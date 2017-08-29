@@ -16,9 +16,6 @@ NODE_DATA = {
     'color': 3,
     'border_color': 4,
     'text_color': 5,
-    'size': 6,
-    'item_icon': 7,
-    'item_text': 8
 }
 
 
@@ -35,19 +32,19 @@ class NodeItem(QtGui.QGraphicsItem):
         self._width = 100
         self._height = 60
 
-        self._icon = ''
         name = name.strip()
         self._name = name.replace(' ', '_')
-        self._text_color = QtGui.QColor(107, 119, 129, 255)
-        self._color = QtGui.QColor(31, 33, 34, 255)
-        self._border_color = QtGui.QColor(58, 65, 68, 255)
-
         self._icon_item = None
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
         self._input_text_items = {}
         self._output_text_items = {}
         self._input_items = []
         self._output_items = []
+
+        self.icon = ''
+        self.text_color = (107, 119, 129, 255)
+        self.color = (31, 33, 34, 255)
+        self.border_color = (58, 65, 68, 255)
 
     def __str__(self):
         return '{}({})'.format(self.__class__.__name__, self.name)
@@ -58,12 +55,13 @@ class NodeItem(QtGui.QGraphicsItem):
     def paint(self, painter, option, widget):
         if self.isSelected():
             r, g, b, a = NODE_SEL_COLOR
-            bg_color = QtGui.QColor(r, g, b, a)
-            r, g, b, a = NODE_SEL_BORDER_COLOR
-            border_color = QtGui.QColor(r, g, b, a)
+            bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
         else:
-            bg_color = self._color
-            border_color = self._border_color
+            r, g, b, a = self.color
+            bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
+
+        bg_color = QtGui.QColor(r, g, b, a)
+        border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
 
         rect = self.boundingRect()
         radius_x = 5
@@ -130,14 +128,17 @@ class NodeItem(QtGui.QGraphicsItem):
     def _set_text_color(self, color):
         """
         Set color of the text for node.
+
         Args:
-            color (QtGui.QColor): color value in QtGui.QColor(r, g, b, a).
+            color (tuple): color value in (r, g, b, a).
         """
+        r, g, b, a = color
+        text_color = QtGui.QColor(r, g, b, a)
         for port, text in self._input_text_items.items():
-            text.setDefaultTextColor(color)
+            text.setDefaultTextColor(text_color)
         for port, text in self._output_text_items.items():
-            text.setDefaultTextColor(color)
-        self._text_item.setDefaultTextColor(color)
+            text.setDefaultTextColor(text_color)
+        self._text_item.setDefaultTextColor(text_color)
 
     def arrange_ports(self, width, height):
         """
@@ -240,7 +241,7 @@ class NodeItem(QtGui.QGraphicsItem):
             icon_y = (height / 2) - (icon_rect.height() / 2)
             self._icon_item.setPos(icon_x, icon_y)
 
-        self._set_text_color(self._text_color)
+        self._set_text_color(self.text_color)
 
     @property
     def id(self):
@@ -263,42 +264,36 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def icon(self):
-        return self._icon
+        return self.data(NODE_DATA['icon'])
 
     @icon.setter
     def icon(self, path=None):
-        self._icon = path
+        self.setData(NODE_DATA['icon'], path)
 
     @property
     def color(self):
-        return self._color.toTuple()
+        return self.data(NODE_DATA['color'])
 
     @color.setter
     def color(self, color=(0, 0, 0, 255)):
-        self._color = QtGui.QColor(
-            color[0], color[1], color[2], color[3]
-        )
+        self.setData(NODE_DATA['color'], color)
 
     @property
     def text_color(self):
-        return self._text_color.toTuple()
+        return self.data(NODE_DATA['text_color'])
 
     @text_color.setter
     def text_color(self, color=(100, 100, 100, 255)):
-        self._text_color = QtGui.QColor(
-            color[0], color[1], color[2], color[3]
-        )
-        self._set_text_color(self._text_color)
+        self.setData(NODE_DATA['text_color'], color)
+        self._set_text_color(color)
 
     @property
     def border_color(self):
-        return self._border_color.toTuple()
+        return self.data(NODE_DATA['border_color'])
 
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
-        self._border_color = QtGui.QColor(
-            color[0], color[1], color[2], color[3]
-        )
+        self.setData(NODE_DATA['border_color'], color)
 
     @property
     def name(self):
@@ -307,7 +302,7 @@ class NodeItem(QtGui.QGraphicsItem):
     @name.setter
     def name(self, name='node'):
         name = name.strip()
-        name = name.strip().replace(' ', '_')
+        name = name.replace(' ', '_')
         self._name = name
         self._text_item.setPlainText(name)
         self.init_node()
