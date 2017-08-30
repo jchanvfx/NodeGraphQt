@@ -87,9 +87,9 @@ class SessionLoader(object):
     def _build_nodes(self):
         node_data = self.data.get('nodes')
         nodes = {}
-        for nid, ndata in node_data:
+        for nid, ndata in node_data.items():
             node_item, node_pos = self._make_node_item(nid, ndata)
-            nodes[nid] = {'node': node_item, 'pos': node_pos}
+            nodes[nid] = (node_item, node_pos)
         return nodes
 
     def _build_connections(self, node_ref):

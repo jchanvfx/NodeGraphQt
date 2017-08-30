@@ -77,7 +77,7 @@ class NodeViewer(QtGui.QGraphicsView):
     def _setup_shortcuts(self):
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
-        open_actn.triggered.connect(self.save_session)
+        open_actn.triggered.connect(self.load_session)
         save_actn = QtGui.QAction('Save Session Layout', self)
         save_actn.setShortcut('Ctrl+s')
         save_actn.triggered.connect(self.save_session)
@@ -333,7 +333,7 @@ class NodeViewer(QtGui.QGraphicsView):
         session = helpers.SessionSaver(self.all_nodes(), self.all_pipes())
         session.save_session(file_path)
 
-    def load_session(self, file_path, open_dialog=True):
+    def load_session(self, file_path=None, open_dialog=True):
         if open_dialog:
             file_dlg = QtGui.QFileDialog.getOpenFileName(
                 self,
@@ -342,8 +342,15 @@ class NodeViewer(QtGui.QGraphicsView):
             file_path = file_dlg[0]
         if not file_path:
             return
+        self.clear_scene()
         session = helpers.SessionLoader(self)
         session.load_file(file_path)
+
+    def clear_scene(self):
+        for node in self.all_nodes():
+            node.delete()
+        for item in self.scene().items():
+            self.scene().removeItem(item)
 
     def center_selection(self, nodes=None):
         if not nodes:
