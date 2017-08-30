@@ -5,6 +5,15 @@ from .constants import (IN_PORT, OUT_PORT,
                         PORT_ACTIVE_COLOR,
                         PORT_ACTIVE_BORDER_COLOR)
 
+PORT_DATA = {
+    'name': 0,
+    'color': 1,
+    'border_color': 2,
+    'border_size': 3,
+    'type': 4,
+    'multi_connection': 5
+}
+
 
 class PortItem(QtGui.QGraphicsItem):
     """
@@ -20,12 +29,12 @@ class PortItem(QtGui.QGraphicsItem):
         self._pipes = []
         self._width = 10.0
         self._height = 10.0
-        self._name = 'port'
-        self._type = None
-        self._multi_connection = False
-        self._color = QtGui.QColor(49, 115, 100, 255)
-        self._border_color = QtGui.QColor(29, 202, 151, 255)
-        self._border_size = 1
+        self.name = 'port'
+        self.color = (49, 115, 100, 255)
+        self.border_color = (29, 202, 151, 255)
+        self.border_size = 1
+        self.port_type = None
+        self.multi_connection = False
 
     def __str__(self):
         return 'Port({})'.format(self.name)
@@ -34,13 +43,14 @@ class PortItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
-        color = self._color
-        border_color = self._border_color
         if self.connected_pipes:
             r, g, b, a = PORT_ACTIVE_COLOR
-            color = QtGui.QColor(r, g, b, a)
-            r, g, b, a = PORT_ACTIVE_BORDER_COLOR
-            border_color = QtGui.QColor(r, g, b, a)
+            bdr_r, bdr_g, bdr_b, bdr_a = PORT_ACTIVE_BORDER_COLOR
+        else:
+            r, g, b, a = self.color
+            bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
+        color = QtGui.QColor(r, g, b, a)
+        border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
         painter.setBrush(color)
         painter.setPen(QtGui.QPen(border_color, 1.5))
         painter.drawEllipse(self.boundingRect())
@@ -96,55 +106,51 @@ class PortItem(QtGui.QGraphicsItem):
 
     @property
     def name(self):
-        return self._name
+        return self.data(PORT_DATA['name'])
 
     @name.setter
     def name(self, name=''):
-        self._name = name.strip()
+        self.setData(PORT_DATA['name'], name.strip())
 
     @property
     def color(self):
-        return self._color.toTuple()
+        return self.data(PORT_DATA['color'])
 
     @color.setter
     def color(self, color=(0, 0, 0, 255)):
-        self._color = QtGui.QColor(
-            color[0], color[1], color[2], color[3]
-        )
+        self.setData(PORT_DATA['color'], color)
 
     @property
     def border_color(self):
-        return self._border_color.toTuple()
+        return self.data(PORT_DATA['border_color'])
 
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
-        self._border_color = QtGui.QColor(
-            color[0], color[1], color[2], color[3]
-        )
+        self.setData(PORT_DATA['border_color'], color)
 
     @property
     def border_size(self):
-        return self._border_size
+        return self.data(PORT_DATA['border_size'])
 
     @border_size.setter
     def border_size(self, size=2):
-        self._border_size = size
+        self.setData(PORT_DATA['border_size'], size)
 
     @property
     def multi_connection(self):
-        return self._multi_connection
+        return self.data(PORT_DATA['multi_connection'])
 
     @multi_connection.setter
     def multi_connection(self, mode=False):
-        self._multi_connection = mode
+        self.setData(PORT_DATA['multi_connection'], mode)
 
     @property
     def port_type(self):
-        return self._type
+        return self.data(PORT_DATA['type'])
 
     @port_type.setter
     def port_type(self, port_type):
-        self._type = port_type
+        self.setData(PORT_DATA['type'], port_type)
 
     def delete(self):
         for pipe in self.connected_pipes:
