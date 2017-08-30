@@ -14,7 +14,8 @@ pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
 fit to screen : `F`
 
 #### Node Graph Shortcuts:
-save session layout : `Ctrl + S`<br/>
-open session layout : *`Not yet implemented`*<br/>
 select all nodes : `Ctrl + A`<br/>
 delete selected node(s) : `Backspace` or `Delete`<br/>
+save session layout : `Ctrl + S` <br/>
+open session layout : `Ctrl + O` <br/>
+>*`(node graph saved in json format with ".ngraph" file extension)`*
