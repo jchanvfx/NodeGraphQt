@@ -9,6 +9,44 @@ from .pipe import Pipe
 from .port import PortItem
 
 
+class NodeOverlay(QtGui.QWidget):
+
+    def __init__(self, parent=None):
+        super(NodeOverlay, self).__init__(parent)
+        self.rubber_band = None
+        self.origin = None
+
+    def showEvent(self, event):
+        super(NodeOverlay, self).showEvent(event)
+        print 'foo'
+
+    def mousePressEvent(self, event):
+        print 'bar'
+        self.origin = event.pos()
+        if not self.rubber_band:
+            self.rubber_band = QtGui.QRubberBand(
+                QtGui.QRubberBand.Rectangle, self
+            )
+        self.rubber_band.setGeometry(
+            QtCore.QRect(self.origin, QtCore.QSize())
+        )
+        # self.rubber_band.show()
+        super(NodeOverlay, self).mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        print 'moveeee'
+        self.rubber_band.setGeometry(
+            QtCore.QRect(self.origin, event.pos()).normalized()
+        )
+        super(NodeOverlay, self).mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self.rubber_band:
+            self.rubber_band.hide()
+        self.hide()
+        super(NodeOverlay, self).mouseReleaseEvent(event)
+
+
 class NodeViewer(QtGui.QGraphicsView):
 
     def __init__(self, parent=None, scene=None):
@@ -25,7 +63,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self._connection_pipe = None
         self._active_pipe = None
         self._start_port = None
-        self._cursor_pos = (0.0, 0.0)
+        self._origin = None
+        self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
 
         self.LMB_state = False
         self.RMB_state = False
@@ -35,9 +74,6 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def __str__(self):
         return '{}()'.format(self.__class__.__name__)
-
-    def _set_cursor_pos(self, event):
-        self._cursor_pos = (event.x(), event.y())
 
     def _set_viewer_zoom(self, value):
         max_zoom = 12
@@ -97,6 +133,10 @@ class NodeViewer(QtGui.QGraphicsView):
         self.addAction(sel_all_actn)
         self.addAction(del_node_actn)
 
+    def resizeEvent(self, event):
+        self._overlay_widget.resize(event.size())
+        super(NodeViewer, self).resizeEvent(event)
+
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = True
@@ -104,7 +144,12 @@ class NodeViewer(QtGui.QGraphicsView):
             self.RMB_state = True
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = True
-        self._set_cursor_pos(event)
+        self._origin = event.pos()
+        if self.LMB_state:
+            self._rubber_band.setGeometry(
+                QtCore.QRect(self._origin, QtCore.QSize())
+            )
+            self._rubber_band.show()
         super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -114,22 +159,29 @@ class NodeViewer(QtGui.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
-        self._set_cursor_pos(event)
+
+        self._rubber_band.hide()
+
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
         modifiers = QtGui.QApplication.keyboardModifiers()
         alt_pressed = modifiers == QtCore.Qt.AltModifier
         if self.MMB_state or (self.LMB_state and alt_pressed):
-            pos_x = (event.x() - self._cursor_pos[0])
-            pos_y = (event.y() - self._cursor_pos[1])
+            pos_x = (event.x() - self._origin.x())
+            pos_y = (event.y() - self._origin.y())
             self._set_viewer_pan(pos_x, pos_y)
-            self._set_cursor_pos(event)
         elif self.RMB_state:
-            pos_x = (event.x() - self._cursor_pos[0])
+            pos_x = (event.x() - self._origin.x())
             zoom = 0.1 if pos_x > 0 else -0.1
             self._set_viewer_zoom(zoom)
-            self._set_cursor_pos(event)
+
+        if self.LMB_state:
+            self._rubber_band.setGeometry(
+                QtCore.QRect(self._origin, event.pos()).normalized()
+            )
+
+        self._origin = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
 
     def wheelEvent(self, event):
