@@ -362,6 +362,18 @@ class NodeGraph(QtGui.QWidget):
             nodes.append(Node(node=node._node_item))
         return nodes
 
+    def select_all(self):
+        """
+        Select all nodes in the current node graph.
+        """
+        self._viewer.select_all_nodes()
+
+    def clear_selection(self):
+        """
+        Clears the selection in the node graph.
+        """
+        self._viewer.clear_selection()
+
     def get_node(self, name):
         """
         Returns a node object that matches the name.
