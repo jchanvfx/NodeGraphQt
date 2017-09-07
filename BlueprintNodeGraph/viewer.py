@@ -25,8 +25,9 @@ class NodeViewer(QtGui.QGraphicsView):
         self._connection_pipe = None
         self._active_pipe = None
         self._start_port = None
-        self._cursor_pos = (0.0, 0.0)
-
+        self._origin_pos = None
+        self._previous_pos = None
+        self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -35,9 +36,6 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def __str__(self):
         return '{}()'.format(self.__class__.__name__)
-
-    def _set_cursor_pos(self, event):
-        self._cursor_pos = (event.x(), event.y())
 
     def _set_viewer_zoom(self, value):
         max_zoom = 12
@@ -64,15 +62,21 @@ class NodeViewer(QtGui.QGraphicsView):
         scroll_x.setValue(scroll_x.value() - pos_x)
         scroll_y.setValue(scroll_y.value() - pos_y)
 
-    def _delete_selection(self):
-        nodes = self.selected_nodes()
-        if not nodes:
-            return
-        self.delete_nodes(nodes)
+    def _items_near(self, pos, item_type=None, size=20):
+        x, y = (pos.x() - (size / 2)), (pos.y() - (size / 2))
+        rect = QtCore.QRect(x, y, size, size)
+        items = []
+        for item in self.scene().items(rect):
+            if not item_type or isinstance(item, item_type):
+                items.append(item)
+        return items
 
-    def _select_all(self):
-        for node in self.all_nodes():
-            node.setSelected(True)
+    def _map_scene_rect(self, rect=None):
+        map_pos = self.mapToScene(rect.x(), rect.y())
+        map_rect = QtCore.QRect(
+            map_pos.x(), map_pos.y(), rect.width(), rect.height()
+        )
+        return map_rect
 
     def _setup_shortcuts(self):
         open_actn = QtGui.QAction('Open Session Layout', self)
@@ -87,24 +91,38 @@ class NodeViewer(QtGui.QGraphicsView):
         fit_zoom_actn.triggered.connect(self.center_selection)
         sel_all_actn = QtGui.QAction('Select All', self)
         sel_all_actn.setShortcut('Ctrl+A')
-        sel_all_actn.triggered.connect(self._select_all)
+        sel_all_actn.triggered.connect(self.select_all_nodes)
         del_node_actn = QtGui.QAction('Delete Selection', self)
         del_node_actn.setShortcuts(['Del', 'Backspace'])
-        del_node_actn.triggered.connect(self._delete_selection)
+        del_node_actn.triggered.connect(self.delete_selected_nodes)
         self.addAction(open_actn)
         self.addAction(save_actn)
         self.addAction(fit_zoom_actn)
         self.addAction(sel_all_actn)
         self.addAction(del_node_actn)
 
+    def resizeEvent(self, event):
+        super(NodeViewer, self).resizeEvent(event)
+
     def mousePressEvent(self, event):
+        modifiers = QtGui.QApplication.keyboardModifiers()
+        alt_pressed = modifiers == QtCore.Qt.AltModifier
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = True
         elif event.button() == QtCore.Qt.RightButton:
             self.RMB_state = True
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = True
-        self._set_cursor_pos(event)
+        self._origin_pos = event.pos()
+        self._previous_pos = event.pos()
+
+        items = self._items_near(self.mapToScene(event.pos()), None, 20)
+        if (self.LMB_state and not alt_pressed) and not items:
+            rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
+            map_rect = self._map_scene_rect(self._rubber_band.rect())
+            self.scene().update(map_rect)
+            self._rubber_band.setGeometry(rect)
+            self._rubber_band.show()
         super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -114,22 +132,35 @@ class NodeViewer(QtGui.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
-        self._set_cursor_pos(event)
+
+        if self._rubber_band.isVisible():
+            map_rect = self._map_scene_rect(self._rubber_band.rect())
+            self._rubber_band.hide()
+            self.scene().update(map_rect)
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
         modifiers = QtGui.QApplication.keyboardModifiers()
         alt_pressed = modifiers == QtCore.Qt.AltModifier
         if self.MMB_state or (self.LMB_state and alt_pressed):
-            pos_x = (event.x() - self._cursor_pos[0])
-            pos_y = (event.y() - self._cursor_pos[1])
+            pos_x = (event.x() - self._previous_pos.x())
+            pos_y = (event.y() - self._previous_pos.y())
             self._set_viewer_pan(pos_x, pos_y)
-            self._set_cursor_pos(event)
         elif self.RMB_state:
-            pos_x = (event.x() - self._cursor_pos[0])
+            pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
             self._set_viewer_zoom(zoom)
-            self._set_cursor_pos(event)
+
+        if self.LMB_state and self._rubber_band.isVisible():
+            rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
+            map_rect = self._map_scene_rect(rect)
+            path = QtGui.QPainterPath()
+            path.addRect(map_rect)
+            self._rubber_band.setGeometry(rect)
+            self.scene().setSelectionArea(path, QtCore.Qt.ContainsItemShape)
+            self.scene().update(map_rect)
+
+        self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
 
     def wheelEvent(self, event):
@@ -216,7 +247,7 @@ class NodeViewer(QtGui.QGraphicsView):
     def sceneMouseMoveEvent(self, event):
         """
         triggered mouse move event for the scene.
-        redraw the connection pipe.
+         - redraw the connection pipe.
 
         Args:
             event (QtGui.QGraphicsSceneMouseEvent): 
@@ -237,6 +268,7 @@ class NodeViewer(QtGui.QGraphicsView):
     def sceneMousePressEvent(self, event):
         """
         triggered mouse press event for the scene.
+         - detect selected pipe and start connection.
 
         Args:
             event (QtGui.QGraphicsScenePressEvent):
@@ -245,16 +277,18 @@ class NodeViewer(QtGui.QGraphicsView):
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
 
-        for item in self.scene().items(event.scenePos()):
-            if isinstance(item, Pipe):
-                self._active_pipe = item
-                self._active_pipe.activate()
-                break
+        pipe_items = self._items_near(event.scenePos(), Pipe, 20)
+        pipe = pipe_items[0] if pipe_items else None
+        if pipe:
+            self._active_pipe = pipe
+            self._active_pipe.activate()
+            port = self._active_pipe.port_from_pos(event.scenePos(), True)
+            self.start_connection(port)
 
     def sceneMouseReleaseEvent(self, event):
         """
         triggered mouse release event for the scene.
-        verify to make a the connection Pipe().
+         - verify to make a the connection Pipe().
         
         Args:
             event (QtGui.QGraphicsSceneMouseEvent): 
@@ -315,6 +349,15 @@ class NodeViewer(QtGui.QGraphicsView):
             if isinstance(node, NodeItem):
                 node.delete()
 
+    def delete_selected_nodes(self):
+        nodes = self.selected_nodes()
+        if nodes:
+            self.delete_nodes(nodes)
+
+    def select_all_nodes(self):
+        for node in self.all_nodes():
+            node.setSelected(True)
+
     def connect_ports(self, from_port, to_port):
         if not isinstance(from_port, PortItem):
             return
@@ -351,6 +394,9 @@ class NodeViewer(QtGui.QGraphicsView):
             node.delete()
         for item in self.scene().items():
             self.scene().removeItem(item)
+
+    def clear_selection(self):
+        self.scene().clearSelection()
 
     def center_selection(self, nodes=None):
         if not nodes:

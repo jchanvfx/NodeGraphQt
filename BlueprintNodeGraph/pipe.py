@@ -41,9 +41,10 @@ class Pipe(QtGui.QGraphicsPathItem):
             input_node, input_name, output_node, output_name
         )
 
-    def mousePressEvent(self, event):
-        super(Pipe, self).mousePressEvent(event)
-        self.viewer_start_connection(event.scenePos())
+    # disabled as pipe selection is done in the viewer.
+    # def mousePressEvent(self, event):
+    #     super(Pipe, self).mousePressEvent(event)
+    #     self.viewer_start_connection(event.scenePos())
 
     def paint(self, painter, option, widget):
         color = self._color
@@ -124,12 +125,13 @@ class Pipe(QtGui.QGraphicsPathItem):
             port = self.input_port if reverse else self.output_port
         return port
 
-    def viewer_start_connection(self, pos):
-        if not self.scene():
-            return
-        start_port = self.port_from_pos(pos, True)
-        viewer = self.scene().viewer()
-        viewer.start_connection(start_port)
+    # disabled as pipe selection is done in the viewer.
+    # def viewer_start_connection(self, pos):
+    #     if not self.scene():
+    #         return
+    #     start_port = self.port_from_pos(pos, True)
+    #     viewer = self.scene().viewer()
+    #     viewer.start_connection(start_port)
 
     def viewer_pipe_layout(self):
         if self.scene():
