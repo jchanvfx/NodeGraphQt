@@ -100,8 +100,16 @@ class Node(object):
         self._node_item.name = name
 
     def __str__(self):
-        name = self.__class__.__name__
-        return '{}(name={}, if={})'.format(name, self.name, self.id())
+        return '{}(name={}, if={})'.format(self.class_type, self.name, self.id())
+
+    def class_type(self):
+        """
+        The class that the node belongs to.
+
+        Returns:
+            str: node class name.
+        """
+        return str(self.__class__.__name__)
 
     def id(self):
         """
@@ -243,13 +251,16 @@ class Node(object):
     def y_pos(self):
         return self._node_item.y()
 
-    def set_x_pos(self, pos_x=0.0):
+    def set_x_pos(self, x=0.0):
         y = self._node_item.pos().y()
-        self._node_item.setPos(pos_x, y)
+        self._node_item.setPos(x, y)
 
-    def set_y_pos(self, pos_y=0.0):
+    def set_y_pos(self, y=0.0):
         x = self._node_item.pos().x()
-        self._node_item.setPos(x, pos_y)
+        self._node_item.setPos(x, y)
+
+    def set_xy_pos(self, x=0.0, y=0.0):
+        self._node_item.setPos(x, y)
 
     def delete(self):
         self._node_item.delete()
