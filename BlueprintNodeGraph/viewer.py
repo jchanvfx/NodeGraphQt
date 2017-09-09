@@ -71,13 +71,6 @@ class NodeViewer(QtGui.QGraphicsView):
                 items.append(item)
         return items
 
-    def _map_scene_rect(self, rect=None):
-        map_pos = self.mapToScene(rect.x(), rect.y())
-        map_rect = QtCore.QRect(
-            map_pos.x(), map_pos.y(), rect.width(), rect.height()
-        )
-        return map_rect
-
     def _setup_shortcuts(self):
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
@@ -105,8 +98,7 @@ class NodeViewer(QtGui.QGraphicsView):
         super(NodeViewer, self).resizeEvent(event)
 
     def mousePressEvent(self, event):
-        modifiers = QtGui.QApplication.keyboardModifiers()
-        alt_pressed = modifiers == QtCore.Qt.AltModifier
+        alt_pressed = event.modifiers() == QtCore.Qt.AltModifier
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = True
         elif event.button() == QtCore.Qt.RightButton:
@@ -119,7 +111,7 @@ class NodeViewer(QtGui.QGraphicsView):
         items = self._items_near(self.mapToScene(event.pos()), None, 20)
         if (self.LMB_state and not alt_pressed) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
-            map_rect = self._map_scene_rect(self._rubber_band.rect())
+            map_rect = self.mapToScene(rect).boundingRect()
             self.scene().update(map_rect)
             self._rubber_band.setGeometry(rect)
             self._rubber_band.show()
@@ -134,14 +126,14 @@ class NodeViewer(QtGui.QGraphicsView):
             self.MMB_state = False
 
         if self._rubber_band.isVisible():
-            map_rect = self._map_scene_rect(self._rubber_band.rect())
+            rect = self._rubber_band.rect()
+            map_rect = self.mapToScene(rect).boundingRect()
             self._rubber_band.hide()
             self.scene().update(map_rect)
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
-        modifiers = QtGui.QApplication.keyboardModifiers()
-        alt_pressed = modifiers == QtCore.Qt.AltModifier
+        alt_pressed = event.modifiers() == QtCore.Qt.AltModifier
         if self.MMB_state or (self.LMB_state and alt_pressed):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
@@ -153,11 +145,11 @@ class NodeViewer(QtGui.QGraphicsView):
 
         if self.LMB_state and self._rubber_band.isVisible():
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
-            map_rect = self._map_scene_rect(rect)
+            map_rect = self.mapToScene(rect).boundingRect()
             path = QtGui.QPainterPath()
             path.addRect(map_rect)
             self._rubber_band.setGeometry(rect)
-            self.scene().setSelectionArea(path, QtCore.Qt.ContainsItemShape)
+            self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
 
         self._previous_pos = event.pos()
@@ -231,6 +223,7 @@ class NodeViewer(QtGui.QGraphicsView):
         if not end_port.multi_connection:
             for pipe in end_port.connected_pipes:
                 pipe.delete()
+
         # make new pipe connection.
         ports = {
             start_port.port_type: start_port, end_port.port_type: end_port
@@ -369,7 +362,7 @@ class NodeViewer(QtGui.QGraphicsView):
             file_dlg = QtGui.QFileDialog.getSaveFileName(
                 self,
                 caption='Save Session Setup',
-                filter='Node Graph (*.ngraph *.json)')
+                filter='Node Graph (*.ngraph)')
             file_path = file_dlg[0]
         if not file_path:
             return
@@ -381,7 +374,7 @@ class NodeViewer(QtGui.QGraphicsView):
             file_dlg = QtGui.QFileDialog.getOpenFileName(
                 self,
                 caption='Open Session Setup',
-                filter='Node Graph (*.ngraph *.json)')
+                filter='Node Graph (*.ngraph)')
             file_path = file_dlg[0]
         if not file_path:
             return

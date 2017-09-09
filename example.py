@@ -62,12 +62,9 @@ if __name__ == '__main__':
     node_graph.add_node(FooNode('Test Node 2'))
 
     # position the nodes.
-    node_1.set_x_pos(-250.0)
-    node_1.set_y_pos(250.0)
-    node_2.set_x_pos(-250.0)
-    node_2.set_y_pos(-150.0)
-    node_3.set_x_pos(250.0)
-    node_3.set_y_pos(50.0)
+    node_1.set_xy_pos(-250.0, 250.0)
+    node_2.set_xy_pos(-250.0, -150.0)
+    node_3.set_xy_pos(250.0, 50.0)
 
     # connect "node_1" to "node_3"
     node1_output = node_1.get_output('apples')
