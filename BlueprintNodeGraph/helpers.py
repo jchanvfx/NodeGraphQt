@@ -1,6 +1,7 @@
 import json
 import os
 
+from .constants import FILE_FORMAT
 from .node import NodeItem
 
 
@@ -42,8 +43,8 @@ class SessionSaver(object):
         return data
 
     def save_session(self, file_path):
-        if file_path and not file_path.endswith('.ngraph'):
-            file_path = '{}.ngraph'.format(file_path.strip())
+        if file_path and not file_path.endswith(FILE_FORMAT):
+            file_path = '{}{}'.format(file_path.strip(), FILE_FORMAT)
         if not file_path:
             return
         data = {'nodes': {}, 'links': []}

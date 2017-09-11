@@ -3,7 +3,8 @@ from PySide import QtGui, QtCore
 
 import helpers
 from .constants import (IN_PORT, OUT_PORT,
-                        PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT)
+                        PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
+                        PIPE_STYLE_DASHED, FILE_FORMAT)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
@@ -62,6 +63,12 @@ class NodeViewer(QtGui.QGraphicsView):
         scroll_x.setValue(scroll_x.value() - pos_x)
         scroll_y.setValue(scroll_y.value() - pos_y)
 
+    def _combined_rect(self, nodes):
+        group = self.scene().createItemGroup(nodes)
+        rect = group.boundingRect()
+        self.scene().destroyItemGroup(group)
+        return rect
+
     def _items_near(self, pos, item_type=None, size=20):
         x, y = (pos.x() - (size / 2)), (pos.y() - (size / 2))
         rect = QtCore.QRect(x, y, size, size)
@@ -98,7 +105,7 @@ class NodeViewer(QtGui.QGraphicsView):
         super(NodeViewer, self).resizeEvent(event)
 
     def mousePressEvent(self, event):
-        alt_pressed = event.modifiers() == QtCore.Qt.AltModifier
+        alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = True
         elif event.button() == QtCore.Qt.RightButton:
@@ -109,7 +116,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._previous_pos = event.pos()
 
         items = self._items_near(self.mapToScene(event.pos()), None, 20)
-        if (self.LMB_state and not alt_pressed) and not items:
+        if (self.LMB_state and not alt_modifier) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
             map_rect = self.mapToScene(rect).boundingRect()
             self.scene().update(map_rect)
@@ -133,8 +140,8 @@ class NodeViewer(QtGui.QGraphicsView):
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
-        alt_pressed = event.modifiers() == QtCore.Qt.AltModifier
-        if self.MMB_state or (self.LMB_state and alt_pressed):
+        alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
+        if self.MMB_state or (self.LMB_state and alt_modifier):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
             self._set_viewer_pan(pos_x, pos_y)
@@ -186,7 +193,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._start_port = selected_port
         self._connection_pipe = Pipe()
         self._connection_pipe.activate()
-        self._connection_pipe.style = 'dotted'
+        self._connection_pipe.style = PIPE_STYLE_DASHED
         if self._start_port.type == IN_PORT:
             self._connection_pipe.input_port = self._start_port
         elif self._start_port == OUT_PORT:
@@ -299,7 +306,6 @@ class NodeViewer(QtGui.QGraphicsView):
             if isinstance(item, PortItem):
                 end_port = item
                 break
-
         # validate connection check.
         if self.validate_connection(self._start_port, end_port):
             # make the connection.
@@ -362,7 +368,7 @@ class NodeViewer(QtGui.QGraphicsView):
             file_dlg = QtGui.QFileDialog.getSaveFileName(
                 self,
                 caption='Save Session Setup',
-                filter='Node Graph (*.ngraph)')
+                filter='Node Graph (*{})'.format(FILE_FORMAT))
             file_path = file_dlg[0]
         if not file_path:
             return
@@ -374,7 +380,7 @@ class NodeViewer(QtGui.QGraphicsView):
             file_dlg = QtGui.QFileDialog.getOpenFileName(
                 self,
                 caption='Open Session Setup',
-                filter='Node Graph (*.ngraph)')
+                filter='Node Graph (*.{})'.format(FILE_FORMAT))
             file_path = file_dlg[0]
         if not file_path:
             return
@@ -400,10 +406,8 @@ class NodeViewer(QtGui.QGraphicsView):
         if len(nodes) == 1:
             self.centerOn(nodes[0])
         else:
-            group = self.scene().createItemGroup(nodes)
-            group_rect = group.boundingRect()
-            self.centerOn(group_rect.center().x(), group_rect.center().y())
-            self.scene().destroyItemGroup(group)
+            rect = self._combined_rect(nodes)
+            self.centerOn(rect.center().x(), rect.center().y())
 
     def get_pipe_layout(self):
         return self._pipe_layout

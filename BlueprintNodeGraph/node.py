@@ -140,6 +140,51 @@ class NodeItem(QtGui.QGraphicsItem):
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
 
+    def calc_size(self):
+        """
+        Calculate node minimum width and height.
+
+        Returns:
+            tuple: (width, height)
+        """
+        width = self._text_item.boundingRect().width() * 2
+        if self.inputs:
+            inport_widths = [
+                (p.boundingRect().width() * 2) for p in self.inputs]
+            width += max(inport_widths) * 2
+        if self.outputs:
+            outport_widths = [
+                (p.boundingRect().width() * 2) for p in self.outputs]
+            width += max(outport_widths) * 2
+        port_count = max([len(self.inputs), len(self.outputs)]) + 1
+        height = (PortItem().boundingRect().height() * 2) * port_count
+        if self._icon_item:
+            icon_rect = self._icon_item.boundingRect()
+            new_height = icon_rect.height() + (icon_rect.height() / 3)
+            if height < new_height:
+                height = new_height
+        return width, height
+
+    def arrange_icon(self, width, height):
+        """
+        Arrange icon image in the node layout.
+
+        Args:
+            width (int): node width
+            height: (int): node height
+        """
+        if self._icon_item:
+            icon_rect = self._icon_item.boundingRect()
+            icon_x = (width / 2) - (icon_rect.width() / 2)
+            icon_y = (height / 2) - (icon_rect.height() / 2)
+            self._icon_item.setPos(icon_x, icon_y)
+
+    def arrange_label(self, width, height):
+        text_rect = self._text_item.boundingRect()
+        text_x = (width / 2) - (text_rect.width() / 2)
+        text_y = 0.0
+        self._text_item.setPos(text_x, text_y)
+
     def arrange_ports(self, width, height):
         """
         Arrange all input and output ports in the node layout.
@@ -151,9 +196,10 @@ class NodeItem(QtGui.QGraphicsItem):
         # adjust input position
         if self.inputs:
             port_width = self.inputs[0].boundingRect().width()
+            port_height = self.inputs[0].boundingRect().height()
             chunk = (height / len(self.inputs))
             port_x = (port_width / 2) * -1
-            port_y = chunk / 2
+            port_y = (chunk / 2) - (port_height / 2)
             for port in self.inputs:
                 port.setPos(port_x, port_y)
                 port_y += chunk
@@ -166,9 +212,10 @@ class NodeItem(QtGui.QGraphicsItem):
         # adjust output position
         if self.outputs:
             port_width = self.outputs[0].boundingRect().width()
+            port_height = self.outputs[0].boundingRect().height()
             chunk = height / len(self.outputs)
             port_x = width - (port_width / 2)
-            port_y = chunk / 2
+            port_y = (chunk / 2) - (port_height / 2)
             for port in self.outputs:
                 port.setPos(port_x, port_y)
                 port_y += chunk
@@ -180,32 +227,43 @@ class NodeItem(QtGui.QGraphicsItem):
             txt_y = port.y() - (txt_height / 2)
             text.setPos(txt_x - 1.0, txt_y)
 
-    def offset_ports(self, offset_x=0.0, offset_y=0.0):
+    def offset_icon(self, x=0.0, y=0.0):
+        """
+        offset the icon in the node layout.
+        Args:
+            x (float): horizontal x offset
+            y (float): vertical y offset
+        """
+        if self._icon_item:
+            icon_x = self._icon_item.pos().x() + x
+            icon_y = self._icon_item.pos().y() + y
+            self._icon_item.setPos(icon_x, icon_y)
+
+    def offset_ports(self, x=0.0, y=0.0):
         """
         offset the node ports in the node layout.
         Args:
-            offset_x (float): horizontal offset 
-            offset_y (float): vertical offset
+            x (float): horizontal x offset
+            y (float): vertical y offset
         """
         for port, text in self._input_text_items.items():
             port_x, port_y = port.pos().x(), port.pos().y()
             text_x, text_y = text.pos().x(), text.pos().y()
-            port.setPos(port_x + offset_x, port_y + offset_y)
-            text.setPos(text_x + offset_x, text_y + offset_y)
+            port.setPos(port_x + x, port_y + y)
+            text.setPos(text_x + x, text_y + y)
         for port, text in self._output_text_items.items():
             port_x, port_y = port.pos().x(), port.pos().y()
             text_x, text_y = text.pos().x(), text.pos().y()
-            port.setPos(port_x + offset_x, port_y + offset_y)
-            text.setPos(text_x + offset_x, text_y + offset_y)
+            port.setPos(port_x + x, port_y + y)
+            text.setPos(text_x + x, text_y + y)
 
     def init_node(self):
         """
         initialize the node layout.
         """
-        width, height = self.size
-        height += 28
-        width += 20
-
+        # setup base size.
+        width, height = self.calc_size()
+        height += 30
         if width < self._width:
             width = self._width
         else:
@@ -214,32 +272,19 @@ class NodeItem(QtGui.QGraphicsItem):
             height = self._height
         else:
             self._height = height
-
-        padding = 20.0
-        padding_y = padding / 2
+        # add vertical padding.
+        padding = 28.0
         height -= padding
+        # arrange label text
+        self.arrange_label(width, height)
 
-        # adjust text position
-        text_x = (width / 2) - (self._text_item.boundingRect().width() / 2)
-        text_y = (self._text_item.boundingRect().height() / 2) * -1
-        text_y += 1
-        self._text_item.setPos(text_x, text_y + padding_y)
-
+        v_offset = 20.0
+        # arrange icon
+        self.arrange_icon(width, height)
+        self.offset_icon(0.0, v_offset)
         # arrange inputs and outputs
         self.arrange_ports(width, height)
-        # offset inputs and outputs
-        self.offset_ports(0.0, 15.0)
-
-        # arrange icon
-        if self.icon:
-            pixmap = QtGui.QPixmap(self.icon)
-            pixmap = pixmap.scaledToHeight(
-                NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
-            self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
-            icon_rect = self._icon_item.boundingRect()
-            icon_x = (width / 2) - (icon_rect.width() / 2)
-            icon_y = (height / 2) - (icon_rect.height() / 2)
-            self._icon_item.setPos(icon_x, icon_y)
+        self.offset_ports(0.0, v_offset)
 
         self._set_text_color(self.text_color)
 
@@ -249,18 +294,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def size(self):
-        width = self._text_item.boundingRect().width() * 2
-        if self.inputs:
-            inport_widths = [
-                (p.boundingRect().width() * 2) for p in self.inputs]
-            width += max(inport_widths) * 2
-        if self.outputs:
-            outport_widths = [
-                (p.boundingRect().width() * 2) for p in self.outputs]
-            width += max(outport_widths) * 2
-        port_count = max([len(self.inputs), len(self.outputs)]) + 1
-        height = (PortItem().boundingRect().height() * 2) * port_count
-        return width, height
+        return self._width, self._height
 
     @property
     def icon(self):
@@ -269,6 +303,16 @@ class NodeItem(QtGui.QGraphicsItem):
     @icon.setter
     def icon(self, path=None):
         self.setData(NODE_DATA['icon'], path)
+        if not path:
+            self._icon_item = None
+            return
+        pixmap = QtGui.QPixmap(path)
+        pixmap = pixmap.scaledToHeight(
+            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation
+        )
+        self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
+        if self.scene():
+            self.init_node()
 
     @property
     def color(self):
@@ -305,7 +349,8 @@ class NodeItem(QtGui.QGraphicsItem):
         name = name.replace(' ', '_')
         self._name = name
         self._text_item.setPlainText(name)
-        self.init_node()
+        if self.scene():
+            self.init_node()
 
     def add_input(self, name='input', multi_port=False):
         port = PortItem(self)
@@ -317,6 +362,8 @@ class NodeItem(QtGui.QGraphicsItem):
         text.setFont(text.font())
         self._input_text_items[port] = text
         self._input_items.append(port)
+        if self.scene():
+            self.init_node()
         return port
 
     def add_output(self, name='output', multi_port=False):
@@ -329,6 +376,8 @@ class NodeItem(QtGui.QGraphicsItem):
         text.setFont(text.font())
         self._output_text_items[port] = text
         self._output_items.append(port)
+        if self.scene():
+            self.init_node()
         return port
 
     @property
