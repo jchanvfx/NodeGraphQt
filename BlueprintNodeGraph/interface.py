@@ -92,7 +92,6 @@ class Port(object):
     #         return
 
 
-
 class Node(object):
 
     def __init__(self, name='node', node=None):
@@ -236,20 +235,32 @@ class Node(object):
         return ports
 
     def get_input(self, name):
+        """
+        Return the input port with the matching name.
+
+        Args:
+            name (str): name of the input port.
+
+        Returns:
+            BlueprintNodeGraph.Port: port object.
+        """
         for port in self._node_item.inputs:
             if port.name == name:
                 return Port(port)
 
     def get_output(self, name):
+        """
+        Return the output port with the matching name.
+
+        Args:
+            name (str): name of the output port.
+
+        Returns:
+            BlueprintNodeGraph.Port: port object.
+        """
         for port in self._node_item.outputs:
             if port.name == name:
                 return Port(port)
-
-    def x_pos(self):
-        return self._node_item.x()
-
-    def y_pos(self):
-        return self._node_item.y()
 
     def set_x_pos(self, x=0.0):
         y = self._node_item.pos().y()
@@ -261,6 +272,12 @@ class Node(object):
 
     def set_xy_pos(self, x=0.0, y=0.0):
         self._node_item.setPos(x, y)
+
+    def x_pos(self):
+        return self._node_item.x()
+
+    def y_pos(self):
+        return self._node_item.y()
 
     def delete(self):
         self._node_item.delete()
