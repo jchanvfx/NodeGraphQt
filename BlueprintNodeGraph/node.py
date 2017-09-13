@@ -28,7 +28,7 @@ class NodeItem(QtGui.QGraphicsItem):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
         self.setZValue(1)
-        self._id = node_id or str(uuid.uuid4())
+        self.setData(NODE_DATA['id'], node_id or str(uuid.uuid4()))
         self._width = 100
         self._height = 60
 
@@ -36,6 +36,7 @@ class NodeItem(QtGui.QGraphicsItem):
         self._name = name.replace(' ', '_')
         self._icon_item = None
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
+        self._data_index = {}
         self._input_text_items = {}
         self._output_text_items = {}
         self._input_items = []
@@ -182,7 +183,7 @@ class NodeItem(QtGui.QGraphicsItem):
     def arrange_label(self, width, height):
         text_rect = self._text_item.boundingRect()
         text_x = (width / 2) - (text_rect.width() / 2)
-        text_y = 0.0
+        text_y = 1.0
         self._text_item.setPos(text_x, text_y)
 
     def arrange_ports(self, width, height):
@@ -290,7 +291,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def id(self):
-        return self._id
+        return self.data(NODE_DATA['id'])
 
     @property
     def size(self):
@@ -352,6 +353,14 @@ class NodeItem(QtGui.QGraphicsItem):
         if self.scene():
             self.init_node()
 
+    @property
+    def inputs(self):
+        return self._input_items
+
+    @property
+    def outputs(self):
+        return self._output_items
+
     def add_input(self, name='input', multi_port=False):
         port = PortItem(self)
         port.name = name
@@ -380,13 +389,28 @@ class NodeItem(QtGui.QGraphicsItem):
             self.init_node()
         return port
 
-    @property
-    def inputs(self):
-        return self._input_items
+    def get_property_names(self, defaults=True):
+        names = []
+        if defaults:
+            names += NODE_DATA.keys()
+        names += self._data_index.keys()
+        return sorted(names)
 
-    @property
-    def outputs(self):
-        return self._output_items
+    def get_property_data(self, name):
+        index = NODE_DATA.get(name)
+        if not index:
+            index = self._data_index.get(name)
+        if not index:
+            raise ValueError('property "{}" doesn\'t exist.'.format(name))
+        return self.data(index)
+
+    def set_property_data(self, name, data):
+        if not NODE_DATA.get(name):
+            index = max(self._data_index.values() + NODE_DATA.values()) + 1
+            self._data_index[name] = index
+            self.setData(index, data)
+            return
+        raise ValueError('property "{}" already exists.'.format(name))
 
     def delete(self):
         for port in self._input_items:
