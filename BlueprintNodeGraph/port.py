@@ -3,7 +3,8 @@ from PySide import QtGui, QtCore
 
 from .constants import (IN_PORT, OUT_PORT,
                         PORT_ACTIVE_COLOR,
-                        PORT_ACTIVE_BORDER_COLOR)
+                        PORT_ACTIVE_BORDER_COLOR,
+                        Z_VAL_PORT)
 
 PORT_DATA = {
     'name': 0,
@@ -25,7 +26,7 @@ class PortItem(QtGui.QGraphicsItem):
         self.setAcceptHoverEvents(True)
         self.setFlag(self.ItemIsSelectable, False)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
-        self.setZValue(2)
+        self.setZValue(Z_VAL_PORT)
         self._pipes = []
         self._width = 10.0
         self._height = 10.0

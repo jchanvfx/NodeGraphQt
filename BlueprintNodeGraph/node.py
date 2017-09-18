@@ -6,7 +6,8 @@ from PySide import QtGui, QtCore
 from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE,
                         NODE_SEL_COLOR,
-                        NODE_SEL_BORDER_COLOR)
+                        NODE_SEL_BORDER_COLOR,
+                        Z_VAL_NODE)
 from .port import PortItem
 
 NODE_DATA = {
@@ -18,6 +19,8 @@ NODE_DATA = {
     'text_color': 5,
 }
 
+from .widgets import ComboNodeWidget, LineEditNodeWidget
+
 
 class NodeItem(QtGui.QGraphicsItem):
     """
@@ -27,7 +30,7 @@ class NodeItem(QtGui.QGraphicsItem):
     def __init__(self, name='node', node_id=None, parent=None):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
-        self.setZValue(1)
+        self.setZValue(Z_VAL_NODE)
         self.setData(NODE_DATA['id'], node_id or str(uuid.uuid4()))
         self._width = 100
         self._height = 60
@@ -41,11 +44,19 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_text_items = {}
         self._input_items = []
         self._output_items = []
+        self._widgets = []
 
         self.icon = ''
         self.text_color = (107, 119, 129, 255)
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
+
+
+
+        # todo: testing
+        self.add_widget(ComboNodeWidget(self, 'foo', 'Bar Test'))
+
+
 
     def __str__(self):
         return '{}({})'.format(self.__class__.__name__, self.name)
@@ -159,6 +170,9 @@ class NodeItem(QtGui.QGraphicsItem):
             width += max(outport_widths) * 2
         port_count = max([len(self.inputs), len(self.outputs)]) + 1
         height = (PortItem().boundingRect().height() * 2) * port_count
+        for widget in self._widgets:
+            rect = widget.boundingRect()
+            height += rect.height() / 2
         if self._icon_item:
             icon_rect = self._icon_item.boundingRect()
             new_height = icon_rect.height() + (icon_rect.height() / 3)
@@ -185,6 +199,21 @@ class NodeItem(QtGui.QGraphicsItem):
         text_x = (width / 2) - (text_rect.width() / 2)
         text_y = 1.0
         self._text_item.setPos(text_x, text_y)
+
+    def arrange_widgets(self, width, height):
+        """
+        Arrange node widgets in the node layout.
+
+        Args:
+            width (int): node width
+            height: (int): node height
+        """
+        pos_y = 0.0
+        for widget in self._widgets:
+            rect = widget.boundingRect()
+            pos_x = (width / 2) - (rect.width() / 2)
+            widget.setPos(pos_x, pos_y)
+            pos_y += rect.height()
 
     def arrange_ports(self, width, height):
         """
@@ -231,6 +260,7 @@ class NodeItem(QtGui.QGraphicsItem):
     def offset_icon(self, x=0.0, y=0.0):
         """
         offset the icon in the node layout.
+
         Args:
             x (float): horizontal x offset
             y (float): vertical y offset
@@ -240,9 +270,23 @@ class NodeItem(QtGui.QGraphicsItem):
             icon_y = self._icon_item.pos().y() + y
             self._icon_item.setPos(icon_x, icon_y)
 
+    def offset_widgets(self, x=0.0, y=0.0):
+        """
+        offset the node widgets in the node layout.
+
+        Args:
+            x (float): horizontal x offset
+            y (float): vertical y offset
+        """
+        for widget in self._widgets:
+            pos_x = widget.pos().x()
+            pos_y = widget.pos().y()
+            widget.setPos(pos_x + x, pos_y + y)
+
     def offset_ports(self, x=0.0, y=0.0):
         """
         offset the node ports in the node layout.
+
         Args:
             x (float): horizontal x offset
             y (float): vertical y offset
@@ -283,6 +327,11 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange icon
         self.arrange_icon(width, height)
         self.offset_icon(0.0, v_offset)
+
+        # arrange node widgets
+        self.arrange_widgets(width, height)
+        self.offset_widgets(0.0, height / 2)
+
         # arrange inputs and outputs
         self.arrange_ports(width, height)
         self.offset_ports(0.0, v_offset)
@@ -388,6 +437,9 @@ class NodeItem(QtGui.QGraphicsItem):
         if self.scene():
             self.init_node()
         return port
+
+    def add_widget(self, widget):
+        self._widgets.append(widget)
 
     def get_property_names(self, defaults=True):
         names = []

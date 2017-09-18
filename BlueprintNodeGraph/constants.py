@@ -1,5 +1,11 @@
 #!/usr/bin/python
 
+# DRAW STACK ORDER
+Z_VAL_PIPE = -1
+Z_VAL_NODE = 1
+Z_VAL_PORT = 2
+Z_VAL_KNOB = 3
+
 # PIPE
 PIPE_STYLE_DEFAULT = 'line'
 PIPE_STYLE_DASHED = 'dashed'
