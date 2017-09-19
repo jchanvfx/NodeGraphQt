@@ -4,14 +4,42 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB
 
+_QGROUPBOX_STYLE = '''
+QGroupBox {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    margin-top: 1ex;
+    padding: 5px;
+}
 
-class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    color: rgba(255, 255, 255, 80);
+}
+'''
+
+
+class _NodeGroubBox(QtGui.QGroupBox):
+
+    def __init__(self, title, parent=None):
+        super(_NodeGroubBox, self).__init__(parent)
+        self.setStyleSheet(_QGROUPBOX_STYLE)
+        self.setTitle(title)
+        self._layout = QtGui.QVBoxLayout(self)
+        self._layout.setContentsMargins(0, 5, 0, 0)
+
+    def add_node_widget(self, widget):
+        self._layout.addWidget(widget)
+
+
+class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     """
     Custom base node widget.
     """
 
     def __init__(self, parent=None, name='widget', label=''):
-        super(BaseNodeWidget, self).__init__(parent)
+        super(_BaseNodeWidget, self).__init__(parent)
         self.setZValue(Z_VAL_KNOB)
         self.name = name
         self.label = label
@@ -37,7 +65,7 @@ class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         self._label = label
 
 
-class ComboNodeWidget(BaseNodeWidget):
+class ComboNodeWidget(_BaseNodeWidget):
     """
     Custom ComboBox node widget.
     """
@@ -45,10 +73,8 @@ class ComboNodeWidget(BaseNodeWidget):
     def __init__(self, parent=None, name='', label=''):
         super(ComboNodeWidget, self).__init__(parent, name, label)
         self._combo = QtGui.QComboBox()
-        group = QtGui.QGroupBox(self.name)
-        layout = QtGui.QVBoxLayout(group)
-        layout.setContentsMargins(1, 1, 1, 1)
-        layout.addWidget(self._combo)
+        group = _NodeGroubBox(self.label)
+        group.add_node_widget(self._combo)
         self.setWidget(group)
 
     @property
@@ -78,7 +104,7 @@ class ComboNodeWidget(BaseNodeWidget):
         self._combo.addItems(items)
 
 
-class LineEditNodeWidget(BaseNodeWidget):
+class LineEditNodeWidget(_BaseNodeWidget):
     """
     Custom LineEdit node widget.
     """
@@ -86,10 +112,8 @@ class LineEditNodeWidget(BaseNodeWidget):
     def __init__(self, parent=None, name='', label=''):
         super(LineEditNodeWidget, self).__init__(parent, name, label)
         self._ledit = QtGui.QLineEdit()
-        group = QtGui.QGroupBox(self.name)
-        layout = QtGui.QVBoxLayout(group)
-        layout.setContentsMargins(1, 1, 1, 1)
-        layout.addWidget(self._ledit)
+        group = _NodeGroubBox(self.label)
+        group.add_node_widget(self._ledit)
         self.setWidget(group)
 
     @property

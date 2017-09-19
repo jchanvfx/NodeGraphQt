@@ -1,15 +1,15 @@
 #!/usr/bin/python
 from PySide import QtGui, QtCore
 
-from node import NodeItem
-from port import PortItem
-from scene import NodeScene
-from viewer import NodeViewer
+from .node import NodeItem
+from .port import PortItem
+from .scene import NodeScene
+from .viewer import NodeViewer
 
 
 class Port(object):
 
-    def __init__(self, port=None):
+    def __init__(self, port=PortItem()):
         self._port_item = port
 
     def __str__(self):
@@ -43,23 +43,23 @@ class Port(object):
         """
         return self._port_item.port_type
 
-    # def color(self):
-    #     """
-    #     Returns the default port color.
-    #
-    #     Returns:
-    #         tuple: (r, g, b, a) from 0-255 range.
-    #     """
-    #     return self._port_item.color
-    #
-    # def set_color(self, color):
-    #     """
-    #     Sets the default port color in (red, green, blur, alpha) value.
-    #
-    #     Args:
-    #         color (tuple): (r, g, b, a)
-    #     """
-    #     self._port_item.color = color
+    def color(self):
+        """
+        Returns the default port color.
+
+        Returns:
+            tuple: (r, g, b, a) from 0-255 range.
+        """
+        return self._port_item.color
+
+    def set_color(self, color):
+        """
+        Sets the default port color in (red, green, blur, alpha) value.
+
+        Args:
+            color (tuple): (r, g, b, a) from 0-255 range.
+        """
+        self._port_item.color = color
 
     def connected_ports(self):
         """
@@ -234,6 +234,15 @@ class Node(object):
             ports.append(Port(port))
         return ports
 
+    def add_combo_menu(self, name, label, items):
+        raise NotImplementedError()
+
+    def add_text_input(self, name, label, text):
+        raise NotImplementedError()
+
+    def add_knob_widget(self, knob):
+        raise NotImplementedError()
+
     def get_input(self, name):
         """
         Return the input port with the matching name.
@@ -280,6 +289,9 @@ class Node(object):
         return self._node_item.y()
 
     def delete(self):
+        """
+        Remove node from the Node Graph.
+        """
         self._node_item.delete()
 
 
