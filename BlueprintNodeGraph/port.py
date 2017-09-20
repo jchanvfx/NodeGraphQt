@@ -12,7 +12,8 @@ PORT_DATA = {
     'border_color': 2,
     'border_size': 3,
     'type': 4,
-    'multi_connection': 5
+    'multi_connection': 5,
+    'display_name': 6
 }
 
 
@@ -112,6 +113,14 @@ class PortItem(QtGui.QGraphicsItem):
     @name.setter
     def name(self, name=''):
         self.setData(PORT_DATA['name'], name.strip())
+
+    @property
+    def display_name(self):
+        return self.data(PORT_DATA['display_name'])
+
+    @display_name.setter
+    def display_name(self, display=True):
+        self.setData(PORT_DATA['display_name'], display)
 
     @property
     def color(self):

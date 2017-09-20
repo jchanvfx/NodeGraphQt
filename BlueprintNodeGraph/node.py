@@ -51,12 +51,6 @@ class NodeItem(QtGui.QGraphicsItem):
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
 
-
-        # todo: testing
-        self.add_widget(ComboNodeWidget(self, 'foo', 'Foo Combo'))
-        self.add_widget(LineEditNodeWidget(self, 'bar', 'Bar Combo'))
-
-
     def __str__(self):
         return '{}({})'.format(self.__class__.__name__, self.name)
 
@@ -200,7 +194,8 @@ class NodeItem(QtGui.QGraphicsItem):
 
         height = port_height * (max([len(self.inputs), len(self.outputs)]) + 1)
         for widget in self._widgets:
-            height += widget.boundingRect().height() / 2
+            rect = widget.boundingRect()
+            height += (rect.height() / 2) + (rect.height() / 3)
 
         if self._icon_item:
             icon_rect = self._icon_item.boundingRect()
@@ -350,9 +345,7 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange node widgets
         if self.widgets:
             self.arrange_widgets()
-            self.offset_widgets(0.0, 26.0)
-            height = self.height + 26.0
-            self.height = height
+            self.offset_widgets(0.0, 30.0)
 
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=30.0)
@@ -448,28 +441,32 @@ class NodeItem(QtGui.QGraphicsItem):
     def outputs(self):
         return self._output_items
 
-    def add_input(self, name='input', multi_port=False):
+    def add_input(self, name='input', multi_port=False, display_name=True):
         port = PortItem(self)
         port.name = name
         port.port_type = IN_PORT
         port.multi_connection = multi_port
+        port.display_name = display_name
         text = QtGui.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
+        text.setVisible(display_name)
         self._input_text_items[port] = text
         self._input_items.append(port)
         if self.scene():
             self.init_node()
         return port
 
-    def add_output(self, name='output', multi_port=False):
+    def add_output(self, name='output', multi_port=False, display_name=True):
         port = PortItem(self)
         port.name = name
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
+        port.display_name = display_name
         text = QtGui.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
+        text.setVisible(display_name)
         self._output_text_items[port] = text
         self._output_items.append(port)
         if self.scene():
@@ -480,8 +477,13 @@ class NodeItem(QtGui.QGraphicsItem):
     def widgets(self):
         return self._widgets
 
-    def add_widget(self, widget):
-        self._widgets.append(widget)
+    def add_combobox(self, name='', label='', items=None):
+        if items is None:
+            items = []
+        self._widgets.append(ComboNodeWidget(self, name, label, items))
+
+    def add_lineedit(self, name='', label='', text=''):
+        self._widgets.append(LineEditNodeWidget(self, name, label, text))
 
     def get_property_names(self, defaults=True):
         names = []

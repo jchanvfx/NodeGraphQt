@@ -4,30 +4,29 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB
 
-_QGROUPBOX_STYLE = '''
+_STYLE_QGROUPBOX = '''
 QGroupBox {
     background-color: rgba(0, 0, 0, 0);
-    border-radius: 2px;
     margin-top: 1ex;
     padding: 5px;
 }
-
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
-    color: rgba(255, 255, 255, 80);
+    color: rgba(255, 255, 255, 85);
 }
 '''
 
 
 class _NodeGroubBox(QtGui.QGroupBox):
 
-    def __init__(self, title, parent=None):
+    def __init__(self, label, parent=None):
         super(_NodeGroubBox, self).__init__(parent)
-        self.setStyleSheet(_QGROUPBOX_STYLE)
-        self.setTitle(title)
+        self.setStyleSheet(_STYLE_QGROUPBOX)
+        self.setTitle(label)
+        self.setMaximumSize(150, 50)
         self._layout = QtGui.QVBoxLayout(self)
-        self._layout.setContentsMargins(0, 5, 0, 0)
+        self._layout.setContentsMargins(0, 4, 0, 0)
 
     def add_node_widget(self, widget):
         self._layout.addWidget(widget)
@@ -70,12 +69,14 @@ class ComboNodeWidget(_BaseNodeWidget):
     Custom ComboBox node widget.
     """
 
-    def __init__(self, parent=None, name='', label=''):
+    def __init__(self, parent=None, name='', label='', items=None):
         super(ComboNodeWidget, self).__init__(parent, name, label)
+        self.setZValue(Z_VAL_KNOB + 1)
         self._combo = QtGui.QComboBox()
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
+        self.add_items(items)
 
     @property
     def item(self):
@@ -89,8 +90,9 @@ class ComboNodeWidget(_BaseNodeWidget):
     def add_item(self, item):
         self._combo.addItem(item)
 
-    def add_items(self, items):
-        self._combo.addItems(items)
+    def add_items(self, items=None):
+        if items:
+            self._combo.addItems(items)
 
     def all_items(self):
         return [self._combo.itemText(i) for i in range(self._combo.count)]
@@ -109,19 +111,20 @@ class LineEditNodeWidget(_BaseNodeWidget):
     Custom LineEdit node widget.
     """
 
-    def __init__(self, parent=None, name='', label=''):
+    def __init__(self, parent=None, name='', label='', text=''):
         super(LineEditNodeWidget, self).__init__(parent, name, label)
         self._ledit = QtGui.QLineEdit()
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._ledit)
         self.setWidget(group)
+        self.text = text
 
     @property
     def text(self):
         return str(self._ledit.text())
 
     @text.setter
-    def text(self, text):
+    def text(self, text=''):
         self._ledit.setText(text)
 
     def set_completer(self, completer):
