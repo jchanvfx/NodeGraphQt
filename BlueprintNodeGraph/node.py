@@ -32,11 +32,10 @@ class NodeItem(QtGui.QGraphicsItem):
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
         self.setZValue(Z_VAL_NODE)
         self.setData(NODE_DATA['id'], node_id or str(uuid.uuid4()))
-        self._width = 100
+        self._width = 120
         self._height = 60
 
-        name = name.strip()
-        self._name = name.replace(' ', '_')
+        self._name = name.strip().replace(' ', '_')
         self._icon_item = None
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
         self._data_index = {}
@@ -192,10 +191,10 @@ class NodeItem(QtGui.QGraphicsItem):
             port = self._output_text_items.keys()[0]
             port_height = port.boundingRect().height() * 2
 
-        height = port_height * (max([len(self.inputs), len(self.outputs)]) + 1)
+        height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
         for widget in self._widgets:
             rect = widget.boundingRect()
-            height += (rect.height() / 2) + (rect.height() / 3)
+            height += (rect.height() / 2) + (rect.height() / 4)
 
         if self._icon_item:
             icon_rect = self._icon_item.boundingRect()
@@ -226,7 +225,8 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         Arrange node widgets to the default center of the node.
         """
-        pos_y = 0.0
+        widget_heights = [w.boundingRect().height() for w in self._widgets]
+        pos_y = sum(widget_heights) / len(self._widgets)
         for widget in self._widgets:
             rect = widget.boundingRect()
             pos_x = (self._width / 2) - (rect.width() / 2)
@@ -345,7 +345,7 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange node widgets
         if self.widgets:
             self.arrange_widgets()
-            self.offset_widgets(0.0, 30.0)
+            # self.offset_widgets(0.0, 30.0)
 
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=30.0)
@@ -480,9 +480,11 @@ class NodeItem(QtGui.QGraphicsItem):
     def add_combobox(self, name='', label='', items=None):
         if items is None:
             items = []
+        label = name if not label else label
         self._widgets.append(ComboNodeWidget(self, name, label, items))
 
     def add_lineedit(self, name='', label='', text=''):
+        label = name if not label else label
         self._widgets.append(LineEditNodeWidget(self, name, label, text))
 
     def get_property_names(self, defaults=True):
