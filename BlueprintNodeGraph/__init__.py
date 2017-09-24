@@ -31,7 +31,6 @@
 
 from interfaces.graph import NodeGraph
 from interfaces.node import Node
-from interfaces.port import Port
 
 __author__ = 'Johnny Chan - www.chantasticvfx.com'
 __email__ = 'johnny@chantasticvfx.com'

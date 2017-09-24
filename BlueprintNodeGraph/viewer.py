@@ -2,10 +2,10 @@
 from PySide import QtGui, QtCore
 
 import helpers
+from BlueprintNodeGraph.node import NodeItem
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED, FILE_FORMAT)
-from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
 

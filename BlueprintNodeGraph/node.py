@@ -3,11 +3,12 @@ import uuid
 
 from PySide import QtGui, QtCore
 
-from .constants import (IN_PORT, OUT_PORT,
-                        NODE_ICON_SIZE,
-                        NODE_SEL_COLOR,
-                        NODE_SEL_BORDER_COLOR,
-                        Z_VAL_NODE)
+from BlueprintNodeGraph.constants import (IN_PORT, OUT_PORT,
+                                          NODE_ICON_SIZE,
+                                          NODE_SEL_COLOR,
+                                          NODE_SEL_BORDER_COLOR,
+                                          Z_VAL_NODE)
+from BlueprintNodeGraph.widgets import ComboNodeWidget, LineEditNodeWidget
 from .port import PortItem
 
 NODE_DATA = {
@@ -18,8 +19,6 @@ NODE_DATA = {
     'border_color': 4,
     'text_color': 5,
 }
-
-from .widgets import ComboNodeWidget, LineEditNodeWidget
 
 
 class NodeItem(QtGui.QGraphicsItem):
@@ -192,9 +191,10 @@ class NodeItem(QtGui.QGraphicsItem):
             port_height = port.boundingRect().height() * 2
 
         height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
-        for widget in self._widgets:
-            rect = widget.boundingRect()
-            height += (rect.height() / 2) + (rect.height() / 4)
+        if self._widgets:
+            wid_height = sum([w.boundingRect().height() for w in self._widgets])
+            if wid_height > height:
+                height = wid_height + (wid_height / len(self._widgets))
 
         if self._icon_item:
             icon_rect = self._icon_item.boundingRect()
@@ -225,8 +225,9 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         Arrange node widgets to the default center of the node.
         """
-        widget_heights = [w.boundingRect().height() for w in self._widgets]
-        pos_y = sum(widget_heights) / len(self._widgets)
+        wid_heights = sum([w.boundingRect().height() for w in self._widgets])
+        pos_y = self._height / 2
+        pos_y -= wid_heights / 2
         for widget in self._widgets:
             rect = widget.boundingRect()
             pos_x = (self._width / 2) - (rect.width() / 2)
@@ -345,7 +346,7 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange node widgets
         if self.widgets:
             self.arrange_widgets()
-            # self.offset_widgets(0.0, 30.0)
+            self.offset_widgets(0.0, 10.0)
 
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=30.0)

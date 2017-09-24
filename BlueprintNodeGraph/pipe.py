@@ -3,7 +3,7 @@ import math
 
 from PySide import QtGui, QtCore
 
-from .constants import (
+from BlueprintNodeGraph.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, IN_PORT, OUT_PORT, Z_VAL_PIPE
