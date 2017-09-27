@@ -490,22 +490,22 @@ class NodeItem(QtGui.QGraphicsItem):
         widget = LineEditNodeWidget(self, name, label, text)
         self._widgets.append(widget)
 
-    def get_property_names(self, defaults=True):
+    def all_data(self, show_default=True):
         names = []
-        if defaults:
+        if show_default:
             names += NODE_DATA.keys()
         names += self._data_index.keys()
         return sorted(names)
 
-    def get_property_data(self, name):
+    def get_data(self, name):
         index = NODE_DATA.get(name)
         if not index:
             index = self._data_index.get(name)
         if not index:
-            return
+            return None
         return self.data(index)
 
-    def set_property_data(self, name, data):
+    def set_data(self, name, data):
         if not NODE_DATA.get(name):
             index = max(self._data_index.values() + NODE_DATA.values()) + 1
             self._data_index[name] = index

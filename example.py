@@ -60,10 +60,10 @@ if __name__ == '__main__':
     node_2 = BarNode('Bar Node')
 
     node_3 = BarNode('Test Node 1')
-    node_3.add_text_input('Text Input', 'Text Foo')
+    node_3.add_text_input('input_1', 'Text Input')
 
     node_4 = FooNode('Test Node 2')
-    node_4.add_dropdown_menu('Combo Test', items=['foo', 'bar', 'test'])
+    node_4.add_dropdown_menu('menu_1', 'Menu Test', items=['item1', 'item2', 'item3'])
 
     # add nodes into the scene.
     node_graph.add_node(node_1)

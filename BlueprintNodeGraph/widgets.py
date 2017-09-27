@@ -110,7 +110,7 @@ class _NodeGroubBox(QtGui.QGroupBox):
 
 class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     """
-    Custom base node widget.
+    Base Node Widget.
     """
 
     def __init__(self, parent=None, name='widget', label=''):
@@ -146,15 +146,15 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
 
 class ComboNodeWidget(_BaseNodeWidget):
     """
-    Custom ComboBox node widget.
+    ComboBox Node Widget.
     """
 
     def __init__(self, parent=None, name='', label='', items=None):
         super(ComboNodeWidget, self).__init__(parent, name, label)
         self.setZValue(Z_VAL_KNOB + 1)
         self._combo = QtGui.QComboBox()
-        self._combo.setMinimumHeight(24)
         self._combo.setStyleSheet(_STYLE_QCOMBOBOX)
+        self._combo.setMinimumHeight(24)
         list_view = QtGui.QListView(self._combo)
         list_view.setStyleSheet(_STYLE_QLISTVIEW)
         self._combo.setView(list_view)
@@ -164,11 +164,11 @@ class ComboNodeWidget(_BaseNodeWidget):
         self.add_items(items)
 
     @property
-    def item(self):
-        return str(self.widget().currentItemText())
+    def value(self):
+        return str(self._combo.currentText())
 
-    @item.setter
-    def item(self, item):
+    @value.setter
+    def value(self, item):
         index = self._combo.findText(QtCore.Qt.MatchExactly)
         self._combo.setCurrentIndex(index)
 
@@ -193,7 +193,7 @@ class ComboNodeWidget(_BaseNodeWidget):
 
 class LineEditNodeWidget(_BaseNodeWidget):
     """
-    Custom LineEdit node widget.
+    LineEdit Node Widget.
     """
 
     def __init__(self, parent=None, name='', label='', text=''):
@@ -206,11 +206,11 @@ class LineEditNodeWidget(_BaseNodeWidget):
         self.text = text
 
     @property
-    def text(self):
+    def value(self):
         return str(self._ledit.text())
 
-    @text.setter
-    def text(self, text=''):
+    @value.setter
+    def value(self, text=''):
         self._ledit.setText(text)
 
     def set_completer(self, completer):
