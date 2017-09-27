@@ -1,6 +1,6 @@
 import sys
 
-from PySide import QtGui
+from PySide import QtGui, QtCore
 
 import BlueprintNodeGraph as bpng
 
@@ -44,6 +44,11 @@ class NodeGraph(bpng.NodeGraph):
         self.setWindowTitle('Blueprint Node Graph')
         self.resize(1100, 800)
 
+    def keyPressEvent(self, event):
+        key = event.key()
+        if key == QtCore.Qt.Key_Escape:
+            self.close()
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
@@ -53,13 +58,18 @@ if __name__ == '__main__':
     # create the nodes.
     node_1 = FooNode('Foo Node')
     node_2 = BarNode('Bar Node')
+
     node_3 = BarNode('Test Node 1')
+    node_3.add_text_input('input_1', 'Text Input')
+
+    node_4 = FooNode('Test Node 2')
+    node_4.add_dropdown_menu('menu_1', 'Menu Test', items=['item1', 'item2', 'item3'])
 
     # add nodes into the scene.
     node_graph.add_node(node_1)
     node_graph.add_node(node_2)
     node_graph.add_node(node_3)
-    node_graph.add_node(FooNode('Test Node 2'))
+    node_graph.add_node(node_4)
 
     # position the nodes.
     node_1.set_xy_pos(-250.0, 250.0)

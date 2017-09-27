@@ -1,4 +1,14 @@
 #!/usr/bin/python
+import os
+
+BLUEPRINT_PATH = os.path.dirname(os.path.abspath(__file__))
+ICON_DOWN_ARROW_ICON = os.path.join(BLUEPRINT_PATH, 'down_arrow.png')
+
+# DRAW STACK ORDER
+Z_VAL_PIPE = -1
+Z_VAL_NODE = 1
+Z_VAL_PORT = 2
+Z_VAL_KNOB = 3
 
 # PIPE
 PIPE_STYLE_DEFAULT = 'line'

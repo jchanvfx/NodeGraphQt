@@ -1,9 +1,10 @@
 #!/usr/bin/python
 from PySide import QtGui, QtCore
 
-from .constants import (IN_PORT, OUT_PORT,
-                        PORT_ACTIVE_COLOR,
-                        PORT_ACTIVE_BORDER_COLOR)
+from BlueprintNodeGraph.constants import (IN_PORT, OUT_PORT,
+                                          PORT_ACTIVE_COLOR,
+                                          PORT_ACTIVE_BORDER_COLOR,
+                                          Z_VAL_PORT)
 
 PORT_DATA = {
     'name': 0,
@@ -11,7 +12,8 @@ PORT_DATA = {
     'border_color': 2,
     'border_size': 3,
     'type': 4,
-    'multi_connection': 5
+    'multi_connection': 5,
+    'display_name': 6
 }
 
 
@@ -25,7 +27,7 @@ class PortItem(QtGui.QGraphicsItem):
         self.setAcceptHoverEvents(True)
         self.setFlag(self.ItemIsSelectable, False)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
-        self.setZValue(2)
+        self.setZValue(Z_VAL_PORT)
         self._pipes = []
         self._width = 10.0
         self._height = 10.0
@@ -111,6 +113,14 @@ class PortItem(QtGui.QGraphicsItem):
     @name.setter
     def name(self, name=''):
         self.setData(PORT_DATA['name'], name.strip())
+
+    @property
+    def display_name(self):
+        return self.data(PORT_DATA['display_name'])
+
+    @display_name.setter
+    def display_name(self, display=True):
+        self.setData(PORT_DATA['display_name'], display)
 
     @property
     def color(self):

@@ -3,10 +3,10 @@ import math
 
 from PySide import QtGui, QtCore
 
-from .constants import (
+from BlueprintNodeGraph.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
-    PIPE_LAYOUT_STRAIGHT, IN_PORT, OUT_PORT
+    PIPE_LAYOUT_STRAIGHT, IN_PORT, OUT_PORT, Z_VAL_PIPE
 )
 from .port import PortItem
 
@@ -24,7 +24,7 @@ class Pipe(QtGui.QGraphicsPathItem):
 
     def __init__(self, input_port=None, output_port=None):
         super(Pipe, self).__init__()
-        self.setZValue(-1)
+        self.setZValue(Z_VAL_PIPE)
         self._color = PIPE_DEFAULT_COLOR
         self._style = PIPE_STYLE_DEFAULT
         self._active = False

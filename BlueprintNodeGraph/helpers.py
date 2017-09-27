@@ -1,8 +1,8 @@
 import json
 import os
 
+from BlueprintNodeGraph.node import NodeItem
 from .constants import FILE_FORMAT
-from .node import NodeItem
 
 
 class SessionSaver(object):
