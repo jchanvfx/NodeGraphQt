@@ -2,11 +2,12 @@
 
 from PySide import QtGui, QtCore
 
-from .constants import Z_VAL_KNOB
+from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
 
 _STYLE_QGROUPBOX = '''
 QGroupBox {
     background-color: rgba(0, 0, 0, 0);
+    border: 0px solid rgba(0, 0, 0, 0);
     margin-top: 1ex;
     padding: 5px;
 }
@@ -14,6 +15,81 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     color: rgba(255, 255, 255, 85);
+}
+'''
+
+_STYLE_QLINEEDIT = '''
+QLineEdit {
+    border: 1px solid rgba(255, 255, 255, 50);
+    border-radius: 0px;
+    color: rgba(255, 255, 255, 150);
+    background: rgba(0, 0, 0, 80);
+    selection-background-color: rgba(255, 198, 10, 155);
+}
+'''
+
+_STYLE_QCOMBOBOX = '''
+QComboBox {
+    border: 1px solid rgba(255, 255, 255, 50);
+    border-radius: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+QComboBox:hover {
+    border: 1px solid rgba(255, 255, 255, 80);
+}
+QComboBox:editable {
+    color: rgba(255, 255, 255, 150);
+    background: rgba(10, 10, 10, 80);
+}
+QComboBox:!editable,
+QComboBox::drop-down:editable {
+    color: rgba(255, 255, 255, 150);
+    background: rgba(80, 80, 80, 80);
+}
+/* QComboBox gets the "on" state when the popup is open */
+QComboBox:!editable:on,
+QComboBox::drop-down:editable:on {
+    background: rgba(150, 150, 150, 150);
+}
+QComboBox::drop-down {
+    background: rgba(80, 80, 80, 80);
+    border-left: 1px solid rgba(80, 80, 80, 255);
+    width: 20px;
+}
+QComboBox::down-arrow {
+    image: url($ICON_DOWN_ARROW);
+}
+QComboBox::down-arrow:on {
+    /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}'''.replace('$ICON_DOWN_ARROW', ICON_DOWN_ARROW_ICON)
+
+_STYLE_QLISTVIEW = '''
+QListView {
+    background: rgba(80, 80, 80, 255);
+    border: 0px solid rgba(0, 0, 0, 0);
+}
+QListView::item {
+    color: rgba(255, 255, 255, 120);
+    background: rgba(60, 60, 60, 255);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 0px;
+    margin: 0px;
+    padding: 2px;
+}
+QListView::item:selected {
+    color: rgba(255, 255, 255, 200);
+    background: rgba(255, 255, 255, 15);
+    border-bottom: 1px solid rgba(255, 255, 255, 5);
+    border-radius: 0px;
+    margin:0px;
+    padding: 2px;
 }
 '''
 
@@ -48,6 +124,10 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         return str(self.__class__.__name__)
 
     @property
+    def node(self):
+        self.parentItem()
+
+    @property
     def name(self):
         return self._name
 
@@ -73,6 +153,11 @@ class ComboNodeWidget(_BaseNodeWidget):
         super(ComboNodeWidget, self).__init__(parent, name, label)
         self.setZValue(Z_VAL_KNOB + 1)
         self._combo = QtGui.QComboBox()
+        self._combo.setMinimumHeight(24)
+        self._combo.setStyleSheet(_STYLE_QCOMBOBOX)
+        list_view = QtGui.QListView(self._combo)
+        list_view.setStyleSheet(_STYLE_QLISTVIEW)
+        self._combo.setView(list_view)
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
@@ -114,6 +199,7 @@ class LineEditNodeWidget(_BaseNodeWidget):
     def __init__(self, parent=None, name='', label='', text=''):
         super(LineEditNodeWidget, self).__init__(parent, name, label)
         self._ledit = QtGui.QLineEdit()
+        self._ledit.setStyleSheet(_STYLE_QLINEEDIT)
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._ledit)
         self.setWidget(group)

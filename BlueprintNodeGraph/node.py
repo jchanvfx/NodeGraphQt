@@ -482,11 +482,13 @@ class NodeItem(QtGui.QGraphicsItem):
         if items is None:
             items = []
         label = name if not label else label
-        self._widgets.append(ComboNodeWidget(self, name, label, items))
+        widget = ComboNodeWidget(self, name, label, items)
+        self._widgets.append(widget)
 
     def add_lineedit(self, name='', label='', text=''):
         label = name if not label else label
-        self._widgets.append(LineEditNodeWidget(self, name, label, text))
+        widget = LineEditNodeWidget(self, name, label, text)
+        self._widgets.append(widget)
 
     def get_property_names(self, defaults=True):
         names = []
