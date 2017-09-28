@@ -29,8 +29,8 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from interfaces.graph import NodeGraph
-from interfaces.node import Node
+from .graph import NodeGraph
+from .node import Node
 
 __author__ = 'Johnny Chan - www.chantasticvfx.com'
 __email__ = 'johnny@chantasticvfx.com'

@@ -200,6 +200,7 @@ class LineEditNodeWidget(_BaseNodeWidget):
         super(LineEditNodeWidget, self).__init__(parent, name, label)
         self._ledit = QtGui.QLineEdit()
         self._ledit.setStyleSheet(_STYLE_QLINEEDIT)
+        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._ledit)
         self.setWidget(group)

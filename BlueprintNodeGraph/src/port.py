@@ -1,10 +1,11 @@
 #!/usr/bin/python
 from PySide import QtGui, QtCore
 
-from BlueprintNodeGraph.constants import (IN_PORT, OUT_PORT,
-                                          PORT_ACTIVE_COLOR,
-                                          PORT_ACTIVE_BORDER_COLOR,
-                                          Z_VAL_PORT)
+from .constants import (
+    IN_PORT, OUT_PORT,
+    PORT_ACTIVE_COLOR,
+    PORT_ACTIVE_BORDER_COLOR,
+    Z_VAL_PORT)
 
 PORT_DATA = {
     'name': 0,

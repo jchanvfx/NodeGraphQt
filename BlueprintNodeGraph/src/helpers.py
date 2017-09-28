@@ -1,7 +1,7 @@
 import json
 import os
 
-from BlueprintNodeGraph.node import NodeItem
+from .node import NodeItem
 from .constants import FILE_FORMAT
 
 
