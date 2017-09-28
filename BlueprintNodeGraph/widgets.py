@@ -8,8 +8,10 @@ _STYLE_QGROUPBOX = '''
 QGroupBox {
     background-color: rgba(0, 0, 0, 0);
     border: 0px solid rgba(0, 0, 0, 0);
-    margin-top: 1ex;
-    padding: 5px;
+    margin-top: 1px;
+    padding: 2px;
+    padding-top: 10px;
+    font-size: 12px;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
@@ -161,25 +163,23 @@ class ComboNodeWidget(_BaseNodeWidget):
         group = _NodeGroubBox(self.label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
-        self.add_items(items)
+        self.add_menu_items(items)
 
-    @property
-    def value(self):
+    def get_value(self):
         return str(self._combo.currentText())
 
-    @value.setter
-    def value(self, item):
+    def set_value(self, item):
         index = self._combo.findText(QtCore.Qt.MatchExactly)
         self._combo.setCurrentIndex(index)
 
-    def add_item(self, item):
+    def add_menu_item(self, item):
         self._combo.addItem(item)
 
-    def add_items(self, items=None):
+    def add_menu_items(self, items=None):
         if items:
             self._combo.addItems(items)
 
-    def all_items(self):
+    def all_menu_items(self):
         return [self._combo.itemText(i) for i in range(self._combo.count)]
 
     def clear(self):
@@ -205,12 +205,10 @@ class LineEditNodeWidget(_BaseNodeWidget):
         self.setWidget(group)
         self.text = text
 
-    @property
-    def value(self):
+    def get_value(self):
         return str(self._ledit.text())
 
-    @value.setter
-    def value(self, text=''):
+    def set_value(self, text=''):
         self._ledit.setText(text)
 
     def set_completer(self, completer):

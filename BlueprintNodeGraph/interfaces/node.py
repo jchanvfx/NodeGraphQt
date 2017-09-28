@@ -209,16 +209,59 @@ class Node(object):
         return Port(port_item)
 
     def add_dropdown_menu(self, name='', label='', items=None):
-        self._node_item.add_combobox(name, label, items)
+        """
+        (Convenience function) Adds a drop down menu into the node.
+
+        Args:
+            name (str): name of the widget.
+            label (str): label to be displayed.
+            items (list[str]): items to be added into the menu.
+        """
+        self._node_item.add_dropdown_menu(name, label, items)
 
     def add_text_input(self, name='', label='', text=''):
-        self._node_item.add_lineedit(name, label, text)
+        """
+        (Convenience function) a text input widget into the node.
 
-    def dropdown_menus(self):
-        return
+        Args:
+            name (str): name of the widget.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+        """
+        self._node_item.add_text_input(name, label, text)
 
-    def text_inputs(self):
-        return
+    def get_dropdown_menu(self, name):
+        """
+        Return the nodes drop down menu widget.
+
+        Args:
+            name (str): name of the node widget.
+
+        Returns:
+            DropdownMenuNodeWidget: drop down menu widget.
+        """
+        return self._node_item.dropdown_menus.get(name)
+
+    def get_text_input(self, name):
+        """
+        Return the nodes text input widget.
+
+        Args:
+            name (str): name of the node widget.
+
+        Returns:
+            TextInputNodeWidget: text input widget.
+        """
+        return self._node_item.text_inputs.get(name)
+
+    def get_widgets(self):
+        """
+        Returns all embedded node widgets.
+
+        Returns:
+            list[]: list of node widgets.
+        """
+        return self._node_item.widgets
 
     def inputs(self):
         """

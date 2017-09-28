@@ -478,14 +478,30 @@ class NodeItem(QtGui.QGraphicsItem):
     def widgets(self):
         return self._widgets
 
-    def add_combobox(self, name='', label='', items=None):
+    @property
+    def dropdown_menus(self):
+        widgets = {}
+        for widget in self._widgets:
+            if isinstance(widget, ComboNodeWidget):
+                widgets[widget.name] = widget
+        return widgets
+
+    @property
+    def text_inputs(self):
+        widgets = {}
+        for widget in self._widgets:
+            if isinstance(widget, LineEditNodeWidget):
+                widgets[widget.name] = widget
+        return widgets
+
+    def add_dropdown_menu(self, name='', label='', items=None):
         if items is None:
             items = []
         label = name if not label else label
         widget = ComboNodeWidget(self, name, label, items)
         self._widgets.append(widget)
 
-    def add_lineedit(self, name='', label='', text=''):
+    def add_text_input(self, name='', label='', text=''):
         label = name if not label else label
         widget = LineEditNodeWidget(self, name, label, text)
         self._widgets.append(widget)
