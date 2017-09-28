@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from BlueprintNodeGraph.scene import NodeScene
-from BlueprintNodeGraph.viewer import NodeViewer
 from .node import Node
+from .src.scene import NodeScene
+from .src.viewer import NodeViewer
 
 
 class NodeGraph(QtGui.QWidget):

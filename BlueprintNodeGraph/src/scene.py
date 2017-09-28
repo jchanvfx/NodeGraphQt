@@ -36,10 +36,11 @@ class NodeScene(QtGui.QGraphicsScene):
         painter.drawRect(rect.normalized())
         if not self._grid:
             return
-        pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 15), 0.5)
-        self._draw_grid(painter, rect, pen, 30)
-        pen = QtGui.QPen(QtGui.QColor(0, 0, 0, 100), 1.0)
-        self._draw_grid(painter, rect, pen, 150)
+        grid_size = 20
+        pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 10), 0.5)
+        self._draw_grid(painter, rect, pen, grid_size)
+        pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 15), 1.0)
+        self._draw_grid(painter, rect, pen, grid_size * 8)
 
     def mousePressEvent(self, event):
         selected_nodes = self.viewer().selected_nodes()

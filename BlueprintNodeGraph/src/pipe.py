@@ -3,7 +3,7 @@ import math
 
 from PySide import QtGui, QtCore
 
-from BlueprintNodeGraph.constants import (
+from .constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, IN_PORT, OUT_PORT, Z_VAL_PIPE
@@ -41,7 +41,7 @@ class Pipe(QtGui.QGraphicsPathItem):
             input_node, input_name, output_node, output_name
         )
 
-    # disabled as pipe selection is done in the viewer.
+    # pipe selection is done through the viewer.
     # def mousePressEvent(self, event):
     #     super(Pipe, self).mousePressEvent(event)
     #     self.viewer_start_connection(event.scenePos())
