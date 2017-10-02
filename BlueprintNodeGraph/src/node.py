@@ -18,6 +18,7 @@ NODE_DATA = {
     'color': 3,
     'border_color': 4,
     'text_color': 5,
+    'type': 6
 }
 
 
@@ -357,6 +358,14 @@ class NodeItem(QtGui.QGraphicsItem):
         return self.data(NODE_DATA['id'])
 
     @property
+    def type(self):
+        return self.data(NODE_DATA['type'])
+
+    @type.setter
+    def type(self, node_type='NODE'):
+        self.setData(NODE_DATA['type'], node_type)
+
+    @property
     def size(self):
         return self._width, self._height
 
@@ -506,12 +515,14 @@ class NodeItem(QtGui.QGraphicsItem):
         widget = LineEditNodeWidget(self, name, label, text)
         self._widgets.append(widget)
 
-    def all_data(self, show_default=True):
-        names = []
-        if show_default:
-            names += NODE_DATA.keys()
-        names += self._data_index.keys()
-        return sorted(names)
+    def all_data(self, include_default=True):
+        data = {}
+        for k, v in self._data_index.items():
+            data[k] = self.data(v)
+        if include_default:
+            for k, v in NODE_DATA.items():
+                data[k] = self.data(v)
+        return data
 
     def get_data(self, name):
         index = NODE_DATA.get(name)

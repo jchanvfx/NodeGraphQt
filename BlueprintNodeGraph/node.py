@@ -92,6 +92,7 @@ class Node(object):
 
     def __init__(self, name='node', node=None):
         self._node_item = node if node else NodeItem()
+        self._node_item.type = self.class_type()
         self._node_item.name = name
 
     def __str__(self):

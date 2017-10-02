@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import re
 from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
@@ -29,6 +29,11 @@ QLineEdit {
     selection-background-color: rgba(255, 198, 10, 155);
 }
 '''
+
+regex = re.compile('(?:\w:|)([.\\/].+\w+)')
+match = regex.match(ICON_DOWN_ARROW_ICON)
+match_str = match.group(0).replace('\\', '/') if match else None
+ICON_DOWN_ARROW_ICON = match_str or ICON_DOWN_ARROW_ICON
 
 _STYLE_QCOMBOBOX = '''
 QComboBox {
@@ -165,10 +170,16 @@ class ComboNodeWidget(_BaseNodeWidget):
         self.setWidget(group)
         self.add_menu_items(items)
 
-    def get_value(self):
+    @property
+    def type(self):
+        return 'ComboNodeWidget'
+
+    @property
+    def value(self):
         return str(self._combo.currentText())
 
-    def set_value(self, item):
+    @value.setter
+    def value(self, item):
         index = self._combo.findText(QtCore.Qt.MatchExactly)
         self._combo.setCurrentIndex(index)
 
@@ -186,7 +197,7 @@ class ComboNodeWidget(_BaseNodeWidget):
         self._combo.clear()
 
     def sort(self):
-        items = sorted(self.all_items())
+        items = sorted(self.all_menu_items())
         self._combo.clear()
         self._combo.addItems(items)
 
@@ -206,10 +217,16 @@ class LineEditNodeWidget(_BaseNodeWidget):
         self.setWidget(group)
         self.text = text
 
-    def get_value(self):
+    @property
+    def type(self):
+        return 'LineEditNodeWidget'
+
+    @property
+    def value(self):
         return str(self._ledit.text())
 
-    def set_value(self, text=''):
+    @value.setter
+    def value(self, text=''):
         self._ledit.setText(text)
 
     def set_completer(self, completer):
