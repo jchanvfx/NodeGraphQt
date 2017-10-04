@@ -11,7 +11,7 @@ QGroupBox {
     margin-top: 1px;
     padding: 2px;
     padding-top: 10px;
-    font-size: 12px;
+    font-size: 11px;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
@@ -107,7 +107,7 @@ class _NodeGroubBox(QtGui.QGroupBox):
         super(_NodeGroubBox, self).__init__(parent)
         self.setStyleSheet(_STYLE_QGROUPBOX)
         self.setTitle(label)
-        self.setMaximumSize(150, 50)
+        self.setMaximumSize(120, 50)
         self._layout = QtGui.QVBoxLayout(self)
         self._layout.setContentsMargins(0, 4, 0, 0)
 
@@ -147,7 +147,7 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         return self._label
 
     @label.setter
-    def label(self, label):
+    def label(self, label=''):
         self._label = label
 
 
@@ -179,8 +179,8 @@ class ComboNodeWidget(_BaseNodeWidget):
         return str(self._combo.currentText())
 
     @value.setter
-    def value(self, item):
-        index = self._combo.findText(QtCore.Qt.MatchExactly)
+    def value(self, item_text):
+        index = self._combo.findText(item_text, QtCore.Qt.MatchExactly)
         self._combo.setCurrentIndex(index)
 
     def add_menu_item(self, item):

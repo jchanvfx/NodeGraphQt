@@ -10,7 +10,24 @@ class Port(object):
 
     def __str__(self):
         name = self.__class__.__name__
-        return '{}(name={}, node={})'.format(name, self.name(), self.node())
+        return '{}(name={}, node={})'.format(
+            name, self.name(), self.node().name()
+        )
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.node().id() == other.node().id()
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash((self.type(), self.node().id()))
+
+    @property
+    def item(self):
+        return self._port_item
 
     def name(self):
         """
@@ -76,6 +93,8 @@ class Port(object):
         Args:
             port (BlueprintNodeGraph.Port): port object.
         """
+        if not port:
+            return
         port_item = port._port_item
         if not isinstance(port_item, PortItem):
             return
@@ -90,15 +109,30 @@ class Port(object):
 
 class Node(object):
 
-    def __init__(self, name='node', node=None):
-        self._node_item = node if node else NodeItem()
-        self._node_item.type = self.class_type()
-        self._node_item.name = name
+    def __init__(self, name=None):
+        self._node_item = NodeItem()
+        self._node_item.type = self.type()
+        self._node_item.name = name or 'node'
 
     def __str__(self):
-        return '{}(name={}, if={})'.format(self.class_type, self.name, self.id())
+        return '{}(name={})'.format(self.type, self.name)
 
-    def class_type(self):
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.id() == other.id()
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash((self.type(), self.id()))
+
+    @property
+    def item(self):
+        return self._node_item
+
+    def type(self):
         """
         The class that the node belongs to.
 
@@ -288,7 +322,7 @@ class Node(object):
             ports.append(Port(port))
         return ports
 
-    def get_input(self, name):
+    def input(self, name):
         """
         Return the input port with the matching name.
 
@@ -302,7 +336,7 @@ class Node(object):
             if port.name == name:
                 return Port(port)
 
-    def get_output(self, name):
+    def output(self, name):
         """
         Return the output port with the matching name.
 
@@ -346,12 +380,30 @@ class Node(object):
         self._node_item.setPos(x, y)
 
     def x_pos(self):
+        """
+        Get the node X position in the node graph.
+
+        Returns:
+            float: x position.
+        """
         return self._node_item.pos().x()
 
     def y_pos(self):
+        """
+        Get the node Y position in the node graph.
+
+        Returns:
+            float: y position.
+        """
         return self._node_item.pos().y()
 
     def xy_pos(self):
+        """
+        Get the node XY position in the node graph.
+
+        Returns:
+            tuple: x and y position.
+        """
         return self._node_item.pos().x(), self._node_item.pos().y()
 
     def delete(self):

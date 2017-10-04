@@ -1,38 +1,45 @@
 import json
 import os
-from collections import defaultdict
 
 from .constants import FILE_FORMAT
-from .node import NodeItem
+
+_RegisteredNodes = []
+
+
+def register_node(node):
+    global _RegisteredNodes
+    if node not in _RegisteredNodes:
+        _RegisteredNodes.append(node)
 
 
 class NodeSerializer(object):
 
     def __init__(self, node):
         self._node = node
-        self._data = defaultdict(lambda: None)
+        self._data = {self.node.id: {}}
 
     @property
     def node(self):
         return self._node
 
     def _serialize_node(self):
-        self._data[self.node.id] = {
-            'pos': (self.node.scenePos().x(), self.node.scenePos().y()),
-            'icon': self.node.icon,
-            'name': self.node.name,
-            'color': self.node.color,
-            'border': self.node.border_color,
-            'type': self.node.type
-        }
+        nid = self.node.id
+        self._data[nid]['icon'] = self.node.icon
+        self._data[nid]['name'] = self.node.name
+        self._data[nid]['color'] = self.node.color
+        self._data[nid]['border'] = self.node.border_color
+        self._data[nid]['type'] = self.node.type
+        self._data[nid]['pos'] = (
+            self.node.scenePos().x(),
+            self.node.scenePos().y()
+        )
 
-    def _serialize_ports(self):
-        self._data[self.node.id]['inputs'] = []
-        self._data[self.node.id]['outputs'] = []
-        for port in self._node.inputs:
-            self._data[self.node.id]['inputs'].append(port.name)
-        for port in self._node.outputs:
-            self._data[self.node.id]['outputs'].append(port.name)
+    def _serialize_widgets(self):
+        if not self.node.widgets:
+            return
+        self._data[self.node.id]['widgets'] = {}
+        for widget in self.node.widgets:
+            self._data[self.node.id]['widgets'][widget.name] = widget.value
 
     def _serialize_data(self):
         node_data = self.node.all_data(False)
@@ -41,7 +48,7 @@ class NodeSerializer(object):
 
     def serialize(self):
         self._serialize_node()
-        self._serialize_ports()
+        self._serialize_widgets()
         self._serialize_data()
         return self._data
 
@@ -98,21 +105,27 @@ class SessionSerializer(object):
 
 class NodeItemBuilder(object):
 
-    def __init__(self, node_id, data):
+    def __init__(self, node_id, data, node_types):
         self._node = None
         self._position = None
-        self._parse_data(node_id, data)
+        self._node_types = node_types
+        self.parse_data(node_id, data)
 
-    def _parse_data(self, node_id, data):
-        node = NodeItem(node_id)
-        node.name = data.get('name', 'node')
-        node.icon = data.get('icon')
-        node.color = data.get('color')
-        node.border_color = data.get('border')
-        for port_name in data.get('inputs', []):
-            node.add_input(port_name)
-        for port_name in data.get('outputs', []):
-            node.add_output(port_name)
+    def get_node_object(self, node_type):
+        return self._node_types[node_type]()
+
+    def parse_data(self, node_id, data):
+        node = self.get_node_object(data.get('type'))
+        node.item.id = node_id
+        node.item.name = data.get('name')
+        node.item.icon = data.get('icon')
+        node.item.color = data.get('color')
+        node.item.border_color = data.get('border')
+        for widget in node.item.widgets:
+            for name, value in data.get('widgets', {}).items():
+                if widget.name == name:
+                    widget.value = value
+                    break
         self._node = node
         self._position = data.get('pos', [0.0, 0.0])
 
@@ -130,10 +143,11 @@ class SessionLoader(object):
         self.data = None
 
     def build_nodes(self):
+        node_types = {n().type(): n for n in _RegisteredNodes}
         node_data = self.data.get('nodes')
         nodes = {}
         for node_id, node_data in node_data.items():
-            node_builder = NodeItemBuilder(node_id, node_data)
+            node_builder = NodeItemBuilder(node_id, node_data, node_types)
             node = node_builder.node()
             pos = node_builder.position()
             nodes[node_id] = (node, pos)
@@ -167,13 +181,13 @@ class SessionLoader(object):
             return
         with open(file_path) as data_file:
             self.data = json.load(data_file)
-
         node_index = {}
         for node_id, node_pos in self.build_nodes().items():
             node, pos = node_pos
-            self.viewer.add_node(node)
-            node.setPos(pos[0], pos[1])
-            node_index[node_id] = node
+            self.viewer.add_node(node.item)
+            node.item.setPos(pos[0], pos[1])
+            node_index[node_id] = node.item
         connections = self.build_connections(node_index)
         for in_port, out_port in connections:
-            self.viewer.connect_ports(in_port, out_port)
+            if in_port and out_port:
+                self.viewer.connect_ports(in_port, out_port)

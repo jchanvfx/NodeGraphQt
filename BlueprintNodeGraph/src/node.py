@@ -27,13 +27,13 @@ class NodeItem(QtGui.QGraphicsItem):
     Base Node item.
     """
 
-    def __init__(self, name='node', node_id=None, parent=None):
+    def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
+        self.setData(NODE_DATA['id'], str(uuid.uuid4()))
         self.setZValue(Z_VAL_NODE)
-        self.setData(NODE_DATA['id'], node_id or str(uuid.uuid4()))
         self._width = 120
-        self._height = 60
+        self._height = 70
 
         self._name = name.strip().replace(' ', '_')
         self._icon_item = None
@@ -357,6 +357,10 @@ class NodeItem(QtGui.QGraphicsItem):
     def id(self):
         return self.data(NODE_DATA['id'])
 
+    @id.setter
+    def id(self, uuid=''):
+        return self.setData(NODE_DATA['id'], uuid)
+
     @property
     def type(self):
         return self.data(NODE_DATA['type'])
@@ -385,6 +389,7 @@ class NodeItem(QtGui.QGraphicsItem):
     @height.setter
     def height(self, height):
         w, h = self.calc_size()
+        h = 70 if h < 70 else h
         self._height = height if height > h else h
 
     @property
@@ -508,11 +513,13 @@ class NodeItem(QtGui.QGraphicsItem):
             items = []
         label = name if not label else label
         widget = ComboNodeWidget(self, name, label, items)
+        widget.setToolTip('name: <b>{}</b>'.format(name))
         self._widgets.append(widget)
 
     def add_text_input(self, name='', label='', text=''):
         label = name if not label else label
         widget = LineEditNodeWidget(self, name, label, text)
+        widget.setToolTip('name: <b>{}</b>'.format(name))
         self._widgets.append(widget)
 
     def all_data(self, include_default=True):

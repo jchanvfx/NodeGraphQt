@@ -5,13 +5,13 @@ from PySide import QtGui, QtCore
 import BlueprintNodeGraph as bpng
 
 
-class FooNode(bpng.Node):
+class TestNodeFoo(bpng.Node):
     """
-    A node class with 2 input ports and 2 output ports.
+    A node class with 2 inputs and 2 outputs.
     """
 
-    def __init__(self, name):
-        super(FooNode, self).__init__(name)
+    def __init__(self, name=None):
+        super(TestNodeFoo, self).__init__(name)
         # create node inputs
         self.add_input('foo')
         self.add_input('bar')
@@ -20,13 +20,13 @@ class FooNode(bpng.Node):
         self.add_output('bananas')
 
 
-class BarNode(bpng.Node):
+class TestNodeBar(bpng.Node):
     """
-    A node class with 3 input ports and 3 output ports.
+    A node class with 3 inputs and 3 outputs.
     """
 
-    def __init__(self, name):
-        super(BarNode, self).__init__(name)
+    def __init__(self, name=None):
+        super(TestNodeBar, self).__init__(name)
         # create node inputs
         self.add_input('hello')
         self.add_input('world')
@@ -35,6 +35,45 @@ class BarNode(bpng.Node):
         self.add_output('apples')
         self.add_output('bananas')
         self.add_output('orange')
+
+
+class TextInputNode(bpng.Node):
+    """
+    A example of a node with a added text input.
+    """
+
+    def __init__(self, name=None):
+        super(TextInputNode, self).__init__(name)
+        # create node inputs
+        self.add_input('hello')
+        # create node outputs
+        self.add_output('world')
+        # add text input field to node.
+        self.add_text_input('my_input', 'Text Input')
+
+
+class DropdownMenuNode(bpng.Node):
+    """
+    A example of a node with a added menu and a few input & outputs.
+    """
+
+    def __init__(self, name=None):
+        super(DropdownMenuNode, self).__init__(name)
+        # create node inputs
+        self.add_input('hello')
+        # create node outputs
+        self.add_output('world')
+        self.add_output('foo')
+        # add text input field to node.
+        items = ['item1', 'item2', 'item3']
+        self.add_dropdown_menu('my_menu_1', 'Menu Test', items=items)
+
+
+# register the nodes.
+bpng.register_node(TestNodeFoo)
+bpng.register_node(TestNodeBar)
+bpng.register_node(TextInputNode)
+bpng.register_node(DropdownMenuNode)
 
 
 class NodeGraph(bpng.NodeGraph):
@@ -56,31 +95,25 @@ if __name__ == '__main__':
     node_graph = NodeGraph()
 
     # create the nodes.
-    node_1 = FooNode('Foo Node')
-    node_2 = BarNode('Bar Node')
-
-    node_3 = BarNode('Test Node 1')
-    node_3.add_text_input('input_1', 'Text Input')
-
-    node_4 = FooNode('Test Node 2')
-    node_4.add_dropdown_menu('menu_1', 'Menu Test', items=['item1', 'item2', 'item3'])
+    node1 = TestNodeFoo('Foo Node')
+    node2 = TestNodeBar('Bar Node')
+    node3 = TextInputNode('Test Node 1')
+    node4 = DropdownMenuNode('Test Node 2')
 
     # add nodes into the scene.
-    node_graph.add_node(node_1)
-    node_graph.add_node(node_2)
-    node_graph.add_node(node_3)
-    node_graph.add_node(node_4)
+    node_graph.add_node(node1)
+    node_graph.add_node(node2)
+    node_graph.add_node(node3)
+    node_graph.add_node(node4)
 
     # position the nodes.
-    node_1.set_xy_pos(-250.0, 250.0)
-    node_2.set_xy_pos(-250.0, -150.0)
-    node_3.set_xy_pos(250.0, 50.0)
+    node1.set_xy_pos(-250.0, 250.0)
+    node2.set_xy_pos(-250.0, -150.0)
+    node3.set_xy_pos(250.0, 50.0)
+    node4.set_xy_pos(300.0, 80.0)
 
     # connect "node_1" to "node_3"
-    node1_output = node_1.get_output('apples')
-    node3_input = node_3.get_input('world')
-
-    node1_output.connect_to(node3_input)
+    node1.output('apples').connect_to(node3.input('hello'))
 
     # show node graph.
     node_graph.show()

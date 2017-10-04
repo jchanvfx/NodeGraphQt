@@ -31,6 +31,8 @@
 
 from .graph import NodeGraph
 from .node import Node
+from .src.serializer import register_node
+
 
 __author__ = 'Johnny Chan - www.chantasticvfx.com'
 __email__ = 'johnny@chantasticvfx.com'
