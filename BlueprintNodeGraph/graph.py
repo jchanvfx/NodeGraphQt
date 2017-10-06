@@ -2,6 +2,7 @@
 from PySide import QtGui
 
 from .node import Node
+from .src import node_types
 from .src.scene import NodeScene
 from .src.viewer import NodeViewer
 
@@ -63,6 +64,24 @@ class NodeGraph(QtGui.QWidget):
         """
         self._viewer.load_session(path, False)
 
+    def create_node(self, class_type, name):
+        """
+        Create node object.
+
+        Args:
+            class_type (str): node class type.
+            name (str): name of the node.
+
+        Returns:
+            BlueprintNodeGraph.Node: node object.
+        """
+        node = node_types.get_registered_nodes(class_type)()
+        node.set_name(name)
+        self.clear_selection()
+        node.set_selected(True)
+        self.add_node(node)
+        return node
+
     def add_node(self, node):
         """
         Add a node into the node graph.
@@ -71,7 +90,7 @@ class NodeGraph(QtGui.QWidget):
             node (BlueprintNodeGraph.Node): node object.
         """
         assert isinstance(node, Node), 'node must be a Node() object'
-        self._viewer.add_node(node._node_item)
+        self._viewer.add_node(node.item)
 
     def delete_node(self, node):
         """

@@ -115,7 +115,7 @@ class Node(object):
         self._node_item.name = name or 'node'
 
     def __str__(self):
-        return '{}(name={})'.format(self.type, self.name)
+        return '{}(name=\'{}\')'.format(self.type, self.name)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -207,7 +207,7 @@ class Node(object):
     def set_selected(self, selected=True):
         """
         Set the node to be selected or not selected.
-        
+
         Args:
             selected (bool): True to select the node.
         """
@@ -216,7 +216,7 @@ class Node(object):
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
         Adds a input port the the node.
-        
+
         Args:
             name (str): name for the input port. 
             multi_input (bool): allow port to have more than one connection.
@@ -303,52 +303,68 @@ class Node(object):
         Returns all the input port for the node.
         
         Returns:
-            list[BlueprintNodeGraph.Port]: a list of port objects.
+            dict: {port name: port object}
         """
-        ports = []
-        for port in self._node_item.inputs:
-            ports.append(Port(port))
-        return ports
+        return {p.name: Port(p) for p in self._node_item.inputs}
 
     def outputs(self):
         """
         Returns all the output port for the node.
 
         Returns:
-            list[BlueprintNodeGraph.Port]: a list of port objects.
+            dict: {port name: port object}
         """
-        ports = []
-        for port in self._node_item.outputs:
-            ports.append(Port(port))
-        return ports
+        return {p.name: Port(p) for p in self._node_item.outputs}
 
-    def input(self, name):
+    def input(self, index):
         """
         Return the input port with the matching name.
 
         Args:
-            name (str): name of the input port.
+            index (int): index of the input port.
 
         Returns:
             BlueprintNodeGraph.Port: port object.
         """
-        for port in self._node_item.inputs:
-            if port.name == name:
-                return Port(port)
+        return Port(self._node_item.inputs[index])
 
-    def output(self, name):
+    def set_input(self, index, port):
+        """
+        Creates a connection pipe to the targeted output port.
+
+        Args:
+            index (int): index of the port.
+            port (BlueprintNodeGraph.Port): port object.
+        """
+        if port.item == self._node_item.inputs[index]:
+            return
+        src_port = Port(self._node_item.inputs[index])
+        src_port.connect_to(port)
+
+    def output(self, index):
         """
         Return the output port with the matching name.
 
         Args:
-            name (str): name of the output port.
+            index (int): index of the output port.
 
         Returns:
             BlueprintNodeGraph.Port: port object.
         """
-        for port in self._node_item.outputs:
-            if port.name == name:
-                return Port(port)
+        return Port(self._node_item.outputs[index])
+
+    def set_output(self, index, port):
+        """
+        Creates a connection pipe to the targeted input port.
+
+        Args:
+            index (int): index of the port.
+            port (BlueprintNodeGraph.Port): port object.
+        """
+        if port.item == self._node_item.outputs[index]:
+            return
+        src_port = Port(self._node_item.outputs[index])
+        src_port.connect_to(port)
 
     def set_x_pos(self, x=0.0):
         """
@@ -370,7 +386,7 @@ class Node(object):
         x = self._node_item.pos().x()
         self._node_item.setPos(x, y)
 
-    def set_xy_pos(self, x=0.0, y=0.0):
+    def set_pos(self, x=0.0, y=0.0):
         """
         Set the node X and Y position in the node graph.
         Args:
@@ -397,12 +413,12 @@ class Node(object):
         """
         return self._node_item.pos().y()
 
-    def xy_pos(self):
+    def pos(self):
         """
         Get the node XY position in the node graph.
 
         Returns:
-            tuple: x and y position.
+            tuple(float, float): x and y position.
         """
         return self._node_item.pos().x(), self._node_item.pos().y()
 

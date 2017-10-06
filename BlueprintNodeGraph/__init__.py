@@ -31,7 +31,7 @@
 
 from .graph import NodeGraph
 from .node import Node
-from .src.serializer import register_node
+from .src.node_types import register_node, registered_nodes
 
 
 __author__ = 'Johnny Chan - www.chantasticvfx.com'

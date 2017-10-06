@@ -8,7 +8,7 @@ from .constants import (
     NODE_ICON_SIZE, NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
     Z_VAL_NODE
 )
-from .node_widgets import ComboNodeWidget, LineEditNodeWidget
+from .widgets import ComboNodeWidget, LineEditNodeWidget
 from .port import PortItem
 
 NODE_DATA = {
@@ -18,7 +18,8 @@ NODE_DATA = {
     'color': 3,
     'border_color': 4,
     'text_color': 5,
-    'type': 6
+    'type': 6,
+    'selected': 7
 }
 
 
@@ -434,6 +435,17 @@ class NodeItem(QtGui.QGraphicsItem):
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
         self.setData(NODE_DATA['border_color'], color)
+
+    @property
+    def selected(self):
+        return self.isSelected()
+
+    @selected.setter
+    def selected(self, selected=False):
+        self.setSelected(selected)
+        self.setData(NODE_DATA['selected'], selected)
+        if selected:
+            self._hightlight_pipes()
 
     @property
     def name(self):

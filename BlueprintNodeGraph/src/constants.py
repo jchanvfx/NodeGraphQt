@@ -1,15 +1,6 @@
 #!/usr/bin/python
 import os
 
-BLUEPRINT_PATH = os.path.dirname(os.path.abspath(__file__))
-ICON_DOWN_ARROW_ICON = os.path.join(BLUEPRINT_PATH, 'down_arrow.png')
-
-# DRAW STACK ORDER
-Z_VAL_PIPE = -1
-Z_VAL_NODE = 1
-Z_VAL_PORT = 2
-Z_VAL_KNOB = 3
-
 # PIPE
 PIPE_STYLE_DEFAULT = 'line'
 PIPE_STYLE_DASHED = 'dashed'
@@ -37,5 +28,16 @@ NODE_SEL_BORDER_COLOR = (173, 115, 5, 255)
 VIEWER_BG_COLOR = (35, 35, 35, 255)
 VIEWER_GRID_OVERLAY = True
 
-# IO FORMATS
-FILE_FORMAT = '.ngraph'
+# SAVE FILE FORMAT
+FILE_FORMAT = '.bpg'
+
+# GRAPH PATHS
+BASE_PATH = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
+ICON_DOWN_ARROW_ICON = os.path.join(BASE_PATH, 'src', 'down_arrow.png')
+
+# DRAW STACK ORDER
+Z_VAL_PIPE = -1
+Z_VAL_NODE = 1
+Z_VAL_PORT = 2
+Z_VAL_KNOB = 3
+

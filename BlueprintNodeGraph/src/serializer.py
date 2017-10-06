@@ -2,14 +2,7 @@ import json
 import os
 
 from .constants import FILE_FORMAT
-
-_RegisteredNodes = []
-
-
-def register_node(node):
-    global _RegisteredNodes
-    if node not in _RegisteredNodes:
-        _RegisteredNodes.append(node)
+from .node_types import registered_nodes
 
 
 class NodeSerializer(object):
@@ -22,34 +15,35 @@ class NodeSerializer(object):
     def node(self):
         return self._node
 
-    def _serialize_node(self):
+    def serialize_node(self):
         nid = self.node.id
         self._data[nid]['icon'] = self.node.icon
         self._data[nid]['name'] = self.node.name
         self._data[nid]['color'] = self.node.color
         self._data[nid]['border'] = self.node.border_color
         self._data[nid]['type'] = self.node.type
+        self._data[nid]['selected'] = self.node.selected
         self._data[nid]['pos'] = (
             self.node.scenePos().x(),
             self.node.scenePos().y()
         )
 
-    def _serialize_widgets(self):
+    def serialize_widgets(self):
         if not self.node.widgets:
             return
         self._data[self.node.id]['widgets'] = {}
         for widget in self.node.widgets:
             self._data[self.node.id]['widgets'][widget.name] = widget.value
 
-    def _serialize_data(self):
+    def serialize_data(self):
         node_data = self.node.all_data(False)
         for k, v in node_data.items():
             self._data[self.node.id]['data'][k] = v
 
     def serialize(self):
-        self._serialize_node()
-        self._serialize_widgets()
-        self._serialize_data()
+        self.serialize_node()
+        self.serialize_widgets()
+        self.serialize_data()
         return self._data
 
 
@@ -111,16 +105,17 @@ class NodeItemBuilder(object):
         self._node_types = node_types
         self.parse_data(node_id, data)
 
-    def get_node_object(self, node_type):
+    def node_object(self, node_type):
         return self._node_types[node_type]()
 
     def parse_data(self, node_id, data):
-        node = self.get_node_object(data.get('type'))
+        node = self.node_object(data.get('type'))
         node.item.id = node_id
         node.item.name = data.get('name')
         node.item.icon = data.get('icon')
         node.item.color = data.get('color')
         node.item.border_color = data.get('border')
+        node.item.selected = data.get('selected')
         for widget in node.item.widgets:
             for name, value in data.get('widgets', {}).items():
                 if widget.name == name:
@@ -143,7 +138,7 @@ class SessionLoader(object):
         self.data = None
 
     def build_nodes(self):
-        node_types = {n().type(): n for n in _RegisteredNodes}
+        node_types = registered_nodes()
         node_data = self.data.get('nodes')
         nodes = {}
         for node_id, node_data in node_data.items():
@@ -191,3 +186,7 @@ class SessionLoader(object):
         for in_port, out_port in connections:
             if in_port and out_port:
                 self.viewer.connect_ports(in_port, out_port)
+
+        for node in self.viewer.all_nodes():
+            node._hightlight_pipes()
+            print node.name, node.pos().x(), node.pos().y()

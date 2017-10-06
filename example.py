@@ -2,10 +2,10 @@ import sys
 
 from PySide import QtGui, QtCore
 
-import BlueprintNodeGraph as bpng
+import BlueprintNodeGraph as BpGraph
 
 
-class TestNodeFoo(bpng.Node):
+class TestNodeFoo(BpGraph.Node):
     """
     A node class with 2 inputs and 2 outputs.
     """
@@ -19,8 +19,10 @@ class TestNodeFoo(bpng.Node):
         self.add_output('apples')
         self.add_output('bananas')
 
+BpGraph.register_node(TestNodeFoo)
 
-class TestNodeBar(bpng.Node):
+
+class TestNodeBar(BpGraph.Node):
     """
     A node class with 3 inputs and 3 outputs.
     """
@@ -36,8 +38,10 @@ class TestNodeBar(bpng.Node):
         self.add_output('bananas')
         self.add_output('orange')
 
+BpGraph.register_node(TestNodeBar)
 
-class TextInputNode(bpng.Node):
+
+class TextInputNode(BpGraph.Node):
     """
     A example of a node with a added text input.
     """
@@ -51,8 +55,10 @@ class TextInputNode(bpng.Node):
         # add text input field to node.
         self.add_text_input('my_input', 'Text Input')
 
+BpGraph.register_node(TextInputNode)
 
-class DropdownMenuNode(bpng.Node):
+
+class DropdownMenuNode(BpGraph.Node):
     """
     A example of a node with a added menu and a few input & outputs.
     """
@@ -65,18 +71,13 @@ class DropdownMenuNode(bpng.Node):
         self.add_output('world')
         self.add_output('foo')
         # add text input field to node.
-        items = ['item1', 'item2', 'item3']
+        items = ['item 1', 'item2', 'item3']
         self.add_dropdown_menu('my_menu_1', 'Menu Test', items=items)
 
-
-# register the nodes.
-bpng.register_node(TestNodeFoo)
-bpng.register_node(TestNodeBar)
-bpng.register_node(TextInputNode)
-bpng.register_node(DropdownMenuNode)
+BpGraph.register_node(DropdownMenuNode)
 
 
-class NodeGraph(bpng.NodeGraph):
+class NodeGraph(BpGraph.NodeGraph):
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -92,29 +93,25 @@ class NodeGraph(bpng.NodeGraph):
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
 
-    node_graph = NodeGraph()
+    # create node graph.
+    graph = NodeGraph()
+    graph.show()
 
     # create the nodes.
-    node1 = TestNodeFoo('Foo Node')
-    node2 = TestNodeBar('Bar Node')
-    node3 = TextInputNode('Test Node 1')
-    node4 = DropdownMenuNode('Test Node 2')
+    foo_node = graph.create_node(class_type='TestNodeFoo', name='Foo Node')
+    bar_node = graph.create_node(class_type='TestNodeBar', name='Bar Node')
+    text_node = graph.create_node(class_type='TextInputNode', name='Text Node')
+    menu_node = graph.create_node(class_type='DropdownMenuNode', name='Menu Node')
 
-    # add nodes into the scene.
-    node_graph.add_node(node1)
-    node_graph.add_node(node2)
-    node_graph.add_node(node3)
-    node_graph.add_node(node4)
+    # position nodes.
+    foo_node.set_pos(-487.0, 141.0)
+    bar_node.set_pos(-77.0, 17.0)
+    text_node.set_pos(-488.0, -158.0)
+    menu_node.set_pos(310.0, -97.0)
 
-    # position the nodes.
-    node1.set_xy_pos(-250.0, 250.0)
-    node2.set_xy_pos(-250.0, -150.0)
-    node3.set_xy_pos(250.0, 50.0)
-    node4.set_xy_pos(300.0, 80.0)
+    # connect nodes
+    foo_node.set_output(0, bar_node.input(2))
+    menu_node.set_input(0, bar_node.output(1))
+    bar_node.set_input(0, text_node.output(0))
 
-    # connect "node_1" to "node_3"
-    node1.output('apples').connect_to(node3.input('hello'))
-
-    # show node graph.
-    node_graph.show()
     app.exec_()
