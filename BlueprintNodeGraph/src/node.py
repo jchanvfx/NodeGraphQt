@@ -3,11 +3,10 @@ import uuid
 
 from PySide import QtGui, QtCore
 
-from .constants import (
-    IN_PORT, OUT_PORT,
-    NODE_ICON_SIZE, NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-    Z_VAL_NODE
-)
+from .constants import (IN_PORT, OUT_PORT,
+                        NODE_ICON_SIZE, ICON_NODE_BASE,
+                        NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
+                        Z_VAL_NODE)
 from .widgets import ComboNodeWidget, LineEditNodeWidget
 from .port import PortItem
 
@@ -75,7 +74,7 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundRect(rect, radius_x, radius_y)
 
-        label_rect = QtCore.QRectF(0.0, 0.0, self._width, 22)
+        label_rect = QtCore.QRectF(0.0, 0.0, self._width, 28)
         path = QtGui.QPainterPath()
         path.addRoundedRect(label_rect, radius_x, radius_y)
         painter.setBrush(QtGui.QColor(0, 0, 0, 60))
@@ -207,13 +206,9 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def arrange_icon(self):
         """
-        Arrange node icon to the default center of the node.
+        Arrange node icon to the default top left of the node.
         """
-        if self._icon_item:
-            icon_rect = self._icon_item.boundingRect()
-            icon_x = (self._width / 2) - (icon_rect.width() / 2)
-            icon_y = (self._height / 2) - (icon_rect.height() / 2)
-            self._icon_item.setPos(icon_x, icon_y)
+        self._icon_item.setPos(2.0, 2.0)
 
     def arrange_label(self):
         """
@@ -294,6 +289,18 @@ class NodeItem(QtGui.QGraphicsItem):
             icon_y = self._icon_item.pos().y() + y
             self._icon_item.setPos(icon_x, icon_y)
 
+    def offset_label(self, x=0.0, y=0.0):
+        """
+        offset the label in the node layout.
+
+        Args:
+            x (float): horizontal x offset
+            y (float): vertical y offset
+        """
+        icon_x = self._text_item.pos().x() + x
+        icon_y = self._text_item.pos().y() + y
+        self._text_item.setPos(icon_x, icon_y)
+
     def offset_widgets(self, x=0.0, y=0.0):
         """
         offset the node widgets in the node layout.
@@ -333,17 +340,18 @@ class NodeItem(QtGui.QGraphicsItem):
         # -----------------------------------------------
         # setup initial base size.
         self._set_base_size()
+        self.height += 14
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # -----------------------------------------------
 
         # arrange label text
         self.arrange_label()
+        self.offset_label(0.0, 3.0)
 
         # arrange icon
-        if self.icon:
-            self.arrange_icon()
-            self.offset_icon(0.0, 0.0)
+        self.arrange_icon()
+        self.offset_icon(1.0, 0.0)
 
         # arrange node widgets
         if self.widgets:
@@ -352,7 +360,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=30.0)
-        self.offset_ports(0.0, 10.0)
+        self.offset_ports(0.0, 15.0)
 
     @property
     def id(self):
@@ -401,8 +409,7 @@ class NodeItem(QtGui.QGraphicsItem):
     def icon(self, path=None):
         self.setData(NODE_DATA['icon'], path)
         if not path:
-            self._icon_item = None
-            return
+            path = ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
         pixmap = pixmap.scaledToHeight(
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation
