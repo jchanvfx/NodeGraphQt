@@ -31,6 +31,8 @@
 
 from .graph import NodeGraph
 from .node import Node
+from .src.node_types import register_node, registered_nodes
+
 
 __author__ = 'Johnny Chan - www.chantasticvfx.com'
 __email__ = 'johnny@chantasticvfx.com'

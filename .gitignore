@@ -11,3 +11,4 @@ docs/_build/
 
 # test
 *.ngraph
+*.bpg

@@ -8,7 +8,7 @@ from .constants import (
     NODE_ICON_SIZE, NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
     Z_VAL_NODE
 )
-from .node_widgets import ComboNodeWidget, LineEditNodeWidget
+from .widgets import ComboNodeWidget, LineEditNodeWidget
 from .port import PortItem
 
 NODE_DATA = {
@@ -18,6 +18,8 @@ NODE_DATA = {
     'color': 3,
     'border_color': 4,
     'text_color': 5,
+    'type': 6,
+    'selected': 7
 }
 
 
@@ -26,13 +28,13 @@ class NodeItem(QtGui.QGraphicsItem):
     Base Node item.
     """
 
-    def __init__(self, name='node', node_id=None, parent=None):
+    def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
+        self.setData(NODE_DATA['id'], str(uuid.uuid4()))
         self.setZValue(Z_VAL_NODE)
-        self.setData(NODE_DATA['id'], node_id or str(uuid.uuid4()))
         self._width = 120
-        self._height = 60
+        self._height = 70
 
         self._name = name.strip().replace(' ', '_')
         self._icon_item = None
@@ -356,6 +358,18 @@ class NodeItem(QtGui.QGraphicsItem):
     def id(self):
         return self.data(NODE_DATA['id'])
 
+    @id.setter
+    def id(self, uuid=''):
+        return self.setData(NODE_DATA['id'], uuid)
+
+    @property
+    def type(self):
+        return self.data(NODE_DATA['type'])
+
+    @type.setter
+    def type(self, node_type='NODE'):
+        self.setData(NODE_DATA['type'], node_type)
+
     @property
     def size(self):
         return self._width, self._height
@@ -376,6 +390,7 @@ class NodeItem(QtGui.QGraphicsItem):
     @height.setter
     def height(self, height):
         w, h = self.calc_size()
+        h = 70 if h < 70 else h
         self._height = height if height > h else h
 
     @property
@@ -420,6 +435,17 @@ class NodeItem(QtGui.QGraphicsItem):
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
         self.setData(NODE_DATA['border_color'], color)
+
+    @property
+    def selected(self):
+        return self.isSelected()
+
+    @selected.setter
+    def selected(self, selected=False):
+        self.setSelected(selected)
+        self.setData(NODE_DATA['selected'], selected)
+        if selected:
+            self._hightlight_pipes()
 
     @property
     def name(self):
@@ -499,19 +525,23 @@ class NodeItem(QtGui.QGraphicsItem):
             items = []
         label = name if not label else label
         widget = ComboNodeWidget(self, name, label, items)
+        widget.setToolTip('name: <b>{}</b>'.format(name))
         self._widgets.append(widget)
 
     def add_text_input(self, name='', label='', text=''):
         label = name if not label else label
         widget = LineEditNodeWidget(self, name, label, text)
+        widget.setToolTip('name: <b>{}</b>'.format(name))
         self._widgets.append(widget)
 
-    def all_data(self, show_default=True):
-        names = []
-        if show_default:
-            names += NODE_DATA.keys()
-        names += self._data_index.keys()
-        return sorted(names)
+    def all_data(self, include_default=True):
+        data = {}
+        for k, v in self._data_index.items():
+            data[k] = self.data(v)
+        if include_default:
+            for k, v in NODE_DATA.items():
+                data[k] = self.data(v)
+        return data
 
     def get_data(self, name):
         index = NODE_DATA.get(name)

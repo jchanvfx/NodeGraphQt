@@ -1,13 +1,13 @@
 #!/usr/bin/python
 from PySide import QtGui, QtCore
 
-import helpers
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED, FILE_FORMAT)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
+from .serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -33,6 +33,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
+        self.serializer = SessionSerializer()
+        self.loader = SessionLoader(self)
         self._setup_shortcuts()
 
     def __str__(self):
@@ -363,8 +365,8 @@ class NodeViewer(QtGui.QGraphicsView):
         if self.validate_connection(from_port, to_port):
             self.make_pipe_connection(from_port, to_port)
 
-    def save_session(self, file_path=None, save_dialog=True):
-        if save_dialog:
+    def save_session(self, file_path=None, dialog=True):
+        if dialog:
             file_dlg = QtGui.QFileDialog.getSaveFileName(
                 self,
                 caption='Save Session Setup',
@@ -372,21 +374,21 @@ class NodeViewer(QtGui.QGraphicsView):
             file_path = file_dlg[0]
         if not file_path:
             return
-        session = helpers.SessionSaver(self.all_nodes(), self.all_pipes())
-        session.save_session(file_path)
+        self.serializer.set_nodes(self.all_nodes())
+        self.serializer.set_pipes(self.all_pipes())
+        self.serializer.write(file_path)
 
     def load_session(self, file_path=None, open_dialog=True):
         if open_dialog:
             file_dlg = QtGui.QFileDialog.getOpenFileName(
                 self,
                 caption='Open Session Setup',
-                filter='Node Graph (*.{})'.format(FILE_FORMAT))
+                filter='Node Graph (*{}) All Files (*)'.format(FILE_FORMAT))
             file_path = file_dlg[0]
         if not file_path:
             return
         self.clear_scene()
-        session = helpers.SessionLoader(self)
-        session.load_file(file_path)
+        self.loader.load(file_path)
 
     def clear_scene(self):
         for node in self.all_nodes():
