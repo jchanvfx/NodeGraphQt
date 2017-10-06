@@ -94,17 +94,15 @@ class Port(object):
             port (BlueprintNodeGraph.Port): port object.
         """
         if not port:
+            for pipe in self.item.connected_pipes:
+                pipe.delete()
             return
+
         port_item = port._port_item
         if not isinstance(port_item, PortItem):
             return
         viewer = self._port_item.scene().viewer()
         viewer.connect_ports(self._port_item, port_item)
-
-    # def disconnect_from(self, port=None):
-    #     port_item = port._port_item
-    #     if not isinstance(port_item, PortItem):
-    #         return
 
 
 class Node(object):
@@ -148,7 +146,7 @@ class Node(object):
         Returns:
             str: UUID of the node.
         """
-        return self._node_item.id
+        return self.item.id
 
     def name(self):
         """
@@ -157,7 +155,7 @@ class Node(object):
         Returns:
             str: name of the node.
         """
-        return self._node_item.name
+        return self.item.name
 
     def set_name(self, name=''):
         """
@@ -166,7 +164,7 @@ class Node(object):
         Args:
             name (str): name for the node.
         """
-        self._node_item.name = name
+        self.item.name = name
 
     def set_icon(self, icon=None):
         """
@@ -175,7 +173,7 @@ class Node(object):
         Args:
             icon (str): path to the icon image. 
         """
-        self._node_item.icon = icon
+        self.item.icon = icon
 
     def color(self):
         """
@@ -184,7 +182,7 @@ class Node(object):
         Returns:
             tuple: (r, g, b, a) from 0-255 range.
         """
-        return self._node_item.color
+        return self.item.color
 
     def set_color(self, color=(0, 0, 0, 255)):
         """
@@ -193,7 +191,7 @@ class Node(object):
         Args:
             color (tuple): (r, g, b, a) 
         """
-        self._node_item.color = color
+        self.item.color = color
 
     def selected(self):
         """
@@ -202,7 +200,7 @@ class Node(object):
         Returns:
             bool: True if the node is selected.
         """
-        return self._node_item.isSelected()
+        return self.item.isSelected()
 
     def set_selected(self, selected=True):
         """
@@ -211,7 +209,7 @@ class Node(object):
         Args:
             selected (bool): True to select the node.
         """
-        self._node_item.setSelected(selected)
+        self.item.setSelected(selected)
 
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
@@ -225,7 +223,7 @@ class Node(object):
         Returns:
             BlueprintNodeGraph.Port: the created port object.
         """
-        port_item = self._node_item.add_input(name, multi_input, display_name)
+        port_item = self.item.add_input(name, multi_input, display_name)
         return Port(port_item)
 
     def add_output(self, name='output', multi_output=False, display_name=True):
@@ -240,7 +238,7 @@ class Node(object):
         Returns:
             BlueprintNodeGraph.Port: the created port object.
         """
-        port_item = self._node_item.add_output(name, multi_output, display_name)
+        port_item = self.item.add_output(name, multi_output, display_name)
         return Port(port_item)
 
     def add_dropdown_menu(self, name='', label='', items=None):
@@ -252,7 +250,7 @@ class Node(object):
             label (str): label to be displayed.
             items (list[str]): items to be added into the menu.
         """
-        self._node_item.add_dropdown_menu(name, label, items)
+        self.item.add_dropdown_menu(name, label, items)
 
     def add_text_input(self, name='', label='', text=''):
         """
@@ -263,7 +261,7 @@ class Node(object):
             label (str): label to be displayed.
             text (str): pre filled text.
         """
-        self._node_item.add_text_input(name, label, text)
+        self.item.add_text_input(name, label, text)
 
     def get_dropdown_menu(self, name):
         """
@@ -275,7 +273,7 @@ class Node(object):
         Returns:
             DropdownMenuNodeWidget: drop down menu widget.
         """
-        return self._node_item.dropdown_menus.get(name)
+        return self.item.dropdown_menus.get(name)
 
     def get_text_input(self, name):
         """
@@ -287,7 +285,7 @@ class Node(object):
         Returns:
             TextInputNodeWidget: text input widget.
         """
-        return self._node_item.text_inputs.get(name)
+        return self.item.text_inputs.get(name)
 
     def get_widgets(self):
         """
@@ -296,7 +294,7 @@ class Node(object):
         Returns:
             list[]: list of node widgets.
         """
-        return self._node_item.widgets
+        return self.item.widgets
 
     def inputs(self):
         """
@@ -305,7 +303,7 @@ class Node(object):
         Returns:
             dict: {port name: port object}
         """
-        return {p.name: Port(p) for p in self._node_item.inputs}
+        return {p.name: Port(p) for p in self.item.inputs}
 
     def outputs(self):
         """
@@ -314,7 +312,7 @@ class Node(object):
         Returns:
             dict: {port name: port object}
         """
-        return {p.name: Port(p) for p in self._node_item.outputs}
+        return {p.name: Port(p) for p in self.item.outputs}
 
     def input(self, index):
         """
@@ -326,7 +324,7 @@ class Node(object):
         Returns:
             BlueprintNodeGraph.Port: port object.
         """
-        return Port(self._node_item.inputs[index])
+        return Port(self.item.inputs[index])
 
     def set_input(self, index, port):
         """
@@ -336,9 +334,9 @@ class Node(object):
             index (int): index of the port.
             port (BlueprintNodeGraph.Port): port object.
         """
-        if port.item == self._node_item.inputs[index]:
+        if port.item == self.item.inputs[index]:
             return
-        src_port = Port(self._node_item.inputs[index])
+        src_port = Port(self.item.inputs[index])
         src_port.connect_to(port)
 
     def output(self, index):
@@ -351,7 +349,7 @@ class Node(object):
         Returns:
             BlueprintNodeGraph.Port: port object.
         """
-        return Port(self._node_item.outputs[index])
+        return Port(self.item.outputs[index])
 
     def set_output(self, index, port):
         """
@@ -361,9 +359,9 @@ class Node(object):
             index (int): index of the port.
             port (BlueprintNodeGraph.Port): port object.
         """
-        if port.item == self._node_item.outputs[index]:
+        if port.item == self.item.outputs[index]:
             return
-        src_port = Port(self._node_item.outputs[index])
+        src_port = Port(self.item.outputs[index])
         src_port.connect_to(port)
 
     def set_x_pos(self, x=0.0):
@@ -373,8 +371,8 @@ class Node(object):
         Args:
             x (float): node x position:
         """
-        y = self._node_item.pos().y()
-        self._node_item.setPos(x, y)
+        y = self.item.pos().y()
+        self.item.setPos(x, y)
 
     def set_y_pos(self, y=0.0):
         """
@@ -383,8 +381,8 @@ class Node(object):
         Args:
             y (float): node x position:
         """
-        x = self._node_item.pos().x()
-        self._node_item.setPos(x, y)
+        x = self.item.pos().x()
+        self.item.setPos(x, y)
 
     def set_pos(self, x=0.0, y=0.0):
         """
@@ -393,7 +391,7 @@ class Node(object):
             x (float): node X position.
             y (float): node Y position.
         """
-        self._node_item.setPos(x, y)
+        self.item.setPos(x, y)
 
     def x_pos(self):
         """
@@ -402,7 +400,7 @@ class Node(object):
         Returns:
             float: x position.
         """
-        return self._node_item.pos().x()
+        return self.item.pos().x()
 
     def y_pos(self):
         """
@@ -411,7 +409,7 @@ class Node(object):
         Returns:
             float: y position.
         """
-        return self._node_item.pos().y()
+        return self.item.pos().y()
 
     def pos(self):
         """
@@ -420,10 +418,10 @@ class Node(object):
         Returns:
             tuple(float, float): x and y position.
         """
-        return self._node_item.pos().x(), self._node_item.pos().y()
+        return self.item.pos().x(), self.item.pos().y()
 
     def delete(self):
         """
         Remove node from the Node Graph.
         """
-        self._node_item.delete()
+        self.item.delete()
