@@ -189,4 +189,3 @@ class SessionLoader(object):
 
         for node in self.viewer.all_nodes():
             node._hightlight_pipes()
-            print node.name, node.pos().x(), node.pos().y()

@@ -36,7 +36,10 @@ class NodeItem(QtGui.QGraphicsItem):
         self._height = 70
 
         self._name = name.strip().replace(' ', '_')
-        self._icon_item = None
+        pixmap = QtGui.QPixmap(ICON_NODE_BASE)
+        pixmap = pixmap.scaledToHeight(
+            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
+        self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
         self._data_index = {}
         self._input_text_items = {}
@@ -45,7 +48,6 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_items = []
         self._widgets = []
 
-        self.icon = ''
         self.text_color = (107, 119, 129, 255)
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
@@ -197,11 +199,6 @@ class NodeItem(QtGui.QGraphicsItem):
             if wid_height > height:
                 height = wid_height + (wid_height / len(self._widgets))
 
-        if self._icon_item:
-            icon_rect = self._icon_item.boundingRect()
-            new_height = icon_rect.height() + (icon_rect.height() / 3)
-            if height < new_height:
-                height = new_height
         return width, height
 
     def arrange_icon(self):
@@ -340,7 +337,7 @@ class NodeItem(QtGui.QGraphicsItem):
         # -----------------------------------------------
         # setup initial base size.
         self._set_base_size()
-        self.height += 14
+        self.height += 10
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # -----------------------------------------------
@@ -359,7 +356,7 @@ class NodeItem(QtGui.QGraphicsItem):
             self.offset_widgets(0.0, 10.0)
 
         # arrange input and output ports.
-        self.arrange_ports(padding_x=0.0, padding_y=30.0)
+        self.arrange_ports(padding_x=0.0, padding_y=35.0)
         self.offset_ports(0.0, 15.0)
 
     @property
@@ -408,13 +405,11 @@ class NodeItem(QtGui.QGraphicsItem):
     @icon.setter
     def icon(self, path=None):
         self.setData(NODE_DATA['icon'], path)
-        if not path:
-            path = ICON_NODE_BASE
+        path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
         pixmap = pixmap.scaledToHeight(
-            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation
-        )
-        self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
+            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
+        self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.init_node()
 
