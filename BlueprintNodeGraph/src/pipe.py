@@ -125,7 +125,7 @@ class Pipe(QtGui.QGraphicsPathItem):
             port = self.input_port if reverse else self.output_port
         return port
 
-    # disabled as pipe selection is done in the viewer.
+    # pipe connection done in the viewer.
     # def viewer_start_connection(self, pos):
     #     if not self.scene():
     #         return

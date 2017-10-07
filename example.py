@@ -107,6 +107,9 @@ if __name__ == '__main__':
     icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'example_icon.png')
     bar_node.set_icon(icon)
 
+    # change the color on "bar_node"
+    bar_node.set_color(17, 52, 88)
+
     # position nodes.
     foo_node.set_pos(-487.0, 141.0)
     bar_node.set_pos(-77.0, 17.0)

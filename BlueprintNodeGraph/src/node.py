@@ -219,6 +219,8 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         Arrange node widgets to the default center of the node.
         """
+        if not self._widgets:
+            return
         wid_heights = sum([w.boundingRect().height() for w in self._widgets])
         pos_y = self._height / 2
         pos_y -= wid_heights / 2
@@ -334,27 +336,23 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         initialize the node layout and form.
         """
-        # -----------------------------------------------
         # setup initial base size.
         self._set_base_size()
-        self.height += 10
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
-        # -----------------------------------------------
+        # ----------------------------------------------------------------------
 
+        # add extra bit of height.
+        self.height += 10
         # arrange label text
         self.arrange_label()
         self.offset_label(0.0, 3.0)
-
         # arrange icon
         self.arrange_icon()
         self.offset_icon(1.0, 0.0)
-
         # arrange node widgets
-        if self.widgets:
-            self.arrange_widgets()
-            self.offset_widgets(0.0, 10.0)
-
+        self.arrange_widgets()
+        self.offset_widgets(0.0, 10.0)
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=35.0)
         self.offset_ports(0.0, 15.0)

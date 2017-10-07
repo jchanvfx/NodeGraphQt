@@ -36,7 +36,7 @@ class Port(object):
         Returns:
             str: port name.
         """
-        return self._port_item.name
+        return self.item.name
 
     def node(self):
         """
@@ -45,7 +45,7 @@ class Port(object):
         Returns:
             BlueprintNodeGraph.Node: node object.
         """
-        return Node(self._port_item.node)
+        return Node(self.item.node)
 
     def type(self):
         """
@@ -54,7 +54,7 @@ class Port(object):
         Returns:
             str: 'in' for input port or 'out' for output port.
         """
-        return self._port_item.port_type
+        return self.item.port_type
 
     def color(self):
         """
@@ -63,7 +63,7 @@ class Port(object):
         Returns:
             tuple: (r, g, b, a) from 0-255 range.
         """
-        return self._port_item.color
+        return self.item.color
 
     def set_color(self, color):
         """
@@ -72,7 +72,7 @@ class Port(object):
         Args:
             color (tuple): (r, g, b, a) from 0-255 range.
         """
-        self._port_item.color = color
+        self.item.color = color
 
     def connected_ports(self):
         """
@@ -81,10 +81,7 @@ class Port(object):
         Returns:
             list[BlueprintNodeGraph.Port]: list pf connected ports.
         """
-        ports = []
-        for port in self._port_item.connected_ports:
-            port.append(Port(port))
-        return ports
+        return [Port(p) for p in self.item.connected_ports]
 
     def connect_to(self, port=None):
         """
@@ -98,17 +95,16 @@ class Port(object):
                 pipe.delete()
             return
 
-        port_item = port._port_item
-        if not isinstance(port_item, PortItem):
+        if not isinstance(port.item, PortItem):
             return
-        viewer = self._port_item.scene().viewer()
-        viewer.connect_ports(self._port_item, port_item)
+        viewer = self.item.scene().viewer()
+        viewer.connect_ports(self.item, port.item)
 
 
 class Node(object):
 
-    def __init__(self, name=None):
-        self._node_item = NodeItem()
+    def __init__(self, name=None, node=None):
+        self._node_item = node or NodeItem()
         self._node_item.type = self.type()
         self._node_item.name = name or 'node'
 
@@ -177,21 +173,25 @@ class Node(object):
 
     def color(self):
         """
-        Returns the node color in (red, green, blur, alpha) value.
+        Returns the node color in (red, green, blue) value.
         
         Returns:
-            tuple: (r, g, b, a) from 0-255 range.
+            tuple: (r, g, b) from 0-255 range.
         """
-        return self.item.color
+        r, g, b, a = self.item.color
+        return r, g, b
 
-    def set_color(self, color=(0, 0, 0, 255)):
+    def set_color(self, r=0, g=0, b=0):
         """
-        Sets the color of the node in (red, green, blur, alpha) value.
+        Sets the color of the node in (red, green, blue) value.
 
         Args:
-            color (tuple): (r, g, b, a) 
+            r (int): red value 0-255 range.
+            g (int): green value 0-255 range.
+            b (int): blue value 0-255 range.
+
         """
-        self.item.color = color
+        self.item.color = (r, g, b, 255)
 
     def selected(self):
         """

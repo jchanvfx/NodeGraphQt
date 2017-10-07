@@ -109,10 +109,7 @@ class NodeGraph(QtGui.QWidget):
         Returns:
             list[BlueprintNodeGraph.Node]: list of nodes.
         """
-        nodes = []
-        for node in self._viewer.all_nodes():
-            nodes.append(Node(node=node._node_item))
-        return nodes
+        return [Node(node=n) for n in self._viewer.all_nodes()]
 
     def selected_nodes(self):
         """
@@ -121,10 +118,7 @@ class NodeGraph(QtGui.QWidget):
         Returns:
             list[BlueprintNodeGraph.Node]: list of nodes.
         """
-        nodes = []
-        for node in self._viewer.selected_nodes():
-            nodes.append(Node(node=node._node_item))
-        return nodes
+        return [Node(node=n) for n in self._viewer.selected_nodes()]
 
     def select_all(self):
         """
