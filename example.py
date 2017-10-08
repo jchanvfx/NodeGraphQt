@@ -103,8 +103,6 @@ if __name__ == '__main__':
     text_node = graph.create_node(class_type='TextInputNode', name='Text Node')
     menu_node = graph.create_node(class_type='DropdownMenuNode', name='Menu Node')
 
-    graph.create_node(class_type='TestNodeFoo', name='TEST')
-
     # change the color on "foo_node"
     foo_node.set_color(17, 52, 88)
 
