@@ -59,12 +59,13 @@ class NodeItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
+        r, g, b, a = self.color
+        bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
         if self.isSelected():
-            r, g, b, a = NODE_SEL_COLOR
-            bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
-        else:
-            r, g, b, a = self.color
-            bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
+            if NODE_SEL_COLOR:
+                r, g, b, a = NODE_SEL_COLOR
+            if NODE_SEL_BORDER_COLOR:
+                bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
 
         bg_color = QtGui.QColor(r, g, b, a)
         border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
@@ -557,7 +558,7 @@ class NodeItem(QtGui.QGraphicsItem):
             self._data_index[name] = index
             self.setData(index, data)
             return
-        raise ValueError('property "{}" already exists.'.format(name))
+        raise ValueError('data "{}" already exists.'.format(name))
 
     def delete(self):
         for port in self._input_items:

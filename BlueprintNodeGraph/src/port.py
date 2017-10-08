@@ -40,7 +40,7 @@ class PortItem(QtGui.QGraphicsItem):
         self.multi_connection = False
 
     def __str__(self):
-        return 'Port({})'.format(self.name)
+        return 'PortItem({})'.format(self.name)
 
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
@@ -96,11 +96,9 @@ class PortItem(QtGui.QGraphicsItem):
     @property
     def connected_ports(self):
         ports = []
+        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
         for pipe in self.connected_pipes:
-            if self.port_type == IN_PORT:
-                ports.append(pipe.output_port)
-            elif self.port_type == OUT_PORT:
-                ports.append(pipe.input_port)
+            ports.append(getattr(pipe, port_types[self.port_type]))
         return ports
 
     @property

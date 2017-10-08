@@ -103,12 +103,13 @@ if __name__ == '__main__':
     text_node = graph.create_node(class_type='TextInputNode', name='Text Node')
     menu_node = graph.create_node(class_type='DropdownMenuNode', name='Menu Node')
 
-    # chage icon on "bar_node"
-    icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'example_icon.png')
-    bar_node.set_icon(icon)
+    # change the color on "foo_node"
+    foo_node.set_color(17, 52, 88)
 
-    # change the color on "bar_node"
-    bar_node.set_color(17, 52, 88)
+    # chage icon on "bar_node"
+    this_path = os.path.dirname(os.path.abspath(__file__))
+    icon = os.path.join(this_path, 'example_icon.png')
+    bar_node.set_icon(icon)
 
     # position nodes.
     foo_node.set_pos(-487.0, 141.0)

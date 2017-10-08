@@ -211,6 +211,24 @@ class NodeViewer(QtGui.QGraphicsView):
             self._connection_pipe = None
         self._start_port = None
 
+    def validate_connection_loop(self, start_port, end_port):
+        """
+        validate the connection doesn't loop itself.
+        """
+        start_node = start_port.node
+        check_nodes = [end_port.node]
+        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        while check_nodes:
+            check_node = check_nodes.pop(0)
+            for check_port in getattr(check_node, io_types[end_port.port_type]):
+                if check_port.connected_ports:
+                    for port in check_port.connected_ports:
+                        if port.node != start_node:
+                            check_nodes.append(port.node)
+                        else:
+                            return False
+        return True
+
     def validate_connection(self, start_port, end_port):
         """
         validate "end_port" connection check.
@@ -222,6 +240,8 @@ class NodeViewer(QtGui.QGraphicsView):
         if end_port.port_type == start_port.port_type:
             return False
         if end_port.node == start_port.node:
+            return False
+        if not self.validate_connection_loop(start_port, end_port):
             return False
         return True
 
