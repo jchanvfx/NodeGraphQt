@@ -64,7 +64,8 @@ class NodeItem(QtGui.QGraphicsItem):
         if self.isSelected():
             if NODE_SEL_COLOR:
                 r, g, b, a = NODE_SEL_COLOR
-            bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
+            if NODE_SEL_BORDER_COLOR:
+                bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
 
         bg_color = QtGui.QColor(r, g, b, a)
         border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
