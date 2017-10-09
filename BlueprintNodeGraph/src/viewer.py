@@ -304,7 +304,6 @@ class NodeViewer(QtGui.QGraphicsView):
         elif ctrl_modifier:
             event.setModifiers(QtCore.Qt.ShiftModifier)
 
-        selection = self.selected_nodes()
         if not alt_modifier:
             pipe_items = self._items_near(event.scenePos(), Pipe, 20)
             pipe = pipe_items[0] if pipe_items else None
@@ -313,9 +312,6 @@ class NodeViewer(QtGui.QGraphicsView):
                 self._active_pipe.activate()
                 port = self._active_pipe.port_from_pos(event.scenePos(), True)
                 self.start_connection(port)
-        else:
-            for node in selection:
-                node.selected = True
 
     def sceneMouseReleaseEvent(self, event):
         """
