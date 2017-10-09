@@ -64,7 +64,8 @@ class PortItem(QtGui.QGraphicsItem):
         return super(PortItem, self).itemChange(change, value)
 
     def mousePressEvent(self, event):
-        self.viewer_start_connection()
+        if event.modifiers() != QtCore.Qt.AltModifier:
+            self.viewer_start_connection()
         super(PortItem, self).mousePressEvent(event)
         
     def mouseReleaseEvent(self, event):
