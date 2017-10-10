@@ -58,21 +58,25 @@ class Port(object):
 
     def color(self):
         """
-        Returns the default port color.
+        Returns the default port color (red, green, blue).
 
         Returns:
-            tuple: (r, g, b, a) from 0-255 range.
+            tuple: (r, g, b) from 0-255 range.
         """
-        return self.item.color
+        r, g, b, a = self.item.color
+        return r, g, b
 
-    def set_color(self, color):
+    def set_color(self, r=0, g=0, b=0):
         """
         Sets the default port color in (red, green, blur, alpha) value.
 
         Args:
-            color (tuple): (r, g, b, a) from 0-255 range.
+            r (int): red value 0-255 range.
+            g (int): green value 0-255 range.
+            b (int): blue value 0-255 range.
         """
-        self.item.color = color
+
+        self.item.color = (r, g, b, 255)
 
     def connected_ports(self):
         """
