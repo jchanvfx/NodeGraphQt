@@ -89,21 +89,21 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.drawPath(path)
 
     def mousePressEvent(self, event):
+        if event.modifiers() == QtCore.Qt.AltModifier:
+            event.ignore()
+            return
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start
             x_pos = event.pos().x()
             if not start <= x_pos <= end:
-                self.setFlag(self.ItemIsMovable, False)
+                event.ignore()
         super(NodeItem, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
-            start = PortItem().boundingRect().width()
-            end = self.boundingRect().width() - start
-            x_pos = event.pos().x()
-            if not start <= x_pos <= end:
-                self.setFlag(self.ItemIsMovable, True)
+        if event.modifiers() == QtCore.Qt.AltModifier:
+            event.ignore()
+            return
         super(NodeItem, self).mouseReleaseEvent(event)
 
     def itemChange(self, change, value):

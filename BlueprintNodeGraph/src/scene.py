@@ -49,7 +49,8 @@ class NodeScene(QtGui.QGraphicsScene):
         super(NodeScene, self).mousePressEvent(event)
         keep_selection = any([
             event.button() == QtCore.Qt.MiddleButton,
-            event.button() == QtCore.Qt.RightButton
+            event.button() == QtCore.Qt.RightButton,
+            event.modifiers() == QtCore.Qt.AltModifier
         ])
         if keep_selection:
             for node in selected_nodes:
