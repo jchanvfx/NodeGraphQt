@@ -46,23 +46,23 @@ class NodeGraph(QtGui.QWidget):
         """
         self._viewer.center_selection(nodes)
 
-    def save(self, path):
+    def write(self, path):
         """
-        Save out the current node graph session with a ".ngraph" file extension.
+        Serialize the current node graph layout.
 
         Args:
             path (str): file path to be saved.
         """
-        self._viewer.save_session(path, False)
+        self._viewer.write(path)
 
     def load(self, path):
         """
-        Open node graph session file.
+        Load serialized node graph layout file.
 
         Args:
             path (str): session file path.
         """
-        self._viewer.load_session(path, False)
+        self._viewer.load(path)
 
     def create_node(self, class_type, name):
         """

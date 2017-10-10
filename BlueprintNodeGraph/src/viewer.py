@@ -22,6 +22,7 @@ class NodeViewer(QtGui.QGraphicsView):
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
+        self._file_format = FILE_FORMAT
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._connection_pipe = None
         self._active_pipe = None
@@ -83,10 +84,10 @@ class NodeViewer(QtGui.QGraphicsView):
     def _setup_shortcuts(self):
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
-        open_actn.triggered.connect(self.load_session)
+        open_actn.triggered.connect(self.load_dialog)
         save_actn = QtGui.QAction('Save Session Layout', self)
         save_actn.setShortcut('Ctrl+s')
-        save_actn.triggered.connect(self.save_session)
+        save_actn.triggered.connect(self.save_dialog)
         fit_zoom_actn = QtGui.QAction('Reset Zoom', self)
         fit_zoom_actn.setShortcut('f')
         fit_zoom_actn.triggered.connect(self.set_zoom)
@@ -291,6 +292,7 @@ class NodeViewer(QtGui.QGraphicsView):
         """
         triggered mouse press event for the scene.
          - detect selected pipe and start connection.
+         - remap Shift and Ctrl modifier.
 
         Args:
             event (QtGui.QGraphicsScenePressEvent):
@@ -391,29 +393,35 @@ class NodeViewer(QtGui.QGraphicsView):
         if self.validate_connection(from_port, to_port):
             self.make_pipe_connection(from_port, to_port)
 
-    def save_session(self, file_path=None, dialog=True):
-        if dialog:
-            file_dlg = QtGui.QFileDialog.getSaveFileName(
-                self,
-                caption='Save Session Setup',
-                filter='Node Graph (*{})'.format(FILE_FORMAT))
-            file_path = file_dlg[0]
+    def save_dialog(self):
+        file_dlg = QtGui.QFileDialog.getSaveFileName(
+            self,
+            caption='Save Session Setup',
+            filter='Node Graph (*{})'.format(self._file_format))
+        file_path = file_dlg[0]
         if not file_path:
             return
         self.serializer.set_nodes(self.all_nodes())
         self.serializer.set_pipes(self.all_pipes())
         self.serializer.write(file_path)
 
-    def load_session(self, file_path=None, open_dialog=True):
-        if open_dialog:
-            file_dlg = QtGui.QFileDialog.getOpenFileName(
-                self,
-                caption='Open Session Setup',
-                filter='Node Graph (*{}) All Files (*)'.format(FILE_FORMAT))
-            file_path = file_dlg[0]
+    def load_dialog(self):
+        file_dlg = QtGui.QFileDialog.getOpenFileName(
+            self,
+            caption='Open Session Setup',
+            filter='Node Graph (*{}) All Files (*)'.format(self._file_format))
+        file_path = file_dlg[0]
         if not file_path:
             return
         self.clear_scene()
+        self.loader.load(file_path)
+
+    def write(self, file_path):
+        self.serializer.set_nodes(self.all_nodes())
+        self.serializer.set_pipes(self.all_pipes())
+        self.serializer.write(file_path)
+
+    def load(self, file_path):
         self.loader.load(file_path)
 
     def clear_scene(self):
