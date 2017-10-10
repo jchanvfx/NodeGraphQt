@@ -212,7 +212,7 @@ class NodeViewer(QtGui.QGraphicsView):
             self._connection_pipe = None
         self._start_port = None
 
-    def validate_connection_loop(self, start_port, end_port):
+    def validate_acyclic_connection(self, start_port, end_port):
         """
         validate the connection doesn't loop itself.
         """
@@ -242,7 +242,7 @@ class NodeViewer(QtGui.QGraphicsView):
             return False
         if end_port.node == start_port.node:
             return False
-        if not self.validate_connection_loop(start_port, end_port):
+        if not self.validate_acyclic_connection(start_port, end_port):
             return False
         return True
 
