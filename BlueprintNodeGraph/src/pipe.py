@@ -19,7 +19,7 @@ PIPE_STYLES = {
 
 class Pipe(QtGui.QGraphicsPathItem):
     """
-    Base Pipe item.
+    Base Pipe Item.
     """
 
     def __init__(self, input_port=None, output_port=None):
@@ -41,7 +41,7 @@ class Pipe(QtGui.QGraphicsPathItem):
             input_node, input_name, output_node, output_name
         )
 
-    # pipe selection is done through the viewer.
+    # TODO: pipe selection is done through the viewer.
     # def mousePressEvent(self, event):
     #     super(Pipe, self).mousePressEvent(event)
     #     self.viewer_start_connection(event.scenePos())
@@ -125,7 +125,7 @@ class Pipe(QtGui.QGraphicsPathItem):
             port = self.input_port if reverse else self.output_port
         return port
 
-    # pipe connection done in the viewer.
+    # TODO: pipe connection done in the viewer.
     # def viewer_start_connection(self, pos):
     #     if not self.scene():
     #         return

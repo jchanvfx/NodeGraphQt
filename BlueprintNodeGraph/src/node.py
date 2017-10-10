@@ -24,7 +24,7 @@ NODE_DATA = {
 
 class NodeItem(QtGui.QGraphicsItem):
     """
-    Base Node item.
+    Base Node Item.
     """
 
     def __init__(self, name='node', parent=None):
@@ -115,18 +115,27 @@ class NodeItem(QtGui.QGraphicsItem):
         return super(NodeItem, self).itemChange(change, value)
 
     def _activate_pipes(self):
+        """
+        active pipe color.
+        """
         ports = self.inputs + self.outputs
         for port in ports:
             for pipe in port.connected_pipes:
                 pipe.activate()
 
     def _hightlight_pipes(self):
+        """
+        highlight pipe color.
+        """
         ports = self.inputs + self.outputs
         for port in ports:
             for pipe in port.connected_pipes:
                 pipe.highlight()
 
     def _reset_pipes(self):
+        """
+        reset the pipe color.
+        """
         ports = self.inputs + self.outputs
         for port in ports:
             for pipe in port.connected_pipes:

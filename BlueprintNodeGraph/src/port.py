@@ -20,7 +20,7 @@ PORT_DATA = {
 
 class PortItem(QtGui.QGraphicsItem):
     """
-    Base Port item.
+    Base Port Item.
     """
 
     def __init__(self, parent=None):
