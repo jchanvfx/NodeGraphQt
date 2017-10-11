@@ -180,4 +180,5 @@ class SessionLoader(object):
                 self.viewer.connect_ports(in_port, out_port)
 
         for node in self.viewer.all_nodes():
-            node._hightlight_pipes()
+            if node.selected:
+                node._hightlight_pipes()
