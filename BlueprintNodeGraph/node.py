@@ -269,6 +269,7 @@ class Node(object):
 
     def add_knob(self, name, data):
         """
+        add knob data to the node item.
 
         Args:
             name (str): name of the knob.
@@ -281,6 +282,7 @@ class Node(object):
 
     def all_knobs(self):
         """
+        Returns all the knob names and values.
 
         Returns:
             dict: a dictionary of node knob data.
@@ -289,12 +291,13 @@ class Node(object):
 
     def knob(self, name):
         """
+        Restur the knob data.
 
         Args:
             name (str): name of the knob.
 
         Returns:
-
+            str, int or float: knob data.
         """
         return self.item.get_knob_data(name)
 
