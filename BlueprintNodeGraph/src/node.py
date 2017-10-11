@@ -110,10 +110,13 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
+            self._reset_pipes()
             if value:
                 self._hightlight_pipes()
-            else:
-                self._reset_pipes()
+            self.setZValue(Z_VAL_NODE)
+            if not self.selected:
+                self.setZValue(Z_VAL_NODE + 1)
+
         return super(NodeItem, self).itemChange(change, value)
 
     def _activate_pipes(self):
