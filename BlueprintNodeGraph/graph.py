@@ -37,6 +37,15 @@ class NodeGraph(QtGui.QWidget):
         """
         self._viewer.set_zoom(zoom)
 
+    def get_zoom(self):
+        """
+        Get the zoom level of the node graph.
+
+        Returns:
+            int: the current zoom level.
+        """
+        return self._viewer.get_zoom()
+
     def center_on(self, nodes=None):
         """
         Center the node graph on the given nodes or all nodes by default.

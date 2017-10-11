@@ -469,3 +469,6 @@ class NodeViewer(QtGui.QGraphicsView):
         zoom_factor = self._zoom * 0.1
         self._set_viewer_zoom(zoom_factor)
 
+    def get_zoom(self):
+        return self._zoom
+

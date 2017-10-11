@@ -37,8 +37,10 @@ class NodeScene(QtGui.QGraphicsScene):
         if not self._grid:
             return
         grid_size = 20
-        pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 10), 0.5)
-        self._draw_grid(painter, rect, pen, grid_size)
+        zoom = self.viewer().get_zoom()
+        if zoom > -4:
+            pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 10), 0.5)
+            self._draw_grid(painter, rect, pen, grid_size)
         pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 15), 1.0)
         self._draw_grid(painter, rect, pen, grid_size * 8)
 
