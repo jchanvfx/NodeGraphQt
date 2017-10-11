@@ -4,6 +4,11 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
 
+regex = re.compile('(?:\w:|)([.\\/].+\w+)')
+match = regex.match(ICON_DOWN_ARROW_ICON)
+match_str = match.group(0).replace('\\', '/') if match else None
+ICON_DOWN_ARROW_ICON = match_str or ICON_DOWN_ARROW_ICON
+
 _STYLE_QGROUPBOX = '''
 QGroupBox {
     background-color: rgba(0, 0, 0, 0);
@@ -29,11 +34,6 @@ QLineEdit {
     selection-background-color: rgba(255, 198, 10, 155);
 }
 '''
-
-regex = re.compile('(?:\w:|)([.\\/].+\w+)')
-match = regex.match(ICON_DOWN_ARROW_ICON)
-match_str = match.group(0).replace('\\', '/') if match else None
-ICON_DOWN_ARROW_ICON = match_str or ICON_DOWN_ARROW_ICON
 
 _STYLE_QCOMBOBOX = '''
 QComboBox {
@@ -120,11 +120,24 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     Base Node Widget.
     """
 
+    value_changed = QtCore.Signal(str, str)
+
     def __init__(self, parent=None, name='widget', label=''):
         super(_BaseNodeWidget, self).__init__(parent)
         self.setZValue(Z_VAL_KNOB)
-        self.name = name
-        self.label = label
+        self._name = name
+        self._label = label
+
+    def _value_changed(self):
+        self.value_changed.emit(self.name, self.value)
+
+    @property
+    def value(self):
+        raise NotImplementedError
+
+    @value.setter
+    def value(self, text):
+        raise NotImplementedError
 
     @property
     def type(self):
@@ -138,17 +151,9 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     def name(self):
         return self._name
 
-    @name.setter
-    def name(self, name=''):
-        self._name = name.strip().replace(' ', '_')
-
     @property
     def label(self):
         return self._label
-
-    @label.setter
-    def label(self, label=''):
-        self._label = label
 
 
 class ComboNodeWidget(_BaseNodeWidget):
@@ -162,13 +167,14 @@ class ComboNodeWidget(_BaseNodeWidget):
         self._combo = QtGui.QComboBox()
         self._combo.setStyleSheet(_STYLE_QCOMBOBOX)
         self._combo.setMinimumHeight(24)
+        self._combo.activated.connect(self._value_changed)
         list_view = QtGui.QListView(self._combo)
         list_view.setStyleSheet(_STYLE_QLISTVIEW)
         self._combo.setView(list_view)
-        group = _NodeGroubBox(self.label)
+        group = _NodeGroubBox(label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
-        self.add_menu_items(items)
+        self.add_items(items)
 
     @property
     def type(self):
@@ -179,27 +185,27 @@ class ComboNodeWidget(_BaseNodeWidget):
         return str(self._combo.currentText())
 
     @value.setter
-    def value(self, item_text):
-        index = self._combo.findText(item_text, QtCore.Qt.MatchExactly)
+    def value(self, text=''):
+        index = self._combo.findText(text, QtCore.Qt.MatchExactly)
         self._combo.setCurrentIndex(index)
 
-    def add_menu_item(self, item):
+    def add_item(self, item):
         self._combo.addItem(item)
 
-    def add_menu_items(self, items=None):
+    def add_items(self, items=None):
         if items:
             self._combo.addItems(items)
 
-    def all_menu_items(self):
+    def all_items(self):
         return [self._combo.itemText(i) for i in range(self._combo.count)]
+
+    def sort_items(self):
+        items = sorted(self.all_items())
+        self._combo.clear()
+        self._combo.addItems(items)
 
     def clear(self):
         self._combo.clear()
-
-    def sort(self):
-        items = sorted(self.all_menu_items())
-        self._combo.clear()
-        self._combo.addItems(items)
 
 
 class LineEditNodeWidget(_BaseNodeWidget):
@@ -212,7 +218,8 @@ class LineEditNodeWidget(_BaseNodeWidget):
         self._ledit = QtGui.QLineEdit()
         self._ledit.setStyleSheet(_STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
-        group = _NodeGroubBox(self.label)
+        self._ledit.textChanged.connect(self._value_changed)
+        group = _NodeGroubBox(label)
         group.add_node_widget(self._ledit)
         self.setWidget(group)
         self.text = text
@@ -228,6 +235,3 @@ class LineEditNodeWidget(_BaseNodeWidget):
     @value.setter
     def value(self, text=''):
         self._ledit.setText(text)
-
-    def set_completer(self, completer):
-        self._ledit.setCompleter(completer)

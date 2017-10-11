@@ -245,9 +245,9 @@ class Node(object):
         port_item = self.item.add_output(name, multi_output, display_name)
         return Port(port_item)
 
-    def add_dropdown_menu(self, name='', label='', items=None):
+    def add_menu(self, name='', label='', items=None):
         """
-        (Convenience function) Adds a drop down menu into the node.
+        Embed a menu knob widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -258,7 +258,7 @@ class Node(object):
 
     def add_text_input(self, name='', label='', text=''):
         """
-        (Convenience function) a text input widget into the node.
+        Embed a text input knob widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -267,38 +267,36 @@ class Node(object):
         """
         self.item.add_text_input(name, label, text)
 
-    def get_dropdown_menu(self, name):
+    def add_knob(self, name, data):
         """
-        Return the nodes drop down menu widget.
 
         Args:
-            name (str): name of the node widget.
+            name (str): name of the knob.
+            data (str, int, float):
+        """
+        if not isinstance(data, (str, int, float)):
+            error = '"data" must be of type (String, Integer, Float)'
+            raise ValueError(error)
+        self.item.set_knob_data(name, data)
+
+    def all_knobs(self):
+        """
 
         Returns:
-            DropdownMenuNodeWidget: drop down menu widget.
+            dict: a dictionary of node knob data.
         """
-        return self.item.dropdown_menus.get(name)
+        return self.item.all_knob_data()
 
-    def get_text_input(self, name):
+    def knob(self, name):
         """
-        Return the nodes text input widget.
 
         Args:
-            name (str): name of the node widget.
+            name (str): name of the knob.
 
         Returns:
-            TextInputNodeWidget: text input widget.
-        """
-        return self.item.text_inputs.get(name)
 
-    def get_widgets(self):
         """
-        Returns all embedded node widgets.
-
-        Returns:
-            list[]: list of node widgets.
-        """
-        return self.item.widgets
+        return self.item.get_knob_data(name)
 
     def inputs(self):
         """

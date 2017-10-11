@@ -28,21 +28,14 @@ class NodeSerializer(object):
             self.node.scenePos().y()
         )
 
-    def serialize_widgets(self):
-        if not self.node.widgets:
-            return
-        self._data[self.node.id]['widgets'] = {}
-        for widget in self.node.widgets:
-            self._data[self.node.id]['widgets'][widget.name] = widget.value
-
     def serialize_data(self):
-        node_data = self.node.all_data(False)
+        self._data[self.node.id]['knobs'] = {}
+        node_data = self.node.all_knob_data(False)
         for k, v in node_data.items():
-            self._data[self.node.id]['data'][k] = v
+            self._data[self.node.id]['knobs'][k] = v
 
     def serialize(self):
         self.serialize_node()
-        self.serialize_widgets()
         self.serialize_data()
         return self._data
 
@@ -116,11 +109,10 @@ class NodeItemBuilder(object):
         node.item.color = data.get('color')
         node.item.border_color = data.get('border')
         node.item.selected = data.get('selected')
-        for widget in node.item.widgets:
-            for name, value in data.get('widgets', {}).items():
-                if widget.name == name:
-                    widget.value = value
-                    break
+        node_widgets = node.item.widgets
+        for name, value in data.get('knobs', {}).items():
+            if node_widgets.get(name):
+                node_widgets.get(name).value = value
         self._node = node
         self._position = data.get('pos', [0.0, 0.0])
 

@@ -72,7 +72,7 @@ class DropdownMenuNode(BpGraph.Node):
         self.add_output('foo')
         # add text input field to node.
         items = ['item 1', 'item2', 'item3']
-        self.add_dropdown_menu('my_menu_1', 'Menu Test', items=items)
+        self.add_menu('my_menu_1', 'Menu Test', items=items)
 
 BpGraph.register_node(DropdownMenuNode)
 

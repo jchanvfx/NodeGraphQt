@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import uuid
+from collections import OrderedDict
 
 from PySide import QtGui, QtCore
 
@@ -7,8 +8,8 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE)
-from .widgets import ComboNodeWidget, LineEditNodeWidget
 from .port import PortItem
+from .widgets import ComboNodeWidget, LineEditNodeWidget
 
 NODE_DATA = {
     'id': 0,
@@ -33,9 +34,10 @@ class NodeItem(QtGui.QGraphicsItem):
         self.setData(NODE_DATA['id'], str(uuid.uuid4()))
         self.setZValue(Z_VAL_NODE)
         self._width = 120
-        self._height = 70
+        self._height = 80
 
         self._name = name.strip().replace(' ', '_')
+        self.setToolTip('node: {}'.format(self._name))
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         pixmap = pixmap.scaledToHeight(
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
@@ -46,7 +48,7 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_text_items = {}
         self._input_items = []
         self._output_items = []
-        self._widgets = []
+        self._widgets = OrderedDict()
 
         self.text_color = (107, 119, 129, 255)
         self.color = (31, 33, 34, 255)
@@ -176,7 +178,7 @@ class NodeItem(QtGui.QGraphicsItem):
         width = 0.0
         if self._widgets:
             widget_widths = [
-                w.boundingRect().width() for w in self._widgets]
+                w.boundingRect().width() for w in self._widgets.values()]
             width = max(widget_widths)
         if self._text_item.boundingRect().width() > width:
             width = self._text_item.boundingRect().width()
@@ -205,7 +207,8 @@ class NodeItem(QtGui.QGraphicsItem):
 
         height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
         if self._widgets:
-            wid_height = sum([w.boundingRect().height() for w in self._widgets])
+            wid_height = sum(
+                [w.boundingRect().height() for w in self._widgets.values()])
             if wid_height > height:
                 height = wid_height + (wid_height / len(self._widgets))
 
@@ -231,10 +234,11 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         if not self._widgets:
             return
-        wid_heights = sum([w.boundingRect().height() for w in self._widgets])
+        wid_heights = sum(
+            [w.boundingRect().height() for w in self._widgets.values()])
         pos_y = self._height / 2
         pos_y -= wid_heights / 2
-        for widget in self._widgets:
+        for name, widget in self._widgets.items():
             rect = widget.boundingRect()
             pos_x = (self._width / 2) - (rect.width() / 2)
             widget.setPos(pos_x, pos_y)
@@ -318,7 +322,7 @@ class NodeItem(QtGui.QGraphicsItem):
             x (float): horizontal x offset
             y (float): vertical y offset
         """
-        for widget in self._widgets:
+        for name, widget in self._widgets.items():
             pos_x = widget.pos().x()
             pos_y = widget.pos().y()
             widget.setPos(pos_x + x, pos_y + y)
@@ -352,8 +356,6 @@ class NodeItem(QtGui.QGraphicsItem):
         self._set_text_color(self.text_color)
         # ----------------------------------------------------------------------
 
-        # add extra bit of height.
-        self.height += 10
         # arrange label text
         self.arrange_label()
         self.offset_label(0.0, 3.0)
@@ -372,8 +374,8 @@ class NodeItem(QtGui.QGraphicsItem):
         return self.data(NODE_DATA['id'])
 
     @id.setter
-    def id(self, uuid=''):
-        return self.setData(NODE_DATA['id'], uuid)
+    def id(self, unique_id=''):
+        return self.setData(NODE_DATA['id'], unique_id)
 
     @property
     def type(self):
@@ -466,6 +468,7 @@ class NodeItem(QtGui.QGraphicsItem):
         name = name.strip()
         name = name.replace(' ', '_')
         self._name = name
+        self.setToolTip('node: {}'.format(self._name))
         self._text_item.setPlainText(name)
         if self.scene():
             self.init_node()
@@ -514,37 +517,23 @@ class NodeItem(QtGui.QGraphicsItem):
     def widgets(self):
         return self._widgets
 
-    @property
-    def dropdown_menus(self):
-        widgets = {}
-        for widget in self._widgets:
-            if isinstance(widget, ComboNodeWidget):
-                widgets[widget.name] = widget
-        return widgets
-
-    @property
-    def text_inputs(self):
-        widgets = {}
-        for widget in self._widgets:
-            if isinstance(widget, LineEditNodeWidget):
-                widgets[widget.name] = widget
-        return widgets
-
     def add_dropdown_menu(self, name='', label='', items=None):
-        if items is None:
-            items = []
+        items = items or []
+        data = str(items[0]) if items else ''
+        self.set_knob_data(name, data)
         label = name if not label else label
-        widget = ComboNodeWidget(self, name, label, items)
-        widget.setToolTip('name: <b>{}</b>'.format(name))
-        self._widgets.append(widget)
+        self._widgets[name] = ComboNodeWidget(self, name, label, items)
+        self._widgets[name].setToolTip('knob: {}'.format(name))
+        self._widgets[name].value_changed.connect(self.set_knob_data)
 
     def add_text_input(self, name='', label='', text=''):
+        self.set_knob_data(name, text)
         label = name if not label else label
-        widget = LineEditNodeWidget(self, name, label, text)
-        widget.setToolTip('name: <b>{}</b>'.format(name))
-        self._widgets.append(widget)
+        self._widgets[name] = LineEditNodeWidget(self, name, label, text)
+        self._widgets[name].setToolTip('knob: {}'.format(name))
+        self._widgets[name].value_changed.connect(self.set_knob_data)
 
-    def all_data(self, include_default=True):
+    def all_knob_data(self, include_default=True):
         data = {}
         for k, v in self._data_index.items():
             data[k] = self.data(v)
@@ -553,7 +542,7 @@ class NodeItem(QtGui.QGraphicsItem):
                 data[k] = self.data(v)
         return data
 
-    def get_data(self, name):
+    def get_knob_data(self, name):
         index = NODE_DATA.get(name)
         if not index:
             index = self._data_index.get(name)
@@ -561,13 +550,15 @@ class NodeItem(QtGui.QGraphicsItem):
             return None
         return self.data(index)
 
-    def set_data(self, name, data):
+    def set_knob_data(self, name, data):
+        if self._widgets.get(name):
+            self._widgets.get(name).value = data
         if not NODE_DATA.get(name):
             index = max(self._data_index.values() + NODE_DATA.values()) + 1
             self._data_index[name] = index
             self.setData(index, data)
             return
-        raise ValueError('data "{}" already exists.'.format(name))
+        raise ValueError('knob name "{}" already exists.'.format(name))
 
     def delete(self):
         for port in self._input_items:
