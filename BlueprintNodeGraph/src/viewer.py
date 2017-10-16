@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from uuid import uuid4
+
 from PySide import QtGui, QtCore
 
 from .constants import (IN_PORT, OUT_PORT,
@@ -18,7 +20,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtGui.QGraphicsView.FullViewportUpdate)
-        scene_area = 6400.0
+        scene_area = 8000.0
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
@@ -34,8 +36,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
-        self.serializer = SessionSerializer()
-        self.loader = SessionLoader(self)
+        self._serializer = SessionSerializer()
+        self._loader = SessionLoader(self)
         self._setup_shortcuts()
 
     def __str__(self):
@@ -98,11 +100,17 @@ class NodeViewer(QtGui.QGraphicsView):
         del_node_actn = QtGui.QAction('Delete Selection', self)
         del_node_actn.setShortcuts(['Del', 'Backspace'])
         del_node_actn.triggered.connect(self.delete_selected_nodes)
+
+        dup_nodes_actn = QtGui.QAction('Duplicate Nodes', self)
+        dup_nodes_actn.setShortcut('Alt+c')
+        dup_nodes_actn.triggered.connect(self.duplicate_nodes)
+
         self.addAction(open_actn)
         self.addAction(save_actn)
         self.addAction(fit_zoom_actn)
         self.addAction(sel_all_actn)
         self.addAction(del_node_actn)
+        self.addAction(dup_nodes_actn)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -373,15 +381,43 @@ class NodeViewer(QtGui.QGraphicsView):
         node.init_node()
         self.scene().addItem(node)
 
-    def delete_nodes(self, nodes):
-        for node in nodes:
+    def delete_node(self, node):
+        if isinstance(node, NodeItem):
+            node.delete()
+
+    def delete_selected_nodes(self):
+        for node in self.selected_nodes():
             if isinstance(node, NodeItem):
                 node.delete()
 
-    def delete_selected_nodes(self):
+    def duplicate_nodes(self, nodes=None):
         nodes = self.selected_nodes()
-        if nodes:
-            self.delete_nodes(nodes)
+        if not nodes:
+            return
+        pipes = []
+        for node in nodes:
+            for port in node.inputs:
+                for pipe in port.connected_pipes:
+                    connected_node = pipe.output_port.node
+                    if connected_node in nodes:
+                        pipes.append(pipe)
+            for port in node.outputs:
+                for pipe in port.connected_pipes:
+                    connected_node = pipe.input_port.node
+                    if connected_node in nodes:
+                        pipes.append(pipe)
+
+        self._serializer.set_nodes(nodes)
+        self._serializer.set_pipes(pipes)
+        data_string = self._serializer.serialize_str()
+        for node in nodes:
+            data_string = data_string.replace(node.id, str(uuid4()))
+
+        self.clear_selection()
+        loaded_nodes = self._loader.load_str(data_string)
+        for node in loaded_nodes:
+            x, y = node.pos().x(), node.pos().y()
+            node.setPos(x + 200, y + 200)
 
     def select_all_nodes(self):
         for node in self.all_nodes():
@@ -401,9 +437,9 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        self.serializer.set_nodes(self.all_nodes())
-        self.serializer.set_pipes(self.all_pipes())
-        self.serializer.write(file_path)
+        self._serializer.set_nodes(self.all_nodes())
+        self._serializer.set_pipes(self.all_pipes())
+        self._serializer.write(file_path)
 
     def load_dialog(self):
         file_dlg = QtGui.QFileDialog.getOpenFileName(
@@ -414,15 +450,15 @@ class NodeViewer(QtGui.QGraphicsView):
         if not file_path:
             return
         self.clear_scene()
-        self.loader.load(file_path)
+        self._loader.load(file_path)
 
     def write(self, file_path):
-        self.serializer.set_nodes(self.all_nodes())
-        self.serializer.set_pipes(self.all_pipes())
-        self.serializer.write(file_path)
+        self._serializer.set_nodes(self.all_nodes())
+        self._serializer.set_pipes(self.all_pipes())
+        self._serializer.write(file_path)
 
     def load(self, file_path):
-        self.loader.load(file_path)
+        self._loader.load(file_path)
 
     def clear_scene(self):
         for node in self.all_nodes():

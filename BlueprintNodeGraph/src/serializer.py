@@ -9,21 +9,21 @@ class NodeSerializer(object):
 
     def __init__(self, node):
         self._node = node
-        self._data = {self.node.id: {}}
+        self._nid = self.node.id
+        self._data = {self._nid: {}}
 
     @property
     def node(self):
         return self._node
 
     def serialize_node(self):
-        nid = self.node.id
-        self._data[nid]['icon'] = self.node.icon
-        self._data[nid]['name'] = self.node.name
-        self._data[nid]['color'] = self.node.color
-        self._data[nid]['border'] = self.node.border_color
-        self._data[nid]['type'] = self.node.type
-        self._data[nid]['selected'] = self.node.selected
-        self._data[nid]['pos'] = (
+        self._data[self._nid]['icon'] = self.node.icon
+        self._data[self._nid]['name'] = self.node.name
+        self._data[self._nid]['color'] = self.node.color
+        self._data[self._nid]['border'] = self.node.border_color
+        self._data[self._nid]['type'] = self.node.type
+        self._data[self._nid]['selected'] = self.node.selected
+        self._data[self._nid]['pos'] = (
             self.node.scenePos().x(),
             self.node.scenePos().y()
         )
@@ -77,6 +77,10 @@ class SessionSerializer(object):
         self.serialize_nodes()
         self.serialize_pipes()
         return self._data
+
+    def serialize_str(self):
+        str_data = self.serialize()
+        return json.dumps(str_data)
 
     def write(self, file_path):
         file_path = file_path.strip()
@@ -163,22 +167,32 @@ class SessionLoader(object):
                 connection_ports.append((in_port, out_port))
         return connection_ports
 
-    def load(self, file_path):
-        if not os.path.isfile(file_path):
-            return
-        with open(file_path) as data_file:
-            self.data = json.load(data_file)
+    def build(self):
+        nodes = []
         node_index = {}
         for node_id, node_pos in self.build_nodes().items():
             node, pos = node_pos
             self.viewer.add_node(node.item)
             node.item.setPos(pos[0], pos[1])
             node_index[node_id] = node.item
+            nodes.append(node.item)
         connections = self.build_connections(node_index)
         for in_port, out_port in connections:
             if in_port and out_port:
                 self.viewer.connect_ports(in_port, out_port)
 
-        for node in self.viewer.all_nodes():
+        for node in nodes:
             if node.selected:
                 node._hightlight_pipes()
+        return nodes
+
+    def load_str(self, str_data):
+        self.data = json.loads(str_data)
+        return self.build()
+
+    def load(self, file_path):
+        if not os.path.isfile(file_path):
+            return
+        with open(file_path) as data_file:
+            self.data = json.load(data_file)
+        return self.build()
