@@ -33,12 +33,12 @@ class Pipe(QtGui.QGraphicsPathItem):
         self._output_port = output_port
 
     def __str__(self):
-        input_name = self._input_port.name if self._input_port else 'None'
-        input_node = self._input_port.node.name if self._input_port else 'None'
-        output_name = self._output_port.name if self._output_port else 'None'
-        output_node = self._output_port.node.name if self._output_port else 'None'
+        in_name = self._input_port.name if self._input_port else ''
+        in_node = self._input_port.node.name if self._input_port else ''
+        out_name = self._output_port.name if self._output_port else ''
+        out_node = self._output_port.node.name if self._output_port else ''
         return 'Pipe(in={}:{}, out={}:{})'.format(
-            input_node, input_name, output_node, output_name
+            in_node, in_name, out_node, out_name
         )
 
     # TODO: pipe selection is done through the viewer.

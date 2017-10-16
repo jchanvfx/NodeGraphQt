@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import uuid
 from collections import OrderedDict
+from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
@@ -31,7 +31,7 @@ class NodeItem(QtGui.QGraphicsItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
-        self.setData(NODE_DATA['id'], str(uuid.uuid4()))
+        self.setData(NODE_DATA['id'], str(uuid4()))
         self.setZValue(Z_VAL_NODE)
         self._width = 120
         self._height = 80

@@ -18,6 +18,7 @@ fit to screen : `F`
 #### Node Graph Shortcuts:
 select all nodes : `Ctrl + A`<br/>
 delete selected node(s) : `Backspace` or `Delete`<br/>
+duplicate node(s) : `Aly + C`<br/>
 save session layout : `Ctrl + S` <br/>
 open session layout : `Ctrl + O` <br/>
 session layout saved as JSON with a `.bpg` file extension.
