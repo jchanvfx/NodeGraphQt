@@ -74,9 +74,9 @@ class NodeViewer(QtGui.QGraphicsView):
         self.scene().destroyItemGroup(group)
         return rect
 
-    def _items_near(self, pos, item_type=None, size=20):
-        x, y = (pos.x() - (size / 2)), (pos.y() - (size / 2))
-        rect = QtCore.QRect(x, y, size, size)
+    def _items_near(self, pos, item_type=None, width=20, height=20):
+        x, y = (pos.x() - (width / 2)), (pos.y() - (height / 2))
+        rect = QtCore.QRect(x, y, width, height)
         items = []
         for item in self.scene().items(rect):
             if not item_type or isinstance(item, item_type):
@@ -126,7 +126,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
 
-        items = self._items_near(self.mapToScene(event.pos()), None, 20)
+        items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
         if (self.LMB_state and not alt_modifier) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
             map_rect = self.mapToScene(rect).boundingRect()
@@ -315,7 +315,7 @@ class NodeViewer(QtGui.QGraphicsView):
             event.setModifiers(QtCore.Qt.ShiftModifier)
 
         if not alt_modifier:
-            pipe_items = self._items_near(event.scenePos(), Pipe, 20)
+            pipe_items = self._items_near(event.scenePos(), Pipe, 20, 20)
             pipe = pipe_items[0] if pipe_items else None
             if pipe:
                 self._active_pipe = pipe
@@ -415,9 +415,19 @@ class NodeViewer(QtGui.QGraphicsView):
 
         self.clear_selection()
         loaded_nodes = self._loader.load_str(data_string)
-        for node in loaded_nodes:
-            x, y = node.pos().x(), node.pos().y()
-            node.setPos(x + 200, y + 200)
+
+        prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
+        orig_x, orig_y = self._origin_pos.x(), self._origin_pos.y()
+        group = self.scene().createItemGroup(loaded_nodes)
+        if (prev_x, prev_y) != (orig_x, orig_y):
+            rect = group.boundingRect()
+            pos = self.mapToScene(self._previous_pos)
+            x, y = pos.x() - rect.center().x(), pos.y() - rect.center().y()
+        else:
+            x, y = group.pos().x() + 50, group.pos().y() + 50
+        group.setPos(x, y)
+        self.scene().destroyItemGroup(group)
+        self._origin_pos = self._previous_pos
 
     def select_all_nodes(self):
         for node in self.all_nodes():
@@ -467,7 +477,9 @@ class NodeViewer(QtGui.QGraphicsView):
             self.scene().removeItem(item)
 
     def clear_selection(self):
-        self.scene().clearSelection()
+        for node in self.selected_nodes():
+            node.selected = False
+        # self.scene().clearSelection()
 
     def center_selection(self, nodes=None):
         if not nodes:

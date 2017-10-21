@@ -119,6 +119,10 @@ class NodeItem(QtGui.QGraphicsItem):
 
         return super(NodeItem, self).itemChange(change, value)
 
+    def setSelected(self, selected):
+        super(NodeItem, self).setSelected(selected)
+        self.setData(NODE_DATA['selected'], selected)
+
     def _activate_pipes(self):
         """
         active pipe color.
@@ -458,7 +462,6 @@ class NodeItem(QtGui.QGraphicsItem):
     @selected.setter
     def selected(self, selected=False):
         self.setSelected(selected)
-        self.setData(NODE_DATA['selected'], selected)
         if selected:
             self._hightlight_pipes()
 
