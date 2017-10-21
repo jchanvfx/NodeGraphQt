@@ -390,7 +390,7 @@ class NodeViewer(QtGui.QGraphicsView):
             if isinstance(node, NodeItem):
                 node.delete()
 
-    def duplicate_nodes(self, nodes=None):
+    def duplicate_nodes(self, nodes=None, cursor_pos=False):
         nodes = self.selected_nodes()
         if not nodes:
             return
@@ -416,13 +416,14 @@ class NodeViewer(QtGui.QGraphicsView):
         self.clear_selection()
         loaded_nodes = self._loader.load_str(data_string)
 
+        group = self.scene().createItemGroup(loaded_nodes)
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
         orig_x, orig_y = self._origin_pos.x(), self._origin_pos.y()
-        group = self.scene().createItemGroup(loaded_nodes)
-        if (prev_x, prev_y) != (orig_x, orig_y):
-            rect = group.boundingRect()
+
+        if cursor_pos and (prev_x, prev_y) != (orig_x, orig_y):
             pos = self.mapToScene(self._previous_pos)
-            x, y = pos.x() - rect.center().x(), pos.y() - rect.center().y()
+            x = pos.x() - group.boundingRect().center().x()
+            y = pos.y() - group.boundingRect().center().y()
         else:
             x, y = group.pos().x() + 50, group.pos().y() + 50
         group.setPos(x, y)

@@ -154,6 +154,15 @@ class NodeGraph(QtGui.QWidget):
             if node_item.name == name:
                 return Node(node=node_item)
 
+    def duplicate_nodes(self, nodes):
+        """
+        Create duplicates nodes.
+
+        Args:
+            nodes (list[BlueprintNodeGraph.Node]): list of node objects.
+        """
+        self._viewer.duplicate_nodes(nodes)
+
     def connect_node_to_node(self, from_node, from_port, to_node, to_port):
         """
         Connects a node with a matching node name and port name to another
