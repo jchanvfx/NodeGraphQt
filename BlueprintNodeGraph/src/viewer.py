@@ -101,16 +101,24 @@ class NodeViewer(QtGui.QGraphicsView):
         del_node_actn.setShortcuts(['Del', 'Backspace'])
         del_node_actn.triggered.connect(self.delete_selected_nodes)
 
-        dup_nodes_actn = QtGui.QAction('Duplicate Nodes', self)
-        dup_nodes_actn.setShortcut('Alt+c')
-        dup_nodes_actn.triggered.connect(self.duplicate_nodes)
+        node_duplicate = QtGui.QAction('Duplicate Nodes', self)
+        node_duplicate.setShortcut('Alt+c')
+        node_duplicate.triggered.connect(self.duplicate_nodes)
+        node_copy = QtGui.QAction('Copy', self)
+        node_copy.setShortcut(QtGui.QKeySequence.Copy)
+        node_copy.triggered.connect(self.copy_to_clipboard)
+        node_paste = QtGui.QAction('Paste', self)
+        node_paste.setShortcut(QtGui.QKeySequence.Paste)
+        node_paste.triggered.connect(self.paste_from_clipboard)
 
         self.addAction(open_actn)
         self.addAction(save_actn)
         self.addAction(fit_zoom_actn)
         self.addAction(sel_all_actn)
         self.addAction(del_node_actn)
-        self.addAction(dup_nodes_actn)
+        self.addAction(node_duplicate)
+        self.addAction(node_copy)
+        self.addAction(node_paste)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -390,10 +398,7 @@ class NodeViewer(QtGui.QGraphicsView):
             if isinstance(node, NodeItem):
                 node.delete()
 
-    def duplicate_nodes(self, nodes=None, cursor_pos=False):
-        nodes = self.selected_nodes()
-        if not nodes:
-            return
+    def serialize_nodes(self, nodes):
         pipes = []
         for node in nodes:
             for port in node.inputs:
@@ -406,29 +411,52 @@ class NodeViewer(QtGui.QGraphicsView):
                     connected_node = pipe.input_port.node
                     if connected_node in nodes:
                         pipes.append(pipe)
-
         self._serializer.set_nodes(nodes)
         self._serializer.set_pipes(pipes)
-        data_string = self._serializer.serialize_str()
-        for node in nodes:
-            data_string = data_string.replace(node.id, str(uuid4()))
+        return self._serializer.serialize_str()
 
+    def deserialize_nodes(self, data):
         self.clear_selection()
-        loaded_nodes = self._loader.load_str(data_string)
-
+        loaded_nodes = self._loader.load_str(data)
         group = self.scene().createItemGroup(loaded_nodes)
+        group_rect = group.boundingRect()
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
         orig_x, orig_y = self._origin_pos.x(), self._origin_pos.y()
-
-        if cursor_pos and (prev_x, prev_y) != (orig_x, orig_y):
+        if (prev_x, prev_y) != (orig_x, orig_y):
             pos = self.mapToScene(self._previous_pos)
-            x = pos.x() - group.boundingRect().center().x()
-            y = pos.y() - group.boundingRect().center().y()
+            x = pos.x() - group_rect.center().x()
+            y = pos.y() - group_rect.center().y()
         else:
             x, y = group.pos().x() + 50, group.pos().y() + 50
         group.setPos(x, y)
         self.scene().destroyItemGroup(group)
         self._origin_pos = self._previous_pos
+
+    def duplicate_nodes(self, nodes=None):
+        nodes = nodes or self.selected_nodes()
+        if not nodes:
+            return
+        data_string = self.serialize_nodes(nodes)
+        if not data_string:
+            return
+        for node in nodes:
+            data_string = data_string.replace(node.id, str(uuid4()))
+        self.deserialize_nodes(data_string)
+
+    def copy_to_clipboard(self, nodes=None):
+        clipboard = QtGui.QClipboard()
+        nodes = nodes or self.selected_nodes()
+        if nodes:
+            data_string = self.serialize_nodes(nodes)
+            clipboard.setText(data_string)
+
+    def paste_from_clipboard(self):
+        clipboard = QtGui.QClipboard()
+        data_string = clipboard.text()
+        for node in self.all_nodes():
+            if node.id in data_string:
+                data_string = data_string.replace(node.id, str(uuid4()))
+        self.deserialize_nodes(data_string)
 
     def select_all_nodes(self):
         for node in self.all_nodes():

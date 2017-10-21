@@ -78,9 +78,10 @@ class SessionSerializer(object):
         self.serialize_pipes()
         return self._data
 
-    def serialize_str(self):
+    def serialize_str(self, pretty=True):
+        indent = 2 if pretty else None
         str_data = self.serialize()
-        return json.dumps(str_data)
+        return json.dumps(str_data, indent=indent)
 
     def write(self, file_path):
         file_path = file_path.strip()
