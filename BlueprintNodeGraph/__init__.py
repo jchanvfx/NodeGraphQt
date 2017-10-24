@@ -34,6 +34,9 @@ from .node import Node
 from .src.node_types import register_node, registered_nodes
 
 
-__author__ = 'Johnny Chan - www.chantasticvfx.com'
+__author__ = 'Johnny Chan'
 __email__ = 'johnny@chantasticvfx.com'
-
+__credits__ = []
+__module_name__ = 'BlueprintNodeGraph'
+__status__ = 'work in progress'
+__url__ = 'https://github.com/jchanvfx/bpNodeGraph'
