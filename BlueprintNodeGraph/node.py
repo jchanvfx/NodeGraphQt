@@ -230,7 +230,7 @@ class Node(object):
         port_item = self.item.add_input(name, multi_input, display_name)
         return Port(port_item)
 
-    def add_output(self, name='output', multi_output=False, display_name=True):
+    def add_output(self, name='output', multi_output=True, display_name=True):
         """
         Adds a output port the the node.
 

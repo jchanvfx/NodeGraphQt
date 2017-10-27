@@ -75,7 +75,7 @@ class NodeViewer(QtGui.QGraphicsView):
         return rect
 
     def _items_near(self, pos, item_type=None, width=20, height=20):
-        x, y = (pos.x() - (width / 2)), (pos.y() - (height / 2))
+        x, y = pos.x() - width, pos.y() - height
         rect = QtCore.QRect(x, y, width, height)
         items = []
         for item in self.scene().items(rect):
@@ -296,13 +296,8 @@ class NodeViewer(QtGui.QGraphicsView):
             return
         if not self._start_port:
             return
-        self._connection_pipe.draw_path(
-            self._start_port, None, event.scenePos()
-        )
-
-        pipes = self._start_port.connected_pipes
-        if not self._start_port.multi_connection and pipes:
-            pipes[0].delete()
+        pos = event.scenePos()
+        self._connection_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMousePressEvent(self, event):
         """
@@ -323,13 +318,21 @@ class NodeViewer(QtGui.QGraphicsView):
             event.setModifiers(QtCore.Qt.ShiftModifier)
 
         if not alt_modifier:
-            pipe_items = self._items_near(event.scenePos(), Pipe, 20, 20)
-            pipe = pipe_items[0] if pipe_items else None
-            if pipe:
-                self._active_pipe = pipe
-                self._active_pipe.activate()
-                port = self._active_pipe.port_from_pos(event.scenePos(), True)
+            pos = event.scenePos()
+            port_items = self._items_near(pos, PortItem, 5, 5)
+            if port_items:
+                if not port_items[0].multi_connection:
+                    [p.delete() for p in port_items[0].connected_pipes]
+                return
+
+            pipe_items = self._items_near(pos, Pipe, 3, 3)
+            if pipe_items:
+                self._active_pipe = pipe_items[0]
+                port = self._active_pipe.port_from_pos(pos, True)
+                if not shift_modifier or not port.multi_connection:
+                    self._active_pipe.delete()
                 self.start_connection(port)
+                self._connection_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMouseReleaseEvent(self, event):
         """
