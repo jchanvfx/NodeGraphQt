@@ -179,6 +179,10 @@ class SessionLoader(object):
             nodes.append(node.item)
         connections = self.build_connections(node_index)
         for in_port, out_port in connections:
+            if in_port in out_port.connected_ports:
+                continue
+            if out_port in in_port.connected_ports:
+                continue
             if in_port and out_port:
                 self.viewer.connect_ports(in_port, out_port)
 

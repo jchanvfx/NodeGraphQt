@@ -421,6 +421,8 @@ class NodeViewer(QtGui.QGraphicsView):
     def deserialize_nodes(self, data):
         self.clear_selection()
         loaded_nodes = self._loader.load_str(data)
+        if not loaded_nodes:
+            return
         group = self.scene().createItemGroup(loaded_nodes)
         group_rect = group.boundingRect()
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
@@ -551,4 +553,3 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def get_zoom(self):
         return self._zoom
-
