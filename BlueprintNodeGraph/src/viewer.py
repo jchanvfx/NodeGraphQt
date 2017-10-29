@@ -31,6 +31,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._start_port = None
         self._origin_pos = None
         self._previous_pos = None
+        self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self.LMB_state = False
         self.RMB_state = False
@@ -125,6 +126,7 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def mousePressEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
+        shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = True
         elif event.button() == QtCore.Qt.RightButton:
@@ -133,6 +135,7 @@ class NodeViewer(QtGui.QGraphicsView):
             self.MMB_state = True
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
+        self._prev_selection = self.selected_nodes()
 
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
         if (self.LMB_state and not alt_modifier) and not items:
@@ -141,7 +144,8 @@ class NodeViewer(QtGui.QGraphicsView):
             self.scene().update(map_rect)
             self._rubber_band.setGeometry(rect)
             self._rubber_band.show()
-        super(NodeViewer, self).mousePressEvent(event)
+        if not shift_modifier:
+            super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -160,6 +164,7 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def mouseMoveEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
+        shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
         if self.MMB_state or (self.LMB_state and alt_modifier):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
@@ -177,6 +182,11 @@ class NodeViewer(QtGui.QGraphicsView):
             self._rubber_band.setGeometry(rect)
             self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
+
+            if shift_modifier and self._prev_selection:
+                for node in self._prev_selection:
+                    if node not in self.selected_nodes():
+                        node.setSelected(True)
 
         self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
