@@ -25,6 +25,7 @@ class Pipe(QtGui.QGraphicsPathItem):
     def __init__(self, input_port=None, output_port=None):
         super(Pipe, self).__init__()
         self.setZValue(Z_VAL_PIPE)
+        self.setAcceptHoverEvents(True)
         self._color = PIPE_DEFAULT_COLOR
         self._style = PIPE_STYLE_DEFAULT
         self._active = False
@@ -40,11 +41,6 @@ class Pipe(QtGui.QGraphicsPathItem):
         return 'Pipe(in={}:{}, out={}:{})'.format(
             in_node, in_name, out_node, out_name
         )
-
-    # TODO: pipe selection is done through the viewer.
-    # def mousePressEvent(self, event):
-    #     super(Pipe, self).mousePressEvent(event)
-    #     self.viewer_start_connection(event.scenePos())
 
     def paint(self, painter, option, widget):
         color = self._color
@@ -63,6 +59,16 @@ class Pipe(QtGui.QGraphicsPathItem):
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
+
+    def hoverEnterEvent(self, event):
+        self.activate()
+
+    def hoverLeaveEvent(self, event):
+        self.reset()
+        if self.input_port.node.selected:
+            self.highlight()
+        elif self.output_port.node.selected:
+            self.highlight()
 
     def draw_path(self, start_port, end_port, cursor_pos=None):
         if not start_port:
@@ -124,14 +130,6 @@ class Pipe(QtGui.QGraphicsPathItem):
         else:
             port = self.input_port if reverse else self.output_port
         return port
-
-    # TODO: pipe connection done in the viewer.
-    # def viewer_start_connection(self, pos):
-    #     if not self.scene():
-    #         return
-    #     start_port = self.port_from_pos(pos, True)
-    #     viewer = self.scene().viewer()
-    #     viewer.start_connection(start_port)
 
     def viewer_pipe_layout(self):
         if self.scene():
