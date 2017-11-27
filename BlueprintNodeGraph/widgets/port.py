@@ -167,3 +167,12 @@ class PortItem(QtGui.QGraphicsItem):
             pipe.delete()
         if self.scene():
             self.scene().removeItem(self)
+
+    def connect_to(self, port):
+        if not port:
+            for pipe in self.connected_pipes:
+                pipe.delete()
+            return
+        if self.scene():
+            viewer = self.scene().viewer()
+            viewer.connect_ports(self, port)

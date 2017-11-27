@@ -1,10 +1,13 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from .node import Node
-from .src import node_types
-from .src.scene import NodeScene
-from .src.viewer import NodeViewer
+from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
+from BlueprintNodeGraph.utils.node_utils import get_node
+from BlueprintNodeGraph.widgets.scene import NodeScene
+from BlueprintNodeGraph.widgets.viewer import NodeViewer
+
+
+_NODES_LOADED = False
 
 
 class NodeGraph(QtGui.QWidget):
@@ -17,6 +20,12 @@ class NodeGraph(QtGui.QWidget):
         layout = QtGui.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
+
+        # TODO: find a better way of loading nodes.
+        global _NODES_LOADED
+        if not _NODES_LOADED:
+            _NODES_LOADED = True
+            import BlueprintNodeGraph.nodes
 
     def set_pipe_layout(self, layout='curved'):
         """
@@ -73,22 +82,23 @@ class NodeGraph(QtGui.QWidget):
         """
         self._viewer.load(path)
 
-    def create_node(self, class_type, name):
+    def create_node(self, node_type, name):
         """
         Create node object.
 
         Args:
-            class_type (str): node class type.
+            node_type (str): node class type.
             name (str): name of the node.
 
         Returns:
-            BlueprintNodeGraph.Node: node object.
+            BlueprintNodeGraph.Node: node instance.
         """
-        node = node_types.get_registered_nodes(class_type)()
-        node.set_name(name)
+        NodeInstance = get_node(node_type)
+        node = NodeInstance()
         self.clear_selection()
-        node.set_selected(True)
         self.add_node(node)
+        node.set_name(name)
+        node.set_selected(True)
         return node
 
     def add_node(self, node):
@@ -96,19 +106,19 @@ class NodeGraph(QtGui.QWidget):
         Add a node into the node graph.
 
         Args:
-            node (BlueprintNodeGraph.Node): node object.
+            node (BlueprintNodeGraph.interface.Node): node instance.
         """
-        assert isinstance(node, Node), 'node must be a Node() object'
+        assert isinstance(node, NodePlugin), 'node must be a node'
         self._viewer.add_node(node.item)
 
     def delete_node(self, node):
         """
-        Removes the node from the node graph.
+        Remove the node from the node graph.
 
         Args:
-            node (BlueprintNodeGraph.Node): node object.
+            node (BlueprintNodeGraph.interface.Node): node object.
         """
-        assert isinstance(node, Node), 'node must be a Node() object'
+        assert isinstance(node, NodePlugin), 'node must be a node'
         node.delete()
 
     def all_nodes(self):
@@ -118,7 +128,11 @@ class NodeGraph(QtGui.QWidget):
         Returns:
             list[BlueprintNodeGraph.Node]: list of nodes.
         """
-        return [Node(node=n) for n in self._viewer.all_nodes()]
+        nodes = []
+        for node_item in self._viewer.all_nodes():
+            NodeInstance = get_node(node_item.type)
+            nodes.append(NodeInstance(item=node_item))
+        return nodes
 
     def selected_nodes(self):
         """
@@ -127,7 +141,11 @@ class NodeGraph(QtGui.QWidget):
         Returns:
             list[BlueprintNodeGraph.Node]: list of nodes.
         """
-        return [Node(node=n) for n in self._viewer.selected_nodes()]
+        nodes = []
+        for node_item in self._viewer.selected_nodes():
+            NodeInstance = get_node(node_item.type)
+            nodes.append(NodeInstance(item=node_item))
+        return nodes
 
     def select_all(self):
         """
@@ -152,7 +170,8 @@ class NodeGraph(QtGui.QWidget):
         """
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
-                return Node(node=node_item)
+                NodeInstance = get_node(node_item.type)
+                return NodeInstance(item=node_item)
 
     def duplicate_nodes(self, nodes):
         """

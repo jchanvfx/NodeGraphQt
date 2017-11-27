@@ -9,7 +9,7 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE)
 from .port import PortItem
-from .widgets import ComboNodeWidget, LineEditNodeWidget
+from .item_widgets import ComboNodeWidget, LineEditNodeWidget
 
 NODE_DATA = {
     'id': 0,
@@ -152,7 +152,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def _set_base_size(self):
         """
-        setup the nodes initial base size.
+        setup initial base size.
         """
         width, height = self.calc_size()
         if width > self._width:
@@ -162,7 +162,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def _set_text_color(self, color):
         """
-        set color of the text for node.
+        set text color.
 
         Args:
             color (tuple): color value in (r, g, b, a).
@@ -177,10 +177,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def calc_size(self):
         """
-        calculates the nodes minimum width and height.
-
-        Returns:
-            tuple: (width, height)
+        calculate minimum node size.
         """
         width = 0.0
         if self._widgets:
@@ -253,7 +250,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def arrange_ports(self, padding_x=0.0, padding_y=0.0):
         """
-        Arrange all input and output ports in the node layout.
+        Arrange input, output ports in the node layout.
     
         Args:
             padding_x (float): horizontal padding.
@@ -336,7 +333,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def offset_ports(self, x=0.0, y=0.0):
         """
-        offset the node ports in the node layout.
+        offset the ports in the node layout.
 
         Args:
             x (float): horizontal x offset
@@ -361,7 +358,8 @@ class NodeItem(QtGui.QGraphicsItem):
         self._set_base_size()
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
-        # ----------------------------------------------------------------------
+
+        # setup node layout
 
         # arrange label text
         self.arrange_label()
@@ -382,7 +380,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @id.setter
     def id(self, unique_id=''):
-        return self.setData(NODE_DATA['id'], unique_id)
+        self.setData(NODE_DATA['id'], unique_id)
 
     @property
     def type(self):
@@ -526,20 +524,20 @@ class NodeItem(QtGui.QGraphicsItem):
     def add_dropdown_menu(self, name='', label='', items=None):
         items = items or []
         data = str(items[0]) if items else ''
-        self.set_knob_data(name, data)
+        self.set_data(name, data)
         label = name if not label else label
         self._widgets[name] = ComboNodeWidget(self, name, label, items)
         self._widgets[name].setToolTip('knob: {}'.format(name))
-        self._widgets[name].value_changed.connect(self.set_knob_data)
+        self._widgets[name].value_changed.connect(self.set_data)
 
     def add_text_input(self, name='', label='', text=''):
-        self.set_knob_data(name, text)
+        self.set_data(name, text)
         label = name if not label else label
         self._widgets[name] = LineEditNodeWidget(self, name, label, text)
         self._widgets[name].setToolTip('knob: {}'.format(name))
-        self._widgets[name].value_changed.connect(self.set_knob_data)
+        self._widgets[name].value_changed.connect(self.set_data)
 
-    def all_knob_data(self, include_default=True):
+    def all_data(self, include_default=True):
         data = {}
         for k, v in self._data_index.items():
             data[k] = self.data(v)
@@ -548,15 +546,15 @@ class NodeItem(QtGui.QGraphicsItem):
                 data[k] = self.data(v)
         return data
 
-    def get_knob_data(self, name):
+    def get_data(self, name):
         index = NODE_DATA.get(name)
         if not index:
             index = self._data_index.get(name)
         if not index:
-            return None
+            raise Exception('node has no data name: {}'.format(name))
         return self.data(index)
 
-    def set_knob_data(self, name, data):
+    def set_data(self, name, data):
         if self._widgets.get(name):
             self._widgets.get(name).value = data
         if not NODE_DATA.get(name):
@@ -565,6 +563,9 @@ class NodeItem(QtGui.QGraphicsItem):
             self.setData(index, data)
             return
         raise ValueError('knob name "{}" already exists.'.format(name))
+
+    def has_data(self, name):
+        return name in self._data_index.keys()
 
     def delete(self):
         for port in self._input_items:

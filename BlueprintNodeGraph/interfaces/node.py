@@ -1,152 +1,12 @@
 #!/usr/bin/python
-
-from .src.node import NodeItem
-from .src.port import PortItem
-
-
-class Port(object):
-    def __init__(self, port=PortItem()):
-        self._port_item = port
-
-    def __str__(self):
-        name = self.__class__.__name__
-        return '{}(name={}, node={})'.format(
-            name, self.name(), self.node().name()
-        )
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.node().id() == other.node().id()
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        return hash((self.type(), self.node().id()))
-
-    @property
-    def item(self):
-        return self._port_item
-
-    def name(self):
-        """
-        name of the port.
-
-        Returns:
-            str: port name.
-        """
-        return self.item.name
-
-    def node(self):
-        """
-        Return the parent node of the port.
-
-        Returns:
-            BlueprintNodeGraph.Node: node object.
-        """
-        return Node(self.item.node)
-
-    def type(self):
-        """
-        Returns the port type.
-
-        Returns:
-            str: 'in' for input port or 'out' for output port.
-        """
-        return self.item.port_type
-
-    def color(self):
-        """
-        Returns the default port color (red, green, blue).
-
-        Returns:
-            tuple: (r, g, b) from 0-255 range.
-        """
-        r, g, b, a = self.item.color
-        return r, g, b
-
-    def set_color(self, r=0, g=0, b=0):
-        """
-        Sets the default port color in (red, green, blur, alpha) value.
-
-        Args:
-            r (int): red value 0-255 range.
-            g (int): green value 0-255 range.
-            b (int): blue value 0-255 range.
-        """
-
-        self.item.color = (r, g, b, 255)
-
-    def connected_ports(self):
-        """
-        Returns all connected ports.
-
-        Returns:
-            list[BlueprintNodeGraph.Port]: list pf connected ports.
-        """
-        return [Port(p) for p in self.item.connected_ports]
-
-    def connect_to(self, port=None):
-        """
-        Creates a pipe and connects it to the port with a connection.
-
-        Args:
-            port (BlueprintNodeGraph.Port): port object.
-        """
-        if not port:
-            for pipe in self.item.connected_pipes:
-                pipe.delete()
-            return
-
-        if not isinstance(port.item, PortItem):
-            return
-        viewer = self.item.scene().viewer()
-        viewer.connect_ports(self.item, port.item)
+from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
+from .port import Port
 
 
-class Node(object):
+class Node(NodePlugin):
 
-    def __init__(self, name=None, node=None):
-        self._node_item = node or NodeItem()
-        self._node_item.type = self.type()
-        self._node_item.name = name or 'node'
-
-    def __str__(self):
-        return '{}(name=\'{}\')'.format(self.type, self.name)
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.id() == other.id()
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        return hash((self.type(), self.id()))
-
-    @property
-    def item(self):
-        return self._node_item
-
-    def type(self):
-        """
-        The class that the node belongs to.
-
-        Returns:
-            str: node class name.
-        """
-        return str(self.__class__.__name__)
-
-    def id(self):
-        """
-        The node unique id.
-        
-        Returns:
-            str: UUID of the node.
-        """
-        return self.item.id
+    NODE_NAME = 'node'
+    NODE_TYPE = 'Node'
 
     def name(self):
         """
@@ -168,7 +28,7 @@ class Node(object):
 
     def set_icon(self, icon=None):
         """
-        Set the nodes icon.
+        Set the node icon.
 
         Args:
             icon (str): path to the icon image. 
@@ -225,10 +85,10 @@ class Node(object):
             display_name (bool): display the port name on the node.
             
         Returns:
-            BlueprintNodeGraph.Port: the created port object.
+            BlueprintNodeGraph.interfaces.Port: the created port object.
         """
         port_item = self.item.add_input(name, multi_input, display_name)
-        return Port(port_item)
+        return Port(self, port=port_item)
 
     def add_output(self, name='output', multi_output=True, display_name=True):
         """
@@ -240,10 +100,10 @@ class Node(object):
             display_name (bool): display the port name on the node.
              
         Returns:
-            BlueprintNodeGraph.Port: the created port object.
+            BlueprintNodeGraph.interfaces.Port: the created port object.
         """
         port_item = self.item.add_output(name, multi_output, display_name)
-        return Port(port_item)
+        return Port(self, port=port_item)
 
     def add_menu(self, name='', label='', items=None):
         """
@@ -267,31 +127,43 @@ class Node(object):
         """
         self.item.add_text_input(name, label, text)
 
-    def add_knob(self, name, data):
+    def add_data(self, name, data):
         """
-        add knob data to the node item.
+        add node data to the node.
 
         Args:
-            name (str): name of the knob.
+            name (str): name of the attribute.
             data (str, int, float):
         """
         if not isinstance(data, (str, int, float)):
             error = '"data" must be of type (String, Integer, Float)'
             raise ValueError(error)
-        self.item.set_knob_data(name, data)
+        self.item.set_data(name, data)
 
-    def all_knobs(self):
+    def has_data(self, name):
         """
-        Returns all the knob names and values.
+        Check if node has data for name.
+
+        Args:
+            name (str): name of the node.
+
+        Returns:
+            bool: true if data name exists in the Node.
+        """
+        return self.item.has_data(name)
+
+    def all_data(self):
+        """
+        Returns all the node data names and values.
 
         Returns:
             dict: a dictionary of node knob data.
         """
-        return self.item.all_knob_data()
+        return self.item.all_data()
 
-    def knob(self, name):
+    def get_data(self, name):
         """
-        Restur the knob data.
+        Return the node data.
 
         Args:
             name (str): name of the knob.
@@ -299,7 +171,7 @@ class Node(object):
         Returns:
             str, int or float: knob data.
         """
-        return self.item.get_knob_data(name)
+        return self.item.get_data(name)
 
     def inputs(self):
         """
@@ -308,7 +180,7 @@ class Node(object):
         Returns:
             dict: {port name: port object}
         """
-        return {p.name: Port(p) for p in self.item.inputs}
+        return {p.name: Port(self, p) for p in self.item.inputs}
 
     def outputs(self):
         """
@@ -317,7 +189,7 @@ class Node(object):
         Returns:
             dict: {port name: port object}
         """
-        return {p.name: Port(p) for p in self.item.outputs}
+        return {p.name: Port(self, p) for p in self.item.outputs}
 
     def input(self, index):
         """
@@ -327,9 +199,9 @@ class Node(object):
             index (int): index of the input port.
 
         Returns:
-            BlueprintNodeGraph.Port: port object.
+            BlueprintNodeGraph.interfaces.Port: port object.
         """
-        return Port(self.item.inputs[index])
+        return Port(self, port=self.item.inputs[index])
 
     def set_input(self, index, port):
         """
@@ -337,7 +209,7 @@ class Node(object):
 
         Args:
             index (int): index of the port.
-            port (BlueprintNodeGraph.Port): port object.
+            port (BlueprintNodeGraph.interfaces.Port): port object.
         """
         if port.item == self.item.inputs[index]:
             return
@@ -352,9 +224,9 @@ class Node(object):
             index (int): index of the output port.
 
         Returns:
-            BlueprintNodeGraph.Port: port object.
+            BlueprintNodeGraph.interfaces.Port: port object.
         """
-        return Port(self.item.outputs[index])
+        return Port(self, port=self.item.outputs[index])
 
     def set_output(self, index, port):
         """
@@ -362,11 +234,9 @@ class Node(object):
 
         Args:
             index (int): index of the port.
-            port (BlueprintNodeGraph.Port): port object.
+            port (BlueprintNodeGraph.interfaces.Port): port object.
         """
-        if port.item == self.item.outputs[index]:
-            return
-        src_port = Port(self.item.outputs[index])
+        src_port = Port(self, port=self.item.outputs[index])
         src_port.connect_to(port)
 
     def set_x_pos(self, x=0.0):

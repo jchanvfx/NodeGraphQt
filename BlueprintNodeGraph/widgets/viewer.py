@@ -9,7 +9,7 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-from .serializer import SessionSerializer, SessionLoader
+# from .serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -37,8 +37,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
-        self._serializer = SessionSerializer()
-        self._loader = SessionLoader(self)
+        # self._serializer = SessionSerializer()
+        # self._loader = SessionLoader(self)
         self._setup_shortcuts()
 
     def __str__(self):

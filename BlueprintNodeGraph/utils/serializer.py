@@ -1,43 +1,49 @@
 import json
 import os
 
-from .constants import FILE_FORMAT
-from .node_types import registered_nodes
-
 
 class NodeSerializer(object):
 
     def __init__(self, node):
-        self._node = node
-        self._nid = self.node.id
+        """
+        Args:
+            node (from BlueprintNodeGraph.widgets.node.NodeItem): node item
+        """
+        self.node = node
         self._data = {self._nid: {}}
 
-    @property
-    def node(self):
-        return self._node
-
     def serialize_node(self):
-        self._data[self._nid]['icon'] = self.node.icon
-        self._data[self._nid]['name'] = self.node.name
-        self._data[self._nid]['color'] = self.node.color
-        self._data[self._nid]['border'] = self.node.border_color
-        self._data[self._nid]['type'] = self.node.type
-        self._data[self._nid]['selected'] = self.node.selected
-        self._data[self._nid]['pos'] = (
-            self.node.scenePos().x(),
-            self.node.scenePos().y()
-        )
+        node = {
+            'type': self.node.type,
+            'icon': self.node.icon,
+            'name': self.node.name,
+            'color': self.node.color,
+            'border': self.node.border_color,
+            'selected': self.node.selected,
+            'pos': (self.node.scenePos().x(), self.node.scenePos().y())
+        }
+        return node
 
     def serialize_data(self):
-        self._data[self.node.id]['knobs'] = {}
-        node_data = self.node.all_knob_data(False)
+        node_wids = {}
+        node_data = self.node.all_data(include_default=False)
         for k, v in node_data.items():
-            self._data[self.node.id]['knobs'][k] = v
+            node_wids[k] = v
+        return node_wids
 
     def serialize(self):
-        self.serialize_node()
-        self.serialize_data()
-        return self._data
+        node = {
+            self._nid: {
+                'node': self.serialize_node(), 'widget': self.serialize_data()
+            }
+        }
+        return node
+
+
+class PipeSerializer(object):
+
+    def __init__(self, pipe):
+        self._pipe = pipe
 
 
 class SessionSerializer(object):
@@ -58,7 +64,7 @@ class SessionSerializer(object):
         for node in self._nodes:
             serializer = NodeSerializer(node)
             serialized_nodes.update(serializer.serialize())
-        self._data['nodes'] = serialized_nodes
+        self._data['interfaces'] = serialized_nodes
         return serialized_nodes
 
     def serialize_pipes(self):
@@ -136,7 +142,7 @@ class SessionLoader(object):
 
     def build_nodes(self):
         node_types = registered_nodes()
-        node_data = self.data.get('nodes')
+        node_data = self.data.get('interfaces')
         nodes = {}
         for node_id, node_data in node_data.items():
             node_builder = NodeItemBuilder(node_id, node_data, node_types)
