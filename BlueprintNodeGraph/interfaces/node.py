@@ -127,6 +127,15 @@ class Node(NodePlugin):
         """
         self.item.add_text_input(name, label, text)
 
+    def get_widget_values(self):
+        """
+        return the widget values.
+
+        Returns:
+            dict: {widget_name : widget_value}
+        """
+        return {k: w.value for k, w in self.item.all_widgets().items()}
+
     def add_data(self, name, data):
         """
         add node data to the node.

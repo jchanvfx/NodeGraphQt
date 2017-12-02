@@ -9,7 +9,7 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE)
 from .port import PortItem
-from .item_widgets import ComboNodeWidget, LineEditNodeWidget
+from .item_widgets import BaseNodeWidget, ComboNodeWidget, LineEditNodeWidget
 
 NODE_DATA = {
     'id': 0,
@@ -523,19 +523,31 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def add_dropdown_menu(self, name='', label='', items=None):
         items = items or []
-        data = str(items[0]) if items else ''
-        self.set_data(name, data)
         label = name if not label else label
         self._widgets[name] = ComboNodeWidget(self, name, label, items)
         self._widgets[name].setToolTip('knob: {}'.format(name))
         self._widgets[name].value_changed.connect(self.set_data)
 
     def add_text_input(self, name='', label='', text=''):
-        self.set_data(name, text)
         label = name if not label else label
         self._widgets[name] = LineEditNodeWidget(self, name, label, text)
         self._widgets[name].setToolTip('knob: {}'.format(name))
         self._widgets[name].value_changed.connect(self.set_data)
+
+    def add_widget(self, widget):
+        if isinstance(widget, BaseNodeWidget):
+            raise Exception('{} is not a node widget'.format(str(widget)))
+        if widget.name in self._widgets.keys():
+            raise Exception('widget name {} already exists'.format(widget.name))
+        self._widgets[widget.name] = widget
+
+    def get_widget(self, name):
+        if not self._widgets.get(name):
+            raise Exception('node has no widget name: {}'.format(name))
+        return self._widgets[name]
+
+    def all_widgets(self):
+        return self._widgets
 
     def all_data(self, include_default=True):
         data = {}
@@ -555,14 +567,12 @@ class NodeItem(QtGui.QGraphicsItem):
         return self.data(index)
 
     def set_data(self, name, data):
-        if self._widgets.get(name):
-            self._widgets.get(name).value = data
         if not NODE_DATA.get(name):
             index = max(self._data_index.values() + NODE_DATA.values()) + 1
             self._data_index[name] = index
             self.setData(index, data)
             return
-        raise ValueError('knob name "{}" already exists.'.format(name))
+        raise ValueError('data name "{}" already exists.'.format(name))
 
     def has_data(self, name):
         return name in self._data_index.keys()

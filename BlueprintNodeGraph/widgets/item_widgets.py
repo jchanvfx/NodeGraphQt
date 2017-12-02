@@ -140,6 +140,14 @@ class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         raise NotImplementedError
 
     @property
+    def label(self):
+        return self._label
+
+    @label.setter
+    def label(self, label):
+        self._label = label
+
+    @property
     def type(self):
         return str(self.__class__.__name__)
 
@@ -150,10 +158,6 @@ class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     @property
     def name(self):
         return self._name
-
-    @property
-    def label(self):
-        return self._label
 
 
 class ComboNodeWidget(BaseNodeWidget):
