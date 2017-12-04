@@ -34,13 +34,14 @@ class NodePlugin(object):
     Base class of a Node.
     """
     __metaclass__ = NodeMeta
-    NODE_NAME = 'node'
-    NODE_TYPE = 'Node'
+    NODE_NAME = ''
+    NODE_TYPE = ''
 
     def __init__(self, node=None):
         self._node_item = node
         if not node:
             self._node_item = NodeItem()
+            self._node_item.type = self.type()
 
     def __repr__(self):
         module = str(self.__class__.__module__)

@@ -2,14 +2,14 @@ import json
 import os
 from .node_utils import get_node
 
-FILE_FORMAT = '.bpg'
-
 
 class SessionSerializer(object):
 
+    def __init__(self, nodes, pipes):
+        self.nodes = nodes
+        self.pipes = pipes
 
-    @classmethod
-    def serialize_node(cls, node):
+    def serialize_node(self, node):
         """
 
         Args:
@@ -27,15 +27,15 @@ class SessionSerializer(object):
             'selected': node.selected,
             'pos': (node.scenePos().x(), node.scenePos().y())
         }
-        widgets = {}
         node_data = node.all_data(include_default=False)
-        for k, v in node_data.items():
-            widgets[k] = v
+        node_widgets = node.all_widgets()
+        widgets = {k: wid.value for k, wid in node_widgets.items()}
 
-        return {node.id: {'node': node_serial, 'widgets': widgets}}
+        return {node.id: {
+            'node': node_serial, 'widgets': widgets, 'data': node_data
+        }}
 
-    @classmethod
-    def serialize_pipe_connection(cls, pipe):
+    def serialize_pipe_connection(self, pipe):
         """
 
         Args:
@@ -49,88 +49,28 @@ class SessionSerializer(object):
             'out': {pipe.output_port.node.id: pipe.output_port.name}
         }
 
-    @classmethod
-    def serialize_session(cls, nodes, pipes):
-        """
-
-        Args:
-            nodes (list[NodeItem]):
-            pipes (list[Pipe]):
-
-        Returns:
-            dict: {
-                'nodes': {
-                    }
-                }
-        """
+    def serialize(self):
         node_serials = {}
         pipe_serials = []
-        for node in nodes:
-            serialized = cls.serialize_node(node)
+        for node in self.nodes:
+            serialized = self.serialize_node(node)
             node_serials.update(serialized)
-        for pipe in pipes:
-            serialized = cls.serialize_pipe_connection(pipe)
+        for pipe in self.pipes:
+            serialized = self.serialize_pipe_connection(pipe)
             pipe_serials.append(serialized)
-        return {'nodes': node_serials, 'connections': pipe_serials}
+        serialized_data = {
+            'nodes': node_serials,
+            'connections': pipe_serials
+        }
+        return serialized_data
 
-    @classmethod
-    def serial_to_str(cls, nodes, pipes, indent=2):
-        """
+    def serialize_to_str(self):
+        return json.dumps(self.serialize(), indent=2)
 
-        Args:
-            nodes:
-            pipes:
-            indent:
-
-        Returns:
-            str:
-        """
-        session = cls.serialize_session(nodes, pipes)
-        return json.dumps(session, indent=indent)
-
-
-def write(session_serial, file_path):
-    file_path = file_path.strip()
-    if os.path.isfile(file_path):
-        if not file_path.endswith(FILE_FORMAT):
-            file_path = '{}{}'.format(file_path, FILE_FORMAT)
+    def write(self, file_path):
+        file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
-            json.dump(session_serial, file_out, indent=2)
-            return True
-    return False
-
-
-class NodeItemBuilder(object):
-
-    def __init__(self, node_id, data, node_types):
-        self._node = None
-        self._position = None
-        self._node_types = node_types
-        self.parse_data(node_id, data)
-
-    def node_object(self, node_type):
-        return self._node_types[node_type]()
-
-    def parse_data(self, node_id, data):
-        node = self.node_object(data.get('type'))
-        node.item.id = node_id
-        node.item.name = data.get('name')
-        node.item.icon = data.get('icon')
-        node.item.color = data.get('color')
-        node.item.border_color = data.get('border')
-        node.item.selected = data.get('selected')
-        node_widgets = node.item.widgets
-        for name, value in data.get('knobs', {}).items():
-            if node_widgets.get(name):
-                node_widgets.get(name).value = value
-        self._node = node
-        self._position = data.get('pos', [0.0, 0.0])
-
-    def node(self):
-        return self._node
-
-    def position(self):
-        return self._position
+            json.dump(self.serialize(), file_out, indent=2)
 
 
 class SessionLoader(object):
@@ -194,11 +134,17 @@ class SessionLoader(object):
                 connection_ports.append((in_port, out_port))
         return connection_ports
 
+    def build_session(self, data):
+        """
+        Args:
+            data (dict): {}
 
+        Returns:
 
-    # TODO: wi[ section to work on here.
+        """
+        # node_data = [for nid, node in data.get('nodes')]
+        connection_data = data.get('connections')
 
-    def build_session(self):
         nodes = []
         node_index = {}
         for node_id, node_pos in self.build_nodes().items():
@@ -219,15 +165,14 @@ class SessionLoader(object):
         for node in nodes:
             if node.selected:
                 node._hightlight_pipes()
-        return nodes
 
     def load_str(self, str_data):
         self.data = json.loads(str_data)
-        return self.build()
+        return self.build_session()
 
     def load(self, file_path):
         if not os.path.isfile(file_path):
             return
         with open(file_path) as data_file:
             self.data = json.load(data_file)
-        return self.build()
+        return self.build_session()

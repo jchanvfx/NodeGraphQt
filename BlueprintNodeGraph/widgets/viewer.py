@@ -3,13 +3,14 @@ from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
+from BlueprintNodeGraph.utils.serializer import (SessionSerializer,
+                                                 SessionLoader)
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
-                        PIPE_STYLE_DASHED, FILE_FORMAT)
+                        PIPE_STYLE_DASHED)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-# from .serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -24,7 +25,7 @@ class NodeViewer(QtGui.QGraphicsView):
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
-        self._file_format = FILE_FORMAT
+        self._file_format = '.bpg'
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._connection_pipe = None
         self._active_pipe = None
@@ -37,8 +38,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
-        # self._serializer = SessionSerializer()
-        # self._loader = SessionLoader(self)
+        self._loader = SessionLoader(self)
         self._setup_shortcuts()
 
     def __str__(self):
@@ -491,9 +491,8 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        self._serializer.set_nodes(self.all_nodes())
-        self._serializer.set_pipes(self.all_pipes())
-        self._serializer.write(file_path)
+        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
+        serializer.write(file_path)
 
     def load_dialog(self):
         file_dlg = QtGui.QFileDialog.getOpenFileName(
@@ -504,7 +503,8 @@ class NodeViewer(QtGui.QGraphicsView):
         if not file_path:
             return
         self.clear_scene()
-        self._loader.load(file_path)
+        loader = SessionLoader(self)
+        loader.load(file_path)
 
     def write(self, file_path):
         self._serializer.set_nodes(self.all_nodes())
