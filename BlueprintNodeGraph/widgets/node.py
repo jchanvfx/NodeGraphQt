@@ -464,6 +464,14 @@ class NodeItem(QtGui.QGraphicsItem):
             self._hightlight_pipes()
 
     @property
+    def pos(self):
+        return self.scenePos().x(), self.scenePos().y()
+
+    @pos.setter
+    def pos(self, pos=(0, 0)):
+        self.setPos(pos[0], pos[1])
+
+    @property
     def name(self):
         return self._name
 

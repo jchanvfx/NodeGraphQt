@@ -19,20 +19,22 @@ class SessionSerializer(object):
             dict: serialized node.
         """
         node_serial = {
-            'type': node.type,
             'icon': node.icon,
             'name': node.name,
             'color': node.color,
-            'border': node.border_color,
+            'border_color': node.border_color,
             'selected': node.selected,
-            'pos': (node.scenePos().x(), node.scenePos().y())
+            'pos': node.pos
         }
         node_data = node.all_data(include_default=False)
         node_widgets = node.all_widgets()
         widgets = {k: wid.value for k, wid in node_widgets.items()}
 
         return {node.id: {
-            'node': node_serial, 'widgets': widgets, 'data': node_data
+            'type': node.type,
+            'node': node_serial,
+            'widgets': widgets,
+            'data': node_data
         }}
 
     def serialize_pipe_connection(self, pipe):
@@ -45,8 +47,8 @@ class SessionSerializer(object):
             dict: serialized pipe.
         """
         return {
-            'in': {pipe.input_port.node.id: pipe.input_port.name},
-            'out': {pipe.output_port.node.id: pipe.output_port.name}
+            'in': [pipe.input_port.node.id, pipe.input_port.name],
+            'out': [pipe.output_port.node.id, pipe.output_port.name]
         }
 
     def serialize(self):
@@ -70,14 +72,17 @@ class SessionSerializer(object):
     def write(self, file_path):
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
-            json.dump(self.serialize(), file_out, indent=2)
+            json.dump(self.serialize(),
+                      file_out,
+                      indent=2,
+                      separators=(',', ':')
+            )
 
 
 class SessionLoader(object):
 
     def __init__(self, viewer):
         self.viewer = viewer
-        self.data = None
 
     def parse_node(self, node_id, node_data):
         """
@@ -134,45 +139,76 @@ class SessionLoader(object):
                 connection_ports.append((in_port, out_port))
         return connection_ports
 
-    def build_session(self, data):
+    def build_layout(self, data):
         """
+        build the node layout.
+        {
+        'nodes': {
+            <node_id>: {
+                'node': <attr_dict>,
+                'data': <data_dict>,
+                'widget': <widget_dict>}},
+        'connections': [{
+            'in': [<node_id>, <port_name>],
+            'out': [<node_id>, <port_name>]
+            }]
+        }
+
         Args:
-            data (dict): {}
-
-        Returns:
-
+            data (dict): layout data
         """
-        # node_data = [for nid, node in data.get('nodes')]
-        connection_data = data.get('connections')
+        nodes = {}
+        for node_id, attrs in data.get('nodes', {}).items():
+            NodeClass = get_node(attrs['type'])
+            node = NodeClass().item
+            # default settings.
+            for k, v in attrs.get('node', {}).items():
+                if hasattr(node, k):
+                    setattr(node, k, v)
+            # user settings data
+            for k, v in attrs.get('data', {}).items():
+                if node.has_data(k):
+                    node.set_data(k, v)
+            # widget settings.
+            for k, v in attrs.get('widgets', {}).items():
+                widget = node.get_widget(k)
+                if widget:
+                    widget.value = v
+            self.viewer.add_node(node)
 
-        nodes = []
-        node_index = {}
-        for node_id, node_pos in self.build_nodes().items():
-            node, pos = node_pos
-            self.viewer.add_node(node.item)
-            node.item.setPos(pos[0], pos[1])
-            node_index[node_id] = node.item
-            nodes.append(node.item)
-        connections = self.build_connections(node_index)
-        for in_port, out_port in connections:
-            if in_port in out_port.connected_ports:
-                continue
-            if out_port in in_port.connected_ports:
-                continue
-            if in_port and out_port:
-                self.viewer.connect_ports(in_port, out_port)
+            nodes[node_id] = node
 
-        for node in nodes:
+        for connection in data.get('connections', []):
+            node_start = nodes.get(connection['in'][0])
+            node_end = nodes.get(connection['out'][0])
+            if not node_start and node_end:
+                continue
+            port_in = None
+            if node_start.inputs:
+                for p in node_start.inputs:
+                    if p.name == connection['in'][1]:
+                        port_in = p
+                        break
+            port_out = None
+            if node_end.outputs:
+                for p in node_end.outputs:
+                    if p.name == connection['out'][1]:
+                        port_out = p
+                        break
+            if port_in and port_out:
+                self.viewer.connect_ports(port_in, port_out)
+
+        for nid, node in nodes.items():
             if node.selected:
                 node._hightlight_pipes()
 
     def load_str(self, str_data):
-        self.data = json.loads(str_data)
-        return self.build_session()
+        data = json.loads(str_data)
+        return self.build_layout(data)
 
     def load(self, file_path):
         if not os.path.isfile(file_path):
             return
         with open(file_path) as data_file:
-            self.data = json.load(data_file)
-        return self.build_session()
+            data = json.load(data_file)
+        return self.build_layout(data)

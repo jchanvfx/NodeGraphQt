@@ -1,4 +1,4 @@
-### Blueprint Node Graph
+### PySide Node Graph
 
 This repository contains a *work in progress* node graph that I'm working on in my spare time, as
 I wanted to learn how to write a node graph in python using [PySide](http://pyside.github.io/docs/pyside/).
@@ -10,17 +10,17 @@ that supports PySide.
 
 [view example code](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
 
-#### Node Graph Navigation:
+#### Navigation:
 zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
 pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
 fit to screen : `F`
 
-#### Node Graph Shortcuts:
+#### Shortcuts:
 select all nodes : `Ctrl + A`<br/>
 delete selected node(s) : `Backspace` or `Delete`<br/>
 copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
 paste node(s): `Ctrl + V` _(paste from clipboard)_<br/>
 duplicate node(s) : `Alt + C`<br/>
-save session layout : `Ctrl + S` <br/>
-open session layout : `Ctrl + O` <br/>
-session layout saved as JSON with a `.bpg` file extension.
+save node layout : `Ctrl + S` <br/>
+open node layout : `Ctrl + O` <br/>
+layout saved in JSON format. (`.bpg` file ext)
