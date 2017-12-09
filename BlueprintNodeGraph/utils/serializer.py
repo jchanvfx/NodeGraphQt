@@ -72,10 +72,8 @@ class SessionSerializer(object):
     def write(self, file_path):
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
-            json.dump(self.serialize(),
-                      file_out,
-                      indent=2,
-                      separators=(',', ':')
+            json.dump(
+                self.serialize(), file_out, indent=2, separators=(',', ':')
             )
 
 

@@ -491,8 +491,7 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
-        serializer.write(file_path)
+        self.write(file_path)
 
     def load_dialog(self):
         file_dlg = QtGui.QFileDialog.getOpenFileName(
@@ -502,17 +501,26 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        self.clear_scene()
-        loader = SessionLoader(self)
-        loader.load(file_path)
+        self.load(file_path)
 
     def write(self, file_path):
-        self._serializer.set_nodes(self.all_nodes())
-        self._serializer.set_pipes(self.all_pipes())
-        self._serializer.write(file_path)
+        try:
+            serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
+            serializer.write(file_path)
+            return True
+        except Exception as e:
+            print e
+            return False
 
     def load(self, file_path):
-        self._loader.load(file_path)
+        try:
+            self.clear_scene()
+            loader = SessionLoader(self)
+            loader.load(file_path)
+            return True
+        except Exception as e:
+            print e
+            return False
 
     def clear_scene(self):
         for node in self.all_nodes():
