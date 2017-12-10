@@ -5,9 +5,9 @@ from .node_utils import get_node
 
 class SessionSerializer(object):
 
-    def __init__(self, nodes, pipes):
-        self.nodes = nodes
-        self.pipes = pipes
+    def __init__(self, nodes=None, pipes=None):
+        self.nodes = nodes or {}
+        self.pipes = pipes or []
 
     def serialize_node(self, node):
         """
@@ -37,6 +37,25 @@ class SessionSerializer(object):
             'data': node_data
         }}
 
+    def serialize_nodes(self, nodes):
+        """
+
+        Args:
+            nodes (list[NodeItem]): list of nodes.
+
+        Returns:
+            dict: serialized nodes.
+                {<node_id>: {
+                    'node': <attr_dict>,
+                    'data': <data_dict>,
+                    'widget': <widget_dict>}}
+        """
+        node_serials = {}
+        for node in nodes:
+            serialized = self.serialize_node(node)
+            node_serials.update(serialized)
+        return node_serials
+
     def serialize_pipe_connection(self, pipe):
         """
 
@@ -51,13 +70,15 @@ class SessionSerializer(object):
             'out': [pipe.output_port.node.id, pipe.output_port.name]
         }
 
-    def serialize(self):
+    def serialize_layout(self, nodes=None, pipes=None):
+        nodes = nodes or self.nodes
+        pipes = pipes or self.pipes
         node_serials = {}
         pipe_serials = []
-        for node in self.nodes:
+        for node in nodes:
             serialized = self.serialize_node(node)
             node_serials.update(serialized)
-        for pipe in self.pipes:
+        for pipe in pipes:
             serialized = self.serialize_pipe_connection(pipe)
             pipe_serials.append(serialized)
         serialized_data = {
@@ -67,13 +88,16 @@ class SessionSerializer(object):
         return serialized_data
 
     def serialize_to_str(self):
-        return json.dumps(self.serialize(), indent=2)
+        return json.dumps(self.serialize_layout(), indent=2)
 
     def write(self, file_path):
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
             json.dump(
-                self.serialize(), file_out, indent=2, separators=(',', ':')
+                self.serialize_layout(),
+                file_out,
+                indent=2,
+                separators=(',', ':')
             )
 
 
@@ -199,6 +223,8 @@ class SessionLoader(object):
         for nid, node in nodes.items():
             if node.selected:
                 node._hightlight_pipes()
+
+        return [node for nid, node in nodes.items()]
 
     def load_str(self, str_data):
         data = json.loads(str_data)
