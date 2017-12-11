@@ -1,12 +1,12 @@
 #!/usr/bin/python
-from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
 from BlueprintNodeGraph.utils.serializer import (SessionSerializer,
                                                  SessionLoader)
 from .constants import (IN_PORT, OUT_PORT,
-                        PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
+                        PIPE_LAYOUT_CURVED,
+                        PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED)
 from .node import NodeItem
 from .pipe import Pipe

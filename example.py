@@ -6,6 +6,15 @@ from PySide import QtGui, QtCore
 from BlueprintNodeGraph.interfaces import NodeGraph
 
 
+
+from BlueprintNodeGraph.utils.node_utils import get_registered_nodes
+
+
+
+import sys
+sys.path.insert(0, '/Users/jchan/GitHub/bpNodeGraph/BlueprintNodeGraph/nodes')
+print os.path.split('/Users/jchan/GitHub/bpNodeGraph/BlueprintNodeGraph/nodes')
+
 class MyNodeGraph(NodeGraph):
 
     def __init__(self, parent=None):
@@ -26,7 +35,9 @@ if __name__ == '__main__':
     graph = MyNodeGraph()
     graph.show()
 
-    # # create the interfaces.
+    print get_registered_nodes()
+
+    # create the interfaces.
     foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo_node.FooNode', name='Foo Node 1')
     bar_node = graph.create_node('BlueprintNodeGraph.nodes.foo_node.BarNode', name='Bar Node')
     text_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
