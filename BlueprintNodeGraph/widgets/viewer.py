@@ -428,7 +428,7 @@ class NodeViewer(QtGui.QGraphicsView):
                         pipes.append(pipe)
         return pipes
 
-    def copy_to_clipboard(self, nodes):
+    def copy_to_clipboard(self, nodes=None):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return
@@ -440,7 +440,7 @@ class NodeViewer(QtGui.QGraphicsView):
     def load_nodes_data(self, data):
         self.clear_selection()
         loader = SessionLoader(self)
-        loaded_nodes = loader.build_layout(data)
+        loaded_nodes = loader.load_str(data)
         if not loaded_nodes:
             return
         group = self.scene().createItemGroup(loaded_nodes)
@@ -457,13 +457,9 @@ class NodeViewer(QtGui.QGraphicsView):
         self.scene().destroyItemGroup(group)
         self._origin_pos = self._previous_pos
 
-    # TODO broken need to fix
     def paste_from_clipboard(self):
         clipboard = QtGui.QClipboard()
         data_string = clipboard.text()
-        for node in self.all_nodes():
-            if node.id in data_string:
-                data_string = data_string.replace(node.id, str(uuid4()))
         self.load_nodes_data(data_string)
 
     def duplicate_nodes(self, nodes=None):

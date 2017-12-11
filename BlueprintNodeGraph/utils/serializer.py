@@ -11,7 +11,6 @@ class SessionSerializer(object):
 
     def serialize_node(self, node):
         """
-
         Args:
             node (NodeItem): node item.
 
@@ -39,7 +38,6 @@ class SessionSerializer(object):
 
     def serialize_nodes(self, nodes):
         """
-
         Args:
             nodes (list[NodeItem]): list of nodes.
 
@@ -58,7 +56,6 @@ class SessionSerializer(object):
 
     def serialize_pipe_connection(self, pipe):
         """
-
         Args:
             pipe (Pipe): pipe item.
 
@@ -161,9 +158,9 @@ class SessionLoader(object):
                 connection_ports.append((in_port, out_port))
         return connection_ports
 
-    def build_layout(self, data):
+    def load_data(self, data):
         """
-        build the node layout.
+        build the node layout from dict.
         {
         'nodes': {
             <node_id>: {
@@ -227,12 +224,30 @@ class SessionLoader(object):
         return [node for nid, node in nodes.items()]
 
     def load_str(self, str_data):
+        """
+        load nodes from string.
+
+        Args:
+            str_data (str): node data string.
+
+        Returns:
+            list[NodeItem]: list of node items.
+        """
         data = json.loads(str_data)
-        return self.build_layout(data)
+        return self.load_data(data)
 
     def load(self, file_path):
+        """
+        load nodes from file path.
+
+        Args:
+            file_path (str): path to the file.
+
+        Returns:
+            list[NodeItem]: list of node items.
+        """
         if not os.path.isfile(file_path):
             return
         with open(file_path) as data_file:
             data = json.load(data_file)
-        return self.build_layout(data)
+        return self.load_data(data)
