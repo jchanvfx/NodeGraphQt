@@ -1,9 +1,6 @@
 #!/usr/bin/python
-import os
-from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
 from BlueprintNodeGraph.interfaces.node import Node
-
-os.environ['BP_NODE_PLUGINS'] = []
+from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
 
 
 def get_registered_nodes():
@@ -31,17 +28,3 @@ def get_node(node_type):
         NodePlugin: node class to be instantiated
     """
     return NodePlugin.registered_nodes.get(node_type)
-
-
-# TODO implement plugin path system.
-def add_plugin_path(plugin_path):
-    plugin_paths = os.getenv('BP_NODE_PLUGINS')
-    if os.path.isdir(plugin_path) and plugin_path not in plugin_paths:
-        plugin_paths.append(plugin_path)
-        os.environ['BP_NODE_PLUGINS'] = plugin_paths
-
-
-def load_plugins():
-    if os.getenv('BP_NODE_PLUGINS'):
-        for plugin in os.getenv('BP_NODE_PLUGINS'):
-            print plugin

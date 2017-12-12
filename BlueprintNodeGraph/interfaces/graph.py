@@ -94,12 +94,14 @@ class NodeGraph(QtGui.QWidget):
             BlueprintNodeGraph.Node: node instance.
         """
         NodeInstance = get_node(node_type)
-        node = NodeInstance()
-        self.clear_selection()
-        self.add_node(node)
-        node.set_name(name)
-        node.set_selected(True)
-        return node
+        if NodeInstance:
+            node = NodeInstance()
+            self.clear_selection()
+            self.add_node(node)
+            node.set_name(name)
+            node.set_selected(True)
+            return node
+        raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
     def add_node(self, node):
         """

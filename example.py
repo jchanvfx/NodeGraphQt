@@ -6,15 +6,6 @@ from PySide import QtGui, QtCore
 from BlueprintNodeGraph.interfaces import NodeGraph
 
 
-
-from BlueprintNodeGraph.utils.node_utils import get_registered_nodes
-
-
-
-import sys
-sys.path.insert(0, '/Users/jchan/GitHub/bpNodeGraph/BlueprintNodeGraph/nodes')
-print os.path.split('/Users/jchan/GitHub/bpNodeGraph/BlueprintNodeGraph/nodes')
-
 class MyNodeGraph(NodeGraph):
 
     def __init__(self, parent=None):
@@ -35,29 +26,27 @@ if __name__ == '__main__':
     graph = MyNodeGraph()
     graph.show()
 
-    print get_registered_nodes()
-
     # create the interfaces.
-    foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo_node.FooNode', name='Foo Node 1')
-    bar_node = graph.create_node('BlueprintNodeGraph.nodes.foo_node.BarNode', name='Bar Node')
+    foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo.FooNode', name='Foo Node 1')
+    bar_node = graph.create_node('BlueprintNodeGraph.nodes.bar.BarNode', name='Bar Node')
     text_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
     menu_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
 
     # change the color on "foo_node"
     foo_node.set_color(17, 52, 88)
 
-    # # chage icon on "bar_node"
+    # change icon on "bar_node"
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example_icon.png')
     bar_node.set_icon(icon)
 
-    # position interfaces.
+    # position nodes.
     foo_node.set_pos(-487.0, 141.0)
     bar_node.set_pos(-77.0, 17.0)
     text_node.set_pos(-488.0, -158.0)
     menu_node.set_pos(310.0, -97.0)
 
-    # connect interfaces
+    # connect nodes
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
