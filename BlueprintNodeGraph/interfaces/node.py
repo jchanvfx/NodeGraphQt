@@ -220,9 +220,7 @@ class Node(NodePlugin):
             index (int): index of the port.
             port (BlueprintNodeGraph.interfaces.Port): port object.
         """
-        if port.item == self.item.inputs[index]:
-            return
-        src_port = Port(self.item.inputs[index])
+        src_port = Port(self, port=self.item.inputs[index])
         src_port.connect_to(port)
 
     def output(self, index):
