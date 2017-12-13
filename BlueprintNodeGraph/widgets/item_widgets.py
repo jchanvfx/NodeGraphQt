@@ -115,7 +115,7 @@ class _NodeGroubBox(QtGui.QGroupBox):
         self._layout.addWidget(widget)
 
 
-class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
+class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     """
     Base Node Widget.
     """
@@ -123,7 +123,7 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     value_changed = QtCore.Signal(str, str)
 
     def __init__(self, parent=None, name='widget', label=''):
-        super(_BaseNodeWidget, self).__init__(parent)
+        super(BaseNodeWidget, self).__init__(parent)
         self.setZValue(Z_VAL_KNOB)
         self._name = name
         self._label = label
@@ -140,6 +140,14 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         raise NotImplementedError
 
     @property
+    def label(self):
+        return self._label
+
+    @label.setter
+    def label(self, label):
+        self._label = label
+
+    @property
     def type(self):
         return str(self.__class__.__name__)
 
@@ -151,12 +159,8 @@ class _BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     def name(self):
         return self._name
 
-    @property
-    def label(self):
-        return self._label
 
-
-class ComboNodeWidget(_BaseNodeWidget):
+class ComboNodeWidget(BaseNodeWidget):
     """
     ComboBox Node Widget.
     """
@@ -208,7 +212,7 @@ class ComboNodeWidget(_BaseNodeWidget):
         self._combo.clear()
 
 
-class LineEditNodeWidget(_BaseNodeWidget):
+class LineEditNodeWidget(BaseNodeWidget):
     """
     LineEdit Node Widget.
     """

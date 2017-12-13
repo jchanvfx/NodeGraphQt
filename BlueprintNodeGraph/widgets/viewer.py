@@ -1,15 +1,16 @@
 #!/usr/bin/python
-from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
+from BlueprintNodeGraph.utils.serializer import (SessionSerializer,
+                                                 SessionLoader)
 from .constants import (IN_PORT, OUT_PORT,
-                        PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT,
-                        PIPE_STYLE_DASHED, FILE_FORMAT)
+                        PIPE_LAYOUT_CURVED,
+                        PIPE_LAYOUT_STRAIGHT,
+                        PIPE_STYLE_DASHED)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-from .serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -24,7 +25,7 @@ class NodeViewer(QtGui.QGraphicsView):
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
-        self._file_format = FILE_FORMAT
+        self._file_format = '.bpg'
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._connection_pipe = None
         self._active_pipe = None
@@ -37,8 +38,6 @@ class NodeViewer(QtGui.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
-        self._serializer = SessionSerializer()
-        self._loader = SessionLoader(self)
         self._setup_shortcuts()
 
     def __str__(self):
@@ -411,7 +410,10 @@ class NodeViewer(QtGui.QGraphicsView):
             if isinstance(node, NodeItem):
                 node.delete()
 
-    def serialize_nodes(self, nodes):
+    def get_pipes_from_nodes(self, nodes=None):
+        nodes = nodes or self.selected_nodes()
+        if not nodes:
+            return
         pipes = []
         for node in nodes:
             for port in node.inputs:
@@ -424,13 +426,21 @@ class NodeViewer(QtGui.QGraphicsView):
                     connected_node = pipe.input_port.node
                     if connected_node in nodes:
                         pipes.append(pipe)
-        self._serializer.set_nodes(nodes)
-        self._serializer.set_pipes(pipes)
-        return self._serializer.serialize_str()
+        return pipes
 
-    def deserialize_nodes(self, data):
+    def copy_to_clipboard(self, nodes=None):
+        nodes = nodes or self.selected_nodes()
+        if not nodes:
+            return
+        pipes = self.get_pipes_from_nodes(nodes)
+        serializer = SessionSerializer(nodes, pipes)
+        clipboard = QtGui.QClipboard()
+        clipboard.setText(serializer.serialize_to_str())
+
+    def load_nodes_data(self, data):
         self.clear_selection()
-        loaded_nodes = self._loader.load_str(data)
+        loader = SessionLoader(self)
+        loaded_nodes = loader.load_str(data)
         if not loaded_nodes:
             return
         group = self.scene().createItemGroup(loaded_nodes)
@@ -447,31 +457,24 @@ class NodeViewer(QtGui.QGraphicsView):
         self.scene().destroyItemGroup(group)
         self._origin_pos = self._previous_pos
 
+    def paste_from_clipboard(self):
+        clipboard = QtGui.QClipboard()
+        data_string = clipboard.text()
+        self.load_nodes_data(data_string)
+
     def duplicate_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return
-        data_string = self.serialize_nodes(nodes)
+        serializer = SessionSerializer()
+        data_string = serializer.serialize_nodes(nodes)
         if not data_string:
             return
-        for node in nodes:
-            data_string = data_string.replace(node.id, str(uuid4()))
-        self.deserialize_nodes(data_string)
+        pipe_serials = []
+        for pipe in self.get_pipes_from_nodes(nodes):
+            pipe_serials.append(serializer.serialize_pipe_connection(pipe))
 
-    def copy_to_clipboard(self, nodes=None):
-        clipboard = QtGui.QClipboard()
-        nodes = nodes or self.selected_nodes()
-        if nodes:
-            data_string = self.serialize_nodes(nodes)
-            clipboard.setText(data_string)
-
-    def paste_from_clipboard(self):
-        clipboard = QtGui.QClipboard()
-        data_string = clipboard.text()
-        for node in self.all_nodes():
-            if node.id in data_string:
-                data_string = data_string.replace(node.id, str(uuid4()))
-        self.deserialize_nodes(data_string)
+        self.load_nodes_data({'nodes': data_string}, )
 
     def select_all_nodes(self):
         for node in self.all_nodes():
@@ -491,9 +494,7 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        self._serializer.set_nodes(self.all_nodes())
-        self._serializer.set_pipes(self.all_pipes())
-        self._serializer.write(file_path)
+        self.write(file_path)
 
     def load_dialog(self):
         file_dlg = QtGui.QFileDialog.getOpenFileName(
@@ -503,16 +504,16 @@ class NodeViewer(QtGui.QGraphicsView):
         file_path = file_dlg[0]
         if not file_path:
             return
-        self.clear_scene()
-        self._loader.load(file_path)
+        self.load(file_path)
 
     def write(self, file_path):
-        self._serializer.set_nodes(self.all_nodes())
-        self._serializer.set_pipes(self.all_pipes())
-        self._serializer.write(file_path)
+        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
+        serializer.write(file_path)
 
     def load(self, file_path):
-        self._loader.load(file_path)
+        self.clear_scene()
+        loader = SessionLoader(self)
+        loader.load(file_path)
 
     def clear_scene(self):
         for node in self.all_nodes():
