@@ -25,6 +25,7 @@ class Node(NodePlugin):
             name (str): name for the node.
         """
         self.item.name = name
+        self.NODE_NAME = self.item.name
 
     def set_icon(self, icon=None):
         """

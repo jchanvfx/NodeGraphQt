@@ -7,9 +7,6 @@ from BlueprintNodeGraph.widgets.scene import NodeScene
 from BlueprintNodeGraph.widgets.viewer import NodeViewer
 
 
-_NODES_LOADED = False
-
-
 class NodeGraph(QtGui.QWidget):
 
     def __init__(self, parent=None):
@@ -20,12 +17,6 @@ class NodeGraph(QtGui.QWidget):
         layout = QtGui.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
-
-        # TODO: find a better way of loading nodes.
-        global _NODES_LOADED
-        if not _NODES_LOADED:
-            _NODES_LOADED = True
-            import BlueprintNodeGraph.nodes
 
     def set_pipe_layout(self, layout='curved'):
         """
@@ -97,9 +88,9 @@ class NodeGraph(QtGui.QWidget):
         if NodeInstance:
             node = NodeInstance()
             self.clear_selection()
-            self.add_node(node)
             node.set_name(name)
             node.set_selected(True)
+            self.add_node(node)
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 

@@ -3,7 +3,21 @@ import sys
 
 from PySide import QtGui, QtCore
 
-from BlueprintNodeGraph.interfaces import NodeGraph
+# load in the example nodes.
+from BlueprintNodeGraph import nodes
+# import the widgets.
+from BlueprintNodeGraph.interfaces import NodeGraph, Node
+
+
+class MyNode(Node):
+
+    NODE_NAME = 'my test node'
+    NODE_TYPE = 'MyNode'
+
+    def __init__(self):
+        super(MyNode, self).__init__()
+        self.add_input('in')
+        self.add_input('out')
 
 
 class MyNodeGraph(NodeGraph):
@@ -26,9 +40,13 @@ if __name__ == '__main__':
     graph = MyNodeGraph()
     graph.show()
 
-    # create the interfaces.
-    foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo.FooNode', name='Foo Node 1')
-    bar_node = graph.create_node('BlueprintNodeGraph.nodes.bar.BarNode', name='Bar Node')
+    # add a node.
+    my_node = MyNode()
+    graph.add_node(my_node)
+
+    # create the nodes from the "nodes" package dir.
+    foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo.FooNode', name='Foo Node')
+    bar_node = graph.create_node('BlueprintNodeGraph.nodes.bar.BarNode', name='Foo Node')
     text_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
     menu_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
 

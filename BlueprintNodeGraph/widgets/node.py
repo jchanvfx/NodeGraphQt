@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 from collections import OrderedDict
 from uuid import uuid4
 
@@ -8,8 +9,8 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE)
-from .port import PortItem
 from .item_widgets import BaseNodeWidget, ComboNodeWidget, LineEditNodeWidget
+from .port import PortItem
 
 NODE_DATA = {
     'id': 0,
@@ -35,8 +36,7 @@ class NodeItem(QtGui.QGraphicsItem):
         self.setZValue(Z_VAL_NODE)
         self._width = 120
         self._height = 80
-
-        self._name = name.strip().replace(' ', '_')
+        self._name = name.strip()
         self.setToolTip('node: {}'.format(self._name))
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         pixmap = pixmap.scaledToHeight(
@@ -476,12 +476,13 @@ class NodeItem(QtGui.QGraphicsItem):
         return self._name
 
     @name.setter
-    def name(self, name='node'):
-        name = name.strip()
-        name = name.replace(' ', '_')
+    def name(self, name=''):
+        if self.scene():
+            viewer = self.scene().viewer()
+            name = viewer.get_unique_node_name(name)
         self._name = name
         self.setToolTip('node: {}'.format(self._name))
-        self._text_item.setPlainText(name)
+        self._text_item.setPlainText(self._name)
         if self.scene():
             self.init_node()
 

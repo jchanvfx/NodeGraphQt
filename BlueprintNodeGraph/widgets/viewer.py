@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 
 from PySide import QtGui, QtCore
 
@@ -212,6 +213,36 @@ class NodeViewer(QtGui.QGraphicsView):
     #     if event.mimeData().hasFormat('component/name'):
     #         event.accept()
 
+    def get_unique_node_name(self, name):
+        regex = re.compile('([aA-zZ ]+)(?:(?: )*(\d+))')
+        match = regex.match(name.strip())
+        version = ''
+        if match:
+            name = match.group(1)
+            version = match.group(2) or ''
+        unique_name = '{}{}'.format(name, version).strip()
+        regex = re.compile('[aA-zZ ]+(\d+)')
+        names = []
+        versions = []
+        for node in self.all_nodes():
+            names.append(node.name)
+            match = regex.match(node.name)
+            if match:
+                versions.append(int(match.group(1)))
+        if unique_name not in names:
+            return unique_name
+        if versions:
+            for x in range(1, max(versions) + 2):
+                unique_name = '{} {}'.format(name, x)
+                if unique_name not in names:
+                    break
+        else:
+            for x in range(1, len(names) + 2):
+                unique_name = '{} {}'.format(name, x)
+                if unique_name not in names:
+                    break
+        return unique_name
+
     def start_connection(self, selected_port):
         """
         create new pipe for the connection.
@@ -398,8 +429,10 @@ class NodeViewer(QtGui.QGraphicsView):
         return nodes
 
     def add_node(self, node):
-        node.init_node()
+        unique_name = self.get_unique_node_name(node.name)
+        node.name = unique_name
         self.scene().addItem(node)
+        node.init_node()
 
     def delete_node(self, node):
         if isinstance(node, NodeItem):

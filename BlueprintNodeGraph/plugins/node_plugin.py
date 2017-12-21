@@ -42,10 +42,12 @@ class NodePlugin(object):
         if not node:
             self._node_item = NodeItem()
             self._node_item.type = self.type()
+            self._node_item.name = self.NODE_NAME
+            self.NODE_NAME = self._node_item.name
 
     def __repr__(self):
         module = str(self.__class__.__module__)
-        return '{}.{}(\'{}\')'.format(module, self.NODE_TYPE)
+        return '{}.{}(\'{}\')'.format(module, self.NODE_TYPE, self.NODE_NAME)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
