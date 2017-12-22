@@ -1,6 +1,9 @@
 #!/usr/bin/python
 import os
 
+# FILE FORMAT
+FILE_IO_EXT = '.bpg'
+
 # PIPE
 PIPE_STYLE_DEFAULT = 'line'
 PIPE_STYLE_DASHED = 'dashed'

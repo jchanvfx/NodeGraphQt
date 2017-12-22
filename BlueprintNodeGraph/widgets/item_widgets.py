@@ -4,10 +4,12 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
 
-regex = re.compile('(?:\w:|)([.\\/].+\w+)')
+regex = re.compile('(\w:)')
 match = regex.match(ICON_DOWN_ARROW_ICON)
-match_str = match.group(0).replace('\\', '/') if match else None
-ICON_DOWN_ARROW_ICON = match_str or ICON_DOWN_ARROW_ICON
+if match:
+    match_str = match.group(1)
+    ICON_DOWN_ARROW_ICON = ICON_DOWN_ARROW_ICON[len(match_str):]
+    ICON_DOWN_ARROW_ICON = ICON_DOWN_ARROW_ICON.replace('\\', '/')
 
 _STYLE_QGROUPBOX = '''
 QGroupBox {

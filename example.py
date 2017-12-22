@@ -10,21 +10,26 @@ from BlueprintNodeGraph.interfaces import NodeGraph, Node
 
 
 class MyNode(Node):
-
-    NODE_NAME = 'my test node'
+    """
+    This is a example test node.
+    """
     NODE_TYPE = 'MyNode'
 
     def __init__(self):
         super(MyNode, self).__init__()
+        self.set_name('my test node')
         self.add_input('in')
-        self.add_input('out')
+        self.add_output('out')
 
 
 class MyNodeGraph(NodeGraph):
+    """
+    Example node graph widget.
+    """
 
     def __init__(self, parent=None):
         super(MyNodeGraph, self).__init__(parent)
-        self.setWindowTitle('My Node Graph')
+        self.setWindowTitle('PySide Node Graph')
         self.resize(1100, 800)
 
     def keyPressEvent(self, event):

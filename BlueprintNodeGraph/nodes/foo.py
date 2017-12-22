@@ -5,11 +5,11 @@ class FooNode(Node):
     """
     A node class with 2 inputs and 2 outputs.
     """
-    NODE_NAME = 'Foo'
     NODE_TYPE = 'FooNode'
 
     def __init__(self):
         super(FooNode, self).__init__()
+        self.set_name('Foo')
 
         # create node inputs
         self.add_input('foo')

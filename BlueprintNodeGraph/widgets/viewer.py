@@ -8,7 +8,8 @@ from BlueprintNodeGraph.utils.serializer import (SessionSerializer,
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
-                        PIPE_STYLE_DASHED)
+                        PIPE_STYLE_DASHED,
+                        FILE_IO_EXT)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
@@ -26,7 +27,7 @@ class NodeViewer(QtGui.QGraphicsView):
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
-        self._file_format = '.bpg'
+        self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._connection_pipe = None
         self._active_pipe = None
@@ -499,15 +500,10 @@ class NodeViewer(QtGui.QGraphicsView):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return
-        serializer = SessionSerializer()
-        data_string = serializer.serialize_nodes(nodes)
-        if not data_string:
-            return
-        pipe_serials = []
-        for pipe in self.get_pipes_from_nodes(nodes):
-            pipe_serials.append(serializer.serialize_pipe_connection(pipe))
-
-        self.load_nodes_data({'nodes': data_string}, )
+        pipes = self.get_pipes_from_nodes(nodes)
+        serializer = SessionSerializer(nodes, pipes)
+        data = serializer.serialize_to_str()
+        self.load_nodes_data(data)
 
     def select_all_nodes(self):
         for node in self.all_nodes():

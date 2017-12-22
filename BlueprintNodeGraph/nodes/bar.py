@@ -5,11 +5,11 @@ class BarNode(Node):
     """
     A node class with 3 inputs and 3 outputs.
     """
-    NODE_NAME = 'Bar'
     NODE_TYPE = 'BarNode'
 
     def __init__(self):
         super(BarNode, self).__init__()
+        self.set_name('Bar')
 
         # create node inputs
         self.add_input('hello')

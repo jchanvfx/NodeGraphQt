@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import re
 from collections import OrderedDict
 from uuid import uuid4
 
@@ -495,6 +494,15 @@ class NodeItem(QtGui.QGraphicsItem):
         return self._output_items
 
     def add_input(self, name='input', multi_port=False, display_name=True):
+        """
+        Args:
+            name (str): name for the port.
+            multi_port (bool): allow multiple connections.
+            display_name (bool): display the port name. 
+
+        Returns:
+            PortItem: input item widget
+        """
         port = PortItem(self)
         port.name = name
         port.port_type = IN_PORT
@@ -511,6 +519,15 @@ class NodeItem(QtGui.QGraphicsItem):
         return port
 
     def add_output(self, name='output', multi_port=False, display_name=True):
+        """
+        Args:
+            name (str): name for the port.
+            multi_port (bool): allow multiple connections.
+            display_name (bool): display the port name. 
+
+        Returns:
+            PortItem: output item widget
+        """
         port = PortItem(self)
         port.name = name
         port.port_type = OUT_PORT
