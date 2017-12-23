@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from BlueprintNodeGraph.interfaces.node import Node
-from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
+from ..interfaces.node import Node
+from ..plugins.node_plugin import NodePlugin
 
 
 def get_registered_nodes():

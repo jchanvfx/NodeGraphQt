@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from BlueprintNodeGraph.widgets.node import NodeItem
+from ..widgets.node import NodeItem
 
 
 class NodeMeta(type):

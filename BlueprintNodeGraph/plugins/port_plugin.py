@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from BlueprintNodeGraph.widgets.port import PortItem
+from ..widgets.port import PortItem
 
 
 class PortPlugin(object):

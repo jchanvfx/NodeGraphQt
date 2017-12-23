@@ -3,8 +3,6 @@ import re
 
 from PySide import QtGui, QtCore
 
-from BlueprintNodeGraph.utils.serializer import (SessionSerializer,
-                                                 SessionLoader)
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -13,6 +11,7 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
+from ..utils.serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):

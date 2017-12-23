@@ -1,4 +1,4 @@
-from BlueprintNodeGraph.interfaces import Node
+from ..interfaces import Node
 
 
 class TextInputNode(Node):

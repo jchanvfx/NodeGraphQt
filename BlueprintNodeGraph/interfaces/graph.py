@@ -1,10 +1,10 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
-from BlueprintNodeGraph.utils.node_utils import get_node
-from BlueprintNodeGraph.widgets.scene import NodeScene
-from BlueprintNodeGraph.widgets.viewer import NodeViewer
+from ..plugins.node_plugin import NodePlugin
+from ..utils.node_utils import get_node
+from ..widgets.scene import NodeScene
+from ..widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtGui.QWidget):

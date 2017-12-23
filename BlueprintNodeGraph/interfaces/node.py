@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from BlueprintNodeGraph.plugins.node_plugin import NodePlugin
 from .port import Port
+from ..plugins.node_plugin import NodePlugin
 
 
 class Node(NodePlugin):

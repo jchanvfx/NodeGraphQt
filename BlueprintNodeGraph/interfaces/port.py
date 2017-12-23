@@ -1,7 +1,6 @@
 #!/usr/bin/python
-from BlueprintNodeGraph.plugins.port_plugin import PipePlugin
-from BlueprintNodeGraph.plugins.port_plugin import PortPlugin
-from BlueprintNodeGraph.widgets.port import PortItem
+from ..plugins.port_plugin import PipePlugin
+from ..plugins.port_plugin import PortPlugin
 
 
 class Port(PortPlugin):
