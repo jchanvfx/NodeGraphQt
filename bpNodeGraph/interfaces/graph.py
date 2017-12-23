@@ -7,10 +7,10 @@ from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
 
 
-class NodeGraph(QtGui.QWidget):
+class NodeGraphWidget(QtGui.QWidget):
 
     def __init__(self, parent=None):
-        super(NodeGraph, self).__init__(parent)
+        super(NodeGraphWidget, self).__init__(parent)
         self.setWindowTitle('Node Graph')
         self._scene = NodeScene()
         self._viewer = NodeViewer(self, self._scene)

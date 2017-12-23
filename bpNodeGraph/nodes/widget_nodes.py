@@ -1,4 +1,4 @@
-from ..interfaces import Node
+from bpNodeGraph.interfaces import Node
 
 
 class TextInputNode(Node):

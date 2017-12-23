@@ -4,9 +4,9 @@ import sys
 from PySide import QtGui, QtCore
 
 # load in the example nodes.
-from BlueprintNodeGraph import nodes
+from bpNodeGraph import nodes
 # import the widgets.
-from BlueprintNodeGraph.interfaces import NodeGraph, Node
+from bpNodeGraph.interfaces import NodeGraphWidget, Node
 
 
 class MyNode(Node):
@@ -22,13 +22,13 @@ class MyNode(Node):
         self.add_output('out')
 
 
-class MyNodeGraph(NodeGraph):
+class NodeGraph(NodeGraphWidget):
     """
     Example node graph widget.
     """
 
     def __init__(self, parent=None):
-        super(MyNodeGraph, self).__init__(parent)
+        super(NodeGraph, self).__init__(parent)
         self.setWindowTitle('PySide Node Graph')
         self.resize(1100, 800)
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
 
     # create node graph.
-    graph = MyNodeGraph()
+    graph = NodeGraph()
     graph.show()
 
     # add a node.
@@ -50,10 +50,10 @@ if __name__ == '__main__':
     graph.add_node(my_node)
 
     # create the nodes from the "nodes" package dir.
-    foo_node = graph.create_node('BlueprintNodeGraph.nodes.foo.FooNode', name='Foo Node')
-    bar_node = graph.create_node('BlueprintNodeGraph.nodes.bar.BarNode', name='Foo Node')
-    text_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
-    menu_node = graph.create_node('BlueprintNodeGraph.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
+    foo_node = graph.create_node('bpNodeGraph.nodes.foo.FooNode', name='Foo Node')
+    bar_node = graph.create_node('bpNodeGraph.nodes.bar.BarNode', name='Foo Node')
+    text_node = graph.create_node('bpNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
+    menu_node = graph.create_node('bpNodeGraph.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
 
     # change the color on "foo_node"
     foo_node.set_color(17, 52, 88)

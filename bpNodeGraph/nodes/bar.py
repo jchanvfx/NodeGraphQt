@@ -1,4 +1,4 @@
-from BlueprintNodeGraph.interfaces import Node
+from bpNodeGraph.interfaces import Node
 
 
 class BarNode(Node):

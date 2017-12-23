@@ -32,6 +32,5 @@
 __author__ = 'Johnny Chan'
 __email__ = 'johnny@chantasticvfx.com'
 __credits__ = []
-__module_name__ = 'BlueprintNodeGraph'
-__status__ = 'work in progress'
+__module_name__ = 'Blueprint Node Graph'
 __url__ = 'https://github.com/jchanvfx/bpNodeGraph'
