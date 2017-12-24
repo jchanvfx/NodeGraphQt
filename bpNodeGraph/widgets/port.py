@@ -3,6 +3,7 @@ from PySide import QtGui, QtCore
 
 from .constants import (
     IN_PORT, OUT_PORT,
+    PIPE_ACTIVE_COLOR,
     PORT_ACTIVE_COLOR,
     PORT_ACTIVE_BORDER_COLOR,
     Z_VAL_PORT)
@@ -32,6 +33,7 @@ class PortItem(QtGui.QGraphicsItem):
         self._pipes = []
         self._width = 10.0
         self._height = 10.0
+        self._hovered = False
         self.name = 'port'
         self.color = (49, 115, 100, 255)
         self.border_color = (29, 202, 151, 255)
@@ -52,6 +54,8 @@ class PortItem(QtGui.QGraphicsItem):
         else:
             r, g, b, a = self.color
             bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
+        if self._hovered:
+            bdr_r, bdr_g, bdr_b, bdr_a = PIPE_ACTIVE_COLOR
         color = QtGui.QColor(r, g, b, a)
         border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
         painter.setBrush(color)
@@ -70,6 +74,14 @@ class PortItem(QtGui.QGraphicsItem):
         
     def mouseReleaseEvent(self, event):
         super(PortItem, self).mouseReleaseEvent(event)
+        
+    def hoverEnterEvent(self, event):
+        self._hovered = True
+        super(PortItem, self).hoverEnterEvent(event)
+        
+    def hoverLeaveEvent(self, event):
+        self._hovered = False
+        super(PortItem, self).hoverLeaveEvent(event)
 
     def viewer_start_connection(self):
         viewer = self.scene().viewer()
