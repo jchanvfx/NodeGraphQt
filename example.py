@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # create the nodes from the "nodes" package dir.
     foo_node = graph.create_node('bpNodeGraph.nodes.foo.FooNode', name='Foo Node')
-    bar_node = graph.create_node('bpNodeGraph.nodes.bar.BarNode', name='Foo Node')
+    bar_node = graph.create_node('bpNodeGraph.nodes.bar.BarNode', name='Bar Node')
     text_node = graph.create_node('bpNodeGraph.nodes.widget_nodes.TextInputNode', name='Text Node')
     menu_node = graph.create_node('bpNodeGraph.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
 

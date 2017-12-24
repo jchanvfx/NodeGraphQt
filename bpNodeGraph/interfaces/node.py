@@ -108,7 +108,7 @@ class Node(NodePlugin):
 
     def add_menu(self, name='', label='', items=None):
         """
-        Embed a menu knob widget into the node.
+        Embed a menu widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -119,7 +119,7 @@ class Node(NodePlugin):
 
     def add_text_input(self, name='', label='', text=''):
         """
-        Embed a text input knob widget into the node.
+        Embed a text input widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -167,7 +167,7 @@ class Node(NodePlugin):
         Returns all the node data names and values.
 
         Returns:
-            dict: a dictionary of node knob data.
+            dict: a dictionary of node data.
         """
         return self.item.all_data()
 
@@ -176,10 +176,10 @@ class Node(NodePlugin):
         Return the node data.
 
         Args:
-            name (str): name of the knob.
+            name (str): name of the attribute.
 
         Returns:
-            str, int or float: knob data.
+            str, int or float: data.
         """
         return self.item.get_data(name)
 

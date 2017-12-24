@@ -17,6 +17,6 @@ class BarNode(Node):
         self.add_input('foo bar')
 
         # create node outputs
-        self.add_output('apples')
-        self.add_output('bananas')
-        self.add_output('orange')
+        self.add_output('apples', multi_output=False)
+        self.add_output('bananas', multi_output=False)
+        self.add_output('orange', display_name=False)

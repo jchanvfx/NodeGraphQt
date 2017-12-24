@@ -125,6 +125,7 @@ class PortItem(QtGui.QGraphicsItem):
     @name.setter
     def name(self, name=''):
         self.setData(PORT_DATA['name'], name.strip())
+        self.setToolTip(name)
 
     @property
     def display_name(self):
