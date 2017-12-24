@@ -11,6 +11,7 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
+from ..utils.node_utils import NodePosUndoCommand
 from ..utils.serializer import SessionSerializer, SessionLoader
 
 
@@ -86,10 +87,10 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _setup_shortcuts(self):
-        # undo_action = self.undoStack.createUndoAction(self, self.tr("&Undo"))
-        # undo_action.setShortcuts(QtGui.QKeySequence.Undo)
-        # redo_action = self.undoStack.createRedoAction(self, self.tr("&Redo"))
-        # redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+        undo_action = self._undo_stack.createUndoAction(self, self.tr("&Undo"))
+        undo_action.setShortcuts(QtGui.QKeySequence.Undo)
+        redo_action = self._undo_stack.createRedoAction(self, self.tr("&Redo"))
+        redo_action.setShortcuts(QtGui.QKeySequence.Redo)
 
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
@@ -370,11 +371,9 @@ class NodeViewer(QtGui.QGraphicsView):
                 if not port_items[0].multi_connection:
                     [p.delete() for p in port_items[0].connected_pipes]
                 return
-
             node_items = self._items_near(pos, NodeItem, 3, 3)
             if node_items:
                 return
-
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
                 self._active_pipe = pipe_items[0]
