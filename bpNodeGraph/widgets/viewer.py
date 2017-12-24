@@ -145,6 +145,11 @@ class NodeViewer(QtGui.QGraphicsView):
         self._prev_selection = self.selected_nodes()
 
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
+        if shift_modifier:
+            for item in items:
+                if isinstance(item, NodeItem):
+                    item.selected = not item.selected
+
         if (self.LMB_state and not alt_modifier) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
             map_rect = self.mapToScene(rect).boundingRect()
