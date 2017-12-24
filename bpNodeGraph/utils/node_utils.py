@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from PySide import QtGui
 from ..interfaces.node import Node
 from ..plugins.node_plugin import NodePlugin
 
@@ -28,3 +29,28 @@ def get_node(node_type):
         NodePlugin: node class to be instantiated
     """
     return NodePlugin.registered_nodes.get(node_type)
+
+
+class NodeStateUndoCommand(QtGui.QUndoCommand):
+
+    def __init__(self, node):
+        super(NodeStateUndoCommand, self).__init__(self)
+        self.setText('modified properties')
+        self.node = node
+
+
+class NodePosUndoCommand(QtGui.QUndoCommand):
+
+    def __init__(self, node):
+        super(NodePosUndoCommand, self).__init__(self)
+        self.setText('update node position')
+        self.node = node
+        self.pos = (node.pos().x(), node.pos().y())
+
+    def undo(self):
+        x, y = self.pos
+        self.node.setPos(x, y)
+
+    def redo(self):
+        x, y = self.pos
+        self.node.setPos(x, y)

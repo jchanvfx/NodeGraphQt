@@ -35,6 +35,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._previous_pos = None
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
+        self._undo_stack = QtGui.QUndoStack()
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -85,6 +86,11 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _setup_shortcuts(self):
+        undo_action = self.undoStack.createUndoAction(self, self.tr("&Undo"))
+        undo_action.setShortcuts(QtGui.QKeySequence.Undo)
+        redo_action = self.undoStack.createRedoAction(self, self.tr("&Redo"))
+        redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
         open_actn.triggered.connect(self.load_dialog)
