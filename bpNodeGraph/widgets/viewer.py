@@ -11,7 +11,7 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-from ..utils.node_utils import NodePosUndoCommand
+from ..utils.node_utils import NodeUndoPosition
 from ..utils.serializer import SessionSerializer, SessionLoader
 
 
@@ -35,6 +35,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._origin_pos = None
         self._previous_pos = None
         self._prev_selection = []
+        self._prev_selection_pos = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self._undo_stack = QtGui.QUndoStack()
         self.LMB_state = False
@@ -144,6 +145,10 @@ class NodeViewer(QtGui.QGraphicsView):
         self._previous_pos = event.pos()
         self._prev_selection = self.selected_nodes()
 
+        # node undo pos :: start
+        self._prev_selection_pos = [
+            (n.x(), n.y()) for n in self._prev_selection]
+
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
         if shift_modifier:
             for item in items:
@@ -172,6 +177,22 @@ class NodeViewer(QtGui.QGraphicsView):
             map_rect = self.mapToScene(rect).boundingRect()
             self._rubber_band.hide()
             self.scene().update(map_rect)
+
+        # node undo pos :: end.
+        current_pos = []
+        for idx, prev_pos in enumerate(self._prev_selection_pos):
+            node = self._prev_selection[idx]
+            x, y = node.x(), node.y()
+            current_pos.append((x, y))
+
+
+            ###########################################################################
+            print(x, y, prev_pos) #TODO This is working need to implement undo command.
+        # pos_undo = NodeUndoPosition(self._prev_selection,
+        #                             self._prev_selection_pos,
+        #                             current_pos)
+
+
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):

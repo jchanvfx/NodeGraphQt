@@ -41,8 +41,8 @@ class PortItem(QtGui.QGraphicsItem):
         self.port_type = None
         self.multi_connection = False
 
-    def __str__(self):
-        return 'PortItem({})'.format(self.name)
+    def __repr__(self):
+        return '{}.PortItem({})'.format(self.__module__, self.name)
 
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)

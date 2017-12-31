@@ -10,9 +10,9 @@ class NodeScene(QtGui.QGraphicsScene):
         self.background_color = VIEWER_BG_COLOR
         self.grid = VIEWER_GRID_OVERLAY
 
-    def __str__(self):
-        return '{}(parent=\'{}\')'.format(
-            self.__class__.__name__, self.viewer()
+    def __repr__(self):
+        return '{}.{}(parent=\'{}\')'.format(
+            self.__module__, self.__class__.__name__, self.viewer()
         )
 
     def _draw_grid(self, painter, rect, pen, grid_size):

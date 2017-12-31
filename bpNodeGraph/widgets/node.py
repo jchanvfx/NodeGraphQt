@@ -53,8 +53,9 @@ class NodeItem(QtGui.QGraphicsItem):
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
 
-    def __str__(self):
-        return '{}({})'.format(self.__class__.__name__, self.name)
+    def __repr__(self):
+        return '{}.{}("{}")'.format(
+            self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)

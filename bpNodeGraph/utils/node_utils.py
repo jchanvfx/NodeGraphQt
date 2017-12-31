@@ -31,19 +31,21 @@ def get_node(node_type):
     return NodePlugin.registered_nodes.get(node_type)
 
 
-class NodePosUndoCommand(QtGui.QUndoCommand):
+class NodeUndoPosition(QtGui.QUndoCommand):
 
-    def __init__(self, node, from_pos, to_pos):
-        super(NodePosUndoCommand, self).__init__(self)
+    def __init__(self, nodes, from_pos, to_pos):
+        super(NodeUndoPosition, self).__init__(self)
         self.setText('move node')
-        self.node = node
+        self.nodes = nodes
         self.from_pos = from_pos
         self.to_pos = to_pos
 
     def undo(self):
-        x, y = self.from_pos
-        self.node.setPos(x, y)
+        for idx, node in enumerate(self.nodes):
+            x, y = self.from_pos[idx]
+            node.setPos(x, y)
 
     def redo(self):
-        x, y = self.to_pos
-        self.node.setPos(x, y)
+        for idx, node in enumerate(self.nodes):
+            x, y = self.to_pos[idx]
+            node.setPos(x, y)
