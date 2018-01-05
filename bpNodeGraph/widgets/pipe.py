@@ -38,7 +38,7 @@ class Pipe(QtGui.QGraphicsPathItem):
         in_node = self._input_port.node.name if self._input_port else ''
         out_name = self._output_port.name if self._output_port else ''
         out_node = self._output_port.node.name if self._output_port else ''
-        return 'Pipe(in={}:{}, out={}:{})'.format(
+        return '{}.Pipe({}:"{}", {}:"{}")'.format(
             self.__module__, in_node, in_name, out_node, out_name
         )
 

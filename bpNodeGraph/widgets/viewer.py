@@ -43,7 +43,12 @@ class NodeViewer(QtGui.QGraphicsView):
         self._setup_shortcuts()
 
     def __str__(self):
-        return '{}()'.format(self.__class__.__name__)
+        return '{}.{}'.format(
+            self.__module__, self.__class__.__name__)
+
+    def __repr__(self):
+        return '{}.{}'.format(
+            self.__module__, self.__class__.__name__)
 
     def _set_viewer_zoom(self, value):
         max_zoom = 12
@@ -185,7 +190,7 @@ class NodeViewer(QtGui.QGraphicsView):
             if node.pos != node.prev_pos:
                 moved_nodes.append(node)
         if moved_nodes:
-            undo_cmd = UndoMoveCmd(moved_nodes)
+            undo_cmd = UndoMoveNodeCmd(moved_nodes)
             self._undo_stack.push(undo_cmd)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
@@ -332,8 +337,9 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def make_pipe_connection(self, start_port, end_port):
         """
-        remove existing pipes from "end_port" if multi connection is disabled.
+        establishes a pipe connection.
         """
+        # remove existing pipes from "end_port" if multi connection is disabled.
         if not end_port.multi_connection:
             for pipe in end_port.connected_pipes:
                 pipe.delete()
@@ -624,11 +630,13 @@ class NodeViewer(QtGui.QGraphicsView):
         return self._zoom
 
 
-class UndoMoveCmd(QtGui.QUndoCommand):
+# UNDO Commands
+
+class UndoMoveNodeCmd(QtGui.QUndoCommand):
 
     def __init__(self, nodes):
         QtGui.QUndoCommand.__init__(self)
-        self.setText('move nodes')
+        self.setText('move node(s)')
         self.nodes = nodes
         self.from_pos = [n.prev_pos for n in self.nodes]
         self.to_pos = [n.pos for n in self.nodes]
@@ -640,3 +648,17 @@ class UndoMoveCmd(QtGui.QUndoCommand):
     def redo(self):
         for idx, node in enumerate(self.nodes):
             node.pos = self.to_pos[idx]
+
+
+class UndoSelectNodeCmd(QtGui.QUndoCommand):
+
+    def __init__(self, node):
+        QtGui.QUndoCommand.__init__(self)
+        self.setText('select node')
+        self.node = node
+
+    def undo(self):
+        self.node.selected = not self.node.selected
+
+    def redo(self):
+        self.node.selected = not self.node.selected
