@@ -53,6 +53,8 @@ class NodeItem(QtGui.QGraphicsItem):
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
 
+        self.prev_pos = self.pos
+
     def __repr__(self):
         return '{}.{}("{}")'.format(
             self.__module__, self.__class__.__name__, self.name)
@@ -354,6 +356,8 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         initialize the node layout and form.
         """
+        # update the previous pos.
+        self.prev_pos = self.pos
         # setup initial base size.
         self._set_base_size()
         # set text color when node is initialized.

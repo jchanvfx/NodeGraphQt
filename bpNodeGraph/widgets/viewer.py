@@ -11,7 +11,6 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-from ..utils.node_utils import NodeUndoPosition
 from ..utils.serializer import SessionSerializer, SessionLoader
 
 
@@ -35,9 +34,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self._origin_pos = None
         self._previous_pos = None
         self._prev_selection = []
-        self._prev_selection_pos = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
-        self._undo_stack = QtGui.QUndoStack()
+        self._undo_stack = QtGui.QUndoStack(self)
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -88,10 +86,10 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _setup_shortcuts(self):
-        undo_action = self._undo_stack.createUndoAction(self, self.tr("&Undo"))
-        undo_action.setShortcuts(QtGui.QKeySequence.Undo)
-        redo_action = self._undo_stack.createRedoAction(self, self.tr("&Redo"))
-        redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+        undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
+        undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
+        redo_actn = self._undo_stack.createRedoAction(self, '&Redo')
+        redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
 
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
@@ -120,6 +118,8 @@ class NodeViewer(QtGui.QGraphicsView):
         node_paste.setShortcut(QtGui.QKeySequence.Paste)
         node_paste.triggered.connect(self.paste_from_clipboard)
 
+        self.addAction(undo_actn)
+        self.addAction(redo_actn)
         self.addAction(open_actn)
         self.addAction(save_actn)
         self.addAction(fit_zoom_actn)
@@ -145,15 +145,16 @@ class NodeViewer(QtGui.QGraphicsView):
         self._previous_pos = event.pos()
         self._prev_selection = self.selected_nodes()
 
-        # node undo pos :: start
-        self._prev_selection_pos = [
-            (n.x(), n.y()) for n in self._prev_selection]
-
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
         if shift_modifier:
             for item in items:
                 if isinstance(item, NodeItem):
+                    print item.name
                     item.selected = not item.selected
+
+        # undo cmd :: record node position
+        for n in self.selected_nodes():
+            n.prev_pos = n.pos
 
         if (self.LMB_state and not alt_modifier) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
@@ -178,20 +179,14 @@ class NodeViewer(QtGui.QGraphicsView):
             self._rubber_band.hide()
             self.scene().update(map_rect)
 
-        # node undo pos :: end.
-        current_pos = []
-        for idx, prev_pos in enumerate(self._prev_selection_pos):
-            node = self._prev_selection[idx]
-            x, y = node.x(), node.y()
-            current_pos.append((x, y))
-
-
-            ###########################################################################
-            print(x, y, prev_pos) #TODO This is working need to implement undo command.
-        # pos_undo = NodeUndoPosition(self._prev_selection,
-        #                             self._prev_selection_pos,
-        #                             current_pos)
-
+        # undo cmd :: push node move command to stack.
+        moved_nodes = []
+        for node in self.selected_nodes():
+            if node.pos != node.prev_pos:
+                moved_nodes.append(node)
+        if moved_nodes:
+            undo_cmd = UndoMoveCmd(moved_nodes)
+            self._undo_stack.push(undo_cmd)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
@@ -627,3 +622,21 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def get_zoom(self):
         return self._zoom
+
+
+class UndoMoveCmd(QtGui.QUndoCommand):
+
+    def __init__(self, nodes):
+        QtGui.QUndoCommand.__init__(self)
+        self.setText('move nodes')
+        self.nodes = nodes
+        self.from_pos = [n.prev_pos for n in self.nodes]
+        self.to_pos = [n.pos for n in self.nodes]
+
+    def undo(self):
+        for idx, node in enumerate(self.nodes):
+            node.pos = self.from_pos[idx]
+
+    def redo(self):
+        for idx, node in enumerate(self.nodes):
+            node.pos = self.to_pos[idx]
