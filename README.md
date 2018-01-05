@@ -23,3 +23,5 @@ duplicate node(s) : `Alt + C`<br/>
 save node layout : `Ctrl + S` <br/>
 open node layout : `Ctrl + O` <br/>
 layout saved in JSON format. (`.bpg` file ext)
+undo action: `Ctrl+z` or `Command+z` _(OSX)_
+redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_
