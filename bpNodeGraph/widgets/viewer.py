@@ -4,7 +4,7 @@ import re
 from PySide import QtGui, QtCore
 
 from .commands import (NodesMoveCmd,
-                       PortConnectionCmd)
+                       PortConnectedCmd)
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -159,7 +159,6 @@ class NodeViewer(QtGui.QGraphicsView):
                     print item.name
                     item.selected = not item.selected
 
-        # undo cmd :: record node position
         for n in self.selected_nodes():
             n.prev_pos = n.pos
 
@@ -438,7 +437,8 @@ class NodeViewer(QtGui.QGraphicsView):
             # make the connection.
             self.make_pipe_connection(self._start_port, end_port)
 
-            undo_cmd = PortConnectionCmd(self._start_port, end_port)
+            # push undo connected command
+            undo_cmd = PortConnectedCmd(self._start_port, end_port)
             self._undo_stack.push(undo_cmd)
 
         # end the live connection.

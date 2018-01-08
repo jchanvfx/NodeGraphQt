@@ -22,7 +22,7 @@ class NodesMoveCmd(QtGui.QUndoCommand):
             node.pos = self.to_pos[idx]
 
 
-class PortConnectionCmd(QtGui.QUndoCommand):
+class PortConnectedCmd(QtGui.QUndoCommand):
 
     def __init__(self, from_port, to_port):
         QtGui.QUndoCommand.__init__(self)
