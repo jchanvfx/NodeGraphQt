@@ -3,6 +3,8 @@ import re
 
 from PySide import QtGui, QtCore
 
+from .commands import (NodesMoveCmd,
+                       PortConnectionCmd)
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -184,13 +186,13 @@ class NodeViewer(QtGui.QGraphicsView):
             self._rubber_band.hide()
             self.scene().update(map_rect)
 
-        # undo cmd :: push node move command to stack.
+        # push undo move command.
         moved_nodes = []
         for node in self.selected_nodes():
             if node.pos != node.prev_pos:
                 moved_nodes.append(node)
         if moved_nodes:
-            undo_cmd = UndoMoveNodeCmd(moved_nodes)
+            undo_cmd = NodesMoveCmd(moved_nodes)
             self._undo_stack.push(undo_cmd)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
@@ -292,9 +294,9 @@ class NodeViewer(QtGui.QGraphicsView):
             self._connection_pipe.output_port = self._start_port
         self.scene().addItem(self._connection_pipe)
 
-    def end_connection(self):
+    def end_live_connection(self):
         """
-        delete connection pipe and reset start port.
+        delete live connection pipe and reset start port.
         """
         if self._connection_pipe:
             self._connection_pipe.delete()
@@ -346,7 +348,8 @@ class NodeViewer(QtGui.QGraphicsView):
 
         # make new pipe connection.
         ports = {
-            start_port.port_type: start_port, end_port.port_type: end_port
+            start_port.port_type: start_port,
+            end_port.port_type: end_port
         }
         pipe = Pipe()
         self.scene().addItem(pipe)
@@ -355,7 +358,6 @@ class NodeViewer(QtGui.QGraphicsView):
         ports[IN_PORT].add_pipe(pipe)
         ports[OUT_PORT].add_pipe(pipe)
         pipe.draw_path(ports[OUT_PORT], ports[IN_PORT])
-        self.end_connection()
 
     def sceneMouseMoveEvent(self, event):
         """
@@ -435,9 +437,12 @@ class NodeViewer(QtGui.QGraphicsView):
         if self.validate_connection(self._start_port, end_port):
             # make the connection.
             self.make_pipe_connection(self._start_port, end_port)
-        else:
-            # delete pipe and end connection.
-            self.end_connection()
+
+            undo_cmd = PortConnectionCmd(self._start_port, end_port)
+            self._undo_stack.push(undo_cmd)
+
+        # end the live connection.
+        self.end_live_connection()
 
         if self._active_pipe and self._active_pipe.active():
             self._active_pipe.reset()
@@ -549,6 +554,7 @@ class NodeViewer(QtGui.QGraphicsView):
             return
         if self.validate_connection(from_port, to_port):
             self.make_pipe_connection(from_port, to_port)
+            self.end_live_connection()
 
     def save_dialog(self):
         file_dlg = QtGui.QFileDialog.getSaveFileName(
@@ -628,37 +634,3 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def get_zoom(self):
         return self._zoom
-
-
-# UNDO Commands
-
-class UndoMoveNodeCmd(QtGui.QUndoCommand):
-
-    def __init__(self, nodes):
-        QtGui.QUndoCommand.__init__(self)
-        self.setText('move node(s)')
-        self.nodes = nodes
-        self.from_pos = [n.prev_pos for n in self.nodes]
-        self.to_pos = [n.pos for n in self.nodes]
-
-    def undo(self):
-        for idx, node in enumerate(self.nodes):
-            node.pos = self.from_pos[idx]
-
-    def redo(self):
-        for idx, node in enumerate(self.nodes):
-            node.pos = self.to_pos[idx]
-
-
-class UndoSelectNodeCmd(QtGui.QUndoCommand):
-
-    def __init__(self, node):
-        QtGui.QUndoCommand.__init__(self)
-        self.setText('select node')
-        self.node = node
-
-    def undo(self):
-        self.node.selected = not self.node.selected
-
-    def redo(self):
-        self.node.selected = not self.node.selected
