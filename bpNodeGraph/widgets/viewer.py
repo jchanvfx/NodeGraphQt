@@ -4,7 +4,8 @@ import re
 from PySide import QtGui, QtCore
 
 from .commands import (NodesMoveCmd,
-                       PortConnectedCmd)
+                       PortConnectedCmd,
+                       PortDisconnectedCmd)
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -31,6 +32,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._connection_pipe = None
+        self._disconnected_port = None
         self._active_pipe = None
         self._start_port = None
         self._origin_pos = None
@@ -405,7 +407,11 @@ class NodeViewer(QtGui.QGraphicsView):
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
                 self._active_pipe = pipe_items[0]
+                active_ports = [self._active_pipe.input_port,
+                                self._active_pipe.output_port]
                 port = self._active_pipe.port_from_pos(pos, True)
+                active_ports.pop(active_ports.index(port))
+                self._disconnected_port = active_ports[0]
                 if not shift_modifier or not port.multi_connection:
                     self._active_pipe.delete()
                 self.start_connection(port)
@@ -440,6 +446,13 @@ class NodeViewer(QtGui.QGraphicsView):
             # push undo connected command
             undo_cmd = PortConnectedCmd(self._start_port, end_port)
             self._undo_stack.push(undo_cmd)
+
+        if self._disconnected_port and end_port != self._disconnected_port:
+            # push undo disconnected command
+            undo_cmd = PortDisconnectedCmd(self._start_port,
+                                           self._disconnected_port)
+            self._undo_stack.push(undo_cmd)
+            self._disconnected_port = None
 
         # end the live connection.
         self.end_live_connection()

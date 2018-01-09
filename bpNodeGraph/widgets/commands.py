@@ -26,7 +26,7 @@ class PortConnectedCmd(QtGui.QUndoCommand):
 
     def __init__(self, from_port, to_port):
         QtGui.QUndoCommand.__init__(self)
-        self.setText('connect node')
+        self.setText('connected node')
         self.from_port = from_port
         self.to_port = to_port
 
@@ -39,3 +39,22 @@ class PortConnectedCmd(QtGui.QUndoCommand):
 
     def redo(self):
         self.from_port.connect_to(self.to_port)
+
+
+class PortDisconnectedCmd(QtGui.QUndoCommand):
+
+    def __init__(self, from_port, to_port):
+        QtGui.QUndoCommand.__init__(self)
+        self.setText('disconnected node')
+        self.from_port = from_port
+        self.to_port = to_port
+
+    def undo(self):
+        self.from_port.connect_to(self.to_port)
+
+    def redo(self):
+        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+        for pipe in self.from_port.connected_pipes:
+            port = getattr(pipe, port_types[self.from_port.port_type])
+            if port == self.to_port:
+                pipe.delete()
