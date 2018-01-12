@@ -1,8 +1,6 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from .constants import IN_PORT, OUT_PORT
-
 
 class NodesMoveCmd(QtGui.QUndoCommand):
 
@@ -22,30 +20,26 @@ class NodesMoveCmd(QtGui.QUndoCommand):
             node.pos = self.to_pos[idx]
 
 
-class PortConnectedCmd(QtGui.QUndoCommand):
+class NodeConnectedCmd(QtGui.QUndoCommand):
 
     def __init__(self, from_port, to_port):
         QtGui.QUndoCommand.__init__(self)
-        self.setText('connected node')
+        self.setText('connect node')
         self.from_port = from_port
         self.to_port = to_port
 
     def undo(self):
-        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
-        for pipe in self.from_port.connected_pipes:
-            port = getattr(pipe, port_types[self.from_port.port_type])
-            if port == self.to_port:
-                pipe.delete()
+        self.from_port.disconnect_from(self.to_port)
 
     def redo(self):
         self.from_port.connect_to(self.to_port)
 
 
-class PortDisconnectedCmd(QtGui.QUndoCommand):
+class NodeDisconnectedCmd(QtGui.QUndoCommand):
 
     def __init__(self, from_port, to_port):
         QtGui.QUndoCommand.__init__(self)
-        self.setText('disconnected node')
+        self.setText('disconnect node')
         self.from_port = from_port
         self.to_port = to_port
 
@@ -53,8 +47,22 @@ class PortDisconnectedCmd(QtGui.QUndoCommand):
         self.from_port.connect_to(self.to_port)
 
     def redo(self):
-        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
-        for pipe in self.from_port.connected_pipes:
-            port = getattr(pipe, port_types[self.from_port.port_type])
-            if port == self.to_port:
-                pipe.delete()
+        self.from_port.disconnect_from(self.to_port)
+
+
+class NodeConnectionChangedCmd(QtGui.QUndoCommand):
+
+    def __init__(self, from_port, to_port, prev_port):
+        QtGui.QUndoCommand.__init__(self)
+        self.setText('connection changed')
+        self.from_port = from_port
+        self.to_port = to_port
+        self.prev_port = prev_port
+
+    def undo(self):
+        self.from_port.disconnect_from(self.to_port)
+        self.from_port.connect_to(self.prev_port)
+
+    def redo(self):
+        self.from_port.disconnect_from(self.prev_port)
+        self.from_port.connect_to(self.to_port)

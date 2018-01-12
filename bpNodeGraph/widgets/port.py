@@ -192,3 +192,10 @@ class PortItem(QtGui.QGraphicsItem):
         if self.scene():
             viewer = self.scene().viewer()
             viewer.connect_ports(self, port)
+
+    def disconnect_from(self, port):
+        port_funcs = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+        for pipe in self.connected_pipes:
+            from_port = getattr(pipe, port_funcs[self.port_type])
+            if port == from_port:
+                pipe.delete()
