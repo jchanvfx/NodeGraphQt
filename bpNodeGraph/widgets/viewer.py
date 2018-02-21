@@ -3,10 +3,7 @@ import re
 
 from PySide import QtGui, QtCore
 
-from .commands import (NodesMoveCmd,
-                       NodeConnectedCmd,
-                       NodeDisconnectedCmd,
-                       NodeConnectionChangedCmd)
+from .commands import *
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -32,8 +29,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self._zoom = 0
         self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
-        self._connection_pipe = None
-        self._disconnected_port = None
+        self._live_pipe = None
+        self._detached_port = None
         self._active_pipe = None
         self._start_port = None
         self._origin_pos = None
@@ -287,22 +284,22 @@ class NodeViewer(QtGui.QGraphicsView):
         if not selected_port:
             return
         self._start_port = selected_port
-        self._connection_pipe = Pipe()
-        self._connection_pipe.activate()
-        self._connection_pipe.style = PIPE_STYLE_DASHED
+        self._live_pipe = Pipe()
+        self._live_pipe.activate()
+        self._live_pipe.style = PIPE_STYLE_DASHED
         if self._start_port.type == IN_PORT:
-            self._connection_pipe.input_port = self._start_port
+            self._live_pipe.input_port = self._start_port
         elif self._start_port == OUT_PORT:
-            self._connection_pipe.output_port = self._start_port
-        self.scene().addItem(self._connection_pipe)
+            self._live_pipe.output_port = self._start_port
+        self.scene().addItem(self._live_pipe)
 
     def end_live_connection(self):
         """
         delete live connection pipe and reset start port.
         """
-        if self._connection_pipe:
-            self._connection_pipe.delete()
-            self._connection_pipe = None
+        if self._live_pipe:
+            self._live_pipe.delete()
+            self._live_pipe = None
         self._start_port = None
 
     def validate_acyclic_connection(self, start_port, end_port):
@@ -344,8 +341,11 @@ class NodeViewer(QtGui.QGraphicsView):
         establishes a pipe connection.
         """
         # remove existing pipes from "end_port" if multi connection is disabled.
+        port = None
         if not end_port.multi_connection:
             for pipe in end_port.connected_pipes:
+                port_funcs = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+                port = getattr(pipe, port_funcs[end_port.port_type])
                 pipe.delete()
 
         # make new pipe connection.
@@ -361,6 +361,9 @@ class NodeViewer(QtGui.QGraphicsView):
         ports[OUT_PORT].add_pipe(pipe)
         pipe.draw_path(ports[OUT_PORT], ports[IN_PORT])
 
+        # return port that was connected to the existing pipe.
+        return port
+
     def sceneMouseMoveEvent(self, event):
         """
         triggered mouse move event for the scene.
@@ -370,12 +373,12 @@ class NodeViewer(QtGui.QGraphicsView):
             event (QtGui.QGraphicsSceneMouseEvent): 
                 The event handler from the QtGui.QGraphicsScene
         """
-        if not self._connection_pipe:
+        if not self._live_pipe:
             return
         if not self._start_port:
             return
         pos = event.scenePos()
-        self._connection_pipe.draw_path(self._start_port, None, pos)
+        self._live_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMousePressEvent(self, event):
         """
@@ -399,8 +402,11 @@ class NodeViewer(QtGui.QGraphicsView):
             pos = event.scenePos()
             port_items = self._items_near(pos, PortItem, 5, 5)
             if port_items:
-                if not port_items[0].multi_connection:
+                port = port_items[0]
+                if not port.multi_connection and port.connected_ports:
+                    # self._detached_port = port.connected_ports[0]
                     [p.delete() for p in port_items[0].connected_pipes]
+                    #TODO register undo command here
                 return
             node_items = self._items_near(pos, NodeItem, 3, 3)
             if node_items:
@@ -412,11 +418,11 @@ class NodeViewer(QtGui.QGraphicsView):
                                 self._active_pipe.output_port]
                 port = self._active_pipe.port_from_pos(pos, True)
                 active_ports.pop(active_ports.index(port))
-                self._disconnected_port = active_ports[0]
+                self._detached_port = active_ports[0]
                 if not shift_modifier or not port.multi_connection:
                     self._active_pipe.delete()
                 self.start_connection(port)
-                self._connection_pipe.draw_path(self._start_port, None, pos)
+                self._live_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMouseReleaseEvent(self, event):
         """
@@ -430,33 +436,67 @@ class NodeViewer(QtGui.QGraphicsView):
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
 
-        if not self._connection_pipe:
+        if not self._live_pipe:
             return
 
-        # find the end port.
         end_port = None
+        dis_port = None
+
+        # find the end port.
         for item in self.scene().items(event.scenePos()):
             if isinstance(item, PortItem):
                 end_port = item
                 break
+
         # validate connection check.
         if self.validate_connection(self._start_port, end_port):
             # make the connection.
-            self.make_pipe_connection(self._start_port, end_port)
+            dis_port = self.make_pipe_connection(self._start_port, end_port)
 
-            if self._disconnected_port and self._disconnected_port != end_port:
-                undo_cmd = NodeConnectionChangedCmd(self._start_port,
-                                                    end_port,
-                                                    self._disconnected_port)
-            else:
-                undo_cmd = NodeConnectedCmd(self._start_port, end_port)
+        if self._detached_port == end_port:
+            self.end_live_connection()
+            if self._active_pipe and self._active_pipe.active():
+                self._active_pipe.reset()
+                self._active_pipe = None
+            return
+
+        # register undo command.
+        if self._detached_port:
+            if end_port is None:
+                self._undo_stack.push(
+                    NodeConnectionCmd(self._start_port,
+                                      self._detached_port,
+                                      'disconnect'))
+            elif not end_port.multi_connection:  # single connection
+                if dis_port:
+                    self._undo_stack.push(
+                        NodeConnectionSwitchedCmd(self._start_port,
+                                                  end_port,
+                                                  dis_port,
+                                                  self._detached_port))
+                else:
+                    self._undo_stack.push(
+                        NodeConnectionChangedCmd(self._start_port,
+                                                 end_port,
+                                                 self._detached_port))
+
+            self._detached_port = None
         else:
-            undo_cmd = NodeDisconnectedCmd(self._start_port,
-                                           self._disconnected_port)
-            self._disconnected_port = None
+            if not end_port.multi_connection:  # single connection
+                if dis_port:
+                    self._undo_stack.push(
+                        NodeConnectionSwitchedCmd(self._start_port,
+                                                  end_port,
+                                                  dis_port))
+                else:
+                    self._undo_stack.push(NodeConnectionCmd(self._start_port,
+                                                            end_port,
+                                                            'connect'))
+            else:
+                self._undo_stack.push(NodeConnectionCmd(self._start_port,
+                                                        end_port,
+                                                        'connect'))
 
-        # push undo command
-        self._undo_stack.push(undo_cmd)
         # end the live connection.
         self.end_live_connection()
 
