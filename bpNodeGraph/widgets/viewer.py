@@ -156,7 +156,6 @@ class NodeViewer(QtGui.QGraphicsView):
         if shift_modifier:
             for item in items:
                 if isinstance(item, NodeItem):
-                    print item.name
                     item.selected = not item.selected
 
         for n in self.selected_nodes():
@@ -332,6 +331,8 @@ class NodeViewer(QtGui.QGraphicsView):
             return False
         if end_port.node == start_port.node:
             return False
+        if start_port in end_port.connected_ports:
+            return False
         if not self.validate_acyclic_connection(start_port, end_port):
             return False
         return True
@@ -404,9 +405,8 @@ class NodeViewer(QtGui.QGraphicsView):
             if port_items:
                 port = port_items[0]
                 if not port.multi_connection and port.connected_ports:
-                    # self._detached_port = port.connected_ports[0]
-                    [p.delete() for p in port_items[0].connected_pipes]
-                    #TODO register undo command here
+                    self._detached_port = port.connected_ports[0]
+                    [p.delete() for p in port.connected_pipes]
                 return
             node_items = self._items_near(pos, NodeItem, 3, 3)
             if node_items:
@@ -479,6 +479,11 @@ class NodeViewer(QtGui.QGraphicsView):
                         NodeConnectionChangedCmd(self._start_port,
                                                  end_port,
                                                  self._detached_port))
+            else:
+                self._undo_stack.push(
+                    NodeConnectionChangedCmd(self._start_port,
+                                             end_port,
+                                             self._detached_port))
 
             self._detached_port = None
         else:
