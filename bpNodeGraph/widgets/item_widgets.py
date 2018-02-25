@@ -4,6 +4,7 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
 
+# we reformat the icon file path on windows os.
 regex = re.compile('(\w:)')
 match = regex.match(ICON_DOWN_ARROW_ICON)
 if match:

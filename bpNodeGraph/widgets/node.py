@@ -53,8 +53,11 @@ class NodeItem(QtGui.QGraphicsItem):
         self.color = (31, 33, 34, 255)
         self.border_color = (58, 65, 68, 255)
 
-    def __str__(self):
-        return '{}({})'.format(self.__class__.__name__, self.name)
+        self.prev_pos = self.pos
+
+    def __repr__(self):
+        return '{}.{}("{}")'.format(
+            self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
@@ -353,6 +356,8 @@ class NodeItem(QtGui.QGraphicsItem):
         """
         initialize the node layout and form.
         """
+        # update the previous pos.
+        self.prev_pos = self.pos
         # setup initial base size.
         self._set_base_size()
         # set text color when node is initialized.
@@ -468,6 +473,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @pos.setter
     def pos(self, pos=(0, 0)):
+        self.prev_pos = self.scenePos().x(), self.scenePos().y()
         self.setPos(pos[0], pos[1])
 
     @property

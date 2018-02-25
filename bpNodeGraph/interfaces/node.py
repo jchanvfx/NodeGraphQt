@@ -108,7 +108,7 @@ class Node(NodePlugin):
 
     def add_menu(self, name='', label='', items=None):
         """
-        Embed a menu knob widget into the node.
+        Embed a menu widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -119,7 +119,7 @@ class Node(NodePlugin):
 
     def add_text_input(self, name='', label='', text=''):
         """
-        Embed a text input knob widget into the node.
+        Embed a text input widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -167,7 +167,7 @@ class Node(NodePlugin):
         Returns all the node data names and values.
 
         Returns:
-            dict: a dictionary of node knob data.
+            dict: a dictionary of node data.
         """
         return self.item.all_data()
 
@@ -176,10 +176,10 @@ class Node(NodePlugin):
         Return the node data.
 
         Args:
-            name (str): name of the knob.
+            name (str): name of the attribute.
 
         Returns:
-            str, int or float: knob data.
+            str, int or float: data.
         """
         return self.item.get_data(name)
 
@@ -255,7 +255,7 @@ class Node(NodePlugin):
             x (float): node x position:
         """
         y = self.item.pos().y()
-        self.item.setPos(x, y)
+        self.set_pos(x, y)
 
     def set_y_pos(self, y=0.0):
         """
@@ -265,7 +265,7 @@ class Node(NodePlugin):
             y (float): node x position:
         """
         x = self.item.pos().x()
-        self.item.setPos(x, y)
+        self.set_pos(x, y)
 
     def set_pos(self, x=0.0, y=0.0):
         """
@@ -274,7 +274,7 @@ class Node(NodePlugin):
             x (float): node X position.
             y (float): node Y position.
         """
-        self.item.setPos(x, y)
+        self.item.pos = (x, y)
 
     def x_pos(self):
         """
@@ -283,7 +283,7 @@ class Node(NodePlugin):
         Returns:
             float: x position.
         """
-        return self.item.pos().x()
+        return self.item.pos[0]
 
     def y_pos(self):
         """
@@ -292,7 +292,7 @@ class Node(NodePlugin):
         Returns:
             float: y position.
         """
-        return self.item.pos().y()
+        return self.item.pos[1]
 
     def pos(self):
         """
@@ -301,7 +301,7 @@ class Node(NodePlugin):
         Returns:
             tuple(float, float): x and y position.
         """
-        return self.item.pos().x(), self.item.pos().y()
+        return self.item.pos
 
     def delete(self):
         """

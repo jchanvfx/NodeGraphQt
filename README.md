@@ -20,6 +20,7 @@ delete selected node(s) : `Backspace` or `Delete`<br/>
 copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
 paste node(s): `Ctrl + V` _(paste from clipboard)_<br/>
 duplicate node(s) : `Alt + C`<br/>
-save node layout : `Ctrl + S` <br/>
+save node layout : `Ctrl + S`<br/>
 open node layout : `Ctrl + O` <br/>
-layout saved in JSON format. (`.bpg` file ext)
+undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
+redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_

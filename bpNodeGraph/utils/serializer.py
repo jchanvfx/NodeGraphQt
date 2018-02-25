@@ -184,6 +184,9 @@ class SessionLoader(object):
             for k, v in attrs.get('node', {}).items():
                 if hasattr(node, k):
                     setattr(node, k, v)
+                # set node initial position.
+                if k == 'pos':
+                    node.prev_pos = v
             # user settings data
             for k, v in attrs.get('data', {}).items():
                 if node.has_data(k):

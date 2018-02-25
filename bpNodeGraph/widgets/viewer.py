@@ -3,6 +3,7 @@ import re
 
 from PySide import QtGui, QtCore
 
+from .commands import *
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -28,13 +29,15 @@ class NodeViewer(QtGui.QGraphicsView):
         self._zoom = 0
         self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
-        self._connection_pipe = None
+        self._live_pipe = None
+        self._detached_port = None
         self._active_pipe = None
         self._start_port = None
         self._origin_pos = None
         self._previous_pos = None
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
+        self._undo_stack = QtGui.QUndoStack(self)
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -42,7 +45,12 @@ class NodeViewer(QtGui.QGraphicsView):
         self._setup_shortcuts()
 
     def __str__(self):
-        return '{}()'.format(self.__class__.__name__)
+        return '{}.{}'.format(
+            self.__module__, self.__class__.__name__)
+
+    def __repr__(self):
+        return '{}.{}'.format(
+            self.__module__, self.__class__.__name__)
 
     def _set_viewer_zoom(self, value):
         max_zoom = 12
@@ -85,6 +93,11 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _setup_shortcuts(self):
+        undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
+        undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
+        redo_actn = self._undo_stack.createRedoAction(self, '&Redo')
+        redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
+
         open_actn = QtGui.QAction('Open Session Layout', self)
         open_actn.setShortcut('Ctrl+o')
         open_actn.triggered.connect(self.load_dialog)
@@ -112,6 +125,8 @@ class NodeViewer(QtGui.QGraphicsView):
         node_paste.setShortcut(QtGui.QKeySequence.Paste)
         node_paste.triggered.connect(self.paste_from_clipboard)
 
+        self.addAction(undo_actn)
+        self.addAction(redo_actn)
         self.addAction(open_actn)
         self.addAction(save_actn)
         self.addAction(fit_zoom_actn)
@@ -138,6 +153,14 @@ class NodeViewer(QtGui.QGraphicsView):
         self._prev_selection = self.selected_nodes()
 
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
+        if shift_modifier:
+            for item in items:
+                if isinstance(item, NodeItem):
+                    item.selected = not item.selected
+
+        for n in self.selected_nodes():
+            n.prev_pos = n.pos
+
         if (self.LMB_state and not alt_modifier) and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
             map_rect = self.mapToScene(rect).boundingRect()
@@ -160,6 +183,14 @@ class NodeViewer(QtGui.QGraphicsView):
             map_rect = self.mapToScene(rect).boundingRect()
             self._rubber_band.hide()
             self.scene().update(map_rect)
+
+        # push undo move command.
+        self._undo_stack.beginMacro('move nodes')
+        for node in self.selected_nodes():
+            if node.pos != node.prev_pos:
+                self._undo_stack.push(NodePositionChangedCmd(node))
+        self._undo_stack.endMacro()
+
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -250,22 +281,22 @@ class NodeViewer(QtGui.QGraphicsView):
         if not selected_port:
             return
         self._start_port = selected_port
-        self._connection_pipe = Pipe()
-        self._connection_pipe.activate()
-        self._connection_pipe.style = PIPE_STYLE_DASHED
+        self._live_pipe = Pipe()
+        self._live_pipe.activate()
+        self._live_pipe.style = PIPE_STYLE_DASHED
         if self._start_port.type == IN_PORT:
-            self._connection_pipe.input_port = self._start_port
+            self._live_pipe.input_port = self._start_port
         elif self._start_port == OUT_PORT:
-            self._connection_pipe.output_port = self._start_port
-        self.scene().addItem(self._connection_pipe)
+            self._live_pipe.output_port = self._start_port
+        self.scene().addItem(self._live_pipe)
 
-    def end_connection(self):
+    def end_live_connection(self):
         """
-        delete connection pipe and reset start port.
+        delete live connection pipe and reset start port.
         """
-        if self._connection_pipe:
-            self._connection_pipe.delete()
-            self._connection_pipe = None
+        if self._live_pipe:
+            self._live_pipe.delete()
+            self._live_pipe = None
         self._start_port = None
 
     def validate_acyclic_connection(self, start_port, end_port):
@@ -298,21 +329,28 @@ class NodeViewer(QtGui.QGraphicsView):
             return False
         if end_port.node == start_port.node:
             return False
+        if start_port in end_port.connected_ports:
+            return False
         if not self.validate_acyclic_connection(start_port, end_port):
             return False
         return True
 
     def make_pipe_connection(self, start_port, end_port):
         """
-        remove existing pipes from "end_port" if multi connection is disabled.
+        establishes a pipe connection.
         """
+        # remove existing pipes from "end_port" if multi connection is disabled.
+        port = None
         if not end_port.multi_connection:
             for pipe in end_port.connected_pipes:
+                port_funcs = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+                port = getattr(pipe, port_funcs[end_port.port_type])
                 pipe.delete()
 
         # make new pipe connection.
         ports = {
-            start_port.port_type: start_port, end_port.port_type: end_port
+            start_port.port_type: start_port,
+            end_port.port_type: end_port
         }
         pipe = Pipe()
         self.scene().addItem(pipe)
@@ -321,7 +359,9 @@ class NodeViewer(QtGui.QGraphicsView):
         ports[IN_PORT].add_pipe(pipe)
         ports[OUT_PORT].add_pipe(pipe)
         pipe.draw_path(ports[OUT_PORT], ports[IN_PORT])
-        self.end_connection()
+
+        # return port that was connected to the existing pipe.
+        return port
 
     def sceneMouseMoveEvent(self, event):
         """
@@ -332,12 +372,12 @@ class NodeViewer(QtGui.QGraphicsView):
             event (QtGui.QGraphicsSceneMouseEvent): 
                 The event handler from the QtGui.QGraphicsScene
         """
-        if not self._connection_pipe:
+        if not self._live_pipe:
             return
         if not self._start_port:
             return
         pos = event.scenePos()
-        self._connection_pipe.draw_path(self._start_port, None, pos)
+        self._live_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMousePressEvent(self, event):
         """
@@ -361,18 +401,26 @@ class NodeViewer(QtGui.QGraphicsView):
             pos = event.scenePos()
             port_items = self._items_near(pos, PortItem, 5, 5)
             if port_items:
-                if not port_items[0].multi_connection:
-                    [p.delete() for p in port_items[0].connected_pipes]
+                port = port_items[0]
+                if not port.multi_connection and port.connected_ports:
+                    self._detached_port = port.connected_ports[0]
+                    [p.delete() for p in port.connected_pipes]
                 return
-
+            node_items = self._items_near(pos, NodeItem, 3, 3)
+            if node_items:
+                return
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
                 self._active_pipe = pipe_items[0]
+                active_ports = [self._active_pipe.input_port,
+                                self._active_pipe.output_port]
                 port = self._active_pipe.port_from_pos(pos, True)
+                active_ports.pop(active_ports.index(port))
+                self._detached_port = active_ports[0]
                 if not shift_modifier or not port.multi_connection:
                     self._active_pipe.delete()
                 self.start_connection(port)
-                self._connection_pipe.draw_path(self._start_port, None, pos)
+                self._live_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMouseReleaseEvent(self, event):
         """
@@ -386,22 +434,74 @@ class NodeViewer(QtGui.QGraphicsView):
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
 
-        if not self._connection_pipe:
+        if not self._live_pipe:
             return
 
-        # find the end port.
         end_port = None
+        dis_port = None
+
+        # find the end port.
         for item in self.scene().items(event.scenePos()):
             if isinstance(item, PortItem):
                 end_port = item
                 break
+
         # validate connection check.
         if self.validate_connection(self._start_port, end_port):
             # make the connection.
-            self.make_pipe_connection(self._start_port, end_port)
+            dis_port = self.make_pipe_connection(self._start_port, end_port)
+
+        if self._detached_port == end_port:
+            self.end_live_connection()
+            if self._active_pipe and self._active_pipe.active():
+                self._active_pipe.reset()
+                self._active_pipe = None
+            return
+
+        # register undo command.
+        if self._detached_port:
+            if end_port is None:
+                self._undo_stack.push(
+                    NodeConnectionCmd(self._start_port,
+                                      self._detached_port,
+                                      'disconnect'))
+            elif not end_port.multi_connection:  # single connection
+                if dis_port:
+                    self._undo_stack.push(
+                        NodeConnectionSwitchedCmd(self._start_port,
+                                                  end_port,
+                                                  dis_port,
+                                                  self._detached_port))
+                else:
+                    self._undo_stack.push(
+                        NodeConnectionChangedCmd(self._start_port,
+                                                 end_port,
+                                                 self._detached_port))
+            else:
+                self._undo_stack.push(
+                    NodeConnectionChangedCmd(self._start_port,
+                                             end_port,
+                                             self._detached_port))
+
+            self._detached_port = None
         else:
-            # delete pipe and end connection.
-            self.end_connection()
+            if not end_port.multi_connection:  # single connection
+                if dis_port:
+                    self._undo_stack.push(
+                        NodeConnectionSwitchedCmd(self._start_port,
+                                                  end_port,
+                                                  dis_port))
+                else:
+                    self._undo_stack.push(NodeConnectionCmd(self._start_port,
+                                                            end_port,
+                                                            'connect'))
+            else:
+                self._undo_stack.push(NodeConnectionCmd(self._start_port,
+                                                        end_port,
+                                                        'connect'))
+
+        # end the live connection.
+        self.end_live_connection()
 
         if self._active_pipe and self._active_pipe.active():
             self._active_pipe.reset()
@@ -513,6 +613,7 @@ class NodeViewer(QtGui.QGraphicsView):
             return
         if self.validate_connection(from_port, to_port):
             self.make_pipe_connection(from_port, to_port)
+            self.end_live_connection()
 
     def save_dialog(self):
         file_dlg = QtGui.QFileDialog.getSaveFileName(
