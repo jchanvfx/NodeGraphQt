@@ -9,6 +9,7 @@ class NodePositionChangedCmd(QtGui.QUndoCommand):
 
     def __init__(self, node):
         QtGui.QUndoCommand.__init__(self)
+        self.setText('node position changed')
         self.node = node
         self.pos = node.pos
         self.prev_pos = node.prev_pos
