@@ -473,6 +473,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @pos.setter
     def pos(self, pos=(0, 0)):
+        self.prev_pos = self.scenePos().x(), self.scenePos().y()
         self.setPos(pos[0], pos[1])
 
     @property

@@ -2,25 +2,22 @@
 from PySide import QtGui
 
 
-class NodesMoveCmd(QtGui.QUndoCommand):
+class NodePositionChangedCmd(QtGui.QUndoCommand):
     """
     Node position changed.
     """
 
-    def __init__(self, nodes):
+    def __init__(self, node):
         QtGui.QUndoCommand.__init__(self)
-        self.setText('move node(s)')
-        self.nodes = nodes
-        self.from_pos = [n.prev_pos for n in self.nodes]
-        self.to_pos = [n.pos for n in self.nodes]
+        self.node = node
+        self.pos = node.pos
+        self.prev_pos = node.prev_pos
 
     def undo(self):
-        for idx, node in enumerate(self.nodes):
-            node.pos = self.from_pos[idx]
+        self.node.pos = self.prev_pos
 
     def redo(self):
-        for idx, node in enumerate(self.nodes):
-            node.pos = self.to_pos[idx]
+        self.node.pos = self.pos
 
 
 class NodeConnectionCmd(QtGui.QUndoCommand):

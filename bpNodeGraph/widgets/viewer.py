@@ -185,13 +185,11 @@ class NodeViewer(QtGui.QGraphicsView):
             self.scene().update(map_rect)
 
         # push undo move command.
-        moved_nodes = []
+        self._undo_stack.beginMacro('move nodes')
         for node in self.selected_nodes():
             if node.pos != node.prev_pos:
-                moved_nodes.append(node)
-        if moved_nodes:
-            undo_cmd = NodesMoveCmd(moved_nodes)
-            self._undo_stack.push(undo_cmd)
+                self._undo_stack.push(NodePositionChangedCmd(node))
+        self._undo_stack.endMacro()
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
