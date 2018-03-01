@@ -172,10 +172,10 @@ class Node(NodePlugin):
 
         Args:
             name (str): name of the attribute.
-            value (str, int, float):
+            value (str, int, float): data
         """
         if not isinstance(value, (str, int, float)):
-            raise ValueError('"data" must be of type (String, Integer, Float)')
+            raise ValueError('value must be of type (String, Integer, Float)')
         elif name in self.properties.keys():
             raise ValueError('"{}" property already exists.'.format(name))
         self.item.add_property(name, value)
@@ -224,7 +224,7 @@ class Node(NodePlugin):
             name (str): name of the node.
 
         Returns:
-            bool: true if data name exists in the Node.
+            bool: true if property name exists in the Node.
         """
         return self.item.has_property(name)
 
