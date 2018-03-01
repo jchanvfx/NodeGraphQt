@@ -1,6 +1,7 @@
 import json
 import os
-from .node_utils import get_node
+
+from ..base.node_utils import get_node
 
 
 class SessionSerializer(object):
@@ -25,9 +26,10 @@ class SessionSerializer(object):
             'selected': node.selected,
             'pos': node.pos
         }
-        node_data = node.all_data(include_default=False)
-        node_widgets = node.all_widgets()
-        widgets = {k: wid.value for k, wid in node_widgets.items()}
+
+        node_data = {k: v for k, v in node.properties.items()
+                     if k not in node_serial.keys()}
+        widgets = {k: wid.value for k, wid in node.widgets.items()}
 
         return {node.id: {
             'type': node.type,
@@ -189,8 +191,8 @@ class SessionLoader(object):
                     node.prev_pos = v
             # user settings data
             for k, v in attrs.get('data', {}).items():
-                if node.has_data(k):
-                    node.set_data(k, v)
+                if node.has_property(k):
+                    node.set_property(k, v)
             # widget settings.
             for k, v in attrs.get('widgets', {}).items():
                 widget = node.get_widget(k)

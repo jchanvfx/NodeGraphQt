@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from ..plugins.node_plugin import NodePlugin
-from ..utils.node_utils import get_node
+from ..base.node_plugin import NodePlugin
+from ..base.node_utils import get_node
 from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
 
@@ -51,7 +51,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Center the node graph on the given nodes or all nodes by default.
 
         Args:
-            nodes (list[BlueprintNodeGraph.Node]): a list of nodes.
+            nodes (list[bpNodeGraph.Node]): a list of nodes.
         """
         self._viewer.center_selection(nodes)
 
@@ -82,7 +82,7 @@ class NodeGraphWidget(QtGui.QWidget):
             name (str): name of the node.
 
         Returns:
-            BlueprintNodeGraph.Node: node instance.
+            bpNodeGraph.Node: node instance.
         """
         NodeInstance = get_node(node_type)
         if NodeInstance:
@@ -99,9 +99,9 @@ class NodeGraphWidget(QtGui.QWidget):
         Add a node into the node graph.
 
         Args:
-            node (BlueprintNodeGraph.interface.Node): node instance.
+            node (bpNodeGraph.interface.Node): node instance.
         """
-        assert isinstance(node, NodePlugin), 'node must be a node'
+        assert isinstance(node, NodePlugin), 'node must be a Node instance.'
         self._viewer.add_node(node.item)
 
     def delete_node(self, node):
@@ -109,9 +109,9 @@ class NodeGraphWidget(QtGui.QWidget):
         Remove the node from the node graph.
 
         Args:
-            node (BlueprintNodeGraph.interface.Node): node object.
+            node (bpNodeGraph.interface.Node): node object.
         """
-        assert isinstance(node, NodePlugin), 'node must be a node'
+        assert isinstance(node, NodePlugin), 'node must be a Node instance.'
         node.delete()
 
     def all_nodes(self):
@@ -119,7 +119,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Return all nodes that are in the node graph.
 
         Returns:
-            list[BlueprintNodeGraph.Node]: list of nodes.
+            list[bpNodeGraph.Node]: list of nodes.
         """
         nodes = []
         for node_item in self._viewer.all_nodes():
@@ -132,7 +132,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Return all selected nodes that are in the node graph.
 
         Returns:
-            list[BlueprintNodeGraph.Node]: list of nodes.
+            list[bpNodeGraph.Node]: list of nodes.
         """
         nodes = []
         for node_item in self._viewer.selected_nodes():
@@ -159,7 +159,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Args:
             name (str): name of the node.
         Returns:
-            BlueprintNodeGraph.Node: node object.
+            bpNodeGraph.Node: node object.
         """
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
@@ -171,6 +171,6 @@ class NodeGraphWidget(QtGui.QWidget):
         Create duplicates nodes.
 
         Args:
-            nodes (list[BlueprintNodeGraph.Node]): list of node objects.
+            nodes (list[bpNodeGraph.Node]): list of node objects.
         """
         self._viewer.duplicate_nodes(nodes)

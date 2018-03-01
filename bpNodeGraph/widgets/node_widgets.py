@@ -118,7 +118,7 @@ class _NodeGroubBox(QtGui.QGroupBox):
         self._layout.addWidget(widget)
 
 
-class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
+class NodeBaseWidget(QtGui.QGraphicsProxyWidget):
     """
     Base Node Widget.
     """
@@ -126,13 +126,18 @@ class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
     value_changed = QtCore.Signal(str, str)
 
     def __init__(self, parent=None, name='widget', label=''):
-        super(BaseNodeWidget, self).__init__(parent)
+        super(NodeBaseWidget, self).__init__(parent)
         self.setZValue(Z_VAL_KNOB)
         self._name = name
         self._label = label
 
     def _value_changed(self):
         self.value_changed.emit(self.name, self.value)
+        
+    def setToolTip(self, tooltip):
+        tooltip = tooltip.replace('\n', '<br/>')
+        tooltip = '<b>{}</b><br/>{}'.format(self.name, tooltip)
+        super(NodeBaseWidget, self).setToolTip(tooltip)
 
     @property
     def value(self):
@@ -163,13 +168,13 @@ class BaseNodeWidget(QtGui.QGraphicsProxyWidget):
         return self._name
 
 
-class ComboNodeWidget(BaseNodeWidget):
+class NodeComboBox(NodeBaseWidget):
     """
     ComboBox Node Widget.
     """
 
     def __init__(self, parent=None, name='', label='', items=None):
-        super(ComboNodeWidget, self).__init__(parent, name, label)
+        super(NodeComboBox, self).__init__(parent, name, label)
         self.setZValue(Z_VAL_KNOB + 1)
         self._combo = QtGui.QComboBox()
         self._combo.setStyleSheet(_STYLE_QCOMBOBOX)
@@ -215,13 +220,13 @@ class ComboNodeWidget(BaseNodeWidget):
         self._combo.clear()
 
 
-class LineEditNodeWidget(BaseNodeWidget):
+class NodeLineEdit(NodeBaseWidget):
     """
     LineEdit Node Widget.
     """
 
     def __init__(self, parent=None, name='', label='', text=''):
-        super(LineEditNodeWidget, self).__init__(parent, name, label)
+        super(NodeLineEdit, self).__init__(parent, name, label)
         self._ledit = QtGui.QLineEdit()
         self._ledit.setStyleSheet(_STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)

@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from ..plugins.port_plugin import PipePlugin
-from ..plugins.port_plugin import PortPlugin
+from ..base.port_plugin import PipePlugin
+from ..base.port_plugin import PortPlugin
 
 
 class Port(PortPlugin):

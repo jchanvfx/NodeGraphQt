@@ -12,7 +12,7 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
-from ..utils.serializer import SessionSerializer, SessionLoader
+from ..base.serializer import SessionSerializer, SessionLoader
 
 
 class NodeViewer(QtGui.QGraphicsView):

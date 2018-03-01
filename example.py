@@ -68,6 +68,7 @@ if __name__ == '__main__':
     bar_node.set_pos(-77.0, 17.0)
     text_node.set_pos(-488.0, -158.0)
     menu_node.set_pos(310.0, -97.0)
+    my_node.set_pos(310.0, 10.0)
 
     # connect nodes
     foo_node.set_output(0, bar_node.input(2))
