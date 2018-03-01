@@ -25,7 +25,9 @@ class SessionSerializer(object):
             'selected': node.selected,
             'pos': node.pos
         }
-        node_data = node.all_data(include_default=False)
+
+        node_data = {k: v for k, v in node.properties.items()
+                     if k in node_serial.get(k)}
         node_widgets = node.all_widgets()
         widgets = {k: wid.value for k, wid in node_widgets.items()}
 
