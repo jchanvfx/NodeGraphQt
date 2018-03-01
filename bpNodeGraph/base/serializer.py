@@ -1,6 +1,7 @@
 import json
 import os
-from ..utils.node_utils import get_node
+
+from ..base.node_utils import get_node
 
 
 class SessionSerializer(object):

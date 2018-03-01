@@ -2,7 +2,7 @@
 from PySide import QtGui
 
 from ..base.node_plugin import NodePlugin
-from ..utils.node_utils import get_node
+from ..base.node_utils import get_node
 from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
 
