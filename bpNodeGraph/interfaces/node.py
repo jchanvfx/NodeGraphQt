@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from .port import Port
-from ..plugins.node_plugin import NodePlugin
+from ..base.node_plugin import NodePlugin
 from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
 
 

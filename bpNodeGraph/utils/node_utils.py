@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from ..interfaces.node import Node
-from ..plugins.node_plugin import NodePlugin
+from ..base.node_plugin import NodePlugin
 
 
 def get_registered_nodes():
