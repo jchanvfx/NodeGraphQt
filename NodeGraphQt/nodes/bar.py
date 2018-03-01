@@ -1,4 +1,4 @@
-from bpNodeGraph.interfaces import Node
+from NodeGraphQt.interfaces import Node
 
 
 class BarNode(Node):

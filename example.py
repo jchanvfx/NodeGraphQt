@@ -4,9 +4,9 @@ import sys
 from PySide import QtGui, QtCore
 
 # load in the example nodes.
-from bpNodeGraph import nodes
+from NodeGraphQt import nodes
 # import the widgets.
-from bpNodeGraph.interfaces import NodeGraphWidget, Node
+from NodeGraphQt.interfaces import NodeGraphWidget, Node
 
 
 class MyNode(Node):
