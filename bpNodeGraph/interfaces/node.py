@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from .port import Port
 from ..plugins.node_plugin import NodePlugin
+from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
 
 
 class Node(NodePlugin):
@@ -86,7 +87,7 @@ class Node(NodePlugin):
             display_name (bool): display the port name on the node.
             
         Returns:
-            BlueprintNodeGraph.interfaces.Port: the created port object.
+            bpNodeGraph.interfaces.Port: the created port object.
         """
         port_item = self.item.add_input(name, multi_input, display_name)
         return Port(self, port=port_item)
@@ -101,25 +102,25 @@ class Node(NodePlugin):
             display_name (bool): display the port name on the node.
              
         Returns:
-            BlueprintNodeGraph.interfaces.Port: the created port object.
+            bpNodeGraph.interfaces.Port: the created port object.
         """
         port_item = self.item.add_output(name, multi_output, display_name)
         return Port(self, port=port_item)
 
-    def add_menu(self, name='', label='', items=None):
+    def add_combo_menu(self, name='', label='', items=None):
         """
-        Embed a menu widget into the node.
+        Embed a NodeComboBox widget into the node.
 
         Args:
             name (str): name of the widget.
             label (str): label to be displayed.
             items (list[str]): items to be added into the menu.
         """
-        self.item.add_dropdown_menu(name, label, items)
+        self.item.add_combo_menu(name, label, items)
 
     def add_text_input(self, name='', label='', text=''):
         """
-        Embed a text input widget into the node.
+        Embed a NodeLineEdit widget into the node.
 
         Args:
             name (str): name of the widget.
@@ -128,31 +129,96 @@ class Node(NodePlugin):
         """
         self.item.add_text_input(name, label, text)
 
-    def get_widget_values(self):
+    def add_widget(self, widget):
         """
-        return the widget values.
+        Adds a widget into the node.
+
+        Args:
+            widget (bpNodeGraph.interfaces.NodeBaseWidget): node widget.
+        """
+        name = widget.name
+        if not isinstance(widget, NodeBaseWidget):
+            raise Exception('Object must be a instance of a NodeBaseWidget')
+        if name in self.item.widgets.keys():
+            raise Exception('widget name "{}" already exists'.format(name))
+        self.item.add_widget(widget)
+
+    def get_widget(self, name):
+        """
+        returns the node widget from the name.
+
+        Args:
+            name (str): name of the widget.
 
         Returns:
-            dict: {widget_name : widget_value}
+            NodeWidget: node widget.
         """
-        return {k: w.value for k, w in self.item.all_widgets().items()}
+        if not self.item.widgets.get(name):
+            raise Exception('node has no widget "{}"'.format(name))
+        return self.item.all_widgets().get(name)
 
-    def add_data(self, name, data):
+    def all_widgets(self):
         """
-        add node data to the node.
+        return all node widgets.
+
+        Returns:
+            dict: {widget_name : node_widget}
+        """
+        return self.item.all_widgets().items()
+
+    def add_property(self, name, value):
+        """
+        adds new property to the node.
 
         Args:
             name (str): name of the attribute.
-            data (str, int, float):
+            value (str, int, float):
         """
-        if not isinstance(data, (str, int, float)):
-            error = '"data" must be of type (String, Integer, Float)'
-            raise ValueError(error)
-        self.item.set_data(name, data)
+        if not isinstance(value, (str, int, float)):
+            raise ValueError('"data" must be of type (String, Integer, Float)')
+        elif name in self.properties.keys():
+            raise ValueError('"{}" property already exists.'.format(name))
+        self.item.add_property(name, value)
 
-    def has_data(self, name):
+    def properties(self):
         """
-        Check if node has data for name.
+        Returns all the node properties.
+
+        Returns:
+            dict: a dictionary of node properties.
+        """
+        return self.item.properties
+
+    def get_property(self, name):
+        """
+        Return the node property.
+
+        Args:
+            name (str): name of the property.
+
+        Returns:
+            str, int or float: value of the node property.
+        """
+        return self.item.get_property(name)
+
+    def set_property(self, name, value):
+        """
+        Set the value on the node property.
+
+        Args:
+            name (str): name of the property.
+            value: the new property value.
+        """
+        if not self.item.properties.get(name):
+            raise AttributeError('node has not property "{}"'.format(name))
+        if not isinstance(value, type(self.item.properties[name])):
+            te = 'property "{}" value type must be of {}'
+            raise TypeError(te.format(name, type(self.item.properties[name])))
+        self.item.set_property(name, value)
+
+    def has_property(self, name):
+        """
+        Check if node property exists.
 
         Args:
             name (str): name of the node.
@@ -160,28 +226,7 @@ class Node(NodePlugin):
         Returns:
             bool: true if data name exists in the Node.
         """
-        return self.item.has_data(name)
-
-    def all_data(self):
-        """
-        Returns all the node data names and values.
-
-        Returns:
-            dict: a dictionary of node data.
-        """
-        return self.item.all_data()
-
-    def get_data(self, name):
-        """
-        Return the node data.
-
-        Args:
-            name (str): name of the attribute.
-
-        Returns:
-            str, int or float: data.
-        """
-        return self.item.get_data(name)
+        return self.item.has_property(name)
 
     def inputs(self):
         """
@@ -209,7 +254,7 @@ class Node(NodePlugin):
             index (int): index of the input port.
 
         Returns:
-            BlueprintNodeGraph.interfaces.Port: port object.
+            bpNodeGraph.interfaces.Port: port object.
         """
         return Port(self, port=self.item.inputs[index])
 
@@ -219,7 +264,7 @@ class Node(NodePlugin):
 
         Args:
             index (int): index of the port.
-            port (BlueprintNodeGraph.interfaces.Port): port object.
+            port (bpNodeGraph.interfaces.Port): port object.
         """
         src_port = Port(self, port=self.item.inputs[index])
         src_port.connect_to(port)
@@ -232,7 +277,7 @@ class Node(NodePlugin):
             index (int): index of the output port.
 
         Returns:
-            BlueprintNodeGraph.interfaces.Port: port object.
+            bpNodeGraph.interfaces.Port: port object.
         """
         return Port(self, port=self.item.outputs[index])
 
@@ -242,7 +287,7 @@ class Node(NodePlugin):
 
         Args:
             index (int): index of the port.
-            port (BlueprintNodeGraph.interfaces.Port): port object.
+            port (bpNodeGraph.interfaces.Port): port object.
         """
         src_port = Port(self, port=self.item.outputs[index])
         src_port.connect_to(port)

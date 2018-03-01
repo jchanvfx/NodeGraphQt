@@ -8,19 +8,14 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE)
-from .item_widgets import BaseNodeWidget, ComboNodeWidget, LineEditNodeWidget
+from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
 from .port import PortItem
 
-NODE_DATA = {
-    'id': 0,
-    'icon': 1,
-    'name': 2,
-    'color': 3,
-    'border_color': 4,
-    'text_color': 5,
-    'type': 6,
-    'selected': 7
-}
+DEFAULT_PROPERTIES = [
+    'id', 'icon', 'name',
+    'color', 'border_color', 'text_color',
+    'type', 'selected'
+]
 
 
 class NodeItem(QtGui.QGraphicsItem):
@@ -31,27 +26,30 @@ class NodeItem(QtGui.QGraphicsItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
-        self.setData(NODE_DATA['id'], str(uuid4()))
         self.setZValue(Z_VAL_NODE)
+        self._properties = {
+            'id': str(uuid4()),
+            'icon': None,
+            'name': name.strip(),
+            'color': (31, 33, 34, 255),
+            'border_color': (58, 65, 68, 255),
+            'text_color': (107, 119, 129, 255),
+            'type': 'NODE',
+            'selected': False
+        }
+        self.setToolTip('node: {}'.format(self._properties['name']))
         self._width = 120
         self._height = 80
-        self._name = name.strip()
-        self.setToolTip('node: {}'.format(self._name))
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         pixmap = pixmap.scaledToHeight(
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
         self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
-        self._data_index = {}
         self._input_text_items = {}
         self._output_text_items = {}
         self._input_items = []
         self._output_items = []
         self._widgets = OrderedDict()
-
-        self.text_color = (107, 119, 129, 255)
-        self.color = (31, 33, 34, 255)
-        self.border_color = (58, 65, 68, 255)
 
         self.prev_pos = self.pos
 
@@ -123,7 +121,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def setSelected(self, selected):
         super(NodeItem, self).setSelected(selected)
-        self.setData(NODE_DATA['selected'], selected)
+        self._properties['selected'] = selected
 
     def _activate_pipes(self):
         """
@@ -380,19 +378,19 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def id(self):
-        return self.data(NODE_DATA['id'])
+        return self._properties['id']
 
     @id.setter
     def id(self, unique_id=''):
-        self.setData(NODE_DATA['id'], unique_id)
+        self._properties['id'] = unique_id
 
     @property
     def type(self):
-        return self.data(NODE_DATA['type'])
+        return self._properties['type']
 
     @type.setter
     def type(self, node_type='NODE'):
-        self.setData(NODE_DATA['type'], node_type)
+        self._properties['type'] = node_type
 
     @property
     def size(self):
@@ -419,11 +417,11 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def icon(self):
-        return self.data(NODE_DATA['icon'])
+        return self._properties['icon']
 
     @icon.setter
     def icon(self, path=None):
-        self.setData(NODE_DATA['icon'], path)
+        self._properties['icon'] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
         pixmap = pixmap.scaledToHeight(
@@ -434,28 +432,27 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def color(self):
-        return self.data(NODE_DATA['color'])
+        return self._properties['color']
 
     @color.setter
     def color(self, color=(0, 0, 0, 255)):
-        self.setData(NODE_DATA['color'], color)
+        self._properties['color'] = color
 
     @property
     def text_color(self):
-        return self.data(NODE_DATA['text_color'])
+        return self._properties['text_color']
 
     @text_color.setter
     def text_color(self, color=(100, 100, 100, 255)):
-        self.setData(NODE_DATA['text_color'], color)
-        self._set_text_color(color)
+        self._properties['text_color'] = color
 
     @property
     def border_color(self):
-        return self.data(NODE_DATA['border_color'])
+        return self._properties['border_color']
 
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
-        self.setData(NODE_DATA['border_color'], color)
+        self._properties['border_color'] = color
 
     @property
     def selected(self):
@@ -478,16 +475,16 @@ class NodeItem(QtGui.QGraphicsItem):
 
     @property
     def name(self):
-        return self._name
+        return self._properties['name']
 
     @name.setter
     def name(self, name=''):
         if self.scene():
             viewer = self.scene().viewer()
             name = viewer.get_unique_node_name(name)
-        self._name = name
-        self.setToolTip('node: {}'.format(self._name))
-        self._text_item.setPlainText(self._name)
+        self._properties['name'] = name
+        self.setToolTip('node: {}'.format(name))
+        self._text_item.setPlainText(name)
         if self.scene():
             self.init_node()
 
@@ -553,61 +550,48 @@ class NodeItem(QtGui.QGraphicsItem):
     def widgets(self):
         return self._widgets
 
-    def add_dropdown_menu(self, name='', label='', items=None):
+    def add_combo_menu(self, name='', label='', items=None, tooltip='test'):
         items = items or []
         label = name if not label else label
-        self._widgets[name] = ComboNodeWidget(self, name, label, items)
-        self._widgets[name].setToolTip('knob: {}'.format(name))
-        self._widgets[name].value_changed.connect(self.set_data)
+        widget = NodeComboBox(self, name, label, items)
+        widget.setToolTip(tooltip)
+        widget.value_changed.connect(self.set_property)
+        self.add_widget(widget)
 
-    def add_text_input(self, name='', label='', text=''):
+    def add_text_input(self, name='', label='', text='', tooltip='test'):
         label = name if not label else label
-        self._widgets[name] = LineEditNodeWidget(self, name, label, text)
-        self._widgets[name].setToolTip('knob: {}'.format(name))
-        self._widgets[name].value_changed.connect(self.set_data)
+        widget = NodeLineEdit(self, name, label, text)
+        widget.setToolTip(tooltip)
+        widget.value_changed.connect(self.set_property)
+        self.add_widget(widget)
 
     def add_widget(self, widget):
-        if isinstance(widget, BaseNodeWidget):
-            raise Exception('{} is not a node widget'.format(str(widget)))
-        if widget.name in self._widgets.keys():
-            raise Exception('widget name {} already exists'.format(widget.name))
-        self._widgets[widget.name] = widget
+        if isinstance(widget, NodeBaseWidget):
+            self._widgets[widget.name] = widget
 
     def get_widget(self, name):
-        if not self._widgets.get(name):
-            raise Exception('node has no widget name: {}'.format(name))
         return self._widgets[name]
 
-    def all_widgets(self):
-        return self._widgets
+    @property
+    def properties(self):
+        return self._properties
 
-    def all_data(self, include_default=True):
-        data = {}
-        for k, v in self._data_index.items():
-            data[k] = self.data(v)
-        if include_default:
-            for k, v in NODE_DATA.items():
-                data[k] = self.data(v)
-        return data
-
-    def get_data(self, name):
-        index = NODE_DATA.get(name)
-        if not index:
-            index = self._data_index.get(name)
-        if not index:
-            raise Exception('node has no data name: {}'.format(name))
-        return self.data(index)
-
-    def set_data(self, name, data):
-        if not NODE_DATA.get(name):
-            index = max(self._data_index.values() + NODE_DATA.values()) + 1
-            self._data_index[name] = index
-            self.setData(index, data)
+    def add_property(self, name, value):
+        if name in DEFAULT_PROPERTIES:
             return
-        raise ValueError('data name "{}" already exists.'.format(name))
+        self._properties[name] = value
 
-    def has_data(self, name):
-        return name in self._data_index.keys()
+    def get_property(self, name):
+        return self._properties.get(name)
+
+    def set_property(self, name, value):
+        if not self._properties.get(name):
+            return
+        if not isinstance(value, type(self._properties[name])):
+            self._properties[name] = value
+
+    def has_property(self, name):
+        return name in self._properties.keys()
 
     def delete(self):
         for port in self._input_items:
