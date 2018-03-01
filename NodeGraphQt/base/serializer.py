@@ -181,6 +181,9 @@ class SessionLoader(object):
         nodes = {}
         for node_id, attrs in data.get('nodes', {}).items():
             NodeClass = get_node(attrs['type'])
+            if not NodeClass:
+                raise ImportError('"{}" node unavailable.'
+                                  .format(attrs['type']))
             node = NodeClass().item
             # default settings.
             for k, v in attrs.get('node', {}).items():
