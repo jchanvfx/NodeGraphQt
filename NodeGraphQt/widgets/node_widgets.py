@@ -2,7 +2,7 @@
 import re
 from PySide import QtGui, QtCore
 
-from .constants import Z_VAL_KNOB, ICON_DOWN_ARROW_ICON
+from .constants import Z_VAL_NODE_WIDGET, ICON_DOWN_ARROW_ICON
 
 # we reformat the icon file path on windows os.
 regex = re.compile('(\w:)')
@@ -127,7 +127,7 @@ class NodeBaseWidget(QtGui.QGraphicsProxyWidget):
 
     def __init__(self, parent=None, name='widget', label=''):
         super(NodeBaseWidget, self).__init__(parent)
-        self.setZValue(Z_VAL_KNOB)
+        self.setZValue(Z_VAL_NODE_WIDGET)
         self._name = name
         self._label = label
 
@@ -175,7 +175,7 @@ class NodeComboBox(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', items=None):
         super(NodeComboBox, self).__init__(parent, name, label)
-        self.setZValue(Z_VAL_KNOB + 1)
+        self.setZValue(Z_VAL_NODE_WIDGET + 1)
         self._combo = QtGui.QComboBox()
         self._combo.setStyleSheet(_STYLE_QCOMBOBOX)
         self._combo.setMinimumHeight(24)
