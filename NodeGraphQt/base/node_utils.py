@@ -22,7 +22,7 @@ def get_node(node_type):
     return a node object from the node type.
 
     Args:
-        node_type (str): BlueprintNodeGraph.nodes.my_nodes.FooNode
+        node_type (str): NodeGraphQt.nodes.my_nodes.FooNode
 
     Returns:
         NodePlugin: node class to be instantiated

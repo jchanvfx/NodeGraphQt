@@ -32,7 +32,7 @@ class Port(PortPlugin):
         Return all connected pipes.
 
         Returns:
-            list[BlueprintNodeGraph.interfaces.Pipe]: list of pipe instances.
+            list[NodeGraphQt.interfaces.Pipe]: list of pipe instances.
         """
         return [Pipe(p) for p in self.item.connected_pipes]
 
@@ -41,7 +41,7 @@ class Port(PortPlugin):
         Returns all connected ports.
 
         Returns:
-            list[BlueprintNodeGraph.interfaces.Port]: list of connected ports.
+            list[NodeGraphQt.interfaces.Port]: list of connected ports.
         """
         self.node()
         return [Port(p.node, p) for p in self.item.connected_ports]
@@ -51,7 +51,7 @@ class Port(PortPlugin):
         Creates a pipe and connects it to the port with a connection.
 
         Args:
-            port (BlueprintNodeGraph.interfaces.Port): port object.
+            port (NodeGraphQt.interfaces.Port): port object.
         """
         self.item.connect_to(port.item)
 
@@ -64,7 +64,7 @@ class Pipe(PipePlugin):
         return the connected input port.
 
         Returns:
-            BlueprintNodeGraph.interfaces.Port: instance of the connected port.
+            NodeGraphQt.interfaces.Port: instance of the connected port.
         """
         port = self.item.input_port
         return Port(port.node, port)
@@ -75,7 +75,7 @@ class Pipe(PipePlugin):
         return the connect output port.
 
         Returns:
-            BlueprintNodeGraph.interfaces.Port: instance of the connected port.
+            NodeGraphQt.interfaces.Port: instance of the connected port.
         """
         port = self.item.output_port
         return Port(port.node, port)

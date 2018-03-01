@@ -51,7 +51,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Center the node graph on the given nodes or all nodes by default.
 
         Args:
-            nodes (list[bpNodeGraph.Node]): a list of nodes.
+            nodes (list[NodeGraphQt.Node]): a list of nodes.
         """
         self._viewer.center_selection(nodes)
 
@@ -82,7 +82,7 @@ class NodeGraphWidget(QtGui.QWidget):
             name (str): name of the node.
 
         Returns:
-            bpNodeGraph.Node: node instance.
+            NodeGraphQt.Node: node instance.
         """
         NodeInstance = get_node(node_type)
         if NodeInstance:
@@ -99,7 +99,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Add a node into the node graph.
 
         Args:
-            node (bpNodeGraph.interface.Node): node instance.
+            node (NodeGraphQt.interface.Node): node instance.
         """
         assert isinstance(node, NodePlugin), 'node must be a Node instance.'
         self._viewer.add_node(node.item)
@@ -109,7 +109,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Remove the node from the node graph.
 
         Args:
-            node (bpNodeGraph.interface.Node): node object.
+            node (NodeGraphQt.interface.Node): node object.
         """
         assert isinstance(node, NodePlugin), 'node must be a Node instance.'
         node.delete()
@@ -119,7 +119,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Return all nodes that are in the node graph.
 
         Returns:
-            list[bpNodeGraph.Node]: list of nodes.
+            list[NodeGraphQt.Node]: list of nodes.
         """
         nodes = []
         for node_item in self._viewer.all_nodes():
@@ -132,7 +132,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Return all selected nodes that are in the node graph.
 
         Returns:
-            list[bpNodeGraph.Node]: list of nodes.
+            list[NodeGraphQt.Node]: list of nodes.
         """
         nodes = []
         for node_item in self._viewer.selected_nodes():
@@ -159,7 +159,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Args:
             name (str): name of the node.
         Returns:
-            bpNodeGraph.Node: node object.
+            NodeGraphQt.Node: node object.
         """
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
@@ -171,6 +171,6 @@ class NodeGraphWidget(QtGui.QWidget):
         Create duplicates nodes.
 
         Args:
-            nodes (list[bpNodeGraph.Node]): list of node objects.
+            nodes (list[NodeGraphQt.Node]): list of node objects.
         """
         self._viewer.duplicate_nodes(nodes)

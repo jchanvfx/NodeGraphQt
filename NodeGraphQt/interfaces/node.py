@@ -87,7 +87,7 @@ class Node(NodePlugin):
             display_name (bool): display the port name on the node.
             
         Returns:
-            bpNodeGraph.interfaces.Port: the created port object.
+            NodeGraphQt.interfaces.Port: the created port object.
         """
         port_item = self.item.add_input(name, multi_input, display_name)
         return Port(self, port=port_item)
@@ -102,7 +102,7 @@ class Node(NodePlugin):
             display_name (bool): display the port name on the node.
              
         Returns:
-            bpNodeGraph.interfaces.Port: the created port object.
+            NodeGraphQt.interfaces.Port: the created port object.
         """
         port_item = self.item.add_output(name, multi_output, display_name)
         return Port(self, port=port_item)
@@ -134,7 +134,7 @@ class Node(NodePlugin):
         Adds a widget into the node.
 
         Args:
-            widget (bpNodeGraph.interfaces.NodeBaseWidget): node widget.
+            widget (NodeGraphQt.interfaces.NodeBaseWidget): node widget.
         """
         name = widget.name
         if not isinstance(widget, NodeBaseWidget):
@@ -254,7 +254,7 @@ class Node(NodePlugin):
             index (int): index of the input port.
 
         Returns:
-            bpNodeGraph.interfaces.Port: port object.
+            NodeGraphQt.interfaces.Port: port object.
         """
         return Port(self, port=self.item.inputs[index])
 
@@ -264,7 +264,7 @@ class Node(NodePlugin):
 
         Args:
             index (int): index of the port.
-            port (bpNodeGraph.interfaces.Port): port object.
+            port (NodeGraphQt.interfaces.Port): port object.
         """
         src_port = Port(self, port=self.item.inputs[index])
         src_port.connect_to(port)
@@ -277,7 +277,7 @@ class Node(NodePlugin):
             index (int): index of the output port.
 
         Returns:
-            bpNodeGraph.interfaces.Port: port object.
+            NodeGraphQt.interfaces.Port: port object.
         """
         return Port(self, port=self.item.outputs[index])
 
@@ -287,7 +287,7 @@ class Node(NodePlugin):
 
         Args:
             index (int): index of the port.
-            port (bpNodeGraph.interfaces.Port): port object.
+            port (NodeGraphQt.interfaces.Port): port object.
         """
         src_port = Port(self, port=self.item.outputs[index])
         src_port.connect_to(port)
