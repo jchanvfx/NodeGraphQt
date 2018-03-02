@@ -125,6 +125,10 @@ class NodeViewer(QtGui.QGraphicsView):
         node_paste.setShortcut(QtGui.QKeySequence.Paste)
         node_paste.triggered.connect(self.paste_from_clipboard)
 
+        node_disability = QtGui.QAction('Disable/Enable Nodes', self)
+        node_disability.setShortcut('d')
+        node_disability.triggered.connect(self.toggle_nodes_disability)
+
         self.addAction(undo_actn)
         self.addAction(redo_actn)
         self.addAction(open_actn)
@@ -135,6 +139,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self.addAction(node_duplicate)
         self.addAction(node_copy)
         self.addAction(node_paste)
+        self.addAction(node_disability)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -607,6 +612,18 @@ class NodeViewer(QtGui.QGraphicsView):
     def select_all_nodes(self):
         for node in self.all_nodes():
             node.setSelected(True)
+
+    def toggle_nodes_disability(self):
+        nodes = self.selected_nodes()
+        state = not nodes[0].disabled if nodes else False
+        for node in nodes:
+            node.disabled = state
+
+        rect = self._combined_rect(nodes).normalized()
+        x1, x2, y1, y2 = rect.getCoords()
+        rect = QtCore.QRect(x1, x2, y1, y2)
+        map_rect = self.mapToScene(rect).boundingRect()
+        self.scene().update(map_rect)
 
     def connect_ports(self, from_port, to_port):
         if not isinstance(from_port, PortItem):

@@ -59,6 +59,27 @@ class Node(NodePlugin):
         """
         self.item.color = (r, g, b, 255)
 
+    def enable(self):
+        """
+        enables the node.
+        """
+        self.item.disabled = False
+
+    def disable(self):
+        """
+        disables the node.
+        """
+        self.item.disabled = True
+
+    def disabled(self):
+        """
+        returns weather the node is enabled or disabled.
+
+        Returns:
+            bool: true if the node is disabled.
+        """
+        return self.item.disabled
+
     def selected(self):
         """
         Returns the selected state of the node.

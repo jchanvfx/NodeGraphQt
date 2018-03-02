@@ -23,4 +23,5 @@ duplicate node(s) : `Alt + C`<br/>
 save node layout : `Ctrl + S`<br/>
 open node layout : `Ctrl + O` <br/>
 undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
-redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_
+redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
+toggle node (enable/disable): `d`

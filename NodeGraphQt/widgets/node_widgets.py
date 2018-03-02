@@ -140,6 +140,10 @@ class NodeBaseWidget(QtGui.QGraphicsProxyWidget):
         super(NodeBaseWidget, self).setToolTip(tooltip)
 
     @property
+    def widget(self):
+        return NotImplementedError
+
+    @property
     def value(self):
         raise NotImplementedError
 
@@ -193,6 +197,10 @@ class NodeComboBox(NodeBaseWidget):
         return 'ComboNodeWidget'
 
     @property
+    def widget(self):
+        return self._combo
+
+    @property
     def value(self):
         return str(self._combo.currentText())
 
@@ -239,6 +247,10 @@ class NodeLineEdit(NodeBaseWidget):
     @property
     def type(self):
         return 'LineEditNodeWidget'
+
+    @property
+    def widget(self):
+        return self._ledit
 
     @property
     def value(self):

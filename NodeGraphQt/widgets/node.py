@@ -7,15 +7,39 @@ from PySide import QtGui, QtCore
 from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                        Z_VAL_NODE)
+                        Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
 from .port import PortItem
 
 DEFAULT_PROPERTIES = [
     'id', 'icon', 'name',
     'color', 'border_color', 'text_color',
-    'type', 'selected'
+    'type', 'selected', 'disabled'
 ]
+
+
+class XDisabledItem(QtGui.QGraphicsItem):
+
+    def __init__(self, parent=None):
+        super(XDisabledItem, self).__init__(parent)
+        self.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self.setVisible(False)
+        self.color = (0, 0, 0, 255)
+
+    def boundingRect(self):
+        return self.parentItem().boundingRect()
+
+    def paint(self, painter, option, widget):
+        margin = 5.5
+        rect = self.boundingRect()
+        dis_rect = QtCore.QRectF(
+            rect.left() - (margin / 2), rect.top() - (margin / 2),
+            rect.width() + margin, rect.height() + margin)
+        pen = QtGui.QPen(QtGui.QColor(*self.color), 5)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
+        painter.setPen(pen)
+        painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
+        painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
 
 
 class NodeItem(QtGui.QGraphicsItem):
@@ -31,13 +55,13 @@ class NodeItem(QtGui.QGraphicsItem):
             'id': str(uuid4()),
             'icon': None,
             'name': name.strip(),
-            'color': (31, 33, 34, 255),
-            'border_color': (58, 65, 68, 255),
-            'text_color': (107, 119, 129, 255),
+            'color': (48, 58, 69, 255),
+            'border_color': (85, 85, 85, 255),
+            'text_color': (255, 255, 255, 180),
             'type': 'NODE',
-            'selected': False
+            'selected': False,
+            'disabled': False,
         }
-        self.setToolTip('node: {}'.format(self._properties['name']))
         self._width = 120
         self._height = 80
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
@@ -45,6 +69,7 @@ class NodeItem(QtGui.QGraphicsItem):
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
         self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
+        self._x_item = XDisabledItem(self)
         self._input_text_items = {}
         self._output_text_items = {}
         self._input_items = []
@@ -61,16 +86,11 @@ class NodeItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
-        r, g, b, a = self.color
-        bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
-        if self.isSelected():
-            if NODE_SEL_COLOR:
-                r, g, b, a = NODE_SEL_COLOR
-            if NODE_SEL_BORDER_COLOR:
-                bdr_r, bdr_g, bdr_b, bdr_a = NODE_SEL_BORDER_COLOR
+        painter.save()
 
-        bg_color = QtGui.QColor(r, g, b, a)
-        border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
+        bg_color = QtGui.QColor(*self.color)
+        if self.disabled:
+            bg_color.setAlpha(180)
 
         rect = self.boundingRect()
         radius_x = 5
@@ -79,16 +99,39 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundRect(rect, radius_x, radius_y)
 
-        label_rect = QtCore.QRectF(0.0, 0.0, self._width, 28)
+        if self.isSelected() and NODE_SEL_COLOR:
+            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            painter.drawRoundRect(rect, radius_x, radius_y)
+
+        label_rect = QtCore.QRectF(rect.left() + (radius_x / 2),
+                                   rect.top() + (radius_x / 2),
+                                   self._width - (radius_x / 1.25),
+                                   28)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(label_rect, radius_x, radius_y)
-        painter.setBrush(QtGui.QColor(0, 0, 0, 60))
+        path.addRoundedRect(label_rect, radius_x / 1.5, radius_y / 1.5)
+        painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
+        border_width = 0.5
+        border_color = QtGui.QColor(*self.border_color)
+        if self.isSelected() and NODE_SEL_BORDER_COLOR:
+            border_width = 1.5
+            border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+        elif self.disabled:
+            border_width = 1.4
+        border_rect = QtCore.QRectF(
+            rect.left() - (border_width / 2), rect.top() - (border_width / 2),
+            rect.width() + border_width, rect.height() + border_width)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(rect, radius_x, radius_y)
-        painter.setPen(QtGui.QPen(border_color, 2))
+        path.addRoundedRect(border_rect, radius_x, radius_y)
+        pen = QtGui.QPen(border_color, border_width)
+        if self.disabled:
+            pen.setStyle(QtCore.Qt.PenStyle.DashDotLine)
+            pen.setCapStyle(QtCore.Qt.RoundCap)
+        painter.setPen(pen)
         painter.drawPath(path)
+
+        painter.restore()
 
     def mousePressEvent(self, event):
         if event.modifiers() == QtCore.Qt.AltModifier:
@@ -122,6 +165,16 @@ class NodeItem(QtGui.QGraphicsItem):
     def setSelected(self, selected):
         super(NodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
+
+    def _update_tooltip(self, state):
+        if state:
+            self.setToolTip(
+                '<b>{}</b><br/><font color="red"><b>NODE DISABLED</b></font>'
+                .format(self._properties['name']))
+            return
+        tooltip = '<b>{}</b><br/>'.format(self._properties['name'])
+        tooltip += '{}<br/>'.format(self._properties['type'])
+        self.setToolTip(tooltip)
 
     def _activate_pipes(self):
         """
@@ -167,8 +220,7 @@ class NodeItem(QtGui.QGraphicsItem):
         Args:
             color (tuple): color value in (r, g, b, a).
         """
-        r, g, b, a = color
-        text_color = QtGui.QColor(r, g, b, a)
+        text_color = QtGui.QColor(*color)
         for port, text in self._input_text_items.items():
             text.setDefaultTextColor(text_color)
         for port, text in self._output_text_items.items():
@@ -215,6 +267,8 @@ class NodeItem(QtGui.QGraphicsItem):
                 [w.boundingRect().height() for w in self._widgets.values()])
             if wid_height > height:
                 height = wid_height + (wid_height / len(self._widgets))
+
+        height += 5
 
         return width, height
 
@@ -360,15 +414,18 @@ class NodeItem(QtGui.QGraphicsItem):
         self._set_base_size()
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
+        # set the tooltip
+        self._update_tooltip(self.disabled)
 
         # setup node layout
+        # =================
 
         # arrange label text
         self.arrange_label()
-        self.offset_label(0.0, 3.0)
+        self.offset_label(0.0, 5.0)
         # arrange icon
         self.arrange_icon()
-        self.offset_icon(1.0, 0.0)
+        self.offset_icon(5.0, 2.0)
         # arrange node widgets
         self.arrange_widgets()
         self.offset_widgets(0.0, 10.0)
@@ -453,6 +510,18 @@ class NodeItem(QtGui.QGraphicsItem):
     @border_color.setter
     def border_color(self, color=(0, 0, 0, 255)):
         self._properties['border_color'] = color
+
+    @property
+    def disabled(self):
+        return self._properties['disabled']
+
+    @disabled.setter
+    def disabled(self, state=False):
+        self._properties['disabled'] = state
+        for n, w in self._widgets.items():
+            w.widget.setDisabled(state)
+        self._update_tooltip(state)
+        self._x_item.setVisible(state)
 
     @property
     def selected(self):
