@@ -1,4 +1,4 @@
-### PySide Node Graph
+### NodeGraphQt - PySide Widget
 
 This is a *work in progress* widget I'm working on in my spare time, as
 a learning exercise on how to write a node graph in [PySide](http://pyside.github.io/docs/pyside/).

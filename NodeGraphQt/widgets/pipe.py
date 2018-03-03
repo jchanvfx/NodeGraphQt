@@ -42,10 +42,8 @@ class Pipe(QtGui.QGraphicsPathItem):
         color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
         pen_width = PIPE_WIDTH
-        pen_cap = None
         if self._active:
             color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
-            pen_cap = QtCore.Qt.RoundCap
         elif self._highlight:
             color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
@@ -54,14 +52,13 @@ class Pipe(QtGui.QGraphicsPathItem):
             in_node = self.input_port.node
             out_node = self.output_port.node
             if in_node.disabled or out_node.disabled:
-                color.setAlpha(100)
+                color.setAlpha(200)
                 pen_width = 1.4
                 pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
 
         pen = QtGui.QPen(color, pen_width)
         pen.setStyle(pen_style)
-        if pen_cap:
-            pen.setCapStyle(pen_cap)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
