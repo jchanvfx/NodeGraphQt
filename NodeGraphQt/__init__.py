@@ -33,4 +33,4 @@ __author__ = 'Johnny Chan'
 __email__ = 'johnny@chantasticvfx.com'
 __credits__ = []
 __module_name__ = 'NodeGraphQt'
-__url__ = 'https://github.com/jchanvfx/bpNodeGraph'
+__url__ = 'https://github.com/jchanvfx/NodeGraphQt'
