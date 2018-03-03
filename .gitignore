@@ -10,5 +10,5 @@ docs/_build/
 *.DS_Store
 
 # test
-*.ngraph
-*.bpg
+*.ngqt
+*.json

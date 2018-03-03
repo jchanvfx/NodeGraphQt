@@ -6,7 +6,7 @@ from PySide import QtGui, QtCore
 from .constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
-    PIPE_LAYOUT_STRAIGHT, IN_PORT, OUT_PORT, Z_VAL_PIPE
+    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
 )
 from .port import PortItem
 
@@ -39,19 +39,29 @@ class Pipe(QtGui.QGraphicsPathItem):
         return '{}.Pipe("{}", "{}")'.format(self.__module__, in_name, out_name)
 
     def paint(self, painter, option, widget):
-        color = self._color
+        color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
-        pen_width = 2
+        pen_width = PIPE_WIDTH
+        pen_cap = None
         if self._active:
-            color = PIPE_ACTIVE_COLOR
+            color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+            pen_cap = QtCore.Qt.RoundCap
         elif self._highlight:
-            color = PIPE_HIGHLIGHT_COLOR
+            color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
 
-        pen = QtGui.QPen(
-            QtGui.QColor(color[0], color[1], color[2], color[3]), pen_width
-        )
+        if self.input_port and self.output_port:
+            in_node = self.input_port.node
+            out_node = self.output_port.node
+            if in_node.disabled or out_node.disabled:
+                color.setAlpha(100)
+                pen_width = 1.4
+                pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
+
+        pen = QtGui.QPen(color, pen_width)
         pen.setStyle(pen_style)
+        if pen_cap:
+            pen.setCapStyle(pen_cap)
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())

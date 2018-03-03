@@ -18,6 +18,7 @@ class MyNode(Node):
     def __init__(self):
         super(MyNode, self).__init__()
         self.set_name('my test node')
+        self.set_color(81, 54, 88)
         self.add_input('in')
         self.add_output('out')
 
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     menu_node = graph.create_node('NodeGraphQt.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
 
     # change the color on "foo_node"
-    foo_node.set_color(17, 52, 88)
+    foo_node.set_color(2, 67, 81)
 
     # change icon on "bar_node"
     this_path = os.path.dirname(os.path.abspath(__file__))
@@ -74,5 +75,7 @@ if __name__ == '__main__':
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
+
+    bar_node.disable()
 
     app.exec_()

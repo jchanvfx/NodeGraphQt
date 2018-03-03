@@ -51,18 +51,19 @@ class PortItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
+        color = QtGui.QColor(*self.color)
+        border_color = QtGui.QColor(*self.border_color)
+
         if self.connected_pipes:
-            r, g, b, a = PORT_ACTIVE_COLOR
-            bdr_r, bdr_g, bdr_b, bdr_a = PORT_ACTIVE_BORDER_COLOR
-        else:
-            r, g, b, a = self.color
-            bdr_r, bdr_g, bdr_b, bdr_a = self.border_color
+            color = QtGui.QColor(*PORT_ACTIVE_COLOR)
+            border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
+
         if self._hovered:
-            bdr_r, bdr_g, bdr_b, bdr_a = PIPE_ACTIVE_COLOR
-        color = QtGui.QColor(r, g, b, a)
-        border_color = QtGui.QColor(bdr_r, bdr_g, bdr_b, bdr_a)
+            border_color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+
         painter.setBrush(color)
-        painter.setPen(QtGui.QPen(border_color, 1.5))
+        pen = QtGui.QPen(border_color, 1.5)
+        painter.setPen(pen)
         painter.drawEllipse(self.boundingRect())
 
     def itemChange(self, change, value):
@@ -128,7 +129,6 @@ class PortItem(QtGui.QGraphicsItem):
     @name.setter
     def name(self, name=''):
         self.setData(PORT_DATA['name'], name.strip())
-        self.setToolTip(name)
 
     @property
     def display_name(self):
