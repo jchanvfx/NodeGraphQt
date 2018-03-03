@@ -127,11 +127,20 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def paint(self, painter, option, widget):
         painter.save()
-
-        bg_color = QtGui.QColor(*self.color)
-        rect = self.boundingRect()
+        bg_border = 1.0
+        rect = QtCore.QRectF(0.5 - (bg_border / 2),
+                             0.5 - (bg_border / 2),
+                             self._width + bg_border,
+                             self._height + bg_border)
         radius_x = 5
         radius_y = 5
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(rect, radius_x, radius_y)
+        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 255), 1.5))
+        painter.drawPath(path)
+
+        rect = self.boundingRect()
+        bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundRect(rect, radius_x, radius_y)
@@ -149,21 +158,18 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
-        border_width = 1.0
+        border_width = 0.85
         border_color = QtGui.QColor(*self.border_color)
         if self.isSelected() and NODE_SEL_BORDER_COLOR:
             border_width = 1.5
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
-        elif self.disabled:
-            border_width = 0.85
-        border_rect = QtCore.QRectF(
-            rect.left() - (border_width / 2), rect.top() - (border_width / 2),
-            rect.width() + border_width, rect.height() + border_width)
+        border_rect = QtCore.QRectF(rect.left() - (border_width / 2),
+                                    rect.top() - (border_width / 2),
+                                    rect.width() + border_width,
+                                    rect.height() + border_width)
         path = QtGui.QPainterPath()
         path.addRoundedRect(border_rect, radius_x, radius_y)
-        pen = QtGui.QPen(border_color, border_width)
-
-        painter.setPen(pen)
+        painter.setPen(QtGui.QPen(border_color, border_width))
         painter.drawPath(path)
 
         painter.restore()

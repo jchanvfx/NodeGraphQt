@@ -51,20 +51,29 @@ class PortItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
+        painter.save()
+
+        rect = QtCore.QRectF(0.0, 0.8, self._width, self._height)
+        painter.setBrush(QtGui.QColor(0, 0, 0, 200))
+        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 255), 1.8))
+        path = QtGui.QPainterPath()
+        path.addEllipse(rect)
+        painter.drawPath(path)
+
         color = QtGui.QColor(*self.color)
         border_color = QtGui.QColor(*self.border_color)
 
         if self.connected_pipes:
             color = QtGui.QColor(*PORT_ACTIVE_COLOR)
             border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
-
         if self._hovered:
             border_color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
-
         painter.setBrush(color)
         pen = QtGui.QPen(border_color, 1.5)
         painter.setPen(pen)
         painter.drawEllipse(self.boundingRect())
+
+        painter.restore()
 
     def itemChange(self, change, value):
         if change == self.ItemScenePositionHasChanged:
