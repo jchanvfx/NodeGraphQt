@@ -18,22 +18,23 @@ class SessionSerializer(object):
         Returns:
             dict: serialized node.
         """
-        node_serial = {
+        prop_defaults = {
             'icon': node.icon,
             'name': node.name,
             'color': node.color,
             'border_color': node.border_color,
             'selected': node.selected,
+            'disabled': node.disabled,
             'pos': node.pos
         }
-
-        node_data = {k: v for k, v in node.properties.items()
-                     if k not in node_serial.keys()}
+        ignore_prop = prop_defaults.keys() + ['id', 'type']
+        node_data = {
+            k: v for k, v in node.properties.items() if k not in ignore_prop}
         widgets = {k: wid.value for k, wid in node.widgets.items()}
 
         return {node.id: {
             'type': node.type,
-            'node': node_serial,
+            'node': prop_defaults,
             'widgets': widgets,
             'data': node_data
         }}
@@ -46,6 +47,7 @@ class SessionSerializer(object):
         Returns:
             dict: serialized nodes.
                 {<node_id>: {
+                    'type': node type,
                     'node': <attr_dict>,
                     'data': <data_dict>,
                     'widget': <widget_dict>}}
@@ -109,7 +111,7 @@ class SessionLoader(object):
         """
         Args:
             node_id (str): node id (uuid string)
-            node_data (dict): node attrs
+            node_data (dict): node attributes.
 
         Returns:
             tuple: NodeItem, xy pos
@@ -121,7 +123,8 @@ class SessionLoader(object):
         node.icon = node_data.get('icon')
         node.color = node_data.get('color')
         node.border_color = node_data.get('border')
-        node.selected = node_data.get('selected')
+        node.selected = node_data.get('selected', False)
+        node.disabled = node_data.get('disabled', False)
         node_widgets = node.item.widgets
         for name, value in node_data.get('widgets', {}).items():
             if node_widgets.get(name):
@@ -163,16 +166,16 @@ class SessionLoader(object):
     def load_data(self, data):
         """
         build the node layout from dict.
-        {
-        'nodes': {
+
+        {'nodes': {
             <node_id>: {
+                'type': str,
                 'node': <attr_dict>,
-                'data': <data_dict>,
-                'widget': <widget_dict>}},
+                'widget': <widget_dict>,
+                'data': <data_dict>}},
         'connections': [{
             'in': [<node_id>, <port_name>],
-            'out': [<node_id>, <port_name>]
-            }]
+            'out': [<node_id>, <port_name>]}]
         }
 
         Args:
@@ -192,7 +195,7 @@ class SessionLoader(object):
                 # set node initial position.
                 if k == 'pos':
                     node.prev_pos = v
-            # user settings data
+            # set custom properties
             for k, v in attrs.get('data', {}).items():
                 if node.has_property(k):
                     node.set_property(k, v)

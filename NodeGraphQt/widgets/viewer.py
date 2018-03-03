@@ -92,6 +92,13 @@ class NodeViewer(QtGui.QGraphicsView):
                 items.append(item)
         return items
 
+    def _redraw_node_area(self, nodes):
+        rect = self._combined_rect(nodes).normalized()
+        x1, x2, y1, y2 = rect.getCoords()
+        rect = QtCore.QRect(x1, x2, y1, y2)
+        map_rect = self.mapToScene(rect).boundingRect()
+        self.scene().update(map_rect)
+
     def _setup_shortcuts(self):
         undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
         undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
@@ -618,12 +625,7 @@ class NodeViewer(QtGui.QGraphicsView):
         state = not nodes[0].disabled if nodes else False
         for node in nodes:
             node.disabled = state
-
-        rect = self._combined_rect(nodes).normalized()
-        x1, x2, y1, y2 = rect.getCoords()
-        rect = QtCore.QRect(x1, x2, y1, y2)
-        map_rect = self.mapToScene(rect).boundingRect()
-        self.scene().update(map_rect)
+        self._redraw_node_area(nodes)
 
     def connect_ports(self, from_port, to_port):
         if not isinstance(from_port, PortItem):

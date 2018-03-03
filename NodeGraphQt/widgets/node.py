@@ -20,26 +20,66 @@ DEFAULT_PROPERTIES = [
 
 class XDisabledItem(QtGui.QGraphicsItem):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, text=None):
         super(XDisabledItem, self).__init__(parent)
-        self.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self.setZValue(Z_VAL_NODE_WIDGET + 2)
         self.setVisible(False)
         self.color = (0, 0, 0, 255)
+        self.text = text
 
     def boundingRect(self):
         return self.parentItem().boundingRect()
 
     def paint(self, painter, option, widget):
-        margin = 5.5
+        painter.save()
+        margin = 20
         rect = self.boundingRect()
-        dis_rect = QtCore.QRectF(
-            rect.left() - (margin / 2), rect.top() - (margin / 2),
-            rect.width() + margin, rect.height() + margin)
-        pen = QtGui.QPen(QtGui.QColor(*self.color), 5)
+        dis_rect = QtCore.QRectF(rect.left() - (margin / 2),
+                                 rect.top() - (margin / 2),
+                                 rect.width() + margin,
+                                 rect.height() + margin)
+        pen = QtGui.QPen(QtGui.QColor(*self.color), 8)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
         painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
         painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
+
+        bg_color = QtGui.QColor(*self.color)
+        bg_color.setAlpha(100)
+        bg_margin = -0.5
+        bg_rect = QtCore.QRectF(dis_rect.left() - (bg_margin / 2),
+                                dis_rect.top() - (bg_margin / 2),
+                                dis_rect.width() + bg_margin,
+                                dis_rect.height() + bg_margin)
+        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 0)))
+        painter.setBrush(bg_color)
+        painter.drawRoundedRect(bg_rect, 5, 5)
+
+        if self.text:
+            font = painter.font()
+            font.setPointSize(10)
+
+            painter.setFont(font)
+            font_metrics = QtGui.QFontMetrics(font)
+            font_width = font_metrics.width(self.text)
+            font_height = font_metrics.height()
+            txt_w = font_width * 1.25
+            txt_h = font_height * 2.25
+            text_bg_rect = QtCore.QRectF((rect.width() / 2) - (txt_w / 2),
+                                         (rect.height() / 2) - (txt_h / 2),
+                                         txt_w, txt_h)
+            painter.setPen(QtGui.QPen(QtGui.QColor(255, 0, 0), 0.5))
+            painter.setBrush(QtGui.QColor(*self.color))
+            painter.drawRoundedRect(text_bg_rect, 2, 2)
+
+            text_rect = QtCore.QRectF((rect.width() / 2) - (font_width / 2),
+                                      (rect.height() / 2) - (font_height / 2),
+                                      txt_w * 2, font_height * 2)
+
+            painter.setPen(QtGui.QPen(QtGui.QColor(255, 0, 0), 1))
+            painter.drawText(text_rect, self.text)
+
+        painter.restore()
 
 
 class NodeItem(QtGui.QGraphicsItem):
@@ -56,7 +96,7 @@ class NodeItem(QtGui.QGraphicsItem):
             'icon': None,
             'name': name.strip(),
             'color': (48, 58, 69, 255),
-            'border_color': (85, 85, 85, 255),
+            'border_color': (85, 100, 100, 255),
             'text_color': (255, 255, 255, 180),
             'type': 'NODE',
             'selected': False,
@@ -69,7 +109,7 @@ class NodeItem(QtGui.QGraphicsItem):
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
         self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
-        self._x_item = XDisabledItem(self)
+        self._x_item = XDisabledItem(self, 'node disabled')
         self._input_text_items = {}
         self._output_text_items = {}
         self._input_items = []
@@ -89,9 +129,6 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.save()
 
         bg_color = QtGui.QColor(*self.color)
-        if self.disabled:
-            bg_color.setAlpha(180)
-
         rect = self.boundingRect()
         radius_x = 5
         radius_y = 5
@@ -112,22 +149,20 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
-        border_width = 0.5
+        border_width = 1.0
         border_color = QtGui.QColor(*self.border_color)
         if self.isSelected() and NODE_SEL_BORDER_COLOR:
             border_width = 1.5
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         elif self.disabled:
-            border_width = 1.4
+            border_width = 0.85
         border_rect = QtCore.QRectF(
             rect.left() - (border_width / 2), rect.top() - (border_width / 2),
             rect.width() + border_width, rect.height() + border_width)
         path = QtGui.QPainterPath()
         path.addRoundedRect(border_rect, radius_x, radius_y)
         pen = QtGui.QPen(border_color, border_width)
-        if self.disabled:
-            pen.setStyle(QtCore.Qt.PenStyle.DashDotLine)
-            pen.setCapStyle(QtCore.Qt.RoundCap)
+
         painter.setPen(pen)
         painter.drawPath(path)
 

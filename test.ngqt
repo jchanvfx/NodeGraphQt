@@ -2,121 +2,117 @@
   "connections":[
     {
       "out":[
-        "4e6ff6a6-43a8-4a7a-880e-a6991d9e321f",
+        "6605e253-2351-463c-bc60-f40733314e75",
         "world"
       ],
       "in":[
-        "ae5dbade-0e57-41ef-b2d1-9aa27ff2429e",
+        "0884dee5-92f5-479b-83b4-b2fac8854e02",
         "hello"
       ]
     },
     {
       "out":[
-        "ae5dbade-0e57-41ef-b2d1-9aa27ff2429e",
+        "0884dee5-92f5-479b-83b4-b2fac8854e02",
         "bananas"
       ],
       "in":[
-        "fc95cfb0-656a-4293-80eb-4f8558c90e68",
+        "77f340cc-0f89-4bb1-affd-6be8cd2639ef",
         "hello"
       ]
     },
     {
       "out":[
-        "021bf650-7bce-4c78-88ce-45d31291f48c",
+        "2df8d594-6c29-4401-b0a9-8ce7340abd47",
         "apples"
       ],
       "in":[
-        "ae5dbade-0e57-41ef-b2d1-9aa27ff2429e",
+        "0884dee5-92f5-479b-83b4-b2fac8854e02",
         "foo bar"
       ]
     }
   ],
   "nodes":{
-    "fc95cfb0-656a-4293-80eb-4f8558c90e68":{
+    "0884dee5-92f5-479b-83b4-b2fac8854e02":{
       "node":{
-        "name":"Menu Node",
+        "name":"Bar Node",
         "color":[
-          31,
-          33,
-          34,
+          48,
+          58,
+          69,
           255
         ],
         "border_color":[
-          58,
-          65,
-          68,
+          85,
+          100,
+          100,
           255
         ],
         "selected":false,
         "pos":[
-          310.0,
-          -97.0
+          -77.0,
+          17.0
         ],
-        "icon":null
+        "disabled":false,
+        "icon":"/Users/jchan/GitHub/bpNodeGraph/example_icon.png"
       },
-      "widgets":{
-        "my_menu_1":"item 1"
-      },
-      "type":"NodeGraphQt.nodes.widget_nodes.DropdownMenuNode",
+      "widgets":{},
+      "type":"NodeGraphQt.nodes.bar.BarNode",
       "data":{
-        "type":"NodeGraphQt.nodes.widget_nodes.DropdownMenuNode",
-        "id":"fc95cfb0-656a-4293-80eb-4f8558c90e68",
         "text_color":[
-          107,
-          119,
-          129,
-          255
+          255,
+          255,
+          255,
+          180
         ]
       }
     },
-    "ea96ac97-9767-44df-a8ad-ca9bfba0bb45":{
+    "a1aa245d-fbee-4267-9a17-8e1983a3ab77":{
       "node":{
         "name":"my test node",
         "color":[
-          31,
-          33,
-          34,
+          81,
+          54,
+          88,
           255
         ],
         "border_color":[
-          58,
-          65,
-          68,
+          85,
+          100,
+          100,
           255
         ],
-        "selected":false,
+        "selected":true,
         "pos":[
-          310.0,
-          10.0
+          345.0,
+          111.0
         ],
+        "disabled":true,
         "icon":null
       },
       "widgets":{},
       "type":"__main__.MyNode",
       "data":{
-        "type":"__main__.MyNode",
-        "id":"ea96ac97-9767-44df-a8ad-ca9bfba0bb45",
         "text_color":[
-          107,
-          119,
-          129,
-          255
+          255,
+          255,
+          255,
+          180
         ]
       }
     },
-    "4e6ff6a6-43a8-4a7a-880e-a6991d9e321f":{
+    "6605e253-2351-463c-bc60-f40733314e75":{
       "node":{
         "name":"Text Node",
         "color":[
-          31,
-          33,
-          34,
+          48,
+          58,
+          69,
           255
         ],
         "border_color":[
-          58,
-          65,
-          68,
+          85,
+          100,
+          100,
           255
         ],
         "selected":false,
@@ -124,6 +120,7 @@
           -488.0,
           -158.0
         ],
+        "disabled":false,
         "icon":null
       },
       "widgets":{
@@ -131,64 +128,63 @@
       },
       "type":"NodeGraphQt.nodes.widget_nodes.TextInputNode",
       "data":{
-        "type":"NodeGraphQt.nodes.widget_nodes.TextInputNode",
-        "id":"4e6ff6a6-43a8-4a7a-880e-a6991d9e321f",
         "text_color":[
-          107,
-          119,
-          129,
-          255
+          255,
+          255,
+          255,
+          180
         ]
       }
     },
-    "ae5dbade-0e57-41ef-b2d1-9aa27ff2429e":{
+    "77f340cc-0f89-4bb1-affd-6be8cd2639ef":{
       "node":{
-        "name":"Bar Node",
+        "name":"Menu Node",
         "color":[
-          31,
-          33,
-          34,
+          48,
+          58,
+          69,
           255
         ],
         "border_color":[
-          58,
-          65,
-          68,
+          85,
+          100,
+          100,
           255
         ],
-        "selected":true,
+        "selected":false,
         "pos":[
-          83.0,
-          -268.0
+          310.0,
+          -97.0
         ],
-        "icon":"/Users/jchan/GitHub/bpNodeGraph/example_icon.png"
+        "disabled":false,
+        "icon":null
       },
-      "widgets":{},
-      "type":"NodeGraphQt.nodes.bar.BarNode",
+      "widgets":{
+        "my_menu_1":"item 1"
+      },
+      "type":"NodeGraphQt.nodes.widget_nodes.DropdownMenuNode",
       "data":{
-        "type":"NodeGraphQt.nodes.bar.BarNode",
-        "id":"ae5dbade-0e57-41ef-b2d1-9aa27ff2429e",
         "text_color":[
-          107,
-          119,
-          129,
-          255
+          255,
+          255,
+          255,
+          180
         ]
       }
     },
-    "021bf650-7bce-4c78-88ce-45d31291f48c":{
+    "2df8d594-6c29-4401-b0a9-8ce7340abd47":{
       "node":{
         "name":"Foo Node",
         "color":[
-          17,
-          52,
-          88,
+          2,
+          67,
+          81,
           255
         ],
         "border_color":[
-          58,
-          65,
-          68,
+          85,
+          100,
+          100,
           255
         ],
         "selected":false,
@@ -196,18 +192,17 @@
           -487.0,
           141.0
         ],
+        "disabled":false,
         "icon":null
       },
       "widgets":{},
       "type":"NodeGraphQt.nodes.foo.FooNode",
       "data":{
-        "type":"NodeGraphQt.nodes.foo.FooNode",
-        "id":"021bf650-7bce-4c78-88ce-45d31291f48c",
         "text_color":[
-          107,
-          119,
-          129,
-          255
+          255,
+          255,
+          255,
+          180
         ]
       }
     }
