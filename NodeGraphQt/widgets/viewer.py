@@ -92,13 +92,6 @@ class NodeViewer(QtGui.QGraphicsView):
                 items.append(item)
         return items
 
-    def _redraw_node_area(self, nodes):
-        rect = self._combined_rect(nodes).normalized()
-        x1, x2, y1, y2 = rect.getCoords()
-        rect = QtCore.QRect(x1, x2, y1, y2)
-        map_rect = self.mapToScene(rect).boundingRect()
-        self.scene().update(map_rect)
-
     def _setup_shortcuts(self):
         undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
         undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
@@ -229,7 +222,7 @@ class NodeViewer(QtGui.QGraphicsView):
             if shift_modifier and self._prev_selection:
                 for node in self._prev_selection:
                     if node not in self.selected_nodes():
-                        node.setSelected(True)
+                        node.selected = True
 
         self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
@@ -618,14 +611,19 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def select_all_nodes(self):
         for node in self.all_nodes():
-            node.setSelected(True)
+            node.selected = True
 
     def toggle_nodes_disability(self):
         nodes = self.selected_nodes()
         state = not nodes[0].disabled if nodes else False
         for node in nodes:
             node.disabled = state
-        self._redraw_node_area(nodes)
+
+        name = 'enable' if state else 'disable'
+        self._undo_stack.beginMacro('{} node(s)'.format(name))
+        for node in nodes:
+            self._undo_stack.push(NodeDisabledCmd(node))
+        self._undo_stack.endMacro()
 
     def connect_ports(self, from_port, to_port):
         if not isinstance(from_port, PortItem):

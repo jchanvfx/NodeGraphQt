@@ -2,6 +2,25 @@
 from PySide import QtGui
 
 
+class NodeDisabledCmd(QtGui.QUndoCommand):
+    """
+    Node enabled/disabled.
+    """
+
+    def __init__(self, node):
+        QtGui.QUndoCommand.__init__(self)
+        self.node = node
+        self.mode = node.disabled
+        mode = 'enabled' if self.mode else 'disabled'
+        self.setText('{} node'.format(mode))
+
+    def undo(self):
+        self.node.disabled = not self.mode
+
+    def redo(self):
+        self.node.disabled = self.mode
+
+
 class NodePositionChangedCmd(QtGui.QUndoCommand):
     """
     Node position changed.
