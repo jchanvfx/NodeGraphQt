@@ -1,13 +1,12 @@
-### NodeGraphQt - PySide Widget
+### NodeGraphQt - [PySide](http://pyside.github.io/docs/pyside/) Widget
 
 This is a *work in progress* widget I'm working on in my spare time, as
-a learning exercise on how to write a node graph in [PySide](http://pyside.github.io/docs/pyside/).
+a learning exercise on how to write a custom node graph in PySide.
 
-widget can be implemented and repurposed into applications that supports PySide.
+`NodeGraphQt` is node graph widget that can be implemented and repurposed into vfx applications that supports PySide.
 
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/bpNodeGraph/master/screenshot.png)
 
-[view example code](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
 
 #### Navigation:
 zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
@@ -25,3 +24,33 @@ open node layout : `Ctrl + O` <br/>
 undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
 redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
 toggle node (enable/disable): `d`
+
+#### Example snippet
+```python
+from NodeGraphQt.interfaces import NodeGraphWidget, Node
+
+# define a node object
+class MyNode(Node):
+    """This is a example test node."""
+    NODE_TYPE = 'MyNode'
+
+    def __init__(self):
+        super(MyNode, self).__init__()
+        self.set_name('foo node')
+        self.set_color(81, 54, 88)
+        self.add_input('in')
+        self.add_output('out')
+
+# create a node
+my_node = MyNode()
+
+# create node graph.
+graph = NodeGraphWidget()
+
+# add node to the node graph.
+graph.add_node(my_node)
+
+graph.show()
+```
+
+[view example.py script](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
