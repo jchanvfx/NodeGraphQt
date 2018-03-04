@@ -55,6 +55,22 @@ class XDisabledItem(QtGui.QGraphicsItem):
         painter.setBrush(bg_color)
         painter.drawRoundedRect(bg_rect, 5, 5)
 
+        pen = QtGui.QPen(QtGui.QColor(155, 0, 0, 255), 0.5)
+        painter.setPen(pen)
+        painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
+        painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
+
+        point_size = 3.0
+        point_pos = (dis_rect.topLeft(), dis_rect.topRight(),
+                     dis_rect.bottomLeft(), dis_rect.bottomRight())
+        painter.setBrush(QtGui.QColor(255, 0, 0, 255))
+        for p in point_pos:
+            p.setX(p.x() - (point_size / 2))
+            p.setY(p.y() - (point_size / 2))
+            point_rect = QtCore.QRectF(
+                p, QtCore.QSizeF(point_size, point_size))
+            painter.drawEllipse(point_rect)
+
         if self.text:
             font = painter.font()
             font.setPointSize(10)
