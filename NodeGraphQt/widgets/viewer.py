@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import re
-
+from collections import OrderedDict
 from PySide import QtGui, QtCore
 
 from .commands import *
@@ -38,6 +38,8 @@ class NodeViewer(QtGui.QGraphicsView):
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self._undo_stack = QtGui.QUndoStack(self)
+        self._context_menu = QtGui.QMenu(self)
+        self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -93,56 +95,79 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _setup_shortcuts(self):
-        undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
-        undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
-        redo_actn = self._undo_stack.createRedoAction(self, '&Redo')
-        redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
+        menus = OrderedDict()
+        menus['File'] = QtGui.QMenu(None, title='File')
+        menus['Edit'] = QtGui.QMenu(None, title='Edit')
+        menus['Node'] = QtGui.QMenu(None, title='Node')
 
-        open_actn = QtGui.QAction('Open Session Layout', self)
+        open_actn = QtGui.QAction('Open File...', self)
         open_actn.setShortcut('Ctrl+o')
         open_actn.triggered.connect(self.load_dialog)
-        save_actn = QtGui.QAction('Save Session Layout', self)
+        menus['File'].addAction(open_actn)
+        save_actn = QtGui.QAction('Save As...', self)
         save_actn.setShortcut('Ctrl+s')
         save_actn.triggered.connect(self.save_dialog)
-        fit_zoom_actn = QtGui.QAction('Reset Zoom', self)
-        fit_zoom_actn.setShortcut('f')
-        fit_zoom_actn.triggered.connect(self.set_zoom)
-        fit_zoom_actn.triggered.connect(self.center_selection)
-        sel_all_actn = QtGui.QAction('Select All', self)
-        sel_all_actn.setShortcut('Ctrl+A')
-        sel_all_actn.triggered.connect(self.select_all_nodes)
-        del_node_actn = QtGui.QAction('Delete Selection', self)
-        del_node_actn.setShortcuts(['Del', 'Backspace'])
-        del_node_actn.triggered.connect(self.delete_selected_nodes)
+        menus['File'].addAction(save_actn)
 
-        node_duplicate = QtGui.QAction('Duplicate Nodes', self)
-        node_duplicate.setShortcut('Alt+c')
-        node_duplicate.triggered.connect(self.duplicate_nodes)
-        node_copy = QtGui.QAction('Copy', self)
+        undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
+        undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
+        menus['Edit'].addAction(undo_actn)
+        redo_actn = self._undo_stack.createRedoAction(self, '&Redo')
+        redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
+        menus['Edit'].addAction(redo_actn)
+        menus['Edit'].addSeparator()
+        node_copy = QtGui.QAction('Copy nodes...', self)
         node_copy.setShortcut(QtGui.QKeySequence.Copy)
         node_copy.triggered.connect(self.copy_to_clipboard)
-        node_paste = QtGui.QAction('Paste', self)
+        menus['Edit'].addAction(node_copy)
+        node_paste = QtGui.QAction('Paste nodes...', self)
         node_paste.setShortcut(QtGui.QKeySequence.Paste)
         node_paste.triggered.connect(self.paste_from_clipboard)
+        menus['Edit'].addAction(node_paste)
 
-        node_disability = QtGui.QAction('Disable/Enable Nodes', self)
+        node_sel_all = QtGui.QAction('Select all nodes', self)
+        node_sel_all.setShortcut('Ctrl+A')
+        node_sel_all.triggered.connect(self.select_all_nodes)
+        menus['Node'].addAction(node_sel_all)
+        node_disability = QtGui.QAction('Toggle enable/disable', self)
         node_disability.setShortcut('d')
         node_disability.triggered.connect(self.toggle_nodes_disability)
+        menus['Node'].addAction(node_disability)
+        node_duplicate = QtGui.QAction('Duplicate selected nodes', self)
+        node_duplicate.setShortcut('Alt+c')
+        node_duplicate.triggered.connect(self.duplicate_nodes)
+        menus['Node'].addAction(node_disability)
+        fit_zoom = QtGui.QAction('Center on selection', self)
+        fit_zoom.setShortcut('f')
+        fit_zoom.triggered.connect(self.set_zoom)
+        fit_zoom.triggered.connect(self.center_selection)
+        menus['Node'].addAction(fit_zoom)
+        zoom_in = QtGui.QAction('Zoom in', self)
+        zoom_in.setShortcut('=')
+        zoom_in.triggered.connect(self.zoom_in)
+        menus['Node'].addAction(zoom_in)
+        zoom_out = QtGui.QAction('Zoom out', self)
+        zoom_out.setShortcut('-')
+        zoom_out.triggered.connect(self.zoom_out)
+        menus['Node'].addAction(zoom_out)
+        menus['Node'].addSeparator()
+        node_delete = QtGui.QAction('Delete', self)
+        node_delete.setShortcuts(['Del', 'Backspace'])
+        node_delete.triggered.connect(self.delete_selected_nodes)
+        menus['Node'].addAction(node_delete)
 
-        self.addAction(undo_actn)
-        self.addAction(redo_actn)
-        self.addAction(open_actn)
-        self.addAction(save_actn)
-        self.addAction(fit_zoom_actn)
-        self.addAction(sel_all_actn)
-        self.addAction(del_node_actn)
-        self.addAction(node_duplicate)
-        self.addAction(node_copy)
-        self.addAction(node_paste)
-        self.addAction(node_disability)
+        for name, menu in menus.items():
+            self._context_menu.addMenu(menu)
+            if name == 'Node':
+                self._context_menu.addSeparator()
+            self.addActions(menu.actions())
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
+
+    def contextMenuEvent(self, event):
+        self.RMB_state = False
+        self._context_menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
@@ -336,8 +361,9 @@ class NodeViewer(QtGui.QGraphicsView):
             return False
         if start_port in end_port.connected_ports:
             return False
-        if not self.validate_acyclic_connection(start_port, end_port):
-            return False
+        if self.acyclic:
+            if not self.validate_acyclic_connection(start_port, end_port):
+                return False
         return True
 
     def make_pipe_connection(self, start_port, end_port):
@@ -710,3 +736,9 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def get_zoom(self):
         return self._zoom
+
+    def zoom_in(self):
+        self.set_zoom(self._zoom + 1)
+
+    def zoom_out(self):
+        self.set_zoom(self._zoom - 1)

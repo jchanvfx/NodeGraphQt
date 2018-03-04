@@ -18,6 +18,24 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
+    def get_context_menu(self):
+        """
+        Returns the node graph context menu.
+
+        Returns:
+            QtGui.QMenu: node context menu.
+        """
+        return self._viewer._context_menu
+
+    def set_acyclic(self, mode=True):
+        """
+        Set the node graph to be acyclic or not.
+
+        Args:
+            mode (bool): false to disable acyclic.
+        """
+        self._viewer.acyclic = mode
+
     def set_pipe_layout(self, layout='curved'):
         """
         Set node graph pipes to be drawn straight or curved by default
@@ -53,6 +71,13 @@ class NodeGraphWidget(QtGui.QWidget):
         Args:
             nodes (list[NodeGraphQt.Node]): a list of nodes.
         """
+        self._viewer.center_selection(nodes)
+
+    def center_selection(self):
+        """
+        Center the node graph on the current selected nodes.
+        """
+        nodes = self._viewer.selected_nodes()
         self._viewer.center_selection(nodes)
 
     def write(self, path):
