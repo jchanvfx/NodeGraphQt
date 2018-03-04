@@ -142,14 +142,15 @@ class NodeViewer(QtGui.QGraphicsView):
         fit_zoom.triggered.connect(self.set_zoom)
         fit_zoom.triggered.connect(self.center_selection)
         menus['Node'].addAction(fit_zoom)
-        zoom_in = QtGui.QAction('Zoom in', self)
-        zoom_in.setShortcut('=')
-        zoom_in.triggered.connect(self.zoom_in)
-        menus['Node'].addAction(zoom_in)
-        zoom_out = QtGui.QAction('Zoom out', self)
-        zoom_out.setShortcut('-')
-        zoom_out.triggered.connect(self.zoom_out)
-        menus['Node'].addAction(zoom_out)
+        # zoom_in = QtGui.QAction('Zoom in', self)
+        # zoom_in.setShortcut('=')
+        # zoom_in.triggered.connect(self.zoom_in)
+        # menus['Node'].addAction(zoom_in)
+        # zoom_out = QtGui.QAction('Zoom out', self)
+        # zoom_out.setShortcut('-')
+        # zoom_out.triggered.connect(self.zoom_out)
+        # menus['Node'].addAction(zoom_out)
+
         menus['Node'].addSeparator()
         node_delete = QtGui.QAction('Delete', self)
         node_delete.setShortcuts(['Del', 'Backspace'])
@@ -737,8 +738,17 @@ class NodeViewer(QtGui.QGraphicsView):
     def get_zoom(self):
         return self._zoom
 
-    def zoom_in(self):
-        self.set_zoom(self._zoom + 1)
-
-    def zoom_out(self):
-        self.set_zoom(self._zoom - 1)
+    # def zoom_in(self):
+    #     if self._zoom >= 10:
+    #         return
+    #     self._zoom += 1
+    #     if self._zoom >= 10:
+    #         self.set_zoom(self._zoom)
+    #
+    # def zoom_out(self):
+    #     if self._zoom <= -10:
+    #         return
+    #     self._zoom -= 1
+    #     if self._zoom >= -10:
+    #         self.set_zoom(-self._zoom)
+    #     print
