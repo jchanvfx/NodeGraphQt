@@ -3,9 +3,8 @@ from PySide import QtGui
 
 
 def setup_viewer_actions(viewer):
-    menu_file = viewer.add_menu('File')
-    menu_edit = viewer.add_menu('Edit')
-    menu_nodes = viewer.add_menu('Nodes')
+    menu_file = viewer.get_menu('File')
+    menu_edit = viewer.get_menu('Edit')
 
     # "File" actions.
     open_actn = QtGui.QAction('Open File...', viewer)

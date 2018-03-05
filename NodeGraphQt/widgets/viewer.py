@@ -44,6 +44,9 @@ class NodeViewer(QtGui.QGraphicsView):
         self._undo_stack = QtGui.QUndoStack(self)
         self._context_menu = QtGui.QMenu(self)
         self._sub_context_menus = OrderedDict()
+        self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
+        self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
+        self._sub_context_menus['Nodes'] = QtGui.QMenu(None, title='Nodes')
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
@@ -100,6 +103,8 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _initialize_viewer(self):
+        for menu in self._sub_context_menus.values():
+            self._context_menu.addMenu(menu)
         setup_viewer_actions(self)
 
     def resizeEvent(self, event):
@@ -481,8 +486,8 @@ class NodeViewer(QtGui.QGraphicsView):
     def context_menu(self):
         return self._context_menu
 
-    def add_menu(self, name):
-        self._sub_context_menus[name] = QtGui.QMenu(None, title=name)
+    def add_menu(self, name, menu):
+        self._sub_context_menus[name] = menu
         self._context_menu.addMenu(self._sub_context_menus[name])
         return self._sub_context_menus[name]
 

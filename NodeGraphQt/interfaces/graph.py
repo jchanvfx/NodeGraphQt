@@ -18,14 +18,24 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
-    def get_context_menu(self):
+    def add_menu(self, name, menu):
         """
-        Returns the node graph context menu.
+        Add a menu to the node graph context menu.
+
+        Args:
+            name (str): menu name
+            menu (QtGui.QMenu): menu object
+        """
+        self._viewer.add_menu(name, menu)
+
+    def get_menu(self, name):
+        """
+        Returns the node graph menu.
 
         Returns:
-            QtGui.QMenu: node context menu.
+            QtGui.QMenu: menu from the name.
         """
-        return self._viewer._context_menu
+        return self._viewer.get_menu(name)
 
     def set_acyclic(self, mode=True):
         """
