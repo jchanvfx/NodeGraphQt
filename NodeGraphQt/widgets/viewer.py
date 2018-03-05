@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import re
+from collections import OrderedDict
 
 from PySide import QtGui, QtCore
 
@@ -12,7 +13,18 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
+from .stylesheet import STYLE_QMENU
+from .viewer_actions import setup_viewer_actions
 from ..base.serializer import SessionSerializer, SessionLoader
+
+ZOOM_LIMIT = 12
+
+
+class NodeViewerMenu(QtGui.QMenu):
+
+    def __init__(self, parent, title):
+        super(NodeViewerMenu, self).__init__(parent, title=title)
+        self.setStyleSheet(STYLE_QMENU)
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -38,11 +50,17 @@ class NodeViewer(QtGui.QGraphicsView):
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self._undo_stack = QtGui.QUndoStack(self)
+        self._context_menu = NodeViewerMenu(self, 'Node Graph')
+        self._sub_context_menus = OrderedDict()
+        self._sub_context_menus['File'] = NodeViewerMenu(None, title='File')
+        self._sub_context_menus['Edit'] = NodeViewerMenu(None, title='Edit')
+        self._sub_context_menus['Nodes'] = NodeViewerMenu(None, title='Nodes')
+        self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
 
-        self._setup_shortcuts()
+        self._initialize_viewer()
 
     def __str__(self):
         return '{}.{}'.format(
@@ -53,7 +71,7 @@ class NodeViewer(QtGui.QGraphicsView):
             self.__module__, self.__class__.__name__)
 
     def _set_viewer_zoom(self, value):
-        max_zoom = 12
+        max_zoom = ZOOM_LIMIT
         min_zoom = max_zoom * -1
         if value > 0.0:
             if self._zoom <= max_zoom:
@@ -92,57 +110,17 @@ class NodeViewer(QtGui.QGraphicsView):
                 items.append(item)
         return items
 
-    def _setup_shortcuts(self):
-        undo_actn = self._undo_stack.createUndoAction(self, '&Undo')
-        undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
-        redo_actn = self._undo_stack.createRedoAction(self, '&Redo')
-        redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
-
-        open_actn = QtGui.QAction('Open Session Layout', self)
-        open_actn.setShortcut('Ctrl+o')
-        open_actn.triggered.connect(self.load_dialog)
-        save_actn = QtGui.QAction('Save Session Layout', self)
-        save_actn.setShortcut('Ctrl+s')
-        save_actn.triggered.connect(self.save_dialog)
-        fit_zoom_actn = QtGui.QAction('Reset Zoom', self)
-        fit_zoom_actn.setShortcut('f')
-        fit_zoom_actn.triggered.connect(self.set_zoom)
-        fit_zoom_actn.triggered.connect(self.center_selection)
-        sel_all_actn = QtGui.QAction('Select All', self)
-        sel_all_actn.setShortcut('Ctrl+A')
-        sel_all_actn.triggered.connect(self.select_all_nodes)
-        del_node_actn = QtGui.QAction('Delete Selection', self)
-        del_node_actn.setShortcuts(['Del', 'Backspace'])
-        del_node_actn.triggered.connect(self.delete_selected_nodes)
-
-        node_duplicate = QtGui.QAction('Duplicate Nodes', self)
-        node_duplicate.setShortcut('Alt+c')
-        node_duplicate.triggered.connect(self.duplicate_nodes)
-        node_copy = QtGui.QAction('Copy', self)
-        node_copy.setShortcut(QtGui.QKeySequence.Copy)
-        node_copy.triggered.connect(self.copy_to_clipboard)
-        node_paste = QtGui.QAction('Paste', self)
-        node_paste.setShortcut(QtGui.QKeySequence.Paste)
-        node_paste.triggered.connect(self.paste_from_clipboard)
-
-        node_disability = QtGui.QAction('Disable/Enable Nodes', self)
-        node_disability.setShortcut('d')
-        node_disability.triggered.connect(self.toggle_nodes_disability)
-
-        self.addAction(undo_actn)
-        self.addAction(redo_actn)
-        self.addAction(open_actn)
-        self.addAction(save_actn)
-        self.addAction(fit_zoom_actn)
-        self.addAction(sel_all_actn)
-        self.addAction(del_node_actn)
-        self.addAction(node_duplicate)
-        self.addAction(node_copy)
-        self.addAction(node_paste)
-        self.addAction(node_disability)
+    def _initialize_viewer(self):
+        for menu in self._sub_context_menus.values():
+            self._context_menu.addMenu(menu)
+        setup_viewer_actions(self)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
+
+    def contextMenuEvent(self, event):
+        self.RMB_state = False
+        self._context_menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
@@ -336,8 +314,9 @@ class NodeViewer(QtGui.QGraphicsView):
             return False
         if start_port in end_port.connected_ports:
             return False
-        if not self.validate_acyclic_connection(start_port, end_port):
-            return False
+        if self.acyclic:
+            if not self.validate_acyclic_connection(start_port, end_port):
+                return False
         return True
 
     def make_pipe_connection(self, start_port, end_port):
@@ -511,6 +490,18 @@ class NodeViewer(QtGui.QGraphicsView):
         if self._active_pipe and self._active_pipe.active():
             self._active_pipe.reset()
             self._active_pipe = None
+
+    def context_menu(self):
+        return self._context_menu
+
+    def add_menu(self, name, menu):
+        menu.setStyleSheet(STYLE_QMENU)
+        self._sub_context_menus[name] = menu
+        self._context_menu.addMenu(self._sub_context_menus[name])
+        return self._sub_context_menus[name]
+
+    def get_menu(self, name):
+        return self._sub_context_menus.get(name)
 
     def all_pipes(self):
         pipes = []
@@ -700,13 +691,18 @@ class NodeViewer(QtGui.QGraphicsView):
         if zoom == 0:
             self.fitInView()
             return
-        self._zoom = zoom
-        if self._zoom > 10:
-            self._zoom = 10
-        elif self._zoom < -10:
-            self._zoom = -10
-        zoom_factor = self._zoom * 0.1
+        if zoom > 0 and zoom >= ZOOM_LIMIT:
+            zoom = 12
+        elif zoom <= (ZOOM_LIMIT * -1):
+            zoom = -12
+        zoom_factor = float(zoom) * 0.1
         self._set_viewer_zoom(zoom_factor)
 
     def get_zoom(self):
         return self._zoom
+
+    def zoom_in(self):
+        self.set_zoom(1)
+
+    def zoom_out(self):
+        self.set_zoom(-1)
