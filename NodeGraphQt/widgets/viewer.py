@@ -13,10 +13,18 @@ from .constants import (IN_PORT, OUT_PORT,
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
+from .stylesheet import STYLE_QMENU
 from .viewer_actions import setup_viewer_actions
 from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
+
+
+class NodeViewerMenu(QtGui.QMenu):
+
+    def __init__(self, parent, title):
+        super(NodeViewerMenu, self).__init__(parent, title=title)
+        self.setStyleSheet(STYLE_QMENU)
 
 
 class NodeViewer(QtGui.QGraphicsView):
@@ -42,11 +50,11 @@ class NodeViewer(QtGui.QGraphicsView):
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self._undo_stack = QtGui.QUndoStack(self)
-        self._context_menu = QtGui.QMenu(self)
+        self._context_menu = NodeViewerMenu(self, 'Node Graph')
         self._sub_context_menus = OrderedDict()
-        self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
-        self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
-        self._sub_context_menus['Nodes'] = QtGui.QMenu(None, title='Nodes')
+        self._sub_context_menus['File'] = NodeViewerMenu(None, title='File')
+        self._sub_context_menus['Edit'] = NodeViewerMenu(None, title='Edit')
+        self._sub_context_menus['Nodes'] = NodeViewerMenu(None, title='Nodes')
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
@@ -487,6 +495,7 @@ class NodeViewer(QtGui.QGraphicsView):
         return self._context_menu
 
     def add_menu(self, name, menu):
+        menu.setStyleSheet(STYLE_QMENU)
         self._sub_context_menus[name] = menu
         self._context_menu.addMenu(self._sub_context_menus[name])
         return self._sub_context_menus[name]

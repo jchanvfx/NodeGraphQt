@@ -26,6 +26,8 @@ class NodeGraphWidget(QtGui.QWidget):
             name (str): menu name
             menu (QtGui.QMenu): menu object
         """
+        if not self._viewer.get_menu(name):
+            raise KeyError('name "{}" already exists.'.format(name))
         self._viewer.add_menu(name, menu)
 
     def get_menu(self, name):
