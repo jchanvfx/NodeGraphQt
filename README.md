@@ -5,13 +5,14 @@ a learning exercise on how to write a custom node graph in PySide.
 
 `NodeGraphQt` is node graph widget that can be implemented and repurposed into vfx applications that supports PySide.
 
-![screencap01](https://raw.githubusercontent.com/jchanvfx/bpNodeGraph/master/screenshot.png)
-
+![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
 #### Navigation:
 zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
 pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
 fit to screen : `F`
+
+![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
 
 #### Shortcuts:
 select all nodes : `Ctrl + A`<br/>

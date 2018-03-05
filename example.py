@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     # change icon on "bar_node"
     this_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(this_path, 'example_icon.png')
+    icon = os.path.join(this_path, 'example', 'example_icon.png')
     bar_node.set_icon(icon)
 
     # position nodes.
