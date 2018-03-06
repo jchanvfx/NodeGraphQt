@@ -51,10 +51,14 @@ if __name__ == '__main__':
     graph.add_node(my_node)
 
     # create the nodes from the "nodes" package dir.
-    foo_node = graph.create_node('NodeGraphQt.nodes.foo.FooNode', name='Foo Node')
-    bar_node = graph.create_node('NodeGraphQt.nodes.bar.BarNode', name='Bar Node')
-    text_node = graph.create_node('NodeGraphQt.nodes.widget_nodes.TextInputNode', name='Text Node')
-    menu_node = graph.create_node('NodeGraphQt.nodes.widget_nodes.DropdownMenuNode', name='Menu Node')
+    foo_node = graph.create_node(
+        'NodeGraphQt.nodes.simple_nodes.FooNode', name='Foo Node')
+    bar_node = graph.create_node(
+        'NodeGraphQt.nodes.simple_nodes.BarNode', name='Bar Node')
+    text_node = graph.create_node(
+        'NodeGraphQt.nodes.text_input_node.TextInputNode', name='Text Node')
+    menu_node = graph.create_node(
+        'NodeGraphQt.nodes.menu_node.DropdownMenuNode', name='Menu Node')
 
     # change the color on "foo_node"
     foo_node.set_color(2, 67, 81)

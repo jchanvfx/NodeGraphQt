@@ -223,14 +223,11 @@ class NodeItem(QtGui.QGraphicsItem):
         super(NodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
 
-    def _update_tooltip(self, state):
+    def _tooltip_disable(self, state):
+        tooltip = '<b>{}</b>'.format(self._properties['name'])
         if state:
-            self.setToolTip(
-                '<b>{}</b><br/><font color="red"><b>NODE DISABLED</b></font>'
-                .format(self._properties['name']))
-            return
-        tooltip = '<b>{}</b><br/>'.format(self._properties['name'])
-        tooltip += '{}<br/>'.format(self._properties['type'])
+            tooltip += ' <font color="red"><b>(NODE DISABLED)</b></font>'
+        tooltip += '<br/>{}<br/>'.format(self._properties['type'])
         self.setToolTip(tooltip)
 
     def _activate_pipes(self):
@@ -472,7 +469,7 @@ class NodeItem(QtGui.QGraphicsItem):
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # set the tooltip
-        self._update_tooltip(self.disabled)
+        self._tooltip_disable(self.disabled)
 
         # setup node layout
         # =================
@@ -577,7 +574,7 @@ class NodeItem(QtGui.QGraphicsItem):
         self._properties['disabled'] = state
         for n, w in self._widgets.items():
             w.widget.setDisabled(state)
-        self._update_tooltip(state)
+        self._tooltip_disable(state)
         self._x_item.setVisible(state)
 
     @property
