@@ -2,19 +2,32 @@
 from PySide import QtGui
 
 
+def save_session(viewer):
+    current = viewer.current_loaded_file()
+    if current:
+        viewer.save(current)
+    else:
+        viewer.save_as()
+
+
 def setup_viewer_actions(viewer):
     menu_file = viewer.get_menu('File')
     menu_edit = viewer.get_menu('Edit')
 
     # "File" actions.
-    open_actn = QtGui.QAction('Open File...', viewer)
+    open_actn = QtGui.QAction('Open Session...', viewer)
     open_actn.setShortcut('Ctrl+o')
     open_actn.triggered.connect(viewer.load_dialog)
     menu_file.addAction(open_actn)
 
-    save_actn = QtGui.QAction('Save As...', viewer)
+    save_actn = QtGui.QAction('Save Session...', viewer)
     save_actn.setShortcut('Ctrl+s')
-    save_actn.triggered.connect(viewer.save_dialog)
+    save_actn.triggered.connect(lambda: save_session(viewer))
+    menu_file.addAction(save_actn)
+
+    save_actn = QtGui.QAction('Save As...', viewer)
+    save_actn.setShortcut('Ctrl+Shift+s')
+    save_actn.triggered.connect(viewer.save_as)
     menu_file.addAction(save_actn)
 
     menu_file.addSeparator()

@@ -39,6 +39,7 @@ class NodeViewer(QtGui.QGraphicsView):
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
+        self._current_file = None
         self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
@@ -503,6 +504,14 @@ class NodeViewer(QtGui.QGraphicsView):
     def get_menu(self, name):
         return self._sub_context_menus.get(name)
 
+    def question_dialog(self, title, text):
+        dlg = QtGui.QMessageBox.question(
+            self, title, text, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        return dlg == QtGui.QMessageBox.Yes
+
+    def message_dialog(self, text, title='node graph'):
+        QtGui.QMessageBox.information(self, title, text, QtGui.QMessageBox.Ok)
+
     def all_pipes(self):
         pipes = []
         for item in self.scene().items():
@@ -623,15 +632,28 @@ class NodeViewer(QtGui.QGraphicsView):
             self.make_pipe_connection(from_port, to_port)
             self.end_live_connection()
 
-    def save_dialog(self):
+    def current_loaded_file(self):
+        return self._current_file
+
+    def save(self, path=None, load=True):
+        try:
+            serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
+            serializer.write(path)
+            if load:
+                self._current_file = path
+        except Exception as e:
+            print e
+
+    def save_as(self):
         file_dlg = QtGui.QFileDialog.getSaveFileName(
             self,
-            caption='Save Session Setup',
+            caption='Save Session',
             filter='Node Graph (*{})'.format(self._file_format))
         file_path = file_dlg[0]
         if not file_path:
             return
-        self.write(file_path)
+        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
+        serializer.write(file_path)
 
     def load_dialog(self):
         file_dlg = QtGui.QFileDialog.getOpenFileName(
@@ -640,12 +662,10 @@ class NodeViewer(QtGui.QGraphicsView):
             filter='Node Graph (*{}) All Files (*)'.format(self._file_format))
         file_path = file_dlg[0]
         if not file_path:
+            self._current_file = None
             return
+        self._current_file = file_path
         self.load(file_path)
-
-    def write(self, file_path):
-        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
-        serializer.write(file_path)
 
     def load(self, file_path):
         self.clear_scene()

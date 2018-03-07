@@ -92,21 +92,21 @@ class NodeGraphWidget(QtGui.QWidget):
         nodes = self._viewer.selected_nodes()
         self._viewer.center_selection(nodes)
 
-    def write(self, path):
+    def save(self, path):
         """
-        Serialize the current node graph layout.
+        Saves the current node graph session layout.
 
         Args:
             path (str): file path to be saved.
         """
-        self._viewer.write(path)
+        self._viewer.save(path)
 
     def load(self, path):
         """
-        Load serialized node graph layout file.
+        Load node graph session layout file.
 
         Args:
-            path (str): session file path.
+            path (str): path to the session file.
         """
         self._viewer.load(path)
 
