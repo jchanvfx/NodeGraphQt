@@ -1,13 +1,36 @@
 #!/usr/bin/python
 from PySide import QtGui
 
+from .constants import FILE_IO_EXT
+
+
+def load_session(viewer):
+    file_dlg = QtGui.QFileDialog.getOpenFileName(
+        viewer,
+        caption='Open Session Setup',
+        filter='Node Graph (*{}) All Files (*)'.format(FILE_IO_EXT))
+    file_path = file_dlg[0]
+    if file_path:
+        viewer.load(file_path)
+
+
+def save_session_as(viewer):
+    file_dlg = QtGui.QFileDialog.getSaveFileName(
+        viewer,
+        caption='Save Session',
+        filter='Node Graph (*{})'.format(FILE_IO_EXT))
+    file_path = file_dlg[0]
+    if not file_path:
+        return
+    viewer.save(file_path)
+
 
 def save_session(viewer):
     current = viewer.current_loaded_file()
     if current:
         viewer.save(current)
     else:
-        viewer.save_as()
+        save_session_as(viewer)
 
 
 def setup_viewer_actions(viewer):
@@ -17,7 +40,7 @@ def setup_viewer_actions(viewer):
     # "File" actions.
     open_actn = QtGui.QAction('Open Session...', viewer)
     open_actn.setShortcut('Ctrl+o')
-    open_actn.triggered.connect(viewer.load_dialog)
+    open_actn.triggered.connect(lambda: load_session(viewer))
     menu_file.addAction(open_actn)
 
     save_actn = QtGui.QAction('Save Session...', viewer)
@@ -27,7 +50,7 @@ def setup_viewer_actions(viewer):
 
     save_actn = QtGui.QAction('Save As...', viewer)
     save_actn.setShortcut('Ctrl+Shift+s')
-    save_actn.triggered.connect(viewer.save_as)
+    save_actn.triggered.connect(lambda: save_session_as(viewer))
     menu_file.addAction(save_actn)
 
     menu_file.addSeparator()

@@ -110,6 +110,12 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         self._viewer.load(path)
 
+    def clear(self):
+        """
+        Clears the node graph.
+        """
+        self._viewer.clear()
+
     def create_node(self, node_type, name):
         """
         Create node object.

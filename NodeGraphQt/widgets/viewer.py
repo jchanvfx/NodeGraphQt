@@ -8,8 +8,7 @@ from .commands import *
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
-                        PIPE_STYLE_DASHED,
-                        FILE_IO_EXT)
+                        PIPE_STYLE_DASHED)
 from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
@@ -40,7 +39,6 @@ class NodeViewer(QtGui.QGraphicsView):
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
         self._current_file = None
-        self._file_format = FILE_IO_EXT
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
         self._detached_port = None
@@ -644,39 +642,18 @@ class NodeViewer(QtGui.QGraphicsView):
         except Exception as e:
             print e
 
-    def save_as(self):
-        file_dlg = QtGui.QFileDialog.getSaveFileName(
-            self,
-            caption='Save Session',
-            filter='Node Graph (*{})'.format(self._file_format))
-        file_path = file_dlg[0]
-        if not file_path:
-            return
-        serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
-        serializer.write(file_path)
-
-    def load_dialog(self):
-        file_dlg = QtGui.QFileDialog.getOpenFileName(
-            self,
-            caption='Open Session Setup',
-            filter='Node Graph (*{}) All Files (*)'.format(self._file_format))
-        file_path = file_dlg[0]
-        if not file_path:
-            self._current_file = None
-            return
-        self._current_file = file_path
-        self.load(file_path)
-
     def load(self, file_path):
-        self.clear_scene()
+        self.clear()
         loader = SessionLoader(self)
         loader.load(file_path)
+        self._current_file = file_path
 
-    def clear_scene(self):
+    def clear(self):
         for node in self.all_nodes():
             node.delete()
         for item in self.scene().items():
             self.scene().removeItem(item)
+        self._current_file = None
 
     def clear_selection(self):
         for node in self.selected_nodes():
