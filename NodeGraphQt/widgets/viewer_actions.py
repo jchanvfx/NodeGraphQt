@@ -53,6 +53,10 @@ def setup_viewer_actions(viewer):
     save_actn.triggered.connect(lambda: save_session_as(viewer))
     menu_file.addAction(save_actn)
 
+    clear_actn = QtGui.QAction('Clear', viewer)
+    clear_actn.triggered.connect(lambda: viewer.clear)
+    menu_file.addAction(clear_actn)
+
     menu_file.addSeparator()
 
     zoom_in = QtGui.QAction('Zoom in', viewer)
