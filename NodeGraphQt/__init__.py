@@ -34,3 +34,5 @@ __email__ = 'johnny@chantasticvfx.com'
 __credits__ = []
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
+
+from interfaces import NodeGraphWidget, Node, Port, Pipe

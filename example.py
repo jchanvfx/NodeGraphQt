@@ -6,7 +6,7 @@ from PySide import QtGui, QtCore
 # load in the example nodes.
 from NodeGraphQt import nodes
 # import the widgets.
-from NodeGraphQt.interfaces import NodeGraphWidget, Node
+from NodeGraphQt import NodeGraphWidget, Node
 
 
 class MyNode(Node):
@@ -30,7 +30,7 @@ class NodeGraph(NodeGraphWidget):
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
-        self.setWindowTitle('PySide Node Graph')
+        self.setWindowTitle('My Node Graph')
         self.resize(1100, 800)
 
     def keyPressEvent(self, event):

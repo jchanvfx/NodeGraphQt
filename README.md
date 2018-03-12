@@ -26,6 +26,9 @@ undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
 redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
 toggle node (enable/disable): `d`
 
+#### Tab Search for Nodes
+![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
+
 #### Example snippet
 ```python
 from NodeGraphQt.interfaces import NodeGraphWidget, Node

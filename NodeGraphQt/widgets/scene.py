@@ -32,6 +32,7 @@ class NodeScene(QtGui.QGraphicsScene):
         painter.drawLines(lines)
 
     def drawBackground(self, painter, rect):
+        painter.save()
         color = QtGui.QColor(*self._bg_color)
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setBrush(color)
@@ -49,9 +50,10 @@ class NodeScene(QtGui.QGraphicsScene):
         if zoom < 0:
             color.setAlpha(grid_alpha * (0.05 * (zoom * -1) + 1.0))
         else:
-            color.setAlpha(grid_alpha * 1.05)
+            color.setAlpha(grid_alpha * 1.1)
         pen = QtGui.QPen(color, 0.5)
         self._draw_grid(painter, rect, pen, grid_size * 8)
+        painter.restore()
 
     def mousePressEvent(self, event):
         selected_nodes = self.viewer().selected_nodes()
