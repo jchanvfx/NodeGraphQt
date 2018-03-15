@@ -191,4 +191,4 @@ class NodeCheckBox(NodeBaseWidget):
 
     @value.setter
     def value(self, state=False):
-        self._cbox.setsetCheckState(state)
+        self._cbox.setCheckState(state)
