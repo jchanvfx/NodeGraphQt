@@ -160,3 +160,35 @@ class NodeLineEdit(NodeBaseWidget):
     @value.setter
     def value(self, text=''):
         self._ledit.setText(text)
+
+class NodeCheckBox(NodeBaseWidget):
+    """
+    CheckBox Node Widget.
+    """
+
+    def __init__(self, parent=None, name='', label='', text='', state=False):
+        super(NodeCheckBox, self).__init__(parent, name, label)
+        self._cbox = QtGui.QCheckBox(text)
+        self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+        self._cbox.stateChanged.connect(self._value_changed)
+        group = _NodeGroubBox(label)
+        group.add_node_widget(self._cbox)
+        self.setWidget(group)
+        self.text = text
+        self.state = state
+
+    @property
+    def type(self):
+        return 'CheckboxNodeWidget'
+
+    @property
+    def widget(self):
+        return self._cbox
+
+    @property
+    def value(self):
+        return str(self._cbox.isChecked())
+
+    @value.setter
+    def value(self, state=False):
+        self._cbox.setsetCheckState(state)

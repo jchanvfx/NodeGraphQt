@@ -122,3 +122,32 @@ QMenu::separator {
     margin: 4px 8px;
 }
 '''
+
+STYLE_QCHECKBOX = '''
+QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,5 @@
 import os
 import sys
-
 from PySide import QtGui, QtCore
 
 # load in the example nodes.
@@ -21,6 +20,8 @@ class MyNode(Node):
         self.set_color(81, 54, 88)
         self.add_input('in')
         self.add_output('out')
+        self.add_checkbox(text='CheckBox?')
+
 
 
 class NodeGraph(NodeGraphWidget):

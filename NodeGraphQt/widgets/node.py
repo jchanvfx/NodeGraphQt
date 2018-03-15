@@ -8,7 +8,7 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE, Z_VAL_NODE_WIDGET)
-from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
+from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit, NodeCheckBox
 from .port import PortItem
 
 DEFAULT_PROPERTIES = [
@@ -684,6 +684,13 @@ class NodeItem(QtGui.QGraphicsItem):
     def add_text_input(self, name='', label='', text='', tooltip='test'):
         label = name if not label else label
         widget = NodeLineEdit(self, name, label, text)
+        widget.setToolTip(tooltip)
+        widget.value_changed.connect(self.set_property)
+        self.add_widget(widget)
+
+    def add_checkbox(self, name='', label='', text='', state=False, tooltip='test'):
+        label = name if not label else label
+        widget = NodeCheckBox(self, name, label, text, state)
         widget.setToolTip(tooltip)
         widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
