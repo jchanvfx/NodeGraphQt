@@ -486,7 +486,8 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=35.0)
         self.offset_ports(0.0, 15.0)
-
+    def all_widgets(self):
+        return self._widgets
     @property
     def id(self):
         return self._properties['id']

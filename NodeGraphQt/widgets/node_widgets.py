@@ -169,6 +169,7 @@ class NodeCheckBox(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', text='', state=False):
         super(NodeCheckBox, self).__init__(parent, name, label)
         self._cbox = QtGui.QCheckBox(text)
+        self._cbox.setChecked(state)
         self._cbox.setStyleSheet(STYLE_QCHECKBOX)
         self._cbox.stateChanged.connect(self._value_changed)
         group = _NodeGroubBox(label)
@@ -187,8 +188,8 @@ class NodeCheckBox(NodeBaseWidget):
 
     @property
     def value(self):
-        return str(self._cbox.isChecked())
+        return self._cbox.isChecked()
 
     @value.setter
     def value(self, state=False):
-        self._cbox.setCheckState(state)
+        self._cbox.setChecked(state)

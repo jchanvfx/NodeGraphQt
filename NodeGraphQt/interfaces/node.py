@@ -152,12 +152,13 @@ class Node(NodePlugin):
 
     def add_checkbox(self, name='', label='', text='', state=False):
         """
-        Embed a NodeLineEdit widget into the node.
+        Embed a NodeCheckBox widget into the node.
 
         Args:
             name (str): name of the widget.
             label (str): label to be displayed.
-            text (str): pre filled text.
+            text (str): QCheckBox text.
+            state (bool): pre-check.
         """
         self.item.add_checkbox(name, label, text, state)
 
