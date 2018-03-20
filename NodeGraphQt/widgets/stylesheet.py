@@ -52,6 +52,7 @@ QListView {
     background-color: rgba(40, 40, 40, 255);
     border: 1px rgba(40, 40, 40, 255);
     color: rgba(255, 255, 255, 150);
+    padding-top: 5px;
 }
 '''
 
