@@ -6,7 +6,7 @@ from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST
 
 class TabSearchCompleter(QtGui.QCompleter):
     """
-    QCompleter referenced from:
+    QCompleter adapted from:
     https://stackoverflow.com/questions/5129211/qcompleter-custom-completion-rules
     """
 

@@ -18,6 +18,24 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
+    def viewer(self):
+        """
+        return the viewer.
+
+        Returns:
+            NodeGraphQt.widgets.viewer.NodeViewer: viewer object.
+        """
+        return self._viewer
+
+    def scene(self):
+        """
+        return the scene
+
+        Returns:
+            NodeGraphQt.widgets.scene.NodeScene: scene used for the nodes.
+        """
+        return self.scene()
+
     def add_menu(self, name, menu):
         """
         Add a menu to the node graph context menu.
