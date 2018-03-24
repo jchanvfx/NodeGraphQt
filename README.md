@@ -12,9 +12,9 @@ zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down
 pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
 fit to screen : `F`
 
+#### Shortcuts:
 ![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
 
-#### Shortcuts:
 select all nodes : `Ctrl + A`<br/>
 delete selected node(s) : `Backspace` or `Delete`<br/>
 copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
@@ -24,10 +24,14 @@ save node layout : `Ctrl + S`<br/>
 open node layout : `Ctrl + O` <br/>
 undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
 redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
-toggle node (enable/disable): `d`
+toggle (enable/disable) node: `d`
 
-#### Tab Search for Nodes
+#### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
+
+prompt search widget: `Tab`
+enter search and create node: `enter`
+
 
 #### Example snippet
 ```python
