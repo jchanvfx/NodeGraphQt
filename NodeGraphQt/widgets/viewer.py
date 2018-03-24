@@ -15,7 +15,7 @@ from .port import PortItem
 from .stylesheet import STYLE_QMENU
 from .tab_search import TabSearchWidget
 from .viewer_actions import setup_viewer_actions
-from ..base.node_utils import get_registered_nodes
+from ..base.node_manager import NodeManager
 from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
@@ -23,7 +23,7 @@ ZOOM_LIMIT = 12
 
 class NodeViewer(QtGui.QGraphicsView):
 
-    tab_search_triggered = QtCore.Signal(str)
+    search_triggered = QtCore.Signal(str)
 
     def __init__(self, parent=None, scene=None):
         super(NodeViewer, self).__init__(scene, parent)
@@ -52,15 +52,15 @@ class NodeViewer(QtGui.QGraphicsView):
         self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
         self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
         self._sub_context_menus['Nodes'] = QtGui.QMenu(None, title='Nodes')
-        self._search_widget = TabSearchWidget(self, get_registered_nodes())
-        self._search_widget.hide()
+        self._search_widget = TabSearchWidget(self, NodeManager.names)
+        self._search_widget.search_submitted.connect(self._on_search_submitted)
+
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
 
         self._initialize_viewer()
-        self._wire_signals()
 
     def __str__(self):
         return '{}.{}'.format(
@@ -111,6 +111,8 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _toggle_tab_search(self):
+        self._search_widget.set_nodes(NodeManager.names)
+
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
         if state:
@@ -125,10 +127,11 @@ class NodeViewer(QtGui.QGraphicsView):
             self._search_widget.setVisible(state)
             self.clearFocus()
 
-    def _on_tab_search(self, text):
-        self.tab_search_triggered.emit(text)
+    def _on_search_submitted(self, node_type):
+        self.search_triggered.emit(node_type)
 
     def _initialize_viewer(self):
+        # setup menus
         for menu in self._sub_context_menus.values():
             menu.setStyleSheet(STYLE_QMENU)
             self._context_menu.addMenu(menu)
@@ -141,9 +144,6 @@ class NodeViewer(QtGui.QGraphicsView):
         tab.setShortcut('tab')
         tab.triggered.connect(self._toggle_tab_search)
         self.addAction(tab)
-
-    def _wire_signals(self):
-        self._search_widget.search_submitted.connect(self._on_tab_search)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)

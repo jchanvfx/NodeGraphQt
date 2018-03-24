@@ -30,7 +30,7 @@ class TabSearchCompleter(QtGui.QCompleter):
 
     def updateModel(self):
         if not self._using_orig_model:
-            self._filter_model.setSourceModel(self.source_model)
+            self._filter_model.setSourceModel(self._source_model)
 
         pattern = QtCore.QRegExp(self._local_completion_prefix,
                                  QtCore.Qt.CaseInsensitive,
@@ -50,15 +50,17 @@ class TabSearchWidget(QtGui.QLineEdit):
 
     search_submitted = QtCore.Signal(str)
 
-    def __init__(self, parent=None, node_names=None):
+    def __init__(self, parent=None, node_dict=None):
         super(TabSearchWidget, self).__init__(parent)
         self.setStyleSheet(STYLE_TABSEARCH)
         self.setMinimumSize(200, 22)
-        self.setTextMargins(5, 0, 5, 0)
+        self.setTextMargins(2, 0, 2, 0)
+        self.hide()
 
-        self._node_names = node_names or []
+        self._node_dict = node_dict or {}
 
-        self._model = QtGui.QStringListModel(self._node_names, self)
+        node_names = sorted(self._node_dict.keys())
+        self._model = QtGui.QStringListModel(node_names, self)
 
         self._completer = TabSearchCompleter()
         self._completer.setModel(self._model)
@@ -68,8 +70,9 @@ class TabSearchWidget(QtGui.QLineEdit):
 
     def _on_search_submitted(self):
         text = self.text()
-        if text:
-            self.search_submitted.emit(text)
+        node_type = self._node_dict.get(text)
+        if node_type:
+            self.search_submitted.emit(node_type)
         self.close()
         self.parentWidget().clearFocus()
 
@@ -77,3 +80,9 @@ class TabSearchWidget(QtGui.QLineEdit):
         super(TabSearchWidget, self).showEvent(event)
         self.setSelection(0, len(self.text()))
         self.setFocus()
+
+    def set_nodes(self, node_dict=None):
+        self._node_dict = node_dict or {}
+        node_names = sorted(self._node_dict.keys())
+        self._model.setStringList(node_names)
+        self._completer.setModel(self._model)

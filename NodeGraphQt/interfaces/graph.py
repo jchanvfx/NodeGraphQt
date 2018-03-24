@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from PySide import QtGui
 
+from ..base.node_manager import NodeManager
 from ..base.node_plugin import NodePlugin
-from ..base.node_utils import get_node
 from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
 
@@ -17,6 +17,8 @@ class NodeGraphWidget(QtGui.QWidget):
         layout = QtGui.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
+
+        self._viewer.search_triggered.connect(self.create_node)
 
     def viewer(self):
         """
@@ -134,23 +136,49 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         self._viewer.clear()
 
-    def create_node(self, node_type, name):
+    def registered_nodes(self):
         """
-        Create node object.
+        Return a list of all node types that have been registered.
+
+        Returns:
+            list[str]: node types.
+        """
+        return sorted(NodeManager.nodes.keys())
+
+    def register_node(self, node, alias=None):
+        """
+        Register a node.
+
+        Args:
+            node (NodeGraphQt.Node): node instance.
+            alias (str): custom alias name for the node type.
+        """
+        NodeManager.register_node(node, alias)
+
+    def create_node(self, node_type, name=None, selected=True, color=None):
+        """
+        Create a new node in the node graph.
 
         Args:
             node_type (str): node class type.
-            name (str): name of the node.
+            name (str): set the name for the created node.
+            selected (bool): set created node to be selected.
+            color (tuple): set the color for the created node (r, g, b).
 
         Returns:
             NodeGraphQt.Node: node instance.
         """
-        NodeInstance = get_node(node_type)
+        NodeInstance = NodeManager.create_node_instance(node_type)
         if NodeInstance:
-            node = NodeInstance()
             self.clear_selection()
-            node.set_name(name)
-            node.set_selected(True)
+            node = NodeInstance()
+            if name:
+                node.set_name(name)
+            if selected:
+                node.set_selected(True)
+            if color:
+                node.set_color(*color)
+
             self.add_node(node)
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
@@ -184,7 +212,7 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.all_nodes():
-            NodeInstance = get_node(node_item.type)
+            NodeInstance = NodeManager.create_node_instance(node_item.type)
             nodes.append(NodeInstance(item=node_item))
         return nodes
 
@@ -197,7 +225,7 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.selected_nodes():
-            NodeInstance = get_node(node_item.type)
+            NodeInstance = NodeManager.create_node_instance(node_item.type)
             nodes.append(NodeInstance(item=node_item))
         return nodes
 
@@ -224,8 +252,9 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
-                NodeInstance = get_node(node_item.type)
-                return NodeInstance(item=node_item)
+                node_type = node_item.type
+                node_instance = NodeManager.create_node_instance(node_type)
+                return node_instance(item=node_item)
 
     def duplicate_nodes(self, nodes):
         """

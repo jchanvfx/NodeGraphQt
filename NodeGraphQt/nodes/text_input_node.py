@@ -1,4 +1,4 @@
-from NodeGraphQt.interfaces import Node
+from NodeGraphQt import Node
 
 
 class TextInputNode(Node):
@@ -7,7 +7,6 @@ class TextInputNode(Node):
     """
 
     NODE_NAME = 'input node'
-    NODE_TYPE = 'TextInputNode'
 
     def __init__(self):
         super(TextInputNode, self).__init__()

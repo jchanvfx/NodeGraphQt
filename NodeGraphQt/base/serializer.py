@@ -1,7 +1,7 @@
 import json
 import os
 
-from ..base.node_utils import get_node
+from ..base.node_manager import NodeManager
 
 
 class SessionSerializer(object):
@@ -116,7 +116,7 @@ class SessionLoader(object):
         Returns:
             tuple: NodeItem, xy pos
         """
-        node_instance = get_node(node_data.get('type'))
+        node_instance = NodeManager.create_node_instance(node_data.get('type'))
         node = node_instance.item
         node.id = node_id
         node.name = node_data.get('name')
@@ -183,7 +183,7 @@ class SessionLoader(object):
         """
         nodes = {}
         for node_id, attrs in data.get('nodes', {}).items():
-            NodeClass = get_node(attrs['type'])
+            NodeClass = NodeManager.create_node_instance(attrs['type'])
             if not NodeClass:
                 raise ImportError('"{}" node unavailable.'
                                   .format(attrs['type']))
