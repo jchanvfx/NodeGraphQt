@@ -1,8 +1,6 @@
 import os
 import sys
-
 from PySide import QtGui, QtCore
-
 from NodeGraphQt import NodeGraphWidget, Node
 from NodeGraphQt.nodes import simple_nodes
 from NodeGraphQt.nodes import text_input_node

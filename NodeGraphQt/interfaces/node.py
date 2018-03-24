@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from .port import Port
 from ..base.node_plugin import NodePlugin
-from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
+from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit, NodeCheckBox
 
 
 class Node(NodePlugin):
@@ -146,6 +146,18 @@ class Node(NodePlugin):
             text (str): pre filled text.
         """
         self.item.add_text_input(name, label, text)
+
+    def add_checkbox(self, name='', label='', text='', state=False):
+        """
+        Embed a NodeCheckBox widget into the node.
+
+        Args:
+            name (str): name of the widget.
+            label (str): label to be displayed.
+            text (str): QCheckBox text.
+            state (bool): pre-check.
+        """
+        self.item.add_checkbox(name, label, text, state)
 
     def add_widget(self, widget):
         """
