@@ -31,11 +31,12 @@ toggle node (enable/disable): `d`
 
 #### Example snippet
 ```python
-from NodeGraphQt.interfaces import NodeGraphWidget, Node
+from NodeGraphQt import NodeGraphWidget, Node
 
-# define a node object
+# create a node object
 class MyNode(Node):
     """This is a example test node."""
+
     NODE_TYPE = 'MyNode'
 
     def __init__(self):
@@ -50,6 +51,9 @@ my_node = MyNode()
 
 # create node graph.
 graph = NodeGraphWidget()
+
+# register node into the node graph.
+graph.register_node(MyNode)
 
 # add node to the node graph.
 graph.add_node(my_node)
