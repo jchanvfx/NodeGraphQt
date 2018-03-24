@@ -322,7 +322,7 @@ class NodeItem(QtGui.QGraphicsItem):
             if wid_height > height:
                 height = wid_height + (wid_height / len(self._widgets))
 
-        height += 5
+        height += 10
 
         return width, height
 
@@ -486,8 +486,10 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange input and output ports.
         self.arrange_ports(padding_x=0.0, padding_y=35.0)
         self.offset_ports(0.0, 15.0)
+
     def all_widgets(self):
         return self._widgets
+
     @property
     def id(self):
         return self._properties['id']
@@ -674,23 +676,20 @@ class NodeItem(QtGui.QGraphicsItem):
     def widgets(self):
         return self._widgets
 
-    def add_combo_menu(self, name='', label='', items=None, tooltip='test'):
+    def add_combo_menu(self, name='', label='', items=None, tooltip=''):
         items = items or []
-        label = name if not label else label
         widget = NodeComboBox(self, name, label, items)
         widget.setToolTip(tooltip)
         widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
-    def add_text_input(self, name='', label='', text='', tooltip='test'):
-        label = name if not label else label
+    def add_text_input(self, name='', label='', text='', tooltip=''):
         widget = NodeLineEdit(self, name, label, text)
         widget.setToolTip(tooltip)
         widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
-    def add_checkbox(self, name='', label='', text='', state=False, tooltip='test'):
-        label = name if not label else label
+    def add_checkbox(self, name='', label='', text='', state=False, tooltip=''):
         widget = NodeCheckBox(self, name, label, text, state)
         widget.setToolTip(tooltip)
         widget.value_changed.connect(self.set_property)

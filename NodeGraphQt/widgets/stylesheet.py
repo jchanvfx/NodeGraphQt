@@ -16,7 +16,7 @@ QGroupBox {
     border: 0px solid rgba(0, 0, 0, 0);
     margin-top: 1px;
     padding: 2px;
-    padding-top: 10px;
+    padding-top: $PADDING_TOP;
     font-size: 11px;
 }
 QGroupBox::title {
@@ -144,30 +144,14 @@ QMenu::separator {
 '''
 
 STYLE_QCHECKBOX = '''
+QCheckBox {
+    color: rgba(255, 255, 255, 150);
+    spacing: 8px 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
 QCheckBox::indicator {
     width: 13px;
     height: 13px;
 }
 '''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

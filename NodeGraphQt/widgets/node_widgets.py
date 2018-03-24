@@ -9,11 +9,18 @@ class _NodeGroubBox(QtGui.QGroupBox):
 
     def __init__(self, label, parent=None):
         super(_NodeGroubBox, self).__init__(parent)
-        self.setStyleSheet(STYLE_QGROUPBOX)
-        self.setTitle(label)
+        margin = (0, 0, 0, 0)
+        padding_top = '10px'
+        if label == '':
+            margin = (0, 2, 0, 0)
+            padding_top = '4px'
+        style = STYLE_QGROUPBOX.replace('$PADDING_TOP', padding_top)
         self.setMaximumSize(120, 50)
+        self.setTitle(label)
+        self.setStyleSheet(style)
+
         self._layout = QtGui.QVBoxLayout(self)
-        self._layout.setContentsMargins(0, 4, 0, 0)
+        self._layout.setContentsMargins(*margin)
 
     def add_node_widget(self, widget):
         self._layout.addWidget(widget)
@@ -163,6 +170,7 @@ class NodeLineEdit(NodeBaseWidget):
     def value(self, text=''):
         self._ledit.setText(text)
 
+
 class NodeCheckBox(NodeBaseWidget):
     """
     CheckBox Node Widget.
@@ -172,6 +180,7 @@ class NodeCheckBox(NodeBaseWidget):
         super(NodeCheckBox, self).__init__(parent, name, label)
         self._cbox = QtGui.QCheckBox(text)
         self._cbox.setChecked(state)
+        self._cbox.setMinimumWidth(80)
         self._cbox.setStyleSheet(STYLE_QCHECKBOX)
         self._cbox.stateChanged.connect(self._value_changed)
         group = _NodeGroubBox(label)

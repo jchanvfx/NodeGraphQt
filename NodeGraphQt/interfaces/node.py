@@ -185,7 +185,7 @@ class Node(NodePlugin):
         """
         if not self.item.widgets.get(name):
             raise Exception('node has no widget "{}"'.format(name))
-        return self.item.all_widgets().get(name)
+        return self.item.widgets.get(name)
 
     def all_widgets(self):
         """
@@ -194,7 +194,7 @@ class Node(NodePlugin):
         Returns:
             dict: {widget_name : node_widget}
         """
-        return self.item.all_widgets().items()
+        return self.item.widgets.items()
 
     def add_property(self, name, value):
         """
