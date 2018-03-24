@@ -29,7 +29,7 @@ toggle (enable/disable) node: `d`
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
 
-prompt search widget: `Tab`
+prompt search widget: `Tab` <br/>
 enter search and create node: `enter`
 
 
