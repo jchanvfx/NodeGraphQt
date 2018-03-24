@@ -11,22 +11,10 @@ class NodeMeta(type):
         """
         Called when a Plugin derived class is imported
         """
-        if not hasattr(cls, 'registered_nodes'):
-            # Called when the metaclass is first instantiated
-            cls.registered_nodes = {}
-        else:
-            # Called when a plugin class is imported
-            cls.register_node(cls)
-
-    def register_node(cls, plugin):
-        """
-        Store node plugin module import to a module reference.
-
-        Args:
-            plugin (NodeMeta): node plugin meta.
-        """
-        module = str(plugin.__module__) + '.' + str(plugin.NODE_TYPE)
-        cls.registered_nodes[module] = plugin
+        module = str(cls.__module__) + '.' + str(cls.__name__)
+        cls.NODE_TYPE = module
+        if cls.NODE_NAME is None:
+            cls.NODE_NAME = str(cls.__name__)
 
 
 class NodePlugin(object):
@@ -34,8 +22,8 @@ class NodePlugin(object):
     Base class of a Node.
     """
     __metaclass__ = NodeMeta
-    NODE_NAME = ''
-    NODE_TYPE = ''
+    NODE_NAME = None
+    NODE_TYPE = None
 
     def __init__(self, node=None):
         self._node_item = node
@@ -86,5 +74,4 @@ class NodePlugin(object):
         Returns:
             str: node type.
         """
-        module = str(self.__class__.__module__)
-        return module + '.' + self.NODE_TYPE
+        return self.NODE_TYPE

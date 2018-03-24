@@ -13,13 +13,17 @@ from .node import NodeItem
 from .pipe import Pipe
 from .port import PortItem
 from .stylesheet import STYLE_QMENU
+from .tab_search import TabSearchWidget
 from .viewer_actions import setup_viewer_actions
+from ..base.node_manager import NodeManager
 from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
 
 
 class NodeViewer(QtGui.QGraphicsView):
+
+    search_triggered = QtCore.Signal(str)
 
     def __init__(self, parent=None, scene=None):
         super(NodeViewer, self).__init__(scene, parent)
@@ -38,7 +42,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._active_pipe = None
         self._start_port = None
         self._origin_pos = None
-        self._previous_pos = None
+        self._previous_pos = QtCore.QPoint(self.width(), self.height())
         self._prev_selection = []
         self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
         self._undo_stack = QtGui.QUndoStack(self)
@@ -48,6 +52,9 @@ class NodeViewer(QtGui.QGraphicsView):
         self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
         self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
         self._sub_context_menus['Nodes'] = QtGui.QMenu(None, title='Nodes')
+        self._search_widget = TabSearchWidget(self, NodeManager.names)
+        self._search_widget.search_submitted.connect(self._on_search_submitted)
+
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
@@ -103,11 +110,40 @@ class NodeViewer(QtGui.QGraphicsView):
                 items.append(item)
         return items
 
+    def _toggle_tab_search(self):
+        self._search_widget.set_nodes(NodeManager.names)
+
+        pos = self._previous_pos
+        state = not self._search_widget.isVisible()
+        if state:
+            rect = self._search_widget.rect()
+            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
+                                    pos.y() - rect.height() / 2)
+            self._search_widget.move(new_pos)
+            self._search_widget.setVisible(state)
+            rect = self.mapToScene(rect).boundingRect()
+            self.scene().update(rect)
+        else:
+            self._search_widget.setVisible(state)
+            self.clearFocus()
+
+    def _on_search_submitted(self, node_type):
+        self.search_triggered.emit(node_type)
+
     def _initialize_viewer(self):
+        # setup menus
         for menu in self._sub_context_menus.values():
             menu.setStyleSheet(STYLE_QMENU)
             self._context_menu.addMenu(menu)
+
+        # populate context menu
         setup_viewer_actions(self)
+
+        # add in the tab search.
+        tab = QtGui.QAction('search nodes', self)
+        tab.setShortcut('tab')
+        tab.triggered.connect(self._toggle_tab_search)
+        self.addAction(tab)
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -146,6 +182,9 @@ class NodeViewer(QtGui.QGraphicsView):
             self._rubber_band.show()
         if not shift_modifier:
             super(NodeViewer, self).mousePressEvent(event)
+
+        if self._search_widget.isVisible():
+            self._toggle_tab_search()
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:

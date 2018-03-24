@@ -1,7 +1,7 @@
 import json
 import os
 
-from ..base.node_utils import get_node
+from ..base.node_manager import NodeManager
 
 
 class SessionSerializer(object):
@@ -116,7 +116,7 @@ class SessionLoader(object):
         Returns:
             tuple: NodeItem, xy pos
         """
-        node_instance = get_node(node_data.get('type'))
+        node_instance = NodeManager.create_node_instance(node_data.get('type'))
         node = node_instance.item
         node.id = node_id
         node.name = node_data.get('name')
@@ -183,7 +183,7 @@ class SessionLoader(object):
         """
         nodes = {}
         for node_id, attrs in data.get('nodes', {}).items():
-            NodeClass = get_node(attrs['type'])
+            NodeClass = NodeManager.create_node_instance(attrs['type'])
             if not NodeClass:
                 raise ImportError('"{}" node unavailable.'
                                   .format(attrs['type']))
@@ -244,7 +244,11 @@ class SessionLoader(object):
         Returns:
             list[NodeItem]: list of node items.
         """
-        data = json.loads(str_data)
+        data = {}
+        try:
+            data = json.loads(str_data)
+        except Exception as e:
+            print 'Cannot read data from clipboard.\n{}'.format(e)
         return self.load_data(data)
 
     def load(self, file_path):
@@ -259,6 +263,9 @@ class SessionLoader(object):
         """
         if not os.path.isfile(file_path):
             return
-        with open(file_path) as data_file:
-            data = json.load(data_file)
+        try:
+            with open(file_path) as data_file:
+                data = json.load(data_file)
+        except Exception as e:
+            print 'Cannot read data from clipboard.\n{}'.format(e)
         return self.load_data(data)

@@ -1,13 +1,11 @@
-from NodeGraphQt.interfaces import Node
+from NodeGraphQt import Node
 
 
 class DropdownMenuNode(Node):
     """
     A example of a node with a added menu and a few input & outputs.
     """
-
     NODE_NAME = 'menu node'
-    NODE_TYPE = 'DropdownMenuNode'
 
     def __init__(self):
         super(DropdownMenuNode, self).__init__()

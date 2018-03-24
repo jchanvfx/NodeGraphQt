@@ -6,9 +6,6 @@ from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit
 
 class Node(NodePlugin):
 
-    NODE_NAME = 'node'
-    NODE_TYPE = 'Node'
-
     def name(self):
         """
         Name of the node.

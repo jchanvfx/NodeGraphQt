@@ -1,14 +1,14 @@
 import re
 
-from .constants import ICON_DOWN_ARROW_ICON
+from .constants import ICON_DOWN_ARROW
 
 # we reformat the icon file path on windows os.
 regex = re.compile('(\w:)')
-match = regex.match(ICON_DOWN_ARROW_ICON)
+match = regex.match(ICON_DOWN_ARROW)
 if match:
     match_str = match.group(1)
-    ICON_DOWN_ARROW_ICON = ICON_DOWN_ARROW_ICON[len(match_str):]
-    ICON_DOWN_ARROW_ICON = ICON_DOWN_ARROW_ICON.replace('\\', '/')
+    ICON_DOWN_ARROW = ICON_DOWN_ARROW[len(match_str):]
+    ICON_DOWN_ARROW = ICON_DOWN_ARROW.replace('\\', '/')
 
 STYLE_QGROUPBOX = '''
 QGroupBox {
@@ -33,6 +33,26 @@ QLineEdit {
     color: rgba(255, 255, 255, 150);
     background: rgba(0, 0, 0, 80);
     selection-background-color: rgba(255, 198, 10, 155);
+}
+'''
+
+STYLE_TABSEARCH = '''
+QLineEdit {
+    border: 1px solid rgba(254, 207, 42, 255);
+    border-radius: 0px;
+    color: rgba(255, 255, 255, 150);
+    background: rgba(20, 20, 20, 255);
+    selection-background-color: rgba(219, 158, 0, 255);
+}
+'''
+
+
+STYLE_TABSEARCH_LIST = '''
+QListView {
+    background-color: rgba(40, 40, 40, 255);
+    border: 1px rgba(40, 40, 40, 255);
+    color: rgba(255, 255, 255, 150);
+    padding-top: 5px;
 }
 '''
 
@@ -76,7 +96,7 @@ QComboBox::down-arrow:on {
     /* shift the arrow when popup is open */
     top: 1px;
     left: 1px;
-}'''.replace('$ICON_DOWN_ARROW', ICON_DOWN_ARROW_ICON)
+}'''.replace('$ICON_DOWN_ARROW', ICON_DOWN_ARROW)
 
 STYLE_QLISTVIEW = '''
 QListView {
@@ -92,8 +112,8 @@ QListView::item {
     padding: 2px;
 }
 QListView::item:selected {
-    color: rgba(255, 255, 255, 200);
-    background: rgba(255, 255, 255, 15);
+    color: rgba(98, 68, 10, 255);
+    background: rgba(219, 158, 0, 255);
     border-bottom: 1px solid rgba(255, 255, 255, 5);
     border-radius: 0px;
     margin:0px;
