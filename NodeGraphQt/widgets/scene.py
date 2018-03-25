@@ -12,7 +12,7 @@ class NodeScene(QtGui.QGraphicsScene):
         self.grid_color = VIEWER_GRID_COLOR
 
     def __repr__(self):
-        return '{}.{}(parent=\'{}\')'.format(
+        return '{}.{}(\'{}\')'.format(
             self.__module__, self.__class__.__name__, self.viewer()
         )
 

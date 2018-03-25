@@ -23,7 +23,7 @@ ZOOM_LIMIT = 12
 
 class NodeViewer(QtGui.QGraphicsView):
 
-    search_triggered = QtCore.Signal(str)
+    search_triggered = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None, scene=None):
         super(NodeViewer, self).__init__(scene, parent)
@@ -128,7 +128,8 @@ class NodeViewer(QtGui.QGraphicsView):
             self.clearFocus()
 
     def _on_search_submitted(self, node_type):
-        self.search_triggered.emit(node_type)
+        pos = self.mapToScene(self._previous_pos)
+        self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
     def _initialize_viewer(self):
         # setup menus

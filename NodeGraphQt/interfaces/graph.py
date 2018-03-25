@@ -18,7 +18,11 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
-        self._viewer.search_triggered.connect(self.create_node)
+        self._viewer.search_triggered.connect(self._on_search)
+
+    def _on_search(self, node_type, pos):
+        node = self.create_node(node_type)
+        node.set_pos(*pos)
 
     def viewer(self):
         """
