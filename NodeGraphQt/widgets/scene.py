@@ -12,9 +12,9 @@ class NodeScene(QtGui.QGraphicsScene):
         self.grid_color = VIEWER_GRID_COLOR
 
     def __repr__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.viewer()
-        )
+        return '{}.{}(\'{}\')'.format(self.__module__,
+                                      self.__class__.__name__,
+                                      self.viewer())
 
     def _draw_grid(self, painter, rect, pen, grid_size):
         lines = []
