@@ -39,16 +39,14 @@ from NodeGraphQt import NodeGraphWidget, Node
 
 # create a node object
 class MyNode(Node):
-    """This is a example test node."""
+    """example test node."""
 
-    NODE_TYPE = 'MyNode'
+    NODE_NAME = 'Test Node'
 
     def __init__(self):
         super(MyNode, self).__init__()
-        self.set_name('foo node')
-        self.set_color(81, 54, 88)
-        self.add_input('in')
-        self.add_output('out')
+        self.add_input('foo')
+        self.add_output('bar')
 
 # create a node
 my_node = MyNode()
