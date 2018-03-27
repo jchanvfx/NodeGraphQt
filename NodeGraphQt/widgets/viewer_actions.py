@@ -118,7 +118,7 @@ def setup_viewer_actions(viewer):
     node_duplicate = QtGui.QAction('Duplicate', viewer)
     node_duplicate.setShortcut('Alt+c')
     node_duplicate.triggered.connect(viewer.duplicate_nodes)
-    menu_edit.addAction(node_disability)
+    menu_edit.addAction(node_duplicate)
 
     fit_zoom = QtGui.QAction('Center Selection', viewer)
     fit_zoom.setShortcut('f')
