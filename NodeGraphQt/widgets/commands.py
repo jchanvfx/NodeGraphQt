@@ -21,6 +21,30 @@ class NodeDisabledCmd(QtGui.QUndoCommand):
         self.node.disabled = self.mode
 
 
+class NodeDeletedCmd(QtGui.QUndoCommand):
+    """
+    Node deleted command.
+    """
+
+    def __init__(self, node, scene):
+        QtGui.QUndoCommand.__init__(self)
+        self.setText('deleted node')
+        self.scene = scene
+        self.node = node
+        self.inputs = {p: p.connected_ports for p in self.node.inputs}
+        self.outputs = {p: p.connected_ports for p in self.node.outputs}
+
+    def undo(self):
+        self.scene.addItem(self.node)
+        for p, ports in self.inputs.items():
+            [p.connect_to(cp) for cp in ports]
+        for p, ports in self.outputs.items():
+            [p.connect_to(cp) for cp in ports]
+
+    def redo(self):
+        self.node.delete()
+
+
 class NodePositionChangedCmd(QtGui.QUndoCommand):
     """
     Node position changed.
@@ -67,8 +91,8 @@ class NodeConnectionCmd(QtGui.QUndoCommand):
 
 class NodeConnectionChangedCmd(QtGui.QUndoCommand):
     """
-    Changing a existing pipe "targed port" to a non multi_connection "end port"
-    with no existing connections.
+    Changing a existing pipe "targeted port" to a non
+    multi_connection "end port" with no existing connections.
     """
 
     def __init__(self, from_port, to_port, dettached_port):
@@ -89,8 +113,8 @@ class NodeConnectionChangedCmd(QtGui.QUndoCommand):
 
 class NodeConnectionSwitchedCmd(QtGui.QUndoCommand):
     """
-    Changing a existing pipe "targed port" to a non multi_connection "end port"
-    that has a existing connection.
+    Changing a existing pipe "targeted port" to a non
+    multi_connection "end port" that has a existing connection.
     """
 
     def __init__(self, from_port, to_port, dis_port, dettached_port=None):

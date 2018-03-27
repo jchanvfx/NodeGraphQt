@@ -8,29 +8,29 @@ a learning exercise on how to write a custom node graph in PySide.
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
 #### Navigation:
-zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
-pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
-fit to screen : `F`
+Zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
+Pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
+Fit to screen : `F`
 
 #### Shortcuts:
 ![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
 
-select all nodes : `Ctrl + A`<br/>
-delete selected node(s) : `Backspace` or `Delete`<br/>
-copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
-paste node(s): `Ctrl + V` _(paste from clipboard)_<br/>
-duplicate node(s) : `Alt + C`<br/>
-save node layout : `Ctrl + S`<br/>
-open node layout : `Ctrl + O` <br/>
+Select all nodes : `Ctrl + A`<br/>
+Delete selected node(s) : `Backspace` or `Delete`<br/>
+Copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
+Paste node(s): `Ctrl + V` _(paste from clipboard)_<br/>
+Duplicate node(s) : `Alt + C`<br/>
+Save node layout : `Ctrl + S`<br/>
+Open node layout : `Ctrl + O` <br/>
 undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
-redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
-toggle (enable/disable) node: `d`
+Redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
+Toggle (enable/disable) node: `d`
 
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
 
-prompt search widget: `Tab` <br/>
-enter search and create node: `enter`
+Show node search: `Tab` <br/>
+Create node from selected: `enter`
 
 
 #### Example snippet

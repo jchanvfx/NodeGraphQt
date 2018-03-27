@@ -51,7 +51,6 @@ class NodeViewer(QtGui.QGraphicsView):
         self._sub_context_menus = OrderedDict()
         self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
         self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
-        self._sub_context_menus['Nodes'] = QtGui.QMenu(None, title='Nodes')
         self._search_widget = TabSearchWidget(self, NodeManager.names)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
@@ -63,11 +62,11 @@ class NodeViewer(QtGui.QGraphicsView):
         self._initialize_viewer()
 
     def __str__(self):
-        return '{}.{}'.format(
+        return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)
 
     def __repr__(self):
-        return '{}.{}'.format(
+        return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)
 
     def _set_viewer_zoom(self, value):
@@ -574,12 +573,16 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def delete_node(self, node):
         if isinstance(node, NodeItem):
+            self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
             node.delete()
 
     def delete_selected_nodes(self):
+        self._undo_stack.beginMacro('delete selected node(s)')
         for node in self.selected_nodes():
             if isinstance(node, NodeItem):
+                self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
                 node.delete()
+        self._undo_stack.endMacro()
 
     def get_pipes_from_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
