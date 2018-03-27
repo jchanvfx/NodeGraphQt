@@ -190,8 +190,8 @@ class PortItem(QtGui.QGraphicsItem):
     def delete(self):
         for pipe in self.connected_pipes:
             pipe.delete()
-        if self.scene():
-            self.scene().removeItem(self)
+            # TODO: not sure if we need this...
+            del pipe
 
     def connect_to(self, port):
         if not port:

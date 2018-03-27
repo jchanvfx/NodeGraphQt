@@ -33,10 +33,17 @@ class Pipe(QtGui.QGraphicsPathItem):
         self._input_port = input_port
         self._output_port = output_port
 
+    def __str__(self):
+        in_name = self._input_port.name if self._input_port else ''
+        out_name = self._output_port.name if self._output_port else ''
+        return '{}.Pipe(\'{}\', \'{}\')'.format(
+            self.__module__, in_name, out_name)
+
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
         out_name = self._output_port.name if self._output_port else ''
-        return '{}.Pipe("{}", "{}")'.format(self.__module__, in_name, out_name)
+        return '{}.Pipe(\'{}\', \'{}\')'.format(
+            self.__module__, in_name, out_name)
 
     def paint(self, painter, option, widget):
         color = QtGui.QColor(*self._color)

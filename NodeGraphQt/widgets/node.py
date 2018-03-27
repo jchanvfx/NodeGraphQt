@@ -134,8 +134,12 @@ class NodeItem(QtGui.QGraphicsItem):
 
         self.prev_pos = self.pos
 
+    def __str__(self):
+        return '{}.{}(\'{}\')'.format(
+            self.__module__, self.__class__.__name__, self.name)
+
     def __repr__(self):
-        return '{}.{}("{}")'.format(
+        return '{}.{}(\'{}\')'.format(
             self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
