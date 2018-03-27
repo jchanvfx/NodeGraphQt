@@ -161,10 +161,10 @@ class Node(NodePlugin):
 
     def add_widget(self, widget):
         """
-        Adds a widget into the node.
+        Embed a custom widget into the node.
 
         Args:
-            widget (NodeGraphQt.interfaces.NodeBaseWidget): node widget.
+            widget (NodeGraphQt.NodeBaseWidget): node widget.
         """
         name = widget.name
         if not isinstance(widget, NodeBaseWidget):

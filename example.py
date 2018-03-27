@@ -2,6 +2,8 @@ import os
 import sys
 from PySide import QtGui, QtCore
 from NodeGraphQt import NodeGraphWidget, Node
+
+# import example nodes from the "nodes" package
 from NodeGraphQt.nodes import simple_nodes
 from NodeGraphQt.nodes import text_input_node
 from NodeGraphQt.nodes import menu_node
@@ -37,7 +39,7 @@ class MyNode(Node):
         self.add_output('out')
 
 
-# gather nodes to be registered
+# gather nodes to be registered to the node graph.
 NODES_TO_REGISTER = [MyNode,
                      menu_node.DropdownMenuNode,
                      simple_nodes.FooNode,
@@ -58,15 +60,13 @@ if __name__ == '__main__':
     # show the node graph.
     graph.show()
 
-    # create the nodes from the "nodes" package dir.
-
-    # create FooNode and change the color.
+    # create "FooNode" and change the color.
     foo_node = graph.create_node(
         'NodeGraphQt.nodes.simple_nodes.FooNode', name='Foo Node')
     foo_node.set_color(2, 67, 81)
     foo_node.set_pos(-487.0, 141.0)
 
-    # create BarNode and change the node icon.
+    # create "BarNode" and change the node icon.
     bar_node = graph.create_node(
         'NodeGraphQt.nodes.simple_nodes.BarNode', name='Bar Node')
     this_path = os.path.dirname(os.path.abspath(__file__))
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     bar_node.set_icon(icon)
     bar_node.set_pos(-77.0, 17.0)
 
-    # create a nodes and disable it.
+    # create "TextInputNode" node and disable it.
     text_node = graph.create_node(
         'NodeGraphQt.nodes.text_input_node.TextInputNode', name='Text Node')
     text_node.disable()

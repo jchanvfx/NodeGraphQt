@@ -35,4 +35,5 @@ __credits__ = []
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
-from interfaces import NodeGraphWidget, Node, Port, Pipe
+from .interfaces import NodeGraphWidget, Node, Port, Pipe
+from .widgets.node_widgets import NodeBaseWidget
