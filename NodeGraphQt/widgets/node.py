@@ -720,7 +720,7 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def set_property(self, name, value):
         if not self._properties.get(name):
-            return
+            raise AttributeError('Node has no property "{}"'.format(name))
         if not isinstance(value, type(self._properties[name])):
             self._properties[name] = value
 

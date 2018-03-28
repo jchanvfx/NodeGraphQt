@@ -13,7 +13,7 @@
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
 
-# * Neither the name of the Johnny Chan nor the names of its contributors
+# * Neither the name Johnny Chan nor the names of its contributors
 #   may be used to endorse or promote products derived from this software
 #   without specific prior written permission.
 
@@ -30,8 +30,7 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = 'Johnny Chan'
-__email__ = 'johnny@chantasticvfx.com'
-__credits__ = []
+__email__ = 'http://chantasticvfx.com/contact'
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
