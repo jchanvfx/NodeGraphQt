@@ -261,34 +261,25 @@ class NodeViewer(QtGui.QGraphicsView):
     #         event.accept()
 
     def get_unique_node_name(self, name):
-        regex = re.compile('([aA-zZ ]+)(?:(?: )*(\d+))')
-        match = regex.match(name.strip())
-        version = ''
-        if match:
-            name = match.group(1)
-            version = match.group(2) or ''
-        unique_name = '{}{}'.format(name, version).strip()
-        regex = re.compile('[aA-zZ ]+(\d+)')
-        names = []
-        versions = []
-        for node in self.all_nodes():
-            names.append(node.name)
-            match = regex.match(node.name)
-            if match:
-                versions.append(int(match.group(1)))
-        if unique_name not in names:
-            return unique_name
-        if versions:
-            for x in range(1, max(versions) + 2):
-                unique_name = '{} {}'.format(name, x)
-                if unique_name not in names:
-                    break
-        else:
-            for x in range(1, len(names) + 2):
-                unique_name = '{} {}'.format(name, x)
-                if unique_name not in names:
-                    break
-        return unique_name
+        name = ' '.join(name.split())
+        node_names = [n.name for n in self.all_nodes()]
+        if name not in node_names:
+            return name
+
+        regex = re.compile('[\w ]+(?: )*(\d+)')
+        search = regex.search(name)
+        if not search:
+            for x in range(1, len(node_names) + 1):
+                new_name = '{} {}'.format(name, x)
+                if new_name not in node_names:
+                    return new_name
+
+        version = search.group(1)
+        name = name[:len(version) * -1].strip()
+        for x in range(1, len(node_names) + 1):
+            new_name = '{} {}'.format(name, x)
+            if new_name not in node_names:
+                return new_name
 
     def start_connection(self, selected_port):
         """
@@ -566,8 +557,7 @@ class NodeViewer(QtGui.QGraphicsView):
         return nodes
 
     def add_node(self, node):
-        unique_name = self.get_unique_node_name(node.name)
-        node.name = unique_name
+        node.name = self.get_unique_node_name(node.name)
         self.scene().addItem(node)
         node.init_node()
 
@@ -616,7 +606,7 @@ class NodeViewer(QtGui.QGraphicsView):
         loader = SessionLoader(self)
         loaded_nodes = loader.load_str(data)
         if not loaded_nodes:
-            return
+            return []
         group = self.scene().createItemGroup(loaded_nodes)
         group_rect = group.boundingRect()
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
@@ -630,6 +620,7 @@ class NodeViewer(QtGui.QGraphicsView):
         group.setPos(x, y)
         self.scene().destroyItemGroup(group)
         self._origin_pos = self._previous_pos
+        return loaded_nodes
 
     def paste_from_clipboard(self):
         clipboard = QtGui.QClipboard()
@@ -639,11 +630,11 @@ class NodeViewer(QtGui.QGraphicsView):
     def duplicate_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
         if not nodes:
-            return
+            return []
         pipes = self.get_pipes_from_nodes(nodes)
         serializer = SessionSerializer(nodes, pipes)
         data = serializer.serialize_to_str()
-        self.load_nodes_data(data)
+        return self.load_nodes_data(data)
 
     def select_all_nodes(self):
         for node in self.all_nodes():
