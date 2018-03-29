@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from collections import OrderedDict
-from uuid import uuid4
+# from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
@@ -8,14 +8,16 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE, Z_VAL_NODE_WIDGET)
-from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit, NodeCheckBox
+from .node_widgets import (NodeBaseWidget, NodeComboBox,
+                           NodeLineEdit, NodeCheckBox)
 from .port import PortItem
+from .node_skeleton import NodeSkeletonItem
 
-DEFAULT_PROPERTIES = [
-    'id', 'icon', 'name',
-    'color', 'border_color', 'text_color',
-    'type', 'selected', 'disabled'
-]
+# DEFAULT_PROPERTIES = [
+#     'id', 'icon', 'name',
+#     'color', 'border_color', 'text_color',
+#     'type', 'selected', 'disabled'
+# ]
 
 
 class XDisabledItem(QtGui.QGraphicsItem):
@@ -98,28 +100,28 @@ class XDisabledItem(QtGui.QGraphicsItem):
         painter.restore()
 
 
-class NodeItem(QtGui.QGraphicsItem):
+class NodeItem(NodeSkeletonItem):
     """
     Base Node Item.
     """
 
     def __init__(self, name='node', parent=None):
-        super(NodeItem, self).__init__(parent)
-        self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
-        self.setZValue(Z_VAL_NODE)
-        self._properties = {
-            'id': str(uuid4()),
-            'icon': None,
-            'name': name.strip(),
-            'color': (48, 58, 69, 255),
-            'border_color': (85, 100, 100, 255),
-            'text_color': (255, 255, 255, 180),
-            'type': 'NODE',
-            'selected': False,
-            'disabled': False,
-        }
-        self._width = 120
-        self._height = 80
+        super(NodeItem, self).__init__(name, parent)
+        # self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
+        # self.setZValue(Z_VAL_NODE)
+        # self._properties = {
+        #     'id': str(uuid4()),
+        #     'icon': None,
+        #     'name': name.strip(),
+        #     'color': (48, 58, 69, 255),
+        #     'border_color': (85, 100, 100, 255),
+        #     'text_color': (255, 255, 255, 180),
+        #     'type': 'NODE',
+        #     'selected': False,
+        #     'disabled': False,
+        # }
+        # self._width = 120
+        # self._height = 80
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         pixmap = pixmap.scaledToHeight(
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
@@ -132,18 +134,18 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_items = []
         self._widgets = OrderedDict()
 
-        self.prev_pos = self.pos
+        # self.prev_pos = self.pos
 
-    def __str__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
+    # def __str__(self):
+    #     return '{}.{}(\'{}\')'.format(
+    #         self.__module__, self.__class__.__name__, self.name)
+    #
+    # def __repr__(self):
+    #     return '{}.{}(\'{}\')'.format(
+    #         self.__module__, self.__class__.__name__, self.name)
 
-    def __repr__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
-
-    def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
+    # def boundingRect(self):
+    #     return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
         painter.save()
@@ -223,9 +225,9 @@ class NodeItem(QtGui.QGraphicsItem):
 
         return super(NodeItem, self).itemChange(change, value)
 
-    def setSelected(self, selected):
-        super(NodeItem, self).setSelected(selected)
-        self._properties['selected'] = selected
+    # def setSelected(self, selected):
+    #     super(NodeItem, self).setSelected(selected)
+    #     self._properties['selected'] = selected
 
     def _tooltip_disable(self, state):
         tooltip = '<b>{}</b>'.format(self._properties['name'])
@@ -494,44 +496,48 @@ class NodeItem(QtGui.QGraphicsItem):
     def all_widgets(self):
         return self._widgets
 
-    @property
-    def id(self):
-        return self._properties['id']
+    # @property
+    # def id(self):
+    #     return self._properties['id']
+    #
+    # @id.setter
+    # def id(self, unique_id=''):
+    #     self._properties['id'] = unique_id
 
-    @id.setter
-    def id(self, unique_id=''):
-        self._properties['id'] = unique_id
+    # @property
+    # def type(self):
+    #     return self._properties['type']
+    #
+    # @type.setter
+    # def type(self, node_type='NODE'):
+    #     self._properties['type'] = node_type
 
-    @property
-    def type(self):
-        return self._properties['type']
+    # @property
+    # def size(self):
+    #     return self._width, self._height
 
-    @type.setter
-    def type(self, node_type='NODE'):
-        self._properties['type'] = node_type
+    # @property
+    # def width(self):
+    #     return self._width
 
-    @property
-    def size(self):
-        return self._width, self._height
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
+    @NodeSkeletonItem.width.setter
     def width(self, width=0.0):
         w, h = self.calc_size()
-        self._width = width if width > w else w
+        # self._width = width if width > w else w
+        width = width if width > w else w
+        NodeSkeletonItem.width.fset(self, width)
 
-    @property
-    def height(self):
-        return self._height
+    # @property
+    # def height(self):
+    #     return self._height
 
-    @height.setter
+    @NodeSkeletonItem.height.setter
     def height(self, height):
         w, h = self.calc_size()
         h = 70 if h < 70 else h
-        self._height = height if height > h else h
+        # self._height = height if height > h else h
+        height = height if height > h else h
+        NodeSkeletonItem.height.fset(self, height)
 
     @property
     def icon(self):
@@ -548,72 +554,73 @@ class NodeItem(QtGui.QGraphicsItem):
         if self.scene():
             self.init_node()
 
-    @property
-    def color(self):
-        return self._properties['color']
+    # @property
+    # def color(self):
+    #     return self._properties['color']
 
-    @color.setter
-    def color(self, color=(0, 0, 0, 255)):
-        self._properties['color'] = color
+    # @color.setter
+    # def color(self, color=(0, 0, 0, 255)):
+    #     self._properties['color'] = color
 
-    @property
-    def text_color(self):
-        return self._properties['text_color']
+    # @property
+    # def text_color(self):
+    #     return self._properties['text_color']
 
-    @text_color.setter
-    def text_color(self, color=(100, 100, 100, 255)):
-        self._properties['text_color'] = color
+    # @text_color.setter
+    # def text_color(self, color=(100, 100, 100, 255)):
+    #     self._properties['text_color'] = color
 
-    @property
-    def border_color(self):
-        return self._properties['border_color']
+    # @property
+    # def border_color(self):
+    #     return self._properties['border_color']
+    #
+    # @border_color.setter
+    # def border_color(self, color=(0, 0, 0, 255)):
+    #     self._properties['border_color'] = color
 
-    @border_color.setter
-    def border_color(self, color=(0, 0, 0, 255)):
-        self._properties['border_color'] = color
+    # @property
+    # def disabled(self):
+    #     return self._properties['disabled']
 
-    @property
-    def disabled(self):
-        return self._properties['disabled']
-
-    @disabled.setter
+    @NodeSkeletonItem.disabled.setter
     def disabled(self, state=False):
-        self._properties['disabled'] = state
+        NodeSkeletonItem.disabled.fset(self, state)
         for n, w in self._widgets.items():
             w.widget.setDisabled(state)
         self._tooltip_disable(state)
         self._x_item.setVisible(state)
 
-    @property
-    def selected(self):
-        return self.isSelected()
+    # @property
+    # def selected(self):
+    #     return self.isSelected()
 
-    @selected.setter
+    @NodeSkeletonItem.selected.setter
     def selected(self, selected=False):
-        self.setSelected(selected)
+        NodeSkeletonItem.selected.fset(self, selected)
         if selected:
             self._hightlight_pipes()
 
-    @property
-    def pos(self):
-        return self.scenePos().x(), self.scenePos().y()
+    # @property
+    # def pos(self):
+    #     return self.scenePos().x(), self.scenePos().y()
 
-    @pos.setter
-    def pos(self, pos=(0, 0)):
-        self.prev_pos = self.scenePos().x(), self.scenePos().y()
-        self.setPos(pos[0], pos[1])
+    # @pos.setter
+    # def pos(self, pos=(0, 0)):
+    #     self.prev_pos = self.scenePos().x(), self.scenePos().y()
+    #     self.setPos(pos[0], pos[1])
 
-    @property
-    def name(self):
-        return self._properties['name']
+    # @property
+    # def name(self):
+    #     return self._properties['name']
 
-    @name.setter
+    @NodeSkeletonItem.name.setter
     def name(self, name=''):
-        if self.scene():
-            viewer = self.scene().viewer()
-            name = viewer.get_unique_node_name(name)
-        self._properties['name'] = name
-        self.setToolTip('node: {}'.format(name))
+        # if self.scene():
+        #     viewer = self.scene().viewer()
+        #     name = viewer.get_unique_node_name(name)
+        # self._properties['name'] = name
+        # self.setToolTip('node: {}'.format(name))
+        NodeSkeletonItem.name.fset(self, name)
         self._text_item.setPlainText(name)
         if self.scene():
             self.init_node()
@@ -706,31 +713,32 @@ class NodeItem(QtGui.QGraphicsItem):
     def get_widget(self, name):
         return self._widgets[name]
 
-    @property
-    def properties(self):
-        return self._properties
+    # @property
+    # def properties(self):
+    #     return self._properties
 
-    def add_property(self, name, value):
-        if name in DEFAULT_PROPERTIES:
-            return
-        self._properties[name] = value
+    # def add_property(self, name, value):
+    #     if name in DEFAULT_PROPERTIES:
+    #         return
+    #     self._properties[name] = value
 
-    def get_property(self, name):
-        return self._properties.get(name)
+    # def get_property(self, name):
+    #     return self._properties.get(name)
 
-    def set_property(self, name, value):
-        if not self._properties.get(name):
-            raise AttributeError('Node has no property "{}"'.format(name))
-        if not isinstance(value, type(self._properties[name])):
-            self._properties[name] = value
+    # def set_property(self, name, value):
+    #     if not self._properties.get(name):
+    #         raise AttributeError('Node has no property "{}"'.format(name))
+    #     if not isinstance(value, type(self._properties[name])):
+    #         self._properties[name] = value
 
-    def has_property(self, name):
-        return name in self._properties.keys()
+    # def has_property(self, name):
+    #     return name in self._properties.keys()
 
     def delete(self):
         for port in self._input_items:
             port.delete()
         for port in self._output_items:
             port.delete()
-        if self.scene():
-            self.scene().removeItem(self)
+        super(NodeItem, self).delete()
+        # if self.scene():
+        #     self.scene().removeItem(self)
