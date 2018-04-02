@@ -45,6 +45,16 @@ class Pipe(QtGui.QGraphicsPathItem):
         return '{}.Pipe(\'{}\', \'{}\')'.format(
             self.__module__, in_name, out_name)
 
+    def hoverEnterEvent(self, event):
+        self.activate()
+
+    def hoverLeaveEvent(self, event):
+        self.reset()
+        if self.input_port.node.selected:
+            self.highlight()
+        elif self.output_port.node.selected:
+            self.highlight()
+
     def paint(self, painter, option, widget):
         color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
@@ -69,16 +79,6 @@ class Pipe(QtGui.QGraphicsPathItem):
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
-
-    def hoverEnterEvent(self, event):
-        self.activate()
-
-    def hoverLeaveEvent(self, event):
-        self.reset()
-        if self.input_port.node.selected:
-            self.highlight()
-        elif self.output_port.node.selected:
-            self.highlight()
 
     def draw_path(self, start_port, end_port, cursor_pos=None):
         if not start_port:
