@@ -1,7 +1,7 @@
-### NodeGraphQt - PySide Widget
+### NodeGraph Widget
 
 This is a *work in progress* widget I'm working on in my spare time, as
-a learning exercise on how to write a custom node graph in PySide.
+a learning exercise to write a custom node graph in PySide.
 
 `NodeGraphQt` is node graph widget that can be implemented and repurposed into vfx applications that supports PySide.
 
