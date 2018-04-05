@@ -1,9 +1,9 @@
 ### NodeGraph Widget
 
-This is a *work in progress* widget I'm working on in my spare time, as
+This is a **_work in progress_** widget I'm working on in my spare time, as
 a learning exercise to write a custom node graph in PySide.
 
-`NodeGraphQt` is node graph widget that can be implemented and repurposed into vfx applications that supports PySide.
+NodeGraphQt is node graph widget that can be implemented and repurposed into applications that supports PySide.
 
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
@@ -32,8 +32,10 @@ Toggle (enable/disable) node: `d`
 Show node search: `Tab` <br/>
 Create node from selected: `enter`
 
+#### Example Snippet
 
-#### Example snippet
+[example script](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
+
 ```python
 from NodeGraphQt import NodeGraphWidget, Node
 
@@ -62,5 +64,3 @@ graph.add_node(my_node)
 
 graph.show()
 ```
-
-[view example.py script](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
