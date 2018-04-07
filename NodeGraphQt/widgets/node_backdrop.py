@@ -7,15 +7,15 @@ from .node_abstract import AbstractNodeItem
 
 class BackdropSizer(QtGui.QGraphicsItem):
 
-    def __init__(self, parent=None, size=6.0, color=(255, 255, 255, 20)):
+    def __init__(self, parent=None, size=6.0, color=(255, 255, 255)):
         super(BackdropSizer, self).__init__(parent)
         self.setFlag(self.ItemIsSelectable, True)
         self.setFlag(self.ItemIsMovable, True)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
-        self.setToolTip('Resize Backdrop')
+        self.setToolTip('double-click auto resize Backdrop')
         self._size = size
-        self._color = color
+        self._color = [c for c in color] + [60]
         self._hovered = False
 
     @property
@@ -33,7 +33,7 @@ class BackdropSizer(QtGui.QGraphicsItem):
     def itemChange(self, change, value):
         if change == self.ItemPositionChange:
             item = self.parentItem()
-            mx, my = item.min_size
+            mx, my = item.minimum_size
             x = mx if value.x() < mx else value.x()
             y = my if value.y() < my else value.y()
             value = QtCore.QPointF(x, y)
@@ -50,10 +50,18 @@ class BackdropSizer(QtGui.QGraphicsItem):
         painter.save()
 
         rect = self.boundingRect()
-        color = QtGui.QColor(*self._color)
+        item = self.parentItem()
+        if item and item.selected:
+            color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+        else:
+            color = QtGui.QColor(*self._color)
+        path = QtGui.QPainterPath()
+        path.moveTo(rect.topRight())
+        path.lineTo(rect.bottomRight())
+        path.lineTo(rect.bottomLeft())
         painter.setBrush(color)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRect(rect)
+        painter.fillPath(path, painter.brush())
 
         painter.restore()
 
@@ -67,36 +75,50 @@ class BackdropNodeItem(AbstractNodeItem):
         super(BackdropNodeItem, self).__init__(name, parent)
         self.setZValue(Z_VAL_PIPE - 1)
         self.add_property('backdrop_text', text)
-        self._min_size = 150, 150
+        self._min_size = 80, 80
         self.width = 50
         self.height = 50
         self.color = (5, 129, 138, 255)
 
-        self._sizer = BackdropSizer(self, 10.0)
+        self._sizer = BackdropSizer(self, 20.0, self.color[:-1])
         self._sizer.set_pos(self.width, self.height)
 
-    # def mousePressEvent(self, event):
-    #     if event.modifiers() == QtCore.Qt.AltModifier:
-    #         event.ignore()
-    #         return
-    #     if event.button() == QtCore.Qt.MouseButton.LeftButton:
-    #         # rect = self.boundingRect()
-    #         print self.viewer()
-    #     super(BackdropNodeItem, self).mousePressEvent(event)
-    #
-    # def mouseReleaseEvent(self, event):
-    #     if event.modifiers() == QtCore.Qt.AltModifier:
-    #         event.ignore()
-    #         return
-    #     super(BackdropNodeItem, self).mouseReleaseEvent(event)
+    def _combined_rect(self, nodes):
+        group = self.scene().createItemGroup(nodes)
+        rect = group.boundingRect()
+        self.scene().destroyItemGroup(group)
+        return rect
+
+    def mousePressEvent(self, event):
+        if event.modifiers() == QtCore.Qt.AltModifier:
+            event.ignore()
+            return
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            if self.scene():
+                polygon = self.mapToScene(self.boundingRect())
+                rect = polygon.boundingRect()
+                items = self.scene().items(
+                    rect, mode=QtCore.Qt.ContainsItemShape)
+                for item in items:
+                    if item == self or item == self._sizer:
+                        continue
+                    if isinstance(item, AbstractNodeItem):
+                        item.selected = True
+
+        super(BackdropNodeItem, self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.modifiers() == QtCore.Qt.AltModifier:
+            event.ignore()
+            return
+        super(BackdropNodeItem, self).mouseReleaseEvent(event)
 
     def on_sizer_pos_changed(self, pos):
         self.width = pos.x() + self._sizer.size
         self.height = pos.y() + self._sizer.size
 
     def on_sizer_double_clicked(self):
-        width, height = self._min_size
-        self._sizer.set_pos(width, height)
+        self.auto_resize()
 
     def paint(self, painter, option, widget):
         painter.save()
@@ -133,9 +155,42 @@ class BackdropNodeItem(AbstractNodeItem):
 
         painter.restore()
 
+    def get_nodes(self, inc_intersects=False):
+        mode = {True: QtCore.Qt.IntersectsItemShape,
+                False: QtCore.Qt.ContainsItemShape}
+        nodes = []
+        if self.scene():
+            polygon = self.mapToScene(self.boundingRect())
+            rect = polygon.boundingRect()
+            items = self.scene().items(rect, mode=mode[inc_intersects])
+            for item in items:
+                if item == self or item == self._sizer:
+                    continue
+                if isinstance(item, AbstractNodeItem):
+                    nodes.append(item)
+        return nodes
+
+    def auto_resize(self):
+        nodes = self.get_nodes(inc_intersects=True)
+        if nodes:
+            padding = 40
+            nodes_rect = self._combined_rect(nodes)
+            self.pos = (nodes_rect.x() - padding,
+                        nodes_rect.y() - padding)
+            self._sizer.set_pos(nodes_rect.width() + (padding * 2),
+                                nodes_rect.height() + (padding * 2))
+            return
+
+        width, height = self._min_size
+        self._sizer.set_pos(width, height)
+
     @property
-    def min_size(self):
+    def minimum_size(self):
         return self._min_size
+
+    @minimum_size.setter
+    def minimum_size(self, size=(50, 50)):
+        self._min_size = size
 
     @property
     def text(self):
