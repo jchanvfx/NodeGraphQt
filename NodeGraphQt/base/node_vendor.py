@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-class _NodeManager(object):
+class _NodeVendor(object):
     """
     Node manager that stores all the node types.
     """
@@ -34,6 +34,8 @@ class _NodeManager(object):
             NodeGraphQt.Node: new node instance.
         """
         NodeInstance = self._nodes.get(node_type)
+        if not NodeInstance:
+            print('can\'t find node type {}'.format(node_type))
         return NodeInstance
 
     def register_node(self, node, alias=None):
@@ -51,20 +53,20 @@ class _NodeManager(object):
         node_type = node.NODE_TYPE
 
         if node_type in self._nodes.keys():
-            raise TypeError(
+            raise AssertionError(
                 'node type: {} already exists!'.format(node_type))
         self._nodes[node_type] = node
 
         if self._names.get(node_type):
-            raise NameError(
+            raise AssertionError(
                 'node name: {} already exists!'.format(name))
         self._names[name] = node_type
 
         if alias:
             if self._aliases.get(alias):
-                raise NameError(
+                raise AssertionError(
                     'node alias: {} already exists!'.format(alias))
             self._aliases[alias] = node_type
 
 
-NodeManager = _NodeManager()
+NodeVendor = _NodeVendor()

@@ -9,13 +9,13 @@ from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED)
-from .node import NodeItem
+from .node_abstract import AbstractNodeItem
 from .pipe import Pipe
 from .port import PortItem
 from .stylesheet import STYLE_QMENU
 from .tab_search import TabSearchWidget
 from .viewer_actions import setup_viewer_actions
-from ..base.node_manager import NodeManager
+from ..base.node_vendor import NodeVendor
 from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
@@ -51,7 +51,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self._sub_context_menus = OrderedDict()
         self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
         self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
-        self._search_widget = TabSearchWidget(self, NodeManager.names)
+        self._search_widget = TabSearchWidget(self, NodeVendor.names)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         self.acyclic = True
@@ -110,7 +110,7 @@ class NodeViewer(QtGui.QGraphicsView):
         return items
 
     def _toggle_tab_search(self):
-        self._search_widget.set_nodes(NodeManager.names)
+        self._search_widget.set_nodes(NodeVendor.names)
 
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
@@ -168,7 +168,7 @@ class NodeViewer(QtGui.QGraphicsView):
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
         if shift_modifier:
             for item in items:
-                if isinstance(item, NodeItem):
+                if isinstance(item, AbstractNodeItem):
                     item.selected = not item.selected
 
         for n in self.selected_nodes():
@@ -414,7 +414,7 @@ class NodeViewer(QtGui.QGraphicsView):
                     self._detached_port = port.connected_ports[0]
                     [p.delete() for p in port.connected_pipes]
                 return
-            node_items = self._items_near(pos, NodeItem, 3, 3)
+            node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
                 return
             pipe_items = self._items_near(pos, Pipe, 3, 3)
@@ -545,31 +545,31 @@ class NodeViewer(QtGui.QGraphicsView):
     def all_nodes(self):
         nodes = []
         for item in self.scene().items():
-            if isinstance(item, NodeItem):
+            if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
         return nodes
 
     def selected_nodes(self):
         nodes = []
         for item in self.scene().selectedItems():
-            if isinstance(item, NodeItem):
+            if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
         return nodes
 
     def add_node(self, node):
         node.name = self.get_unique_node_name(node.name)
         self.scene().addItem(node)
-        node.init_node()
+        node.initialize_node()
 
     def delete_node(self, node):
-        if isinstance(node, NodeItem):
+        if isinstance(node, AbstractNodeItem):
             self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
             node.delete()
 
     def delete_selected_nodes(self):
         self._undo_stack.beginMacro('delete selected node(s)')
         for node in self.selected_nodes():
-            if isinstance(node, NodeItem):
+            if isinstance(node, AbstractNodeItem):
                 self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
                 node.delete()
         self._undo_stack.endMacro()

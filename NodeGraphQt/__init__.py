@@ -34,5 +34,7 @@ __email__ = 'http://chantasticvfx.com/contact'
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
-from .interfaces import NodeGraphWidget, Node, Port, Pipe
+from .interfaces.graph import NodeGraphWidget
+from .interfaces.node import Node, Backdrop
+from .interfaces.port import Port, Pipe
 from .widgets.node_widgets import NodeBaseWidget

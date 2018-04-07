@@ -1,10 +1,11 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from ..base.node_manager import NodeManager
+from ..base.node_vendor import NodeVendor
 from ..base.node_plugin import NodePlugin
 from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
+from ..interfaces.node import Backdrop
 
 
 class NodeGraphWidget(QtGui.QWidget):
@@ -18,6 +19,9 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
+        if Backdrop not in NodeVendor.nodes.values():
+            NodeVendor.register_node(Backdrop, 'Backdrop')
+
         self._viewer.search_triggered.connect(self._on_search)
 
     def _on_search(self, node_type, pos):
@@ -26,7 +30,7 @@ class NodeGraphWidget(QtGui.QWidget):
 
     def viewer(self):
         """
-        return the viewer.
+        return the viewer object.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer object.
@@ -35,12 +39,12 @@ class NodeGraphWidget(QtGui.QWidget):
 
     def scene(self):
         """
-        return the scene
+        return the scene object.
 
         Returns:
             NodeGraphQt.widgets.scene.NodeScene: scene used for the nodes.
         """
-        return self.scene()
+        return self._scene
 
     def add_menu(self, name, menu):
         """
@@ -147,7 +151,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Returns:
             list[str]: node types.
         """
-        return sorted(NodeManager.nodes.keys())
+        return sorted(NodeVendor.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
@@ -157,7 +161,7 @@ class NodeGraphWidget(QtGui.QWidget):
             node (NodeGraphQt.Node): node instance.
             alias (str): custom alias name for the node type.
         """
-        NodeManager.register_node(node, alias)
+        NodeVendor.register_node(node, alias)
 
     def create_node(self, node_type, name=None, selected=True, color=None):
         """
@@ -172,7 +176,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Returns:
             NodeGraphQt.Node: node instance.
         """
-        NodeInstance = NodeManager.create_node_instance(node_type)
+        NodeInstance = NodeVendor.create_node_instance(node_type)
         if NodeInstance:
             self.clear_selection()
             node = NodeInstance()
@@ -216,7 +220,7 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.all_nodes():
-            NodeInstance = NodeManager.create_node_instance(node_item.type)
+            NodeInstance = NodeVendor.create_node_instance(node_item.type)
             nodes.append(NodeInstance(item=node_item))
         return nodes
 
@@ -229,7 +233,7 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.selected_nodes():
-            NodeInstance = NodeManager.create_node_instance(node_item.type)
+            NodeInstance = NodeVendor.create_node_instance(node_item.type)
             nodes.append(NodeInstance(item=node_item))
         return nodes
 
@@ -257,7 +261,7 @@ class NodeGraphWidget(QtGui.QWidget):
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
                 node_type = node_item.type
-                node_instance = NodeManager.create_node_instance(node_type)
+                node_instance = NodeVendor.create_node_instance(node_type)
                 return node_instance(item=node_item)
 
     def duplicate_nodes(self, nodes):
@@ -266,5 +270,12 @@ class NodeGraphWidget(QtGui.QWidget):
 
         Args:
             nodes (list[NodeGraphQt.Node]): list of node objects.
+        Returns:
+            list[NodeGraphQt.Node]: list of duplicated node instances.
         """
-        self._viewer.duplicate_nodes(nodes)
+        new_nodes = []
+        duplicated_nodes = self._viewer.duplicate_nodes(nodes)
+        for node in duplicated_nodes:
+            node_instance = NodeVendor.create_node_instance(node.type)
+            new_nodes.append(node_instance)
+        return new_nodes

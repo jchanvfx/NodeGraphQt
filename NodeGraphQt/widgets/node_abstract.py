@@ -11,13 +11,13 @@ DEFAULT_PROPERTIES = ['id', 'icon', 'name',
                       'type', 'selected', 'disabled']
 
 
-class NodeSkeletonItem(QtGui.QGraphicsItem):
+class AbstractNodeItem(QtGui.QGraphicsItem):
     """
-    The base skeleton of a Node.
+    The abstract base class of a node.
     """
 
     def __init__(self, name='node', parent=None):
-        super(NodeSkeletonItem, self).__init__(parent)
+        super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
         self.setZValue(Z_VAL_NODE)
         self._properties = {
@@ -47,8 +47,11 @@ class NodeSkeletonItem(QtGui.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def setSelected(self, selected):
-        super(NodeSkeletonItem, self).setSelected(selected)
+        super(AbstractNodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
+
+    def initialize_node(self):
+        return
 
     @property
     def id(self):
@@ -76,18 +79,15 @@ class NodeSkeletonItem(QtGui.QGraphicsItem):
 
     @width.setter
     def width(self, width=0.0):
-        w, h = self.calc_size()
-        self._width = width if width > w else w
+        self._width = width
 
     @property
     def height(self):
         return self._height
 
     @height.setter
-    def height(self, height):
-        w, h = self.calc_size()
-        h = 70 if h < 70 else h
-        self._height = height if height > h else h
+    def height(self, height=0.0):
+        self._height = height
 
     @property
     def color(self):
@@ -156,7 +156,9 @@ class NodeSkeletonItem(QtGui.QGraphicsItem):
 
     def add_property(self, name, value):
         if name in DEFAULT_PROPERTIES:
-            return
+            raise AssertionError('cannot override default properties.')
+        elif name in self._properties.keys():
+            raise AssertionError('property already exists.')
         self._properties[name] = value
 
     def get_property(self, name):
@@ -164,12 +166,16 @@ class NodeSkeletonItem(QtGui.QGraphicsItem):
 
     def set_property(self, name, value):
         if not self._properties.get(name):
-            raise KeyError('Node has no property "{}"'.format(name))
+            raise AssertionError('Node has no property "{}"'.format(name))
         if not isinstance(value, type(self._properties[name])):
             self._properties[name] = value
 
     def has_property(self, name):
         return name in self._properties.keys()
+
+    def viewer(self):
+        if self.scene():
+            return self.scene().viewer()
 
     def delete(self):
         if self.scene():

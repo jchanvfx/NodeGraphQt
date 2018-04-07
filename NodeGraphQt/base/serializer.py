@@ -1,7 +1,7 @@
 import json
 import os
 
-from ..base.node_manager import NodeManager
+from ..base.node_vendor import NodeVendor
 
 
 class SessionSerializer(object):
@@ -116,7 +116,7 @@ class SessionLoader(object):
         Returns:
             tuple: NodeItem, xy pos
         """
-        node_instance = NodeManager.create_node_instance(node_data.get('type'))
+        node_instance = NodeVendor.create_node_instance(node_data.get('type'))
         node = node_instance.item
         node.id = node_id
         node.name = node_data.get('name')
@@ -179,11 +179,11 @@ class SessionLoader(object):
         }
 
         Args:
-            data (dict): layout data
+            data (dict): node id and object {node_id: node_item}
         """
         nodes = {}
         for node_id, attrs in data.get('nodes', {}).items():
-            NodeClass = NodeManager.create_node_instance(attrs['type'])
+            NodeClass = NodeVendor.create_node_instance(attrs['type'])
             if not NodeClass:
                 raise ImportError('"{}" node unavailable.'
                                   .format(attrs['type']))
@@ -232,7 +232,7 @@ class SessionLoader(object):
             if node.selected:
                 node._hightlight_pipes()
 
-        return [node for nid, node in nodes.items()]
+        return nodes
 
     def load_str(self, str_data):
         """
@@ -249,7 +249,8 @@ class SessionLoader(object):
             data = json.loads(str_data)
         except Exception as e:
             print 'Cannot read data from clipboard.\n{}'.format(e)
-        return self.load_data(data)
+
+        return [node for nid, node in self.load_data(data).items()]
 
     def load(self, file_path):
         """
@@ -261,6 +262,7 @@ class SessionLoader(object):
         Returns:
             list[NodeItem]: list of node items.
         """
+        data = {}
         if not os.path.isfile(file_path):
             return
         try:
@@ -268,4 +270,5 @@ class SessionLoader(object):
                 data = json.load(data_file)
         except Exception as e:
             print 'Cannot read data from clipboard.\n{}'.format(e)
-        return self.load_data(data)
+
+        return [node for nid, node in self.load_data(data).items()]
