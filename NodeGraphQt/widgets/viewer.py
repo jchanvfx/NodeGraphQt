@@ -558,8 +558,9 @@ class NodeViewer(QtGui.QGraphicsView):
 
     def add_node(self, node):
         node.name = self.get_unique_node_name(node.name)
+        node.pre_init(self)
         self.scene().addItem(node)
-        node.initialize_node()
+        node.post_init(self)
 
     def delete_node(self, node):
         if isinstance(node, AbstractNodeItem):

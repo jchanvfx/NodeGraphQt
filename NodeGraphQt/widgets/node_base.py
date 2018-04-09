@@ -428,9 +428,13 @@ class NodeItem(AbstractNodeItem):
             port.setPos(port_x + x, port_y + y)
             text.setPos(text_x + x, text_y + y)
 
-    def initialize_node(self):
+    def post_init(self, viewer=None):
         """
-        initialize the node layout and form.
+        Called after node has been added into the scene.
+        Adjust the node layout and form after the node has been added.
+
+        Args:
+            viewer: not used
         """
         # update the previous pos.
         self.prev_pos = self.pos
@@ -488,7 +492,7 @@ class NodeItem(AbstractNodeItem):
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
         self._icon_item.setPixmap(pixmap)
         if self.scene():
-            self.initialize_node()
+            self.post_init()
 
     @AbstractNodeItem.disabled.setter
     def disabled(self, state=False):
@@ -509,7 +513,7 @@ class NodeItem(AbstractNodeItem):
         AbstractNodeItem.name.fset(self, name)
         self._text_item.setPlainText(name)
         if self.scene():
-            self.initialize_node()
+            self.post_init()
 
     @property
     def inputs(self):
@@ -541,7 +545,7 @@ class NodeItem(AbstractNodeItem):
         self._input_text_items[port] = text
         self._input_items.append(port)
         if self.scene():
-            self.initialize_node()
+            self.post_init()
         return port
 
     def add_output(self, name='output', multi_port=False, display_name=True):
@@ -566,7 +570,7 @@ class NodeItem(AbstractNodeItem):
         self._output_text_items[port] = text
         self._output_items.append(port)
         if self.scene():
-            self.initialize_node()
+            self.post_init()
         return port
 
     @property

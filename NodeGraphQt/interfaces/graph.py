@@ -163,7 +163,7 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         NodeVendor.register_node(node, alias)
 
-    def create_node(self, node_type, name=None, selected=True, color=None):
+    def create_node(self, node_type, name=None, selected=False, color=None):
         """
         Create a new node in the node graph.
 
@@ -191,12 +191,13 @@ class NodeGraphWidget(QtGui.QWidget):
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
-    def add_node(self, node):
+    def add_node(self, node, selected=False):
         """
         Add a node into the node graph.
 
         Args:
             node (NodeGraphQt.interface.Node): node instance.
+            selected (bool): true if node is selected bt default.
         """
         assert isinstance(node, NodePlugin), 'node must be a Node instance.'
         self._viewer.add_node(node.item)

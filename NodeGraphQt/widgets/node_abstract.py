@@ -50,8 +50,23 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         super(AbstractNodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
 
-    def initialize_node(self):
-        return
+    def pre_init(self, viewer):
+        """
+        Called before node has been added into the scene.
+
+        Args:
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
+        """
+        pass
+
+    def post_init(self, viewer):
+        """
+        Called after node has been added into the scene.
+
+        Args:
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
+        """
+        pass
 
     @property
     def id(self):
@@ -152,6 +167,10 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
 
     @property
     def properties(self):
+        """
+        Returns:
+            dict: {property_name: property_value}
+        """
         return self._properties
 
     def add_property(self, name, value):
