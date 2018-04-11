@@ -5,7 +5,7 @@ import os
 FILE_IO_EXT = '.ngqt'
 
 # PIPE
-PIPE_WIDTH = 1.8
+PIPE_WIDTH = 1.4
 PIPE_STYLE_DEFAULT = 'line'
 PIPE_STYLE_DASHED = 'dashed'
 PIPE_STYLE_DOTTED = 'dotted'

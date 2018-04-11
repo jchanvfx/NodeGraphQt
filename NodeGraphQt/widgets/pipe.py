@@ -70,12 +70,13 @@ class Pipe(QtGui.QGraphicsPathItem):
             out_node = self.output_port.node
             if in_node.disabled or out_node.disabled:
                 color.setAlpha(200)
-                pen_width = 1.4
+                pen_width += 0.2
                 pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
 
         pen = QtGui.QPen(color, pen_width)
         pen.setStyle(pen_style)
         pen.setCapStyle(QtCore.Qt.RoundCap)
+
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
