@@ -50,21 +50,23 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         super(AbstractNodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
 
-    def pre_init(self, viewer):
+    def pre_init(self, viewer, pos=None):
         """
         Called before node has been added into the scene.
 
         Args:
-            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer.
+            pos (tuple): the cursor pos if node is called with tab search.
         """
         pass
 
-    def post_init(self, viewer):
+    def post_init(self, viewer, pos=None):
         """
         Called after node has been added into the scene.
 
         Args:
             viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
+            pos (tuple): the cursor pos if node is called with tab search.
         """
         pass
 
@@ -149,7 +151,7 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         return float(self.scenePos().x()), float(self.scenePos().y())
 
     @pos.setter
-    def pos(self, pos=(0, 0)):
+    def pos(self, pos=(0.0, 0.0)):
         self.prev_pos = self.scenePos().x(), self.scenePos().y()
         self.setPos(pos[0], pos[1])
 
