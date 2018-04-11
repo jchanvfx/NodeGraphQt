@@ -31,8 +31,7 @@ class NodePlugin(object):
         self._item.name = self.NODE_NAME
 
     def __repr__(self):
-        module = str(self.__class__.__module__)
-        return '{}.{}(\'{}\')'.format(module, self.NODE_TYPE, self.NODE_NAME)
+        return '{}(\'{}\')'.format(self.NODE_TYPE, self.NODE_NAME)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
