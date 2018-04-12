@@ -87,13 +87,16 @@ class BackdropNodeItem(AbstractNodeItem):
         return rect
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.AltModifier:
-            event.ignore()
+        if event.modifiers() == QtCore.Qt.ControlModifier:
             return
 
-        super(BackdropNodeItem, self).mousePressEvent(event)
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
-            [n.setSelected(True) for n in self.get_nodes()]
+            self.selected = True
+            for n in self.get_nodes():
+                n.selected = True
+
+    def mouseReleaseEvent(self, event):
+        event.ignore()
 
     def on_sizer_pos_changed(self, pos):
         self._width = pos.x() + self._sizer.size
