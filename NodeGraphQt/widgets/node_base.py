@@ -147,7 +147,7 @@ class NodeItem(AbstractNodeItem):
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
-        border_width = 0.85
+        border_width = 0.8
         border_color = QtGui.QColor(*self.border_color)
         if self.isSelected() and NODE_SEL_BORDER_COLOR:
             border_width = 1.5
@@ -428,14 +428,19 @@ class NodeItem(AbstractNodeItem):
             port.setPos(port_x + x, port_y + y)
             text.setPos(text_x + x, text_y + y)
 
-    def post_init(self, viewer=None):
+    def post_init(self, viewer=None, pos=None):
         """
         Called after node has been added into the scene.
         Adjust the node layout and form after the node has been added.
 
         Args:
-            viewer: not used
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): not used
+            pos (tuple): cursor position.
         """
+        # set initial node position.
+        if pos:
+            self.setPos(pos[0], pos[1])
+
         # update the previous pos.
         self.prev_pos = self.pos
         # setup initial base size.
@@ -451,14 +456,17 @@ class NodeItem(AbstractNodeItem):
         # arrange label text
         self.arrange_label()
         self.offset_label(0.0, 5.0)
+
         # arrange icon
         self.arrange_icon()
         self.offset_icon(5.0, 2.0)
+
         # arrange node widgets
         self.arrange_widgets()
         self.offset_widgets(0.0, 10.0)
+
         # arrange input and output ports.
-        self.arrange_ports(padding_x=0.0, padding_y=35.0)
+        self.arrange_ports(padding_y=35.0)
         self.offset_ports(0.0, 15.0)
 
     def all_widgets(self):
@@ -581,19 +589,16 @@ class NodeItem(AbstractNodeItem):
         items = items or []
         widget = NodeComboBox(self, name, label, items)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_text_input(self, name='', label='', text='', tooltip=''):
         widget = NodeLineEdit(self, name, label, text)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_checkbox(self, name='', label='', text='', state=False, tooltip=''):
         widget = NodeCheckBox(self, name, label, text, state)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_widget(self, widget):

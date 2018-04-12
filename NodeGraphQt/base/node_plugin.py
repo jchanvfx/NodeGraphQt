@@ -51,6 +51,10 @@ class NodePlugin(object):
         """
         return self._item
 
+    def set_item(self, item):
+        self._item = item
+        self.NODE_NAME = self._item.name
+
     def id(self):
         """
         The node unique id.

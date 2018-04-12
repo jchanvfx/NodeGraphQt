@@ -166,27 +166,27 @@ class BackdropNodeItem(AbstractNodeItem):
         width, height = self._min_size
         self._sizer.set_pos(width, height)
 
-    # def pre_init(self, viewer):
-    #     """
-    #     Called before node has been added into the scene.
-    #
-    #     Args:
-    #         viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer.
-    #     """
-    #     nodes = viewer.selected_nodes()
-    #     if self in nodes:
-    #         nodes.remove(self)
-    #     if nodes:
-    #         padding = 40
-    #         scene = viewer.scene()
-    #         group = scene.createItemGroup(nodes)
-    #         rect = group.boundingRect()
-    #         # rect = group.mapRectToScene(rect)
-    #         scene.destroyItemGroup(group)
-    #         # self.pos = (rect.x() - padding,
-    #         #             rect.y() - padding)
-    #         self._sizer.set_pos(rect.width() + (padding * 2),
-    #                             rect.height() + (padding * 2))
+    def pre_init(self, viewer, pos=None):
+        """
+        Called before node has been added into the scene.
+
+        Args:
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer.
+            pos (tuple): cursor pos.
+        """
+        nodes = viewer.selected_nodes()
+        if nodes:
+            padding = 40
+            scene = viewer.scene()
+            group = scene.createItemGroup(nodes)
+            rect = group.boundingRect()
+            scene.destroyItemGroup(group)
+            self.pos = (rect.x() - padding,
+                        rect.y() - padding)
+            self._sizer.set_pos(rect.width() + (padding * 2),
+                                rect.height() + (padding * 2))
+        else:
+            self.pos = pos
 
     @property
     def minimum_size(self):
