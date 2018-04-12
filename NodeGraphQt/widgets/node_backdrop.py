@@ -91,6 +91,8 @@ class BackdropNodeItem(AbstractNodeItem):
             return
 
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            viewer = self.viewer()
+            viewer.clear_selection()
             self.selected = True
             for n in self.get_nodes():
                 n.selected = True
