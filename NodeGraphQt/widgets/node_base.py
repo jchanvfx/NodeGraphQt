@@ -149,8 +149,8 @@ class NodeItem(AbstractNodeItem):
 
         border_width = 0.8
         border_color = QtGui.QColor(*self.border_color)
-        if self.isSelected() and NODE_SEL_BORDER_COLOR:
-            border_width = 1.5
+        if self.selected and NODE_SEL_BORDER_COLOR:
+            border_width = 1.2
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         border_rect = QtCore.QRectF(rect.left() - (border_width / 2),
                                     rect.top() - (border_width / 2),

@@ -129,8 +129,10 @@ class BackdropNodeItem(AbstractNodeItem):
             painter.setPen(QtCore.Qt.NoPen)
             painter.drawRect(rect)
 
-        painter.setPen(QtGui.QColor(255, 255, 255, 255))
-        painter.drawText(top_rect, QtCore.Qt.AlignCenter, self.name)
+        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y() + 1.5,
+                                 rect.width(), top_rect.height())
+        painter.setPen(QtGui.QColor(*self.text_color))
+        painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
 
         path = QtGui.QPainterPath()
         path.addRect(rect)
