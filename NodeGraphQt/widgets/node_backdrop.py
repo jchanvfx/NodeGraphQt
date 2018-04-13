@@ -79,6 +79,7 @@ class BackdropNodeItem(AbstractNodeItem):
         self._min_size = 80, 80
         self._sizer = BackdropSizer(self, 20.0)
         self._sizer.set_pos(*self._min_size)
+        self._nodes = [self]
 
     def _combined_rect(self, nodes):
         group = self.scene().createItemGroup(nodes)
@@ -93,12 +94,13 @@ class BackdropNodeItem(AbstractNodeItem):
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             viewer = self.viewer()
             viewer.clear_selection()
-            self.selected = True
-            for n in self.get_nodes():
-                n.selected = True
+            self._nodes += self.get_nodes()
+            [n.setSelected(True) for n in self._nodes]
 
     def mouseReleaseEvent(self, event):
-        event.ignore()
+        super(BackdropNodeItem, self).mouseReleaseEvent(event)
+        [n.setSelected(True) for n in self._nodes]
+        self._nodes = [self]
 
     def on_sizer_pos_changed(self, pos):
         self._width = pos.x() + self._sizer.size

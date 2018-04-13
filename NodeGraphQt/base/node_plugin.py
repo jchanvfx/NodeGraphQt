@@ -46,9 +46,6 @@ class NodePlugin(object):
 
     @property
     def item(self):
-        """
-        returns the item used in the scene.
-        """
         return self._item
 
     def set_item(self, item):
