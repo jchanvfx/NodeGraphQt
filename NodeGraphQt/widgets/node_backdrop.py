@@ -87,9 +87,6 @@ class BackdropNodeItem(AbstractNodeItem):
         return rect
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.ControlModifier:
-            return
-
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             viewer = self.viewer()
             viewer.clear_selection()

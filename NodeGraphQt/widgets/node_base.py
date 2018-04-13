@@ -28,6 +28,7 @@ class XDisabledItem(QtGui.QGraphicsItem):
 
     def paint(self, painter, option, widget):
         painter.save()
+
         margin = 20
         rect = self.boundingRect()
         dis_rect = QtCore.QRectF(rect.left() - (margin / 2),
@@ -165,9 +166,6 @@ class NodeItem(AbstractNodeItem):
         painter.restore()
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.AltModifier:
-            event.ignore()
-            return
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start

@@ -165,26 +165,35 @@ class NodeViewer(QtGui.QGraphicsView):
         self._previous_pos = event.pos()
         self._prev_selection = self.selected_nodes()
 
+        # close tab search
+        if self._search_widget.isVisible():
+            self._toggle_tab_search()
+
+        if alt_modifier:
+            return
+
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
+        nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
+
+        # toggle extend node selection.
         if shift_modifier:
-            for item in items:
-                if isinstance(item, AbstractNodeItem):
-                    item.selected = not item.selected
+            for node in nodes:
+                node.selected = not node.selected
 
         for n in self.selected_nodes():
             n.prev_pos = n.pos
 
-        if (self.LMB_state and not alt_modifier) and not items:
-            rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
+        # show selection selection marquee
+        if self.LMB_state and not items:
+            rect = QtCore.QRect(self._previous_pos, QtCore.QSize())
+            rect = rect.normalized()
             map_rect = self.mapToScene(rect).boundingRect()
             self.scene().update(map_rect)
             self._rubber_band.setGeometry(rect)
             self._rubber_band.show()
+
         if not shift_modifier:
             super(NodeViewer, self).mousePressEvent(event)
-
-        if self._search_widget.isVisible():
-            self._toggle_tab_search()
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -194,6 +203,7 @@ class NodeViewer(QtGui.QGraphicsView):
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
 
+        # hide selection selection marquee
         if self._rubber_band.isVisible():
             rect = self._rubber_band.rect()
             map_rect = self.mapToScene(rect).boundingRect()
