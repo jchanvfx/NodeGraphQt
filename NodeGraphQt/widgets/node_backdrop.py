@@ -15,7 +15,6 @@ class BackdropSizer(QtGui.QGraphicsItem):
         self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
         self.setToolTip('double-click auto resize Backdrop')
         self._size = size
-        self._hovered = False
 
     @property
     def size(self):
@@ -94,7 +93,7 @@ class BackdropNodeItem(AbstractNodeItem):
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             viewer = self.viewer()
             viewer.clear_selection()
-            self._nodes += self.get_nodes()
+            self._nodes += self.get_nodes(False)
             [n.setSelected(True) for n in self._nodes]
 
     def mouseReleaseEvent(self, event):
@@ -160,7 +159,7 @@ class BackdropNodeItem(AbstractNodeItem):
         return nodes
 
     def auto_resize(self, nodes=None):
-        nodes = nodes or self.get_nodes(inc_intersects=True)
+        nodes = nodes or self.get_nodes(True)
         if nodes:
             padding = 40
             nodes_rect = self._combined_rect(nodes)
