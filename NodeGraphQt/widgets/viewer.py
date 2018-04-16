@@ -592,12 +592,15 @@ class NodeViewer(QtGui.QGraphicsView):
             return
         pipes = []
         for node in nodes:
-            for port in node.inputs:
+            n_inputs = node.inputs if hasattr(node, 'inputs') else []
+            n_outputs = node.outputs if hasattr(node, 'outputs') else []
+
+            for port in n_inputs:
                 for pipe in port.connected_pipes:
                     connected_node = pipe.output_port.node
                     if connected_node in nodes:
                         pipes.append(pipe)
-            for port in node.outputs:
+            for port in n_outputs:
                 for pipe in port.connected_pipes:
                     connected_node = pipe.input_port.node
                     if connected_node in nodes:

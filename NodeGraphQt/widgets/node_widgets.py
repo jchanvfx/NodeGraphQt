@@ -21,6 +21,7 @@ class _NodeGroubBox(QtGui.QGroupBox):
 
         self._layout = QtGui.QVBoxLayout(self)
         self._layout.setContentsMargins(*margin)
+        self._layout.setSpacing(1)
 
     def add_node_widget(self, widget):
         self._layout.addWidget(widget)
@@ -181,7 +182,11 @@ class NodeCheckBox(NodeBaseWidget):
         self._cbox = QtGui.QCheckBox(text)
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
+        self._cbox.setMaximumHeight(18)
         self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+        font = self._cbox.font()
+        font.setPointSize(11)
+        self._cbox.setFont(font)
         self._cbox.stateChanged.connect(self._value_changed)
         group = _NodeGroubBox(label)
         group.add_node_widget(self._cbox)
