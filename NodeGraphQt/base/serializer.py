@@ -18,26 +18,7 @@ class SessionSerializer(object):
         Returns:
             dict: serialized node.
         """
-        prop_defaults = {
-            'icon': node.icon,
-            'name': node.name,
-            'color': node.color,
-            'border_color': node.border_color,
-            'selected': node.selected,
-            'disabled': node.disabled,
-            'pos': node.pos
-        }
-        ignore_prop = prop_defaults.keys() + ['id', 'type']
-        node_data = {
-            k: v for k, v in node.properties.items() if k not in ignore_prop}
-        widgets = {k: wid.value for k, wid in node.widgets.items()}
-
-        return {node.id: {
-            'type': node.type,
-            'node': prop_defaults,
-            'widgets': widgets,
-            'data': node_data
-        }}
+        return node.to_dict()
 
     def serialize_nodes(self, nodes):
         """
@@ -45,18 +26,12 @@ class SessionSerializer(object):
             nodes (list[NodeItem]): list of nodes.
 
         Returns:
-            dict: serialized nodes.
-                {<node_id>: {
-                    'type': node type,
-                    'node': <attr_dict>,
-                    'data': <data_dict>,
-                    'widget': <widget_dict>}}
+            dict: serialized nodes {<node_id>: <node_dict>}
         """
-        node_serials = {}
+        serials = {}
         for node in nodes:
-            serialized = self.serialize_node(node)
-            node_serials.update(serialized)
-        return node_serials
+            serials.update(node.to_dict())
+        return serials
 
     def serialize_pipe_connection(self, pipe):
         """
@@ -72,23 +47,32 @@ class SessionSerializer(object):
         }
 
     def serialize_layout(self, nodes=None, pipes=None):
+        """
+        Args:
+            nodes (list[NodeItem]): list of node items.
+            pipes (list[Pipe]): list of pipe items.
+
+        Returns:
+            dict: serialized session layout.
+                {
+                    'nodes': {<node_id>: <node_dict>},
+                        'connections': [{
+                            'in': [<node_id>, <input_port.name>],
+                            'out': [<node_id>, <output_port.name>]
+                    }]
+                }
+        """
         nodes = nodes or self.nodes
         pipes = pipes or self.pipes
-        node_serials = {}
-        pipe_serials = []
-        for node in nodes:
-            serialized = self.serialize_node(node)
-            node_serials.update(serialized)
-        for pipe in pipes:
-            serialized = self.serialize_pipe_connection(pipe)
-            pipe_serials.append(serialized)
-        serialized_data = {
-            'nodes': node_serials,
-            'connections': pipe_serials
-        }
-        return serialized_data
+        node_serials = self.serialize_nodes(nodes)
+        pipe_serials = [self.serialize_pipe_connection(p) for p in pipes]
+        return {'nodes': node_serials, 'connections': pipe_serials}
 
     def serialize_to_str(self):
+        """
+        Returns:
+            str: json string session layout.
+        """
         return json.dumps(self.serialize_layout(), indent=2)
 
     def write(self, file_path):
@@ -118,18 +102,7 @@ class SessionLoader(object):
         """
         node_instance = NodeVendor.create_node_instance(node_data.get('type'))
         node = node_instance.item
-        node.id = node_id
-        node.name = node_data.get('name')
-        node.icon = node_data.get('icon')
-        node.color = node_data.get('color')
-        node.border_color = node_data.get('border')
-        node.selected = node_data.get('selected', False)
-        node.disabled = node_data.get('disabled', False)
-        node_widgets = node.item.widgets
-        for name, value in node_data.get('widgets', {}).items():
-            if node_widgets.get(name):
-                node_widgets.get(name).value = value
-        return node, node_data.get('pos', [0.0, 0.0])
+        node.from_dict(node_data)
 
     def parse_connection_ports(self, connections):
         """
@@ -168,46 +141,35 @@ class SessionLoader(object):
         build the node layout from dict.
 
         {'nodes': {
-            <node_id>: {
-                'type': str,
-                'node': <attr_dict>,
-                'widget': <widget_dict>,
-                'data': <data_dict>}},
+            <node_id>: {<attr_dict>}
+            },
         'connections': [{
             'in': [<node_id>, <port_name>],
-            'out': [<node_id>, <port_name>]}]
+            'out': [<node_id>, <port_name>]}
+            ]
         }
 
         Args:
             data (dict): node id and object {node_id: node_item}
         """
         nodes = {}
+
+        # parse the nodes.
         for node_id, attrs in data.get('nodes', {}).items():
             NodeClass = NodeVendor.create_node_instance(attrs['type'])
             if not NodeClass:
-                raise ImportError('"{}" node unavailable.'
-                                  .format(attrs['type']))
+                ie = '"{}" node unavailable.'.format(attrs['type'])
+                raise ImportError(ie)
             node = NodeClass().item
-            # default settings.
-            for k, v in attrs.get('node', {}).items():
-                if hasattr(node, k):
-                    setattr(node, k, v)
-                # set node initial position.
-                if k == 'pos':
-                    node.prev_pos = v
-            # set custom properties
-            for k, v in attrs.get('data', {}).items():
-                if node.has_property(k):
-                    node.set_property(k, v)
-            # widget settings.
-            for k, v in attrs.get('widgets', {}).items():
-                widget = node.get_widget(k)
-                if widget:
-                    widget.value = v
+
+            # add the node
             self.viewer.add_node(node)
 
+            # set the attributes.
+            node.from_dict(attrs)
             nodes[node_id] = node
 
+        # parse the connections.
         for connection in data.get('connections', []):
             node_start = nodes.get(connection['in'][0])
             node_end = nodes.get(connection['out'][0])
@@ -229,8 +191,8 @@ class SessionLoader(object):
                 self.viewer.connect_ports(port_in, port_out)
 
         for nid, node in nodes.items():
-            if node.selected:
-                node._hightlight_pipes()
+            if node.selected and hasattr(node, 'hightlight_pipes'):
+                node.hightlight_pipes()
 
         return nodes
 

@@ -61,12 +61,12 @@ class PortItem(QtGui.QGraphicsItem):
         path.addEllipse(rect)
         painter.drawPath(path)
 
-        if self.connected_pipes:
-            color = QtGui.QColor(*PORT_ACTIVE_COLOR)
-            border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
-        elif self._hovered:
+        if self._hovered:
             color = QtGui.QColor(*PORT_HOVER_COLOR)
             border_color = QtGui.QColor(*PORT_HOVER_BORDER_COLOR)
+        elif self.connected_pipes:
+            color = QtGui.QColor(*PORT_ACTIVE_COLOR)
+            border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
         else:
             color = QtGui.QColor(*self.color)
             border_color = QtGui.QColor(*self.border_color)

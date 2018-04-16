@@ -1,14 +1,7 @@
 #!/usr/bin/python
-from uuid import uuid4
-
 from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_NODE
-
-
-DEFAULT_PROPERTIES = ['id', 'icon', 'name',
-                      'color', 'border_color', 'text_color',
-                      'type', 'selected', 'disabled']
 
 
 class AbstractNodeItem(QtGui.QGraphicsItem):
@@ -20,20 +13,19 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
         self.setZValue(Z_VAL_NODE)
+        self.prev_pos = self.pos
         self._properties = {
-            'id': str(uuid4()),
-            'icon': None,
+            'id': hex(id(self)),
             'name': name.strip(),
             'color': (48, 58, 69, 255),
             'border_color': (85, 100, 100, 255),
             'text_color': (255, 255, 255, 180),
-            'type': 'NodeSkeleton',
+            'type': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
         }
         self._width = 120
         self._height = 80
-        self.prev_pos = self.pos
 
     def __str__(self):
         return '{}.{}(\'{}\')'.format(
@@ -151,7 +143,7 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         return float(self.scenePos().x()), float(self.scenePos().y())
 
     @pos.setter
-    def pos(self, pos=(0.0, 0.0)):
+    def pos(self, pos=[0.0, 0.0]):
         self.prev_pos = self.scenePos().x(), self.scenePos().y()
         self.setPos(pos[0], pos[1])
 
@@ -175,29 +167,82 @@ class AbstractNodeItem(QtGui.QGraphicsItem):
         """
         return self._properties
 
+    def has_property(self, name):
+        return name in self._properties.keys()
+
     def add_property(self, name, value):
-        if name in DEFAULT_PROPERTIES:
-            raise AssertionError('cannot override default properties.')
-        elif name in self._properties.keys():
-            raise AssertionError('property already exists.')
+        if name in self._properties.keys():
+            raise AssertionError('property "{}" already exists!')
         self._properties[name] = value
 
     def get_property(self, name):
         return self._properties.get(name)
 
     def set_property(self, name, value):
+        class_name = self.__class__.__name__
         if not self._properties.get(name):
-            raise AssertionError('Node has no property "{}"'.format(name))
-        if not isinstance(value, type(self._properties[name])):
-            self._properties[name] = value
+            raise AssertionError('{} has no property "{}"'
+                                 .format(class_name, name))
 
-    def has_property(self, name):
-        return name in self._properties.keys()
+        if isinstance(value, type(self._properties[name])):
+            if hasattr(self, name):
+                setattr(self, name, value)
+            else:
+                self._properties[name] = value
+        else:
+            raise TypeError('{} property "{}" has to be a {} type.'
+                            .format(class_name, name, value))
 
     def viewer(self):
+        """
+        return the main viewer.
+
+        Returns:
+            NodeGraphQt.widgets.viewer.NodeViewer: viewer object.
+        """
         if self.scene():
             return self.scene().viewer()
 
     def delete(self):
+        """
+        delete node item from the scene.
+        """
         if self.scene():
             self.scene().removeItem(self)
+
+    def to_dict(self):
+        """
+        serialize node object to a dict:.
+
+        Returns:
+            dict: node id as the key and properties as the values eg.
+                {'0x106cf75a8': {
+                    'name': 'foo node',
+                    'color': (48, 58, 69, 255),
+                    'border_color': (85, 100, 100, 255),
+                    'text_color': (255, 255, 255, 180),
+                    'type': 'NodeGraphQt.nodes.simple_nodes.FooNode',
+                    'selected': False,
+                    'disabled': False,
+                    'pos': (0.0, 0.0)
+                    }
+                }
+        """
+        serial = {
+            self.id: {k: v for k, v in self._properties.items() if k != 'id'}
+        }
+        serial[self.id]['pos'] = self.pos
+        return serial
+
+    def from_dict(self, node_dict):
+        """
+        deserialize dict to node.
+
+        Args:
+            node_dict (dict): serialized node dict.
+        """
+        for name, value in node_dict.items():
+            if hasattr(self, name):
+                setattr(self, name, value)
+            else:
+                self.set_property(name, value)

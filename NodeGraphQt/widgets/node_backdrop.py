@@ -13,7 +13,7 @@ class BackdropSizer(QtGui.QGraphicsItem):
         self.setFlag(self.ItemIsMovable, True)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
-        self.setToolTip('double-click auto resize Backdrop')
+        self.setToolTip('double-click auto resize')
         self._size = size
 
     @property
@@ -73,7 +73,7 @@ class BackdropNodeItem(AbstractNodeItem):
     def __init__(self, name='backdrop', text='', parent=None):
         super(BackdropNodeItem, self).__init__(name, parent)
         self.setZValue(Z_VAL_PIPE - 1)
-        self.add_property('backdrop_text', text)
+        self._properties['backdrop_text'] = text
         self.color = (5, 129, 138, 255)
         self._min_size = 80, 80
         self._sizer = BackdropSizer(self, 20.0)
@@ -162,8 +162,7 @@ class BackdropNodeItem(AbstractNodeItem):
         if nodes:
             padding = 40
             nodes_rect = self._combined_rect(nodes)
-            self.pos = (nodes_rect.x() - padding,
-                        nodes_rect.y() - padding)
+            self.pos = [nodes_rect.x() - padding, nodes_rect.y() - padding]
             self._sizer.set_pos(nodes_rect.width() + (padding * 2),
                                 nodes_rect.height() + (padding * 2))
             return
@@ -186,8 +185,7 @@ class BackdropNodeItem(AbstractNodeItem):
             group = scene.createItemGroup(nodes)
             rect = group.boundingRect()
             scene.destroyItemGroup(group)
-            self.pos = (rect.x() - padding,
-                        rect.y() - padding)
+            self.pos = [rect.x() - padding, rect.y() - padding]
             self._sizer.set_pos(rect.width() + (padding * 2),
                                 rect.height() + (padding * 2))
         else:
@@ -202,11 +200,11 @@ class BackdropNodeItem(AbstractNodeItem):
         self._min_size = size
 
     @property
-    def text(self):
+    def backdrop_text(self):
         return self._properties['backdrop_text']
 
-    @text.setter
-    def text(self, text):
+    @backdrop_text.setter
+    def backdrop_text(self, text):
         self._properties['backdrop_text'] = text
 
     @AbstractNodeItem.width.setter
@@ -218,3 +216,8 @@ class BackdropNodeItem(AbstractNodeItem):
     def height(self, height=0.0):
         AbstractNodeItem.height.fset(self, height)
         self._sizer.set_pos(self._width, self._height)
+
+    def to_dict(self):
+        serial = super(BackdropNodeItem, self).to_dict()
+        serial[self.id]['backdrop_text'] = self._properties['backdrop_text']
+        return serial

@@ -103,8 +103,9 @@ class NodeItem(AbstractNodeItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-        pixmap = pixmap.scaledToHeight(
-            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
+        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                       QtCore.Qt.SmoothTransformation)
+        self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'node disabled')
@@ -182,9 +183,9 @@ class NodeItem(AbstractNodeItem):
 
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
-            self._reset_pipes()
+            self.reset_pipes()
             if value:
-                self._hightlight_pipes()
+                self.hightlight_pipes()
             self.setZValue(Z_VAL_NODE)
             if not self.selected:
                 self.setZValue(Z_VAL_NODE + 1)
@@ -197,33 +198,6 @@ class NodeItem(AbstractNodeItem):
             tooltip += ' <font color="red"><b>(NODE DISABLED)</b></font>'
         tooltip += '<br/>{}<br/>'.format(self._properties['type'])
         self.setToolTip(tooltip)
-
-    def _activate_pipes(self):
-        """
-        active pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.activate()
-
-    def _hightlight_pipes(self):
-        """
-        highlight pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.highlight()
-
-    def _reset_pipes(self):
-        """
-        reset the pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.reset()
 
     def _set_base_size(self):
         """
@@ -248,6 +222,33 @@ class NodeItem(AbstractNodeItem):
         for port, text in self._output_text_items.items():
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
+
+    def _activate_pipes(self):
+        """
+        active pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.activate()
+
+    def hightlight_pipes(self):
+        """
+        highlight pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.highlight()
+
+    def reset_pipes(self):
+        """
+        reset the pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.reset()
 
     def calc_size(self):
         """
@@ -467,8 +468,20 @@ class NodeItem(AbstractNodeItem):
         self.arrange_ports(padding_y=35.0)
         self.offset_ports(0.0, 15.0)
 
-    def all_widgets(self):
-        return self._widgets
+    @property
+    def icon(self):
+        return self._properties['icon']
+
+    @icon.setter
+    def icon(self, path=None):
+        self._properties['icon'] = path
+        path = path or ICON_NODE_BASE
+        pixmap = QtGui.QPixmap(path)
+        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                       QtCore.Qt.SmoothTransformation)
+        self._icon_item.setPixmap(pixmap)
+        if self.scene():
+            self.post_init()
 
     @AbstractNodeItem.width.setter
     def width(self, width=0.0):
@@ -485,21 +498,6 @@ class NodeItem(AbstractNodeItem):
         height = height if height > h else h
         AbstractNodeItem.height.fset(self, height)
 
-    @property
-    def icon(self):
-        return self._properties['icon']
-
-    @icon.setter
-    def icon(self, path=None):
-        self._properties['icon'] = path
-        path = path or ICON_NODE_BASE
-        pixmap = QtGui.QPixmap(path)
-        pixmap = pixmap.scaledToHeight(
-            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
-        self._icon_item.setPixmap(pixmap)
-        if self.scene():
-            self.post_init()
-
     @AbstractNodeItem.disabled.setter
     def disabled(self, state=False):
         AbstractNodeItem.disabled.fset(self, state)
@@ -512,7 +510,7 @@ class NodeItem(AbstractNodeItem):
     def selected(self, selected=False):
         AbstractNodeItem.selected.fset(self, selected)
         if selected:
-            self._hightlight_pipes()
+            self.hightlight_pipes()
 
     @AbstractNodeItem.name.setter
     def name(self, name=''):
@@ -612,3 +610,18 @@ class NodeItem(AbstractNodeItem):
         for port in self._output_items:
             port.delete()
         super(NodeItem, self).delete()
+
+    def to_dict(self):
+        serial = super(NodeItem, self).to_dict()
+        if self._widgets:
+            serial[self.id]['widgets'] = {
+                k: v.value for k, v in self._widgets.items()
+            }
+        return serial
+
+    def from_dict(self, node_dict):
+        widgets = node_dict.pop('widgets', {})
+        for name, value in widgets.items():
+            if self._widgets.get(name):
+                self._widgets[name].value = value
+        super(NodeItem, self).from_dict(node_dict)
