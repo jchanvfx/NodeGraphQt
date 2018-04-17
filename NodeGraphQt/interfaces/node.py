@@ -124,7 +124,7 @@ class Node(NodePlugin):
         Returns:
             dict: {widget_name : node_widget}
         """
-        return self.item.widgets.items()
+        return self.item.widgets
 
     def inputs(self):
         """

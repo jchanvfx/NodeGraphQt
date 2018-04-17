@@ -579,7 +579,7 @@ class NodeItem(AbstractNodeItem):
 
     @property
     def widgets(self):
-        return self._widgets
+        return dict(self._widgets)
 
     def add_combo_menu(self, name='', label='', items=None, tooltip=''):
         items = items or []
