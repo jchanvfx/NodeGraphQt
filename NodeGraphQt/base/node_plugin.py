@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from six import with_metaclass
+
 from ..widgets.node import NodeItem
 
 
@@ -17,7 +19,7 @@ class NodeMeta(type):
             cls.NODE_NAME = str(cls.__name__)
 
 
-class NodePlugin(object, metaclass=NodeMeta):
+class NodePlugin(with_metaclass(NodeMeta, object)):
     """
     Base class of a Node.
     """
