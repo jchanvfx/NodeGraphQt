@@ -218,3 +218,39 @@ class Backdrop(NodePlugin):
             str: text string.
         """
         return self.item.text
+
+    def width(self):
+        """
+        Returns the width of the backdrop.
+
+        Returns:
+            float: backdrop width.
+        """
+        return self.item.width
+
+    def set_width(self, width):
+        """
+        Sets the backdrop width.
+
+        Args:
+            width (float): width size.
+        """
+        self.item.width = width
+
+    def height(self):
+        """
+        Returns the height of the backdrop.
+
+        Returns:
+            float: backdrop height.
+        """
+        return self.item.height
+
+    def set_height(self, height):
+        """
+        Sets the backdrop height.
+
+        Args:
+            height (float): width size.
+        """
+        self.item.height = height

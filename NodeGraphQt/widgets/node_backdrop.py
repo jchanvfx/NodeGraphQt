@@ -3,6 +3,8 @@ from PySide import QtGui, QtCore
 
 from .constants import Z_VAL_PIPE, NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR
 from .node_abstract import AbstractNodeItem
+from .pipe import Pipe
+from .port import PortItem
 
 
 class BackdropSizer(QtGui.QGraphicsItem):
@@ -42,7 +44,6 @@ class BackdropSizer(QtGui.QGraphicsItem):
     def mouseDoubleClickEvent(self, event):
         item = self.parentItem()
         item.on_sizer_double_clicked()
-        super(BackdropSizer, self).mouseDoubleClickEvent(event)
 
     def paint(self, painter, option, widget):
         painter.save()
@@ -88,8 +89,16 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            pos = event.scenePos()
+            rect = QtCore.QRectF(pos.x()-5, pos.y()-5, 10, 10)
+            item = self.scene().items(rect)[0]
+
+            if isinstance(item, (PortItem, Pipe)):
+                self.setFlag(self.ItemIsMovable, False)
+                return
             if self.selected:
                 return
+
             viewer = self.viewer()
             viewer.clear_selection()
             self._nodes += self.get_nodes(False)
@@ -97,6 +106,7 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def mouseReleaseEvent(self, event):
         super(BackdropNodeItem, self).mouseReleaseEvent(event)
+        self.setFlag(self.ItemIsMovable, True)
         [n.setSelected(True) for n in self._nodes]
         self._nodes = [self]
 
@@ -221,5 +231,7 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def to_dict(self):
         serial = super(BackdropNodeItem, self).to_dict()
-        serial[self.id]['backdrop_text'] = self._properties['backdrop_text']
+        serial[self.id]['backdrop_text'] = self.backdrop_text
+        serial[self.id]['width'] = self.width
+        serial[self.id]['height'] = self.height
         return serial
