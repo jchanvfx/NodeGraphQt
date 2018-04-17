@@ -17,11 +17,10 @@ class NodeMeta(type):
             cls.NODE_NAME = str(cls.__name__)
 
 
-class NodePlugin(object):
+class NodePlugin(object, metaclass=NodeMeta):
     """
     Base class of a Node.
     """
-    __metaclass__ = NodeMeta
     NODE_NAME = None
     NODE_TYPE = None
 

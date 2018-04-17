@@ -1,11 +1,11 @@
 #!/usr/bin/python
-from PySide import QtGui, QtCore
+from PySide2 import QtCore, QtWidgets
 
 from .constants import Z_VAL_NODE_WIDGET
 from .stylesheet import *
 
 
-class _NodeGroubBox(QtGui.QGroupBox):
+class _NodeGroubBox(QtWidgets.QGroupBox):
 
     def __init__(self, label, parent=None):
         super(_NodeGroubBox, self).__init__(parent)
@@ -19,14 +19,14 @@ class _NodeGroubBox(QtGui.QGroupBox):
         self.setTitle(label)
         self.setStyleSheet(style)
 
-        self._layout = QtGui.QVBoxLayout(self)
+        self._layout = QtWidgets.QVBoxLayout(self)
         self._layout.setContentsMargins(*margin)
 
     def add_node_widget(self, widget):
         self._layout.addWidget(widget)
 
 
-class NodeBaseWidget(QtGui.QGraphicsProxyWidget):
+class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
     Base Node Widget.
     """
@@ -88,11 +88,11 @@ class NodeComboBox(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', items=None):
         super(NodeComboBox, self).__init__(parent, name, label)
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
-        self._combo = QtGui.QComboBox()
+        self._combo = QtWidgets.QComboBox()
         self._combo.setStyleSheet(STYLE_QCOMBOBOX)
         self._combo.setMinimumHeight(24)
         self._combo.activated.connect(self._value_changed)
-        list_view = QtGui.QListView(self._combo)
+        list_view = QtWidgets.QListView(self._combo)
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         self._combo.setView(list_view)
         self._combo.clearFocus()
@@ -144,7 +144,7 @@ class NodeLineEdit(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
-        self._ledit = QtGui.QLineEdit()
+        self._ledit = QtWidgets.QLineEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         self._ledit.textChanged.connect(self._value_changed)
@@ -178,7 +178,7 @@ class NodeCheckBox(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', text='', state=False):
         super(NodeCheckBox, self).__init__(parent, name, label)
-        self._cbox = QtGui.QCheckBox(text)
+        self._cbox = QtWidgets.QCheckBox(text)
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
         self._cbox.setStyleSheet(STYLE_QCHECKBOX)

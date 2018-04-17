@@ -2,7 +2,7 @@
 from collections import OrderedDict
 from uuid import uuid4
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 
 from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
@@ -18,7 +18,7 @@ DEFAULT_PROPERTIES = [
 ]
 
 
-class XDisabledItem(QtGui.QGraphicsItem):
+class XDisabledItem(QtWidgets.QGraphicsItem):
 
     def __init__(self, parent=None, text=None):
         super(XDisabledItem, self).__init__(parent)
@@ -98,7 +98,7 @@ class XDisabledItem(QtGui.QGraphicsItem):
         painter.restore()
 
 
-class NodeItem(QtGui.QGraphicsItem):
+class NodeItem(QtWidgets.QGraphicsItem):
     """
     Base Node Item.
     """
@@ -123,8 +123,8 @@ class NodeItem(QtGui.QGraphicsItem):
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         pixmap = pixmap.scaledToHeight(
             NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
-        self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
-        self._text_item = QtGui.QGraphicsTextItem(self.name, self)
+        self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
+        self._text_item = QtWidgets.QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'node disabled')
         self._input_text_items = {}
         self._output_text_items = {}
@@ -306,7 +306,7 @@ class NodeItem(QtGui.QGraphicsItem):
                     input_width += text.boundingRect().width()
                 input_widths.append(input_width)
             width += max(input_widths)
-            port = self._input_text_items.keys()[0]
+            port = list(self._input_text_items.keys())[0]
             port_height = port.boundingRect().height() * 2
         if self._output_text_items:
             output_widths = []
@@ -316,7 +316,7 @@ class NodeItem(QtGui.QGraphicsItem):
                     output_width += text.boundingRect().width()
                 output_widths.append(output_width)
             width += max(output_widths)
-            port = self._output_text_items.keys()[0]
+            port = list(self._output_text_items.keys())[0]
             port_height = port.boundingRect().height() * 2
 
         height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
@@ -641,7 +641,7 @@ class NodeItem(QtGui.QGraphicsItem):
         port.port_type = IN_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QtGui.QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
@@ -666,7 +666,7 @@ class NodeItem(QtGui.QGraphicsItem):
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QtGui.QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)

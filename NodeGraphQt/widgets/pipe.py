@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from PySide import QtGui, QtCore
+from PySide2 import QtCore, QtGui, QtWidgets
 
 from .constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
@@ -17,7 +17,7 @@ PIPE_STYLES = {
 }
 
 
-class Pipe(QtGui.QGraphicsPathItem):
+class Pipe(QtWidgets.QGraphicsPathItem):
     """
     Base Pipe Item.
     """

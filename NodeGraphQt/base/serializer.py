@@ -248,7 +248,7 @@ class SessionLoader(object):
         try:
             data = json.loads(str_data)
         except Exception as e:
-            print 'Cannot read data from clipboard.\n{}'.format(e)
+            print('Cannot read data from clipboard.\n{}'.format(e))
         return self.load_data(data)
 
     def load(self, file_path):
@@ -267,5 +267,5 @@ class SessionLoader(object):
             with open(file_path) as data_file:
                 data = json.load(data_file)
         except Exception as e:
-            print 'Cannot read data from clipboard.\n{}'.format(e)
+            print('Cannot read data from clipboard.\n{}'.format(e))
         return self.load_data(data)

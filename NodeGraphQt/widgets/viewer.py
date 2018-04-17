@@ -2,7 +2,7 @@
 import re
 from collections import OrderedDict
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 
 from .commands import *
 from .constants import (IN_PORT, OUT_PORT,
@@ -21,7 +21,7 @@ from ..base.serializer import SessionSerializer, SessionLoader
 ZOOM_LIMIT = 12
 
 
-class NodeViewer(QtGui.QGraphicsView):
+class NodeViewer(QtWidgets.QGraphicsView):
 
     search_triggered = QtCore.Signal(str, tuple)
 
@@ -30,7 +30,7 @@ class NodeViewer(QtGui.QGraphicsView):
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setViewportUpdateMode(QtGui.QGraphicsView.FullViewportUpdate)
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
         scene_area = 8000.0
         scene_pos = (scene_area / 2) * -1
         self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
@@ -44,13 +44,13 @@ class NodeViewer(QtGui.QGraphicsView):
         self._origin_pos = None
         self._previous_pos = QtCore.QPoint(self.width(), self.height())
         self._prev_selection = []
-        self._rubber_band = QtGui.QRubberBand(QtGui.QRubberBand.Rectangle, self)
-        self._undo_stack = QtGui.QUndoStack(self)
-        self._context_menu = QtGui.QMenu(self, 'Node Graph')
+        self._rubber_band = QtWidgets.QRubberBand(QtWidgets.QRubberBand.Rectangle, self)
+        self._undo_stack = QtWidgets.QUndoStack(self)
+        self._context_menu = QtWidgets.QMenu(self, 'Node Graph')
         self._context_menu.setStyleSheet(STYLE_QMENU)
         self._sub_context_menus = OrderedDict()
-        self._sub_context_menus['File'] = QtGui.QMenu(None, title='File')
-        self._sub_context_menus['Edit'] = QtGui.QMenu(None, title='Edit')
+        self._sub_context_menus['File'] = QtWidgets.QMenu(None, title='File')
+        self._sub_context_menus['Edit'] = QtWidgets.QMenu(None, title='Edit')
         self._search_widget = TabSearchWidget(self, NodeManager.names)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
@@ -140,7 +140,7 @@ class NodeViewer(QtGui.QGraphicsView):
         setup_viewer_actions(self)
 
         # add in the tab search.
-        tab = QtGui.QAction('search nodes', self)
+        tab = QtWidgets.QAction('search nodes', self)
         tab.setShortcut('tab')
         tab.triggered.connect(self._toggle_tab_search)
         self.addAction(tab)
@@ -386,8 +386,8 @@ class NodeViewer(QtGui.QGraphicsView):
          - redraw the connection pipe.
 
         Args:
-            event (QtGui.QGraphicsSceneMouseEvent): 
-                The event handler from the QtGui.QGraphicsScene
+            event (QtWidgets.QGraphicsSceneMouseEvent):
+                The event handler from the QtWidgets.QGraphicsScene
         """
         if not self._live_pipe:
             return
@@ -403,8 +403,8 @@ class NodeViewer(QtGui.QGraphicsView):
          - remap Shift and Ctrl modifier.
 
         Args:
-            event (QtGui.QGraphicsScenePressEvent):
-                The event handler from the QtGui.QGraphicsScene
+            event (QtWidgets.QGraphicsScenePressEvent):
+                The event handler from the QtWidgets.QGraphicsScene
         """
         ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
@@ -445,8 +445,8 @@ class NodeViewer(QtGui.QGraphicsView):
          - verify to make a the connection Pipe().
         
         Args:
-            event (QtGui.QGraphicsSceneMouseEvent): 
-                The event handler from the QtGui.QGraphicsScene
+            event (QtWidgets.QGraphicsSceneMouseEvent):
+                The event handler from the QtWidgets.QGraphicsScene
         """
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
@@ -537,12 +537,12 @@ class NodeViewer(QtGui.QGraphicsView):
         return self._sub_context_menus.get(name)
 
     def question_dialog(self, title, text):
-        dlg = QtGui.QMessageBox.question(
-            self, title, text, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-        return dlg == QtGui.QMessageBox.Yes
+        dlg = QtWidgets.QMessageBox.question(
+            self, title, text, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        return dlg == QtWidgets.QMessageBox.Yes
 
     def message_dialog(self, text, title='node graph'):
-        QtGui.QMessageBox.information(self, title, text, QtGui.QMessageBox.Ok)
+        QtWidgets.QMessageBox.information(self, title, text, QtWidgets.QMessageBox.Ok)
 
     def all_pipes(self):
         pipes = []
@@ -678,7 +678,7 @@ class NodeViewer(QtGui.QGraphicsView):
             if load:
                 self._current_file = path
         except Exception as e:
-            print e
+            print(e)
 
     def load(self, file_path):
         self.clear()
