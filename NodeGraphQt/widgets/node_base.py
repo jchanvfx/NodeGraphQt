@@ -223,7 +223,7 @@ class NodeItem(AbstractNodeItem):
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
 
-    def _activate_pipes(self):
+    def activate_pipes(self):
         """
         active pipe color.
         """
