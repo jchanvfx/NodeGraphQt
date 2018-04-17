@@ -1,10 +1,11 @@
 #!/usr/bin/python
 from PySide import QtGui
 
-from ..base.node_manager import NodeManager
+from ..base.node_vendor import NodeVendor
 from ..base.node_plugin import NodePlugin
 from ..widgets.scene import NodeScene
 from ..widgets.viewer import NodeViewer
+from ..interfaces.node import Backdrop
 
 
 class NodeGraphWidget(QtGui.QWidget):
@@ -18,15 +19,17 @@ class NodeGraphWidget(QtGui.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
+        if Backdrop not in NodeVendor.nodes.values():
+            NodeVendor.register_node(Backdrop, 'Backdrop')
+
         self._viewer.search_triggered.connect(self._on_search)
 
     def _on_search(self, node_type, pos):
-        node = self.create_node(node_type)
-        node.set_pos(*pos)
+        self.create_node(node_type, pos=pos)
 
     def viewer(self):
         """
-        return the viewer.
+        return the viewer object.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer object.
@@ -35,16 +38,16 @@ class NodeGraphWidget(QtGui.QWidget):
 
     def scene(self):
         """
-        return the scene
+        return the scene object.
 
         Returns:
             NodeGraphQt.widgets.scene.NodeScene: scene used for the nodes.
         """
-        return self.scene()
+        return self._scene
 
     def add_menu(self, name, menu):
         """
-        Add a menu to the node graph context menu.
+        Add a QMenu object to the node graph context menu.
 
         Args:
             name (str): menu name
@@ -65,7 +68,7 @@ class NodeGraphWidget(QtGui.QWidget):
 
     def set_acyclic(self, mode=True):
         """
-        Set the node graph to be acyclic or not.
+        Set the node graph to be acyclic or not. (default=True)
 
         Args:
             mode (bool): false to disable acyclic.
@@ -75,7 +78,7 @@ class NodeGraphWidget(QtGui.QWidget):
     def set_pipe_layout(self, layout='curved'):
         """
         Set node graph pipes to be drawn straight or curved by default
-        all pipes are set curved.
+        all pipes are set curved. (default='curved')
 
         Args:
             layout (str): 'straight' or 'curved'
@@ -143,47 +146,53 @@ class NodeGraphWidget(QtGui.QWidget):
     def registered_nodes(self):
         """
         Return a list of all node types that have been registered.
+        To register a node see "NodeGraphWidget.register_node()"
 
         Returns:
             list[str]: node types.
         """
-        return sorted(NodeManager.nodes.keys())
+        return sorted(NodeVendor.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
         Register a node.
+        To list all node types see "NodeGraphWidget.registered_nodes()"
 
         Args:
             node (NodeGraphQt.Node): node instance.
             alias (str): custom alias name for the node type.
         """
-        NodeManager.register_node(node, alias)
+        NodeVendor.register_node(node, alias)
 
-    def create_node(self, node_type, name=None, selected=True, color=None):
+    def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
         """
         Create a new node in the node graph.
+        To list all node types see "NodeGraphWidget.registered_nodes()"
 
         Args:
-            node_type (str): node class type.
-            name (str): set the name for the created node.
+            node_type (str): node instance type.
+            name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple): set the color for the created node (r, g, b).
+            color (tuple): set color of the created node (r, g, b).
+            pos (tuple): set position of the node (x, y).
 
         Returns:
             NodeGraphQt.Node: node instance.
         """
-        NodeInstance = NodeManager.create_node_instance(node_type)
+        NodeInstance = NodeVendor.create_node_instance(node_type)
         if NodeInstance:
-            self.clear_selection()
             node = NodeInstance()
-            if name:
-                node.set_name(name)
-            if selected:
-                node.set_selected(True)
-            if color:
-                node.set_color(*color)
+            item = node.item
+            item.selected = selected
 
-            self.add_node(node)
+            if name:
+                item.name = name
+            if color:
+                r, g, b = color
+                item.color = (r, g, b, 255)
+
+            self._viewer.add_node(item, pos)
+
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
@@ -216,8 +225,10 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.all_nodes():
-            NodeInstance = NodeManager.create_node_instance(node_item.type)
-            nodes.append(NodeInstance(item=node_item))
+            NodeInstance = NodeVendor.create_node_instance(node_item.type)
+            node = NodeInstance()
+            node.set_item(node_item)
+            nodes.append(node)
         return nodes
 
     def selected_nodes(self):
@@ -229,8 +240,10 @@ class NodeGraphWidget(QtGui.QWidget):
         """
         nodes = []
         for node_item in self._viewer.selected_nodes():
-            NodeInstance = NodeManager.create_node_instance(node_item.type)
-            nodes.append(NodeInstance(item=node_item))
+            NodeInstance = NodeVendor.create_node_instance(node_item.type)
+            node = NodeInstance()
+            node.set_item(node_item)
+            nodes.append(node)
         return nodes
 
     def select_all(self):
@@ -257,7 +270,7 @@ class NodeGraphWidget(QtGui.QWidget):
         for node_item in self._viewer.all_nodes():
             if node_item.name == name:
                 node_type = node_item.type
-                node_instance = NodeManager.create_node_instance(node_type)
+                node_instance = NodeVendor.create_node_instance(node_type)
                 return node_instance(item=node_item)
 
     def duplicate_nodes(self, nodes):
@@ -266,5 +279,12 @@ class NodeGraphWidget(QtGui.QWidget):
 
         Args:
             nodes (list[NodeGraphQt.Node]): list of node objects.
+        Returns:
+            list[NodeGraphQt.Node]: list of duplicated node instances.
         """
-        self._viewer.duplicate_nodes(nodes)
+        new_nodes = []
+        duplicated_nodes = self._viewer.duplicate_nodes(nodes)
+        for node in duplicated_nodes:
+            node_instance = NodeVendor.create_node_instance(node.type)
+            new_nodes.append(node_instance)
+        return new_nodes

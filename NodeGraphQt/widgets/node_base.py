@@ -1,6 +1,5 @@
 #!/usr/bin/python
 from collections import OrderedDict
-from uuid import uuid4
 
 from PySide import QtGui, QtCore
 
@@ -8,14 +7,11 @@ from .constants import (IN_PORT, OUT_PORT,
                         NODE_ICON_SIZE, ICON_NODE_BASE,
                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                         Z_VAL_NODE, Z_VAL_NODE_WIDGET)
-from .node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit, NodeCheckBox
-from .port import PortItem
 
-DEFAULT_PROPERTIES = [
-    'id', 'icon', 'name',
-    'color', 'border_color', 'text_color',
-    'type', 'selected', 'disabled'
-]
+from .node_abstract import AbstractNodeItem
+from .node_widgets import (NodeBaseWidget, NodeComboBox,
+                           NodeLineEdit, NodeCheckBox)
+from .port import PortItem
 
 
 class XDisabledItem(QtGui.QGraphicsItem):
@@ -32,6 +28,7 @@ class XDisabledItem(QtGui.QGraphicsItem):
 
     def paint(self, painter, option, widget):
         painter.save()
+
         margin = 20
         rect = self.boundingRect()
         dis_rect = QtCore.QRectF(rect.left() - (margin / 2),
@@ -98,31 +95,17 @@ class XDisabledItem(QtGui.QGraphicsItem):
         painter.restore()
 
 
-class NodeItem(QtGui.QGraphicsItem):
+class NodeItem(AbstractNodeItem):
     """
-    Base Node Item.
+    Base Node item.
     """
 
     def __init__(self, name='node', parent=None):
-        super(NodeItem, self).__init__(parent)
-        self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
-        self.setZValue(Z_VAL_NODE)
-        self._properties = {
-            'id': str(uuid4()),
-            'icon': None,
-            'name': name.strip(),
-            'color': (48, 58, 69, 255),
-            'border_color': (85, 100, 100, 255),
-            'text_color': (255, 255, 255, 180),
-            'type': 'NODE',
-            'selected': False,
-            'disabled': False,
-        }
-        self._width = 120
-        self._height = 80
+        super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-        pixmap = pixmap.scaledToHeight(
-            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
+        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                       QtCore.Qt.SmoothTransformation)
+        self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtGui.QGraphicsPixmapItem(pixmap, self)
         self._text_item = QtGui.QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'node disabled')
@@ -132,21 +115,9 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_items = []
         self._widgets = OrderedDict()
 
-        self.prev_pos = self.pos
-
-    def __str__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
-
-    def __repr__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
-
-    def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
-
     def paint(self, painter, option, widget):
         painter.save()
+
         bg_border = 1.0
         rect = QtCore.QRectF(0.5 - (bg_border / 2),
                              0.5 - (bg_border / 2),
@@ -165,7 +136,7 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundRect(rect, radius_x, radius_y)
 
-        if self.isSelected() and NODE_SEL_COLOR:
+        if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundRect(rect, radius_x, radius_y)
 
@@ -178,10 +149,10 @@ class NodeItem(QtGui.QGraphicsItem):
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
-        border_width = 0.85
+        border_width = 0.8
         border_color = QtGui.QColor(*self.border_color)
-        if self.isSelected() and NODE_SEL_BORDER_COLOR:
-            border_width = 1.5
+        if self.selected and NODE_SEL_BORDER_COLOR:
+            border_width = 1.2
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         border_rect = QtCore.QRectF(rect.left() - (border_width / 2),
                                     rect.top() - (border_width / 2),
@@ -189,15 +160,13 @@ class NodeItem(QtGui.QGraphicsItem):
                                     rect.height() + border_width)
         path = QtGui.QPainterPath()
         path.addRoundedRect(border_rect, radius_x, radius_y)
+        painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.drawPath(path)
 
         painter.restore()
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.AltModifier:
-            event.ignore()
-            return
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start
@@ -214,18 +183,14 @@ class NodeItem(QtGui.QGraphicsItem):
 
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
-            self._reset_pipes()
+            self.reset_pipes()
             if value:
-                self._hightlight_pipes()
+                self.hightlight_pipes()
             self.setZValue(Z_VAL_NODE)
             if not self.selected:
                 self.setZValue(Z_VAL_NODE + 1)
 
         return super(NodeItem, self).itemChange(change, value)
-
-    def setSelected(self, selected):
-        super(NodeItem, self).setSelected(selected)
-        self._properties['selected'] = selected
 
     def _tooltip_disable(self, state):
         tooltip = '<b>{}</b>'.format(self._properties['name'])
@@ -233,33 +198,6 @@ class NodeItem(QtGui.QGraphicsItem):
             tooltip += ' <font color="red"><b>(NODE DISABLED)</b></font>'
         tooltip += '<br/>{}<br/>'.format(self._properties['type'])
         self.setToolTip(tooltip)
-
-    def _activate_pipes(self):
-        """
-        active pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.activate()
-
-    def _hightlight_pipes(self):
-        """
-        highlight pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.highlight()
-
-    def _reset_pipes(self):
-        """
-        reset the pipe color.
-        """
-        ports = self.inputs + self.outputs
-        for port in ports:
-            for pipe in port.connected_pipes:
-                pipe.reset()
 
     def _set_base_size(self):
         """
@@ -284,6 +222,33 @@ class NodeItem(QtGui.QGraphicsItem):
         for port, text in self._output_text_items.items():
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
+
+    def activate_pipes(self):
+        """
+        active pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.activate()
+
+    def hightlight_pipes(self):
+        """
+        highlight pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.highlight()
+
+    def reset_pipes(self):
+        """
+        reset the pipe color.
+        """
+        ports = self.inputs + self.outputs
+        for port in ports:
+            for pipe in port.connected_pipes:
+                pipe.reset()
 
     def calc_size(self):
         """
@@ -462,10 +427,19 @@ class NodeItem(QtGui.QGraphicsItem):
             port.setPos(port_x + x, port_y + y)
             text.setPos(text_x + x, text_y + y)
 
-    def init_node(self):
+    def post_init(self, viewer=None, pos=None):
         """
-        initialize the node layout and form.
+        Called after node has been added into the scene.
+        Adjust the node layout and form after the node has been added.
+
+        Args:
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): not used
+            pos (tuple): cursor position.
         """
+        # set initial node position.
+        if pos:
+            self.setPos(pos[0], pos[1])
+
         # update the previous pos.
         self.prev_pos = self.pos
         # setup initial base size.
@@ -481,57 +455,18 @@ class NodeItem(QtGui.QGraphicsItem):
         # arrange label text
         self.arrange_label()
         self.offset_label(0.0, 5.0)
+
         # arrange icon
         self.arrange_icon()
         self.offset_icon(5.0, 2.0)
+
         # arrange node widgets
         self.arrange_widgets()
         self.offset_widgets(0.0, 10.0)
+
         # arrange input and output ports.
-        self.arrange_ports(padding_x=0.0, padding_y=35.0)
+        self.arrange_ports(padding_y=35.0)
         self.offset_ports(0.0, 15.0)
-
-    def all_widgets(self):
-        return self._widgets
-
-    @property
-    def id(self):
-        return self._properties['id']
-
-    @id.setter
-    def id(self, unique_id=''):
-        self._properties['id'] = unique_id
-
-    @property
-    def type(self):
-        return self._properties['type']
-
-    @type.setter
-    def type(self, node_type='NODE'):
-        self._properties['type'] = node_type
-
-    @property
-    def size(self):
-        return self._width, self._height
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, width=0.0):
-        w, h = self.calc_size()
-        self._width = width if width > w else w
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, height):
-        w, h = self.calc_size()
-        h = 70 if h < 70 else h
-        self._height = height if height > h else h
 
     @property
     def icon(self):
@@ -542,81 +477,47 @@ class NodeItem(QtGui.QGraphicsItem):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
-        pixmap = pixmap.scaledToHeight(
-            NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation)
+        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                       QtCore.Qt.SmoothTransformation)
         self._icon_item.setPixmap(pixmap)
         if self.scene():
-            self.init_node()
+            self.post_init()
 
-    @property
-    def color(self):
-        return self._properties['color']
+    @AbstractNodeItem.width.setter
+    def width(self, width=0.0):
+        w, h = self.calc_size()
+        # self._width = width if width > w else w
+        width = width if width > w else w
+        AbstractNodeItem.width.fset(self, width)
 
-    @color.setter
-    def color(self, color=(0, 0, 0, 255)):
-        self._properties['color'] = color
+    @AbstractNodeItem.height.setter
+    def height(self, height=0.0):
+        w, h = self.calc_size()
+        h = 70 if h < 70 else h
+        # self._height = height if height > h else h
+        height = height if height > h else h
+        AbstractNodeItem.height.fset(self, height)
 
-    @property
-    def text_color(self):
-        return self._properties['text_color']
-
-    @text_color.setter
-    def text_color(self, color=(100, 100, 100, 255)):
-        self._properties['text_color'] = color
-
-    @property
-    def border_color(self):
-        return self._properties['border_color']
-
-    @border_color.setter
-    def border_color(self, color=(0, 0, 0, 255)):
-        self._properties['border_color'] = color
-
-    @property
-    def disabled(self):
-        return self._properties['disabled']
-
-    @disabled.setter
+    @AbstractNodeItem.disabled.setter
     def disabled(self, state=False):
-        self._properties['disabled'] = state
+        AbstractNodeItem.disabled.fset(self, state)
         for n, w in self._widgets.items():
             w.widget.setDisabled(state)
         self._tooltip_disable(state)
         self._x_item.setVisible(state)
 
-    @property
-    def selected(self):
-        return self.isSelected()
-
-    @selected.setter
+    @AbstractNodeItem.selected.setter
     def selected(self, selected=False):
-        self.setSelected(selected)
+        AbstractNodeItem.selected.fset(self, selected)
         if selected:
-            self._hightlight_pipes()
+            self.hightlight_pipes()
 
-    @property
-    def pos(self):
-        return self.scenePos().x(), self.scenePos().y()
-
-    @pos.setter
-    def pos(self, pos=(0, 0)):
-        self.prev_pos = self.scenePos().x(), self.scenePos().y()
-        self.setPos(pos[0], pos[1])
-
-    @property
-    def name(self):
-        return self._properties['name']
-
-    @name.setter
+    @AbstractNodeItem.name.setter
     def name(self, name=''):
-        if self.scene():
-            viewer = self.scene().viewer()
-            name = viewer.get_unique_node_name(name)
-        self._properties['name'] = name
-        self.setToolTip('node: {}'.format(name))
+        AbstractNodeItem.name.fset(self, name)
         self._text_item.setPlainText(name)
         if self.scene():
-            self.init_node()
+            self.post_init()
 
     @property
     def inputs(self):
@@ -648,7 +549,7 @@ class NodeItem(QtGui.QGraphicsItem):
         self._input_text_items[port] = text
         self._input_items.append(port)
         if self.scene():
-            self.init_node()
+            self.post_init()
         return port
 
     def add_output(self, name='output', multi_port=False, display_name=True):
@@ -673,30 +574,27 @@ class NodeItem(QtGui.QGraphicsItem):
         self._output_text_items[port] = text
         self._output_items.append(port)
         if self.scene():
-            self.init_node()
+            self.post_init()
         return port
 
     @property
     def widgets(self):
-        return self._widgets
+        return dict(self._widgets)
 
     def add_combo_menu(self, name='', label='', items=None, tooltip=''):
         items = items or []
         widget = NodeComboBox(self, name, label, items)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_text_input(self, name='', label='', text='', tooltip=''):
         widget = NodeLineEdit(self, name, label, text)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_checkbox(self, name='', label='', text='', state=False, tooltip=''):
         widget = NodeCheckBox(self, name, label, text, state)
         widget.setToolTip(tooltip)
-        widget.value_changed.connect(self.set_property)
         self.add_widget(widget)
 
     def add_widget(self, widget):
@@ -706,31 +604,24 @@ class NodeItem(QtGui.QGraphicsItem):
     def get_widget(self, name):
         return self._widgets[name]
 
-    @property
-    def properties(self):
-        return self._properties
-
-    def add_property(self, name, value):
-        if name in DEFAULT_PROPERTIES:
-            return
-        self._properties[name] = value
-
-    def get_property(self, name):
-        return self._properties.get(name)
-
-    def set_property(self, name, value):
-        if not self._properties.get(name):
-            return
-        if not isinstance(value, type(self._properties[name])):
-            self._properties[name] = value
-
-    def has_property(self, name):
-        return name in self._properties.keys()
-
     def delete(self):
         for port in self._input_items:
             port.delete()
         for port in self._output_items:
             port.delete()
-        if self.scene():
-            self.scene().removeItem(self)
+        super(NodeItem, self).delete()
+
+    def to_dict(self):
+        serial = super(NodeItem, self).to_dict()
+        if self._widgets:
+            serial[self.id]['widgets'] = {
+                k: v.value for k, v in self._widgets.items()
+            }
+        return serial
+
+    def from_dict(self, node_dict):
+        widgets = node_dict.pop('widgets', {})
+        for name, value in widgets.items():
+            if self._widgets.get(name):
+                self._widgets[name].value = value
+        super(NodeItem, self).from_dict(node_dict)
