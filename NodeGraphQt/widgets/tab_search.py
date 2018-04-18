@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from PySide import QtGui, QtCore
+from PySide2 import QtCore, QtWidgets
 
 from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST
 
 
-class TabSearchCompleter(QtGui.QCompleter):
+class TabSearchCompleter(QtWidgets.QCompleter):
     """
     QCompleter adapted from:
     https://stackoverflow.com/questions/5129211/qcompleter-custom-completion-rules
@@ -24,7 +24,7 @@ class TabSearchCompleter(QtGui.QCompleter):
         self.updateModel()
         if self._filter_model.rowCount() == 0:
             self._using_orig_model = False
-            self._filter_model.setSourceModel(QtGui.QStringListModel([path]))
+            self._filter_model.setSourceModel(QtCore.QStringListModel([path]))
             return [path]
         return []
 
@@ -39,14 +39,14 @@ class TabSearchCompleter(QtGui.QCompleter):
 
     def setModel(self, model):
         self._source_model = model
-        self._filter_model = QtGui.QSortFilterProxyModel(self)
+        self._filter_model = QtCore.QSortFilterProxyModel(self)
         self._filter_model.setSourceModel(self._source_model)
         super(TabSearchCompleter, self).setModel(self._filter_model)
         self.popup().setStyleSheet(STYLE_TABSEARCH_LIST)
         self._using_orig_model = True
 
 
-class TabSearchWidget(QtGui.QLineEdit):
+class TabSearchWidget(QtWidgets.QLineEdit):
 
     search_submitted = QtCore.Signal(str)
 
@@ -60,7 +60,7 @@ class TabSearchWidget(QtGui.QLineEdit):
         self._node_dict = node_dict or {}
 
         node_names = sorted(self._node_dict.keys())
-        self._model = QtGui.QStringListModel(node_names, self)
+        self._model = QtCore.QStringListModel(node_names, self)
 
         self._completer = TabSearchCompleter()
         self._completer.setModel(self._model)

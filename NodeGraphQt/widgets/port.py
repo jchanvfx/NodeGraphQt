@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 
 from .constants import (
     IN_PORT, OUT_PORT,
@@ -20,7 +20,7 @@ PORT_DATA = {
 }
 
 
-class PortItem(QtGui.QGraphicsItem):
+class PortItem(QtWidgets.QGraphicsItem):
     """
     Base Port Item.
     """

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide import QtGui
+from PySide2 import QtWidgets
 
 from ..base.node_vendor import NodeVendor
 from ..base.node_plugin import NodePlugin
@@ -8,14 +8,14 @@ from ..widgets.viewer import NodeViewer
 from ..interfaces.node import Backdrop
 
 
-class NodeGraphWidget(QtGui.QWidget):
+class NodeGraphWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(NodeGraphWidget, self).__init__(parent)
         self.setWindowTitle('Node Graph')
         self._scene = NodeScene()
         self._viewer = NodeViewer(self, self._scene)
-        layout = QtGui.QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._viewer)
 
@@ -51,7 +51,7 @@ class NodeGraphWidget(QtGui.QWidget):
 
         Args:
             name (str): menu name
-            menu (QtGui.QMenu): menu object
+            menu (QtWidgets.QMenu): menu object
         """
         if not self._viewer.get_menu(name):
             raise KeyError('name "{}" already exists.'.format(name))
@@ -62,7 +62,7 @@ class NodeGraphWidget(QtGui.QWidget):
         Returns the node graph menu.
 
         Returns:
-            QtGui.QMenu: menu from the name.
+            QtWidgets.QMenu: menu from the name.
         """
         return self._viewer.get_menu(name)
 

@@ -1,6 +1,6 @@
 import os
 import sys
-from PySide import QtGui, QtCore
+from PySide2 import QtCore, QtWidgets
 from NodeGraphQt import NodeGraphWidget, Node
 
 # import example nodes from the "nodes" package
@@ -49,7 +49,7 @@ NODES_TO_REGISTER = [MyNode,
 
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     # create node graph.
     graph = NodeGraph()

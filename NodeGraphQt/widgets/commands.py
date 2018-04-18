@@ -1,14 +1,14 @@
 #!/usr/bin/python
-from PySide import QtGui
+from PySide2 import QtWidgets
 
 
-class NodeDisabledCmd(QtGui.QUndoCommand):
+class NodeDisabledCmd(QtWidgets.QUndoCommand):
     """
     Node enabled/disabled.
     """
 
     def __init__(self, node):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.node = node
         self.mode = node.disabled
         mode = 'enabled' if self.mode else 'disabled'
@@ -21,13 +21,13 @@ class NodeDisabledCmd(QtGui.QUndoCommand):
         self.node.disabled = self.mode
 
 
-class NodeDeletedCmd(QtGui.QUndoCommand):
+class NodeDeletedCmd(QtWidgets.QUndoCommand):
     """
     Node deleted command.
     """
 
     def __init__(self, node, scene):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('deleted node')
         self.scene = scene
         self.node = node
@@ -50,13 +50,13 @@ class NodeDeletedCmd(QtGui.QUndoCommand):
         self.node.delete()
 
 
-class NodePositionChangedCmd(QtGui.QUndoCommand):
+class NodePositionChangedCmd(QtWidgets.QUndoCommand):
     """
     Node position changed.
     """
 
     def __init__(self, node):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('node position changed')
         self.node = node
         self.pos = node.pos
@@ -69,13 +69,13 @@ class NodePositionChangedCmd(QtGui.QUndoCommand):
         self.node.pos = self.pos
 
 
-class NodeConnectionCmd(QtGui.QUndoCommand):
+class NodeConnectionCmd(QtWidgets.QUndoCommand):
     """
     Node connect/disconnect.
     """
 
     def __init__(self, from_port, to_port, mode=None):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.mode = {'connect': 0, 'disconnect': 1}.get(mode)
         self.setText('{} node'.format(mode))
         self.from_port = from_port
@@ -94,14 +94,14 @@ class NodeConnectionCmd(QtGui.QUndoCommand):
             self.from_port.disconnect_from(self.to_port)
 
 
-class NodeConnectionChangedCmd(QtGui.QUndoCommand):
+class NodeConnectionChangedCmd(QtWidgets.QUndoCommand):
     """
     Changing a existing pipe "targeted port" to a non
     multi_connection "end port" with no existing connections.
     """
 
     def __init__(self, from_port, to_port, dettached_port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('connected changed')
         self.from_port = from_port
         self.to_port = to_port
@@ -116,14 +116,14 @@ class NodeConnectionChangedCmd(QtGui.QUndoCommand):
         self.from_port.connect_to(self.to_port)
 
 
-class NodeConnectionSwitchedCmd(QtGui.QUndoCommand):
+class NodeConnectionSwitchedCmd(QtWidgets.QUndoCommand):
     """
     Changing a existing pipe "targeted port" to a non
     multi_connection "end port" that has a existing connection.
     """
 
     def __init__(self, from_port, to_port, dis_port, dettached_port=None):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('connection switched')
         self.from_port = from_port
         self.to_port = to_port
