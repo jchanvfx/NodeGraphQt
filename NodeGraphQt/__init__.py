@@ -29,8 +29,12 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+__version__ = '0.0.1.a1'
+
+
 __author__ = 'Johnny Chan'
 __email__ = 'http://chantasticvfx.com/contact'
+__credits__ = []
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
