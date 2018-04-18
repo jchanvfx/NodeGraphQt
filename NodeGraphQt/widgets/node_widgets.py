@@ -10,10 +10,10 @@ class _NodeGroubBox(QtWidgets.QGroupBox):
     def __init__(self, label, parent=None):
         super(_NodeGroubBox, self).__init__(parent)
         margin = (0, 0, 0, 0)
-        padding_top = '10px'
+        padding_top = '14px'
         if label == '':
             margin = (0, 2, 0, 0)
-            padding_top = '4px'
+            padding_top = '2px'
         style = STYLE_QGROUPBOX.replace('$PADDING_TOP', padding_top)
         self.setMaximumSize(120, 50)
         self.setTitle(label)
@@ -182,7 +182,6 @@ class NodeCheckBox(NodeBaseWidget):
         self._cbox = QtWidgets.QCheckBox(text)
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
-        self._cbox.setMaximumHeight(18)
         self._cbox.setStyleSheet(STYLE_QCHECKBOX)
         font = self._cbox.font()
         font.setPointSize(11)

@@ -17,7 +17,7 @@ QGroupBox {
     margin-top: 1px;
     padding: 2px;
     padding-top: $PADDING_TOP;
-    font-size: 11px;
+    font-size: 10pt;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
