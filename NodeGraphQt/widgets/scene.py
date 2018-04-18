@@ -1,9 +1,9 @@
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 
 from .constants import VIEWER_BG_COLOR, VIEWER_GRID_OVERLAY, VIEWER_GRID_COLOR
 
 
-class NodeScene(QtGui.QGraphicsScene):
+class NodeScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent=None):
         super(NodeScene, self).__init__(parent)

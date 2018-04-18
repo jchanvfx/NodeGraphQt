@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from PySide import QtGui, QtCore
+from PySide2 import QtCore, QtWidgets
 
 from .constants import Z_VAL_NODE
 
 
-class AbstractNodeItem(QtGui.QGraphicsItem):
+class AbstractNodeItem(QtWidgets.QGraphicsItem):
     """
     The abstract base class of a node.
     """
