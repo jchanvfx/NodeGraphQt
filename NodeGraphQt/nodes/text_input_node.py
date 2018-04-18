@@ -6,7 +6,7 @@ class TextInputNode(Node):
     A example of a node with a added text input.
     """
 
-    NODE_NAME = 'input node'
+    NODE_NAME = 'Input text node'
 
     def __init__(self):
         super(TextInputNode, self).__init__()

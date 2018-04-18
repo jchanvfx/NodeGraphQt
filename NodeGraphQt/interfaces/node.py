@@ -1,29 +1,20 @@
 #!/usr/bin/python
 from .port import Port
 from ..base.node_plugin import NodePlugin
-from ..widgets.node_widgets import NodeBaseWidget, NodeComboBox, NodeLineEdit, NodeCheckBox
+from ..widgets.node_base import NodeItem
+from ..widgets.node_backdrop import BackdropNodeItem
+from ..widgets.node_widgets import NodeBaseWidget
 
 
 class Node(NodePlugin):
+    """
+    Base class of a Node
+    """
 
-    def name(self):
-        """
-        Name of the node.
-        
-        Returns:
-            str: name of the node.
-        """
-        return self.item.name
+    NODE_NAME = 'Base node'
 
-    def set_name(self, name=''):
-        """
-        Set the name of the node.
-        
-        Args:
-            name (str): name for the node.
-        """
-        self.item.name = name
-        self.NODE_NAME = self.item.name
+    def __init__(self):
+        super(Node, self).__init__(NodeItem())
 
     def set_icon(self, icon=None):
         """
@@ -33,67 +24,6 @@ class Node(NodePlugin):
             icon (str): path to the icon image. 
         """
         self.item.icon = icon
-
-    def color(self):
-        """
-        Returns the node color in (red, green, blue) value.
-        
-        Returns:
-            tuple: (r, g, b) from 0-255 range.
-        """
-        r, g, b, a = self.item.color
-        return r, g, b
-
-    def set_color(self, r=0, g=0, b=0):
-        """
-        Sets the color of the node in (red, green, blue) value.
-
-        Args:
-            r (int): red value 0-255 range.
-            g (int): green value 0-255 range.
-            b (int): blue value 0-255 range.
-
-        """
-        self.item.color = (r, g, b, 255)
-
-    def enable(self):
-        """
-        enables the node.
-        """
-        self.item.disabled = False
-
-    def disable(self):
-        """
-        disables the node.
-        """
-        self.item.disabled = True
-
-    def disabled(self):
-        """
-        returns weather the node is enabled or disabled.
-
-        Returns:
-            bool: true if the node is disabled.
-        """
-        return self.item.disabled
-
-    def selected(self):
-        """
-        Returns the selected state of the node.
-        
-        Returns:
-            bool: True if the node is selected.
-        """
-        return self.item.isSelected()
-
-    def set_selected(self, selected=True):
-        """
-        Set the node to be selected or not selected.
-
-        Args:
-            selected (bool): True to select the node.
-        """
-        self.item.setSelected(selected)
 
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
@@ -168,9 +98,9 @@ class Node(NodePlugin):
         """
         name = widget.name
         if not isinstance(widget, NodeBaseWidget):
-            raise Exception('Object must be a instance of a NodeBaseWidget')
+            raise TypeError('Object must be a instance of a NodeBaseWidget')
         if name in self.item.widgets.keys():
-            raise Exception('widget name "{}" already exists'.format(name))
+            raise KeyError('widget name "{}" already exists'.format(name))
         self.item.add_widget(widget)
 
     def get_widget(self, name):
@@ -184,7 +114,7 @@ class Node(NodePlugin):
             NodeWidget: node widget.
         """
         if not self.item.widgets.get(name):
-            raise Exception('node has no widget "{}"'.format(name))
+            raise KeyError('node has no widget "{}"'.format(name))
         return self.item.widgets.get(name)
 
     def all_widgets(self):
@@ -194,69 +124,7 @@ class Node(NodePlugin):
         Returns:
             dict: {widget_name : node_widget}
         """
-        return self.item.widgets.items()
-
-    def add_property(self, name, value):
-        """
-        adds new property to the node.
-
-        Args:
-            name (str): name of the attribute.
-            value (str, int, float): data
-        """
-        if not isinstance(value, (str, int, float)):
-            raise ValueError('value must be of type (String, Integer, Float)')
-        elif name in self.properties.keys():
-            raise ValueError('"{}" property already exists.'.format(name))
-        self.item.add_property(name, value)
-
-    def properties(self):
-        """
-        Returns all the node properties.
-
-        Returns:
-            dict: a dictionary of node properties.
-        """
-        return self.item.properties
-
-    def get_property(self, name):
-        """
-        Return the node property.
-
-        Args:
-            name (str): name of the property.
-
-        Returns:
-            str, int or float: value of the node property.
-        """
-        return self.item.get_property(name)
-
-    def set_property(self, name, value):
-        """
-        Set the value on the node property.
-
-        Args:
-            name (str): name of the property.
-            value: the new property value.
-        """
-        if not self.item.properties.get(name):
-            raise AttributeError('node has not property "{}"'.format(name))
-        if not isinstance(value, type(self.item.properties[name])):
-            te = 'property "{}" value type must be of {}'
-            raise TypeError(te.format(name, type(self.item.properties[name])))
-        self.item.set_property(name, value)
-
-    def has_property(self, name):
-        """
-        Check if node property exists.
-
-        Args:
-            name (str): name of the node.
-
-        Returns:
-            bool: true if property name exists in the Node.
-        """
-        return self.item.has_property(name)
+        return self.item.widgets
 
     def inputs(self):
         """
@@ -278,7 +146,7 @@ class Node(NodePlugin):
 
     def input(self, index):
         """
-        Return the input port with the matching name.
+        Return the input port with the matching index.
 
         Args:
             index (int): index of the input port.
@@ -301,7 +169,7 @@ class Node(NodePlugin):
 
     def output(self, index):
         """
-        Return the output port with the matching name.
+        Return the output port with the matching index.
 
         Args:
             index (int): index of the output port.
@@ -322,64 +190,67 @@ class Node(NodePlugin):
         src_port = Port(self, port=self.item.outputs[index])
         src_port.connect_to(port)
 
-    def set_x_pos(self, x=0.0):
+
+class Backdrop(NodePlugin):
+    """
+    Base class of a Backdrop.
+    """
+
+    NODE_NAME = 'Backdrop'
+
+    def __init__(self):
+        super(Backdrop, self).__init__(BackdropNodeItem())
+
+    def set_text(self, text):
         """
-        Set the node horizontal X position in the node graph.
+        Sets the text to be displayed in the backdrop node.
 
         Args:
-            x (float): node x position:
+            text (str): text string.
         """
-        y = self.item.pos().y()
-        self.set_pos(x, y)
+        self.item.text = text
 
-    def set_y_pos(self, y=0.0):
+    def text(self):
         """
-        Set the node horizontal Y position in the node graph.
+        returns the text on the backdrop node.
+
+        Returns:
+            str: text string.
+        """
+        return self.item.text
+
+    def width(self):
+        """
+        Returns the width of the backdrop.
+
+        Returns:
+            float: backdrop width.
+        """
+        return self.item.width
+
+    def set_width(self, width):
+        """
+        Sets the backdrop width.
 
         Args:
-            y (float): node x position:
+            width (float): width size.
         """
-        x = self.item.pos().x()
-        self.set_pos(x, y)
+        self.item.width = width
 
-    def set_pos(self, x=0.0, y=0.0):
+    def height(self):
         """
-        Set the node X and Y position in the node graph.
+        Returns the height of the backdrop.
+
+        Returns:
+            float: backdrop height.
+        """
+        return self.item.height
+
+    def set_height(self, height):
+        """
+        Sets the backdrop height.
+
         Args:
-            x (float): node X position.
-            y (float): node Y position.
+            height (float): width size.
         """
-        self.item.pos = (x, y)
-
-    def x_pos(self):
-        """
-        Get the node X position in the node graph.
-
-        Returns:
-            float: x position.
-        """
-        return self.item.pos[0]
-
-    def y_pos(self):
-        """
-        Get the node Y position in the node graph.
-
-        Returns:
-            float: y position.
-        """
-        return self.item.pos[1]
-
-    def pos(self):
-        """
-        Get the node XY position in the node graph.
-
-        Returns:
-            tuple(float, float): x and y position.
-        """
-        return self.item.pos
-
-    def delete(self):
-        """
-        Remove node from the Node Graph.
-        """
-        self.item.delete()
+        self.item.height = height

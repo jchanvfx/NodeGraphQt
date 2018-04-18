@@ -9,13 +9,13 @@ from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED)
-from .node import NodeItem
+from .node_abstract import AbstractNodeItem
 from .pipe import Pipe
 from .port import PortItem
 from .stylesheet import STYLE_QMENU
 from .tab_search import TabSearchWidget
 from .viewer_actions import setup_viewer_actions
-from ..base.node_manager import NodeManager
+from ..base.node_vendor import NodeVendor
 from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
@@ -44,14 +44,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._origin_pos = None
         self._previous_pos = QtCore.QPoint(self.width(), self.height())
         self._prev_selection = []
-        self._rubber_band = QtWidgets.QRubberBand(QtWidgets.QRubberBand.Rectangle, self)
+        self._rubber_band = QtWidgets.QRubberBand(
+            QtWidgets.QRubberBand.Rectangle, self
+        )
         self._undo_stack = QtWidgets.QUndoStack(self)
         self._context_menu = QtWidgets.QMenu(self, 'Node Graph')
         self._context_menu.setStyleSheet(STYLE_QMENU)
         self._sub_context_menus = OrderedDict()
         self._sub_context_menus['File'] = QtWidgets.QMenu(None, title='File')
         self._sub_context_menus['Edit'] = QtWidgets.QMenu(None, title='Edit')
-        self._search_widget = TabSearchWidget(self, NodeManager.names)
+        self._search_widget = TabSearchWidget(self, NodeVendor.names)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         self.acyclic = True
@@ -110,7 +112,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return items
 
     def _toggle_tab_search(self):
-        self._search_widget.set_nodes(NodeManager.names)
+        self._search_widget.set_nodes(NodeVendor.names)
 
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
@@ -165,26 +167,35 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._previous_pos = event.pos()
         self._prev_selection = self.selected_nodes()
 
+        # close tab search
+        if self._search_widget.isVisible():
+            self._toggle_tab_search()
+
+        if alt_modifier:
+            return
+
         items = self._items_near(self.mapToScene(event.pos()), None, 20, 20)
+        nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
+
+        # toggle extend node selection.
         if shift_modifier:
-            for item in items:
-                if isinstance(item, NodeItem):
-                    item.selected = not item.selected
+            for node in nodes:
+                node.selected = not node.selected
 
         for n in self.selected_nodes():
             n.prev_pos = n.pos
 
-        if (self.LMB_state and not alt_modifier) and not items:
-            rect = QtCore.QRect(self._previous_pos, QtCore.QSize()).normalized()
+        # show selection selection marquee
+        if self.LMB_state and not items:
+            rect = QtCore.QRect(self._previous_pos, QtCore.QSize())
+            rect = rect.normalized()
             map_rect = self.mapToScene(rect).boundingRect()
             self.scene().update(map_rect)
             self._rubber_band.setGeometry(rect)
             self._rubber_band.show()
+
         if not shift_modifier:
             super(NodeViewer, self).mousePressEvent(event)
-
-        if self._search_widget.isVisible():
-            self._toggle_tab_search()
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -194,6 +205,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
 
+        # hide selection selection marquee
         if self._rubber_band.isVisible():
             rect = self._rubber_band.rect()
             map_rect = self.mapToScene(rect).boundingRect()
@@ -261,34 +273,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
     #         event.accept()
 
     def get_unique_node_name(self, name):
-        regex = re.compile('([aA-zZ ]+)(?:(?: )*(\d+))')
-        match = regex.match(name.strip())
-        version = ''
-        if match:
-            name = match.group(1)
-            version = match.group(2) or ''
-        unique_name = '{}{}'.format(name, version).strip()
-        regex = re.compile('[aA-zZ ]+(\d+)')
-        names = []
-        versions = []
-        for node in self.all_nodes():
-            names.append(node.name)
-            match = regex.match(node.name)
-            if match:
-                versions.append(int(match.group(1)))
-        if unique_name not in names:
-            return unique_name
-        if versions:
-            for x in range(1, max(versions) + 2):
-                unique_name = '{} {}'.format(name, x)
-                if unique_name not in names:
-                    break
-        else:
-            for x in range(1, len(names) + 2):
-                unique_name = '{} {}'.format(name, x)
-                if unique_name not in names:
-                    break
-        return unique_name
+        name = ' '.join(name.split())
+        node_names = [n.name for n in self.all_nodes()]
+        if name not in node_names:
+            return name
+
+        regex = re.compile('[\w ]+(?: )*(\d+)')
+        search = regex.search(name)
+        if not search:
+            for x in range(1, len(node_names) + 1):
+                new_name = '{} {}'.format(name, x)
+                if new_name not in node_names:
+                    return new_name
+
+        version = search.group(1)
+        name = name[:len(version) * -1].strip()
+        for x in range(1, len(node_names) + 1):
+            new_name = '{} {}'.format(name, x)
+            if new_name not in node_names:
+                return new_name
 
     def start_connection(self, selected_port):
         """
@@ -423,7 +426,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     self._detached_port = port.connected_ports[0]
                     [p.delete() for p in port.connected_pipes]
                 return
-            node_items = self._items_near(pos, NodeItem, 3, 3)
+            node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
                 return
             pipe_items = self._items_near(pos, Pipe, 3, 3)
@@ -538,11 +541,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def question_dialog(self, title, text):
         dlg = QtWidgets.QMessageBox.question(
-            self, title, text, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+            self, title, text,
+            QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
     def message_dialog(self, text, title='node graph'):
-        QtWidgets.QMessageBox.information(self, title, text, QtWidgets.QMessageBox.Ok)
+        QtWidgets.QMessageBox.information(
+            self, title, text, QtWidgets.QMessageBox.Ok)
 
     def all_pipes(self):
         pipes = []
@@ -554,32 +559,33 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def all_nodes(self):
         nodes = []
         for item in self.scene().items():
-            if isinstance(item, NodeItem):
+            if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
         return nodes
 
     def selected_nodes(self):
         nodes = []
         for item in self.scene().selectedItems():
-            if isinstance(item, NodeItem):
+            if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
         return nodes
 
-    def add_node(self, node):
-        unique_name = self.get_unique_node_name(node.name)
-        node.name = unique_name
+    def add_node(self, node, pos=None):
+        pos = pos or (self._previous_pos.x(), self._previous_pos.y())
+        node.name = self.get_unique_node_name(node.name)
+        node.pre_init(self, pos)
         self.scene().addItem(node)
-        node.init_node()
+        node.post_init(self, pos)
 
     def delete_node(self, node):
-        if isinstance(node, NodeItem):
+        if isinstance(node, AbstractNodeItem):
             self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
             node.delete()
 
     def delete_selected_nodes(self):
         self._undo_stack.beginMacro('delete selected node(s)')
         for node in self.selected_nodes():
-            if isinstance(node, NodeItem):
+            if isinstance(node, AbstractNodeItem):
                 self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
                 node.delete()
         self._undo_stack.endMacro()
@@ -590,12 +596,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
         pipes = []
         for node in nodes:
-            for port in node.inputs:
+            n_inputs = node.inputs if hasattr(node, 'inputs') else []
+            n_outputs = node.outputs if hasattr(node, 'outputs') else []
+
+            for port in n_inputs:
                 for pipe in port.connected_pipes:
                     connected_node = pipe.output_port.node
                     if connected_node in nodes:
                         pipes.append(pipe)
-            for port in node.outputs:
+            for port in n_outputs:
                 for pipe in port.connected_pipes:
                     connected_node = pipe.input_port.node
                     if connected_node in nodes:
@@ -616,7 +625,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         loader = SessionLoader(self)
         loaded_nodes = loader.load_str(data)
         if not loaded_nodes:
-            return
+            return []
         group = self.scene().createItemGroup(loaded_nodes)
         group_rect = group.boundingRect()
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
@@ -630,6 +639,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         group.setPos(x, y)
         self.scene().destroyItemGroup(group)
         self._origin_pos = self._previous_pos
+        return loaded_nodes
 
     def paste_from_clipboard(self):
         clipboard = QtGui.QClipboard()
@@ -639,11 +649,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def duplicate_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
         if not nodes:
-            return
+            return []
         pipes = self.get_pipes_from_nodes(nodes)
         serializer = SessionSerializer(nodes, pipes)
         data = serializer.serialize_to_str()
-        self.load_nodes_data(data)
+        return self.load_nodes_data(data)
 
     def select_all_nodes(self):
         for node in self.all_nodes():

@@ -3,7 +3,8 @@ from PySide2 import QtGui, QtCore, QtWidgets
 
 from .constants import (
     IN_PORT, OUT_PORT,
-    PIPE_ACTIVE_COLOR,
+    PORT_HOVER_COLOR,
+    PORT_HOVER_BORDER_COLOR,
     PORT_ACTIVE_COLOR,
     PORT_ACTIVE_BORDER_COLOR,
     Z_VAL_PORT)
@@ -60,14 +61,16 @@ class PortItem(QtWidgets.QGraphicsItem):
         path.addEllipse(rect)
         painter.drawPath(path)
 
-        color = QtGui.QColor(*self.color)
-        border_color = QtGui.QColor(*self.border_color)
-
-        if self.connected_pipes:
+        if self._hovered:
+            color = QtGui.QColor(*PORT_HOVER_COLOR)
+            border_color = QtGui.QColor(*PORT_HOVER_BORDER_COLOR)
+        elif self.connected_pipes:
             color = QtGui.QColor(*PORT_ACTIVE_COLOR)
             border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
-        if self._hovered:
-            border_color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+        else:
+            color = QtGui.QColor(*self.color)
+            border_color = QtGui.QColor(*self.border_color)
+
         painter.setBrush(color)
         pen = QtGui.QPen(border_color, 1.5)
         painter.setPen(pen)

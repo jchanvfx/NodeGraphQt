@@ -33,8 +33,9 @@ class MyNode(Node):
 
     def __init__(self):
         super(MyNode, self).__init__()
-        self.set_name('my test node')
         self.set_color(81, 54, 88)
+        self.add_checkbox('cb_hello', '', 'Hello', True)
+        self.add_checkbox('cb_world', '', 'World', False)
         self.add_input('in')
         self.add_output('out')
 

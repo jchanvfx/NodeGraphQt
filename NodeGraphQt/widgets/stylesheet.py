@@ -38,8 +38,10 @@ QLineEdit {
 
 STYLE_TABSEARCH = '''
 QLineEdit {
-    border: 1px solid rgba(254, 207, 42, 255);
+    border: 2px solid rgba(90, 90, 100, 255);
     border-radius: 0px;
+    padding: 2px;
+    margin: 4px;
     color: rgba(255, 255, 255, 150);
     background: rgba(20, 20, 20, 255);
     selection-background-color: rgba(219, 158, 0, 255);

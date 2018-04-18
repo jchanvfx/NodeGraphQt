@@ -31,8 +31,13 @@ class NodeDeletedCmd(QtWidgets.QUndoCommand):
         self.setText('deleted node')
         self.scene = scene
         self.node = node
-        self.inputs = {p: p.connected_ports for p in self.node.inputs}
-        self.outputs = {p: p.connected_ports for p in self.node.outputs}
+        self.inputs = {}
+        self.outputs = {}
+
+        if hasattr(self.node, 'inputs'):
+            self.inputs = {p: p.connected_ports for p in self.node.inputs}
+        if hasattr(self.node, 'outputs'):
+            self.outputs = {p: p.connected_ports for p in self.node.outputs}
 
     def undo(self):
         self.scene.addItem(self.node)

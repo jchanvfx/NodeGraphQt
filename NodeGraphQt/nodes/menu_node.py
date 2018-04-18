@@ -5,7 +5,7 @@ class DropdownMenuNode(Node):
     """
     A example of a node with a added menu and a few input & outputs.
     """
-    NODE_NAME = 'menu node'
+    NODE_NAME = 'Menu node'
 
     def __init__(self):
         super(DropdownMenuNode, self).__init__()
