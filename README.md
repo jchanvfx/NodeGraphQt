@@ -1,9 +1,9 @@
 ### NodeGraph Widget
 
 This is a **_work in progress_** widget I'm working on in my spare time, as
-a learning exercise to write a custom node graph in PySide.
+a learning exercise to write a custom node graph in PySide2.
 
-NodeGraphQt is node graph widget that can be implemented and repurposed into applications that supports PySide.
+NodeGraphQt is node graph widget that can be implemented and repurposed into applications that supports PySide2.
 
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
