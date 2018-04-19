@@ -89,6 +89,7 @@ if __name__ == '__main__':
     # create a node with a combobox menu.
     menu_node = graph.create_node(
         'com.chantasticvfx.DropdownMenuNode', name='Menu Node')
+    menu_node.set_pos(279.0, -209.0)
 
     # add a node manually.
     my_node = MyNode()
