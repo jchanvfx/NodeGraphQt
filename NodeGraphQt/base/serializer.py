@@ -115,7 +115,7 @@ class SessionLoader(object):
                 }}
 
         Returns:
-            NographQt.Node: new node instance.
+            NodeGraphQt.Node: new node instance.
         """
         node_instance = NodeVendor.create_node_instance(node_data.get('type'))
         node_interface = node_instance()
