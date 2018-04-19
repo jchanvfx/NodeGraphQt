@@ -1,37 +1,32 @@
 #!/usr/bin/python
-from six import with_metaclass
 
 
-class NodeMeta(type):
-    """
-    base meta class type for a NodePlugin
-    """
+class classproperty(object):
 
-    def __init__(cls, name, bases, attrs):
-        """
-        Called when a Plugin derived class is imported
-        """
-        module = str(cls.__module__) + '.' + str(cls.__name__)
-        cls.NODE_TYPE = module
-        if cls.NODE_NAME is None:
-            cls.NODE_NAME = str(cls.__name__)
+    def __init__(self, f):
+        self.f = f
+
+    def __get__(self, instance, owner):
+        return self.f(owner)
 
 
-class NodePlugin(with_metaclass(NodeMeta, object)):
+class NodePlugin(object):
     """
     Base interface for a node object.
     """
+
+    __identifier__ = 'nodeGraphQt.nodes'
+
     NODE_NAME = None
-    NODE_TYPE = None
 
     def __init__(self, node=None):
         assert node, 'node cannot be None.'
         self._item = node
-        self._item.type = self.type()
+        self._item.type = self.type
         self._item.name = self.NODE_NAME
 
     def __repr__(self):
-        return '{}(\'{}\')'.format(self.NODE_TYPE, self.NODE_NAME)
+        return '{}(\'{}\')'.format(self.type, self.NODE_NAME)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -42,33 +37,42 @@ class NodePlugin(with_metaclass(NodeMeta, object)):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return hash((self.type(), self.id()))
+        return hash((self.type, self.id()))
+
+    @classproperty
+    def type(cls):
+        """
+        node type identifier followed by the class name.
+        eg. com.chantasticvfx.FooNode
+
+        Returns:
+            str: node type.
+        """
+        return cls.__identifier__ + '.' + cls.__name__
 
     @property
     def item(self):
+        """
+        QGraphicsItem used in the scene.
+
+        Returns:
+            QtWidgets.QGraphicsItem: node item.
+        """
         return self._item
 
     def set_item(self, item):
         self._item = item
         self.NODE_NAME = self._item.name
 
+    @property
     def id(self):
         """
         The node unique id.
 
         Returns:
-            str: UUID of the node.
+            str: unique id string.
         """
         return self.item.id
-
-    def type(self):
-        """
-        returns the node type.
-
-        Returns:
-            str: node type.
-        """
-        return self.NODE_TYPE
 
     def name(self):
         """

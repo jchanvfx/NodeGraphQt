@@ -10,17 +10,19 @@ class SessionSerializer(object):
         self.nodes = nodes or {}
         self.pipes = pipes or []
 
-    def serialize_node(self, node):
+    @staticmethod
+    def serialize_node(node):
         """
         Args:
             node (NodeItem): node item.
 
         Returns:
-            dict: serialized node.
+            dict: serialized node attributes.
         """
         return node.to_dict()
 
-    def serialize_nodes(self, nodes):
+    @staticmethod
+    def serialize_nodes(nodes):
         """
         Args:
             nodes (list[NodeItem]): list of nodes.
@@ -33,7 +35,8 @@ class SessionSerializer(object):
             serials.update(node.to_dict())
         return serials
 
-    def serialize_pipe_connection(self, pipe):
+    @staticmethod
+    def serialize_pipe_connection(pipe):
         """
         Args:
             pipe (Pipe): pipe item.
@@ -89,20 +92,37 @@ class SessionSerializer(object):
 class SessionLoader(object):
 
     def __init__(self, viewer):
-        self.viewer = viewer
+        self._viewer = viewer
 
-    def parse_node(self, node_id, node_data):
+    @property
+    def viewer(self):
+        return self._viewer
+
+    def parse_node(self, node_data):
         """
         Args:
-            node_id (str): node id (uuid string)
-            node_data (dict): node attributes.
+            node_data (dict): node attributes
+                eg.
+                {'0x106cf75a8': {
+                    'name': 'foo node',
+                    'color': (48, 58, 69, 255),
+                    'border_color': (85, 100, 100, 255),
+                    'text_color': (255, 255, 255, 180),
+                    'type': 'com.chantasticvfx.FooNode',
+                    'selected': False,
+                    'disabled': False,
+                    'pos': (0.0, 0.0)
+                }}
 
         Returns:
-            tuple: NodeItem, xy pos
+            NodeGraphQt.Node: new node instance.
         """
         node_instance = NodeVendor.create_node_instance(node_data.get('type'))
-        node = node_instance.item
+        node_interface = node_instance()
+        node = node_interface.item
+        self.viewer.add_node(node)
         node.from_dict(node_data)
+        return node_interface
 
     def parse_connection_ports(self, connections):
         """
@@ -118,16 +138,16 @@ class SessionLoader(object):
         for link in connections:
             if not (link.get('in') and link.get('out')):
                 continue
+            in_port = None
+            out_port = None
             for nid, input_name in link['in'].items():
                 node = nodes_dict.get(nid)
-                in_port = None
                 for port in node.inputs:
                     if port.name == input_name:
                         in_port = port
                         break
             for nid, output_name in link['out'].items():
                 node = nodes_dict.get(nid)
-                out_port = None
                 for port in node.outputs:
                     if port.name == output_name:
                         out_port = port

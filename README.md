@@ -43,6 +43,10 @@ from NodeGraphQt import NodeGraphWidget, Node
 class MyNode(Node):
     """example test node."""
 
+    # set unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set initial default node name.
     NODE_NAME = 'Test Node'
 
     def __init__(self):

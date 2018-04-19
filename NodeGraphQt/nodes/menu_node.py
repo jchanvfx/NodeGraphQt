@@ -5,6 +5,11 @@ class DropdownMenuNode(Node):
     """
     A example of a node with a added menu and a few input & outputs.
     """
+
+    # set unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set initial default node name.
     NODE_NAME = 'Menu node'
 
     def __init__(self):

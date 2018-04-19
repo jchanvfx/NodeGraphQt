@@ -29,6 +29,10 @@ class MyNode(Node):
     """
     This is a example test node.
     """
+    # set a unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set the initial default node name.
     NODE_NAME = 'my test node'
 
     def __init__(self):
@@ -45,7 +49,8 @@ NODES_TO_REGISTER = [MyNode,
                      menu_node.DropdownMenuNode,
                      simple_nodes.FooNode,
                      simple_nodes.BarNode,
-                     text_input_node.TextInputNode]
+                     text_input_node.TextInputNode
+                    ]
 
 
 if __name__ == '__main__':
@@ -63,13 +68,13 @@ if __name__ == '__main__':
 
     # create "FooNode" and change the color.
     foo_node = graph.create_node(
-        'NodeGraphQt.nodes.simple_nodes.FooNode', name='Foo Node')
+        'com.chantasticvfx.FooNode', name='Foo Node')
     foo_node.set_color(2, 67, 81)
     foo_node.set_pos(-487.0, 141.0)
 
     # create "BarNode" and change the node icon.
     bar_node = graph.create_node(
-        'NodeGraphQt.nodes.simple_nodes.BarNode', name='Bar Node')
+        'com.chantasticvfx.BarNode', name='Bar Node')
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example', 'example_icon.png')
     bar_node.set_icon(icon)
@@ -77,13 +82,14 @@ if __name__ == '__main__':
 
     # create "TextInputNode" node and disable it.
     text_node = graph.create_node(
-        'NodeGraphQt.nodes.text_input_node.TextInputNode', name='Text Node')
+        'com.chantasticvfx.TextInputNode', name='Text Node')
     text_node.disable()
     text_node.set_pos(-488.0, -158.0)
 
     # create a node with a combobox menu.
     menu_node = graph.create_node(
-        'NodeGraphQt.nodes.menu_node.DropdownMenuNode', name='Menu Node')
+        'com.chantasticvfx.DropdownMenuNode', name='Menu Node')
+    menu_node.set_pos(279.0, -209.0)
 
     # add a node manually.
     my_node = MyNode()
