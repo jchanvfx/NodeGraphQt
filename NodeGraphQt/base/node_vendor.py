@@ -23,16 +23,20 @@ class _NodeVendor(object):
     def nodes(self):
         return self._nodes
 
-    def create_node_instance(self, node_type):
+    def create_node_instance(self, node_type=None, alias=None):
         """
-        create node class by the node type.
+        create node class by the node type identifier or alias.
 
         Args:
-            node_type (str):
+            node_type (str): node type.
+            alias (str): alias name (optional).
 
         Returns:
             NodeGraphQt.Node: new node instance.
         """
+        if alias and self.aliases.get(alias):
+            node_type = self.aliases[alias]
+
         NodeInstance = self._nodes.get(node_type)
         if not NodeInstance:
             print('can\'t find node type {}'.format(node_type))
@@ -44,28 +48,32 @@ class _NodeVendor(object):
 
         Args:
             node (Node): node item
-            alias (str): custom alias name for the node type.
+            alias (str): custom alias for the node (optional).
         """
         if node is None:
             return
 
         name = node.NODE_NAME
-        node_type = node.NODE_TYPE
+        node_type = node.type
 
-        if node_type in self._nodes.keys():
+        if self._nodes.get(node_type):
             raise AssertionError(
-                'node type: {} already exists!'.format(node_type))
+                'Node: {} already exists! '
+                'Please specify a new plugin class name or identifier.'
+                .format(node_type))
         self._nodes[node_type] = node
 
         if self._names.get(node_type):
             raise AssertionError(
-                'node name: {} already exists!'.format(name))
+                'Node Name: {} already exists!'
+                'Please specify a new node name for node: {}'
+                .format(name, node_type))
         self._names[name] = node_type
 
         if alias:
             if self._aliases.get(alias):
                 raise AssertionError(
-                    'node alias: {} already exists!'.format(alias))
+                    'Node Alias: {} already taken!'.format(alias))
             self._aliases[alias] = node_type
 
 

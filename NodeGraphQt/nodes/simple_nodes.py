@@ -5,6 +5,11 @@ class FooNode(Node):
     """
     A node class with 2 inputs and 2 outputs.
     """
+
+    # set a unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set the initial default node name.
     NODE_NAME = 'Foo'
 
     def __init__(self):
@@ -26,6 +31,11 @@ class BarNode(Node):
     """
     A node class with 3 inputs and 3 outputs.
     """
+
+    # set unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set initial default node name.
     NODE_NAME = 'Bar'
 
     def __init__(self):
