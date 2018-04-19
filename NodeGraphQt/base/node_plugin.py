@@ -42,7 +42,8 @@ class NodePlugin(object):
     @classproperty
     def type(cls):
         """
-        returns the node type.
+        node type identifier followed by the class name.
+        eg. com.chantasticvfx.FooNode
 
         Returns:
             str: node type.
@@ -51,12 +52,19 @@ class NodePlugin(object):
 
     @property
     def item(self):
+        """
+        QGraphicsItem used in the scene.
+
+        Returns:
+            QtWidgets.QGraphicsItem: node item.
+        """
         return self._item
 
     def set_item(self, item):
         self._item = item
         self.NODE_NAME = self._item.name
 
+    @property
     def id(self):
         """
         The node unique id.

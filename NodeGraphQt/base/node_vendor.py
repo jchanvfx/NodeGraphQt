@@ -32,7 +32,7 @@ class _NodeVendor(object):
             alias (str): alias name (optional).
 
         Returns:
-            NodeGraphQt.Node: new node instance.
+            NodeGraphQt.Node: new node instance object.
         """
         if alias and self.aliases.get(alias):
             node_type = self.aliases[alias]
