@@ -271,9 +271,3 @@ class NodePlugin(object):
             tuple(float, float): x and y position.
         """
         return self.item.pos
-
-    def delete(self):
-        """
-        Remove node from the Node Graph.
-        """
-        self.item.delete()

@@ -149,11 +149,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
     def activate(self):
         self._active = True
-        pen = QtGui.QPen(
-            QtGui.QColor(
-                PIPE_ACTIVE_COLOR[0], PIPE_ACTIVE_COLOR[1],
-                PIPE_ACTIVE_COLOR[2], PIPE_ACTIVE_COLOR[3]), 2
-        )
+        pen = QtGui.QPen(QtGui.QColor(*PIPE_ACTIVE_COLOR), 2)
         pen.setStyle(PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
         self.setPen(pen)
 
@@ -162,11 +158,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
     def highlight(self):
         self._highlight = True
-        pen = QtGui.QPen(
-            QtGui.QColor(
-                PIPE_HIGHLIGHT_COLOR[0], PIPE_HIGHLIGHT_COLOR[1],
-                PIPE_HIGHLIGHT_COLOR[2], PIPE_HIGHLIGHT_COLOR[3]), 2
-        )
+        pen = QtGui.QPen(QtGui.QColor(*PIPE_HIGHLIGHT_COLOR), 2)
         pen.setStyle(PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
         self.setPen(pen)
 
@@ -176,12 +168,18 @@ class Pipe(QtWidgets.QGraphicsPathItem):
     def reset(self):
         self._active = False
         self._highlight = False
-        pen = QtGui.QPen(
-            QtGui.QColor(
-                self.color[0], self.color[1], self.color[2], self.color[3]), 2
-        )
+        pen = QtGui.QPen(QtGui.QColor(*self.color), 2)
         pen.setStyle(PIPE_STYLES.get(self.style))
         self.setPen(pen)
+
+    def set_connections(self, port1, port2):
+        ports = {
+            port1.port_type: port1, port2.port_type: port2
+        }
+        self.input_port = ports[IN_PORT]
+        self.output_port = ports[OUT_PORT]
+        ports[IN_PORT].add_pipe(self)
+        ports[OUT_PORT].add_pipe(self)
 
     @property
     def input_port(self):

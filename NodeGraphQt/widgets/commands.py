@@ -1,6 +1,9 @@
 #!/usr/bin/python
 from PySide2 import QtWidgets
 
+from .constants import IN_PORT, OUT_PORT
+from .pipe import Pipe
+
 
 class NodeDisabledCmd(QtWidgets.QUndoCommand):
     """
@@ -21,6 +24,24 @@ class NodeDisabledCmd(QtWidgets.QUndoCommand):
         self.node.disabled = self.mode
 
 
+class NodeCreatedCommand(QtWidgets.QUndoCommand):
+    """
+    Node created command.
+    """
+
+    def __init__(self, node, scene):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('created node')
+        self.scene = scene
+        self.node = node
+
+    def undo(self):
+        self.node.delete()
+
+    def redo(self):
+        self.scene.addItem(self.node)
+
+
 class NodeDeletedCmd(QtWidgets.QUndoCommand):
     """
     Node deleted command.
@@ -33,7 +54,6 @@ class NodeDeletedCmd(QtWidgets.QUndoCommand):
         self.node = node
         self.inputs = {}
         self.outputs = {}
-
         if hasattr(self.node, 'inputs'):
             self.inputs = {p: p.connected_ports for p in self.node.inputs}
         if hasattr(self.node, 'outputs'):
@@ -48,6 +68,90 @@ class NodeDeletedCmd(QtWidgets.QUndoCommand):
 
     def redo(self):
         self.node.delete()
+
+
+class NodeConnectedCmd(QtWidgets.QUndoCommand):
+    """
+    Port connected command.
+    """
+
+    def __init__(self, start_port, end_port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('connected node')
+        self.start_port = start_port
+        self.end_port = end_port
+        self.pipe = Pipe()
+        self.exist_end_port = None
+        self.exist_end_pipe = None
+
+        single_connection = not self.end_port.multi_connection
+        if single_connection and self.end_port.connected_ports:
+            self.exist_end_port = self.end_port.connected_ports[0]
+            self.exist_end_pipe = self.end_port.connected_pipes[0]
+
+    def establish_connection(self, start_port, end_port, pipe):
+        ports = {
+            start_port.port_type: start_port,
+            end_port.port_type: end_port
+        }
+        scene = start_port.scene()
+        scene.addItem(pipe)
+        pipe.set_connections(ports[IN_PORT], ports[OUT_PORT])
+        pipe.draw_path(pipe.input_port, pipe.output_port)
+
+    def undo(self):
+        self.pipe.delete()
+        if self.exist_end_port:
+            self.establish_connection(self.end_port,
+                                      self.exist_end_port,
+                                      self.exist_end_pipe)
+
+    def redo(self):
+        if self.end_port in self.start_port.connected_ports:
+            return
+
+        if self.exist_end_pipe:
+            self.exist_end_pipe.delete()
+        self.establish_connection(self.start_port,
+                                  self.end_port,
+                                  self.pipe)
+
+
+class NodeDisconnectedCmd(QtWidgets.QUndoCommand):
+    """
+    Node disconnected command.
+    """
+
+    def __init__(self, start_port, end_port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('disconnected node')
+        self.start_port = start_port
+        self.end_port = end_port
+        self.pipe = Pipe()
+
+    def establish_connection(self, start_port, end_port, pipe):
+        ports = {
+            start_port.port_type: start_port,
+            end_port.port_type: end_port
+        }
+        scene = start_port.scene()
+        scene.addItem(pipe)
+        pipe.set_connections(ports[IN_PORT], ports[OUT_PORT])
+        pipe.draw_path(pipe.input_port, pipe.output_port)
+
+    def undo(self):
+        self.establish_connection(self.start_port,
+                                  self.end_port,
+                                  self.pipe)
+
+    def redo(self):
+        if self.end_port not in self.start_port.connected_ports:
+            return
+        for pipe in self.start_port.connected_pipes:
+            if self.end_port in [pipe.input_port, pipe.output_port]:
+                self.pipe = pipe
+                self.pipe.delete()
+                break
 
 
 class NodePositionChangedCmd(QtWidgets.QUndoCommand):
@@ -67,77 +171,3 @@ class NodePositionChangedCmd(QtWidgets.QUndoCommand):
 
     def redo(self):
         self.node.pos = self.pos
-
-
-class NodeConnectionCmd(QtWidgets.QUndoCommand):
-    """
-    Node connect/disconnect.
-    """
-
-    def __init__(self, from_port, to_port, mode=None):
-        QtWidgets.QUndoCommand.__init__(self)
-        self.mode = {'connect': 0, 'disconnect': 1}.get(mode)
-        self.setText('{} node'.format(mode))
-        self.from_port = from_port
-        self.to_port = to_port
-
-    def undo(self):
-        if self.mode == 0:
-            self.from_port.disconnect_from(self.to_port)
-        else:
-            self.from_port.connect_to(self.to_port)
-
-    def redo(self):
-        if self.mode == 0:
-            self.to_port.connect_to(self.from_port)
-        else:
-            self.from_port.disconnect_from(self.to_port)
-
-
-class NodeConnectionChangedCmd(QtWidgets.QUndoCommand):
-    """
-    Changing a existing pipe "targeted port" to a non
-    multi_connection "end port" with no existing connections.
-    """
-
-    def __init__(self, from_port, to_port, dettached_port):
-        QtWidgets.QUndoCommand.__init__(self)
-        self.setText('connected changed')
-        self.from_port = from_port
-        self.to_port = to_port
-        self.dettached_port = dettached_port
-
-    def undo(self):
-        self.from_port.disconnect_from(self.to_port)
-        self.from_port.connect_to(self.dettached_port)
-
-    def redo(self):
-        self.from_port.disconnect_from(self.dettached_port)
-        self.from_port.connect_to(self.to_port)
-
-
-class NodeConnectionSwitchedCmd(QtWidgets.QUndoCommand):
-    """
-    Changing a existing pipe "targeted port" to a non
-    multi_connection "end port" that has a existing connection.
-    """
-
-    def __init__(self, from_port, to_port, dis_port, dettached_port=None):
-        QtWidgets.QUndoCommand.__init__(self)
-        self.setText('connection switched')
-        self.from_port = from_port
-        self.to_port = to_port
-        self.dis_port = dis_port
-        self.dettached_port = dettached_port
-
-    def undo(self):
-        if self.dettached_port:
-            self.from_port.connect_to(self.dettached_port)
-        self.dis_port.connect_to(self.to_port)
-        self.from_port.disconnect_from(self.to_port)
-
-    def redo(self):
-        if self.dettached_port:
-            self.from_port.disconnect_from(self.dettached_port)
-        self.dis_port.disconnect_from(self.to_port)
-        self.from_port.connect_to(self.to_port)

@@ -214,7 +214,8 @@ class NodeGraphWidget(QtWidgets.QWidget):
             node (NodeGraphQt.interface.Node): node object.
         """
         assert isinstance(node, NodePlugin), 'node must be a Node instance.'
-        node.delete()
+        item = node.item
+        self._viewer.delete_node(item)
 
     def all_nodes(self):
         """
