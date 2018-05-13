@@ -195,7 +195,7 @@ class NodeItem(AbstractNodeItem):
     def _tooltip_disable(self, state):
         tooltip = '<b>{}</b>'.format(self._properties['name'])
         if state:
-            tooltip += ' <font color="red"><b>(NODE DISABLED)</b></font>'
+            tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
         tooltip += '<br/>{}<br/>'.format(self._properties['type'])
         self.setToolTip(tooltip)
 
