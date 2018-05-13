@@ -216,9 +216,9 @@ class SessionLoader(object):
 
         return nodes
 
-    def load_str(self, str_data):
+    def load_string_data(self, str_data):
         """
-        load nodes from string.
+        load nodes from JSON string.
 
         Args:
             str_data (str): node data string.

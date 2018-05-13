@@ -101,7 +101,7 @@ class PortItem(QtWidgets.QGraphicsItem):
 
     def viewer_start_connection(self):
         viewer = self.scene().viewer()
-        viewer.start_connection(self)
+        viewer.start_live_connection(self)
 
     def redraw_connected_pipes(self):
         if not self.connected_pipes:
@@ -180,6 +180,8 @@ class PortItem(QtWidgets.QGraphicsItem):
 
     @multi_connection.setter
     def multi_connection(self, mode=False):
+        conn_type = 'multi' if mode else 'single'
+        self.setToolTip('{}: ({})'.format(self.name, conn_type))
         self.setData(PORT_DATA['multi_connection'], mode)
 
     @property
@@ -204,10 +206,3 @@ class PortItem(QtWidgets.QGraphicsItem):
         if self.scene():
             viewer = self.scene().viewer()
             viewer.connect_ports(self, port)
-
-    def disconnect_from(self, port):
-        port_funcs = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
-        for pipe in self.connected_pipes:
-            from_port = getattr(pipe, port_funcs[self.port_type])
-            if port == from_port:
-                pipe.delete()

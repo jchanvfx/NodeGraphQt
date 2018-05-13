@@ -79,9 +79,3 @@ class Pipe(PipePlugin):
         """
         port = self.item.output_port
         return Port(port.node, port)
-
-    def delete(self):
-        """
-        remove the connection pipe from the scene.
-        """
-        self.item.delete()

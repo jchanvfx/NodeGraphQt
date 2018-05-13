@@ -39,7 +39,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
         self._detached_port = None
-        self._active_pipe = None
         self._start_port = None
         self._origin_pos = None
         self._previous_pos = QtCore.QPoint(self.width(), self.height())
@@ -70,6 +69,24 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def __repr__(self):
         return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)
+
+    def _acyclic_check(self, start_port, end_port):
+        """
+        validate the connection doesn't loop itself.
+        """
+        start_node = start_port.node
+        check_nodes = [end_port.node]
+        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        while check_nodes:
+            check_node = check_nodes.pop(0)
+            for check_port in getattr(check_node, io_types[end_port.port_type]):
+                if check_port.connected_ports:
+                    for port in check_port.connected_ports:
+                        if port.node != start_node:
+                            check_nodes.append(port.node)
+                        else:
+                            return False
+        return True
 
     def _set_viewer_zoom(self, value):
         max_zoom = ZOOM_LIMIT
@@ -213,11 +230,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.scene().update(map_rect)
 
         # push undo move command.
-        self._undo_stack.beginMacro('move nodes')
-        for node in self.selected_nodes():
-            if node.pos != node.prev_pos:
+        nodes_pos_changed = [
+            n for n in self.selected_nodes() if n.pos != n.prev_pos
+        ]
+        if nodes_pos_changed:
+            self._undo_stack.beginMacro('move nodes')
+            for node in nodes_pos_changed:
                 self._undo_stack.push(NodePositionChangedCmd(node))
-        self._undo_stack.endMacro()
+            self._undo_stack.endMacro()
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
@@ -293,7 +313,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if new_name not in node_names:
                 return new_name
 
-    def start_connection(self, selected_port):
+    def start_live_connection(self, selected_port):
         """
         create new pipe for the connection.
         """
@@ -317,71 +337,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._live_pipe.delete()
             self._live_pipe = None
         self._start_port = None
-
-    def validate_acyclic_connection(self, start_port, end_port):
-        """
-        validate the connection doesn't loop itself.
-        """
-        start_node = start_port.node
-        check_nodes = [end_port.node]
-        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
-        while check_nodes:
-            check_node = check_nodes.pop(0)
-            for check_port in getattr(check_node, io_types[end_port.port_type]):
-                if check_port.connected_ports:
-                    for port in check_port.connected_ports:
-                        if port.node != start_node:
-                            check_nodes.append(port.node)
-                        else:
-                            return False
-        return True
-
-    def validate_connection(self, start_port, end_port):
-        """
-        validate "end_port" connection check.
-        """
-        if not end_port:
-            return False
-        if end_port == start_port:
-            return False
-        if end_port.port_type == start_port.port_type:
-            return False
-        if end_port.node == start_port.node:
-            return False
-        if start_port in end_port.connected_ports:
-            return False
-        if self.acyclic:
-            if not self.validate_acyclic_connection(start_port, end_port):
-                return False
-        return True
-
-    def make_pipe_connection(self, start_port, end_port):
-        """
-        establishes a pipe connection.
-        """
-        # remove existing pipes from "end_port" if multi connection is disabled.
-        port = None
-        if not end_port.multi_connection:
-            for pipe in end_port.connected_pipes:
-                port_funcs = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
-                port = getattr(pipe, port_funcs[end_port.port_type])
-                pipe.delete()
-
-        # make new pipe connection.
-        ports = {
-            start_port.port_type: start_port,
-            end_port.port_type: end_port
-        }
-        pipe = Pipe()
-        self.scene().addItem(pipe)
-        pipe.input_port = ports[IN_PORT]
-        pipe.output_port = ports[OUT_PORT]
-        ports[IN_PORT].add_pipe(pipe)
-        ports[OUT_PORT].add_pipe(pipe)
-        pipe.draw_path(ports[OUT_PORT], ports[IN_PORT])
-
-        # return port that was connected to the existing pipe.
-        return port
 
     def sceneMouseMoveEvent(self, event):
         """
@@ -424,28 +379,34 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 port = port_items[0]
                 if not port.multi_connection and port.connected_ports:
                     self._detached_port = port.connected_ports[0]
+                self.start_live_connection(port)
+                if not port.multi_connection:
                     [p.delete() for p in port.connected_pipes]
                 return
+
             node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
                 return
+
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
-                self._active_pipe = pipe_items[0]
-                active_ports = [self._active_pipe.input_port,
-                                self._active_pipe.output_port]
-                port = self._active_pipe.port_from_pos(pos, True)
-                active_ports.pop(active_ports.index(port))
-                self._detached_port = active_ports[0]
-                if not shift_modifier or not port.multi_connection:
-                    self._active_pipe.delete()
-                self.start_connection(port)
+                pipe = pipe_items[0]
+                attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+                from_port = pipe.port_from_pos(pos, True)
+                to_port = getattr(pipe, attr[from_port.port_type])
+                if not from_port.multi_connection and from_port.connected_ports:
+                    self._detached_port = from_port.connected_ports[0]
+                elif not to_port.multi_connection:
+                    self._detached_port = to_port
+
+                self.start_live_connection(from_port)
                 self._live_pipe.draw_path(self._start_port, None, pos)
+                pipe.delete()
 
     def sceneMouseReleaseEvent(self, event):
         """
         triggered mouse release event for the scene.
-         - verify to make a the connection Pipe().
+         - verify to make a the connection Pipe.
         
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
@@ -457,75 +418,70 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not self._live_pipe:
             return
 
-        end_port = None
-        dis_port = None
-
         # find the end port.
+        end_port = None
         for item in self.scene().items(event.scenePos()):
             if isinstance(item, PortItem):
                 end_port = item
                 break
 
-        # validate connection check.
-        if self.validate_connection(self._start_port, end_port):
-            # make the connection.
-            dis_port = self.make_pipe_connection(self._start_port, end_port)
-
-        if self._detached_port == end_port:
+        if end_port is None:
+            if self._detached_port:
+                self._undo_stack.push(
+                    NodeDisconnectedCmd(self._start_port, self._detached_port)
+                )
+            self._detached_port = None
             self.end_live_connection()
-            if self._active_pipe and self._active_pipe.active():
-                self._active_pipe.reset()
-                self._active_pipe = None
             return
 
-        # register undo command.
-        if self._detached_port:
-            if end_port is None:
-                self._undo_stack.push(
-                    NodeConnectionCmd(self._start_port,
-                                      self._detached_port,
-                                      'disconnect'))
-            elif not end_port.multi_connection:  # single connection
-                if dis_port:
-                    self._undo_stack.push(
-                        NodeConnectionSwitchedCmd(self._start_port,
-                                                  end_port,
-                                                  dis_port,
-                                                  self._detached_port))
-                else:
-                    self._undo_stack.push(
-                        NodeConnectionChangedCmd(self._start_port,
-                                                 end_port,
-                                                 self._detached_port))
-            else:
-                self._undo_stack.push(
-                    NodeConnectionChangedCmd(self._start_port,
-                                             end_port,
-                                             self._detached_port))
-
+        # restore connection check.
+        restore_connection = [
+            # if same port type.
+            end_port.port_type == self._start_port.port_type,
+            # if connection to itself.
+            end_port.node == self._start_port.node,
+            # if end port is the start port.
+            end_port == self._start_port,
+            # if detached port is the end port.
+            self._detached_port == end_port
+        ]
+        if any(restore_connection):
+            pipe = Pipe()
+            self.scene().addItem(pipe)
+            to_port = self._detached_port or end_port
+            pipe.set_connections(self._start_port, to_port)
+            pipe.draw_path(pipe.input_port, pipe.output_port)
             self._detached_port = None
-        else:
-            if not end_port.multi_connection:  # single connection
-                if dis_port:
-                    self._undo_stack.push(
-                        NodeConnectionSwitchedCmd(self._start_port,
-                                                  end_port,
-                                                  dis_port))
-                else:
-                    self._undo_stack.push(NodeConnectionCmd(self._start_port,
-                                                            end_port,
-                                                            'connect'))
-            else:
-                self._undo_stack.push(NodeConnectionCmd(self._start_port,
-                                                        end_port,
-                                                        'connect'))
+            self.end_live_connection()
+            return
 
-        # end the live connection.
+        # register as disconnected if not acyclic.
+        if self.acyclic and not self._acyclic_check(self._start_port, end_port):
+            if self._detached_port:
+                self._undo_stack.push(
+                    NodeDisconnectedCmd(self._start_port, self._detached_port)
+                )
+            self._detached_port = None
+            self.end_live_connection()
+            return
+
+        # make connection.
+        cmds = []
+        if not end_port.multi_connection and end_port.connected_ports:
+            dettached_end = end_port.connected_ports[0]
+            cmds.append(NodeDisconnectedCmd(end_port, dettached_end))
+        if self._detached_port:
+            cmds.append(
+                NodeDisconnectedCmd(self._start_port, self._detached_port)
+            )
+        cmds.append(NodeConnectedCmd(self._start_port, end_port))
+
+        self._undo_stack.beginMacro('connected node')
+        [self._undo_stack.push(c) for c in cmds]
+        self._undo_stack.endMacro()
+
+        self._detached_port = None
         self.end_live_connection()
-
-        if self._active_pipe and self._active_pipe.active():
-            self._active_pipe.reset()
-            self._active_pipe = None
 
     def context_menu(self):
         return self._context_menu
@@ -574,20 +530,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = pos or (self._previous_pos.x(), self._previous_pos.y())
         node.name = self.get_unique_node_name(node.name)
         node.pre_init(self, pos)
-        self.scene().addItem(node)
+        self._undo_stack.push(NodeCreatedCommand(node, self.scene()))
         node.post_init(self, pos)
 
     def delete_node(self, node):
         if isinstance(node, AbstractNodeItem):
             self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
-            node.delete()
 
     def delete_selected_nodes(self):
         self._undo_stack.beginMacro('delete selected node(s)')
         for node in self.selected_nodes():
             if isinstance(node, AbstractNodeItem):
                 self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
-                node.delete()
         self._undo_stack.endMacro()
 
     def get_pipes_from_nodes(self, nodes=None):
@@ -623,9 +577,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def load_nodes_data(self, data):
         self.clear_selection()
         loader = SessionLoader(self)
-        loaded_nodes = loader.load_str(data)
+        loaded_nodes = loader.load_string_data(data)
         if not loaded_nodes:
             return []
+
+        # offset loaded nodes.
         group = self.scene().createItemGroup(loaded_nodes)
         group_rect = group.boundingRect()
         prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
@@ -644,7 +600,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def paste_from_clipboard(self):
         clipboard = QtGui.QClipboard()
         data_string = clipboard.text()
+        self._undo_stack.beginMacro('pasted nodes')
         self.load_nodes_data(data_string)
+        self._undo_stack.endMacro()
 
     def duplicate_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
@@ -653,7 +611,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pipes = self.get_pipes_from_nodes(nodes)
         serializer = SessionSerializer(nodes, pipes)
         data = serializer.serialize_to_str()
-        return self.load_nodes_data(data)
+        self._undo_stack.beginMacro('duplicated nodes')
+        new_nodes = self.load_nodes_data(data)
+        self._undo_stack.endMacro()
+        return new_nodes
 
     def select_all_nodes(self):
         for node in self.all_nodes():
@@ -674,9 +635,36 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def connect_ports(self, from_port, to_port):
         if not isinstance(from_port, PortItem):
             return
-        if self.validate_connection(from_port, to_port):
-            self.make_pipe_connection(from_port, to_port)
-            self.end_live_connection()
+
+        pre_conn_port = None
+        if not from_port.multi_connection and from_port.connected_ports:
+            pre_conn_port = from_port.connected_ports[0]
+
+        if not to_port:
+            if pre_conn_port:
+                self._undo_stack.push(
+                    NodeDisconnectedCmd(from_port, pre_conn_port)
+                )
+            return
+
+        if self.acyclic and not self._acyclic_check(from_port, to_port):
+            if pre_conn_port:
+                self._undo_stack.push(
+                    NodeDisconnectedCmd(self._start_port, pre_conn_port)
+                )
+                return
+
+        cmds = []
+        if not to_port.multi_connection and to_port.connected_ports:
+            dettached_port = to_port.connected_ports[0]
+            cmds.append(NodeDisconnectedCmd(to_port, dettached_port))
+        if pre_conn_port:
+            cmds.append(NodeDisconnectedCmd(from_port, pre_conn_port))
+        cmds.append(NodeConnectedCmd(from_port, to_port))
+
+        self._undo_stack.beginMacro('connected node')
+        [self._undo_stack.push(c) for c in cmds]
+        self._undo_stack.endMacro()
 
     def current_loaded_file(self):
         return self._current_file

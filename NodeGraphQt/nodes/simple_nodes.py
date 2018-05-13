@@ -49,4 +49,4 @@ class BarNode(Node):
         # create node outputs
         self.add_output('apples', multi_output=False)
         self.add_output('bananas', multi_output=False)
-        self.add_output('orange', display_name=False)
+        self.add_output('orange')
