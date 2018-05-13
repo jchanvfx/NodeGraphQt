@@ -10,6 +10,7 @@ from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_STRAIGHT,
                         PIPE_STYLE_DASHED)
 from .node_abstract import AbstractNodeItem
+from .node_backdrop import BackdropNodeItem
 from .pipe import Pipe
 from .port import PortItem
 from .stylesheet import STYLE_QMENU
@@ -386,7 +387,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
-                return
+                if not isinstance(node_items[0], BackdropNodeItem):
+                    return
 
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:

@@ -28,7 +28,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         self.setPos(x, y)
 
     def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._size, self._size)
+        return QtCore.QRectF(0.5, 0.5, self._size, self._size)
 
     def itemChange(self, change, value):
         if change == self.ItemPositionChange:
@@ -54,7 +54,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
             color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         else:
             color = QtGui.QColor(*item.color)
-            color.setAlpha(60)
+            color = color.darker(110)
         path = QtGui.QPainterPath()
         path.moveTo(rect.topRight())
         path.lineTo(rect.bottomRight())
