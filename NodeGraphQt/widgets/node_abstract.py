@@ -38,9 +38,13 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     def boundingRect(self):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
+    def mousePressEvent(self, event):
+        self._properties['selected'] = True
+        super(AbstractNodeItem, self).mousePressEvent(event)
+
     def setSelected(self, selected):
-        super(AbstractNodeItem, self).setSelected(selected)
         self._properties['selected'] = selected
+        super(AbstractNodeItem, self).setSelected(selected)
 
     def pre_init(self, viewer, pos=None):
         """
