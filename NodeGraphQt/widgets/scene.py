@@ -42,16 +42,12 @@ class NodeScene(QtWidgets.QGraphicsScene):
         grid_size = 20
         zoom = self.viewer().get_zoom()
         color = QtGui.QColor(*self.grid_color)
-        grid_alpha = 8
         if zoom > -4:
-            color.setAlpha(grid_alpha)
             pen = QtGui.QPen(color, 0.65)
             self._draw_grid(painter, rect, pen, grid_size)
-        if zoom < 0:
-            color.setAlpha(grid_alpha * (0.05 * (zoom * -1) + 1.0))
-        else:
-            color.setAlpha(grid_alpha * 1.1)
-        pen = QtGui.QPen(color, 0.5)
+
+        color = color.darker(150)
+        pen = QtGui.QPen(color, 0.65)
         self._draw_grid(painter, rect, pen, grid_size * 8)
         painter.restore()
 
@@ -103,5 +99,5 @@ class NodeScene(QtWidgets.QGraphicsScene):
         return self._bg_color
 
     @background_color.setter
-    def background_color(self, color=(0, 0, 0, 0)):
+    def background_color(self, color=(0, 0, 0)):
         self._bg_color = color
