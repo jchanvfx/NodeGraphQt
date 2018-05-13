@@ -81,13 +81,6 @@ class NodeConnectedCmd(QtWidgets.QUndoCommand):
         self.start_port = start_port
         self.end_port = end_port
         self.pipe = Pipe()
-        self.exist_end_port = None
-        self.exist_end_pipe = None
-
-        single_connection = not self.end_port.multi_connection
-        if single_connection and self.end_port.connected_ports:
-            self.exist_end_port = self.end_port.connected_ports[0]
-            self.exist_end_pipe = self.end_port.connected_pipes[0]
 
     def establish_connection(self, start_port, end_port, pipe):
         ports = {
@@ -101,17 +94,10 @@ class NodeConnectedCmd(QtWidgets.QUndoCommand):
 
     def undo(self):
         self.pipe.delete()
-        if self.exist_end_port:
-            self.establish_connection(self.end_port,
-                                      self.exist_end_port,
-                                      self.exist_end_pipe)
 
     def redo(self):
         if self.end_port in self.start_port.connected_ports:
             return
-
-        if self.exist_end_pipe:
-            self.exist_end_pipe.delete()
         self.establish_connection(self.start_port,
                                   self.end_port,
                                   self.pipe)

@@ -313,17 +313,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if new_name not in node_names:
                 return new_name
 
-    def start_connection(self, selected_port):
+    def start_live_connection(self, selected_port):
         """
         create new pipe for the connection.
         """
         if not selected_port:
             return
-
-        pre_connected_port = None
-        if not selected_port.multi_connection and selected_port.connected_ports:
-            pre_connected_port = selected_port.connected_ports[0]
-
         self._start_port = selected_port
         self._live_pipe = Pipe()
         self._live_pipe.activate()
@@ -333,7 +328,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif self._start_port == OUT_PORT:
             self._live_pipe.output_port = self._start_port
         self.scene().addItem(self._live_pipe)
-        return pre_connected_port
 
     def end_live_connection(self):
         """
@@ -383,7 +377,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             port_items = self._items_near(pos, PortItem, 5, 5)
             if port_items:
                 port = port_items[0]
-                self._detached_port = self.start_connection(port)
+                if not port.multi_connection and port.connected_ports:
+                    self._detached_port = port.connected_ports[0]
+                self.start_live_connection(port)
                 if not port.multi_connection:
                     [p.delete() for p in port.connected_pipes]
                 return
@@ -395,8 +391,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
                 pipe = pipe_items[0]
+                attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
                 from_port = pipe.port_from_pos(pos, True)
-                self._detached_port = self.start_connection(from_port)
+                to_port = getattr(pipe, attr[from_port.port_type])
+                if not from_port.multi_connection and from_port.connected_ports:
+                    self._detached_port = from_port.connected_ports[0]
+                elif not to_port.multi_connection:
+                    self._detached_port = to_port
+
+                self.start_live_connection(from_port)
                 self._live_pipe.draw_path(self._start_port, None, pos)
                 pipe.delete()
 
@@ -452,34 +455,30 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.end_live_connection()
             return
 
-        # make new connection.
-        if self.acyclic:
-            acyclic_check = self._acyclic_check(self._start_port, end_port)
-            if self._detached_port and not acyclic_check:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(self._start_port, self._detached_port)
-                )
-            else:
-                self._undo_stack.beginMacro('connected node')
-                if self._detached_port:
-                    self._undo_stack.push(
-                        NodeDisconnectedCmd(self._start_port,
-                                            self._detached_port)
-                    )
-                self._undo_stack.push(
-                    NodeConnectedCmd(self._start_port, end_port)
-                )
-                self._undo_stack.endMacro()
-        else:
-            self._undo_stack.beginMacro('connected node')
+        # register as disconnected if not acyclic.
+        if self.acyclic and not self._acyclic_check(self._start_port, end_port):
             if self._detached_port:
                 self._undo_stack.push(
                     NodeDisconnectedCmd(self._start_port, self._detached_port)
                 )
-            self._undo_stack.push(
-                NodeConnectedCmd(self._start_port, end_port)
+            self._detached_port = None
+            self.end_live_connection()
+            return
+
+        # make connection.
+        cmds = []
+        if not end_port.multi_connection and end_port.connected_ports:
+            dettached_end = end_port.connected_ports[0]
+            cmds.append(NodeDisconnectedCmd(end_port, dettached_end))
+        if self._detached_port:
+            cmds.append(
+                NodeDisconnectedCmd(self._start_port, self._detached_port)
             )
-            self._undo_stack.endMacro()
+        cmds.append(NodeConnectedCmd(self._start_port, end_port))
+
+        self._undo_stack.beginMacro('connected node')
+        [self._undo_stack.push(c) for c in cmds]
+        self._undo_stack.endMacro()
 
         self._detached_port = None
         self.end_live_connection()
@@ -648,28 +647,24 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 )
             return
 
-        if self.acyclic:
-            acyclic_check = self._acyclic_check(from_port, to_port)
-            if pre_conn_port and not acyclic_check:
+        if self.acyclic and not self._acyclic_check(from_port, to_port):
+            if pre_conn_port:
                 self._undo_stack.push(
                     NodeDisconnectedCmd(self._start_port, pre_conn_port)
                 )
-            else:
-                self._undo_stack.beginMacro('connected node')
-                if pre_conn_port:
-                    self._undo_stack.push(
-                        NodeDisconnectedCmd(from_port, pre_conn_port)
-                    )
-                self._undo_stack.push(NodeConnectedCmd(from_port, to_port))
-                self._undo_stack.endMacro()
-        else:
-            self._undo_stack.beginMacro('connected node')
-            if pre_conn_port:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(from_port, pre_conn_port)
-                )
-            self._undo_stack.push(NodeConnectedCmd(from_port, to_port))
-            self._undo_stack.endMacro()
+                return
+
+        cmds = []
+        if not to_port.multi_connection and to_port.connected_ports:
+            dettached_port = to_port.connected_ports[0]
+            cmds.append(NodeDisconnectedCmd(to_port, dettached_port))
+        if pre_conn_port:
+            cmds.append(NodeDisconnectedCmd(from_port, pre_conn_port))
+        cmds.append(NodeConnectedCmd(from_port, to_port))
+
+        self._undo_stack.beginMacro('connected node')
+        [self._undo_stack.push(c) for c in cmds]
+        self._undo_stack.endMacro()
 
     def current_loaded_file(self):
         return self._current_file

@@ -101,7 +101,7 @@ class PortItem(QtWidgets.QGraphicsItem):
 
     def viewer_start_connection(self):
         viewer = self.scene().viewer()
-        viewer.start_connection(self)
+        viewer.start_live_connection(self)
 
     def redraw_connected_pipes(self):
         if not self.connected_pipes:
