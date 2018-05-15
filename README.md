@@ -1,7 +1,7 @@
 ### NodeGraph Widget
 
 This is a **_work in progress_** widget I'm working on in my spare time, as
-a learning exercise to write a custom node graph in PySide2.
+a learning exercise to write a custom node graph with PySide2.
 
 NodeGraphQt is node graph widget that can be implemented and repurposed into applications that supports PySide2.
 
@@ -15,22 +15,26 @@ Fit to screen : `F`
 #### Shortcuts:
 ![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
 
-Select all nodes : `Ctrl + A`<br/>
-Delete selected node(s) : `Backspace` or `Delete`<br/>
-Copy node(s): `Ctrl + C` _(copy to clipboard)_<br/>
-Paste node(s): `Ctrl + V` _(paste from clipboard)_<br/>
-Duplicate node(s) : `Alt + C`<br/>
-Save node layout : `Ctrl + S`<br/>
-Open node layout : `Ctrl + O` <br/>
-undo action: `Ctrl+z` or `Command+z` _(OSX)_ <br/>
-Redo action: `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ <br/>
-Toggle (enable/disable) node: `d`
+| action                  | hotkey                                      |
+| ----------------------- |:-------------------------------------------:|
+| Select all nodes        | `Ctrl + A`                                  |
+| Delete selected node(s) | `Backspace` or `Delete`                     |
+| Copy node(s)            | `Ctrl + C` _(copy to clipboard)_            |
+| Paste node(s)           | `Ctrl + V` _(paste from clipboard)_         |
+| Duplicate node(s)       | `Alt + C`                                   |
+| Save node layout        | `Ctrl + S`                                  |
+| Open node layout        | `Ctrl + O`                                  |
+| Undo action             | `Ctrl+z` or `Command+z` _(OSX)_             |
+| Redo action             | `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ |
+| (Enable/Disable) node   | `d`                                         |
 
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
 
-Show node search: `Tab` <br/>
-Create node from selected: `enter`
+| action                    | hotkey    |
+| ------------------------- |:---------:|
+| Show node search          | `Tab`     |
+| Create node from selected | `enter`   |
 
 #### Example Snippet
 
