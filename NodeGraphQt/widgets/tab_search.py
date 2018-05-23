@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets, QtGui
 
 from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST
 
@@ -24,7 +24,7 @@ class TabSearchCompleter(QtWidgets.QCompleter):
         self.updateModel()
         if self._filter_model.rowCount() == 0:
             self._using_orig_model = False
-            self._filter_model.setSourceModel(QtCore.QStringListModel([path]))
+            self._filter_model.setSourceModel(QtGui.QStringListModel([path]))
             return [path]
         return []
 
@@ -60,7 +60,7 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         self._node_dict = node_dict or {}
 
         node_names = sorted(self._node_dict.keys())
-        self._model = QtCore.QStringListModel(node_names, self)
+        self._model = QtGui.QStringListModel(node_names, self)
 
         self._completer = TabSearchCompleter()
         self._completer.setModel(self._model)
