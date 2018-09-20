@@ -462,9 +462,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._detached_port == end_port
         ])
         if restore_connection:
-            to_port = self._detached_port or end_port
-            self.establish_connection(self._start_port, to_port)
-            self._detached_port = None
+            if self._detached_port:
+                to_port = self._detached_port or end_port
+                self.establish_connection(self._start_port, to_port)
+                self._detached_port = None
             self.end_live_connection()
             return
 
