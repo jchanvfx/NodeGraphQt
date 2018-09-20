@@ -4,17 +4,17 @@ from PySide2.QtWidgets import (QGraphicsItem,
                                QGraphicsPixmapItem,
                                QGraphicsTextItem)
 
-from .constants import (IN_PORT, OUT_PORT,
-                        NODE_ICON_SIZE, ICON_NODE_BASE,
-                        NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                        Z_VAL_NODE, Z_VAL_NODE_WIDGET)
+from NodeGraphQt.widgets.constants import (IN_PORT, OUT_PORT,
+                                           NODE_ICON_SIZE, ICON_NODE_BASE,
+                                           NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
+                                           Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 
-from .graphics_widgets import (NodeBaseWidget,
-                               NodeComboBox,
-                               NodeLineEdit,
-                               NodeCheckBox)
-from .node_abstract import AbstractNodeItem
-from .port import PortItem
+from NodeGraphQt.widgets.graphics_widgets import (NodeBaseWidget,
+                                                  NodeComboBox,
+                                                  NodeLineEdit,
+                                                  NodeCheckBox)
+from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
+from NodeGraphQt.widgets.port import PortItem
 
 
 class XDisabledItem(QGraphicsItem):

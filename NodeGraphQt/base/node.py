@@ -1,9 +1,9 @@
 #!/usr/bin/python
-from base.port import Port
-from widgets.node_backdrop import BackdropNodeItem
-from widgets.node_base import NodeItem
-from .commands import PropertyChangedCmd
-from .model import NodeModel
+from NodeGraphQt.base.commands import PropertyChangedCmd
+from NodeGraphQt.base.model import NodeModel
+from NodeGraphQt.base.port import Port
+from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
+from NodeGraphQt.widgets.node_base import NodeItem
 
 
 class classproperty(object):

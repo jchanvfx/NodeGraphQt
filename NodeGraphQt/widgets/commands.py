@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from PySide2 import QtWidgets
 
-from .constants import IN_PORT, OUT_PORT
-from .pipe import Pipe
+from NodeGraphQt.widgets.constants import IN_PORT, OUT_PORT
+from NodeGraphQt.widgets.pipe import Pipe
 
 
 class NodePropertyChangedCmd(QtWidgets.QUndoCommand):

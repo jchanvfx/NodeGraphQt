@@ -2,7 +2,7 @@
 from PySide2.QtCore import QRectF
 from PySide2.QtWidgets import QGraphicsItem
 
-from .constants import Z_VAL_NODE
+from NodeGraphQt.widgets.constants import Z_VAL_NODE
 
 
 class AbstractNodeItem(QGraphicsItem):

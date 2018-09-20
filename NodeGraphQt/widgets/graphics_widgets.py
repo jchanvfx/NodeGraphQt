@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from PySide2 import QtCore, QtWidgets
 
-from .constants import Z_VAL_NODE_WIDGET
-from .stylesheet import *
+from NodeGraphQt.widgets.constants import Z_VAL_NODE_WIDGET
+from NodeGraphQt.widgets.stylesheet import *
 
 
 class _NodeGroubBox(QtWidgets.QGroupBox):

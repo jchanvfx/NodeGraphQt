@@ -1,6 +1,6 @@
 import sys
 
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtWidgets
 
 from NodeGraphQt import NodeGraph, Node
 # import example nodes from the "example_nodes" package

@@ -7,15 +7,15 @@ from PySide2 import QtCore
 from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QUndoStack, QAction
 
-from widgets.viewer import NodeViewer
-from .actions import setup_actions
-from .commands import (NodeAddedCmd,
-                       NodeRemovedCmd,
-                       NodeMovedCmd,
-                       PortConnectedCmd)
-from .model import NodeGraphModel
-from .node import NodeObject
-from .vendor import NodeVendor
+from NodeGraphQt.base.actions import setup_actions
+from NodeGraphQt.base.commands import (NodeAddedCmd,
+                                       NodeRemovedCmd,
+                                       NodeMovedCmd,
+                                       PortConnectedCmd)
+from NodeGraphQt.base.model import NodeGraphModel
+from NodeGraphQt.base.node import NodeObject
+from NodeGraphQt.base.vendor import NodeVendor
+from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
