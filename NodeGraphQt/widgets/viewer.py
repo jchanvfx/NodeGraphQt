@@ -1,10 +1,8 @@
 #!/usr/bin/python
-import re
-from collections import OrderedDict
+from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
-from .commands import *
 from .constants import (IN_PORT, OUT_PORT,
                         PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -13,30 +11,72 @@ from .node_abstract import AbstractNodeItem
 from .node_backdrop import BackdropNodeItem
 from .pipe import Pipe
 from .port import PortItem
+from .scene import NodeScene
 from .stylesheet import STYLE_QMENU
 from .tab_search import TabSearchWidget
-from .viewer_actions import setup_viewer_actions
-from ..base.node_vendor import NodeVendor
-from ..base.serializer import SessionSerializer, SessionLoader
 
 ZOOM_LIMIT = 12
 
 
+class ContextMenu(object):
+
+    def __init__(self, view, menu):
+        self.__view = view
+        self.__menu = menu
+
+    @property
+    def _menu_obj(self):
+        return self.__menu
+
+    def get_menu(self, name):
+        ctx_menu = self.__view.context_menu()
+        root_menu = ctx_menu._menu_obj
+        for action in root_menu.actions():
+            if action.text() != name:
+                continue
+            menu = action.menu()
+            return ContextMenu(self.__view, menu)
+
+    def add_action(self, action):
+        action.setShortcutVisibleInContextMenu(True)
+        self.__menu.addAction(action)
+
+    def add_menu(self, name):
+        menu = QtWidgets.QMenu(None, title=name)
+        menu.setStyleSheet(STYLE_QMENU)
+        self.__menu.addMenu(menu)
+        return ContextMenu(self.__view, menu)
+
+    def add_command(self, name, func=None, shortcut=None):
+        action = QtWidgets.QAction(name, self.__view)
+        action.setShortcutVisibleInContextMenu(True)
+        if shortcut:
+            action.setShortcut(shortcut)
+        if func:
+            action.triggered.connect(func)
+        self.__menu.addAction(action, shortcut=shortcut)
+
+    def add_separator(self):
+        self.__menu.addSeparator()
+
+
 class NodeViewer(QtWidgets.QGraphicsView):
 
+    moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
+    connection_changed = QtCore.Signal(list, list)
 
-    def __init__(self, parent=None, scene=None):
-        super(NodeViewer, self).__init__(scene, parent)
+    def __init__(self, parent=None):
+        super(NodeViewer, self).__init__(parent)
+        scene_area = 8000.0
+        scene_pos = (scene_area / 2) * -1
+        self.setScene(NodeScene(self))
+        self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
-        scene_area = 8000.0
-        scene_pos = (scene_area / 2) * -1
-        self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
         self._zoom = 0
-        self._current_file = None
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
         self._detached_port = None
@@ -44,24 +84,28 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._origin_pos = None
         self._previous_pos = QtCore.QPoint(self.width(), self.height())
         self._prev_selection = []
+        self._node_positions = {}
         self._rubber_band = QtWidgets.QRubberBand(
             QtWidgets.QRubberBand.Rectangle, self
         )
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._context_menu = QtWidgets.QMenu(self, 'Node Graph')
+        self._context_menu = QtWidgets.QMenu('nodes', self)
         self._context_menu.setStyleSheet(STYLE_QMENU)
-        self._sub_context_menus = OrderedDict()
-        self._sub_context_menus['File'] = QtWidgets.QMenu(None, title='File')
-        self._sub_context_menus['Edit'] = QtWidgets.QMenu(None, title='Edit')
-        self._search_widget = TabSearchWidget(self, NodeVendor.names)
+        self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
+
+        # workaround fix on OSX shortcuts from the non-native menu actions
+        # don't seem to trigger so we create a dummy menu bar.
+        if platform == 'darwin':
+            menu_bar = QtWidgets.QMenuBar(self)
+            menu_bar.setNativeMenuBar(False)
+            menu_bar.resize(0, 0)
+            menu_bar.addMenu(self._context_menu)
 
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
-
-        self._initialize_viewer()
 
     def __str__(self):
         return '{}.{}()'.format(
@@ -71,23 +115,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)
 
-    def _acyclic_check(self, start_port, end_port):
-        """
-        validate the connection doesn't loop itself.
-        """
-        start_node = start_port.node
-        check_nodes = [end_port.node]
-        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
-        while check_nodes:
-            check_node = check_nodes.pop(0)
-            for check_port in getattr(check_node, io_types[end_port.port_type]):
-                if check_port.connected_ports:
-                    for port in check_port.connected_ports:
-                        if port.node != start_node:
-                            check_nodes.append(port.node)
-                        else:
-                            return False
-        return True
+    # --- private methods ---
 
     def _set_viewer_zoom(self, value):
         max_zoom = ZOOM_LIMIT
@@ -129,41 +157,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 items.append(item)
         return items
 
-    def _toggle_tab_search(self):
-        self._search_widget.set_nodes(NodeVendor.names)
-
-        pos = self._previous_pos
-        state = not self._search_widget.isVisible()
-        if state:
-            rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
-                                    pos.y() - rect.height() / 2)
-            self._search_widget.move(new_pos)
-            self._search_widget.setVisible(state)
-            rect = self.mapToScene(rect).boundingRect()
-            self.scene().update(rect)
-        else:
-            self._search_widget.setVisible(state)
-            self.clearFocus()
-
     def _on_search_submitted(self, node_type):
         pos = self.mapToScene(self._previous_pos)
         self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
-    def _initialize_viewer(self):
-        # setup menus
-        for menu in self._sub_context_menus.values():
-            menu.setStyleSheet(STYLE_QMENU)
-            self._context_menu.addMenu(menu)
-
-        # populate context menu
-        setup_viewer_actions(self)
-
-        # add in the tab search.
-        tab = QtWidgets.QAction('search nodes', self)
-        tab.setShortcut('tab')
-        tab.triggered.connect(self._toggle_tab_search)
-        self.addAction(tab)
+    # --- re-implemented methods ---
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -187,7 +185,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # close tab search
         if self._search_widget.isVisible():
-            self._toggle_tab_search()
+            self.tab_search_toggle()
 
         if alt_modifier:
             return
@@ -200,8 +198,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             for node in nodes:
                 node.selected = not node.selected
 
-        for n in self.selected_nodes():
-            n.prev_pos = n.pos
+        # update the recorded node positions.
+        self._node_positions.update({n: n.pos for n in self.selected_nodes()})
 
         # show selection selection marquee
         if self.LMB_state and not items:
@@ -223,22 +221,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
 
-        # hide selection selection marquee
+        # hide selection marquee
         if self._rubber_band.isVisible():
             rect = self._rubber_band.rect()
             map_rect = self.mapToScene(rect).boundingRect()
             self._rubber_band.hide()
             self.scene().update(map_rect)
 
-        # push undo move command.
-        nodes_pos_changed = [
-            n for n in self.selected_nodes() if n.pos != n.prev_pos
-        ]
-        if nodes_pos_changed:
-            self._undo_stack.beginMacro('move nodes')
-            for node in nodes_pos_changed:
-                self._undo_stack.push(NodePositionChangedCmd(node))
-            self._undo_stack.endMacro()
+        # find position changed nodes and emit signal.
+        moved_nodes = {
+            n: pos for n, pos in self._node_positions.items() if n.pos != pos}
+        if moved_nodes:
+            self.moved_nodes.emit(moved_nodes)
+
+        # reset recorded positions.
+        self._node_positions = {}
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
@@ -293,26 +290,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     #     if event.mimeData().hasFormat('component/name'):
     #         event.accept()
 
-    def get_unique_node_name(self, name):
-        name = ' '.join(name.split())
-        node_names = [n.name for n in self.all_nodes()]
-        if name not in node_names:
-            return name
-
-        regex = re.compile('[\w ]+(?: )*(\d+)')
-        search = regex.search(name)
-        if not search:
-            for x in range(1, len(node_names) + 1):
-                new_name = '{} {}'.format(name, x)
-                if new_name not in node_names:
-                    return new_name
-
-        version = search.group(1)
-        name = name[:len(version) * -1].strip()
-        for x in range(1, len(node_names) + 1):
-            new_name = '{} {}'.format(name, x)
-            if new_name not in node_names:
-                return new_name
+    # --- viewer methods ---
 
     def start_live_connection(self, selected_port):
         """
@@ -339,6 +317,34 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._live_pipe = None
         self._start_port = None
 
+    def establish_connection(self, start_port, end_port):
+        """
+        establish a new pipe connection.
+        """
+        pipe = Pipe()
+        self.scene().addItem(pipe)
+        pipe.set_connections(start_port, end_port)
+        pipe.draw_path(pipe.input_port, pipe.output_port)
+
+    def acyclic_check(self, start_port, end_port):
+        """
+        validate the connection doesn't loop itself and
+        returns True if port connection is valid.
+        """
+        start_node = start_port.node
+        check_nodes = [end_port.node]
+        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        while check_nodes:
+            check_node = check_nodes.pop(0)
+            for check_port in getattr(check_node, io_types[end_port.port_type]):
+                if check_port.connected_ports:
+                    for port in check_port.connected_ports:
+                        if port.node != start_node:
+                            check_nodes.append(port.node)
+                        else:
+                            return False
+        return True
+
     def sceneMouseMoveEvent(self, event):
         """
         triggered mouse move event for the scene.
@@ -357,7 +363,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def sceneMousePressEvent(self, event):
         """
-        triggered mouse press event for the scene.
+        triggered mouse press event for the scene (takes priority over viewer).
          - detect selected pipe and start connection.
          - remap Shift and Ctrl modifier.
 
@@ -387,6 +393,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
+                # record the node positions at selection time.
+                for n in node_items:
+                    self._node_positions[n] = n.pos
+
                 if not isinstance(node_items[0], BackdropNodeItem):
                     return
 
@@ -427,17 +437,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 end_port = item
                 break
 
+        connected = []
+        disconnected = []
+
+        # if port disconnected from existing pipe.
         if end_port is None:
             if self._detached_port:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(self._start_port, self._detached_port)
-                )
+                disconnected.append((self._start_port, self._detached_port))
+                self.connection_changed.emit(disconnected, connected)
+
             self._detached_port = None
             self.end_live_connection()
             return
 
         # restore connection check.
-        restore_connection = [
+        restore_connection = any([
             # if same port type.
             end_port.port_type == self._start_port.port_type,
             # if connection to itself.
@@ -446,56 +460,60 @@ class NodeViewer(QtWidgets.QGraphicsView):
             end_port == self._start_port,
             # if detached port is the end port.
             self._detached_port == end_port
-        ]
-        if any(restore_connection):
-            pipe = Pipe()
-            self.scene().addItem(pipe)
+        ])
+        if restore_connection:
             to_port = self._detached_port or end_port
-            pipe.set_connections(self._start_port, to_port)
-            pipe.draw_path(pipe.input_port, pipe.output_port)
+            self.establish_connection(self._start_port, to_port)
             self._detached_port = None
             self.end_live_connection()
             return
 
         # register as disconnected if not acyclic.
-        if self.acyclic and not self._acyclic_check(self._start_port, end_port):
+        if self.acyclic and not self.acyclic_check(self._start_port, end_port):
             if self._detached_port:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(self._start_port, self._detached_port)
-                )
+                disconnected.append((self._start_port, self._detached_port))
+
+            self.connection_changed.emit(disconnected, connected)
+
             self._detached_port = None
             self.end_live_connection()
             return
 
         # make connection.
-        cmds = []
         if not end_port.multi_connection and end_port.connected_ports:
             dettached_end = end_port.connected_ports[0]
-            cmds.append(NodeDisconnectedCmd(end_port, dettached_end))
-        if self._detached_port:
-            cmds.append(
-                NodeDisconnectedCmd(self._start_port, self._detached_port)
-            )
-        cmds.append(NodeConnectedCmd(self._start_port, end_port))
+            disconnected.append((end_port, dettached_end))
 
-        self._undo_stack.beginMacro('connected node')
-        [self._undo_stack.push(c) for c in cmds]
-        self._undo_stack.endMacro()
+        if self._detached_port:
+            disconnected.append((self._start_port, self._detached_port))
+
+        connected.append((self._start_port, end_port))
+
+        self.connection_changed.emit(disconnected, connected)
 
         self._detached_port = None
         self.end_live_connection()
 
+    def tab_search_set_nodes(self, nodes):
+        self._search_widget.set_nodes(nodes)
+
+    def tab_search_toggle(self):
+        pos = self._previous_pos
+        state = not self._search_widget.isVisible()
+        if state:
+            rect = self._search_widget.rect()
+            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
+                                    pos.y() - rect.height() / 2)
+            self._search_widget.move(new_pos)
+            self._search_widget.setVisible(state)
+            rect = self.mapToScene(rect).boundingRect()
+            self.scene().update(rect)
+        else:
+            self._search_widget.setVisible(state)
+            self.clearFocus()
+
     def context_menu(self):
-        return self._context_menu
-
-    def add_menu(self, name, menu):
-        menu.setStyleSheet(STYLE_QMENU)
-        self._sub_context_menus[name] = menu
-        self._context_menu.addMenu(self._sub_context_menus[name])
-        return self._sub_context_menus[name]
-
-    def get_menu(self, name):
-        return self._sub_context_menus.get(name)
+        return ContextMenu(self, self._context_menu)
 
     def question_dialog(self, title, text):
         dlg = QtWidgets.QMessageBox.question(
@@ -530,21 +548,28 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def add_node(self, node, pos=None):
         pos = pos or (self._previous_pos.x(), self._previous_pos.y())
-        node.name = self.get_unique_node_name(node.name)
         node.pre_init(self, pos)
-        self._undo_stack.push(NodeCreatedCommand(node, self.scene()))
+        self.scene().addItem(node)
         node.post_init(self, pos)
 
-    def delete_node(self, node):
+    def remove_node(self, node):
         if isinstance(node, AbstractNodeItem):
-            self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
+            node.delete()
 
-    def delete_selected_nodes(self):
-        self._undo_stack.beginMacro('delete selected node(s)')
-        for node in self.selected_nodes():
-            if isinstance(node, AbstractNodeItem):
-                self._undo_stack.push(NodeDeletedCmd(node, self.scene()))
-        self._undo_stack.endMacro()
+    def move_nodes(self, nodes, pos=None, offset=None):
+        group = self.scene().createItemGroup(nodes)
+        group_rect = group.boundingRect()
+        if pos:
+            x, y = pos
+        else:
+            pos = self.mapToScene(self._previous_pos)
+            x = pos.x() - group_rect.center().x()
+            y = pos.y() - group_rect.center().y()
+        if offset:
+            x += offset[0]
+            y += offset[1]
+        group.setPos(x, y)
+        self.scene().destroyItemGroup(group)
 
     def get_pipes_from_nodes(self, nodes=None):
         nodes = nodes or self.selected_nodes()
@@ -566,137 +591,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     if connected_node in nodes:
                         pipes.append(pipe)
         return pipes
-
-    def copy_to_clipboard(self, nodes=None):
-        nodes = nodes or self.selected_nodes()
-        if not nodes:
-            return
-        pipes = self.get_pipes_from_nodes(nodes)
-        serializer = SessionSerializer(nodes, pipes)
-        clipboard = QtGui.QClipboard()
-        clipboard.setText(serializer.serialize_to_str())
-
-    def load_nodes_data(self, data):
-        self.clear_selection()
-        loader = SessionLoader(self)
-        loaded_nodes = loader.load_string_data(data)
-        if not loaded_nodes:
-            return []
-
-        # offset loaded nodes.
-        group = self.scene().createItemGroup(loaded_nodes)
-        group_rect = group.boundingRect()
-        prev_x, prev_y = self._previous_pos.x(), self._previous_pos.y()
-        orig_x, orig_y = self._origin_pos.x(), self._origin_pos.y()
-        if (prev_x, prev_y) != (orig_x, orig_y):
-            pos = self.mapToScene(self._previous_pos)
-            x = pos.x() - group_rect.center().x()
-            y = pos.y() - group_rect.center().y()
-        else:
-            x, y = group.pos().x() + 50, group.pos().y() + 50
-        group.setPos(x, y)
-        self.scene().destroyItemGroup(group)
-        self._origin_pos = self._previous_pos
-        return loaded_nodes
-
-    def paste_from_clipboard(self):
-        clipboard = QtGui.QClipboard()
-        data_string = clipboard.text()
-        self._undo_stack.beginMacro('pasted nodes')
-        self.load_nodes_data(data_string)
-        self._undo_stack.endMacro()
-
-    def duplicate_nodes(self, nodes=None):
-        nodes = nodes or self.selected_nodes()
-        if not nodes:
-            return []
-        pipes = self.get_pipes_from_nodes(nodes)
-        serializer = SessionSerializer(nodes, pipes)
-        data = serializer.serialize_to_str()
-        self._undo_stack.beginMacro('duplicated nodes')
-        new_nodes = self.load_nodes_data(data)
-        self._undo_stack.endMacro()
-        return new_nodes
-
-    def select_all_nodes(self):
-        for node in self.all_nodes():
-            node.selected = True
-
-    def toggle_nodes_disability(self):
-        nodes = self.selected_nodes()
-        state = not nodes[0].disabled if nodes else False
-        for node in nodes:
-            node.disabled = state
-
-        name = 'enable' if state else 'disable'
-        self._undo_stack.beginMacro('{} node(s)'.format(name))
-        for node in nodes:
-            self._undo_stack.push(NodeDisabledCmd(node))
-        self._undo_stack.endMacro()
-
-    def connect_ports(self, from_port, to_port):
-        if not isinstance(from_port, PortItem):
-            return
-
-        pre_conn_port = None
-        if not from_port.multi_connection and from_port.connected_ports:
-            pre_conn_port = from_port.connected_ports[0]
-
-        if not to_port:
-            if pre_conn_port:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(from_port, pre_conn_port)
-                )
-            return
-
-        if self.acyclic and not self._acyclic_check(from_port, to_port):
-            if pre_conn_port:
-                self._undo_stack.push(
-                    NodeDisconnectedCmd(self._start_port, pre_conn_port)
-                )
-                return
-
-        cmds = []
-        if not to_port.multi_connection and to_port.connected_ports:
-            dettached_port = to_port.connected_ports[0]
-            cmds.append(NodeDisconnectedCmd(to_port, dettached_port))
-        if pre_conn_port:
-            cmds.append(NodeDisconnectedCmd(from_port, pre_conn_port))
-        cmds.append(NodeConnectedCmd(from_port, to_port))
-
-        self._undo_stack.beginMacro('connected node')
-        [self._undo_stack.push(c) for c in cmds]
-        self._undo_stack.endMacro()
-
-    def current_loaded_file(self):
-        return self._current_file
-
-    def save(self, path=None, load=True):
-        try:
-            serializer = SessionSerializer(self.all_nodes(), self.all_pipes())
-            serializer.write(path)
-            if load:
-                self._current_file = path
-        except Exception as e:
-            print(e)
-
-    def load(self, file_path):
-        self.clear()
-        loader = SessionLoader(self)
-        loader.load(file_path)
-        self._current_file = file_path
-
-    def clear(self):
-        for node in self.all_nodes():
-            node.delete()
-        for item in self.scene().items():
-            self.scene().removeItem(item)
-        self._current_file = None
-
-    def clear_selection(self):
-        for node in self.selected_nodes():
-            node.selected = False
-        # self.scene().clearSelection()
 
     def center_selection(self, nodes=None):
         if not nodes:
@@ -722,6 +616,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
+    def get_zoom(self):
+        return self._zoom
+
     def set_zoom(self, zoom=0):
         if zoom == 0:
             self.fitInView()
@@ -732,12 +629,3 @@ class NodeViewer(QtWidgets.QGraphicsView):
             zoom = -12
         zoom_factor = float(zoom) * 0.1
         self._set_viewer_zoom(zoom_factor)
-
-    def get_zoom(self):
-        return self._zoom
-
-    def zoom_in(self):
-        self.set_zoom(1)
-
-    def zoom_out(self):
-        self.set_zoom(-1)

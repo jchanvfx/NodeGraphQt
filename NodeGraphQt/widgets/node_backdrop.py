@@ -1,5 +1,6 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore, QtWidgets
+from PySide2 import QtGui, QtCore
+from PySide2.QtWidgets import QGraphicsItem
 
 from .constants import Z_VAL_PIPE, NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR
 from .node_abstract import AbstractNodeItem
@@ -7,7 +8,7 @@ from .pipe import Pipe
 from .port import PortItem
 
 
-class BackdropSizer(QtWidgets.QGraphicsItem):
+class BackdropSizer(QGraphicsItem):
 
     def __init__(self, parent=None, size=6.0):
         super(BackdropSizer, self).__init__(parent)

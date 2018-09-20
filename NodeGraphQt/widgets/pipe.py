@@ -174,7 +174,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
     def set_connections(self, port1, port2):
         ports = {
-            port1.port_type: port1, port2.port_type: port2
+            port1.port_type: port1,
+            port2.port_type: port2
         }
         self.input_port = ports[IN_PORT]
         self.output_port = ports[OUT_PORT]
@@ -226,3 +227,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.output_port.remove_pipe(self)
         if self.scene():
             self.scene().removeItem(self)
+        # TODO: not sure if we need this...?
+        del self
+

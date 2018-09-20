@@ -38,7 +38,7 @@ QLineEdit {
 
 STYLE_TABSEARCH = '''
 QLineEdit {
-    border: 2px solid rgba(90, 90, 100, 255);
+    border: 2px solid rgba(170, 140, 0, 255);
     border-radius: 0px;
     padding: 2px;
     margin: 4px;
@@ -52,9 +52,9 @@ QLineEdit {
 STYLE_TABSEARCH_LIST = '''
 QListView {
     background-color: rgba(40, 40, 40, 255);
-    border: 1px rgba(40, 40, 40, 255);
+    border: 1px solid rgba(20, 20, 20, 255);
     color: rgba(255, 255, 255, 150);
-    padding-top: 5px;
+    padding-top: 4px;
 }
 '''
 
