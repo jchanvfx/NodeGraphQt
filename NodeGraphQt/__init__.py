@@ -29,7 +29,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '0.0.1.a1'
+__version__ = '0.0.1.b1'
 
 
 __author__ = 'Johnny Chan'
@@ -38,7 +38,6 @@ __credits__ = []
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
-from .interfaces.graph import NodeGraphWidget
-from .interfaces.node import Node, Backdrop
-from .interfaces.port import Port, Pipe
-from .widgets.node_widgets import NodeBaseWidget
+from .base.graph import NodeGraph
+from .base.node import Node, Backdrop
+from .base.port import Port

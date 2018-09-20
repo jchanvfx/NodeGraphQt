@@ -3,12 +3,12 @@ import math
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from .constants import (
+from NodeGraphQt.widgets.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
 )
-from .port import PortItem
+from NodeGraphQt.widgets.port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.PenStyle.SolidLine,
@@ -174,7 +174,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
     def set_connections(self, port1, port2):
         ports = {
-            port1.port_type: port1, port2.port_type: port2
+            port1.port_type: port1,
+            port2.port_type: port2
         }
         self.input_port = ports[IN_PORT]
         self.output_port = ports[OUT_PORT]
@@ -226,3 +227,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.output_port.remove_pipe(self)
         if self.scene():
             self.scene().removeItem(self)
+        # TODO: not sure if we need this...?
+        del self
+

@@ -1,10 +1,11 @@
 #!/usr/bin/python
-from PySide2 import QtCore, QtWidgets
+from PySide2.QtCore import QRectF
+from PySide2.QtWidgets import QGraphicsItem
 
-from .constants import Z_VAL_NODE
+from NodeGraphQt.widgets.constants import Z_VAL_NODE
 
 
-class AbstractNodeItem(QtWidgets.QGraphicsItem):
+class AbstractNodeItem(QGraphicsItem):
     """
     The abstract base class of a node.
     """
@@ -13,9 +14,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
         self.setZValue(Z_VAL_NODE)
-        self.prev_pos = self.pos
         self._properties = {
-            'id': hex(id(self)),
+            'id': None,
             'name': name.strip(),
             'color': (48, 58, 69, 255),
             'border_color': (85, 100, 100, 255),
@@ -36,7 +36,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
+        return QRectF(0.0, 0.0, self._width, self._height)
 
     def mousePressEvent(self, event):
         self._properties['selected'] = True
@@ -147,8 +147,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         return float(self.scenePos().x()), float(self.scenePos().y())
 
     @pos.setter
-    def pos(self, pos=[0.0, 0.0]):
-        self.prev_pos = self.scenePos().x(), self.scenePos().y()
+    def pos(self, pos=None):
+        pos = pos or [0.0, 0.0]
         self.setPos(pos[0], pos[1])
 
     @property
@@ -157,45 +157,22 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @name.setter
     def name(self, name=''):
-        if self.scene():
-            viewer = self.scene().viewer()
-            name = viewer.get_unique_node_name(name)
         self._properties['name'] = name
         self.setToolTip('node: {}'.format(name))
 
     @property
     def properties(self):
         """
+        return the node view attributes.
+
         Returns:
             dict: {property_name: property_value}
         """
-        return self._properties
-
-    def has_property(self, name):
-        return name in self._properties.keys()
-
-    def add_property(self, name, value):
-        if name in self._properties.keys():
-            raise AssertionError('property "{}" already exists!')
-        self._properties[name] = value
-
-    def get_property(self, name):
-        return self._properties.get(name)
-
-    def set_property(self, name, value):
-        class_name = self.__class__.__name__
-        if not self._properties.get(name):
-            raise AssertionError('{} has no property "{}"'
-                                 .format(class_name, name))
-
-        if isinstance(value, type(self._properties[name])):
-            if hasattr(self, name):
-                setattr(self, name, value)
-            else:
-                self._properties[name] = value
-        else:
-            raise TypeError('{} property "{}" has to be a {} type.'
-                            .format(class_name, name, value))
+        props = {'width': self.width,
+                 'height': self.height,
+                 'pos':  self.pos}
+        props.update(self._properties)
+        return props
 
     def viewer(self):
         """
@@ -209,14 +186,14 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     def delete(self):
         """
-        delete node item from the scene.
+        remove node view from the scene.
         """
         if self.scene():
             self.scene().removeItem(self)
 
     def to_dict(self):
         """
-        serialize node object to a dict:.
+        serialize node view attributes to a dictionary:.
 
         Returns:
             dict: node id as the key and properties as the values eg.
@@ -240,13 +217,12 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     def from_dict(self, node_dict):
         """
-        deserialize dict to node.
+        set the node view attributes from the dictionary.
 
         Args:
             node_dict (dict): serialized node dict.
         """
+        node_attrs = list(self._properties.keys()) + ['width', 'height']
         for name, value in node_dict.items():
-            if hasattr(self, name):
+            if name in node_attrs:
                 setattr(self, name, value)
-            else:
-                self.set_property(name, value)

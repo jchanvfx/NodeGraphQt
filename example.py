@@ -1,28 +1,10 @@
-import os
 import sys
-from PySide2 import QtCore, QtWidgets
-from NodeGraphQt import NodeGraphWidget, Node
 
-# import example nodes from the "nodes" package
-from NodeGraphQt.nodes import simple_nodes
-from NodeGraphQt.nodes import text_input_node
-from NodeGraphQt.nodes import menu_node
+from PySide2 import QtWidgets
 
-
-class NodeGraph(NodeGraphWidget):
-    """
-    Example node graph widget.
-    """
-
-    def __init__(self, parent=None):
-        super(NodeGraph, self).__init__(parent)
-        self.setWindowTitle('My Node Graph')
-        self.resize(1100, 800)
-
-    def keyPressEvent(self, event):
-        key = event.key()
-        if key == QtCore.Qt.Key_Escape:
-            self.close()
+from NodeGraphQt import NodeGraph, Node
+# import example nodes from the "example_nodes" package
+from example_nodes import simple_nodes, menu_node, text_input_node
 
 
 class MyNode(Node):
@@ -50,7 +32,7 @@ NODES_TO_REGISTER = [MyNode,
                      simple_nodes.FooNode,
                      simple_nodes.BarNode,
                      text_input_node.TextInputNode
-                    ]
+                     ]
 
 
 if __name__ == '__main__':
@@ -58,6 +40,9 @@ if __name__ == '__main__':
 
     # create node graph.
     graph = NodeGraph()
+    viewer = graph.viewer()
+    viewer.setWindowTitle('My Node Graph')
+    viewer.resize(1100, 800)
 
     # register the nodes.
     for node in NODES_TO_REGISTER:
@@ -75,6 +60,7 @@ if __name__ == '__main__':
     # create "BarNode" and change the node icon.
     bar_node = graph.create_node(
         'com.chantasticvfx.BarNode', name='Bar Node')
+    import os
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example', 'example_icon.png')
     bar_node.set_icon(icon)
@@ -83,7 +69,7 @@ if __name__ == '__main__':
     # create "TextInputNode" node and disable it.
     text_node = graph.create_node(
         'com.chantasticvfx.TextInputNode', name='Text Node')
-    text_node.disable()
+    text_node.set_disabled(True)
     text_node.set_pos(-488.0, -158.0)
 
     # create a node with a combobox menu.
@@ -96,7 +82,7 @@ if __name__ == '__main__':
     graph.add_node(my_node)
     my_node.set_pos(310.0, 10.0)
 
-    # connect the nodes
+    # # connect the nodes
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))

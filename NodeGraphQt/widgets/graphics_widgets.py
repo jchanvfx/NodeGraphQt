@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from PySide2 import QtCore, QtWidgets
 
-from .constants import Z_VAL_NODE_WIDGET
-from .stylesheet import *
+from NodeGraphQt.widgets.constants import Z_VAL_NODE_WIDGET
+from NodeGraphQt.widgets.stylesheet import *
 
 
 class _NodeGroubBox(QtWidgets.QGroupBox):
@@ -32,7 +32,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     Base Node Widget.
     """
 
-    value_changed = QtCore.Signal(str, str)
+    value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None, name='widget', label=''):
         super(NodeBaseWidget, self).__init__(parent)
@@ -42,7 +42,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     def _value_changed(self):
         self.value_changed.emit(self.name, self.value)
-        
+
     def setToolTip(self, tooltip):
         tooltip = tooltip.replace('\n', '<br/>')
         tooltip = '<b>{}</b><br/>{}'.format(self.name, tooltip)
@@ -50,7 +50,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     @property
     def widget(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     @property
     def value(self):

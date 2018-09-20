@@ -8,11 +8,9 @@ NodeGraphQt is node graph widget that can be implemented and repurposed into app
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
 #### Navigation:
-| navigation    | hotkey                                                              |
-| ------------- |:-------------------------------------------------------------------:|
-| Zoom in/out   | `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down` |
-| Pan scene     | `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`      |
-| Fit to screen | `F`                                                                 |
+Zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
+Pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
+Fit to screen : `F`
 
 #### Shortcuts:
 ![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)

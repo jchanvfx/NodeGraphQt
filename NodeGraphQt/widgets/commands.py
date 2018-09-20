@@ -1,8 +1,28 @@
 #!/usr/bin/python
 from PySide2 import QtWidgets
 
-from .constants import IN_PORT, OUT_PORT
-from .pipe import Pipe
+from NodeGraphQt.widgets.constants import IN_PORT, OUT_PORT
+from NodeGraphQt.widgets.pipe import Pipe
+
+
+class NodePropertyChangedCmd(QtWidgets.QUndoCommand):
+    """
+    Node property changed.
+    """
+
+    def __init__(self, node, name, value):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('modified node "{}"'.format(name))
+        self.node = node
+        self.name = name
+        self.old_val = self.node.get_property(name)
+        self.new_val = value
+
+    def undo(self):
+        self.node.set_property(self.name, self.old_val)
+
+    def redo(self):
+        self.node.set_property(self.name, self.new_val)
 
 
 class NodeDisabledCmd(QtWidgets.QUndoCommand):

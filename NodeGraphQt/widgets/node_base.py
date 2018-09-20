@@ -1,20 +1,23 @@
 #!/usr/bin/python
-from collections import OrderedDict
+from PySide2 import QtGui, QtCore
+from PySide2.QtWidgets import (QGraphicsItem,
+                               QGraphicsPixmapItem,
+                               QGraphicsTextItem)
 
-from PySide2 import QtGui, QtCore, QtWidgets
+from NodeGraphQt.widgets.constants import (IN_PORT, OUT_PORT,
+                                           NODE_ICON_SIZE, ICON_NODE_BASE,
+                                           NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
+                                           Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 
-from .constants import (IN_PORT, OUT_PORT,
-                        NODE_ICON_SIZE, ICON_NODE_BASE,
-                        NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                        Z_VAL_NODE, Z_VAL_NODE_WIDGET)
-
-from .node_abstract import AbstractNodeItem
-from .node_widgets import (NodeBaseWidget, NodeComboBox,
-                           NodeLineEdit, NodeCheckBox)
-from .port import PortItem
+from NodeGraphQt.widgets.graphics_widgets import (NodeBaseWidget,
+                                                  NodeComboBox,
+                                                  NodeLineEdit,
+                                                  NodeCheckBox)
+from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
+from NodeGraphQt.widgets.port import PortItem
 
 
-class XDisabledItem(QtWidgets.QGraphicsItem):
+class XDisabledItem(QGraphicsItem):
 
     def __init__(self, parent=None, text=None):
         super(XDisabledItem, self).__init__(parent)
@@ -106,14 +109,12 @@ class NodeItem(AbstractNodeItem):
         pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
                                        QtCore.Qt.SmoothTransformation)
         self._properties['icon'] = ICON_NODE_BASE
-        self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
-        self._text_item = QtWidgets.QGraphicsTextItem(self.name, self)
+        self._icon_item = QGraphicsPixmapItem(pixmap, self)
+        self._text_item = QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'node disabled')
-        self._input_text_items = {}
-        self._output_text_items = {}
-        self._input_items = []
-        self._output_items = []
-        self._widgets = OrderedDict()
+        self._input_items = {}
+        self._output_items = {}
+        self._widgets = {}
 
     def paint(self, painter, option, widget):
         painter.save()
@@ -217,9 +218,9 @@ class NodeItem(AbstractNodeItem):
             color (tuple): color value in (r, g, b, a).
         """
         text_color = QtGui.QColor(*color)
-        for port, text in self._input_text_items.items():
+        for port, text in self._input_items.items():
             text.setDefaultTextColor(text_color)
-        for port, text in self._output_text_items.items():
+        for port, text in self._output_items.items():
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
 
@@ -263,25 +264,25 @@ class NodeItem(AbstractNodeItem):
             width = self._text_item.boundingRect().width()
 
         port_height = 0.0
-        if self._input_text_items:
+        if self._input_items:
             input_widths = []
-            for port, text in self._input_text_items.items():
+            for port, text in self._input_items.items():
                 input_width = port.boundingRect().width() * 2
                 if text.isVisible():
                     input_width += text.boundingRect().width()
                 input_widths.append(input_width)
             width += max(input_widths)
-            port = list(self._input_text_items.keys())[0]
+            port = list(self._input_items.keys())[0]
             port_height = port.boundingRect().height() * 2
-        if self._output_text_items:
+        if self._output_items:
             output_widths = []
-            for port, text in self._output_text_items.items():
+            for port, text in self._output_items.items():
                 output_width = port.boundingRect().width() * 2
                 if text.isVisible():
                     output_width += text.boundingRect().width()
                 output_widths.append(output_width)
             width += max(output_widths)
-            port = list(self._output_text_items.keys())[0]
+            port = list(self._output_items.keys())[0]
             port_height = port.boundingRect().height() * 2
 
         height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
@@ -347,7 +348,7 @@ class NodeItem(AbstractNodeItem):
                 port.setPos(port_x + padding_x, port_y + (padding_y / 2))
                 port_y += chunk
         # adjust input text position
-        for port, text in self._input_text_items.items():
+        for port, text in self._input_items.items():
             txt_height = text.boundingRect().height() - 8.0
             txt_x = port.x() + port.boundingRect().width()
             txt_y = port.y() - (txt_height / 2)
@@ -363,7 +364,7 @@ class NodeItem(AbstractNodeItem):
                 port.setPos(port_x, port_y + (padding_y / 2))
                 port_y += chunk
         # adjust output text position
-        for port, text in self._output_text_items.items():
+        for port, text in self._output_items.items():
             txt_width = text.boundingRect().width()
             txt_height = text.boundingRect().height() - 8.0
             txt_x = width - txt_width - (port.boundingRect().width() / 2)
@@ -416,12 +417,12 @@ class NodeItem(AbstractNodeItem):
             x (float): horizontal x offset
             y (float): vertical y offset
         """
-        for port, text in self._input_text_items.items():
+        for port, text in self._input_items.items():
             port_x, port_y = port.pos().x(), port.pos().y()
             text_x, text_y = text.pos().x(), text.pos().y()
             port.setPos(port_x + x, port_y + y)
             text.setPos(text_x + x, text_y + y)
-        for port, text in self._output_text_items.items():
+        for port, text in self._output_items.items():
             port_x, port_y = port.pos().x(), port.pos().y()
             text_x, text_y = text.pos().x(), text.pos().y()
             port.setPos(port_x + x, port_y + y)
@@ -440,8 +441,6 @@ class NodeItem(AbstractNodeItem):
         if pos:
             self.setPos(pos[0], pos[1])
 
-        # update the previous pos.
-        self.prev_pos = self.pos
         # setup initial base size.
         self._set_base_size()
         # set text color when node is initialized.
@@ -521,11 +520,11 @@ class NodeItem(AbstractNodeItem):
 
     @property
     def inputs(self):
-        return self._input_items
+        return list(self._input_items.keys())
 
     @property
     def outputs(self):
-        return self._output_items
+        return list(self._output_items.keys())
 
     def add_input(self, name='input', multi_port=False, display_name=True):
         """
@@ -542,12 +541,11 @@ class NodeItem(AbstractNodeItem):
         port.port_type = IN_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QtWidgets.QGraphicsTextItem(port.name, self)
+        text = QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
-        self._input_text_items[port] = text
-        self._input_items.append(port)
+        self._input_items[port] = text
         if self.scene():
             self.post_init()
         return port
@@ -567,12 +565,11 @@ class NodeItem(AbstractNodeItem):
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QtWidgets.QGraphicsTextItem(port.name, self)
+        text = QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
-        self._output_text_items[port] = text
-        self._output_items.append(port)
+        self._output_items[port] = text
         if self.scene():
             self.post_init()
         return port
@@ -586,28 +583,36 @@ class NodeItem(AbstractNodeItem):
         widget = NodeComboBox(self, name, label, items)
         widget.setToolTip(tooltip)
         self.add_widget(widget)
+        return widget
 
     def add_text_input(self, name='', label='', text='', tooltip=''):
         widget = NodeLineEdit(self, name, label, text)
         widget.setToolTip(tooltip)
         self.add_widget(widget)
+        return widget
 
     def add_checkbox(self, name='', label='', text='', state=False, tooltip=''):
         widget = NodeCheckBox(self, name, label, text, state)
         widget.setToolTip(tooltip)
         self.add_widget(widget)
+        return widget
 
     def add_widget(self, widget):
         if isinstance(widget, NodeBaseWidget):
             self._widgets[widget.name] = widget
+        else:
+            raise TypeError('{} is not an instance of a node widget.')
 
     def get_widget(self, name):
-        return self._widgets[name]
+        widget = self._widgets.get(name)
+        if widget:
+            return widget
+        raise KeyError('node has no widget "{}"'.format(name))
 
     def delete(self):
-        for port in self._input_items:
+        for port, text in self._input_items.items():
             port.delete()
-        for port in self._output_items:
+        for port, text in self._output_items.items():
             port.delete()
         super(NodeItem, self).delete()
 
@@ -620,8 +625,8 @@ class NodeItem(AbstractNodeItem):
         return serial
 
     def from_dict(self, node_dict):
+        super(NodeItem, self).from_dict(node_dict)
         widgets = node_dict.pop('widgets', {})
         for name, value in widgets.items():
             if self._widgets.get(name):
                 self._widgets[name].value = value
-        super(NodeItem, self).from_dict(node_dict)
