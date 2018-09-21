@@ -13,7 +13,6 @@ NodeGraphQt is node graph widget that can be implemented and repurposed into app
 | ------------- |:--------------------------------------:|
 | Zoom in/out   | `RMB + Drag` or `Mouse Scroll Up/Down` |
 | Pan           | `RMB + Drag` or `Alt + LMB + Drag`     |
-| Fit to screen | `F`                                    |
 
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
