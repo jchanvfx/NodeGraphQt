@@ -160,7 +160,6 @@ class NodeObject(object):
             r (int): red value 0-255 range.
             g (int): green value 0-255 range.
             b (int): blue value 0-255 range.
-
         """
         self.set_property('color', (r, g, b, 255))
 

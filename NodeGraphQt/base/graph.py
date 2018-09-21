@@ -132,7 +132,7 @@ class NodeGraph(QtCore.QObject):
 
     def viewer(self):
         """
-        Return the viewer widget object.
+        Return the node graph viewer widget object.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.
@@ -257,10 +257,9 @@ class NodeGraph(QtCore.QObject):
     def register_node(self, node, alias=None):
         """
         Register a node.
-        To list all node types see "NodeGraphWidget.registered_nodes()"
 
         Args:
-            node (NodeGraphQt.Node): node instance.
+            node (NodeGraphQt.Node): node object.
             alias (str): custom alias name for the node type.
         """
         NodeVendor.register_node(node, alias)
@@ -274,7 +273,7 @@ class NodeGraph(QtCore.QObject):
             node_type (str): node instance type.
             name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple): set color of the created node (r, g, b).
+            color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
             pos (tuple): set position of the node (x, y).
 
         Returns:
@@ -285,6 +284,7 @@ class NodeGraph(QtCore.QObject):
             node = NodeInstance()
             node._graph = self
             node.update()
+
             self._undo_stack.beginMacro('created node')
             self._undo_stack.push(NodeAddedCmd(self, node, pos))
             if name:
@@ -292,6 +292,9 @@ class NodeGraph(QtCore.QObject):
             else:
                 node.set_name(node.NODE_NAME)
             if color:
+                if isinstance(color, str):
+                    color = color[1:] if color[0] is '#' else color
+                    color = tuple(int(color[i:i + 2], 16) for i in (0, 2, 4))
                 node.set_color(*color)
             node.set_selected(selected)
             self._undo_stack.endMacro()

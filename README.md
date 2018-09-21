@@ -7,68 +7,63 @@ NodeGraphQt is node graph widget that can be implemented and repurposed into app
 
 ![screencap01](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot.png)
 
-#### Navigation:
-Zoom in/out : `Right Mouse Click + Drag` or `Mouse Scroll Up`/`Mouse Scroll Down`<br/>
-Pan scene : `Middle Mouse Click + Drag` or `Alt + Left Mouse Click + Drag`<br/>
-Fit to screen : `F`
+#### Navigation
 
-#### Shortcuts:
-![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
-
-| action                  | hotkey                                      |
-| ----------------------- |:-------------------------------------------:|
-| Select all nodes        | `Ctrl + A`                                  |
-| Delete selected node(s) | `Backspace` or `Delete`                     |
-| Copy node(s)            | `Ctrl + C` _(copy to clipboard)_            |
-| Paste node(s)           | `Ctrl + V` _(paste from clipboard)_         |
-| Duplicate node(s)       | `Alt + C`                                   |
-| Save node layout        | `Ctrl + S`                                  |
-| Open node layout        | `Ctrl + O`                                  |
-| Undo action             | `Ctrl+z` or `Command+z` _(OSX)_             |
-| Redo action             | `Ctrl+Shift+z` or `Command+Shift+z` _(OSX)_ |
-| (Enable/Disable) node   | `d`                                         |
+| action        | controls                               |
+| ------------- |:--------------------------------------:|
+| Zoom in/out   | `RMB + Drag` or `Mouse Scroll Up/Down` |
+| Pan           | `RMB + Drag` or `Alt + LMB + Drag`     |
+| Fit to screen | `F`                                    |
 
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
 
-| action                    | hotkey    |
-| ------------------------- |:---------:|
-| Show node search          | `Tab`     |
-| Create node from selected | `enter`   |
+| action           | hotkey |
+| ---------------- |:------:|
+| Show node search | `Tab`  |
 
-#### Example Snippet
+#### Context Menu
+![screencap02](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_menu.png)
 
-[example script](https://github.com/jchanvfx/bpNodeGraph/blob/master/example.py)
+#### Example
 
 ```python
-from NodeGraphQt import NodeGraphWidget, Node
+import sys
+from PySide2 import QtWidgets
+from NodeGraphQt import NodeGraph, Node
 
-# create a node object
+# create node object
+
 class MyNode(Node):
     """example test node."""
 
-    # set unique node identifier.
+    # unique node identifier.
     __identifier__ = 'com.chantasticvfx'
 
-    # set initial default node name.
+    # initial default node name.
     NODE_NAME = 'Test Node'
 
     def __init__(self):
         super(MyNode, self).__init__()
         self.add_input('foo')
         self.add_output('bar')
+        
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
 
-# create a node
-my_node = MyNode()
+    # create node graph.
+    graph = NodeGraph()
+    graph.show()
 
-# create node graph.
-graph = NodeGraphWidget()
+    # register node into the node graph.
+    graph.register_node(MyNode)
 
-# register node into the node graph.
-graph.register_node(MyNode)
+    # create a node.
+    node_a = graph.create_node('com.chantasticvfx.MyNode', name='Foo Node')
+    node_b = graph.create_node('com.chantasticvfx.MyNode', name='Bar Node', color='#5b162f')
+    
+    # connect nodes.
+    node_a.set_input(0, node_b.output(0))    
 
-# add node to the node graph.
-graph.add_node(my_node)
-
-graph.show()
+    app.exec_()
 ```
