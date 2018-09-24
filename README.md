@@ -52,7 +52,10 @@ if __name__ == '__main__':
 
     # create node graph.
     graph = NodeGraph()
-    graph.show()
+   
+    # show the widget.
+    graph_widget = graph.viewer()
+    graph_widget.show()
 
     # register node into the node graph.
     graph.register_node(MyNode)
