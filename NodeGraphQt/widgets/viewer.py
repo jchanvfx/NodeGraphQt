@@ -15,7 +15,8 @@ from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 from NodeGraphQt.widgets.tab_search import TabSearchWidget
 
-ZOOM_LIMIT = 12
+ZOOM_MIN = -0.95
+ZOOM_MAX = 2.0
 
 
 class ContextMenu(object):
@@ -76,7 +77,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
-        self._zoom = 0
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
         self._detached_port = None
@@ -118,22 +118,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- private methods ---
 
     def _set_viewer_zoom(self, value):
-        max_zoom = ZOOM_LIMIT
-        min_zoom = max_zoom * -1
-        if value > 0.0:
-            if self._zoom <= max_zoom:
-                self._zoom += 1
-        else:
-            if self._zoom >= min_zoom:
-                self._zoom -= 1
-        if self._zoom == 0:
-            self.fitInView()
+        if value == 0.0:
             return
-        if self._zoom >= max_zoom:
-            return
-        if self._zoom <= min_zoom:
-            return
-        scale = 1.0 + value
+        scale = 0.9 if value < 0.0 else 1.1
+        zoom = self.get_zoom()
+        if ZOOM_MIN >= zoom:
+            if scale == 0.9:
+                return
+        if ZOOM_MAX <= zoom:
+            if scale == 1.1:
+                return
         self.scale(scale, scale)
 
     def _set_viewer_pan(self, pos_x, pos_y):
@@ -275,7 +269,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def fitInView(self):
         unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
         self.scale(1 / unity.width(), 1 / unity.height())
-        self._zoom = 0
 
     # def dropEvent(self, event):
     #     if event.mimeData().hasFormat('component/name'):
@@ -617,16 +610,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
-    def get_zoom(self):
-        return self._zoom
+    def reset_zoom(self):
+        self.scale(1.0, 1.0)
+        self.resetMatrix()
 
-    def set_zoom(self, zoom=0):
-        if zoom == 0:
-            self.fitInView()
+    def get_zoom(self):
+        transform = self.transform()
+        cur_scale = (transform.m11(), transform.m22())
+        return float('{:0.2f}'.format(cur_scale[0] - 1.0))
+
+    def set_zoom(self, value=0.0):
+        if value == 0.0:
+            self.reset_zoom()
             return
-        if zoom > 0 and zoom >= ZOOM_LIMIT:
-            zoom = 12
-        elif zoom <= (ZOOM_LIMIT * -1):
-            zoom = -12
-        zoom_factor = float(zoom) * 0.1
-        self._set_viewer_zoom(zoom_factor)
+        zoom = self.get_zoom()
+        if zoom < 0.0:
+            if not (ZOOM_MIN <= zoom <= ZOOM_MAX):
+                return
+        else:
+            if not (ZOOM_MIN <= value <= ZOOM_MAX):
+                return
+        value = value - zoom
+        self._set_viewer_zoom(value)

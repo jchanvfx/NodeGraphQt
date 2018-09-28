@@ -210,6 +210,12 @@ class NodeGraph(QtCore.QObject):
         """
         self._viewer.set_pipe_layout(layout)
 
+    def reset_zoom(self):
+        """
+        Reset the zoom level
+        """
+        self._viewer.reset_zoom()
+
     def set_zoom(self, zoom=0):
         """
         Set the zoom factor of the Node Graph the default is 0.
