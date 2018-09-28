@@ -266,10 +266,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         adjust = (event.delta() / 120) * 0.1
         self._set_viewer_zoom(adjust)
 
-    def fitInView(self):
-        unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
-        self.scale(1 / unity.width(), 1 / unity.height())
-
     # def dropEvent(self, event):
     #     if event.mimeData().hasFormat('component/name'):
     #         drop_str = str(event.mimeData().data('component/name'))
@@ -632,3 +628,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 return
         value = value - zoom
         self._set_viewer_zoom(value)
+
+    def zoom_to_nodes(self, nodes):
+        rect = self._combined_rect(nodes)
+        self.fitInView(rect, QtCore.Qt.KeepAspectRatio)
+        self.reset_zoom()

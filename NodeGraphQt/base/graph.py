@@ -210,6 +210,16 @@ class NodeGraph(QtCore.QObject):
         """
         self._viewer.set_pipe_layout(layout)
 
+    def fit_to_selection(self):
+        """
+        Sets the zoom level to fit selected nodes.
+        If no nodes are selected then all nodes in the graph will be framed.
+        """
+        nodes = self.selected_nodes() or self.all_nodes()
+        if not nodes:
+            return
+        self._viewer.zoom_to_nodes([n.view for n in nodes])
+
     def reset_zoom(self):
         """
         Reset the zoom level
@@ -218,10 +228,10 @@ class NodeGraph(QtCore.QObject):
 
     def set_zoom(self, zoom=0):
         """
-        Set the zoom factor of the Node Graph the default is 0.
+        Set the zoom factor of the Node Graph the default is 0.0
 
         Args:
-            zoom (int): zoom factor max zoom out -10 max zoom in 10.
+            zoom (float): zoom factor max zoom out -0.9 max zoom in 2.0
         """
         self._viewer.set_zoom(zoom)
 
@@ -230,7 +240,7 @@ class NodeGraph(QtCore.QObject):
         Get the current zoom level of the node graph.
 
         Returns:
-            int: the current zoom level.
+            float: the current zoom level.
         """
         return self._viewer.get_zoom()
 

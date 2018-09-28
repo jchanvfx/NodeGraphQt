@@ -61,7 +61,7 @@ def setup_actions(graph):
                           lambda: graph.duplicate_nodes(graph.selected_nodes()),
                           'Alt+c')
     edit_menu.add_command('Center Selection',
-                          lambda: zoom_to_secection(graph),
+                          graph.fit_to_selection,
                           'f')
 
     edit_menu.add_separator()
@@ -75,11 +75,6 @@ def zoom_in(graph):
 def zoom_out(graph):
     zoom = graph.get_zoom() - 0.2
     graph.set_zoom(zoom)
-
-
-def zoom_to_secection(graph):
-    graph.set_zoom(0.0)
-    graph.center_selection()
 
 
 def open_session(graph):
