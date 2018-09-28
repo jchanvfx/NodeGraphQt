@@ -41,14 +41,16 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.drawRect(rect.normalized())
         if not self._grid:
             return
-        grid_size = 20
         zoom = self.viewer().get_zoom()
-        color = QtGui.QColor(*self.grid_color)
-        if zoom > -4:
+        grid_size = 20
+        if zoom > -0.5:
+            color = QtGui.QColor(*self.grid_color)
             pen = QtGui.QPen(color, 0.65)
             self._draw_grid(painter, rect, pen, grid_size)
-
-        color = color.darker(150)
+        color = QtGui.QColor(*VIEWER_BG_COLOR)
+        color = color.darker(130)
+        if zoom < -0.0:
+            color = color.darker(100 - int(zoom * 110))
         pen = QtGui.QPen(color, 0.65)
         self._draw_grid(painter, rect, pen, grid_size * 8)
         painter.restore()

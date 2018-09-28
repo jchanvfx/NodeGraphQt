@@ -30,7 +30,7 @@ def setup_actions(graph):
 
     file_menu.add_command('Zoom In', lambda: zoom_in(graph), '=')
     file_menu.add_command('Zoom Out', lambda: zoom_out(graph), '-')
-    file_menu.add_command('Reset Zoom', graph.set_zoom)
+    file_menu.add_command('Reset Zoom', graph.reset_zoom, 'h')
 
     # Edit menu.
     undo_actn = graph.undo_stack().createUndoAction(graph.viewer(), '&Undo')
@@ -61,19 +61,19 @@ def setup_actions(graph):
                           lambda: graph.duplicate_nodes(graph.selected_nodes()),
                           'Alt+c')
     edit_menu.add_command('Center Selection',
-                          graph.center_selection,
+                          graph.fit_to_selection,
                           'f')
 
     edit_menu.add_separator()
 
 
 def zoom_in(graph):
-    zoom = graph.get_zoom() + 1
+    zoom = graph.get_zoom() + 0.1
     graph.set_zoom(zoom)
 
 
 def zoom_out(graph):
-    zoom = graph.get_zoom() - 1
+    zoom = graph.get_zoom() - 0.2
     graph.set_zoom(zoom)
 
 
