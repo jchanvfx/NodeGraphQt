@@ -616,14 +616,6 @@ class NodeItem(AbstractNodeItem):
             port.delete()
         super(NodeItem, self).delete()
 
-    def to_dict(self):
-        serial = super(NodeItem, self).to_dict()
-        if self._widgets:
-            serial[self.id]['widgets'] = {
-                k: v.value for k, v in self._widgets.items()
-            }
-        return serial
-
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
         widgets = node_dict.pop('widgets', {})

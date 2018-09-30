@@ -113,6 +113,16 @@ class NodeObject(object):
         """
         return self.model.id
 
+    def update_model(self):
+        """
+        update the node model from view.
+        """
+        for name, val in self.view.properties.items():
+            if name in self.model.properties.keys():
+                setattr(self.model, name, val)
+            if name in self.model.custom_properties.keys():
+                self.model.custom_properties[name] = val
+
     def update(self):
         """
         Update the node view from model.
@@ -238,6 +248,8 @@ class NodeObject(object):
             str, int or float: value of the node property.
         """
         if name in self.model.custom_properties.keys():
+            if name == 'selected':
+                self.model.custom_properties[name] = self.view.selected
             return self.model.custom_properties[name]
         return self.model.properties.get(name)
 
@@ -359,6 +371,21 @@ class Node(NodeObject):
     def _on_widget_changed(self, name, value):
         self.model.custom_properties[name] = value
 
+    def update_model(self):
+        """
+        update the node model from view.
+        """
+        for name, val in self.view.properties.items():
+            if name in ['inputs', 'outputs']:
+                continue
+            if name in self.model.properties.keys():
+                setattr(self.model, name, val)
+            if name in self.model.custom_properties.keys():
+                self.model.custom_properties[name] = val
+        for name, widget in self.view.widgets.items():
+            if name in self.model.custom_properties.keys():
+                self.model.custom_properties[name] = widget.value
+
     def set_property(self, name, value, update_widget=True):
         """
         Set the value on the node custom property and updates the node widget.
@@ -381,8 +408,6 @@ class Node(NodeObject):
             icon (str): path to the icon image. 
         """
         self.set_property('icon', icon)
-        # self.view.icon = icon
-        # self.model.icon = icon
 
     def icon(self):
         """
@@ -552,7 +577,25 @@ class Backdrop(NodeObject):
 
     def __init__(self):
         super(Backdrop, self).__init__(BackdropNodeItem())
-        self.add_property('bg_text', '')
+        # override base default color.
+        self.model.color = (5, 129, 138, 255)
+        self.create_property('bg_text', '')
+
+    def auto_size(self):
+        """
+        Auto resize the backdrop node to fit around the intersecting nodes.
+        """
+        self.view.auto_resize()
+
+    def nodes(self):
+        """
+        Returns nodes wrapped within the backdrop node.
+
+        Returns:
+            list[NodeGraphQt.Node]: list of node under the backdrop.
+        """
+        node_ids = [n.id for n in self.view.get_nodes()]
+        return [self.graph.get_node_by_id(nid) for nid in node_ids]
 
     def set_text(self, text=''):
         """
@@ -562,49 +605,40 @@ class Backdrop(NodeObject):
             text (str): text string.
         """
         self.set_property('backdrop_text', text)
-        # self.view.backdrop_text = text
 
     def text(self):
         """
-        returns the text on the backdrop node.
+        Returns the text on the backdrop node.
 
         Returns:
             str: text string.
         """
         return self.get_property('backdrop_text')
 
-    def width(self):
+    def set_size(self, size=None):
         """
-        Returns the width of the backdrop.
-
-        Returns:
-            float: backdrop width.
-        """
-        return self.view.width
-
-    def set_width(self, width):
-        """
-        Sets the backdrop width.
+        Sets the backdrop size.
 
         Args:
-            width (float): width size.
+            size (tuple): width, height size.
         """
-        self.view.width = width
+        if size:
+            if self.graph:
+                self.graph.begin_undo('backdrop size')
+                self.set_property('width', size[0])
+                self.set_property('height', size[1])
+                self.graph.end_undo()
+                return
+            self.view.width, self.view.height = size
+            self.model.width, self.model.height = size
 
-    def height(self):
+    def size(self):
         """
-        Returns the height of the backdrop.
+        Returns the current size of the node.
 
         Returns:
-            float: backdrop height.
+            tuple: node width, height
         """
-        return self.view.height
-
-    def set_height(self, height):
-        """
-        Sets the backdrop height.
-
-        Args:
-            height (float): width size.
-        """
-        self.view.height = height
+        self.model.width = self.view.width
+        self.model.height = self.view.height
+        return self.model.width, self.model.height

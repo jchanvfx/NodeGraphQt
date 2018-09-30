@@ -479,10 +479,15 @@ class NodeGraph(QtCore.QObject):
         serial_data = {'nodes': {}, 'connections': []}
         nodes_data = {}
         for n in nodes:
+
+            # update the node model.
+            n.update_model()
+
             nodes_data.update(n.model.to_dict)
 
         for n_id, n_data in nodes_data.items():
             serial_data['nodes'][n_id] = n_data
+
             inputs = n_data.pop('inputs') if n_data.get('inputs') else {}
             outputs = n_data.pop('outputs') if n_data.get('outputs') else {}
 

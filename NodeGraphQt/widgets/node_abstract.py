@@ -191,30 +191,6 @@ class AbstractNodeItem(QGraphicsItem):
         if self.scene():
             self.scene().removeItem(self)
 
-    def to_dict(self):
-        """
-        serialize node view attributes to a dictionary:.
-
-        Returns:
-            dict: node id as the key and properties as the values eg.
-                {'0x106cf75a8': {
-                    'name': 'foo node',
-                    'color': (48, 58, 69, 255),
-                    'border_color': (85, 100, 100, 255),
-                    'text_color': (255, 255, 255, 180),
-                    'type': 'com.chantasticvfx.FooNode',
-                    'selected': False,
-                    'disabled': False,
-                    'pos': (0.0, 0.0)
-                    }
-                }
-        """
-        serial = {
-            self.id: {k: v for k, v in self._properties.items() if k != 'id'}
-        }
-        serial[self.id]['pos'] = self.pos
-        return serial
-
     def from_dict(self, node_dict):
         """
         set the node view attributes from the dictionary.

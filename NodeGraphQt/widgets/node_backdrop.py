@@ -78,7 +78,6 @@ class BackdropNodeItem(AbstractNodeItem):
         super(BackdropNodeItem, self).__init__(name, parent)
         self.setZValue(Z_VAL_PIPE - 1)
         self._properties['backdrop_text'] = text
-        self.color = (5, 129, 138, 255)
         self._min_size = 80, 80
         self._sizer = BackdropSizer(self, 20.0)
         self._sizer.set_pos(*self._min_size)
@@ -93,7 +92,7 @@ class BackdropNodeItem(AbstractNodeItem):
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
             pos = event.scenePos()
-            rect = QtCore.QRectF(pos.x()-5, pos.y()-5, 10, 10)
+            rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]
 
             if isinstance(item, (PortItem, Pipe)):
@@ -103,7 +102,8 @@ class BackdropNodeItem(AbstractNodeItem):
                 return
 
             viewer = self.viewer()
-            viewer.clear_selection()
+            [n.setSelected(False) for n in viewer.selected_nodes()]
+
             self._nodes += self.get_nodes(False)
             [n.setSelected(True) for n in self._nodes]
 
@@ -231,10 +231,3 @@ class BackdropNodeItem(AbstractNodeItem):
     def height(self, height=0.0):
         AbstractNodeItem.height.fset(self, height)
         self._sizer.set_pos(self._width, self._height)
-
-    def to_dict(self):
-        serial = super(BackdropNodeItem, self).to_dict()
-        serial[self.id]['backdrop_text'] = self.backdrop_text
-        serial[self.id]['width'] = self.width
-        serial[self.id]['height'] = self.height
-        return serial
