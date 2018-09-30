@@ -4,7 +4,7 @@ import sys
 
 from PySide2 import QtWidgets
 
-from NodeGraphQt import NodeGraph, Node
+from NodeGraphQt import NodeGraph, Node, Backdrop
 
 # import example nodes from the "example_nodes" package
 from example_nodes import simple_nodes, menu_node, text_input_node
@@ -42,13 +42,16 @@ if __name__ == '__main__':
     viewer.show()
 
     # registered nodes.
-    reg_nodes = [MyNode,
-                 menu_node.DropdownMenuNode, simple_nodes.FooNode,
-                 simple_nodes.BarNode, text_input_node.TextInputNode]
+    reg_nodes = [
+        Backdrop,
+        MyNode,
+        menu_node.DropdownMenuNode,
+        simple_nodes.FooNode,
+        simple_nodes.BarNode, 
+        text_input_node.TextInputNode
+    ]
+    [graph.register_node(n) for n in reg_nodes]
 
-    # register the nodes.
-    for node in reg_nodes:
-        graph.register_node(node)
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
                                 name='test',
