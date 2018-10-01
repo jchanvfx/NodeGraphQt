@@ -50,22 +50,22 @@ class MyNode(Node):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    # create node graph.
+    # create the main node graph controller.
     graph = NodeGraph()
    
-    # show the widget.
-    graph_widget = graph.viewer()
-    graph_widget.show()
-
     # register node into the node graph.
     graph.register_node(MyNode)
-
-    # create a node.
+   
+    # create nodes.
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Foo Node')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Bar Node', color='#5b162f')
     
     # connect nodes.
     node_a.set_input(0, node_b.output(0))    
+
+    # show the viewer widget.
+    graph_widget = graph.viewer()
+    graph_widget.show()
 
     app.exec_()
 ```
