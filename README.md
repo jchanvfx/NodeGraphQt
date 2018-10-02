@@ -12,7 +12,7 @@ NodeGraphQt is node graph widget that can be implemented and repurposed into app
 | action        | controls                               |
 | ------------- |:--------------------------------------:|
 | Zoom in/out   | `RMB + Drag` or `Mouse Scroll Up/Down` |
-| Pan           | `RMB + Drag` or `Alt + LMB + Drag`     |
+| Pan           | `MMB + Drag` or `Alt + LMB + Drag`     |
 
 #### Node Search
 ![screencap03](https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/master/example/screenshot_tab_search.png)
@@ -29,10 +29,9 @@ NodeGraphQt is node graph widget that can be implemented and repurposed into app
 ```python
 import sys
 from PySide2 import QtWidgets
-from NodeGraphQt import NodeGraph, Node
+from NodeGraphQt import NodeGraph, Node, Backdrop
 
-# create node object
-
+# create a example node object with a input/output port.
 class MyNode(Node):
     """example test node."""
 
@@ -46,14 +45,18 @@ class MyNode(Node):
         super(MyNode, self).__init__()
         self.add_input('foo')
         self.add_output('bar')
-        
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     # create the main node graph controller.
     graph = NodeGraph()
    
-    # register node into the node graph.
+    # register backdrop node. (included in the NodeGraphQt module)
+    graph.register_node(Backdrop)
+   
+    # register example node into the node graph.
     graph.register_node(MyNode)
    
     # create nodes.
