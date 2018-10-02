@@ -75,6 +75,13 @@ class _NodeVendor(object):
                 raise AssertionError(
                     'Node Alias: {} already taken!'.format(alias))
             self._aliases[alias] = node_type
-
-
+            
+     def clear_registered_nodes(self):
+        """
+        clear out registered nodes, to prevent conflicts on reset
+        """
+        self._nodes.clear()
+        self._names.clear()
+        self._aliases.clear()
+        
 NodeVendor = _NodeVendor()
