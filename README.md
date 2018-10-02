@@ -1,4 +1,4 @@
-### NodeGraph Widget
+### NodeGraph Widget  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 This is a **_work in progress_** widget I'm working on in my spare time, as
 a learning exercise to write a custom node graph with PySide2.
@@ -60,6 +60,7 @@ if __name__ == '__main__':
     graph.register_node(MyNode)
    
     # create nodes.
+    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Foo Node')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Bar Node', color='#5b162f')
     
