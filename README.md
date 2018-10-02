@@ -1,6 +1,6 @@
 ## NodeGraph Widget
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md) [![PEP8](https://img.shields.io/badge/code%20style-pep8-yellow.svg)](https://www.python.org/dev/peps/pep-0008/)
 
 This is a **_work in progress_** widget I'm working on in my spare time, as
 a learning exercise to write a custom node graph with PySide2.
