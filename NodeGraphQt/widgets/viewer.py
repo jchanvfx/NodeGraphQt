@@ -66,6 +66,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
     connection_changed = QtCore.Signal(list, list)
+    node_selected = QtCore.Signal()
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
@@ -207,6 +208,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not shift_modifier:
             super(NodeViewer, self).mousePressEvent(event)
 
+        if event.button() == QtCore.Qt.LeftButton:
+            # emit specific node selected signal
+            if self.selected_nodes():
+                self.node_selected.emit()
+            
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self.LMB_state = False
