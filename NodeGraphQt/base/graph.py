@@ -19,6 +19,8 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
+  
+    node_selected = QtCore.Signal(list)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -32,6 +34,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_changed.connect(self._on_connection_changed)
+        self._viewer.node_selected.connect(self._on_node_selected)
 
     def _init_actions(self):
         # setup tab search shortcut.
@@ -60,6 +63,14 @@ class NodeGraph(QtCore.QObject):
             node = self._model.nodes[node_view.id]
             self._undo_stack.push(NodeMovedCmd(node, node.pos(), prev_pos))
         self._undo_stack.endMacro()
+
+    def _on_nodes_moved(self, node_data):
+        """
+        called when a node in the viewer is selected on left click.
+
+        """
+        nodes = self.selected_nodes()
+        self.node_selected.emit(nodes)
 
     def _on_search_triggered(self, node_type, pos):
         """
