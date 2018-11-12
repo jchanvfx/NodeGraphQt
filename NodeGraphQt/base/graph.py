@@ -20,7 +20,7 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 class NodeGraph(QtCore.QObject):
   
-    node_selected = QtCore.Signal(list)
+    node_selected = QtCore.Signal(NodeObject)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -64,13 +64,15 @@ class NodeGraph(QtCore.QObject):
             self._undo_stack.push(NodeMovedCmd(node, node.pos(), prev_pos))
         self._undo_stack.endMacro()
 
-    def _on_nodes_moved(self, node_data):
+    def _on_node_selected(self, node_id):
         """
         called when a node in the viewer is selected on left click.
 
+        Args:
+            node_id (str): node id emitted by the viewer.
         """
-        nodes = self.selected_nodes()
-        self.node_selected.emit(nodes)
+        node = self.get_node_by_id(node_id)
+        self.node_selected.emit(node)
 
     def _on_search_triggered(self, node_type, pos):
         """
