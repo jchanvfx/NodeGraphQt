@@ -66,6 +66,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
     connection_changed = QtCore.Signal(list, list)
+    node_selected = QtCore.Signal(str)
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
@@ -382,11 +383,17 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
             if node_items:
+                node = node_items[0]
+
                 # record the node positions at selection time.
                 for n in node_items:
                     self._node_positions[n] = n.pos
 
-                if not isinstance(node_items[0], BackdropNodeItem):
+                # emit selected node id with LMB.
+                if event.button() == QtCore.Qt.LeftButton:
+                    self.node_selected.emit(node.id)
+
+                if not isinstance(node, BackdropNodeItem):
                     return
 
             pipe_items = self._items_near(pos, Pipe, 3, 3)
