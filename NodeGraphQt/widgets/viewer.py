@@ -6,7 +6,8 @@ from PySide2 import QtGui, QtCore, QtWidgets
 from NodeGraphQt.widgets.constants import (IN_PORT, OUT_PORT,
                                            PIPE_LAYOUT_CURVED,
                                            PIPE_LAYOUT_STRAIGHT,
-                                           PIPE_STYLE_DASHED)
+                                           PIPE_STYLE_DASHED,
+                                           FILE_IO_EXT)
 from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.pipe import Pipe
@@ -237,14 +238,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def mouseMoveEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
         shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
-        if self.MMB_state or (self.LMB_state and alt_modifier):
-            pos_x = (event.x() - self._previous_pos.x())
-            pos_y = (event.y() - self._previous_pos.y())
-            self._set_viewer_pan(pos_x, pos_y)
-        elif self.RMB_state:
+        if self.MMB_state and alt_modifier:
             pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
             self._set_viewer_zoom(zoom)
+        elif self.MMB_state or (self.LMB_state and alt_modifier):
+            pos_x = (event.x() - self._previous_pos.x())
+            pos_y = (event.y() - self._previous_pos.y())
+            self._set_viewer_pan(pos_x, pos_y)
 
         if self.LMB_state and self._rubber_band.isVisible():
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
@@ -521,6 +522,30 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def message_dialog(self, text, title='node graph'):
         QtWidgets.QMessageBox.information(
             self, title, text, QtWidgets.QMessageBox.Ok)
+
+    def load_dialog(self, current_dir=''):
+        ext_filter = ';;'.join([
+            'Node Graph (*{} *json)'.format(FILE_IO_EXT), 'All Files (*)'])
+        file_dlg = QtWidgets.QFileDialog.getOpenFileName(
+            self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
+        return file_dlg[0] or None
+
+    def save_dialog(self, current_dir=''):
+        ext_map = {'Node Graph (*{} *json)'.format(FILE_IO_EXT): '.json',
+                   'All Files (*)': ''}
+        file_dlg = QtWidgets.QFileDialog.getSaveFileName(
+            self,
+            caption='Save Session',
+            dir=current_dir,
+            filter=';;'.join(ext_map.keys())
+        )
+        file_path = file_dlg[0]
+        if not file_path:
+            return
+        ext = ext_map[file_dlg[1]]
+        if ext and file_path.endswith(ext):
+            file_path += ext
+        return file_path
 
     def all_pipes(self):
         pipes = []

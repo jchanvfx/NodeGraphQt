@@ -20,10 +20,10 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
 #### Navigation Controls
 
-| action        | controls                               |
-| ------------- |:--------------------------------------:|
-| Zoom in/out   | `RMB + Drag` or `Mouse Scroll Up/Down` |
-| Pan           | `MMB + Drag` or `Alt + LMB + Drag`     |
+| action        | controls                                     |
+| ------------- |:--------------------------------------------:|
+| Zoom in/out   | `Alt + MMB + Drag` or `Mouse Scroll Up/Down` |
+| Pan           | `Alt + LMB + Drag` or `MMB + Drag`           |
 
 #### Node Search
 ![screencap03](/example/screenshot_tab_search.png)

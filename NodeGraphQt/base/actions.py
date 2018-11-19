@@ -1,6 +1,5 @@
 #!/usr/bin/python
 from PySide2 import QtGui
-from PySide2.QtWidgets import QFileDialog
 
 
 def setup_actions(graph):
@@ -23,7 +22,7 @@ def setup_actions(graph):
                           QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...',
                           lambda: save_session_as(graph),
-                          QtGui.QKeySequence.SaveAs)
+                          'Ctrl+Shift+s')
     file_menu.add_command('Clear', lambda: clear_session(graph))
 
     file_menu.add_separator()
@@ -41,6 +40,8 @@ def setup_actions(graph):
     redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
     edit_menu.add_action(redo_actn)
 
+    edit_menu.add_separator()
+    edit_menu.add_command('Clear Undo History', lambda: clear_undo(graph))
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', graph.copy_nodes, QtGui.QKeySequence.Copy)
@@ -78,11 +79,9 @@ def zoom_out(graph):
 
 
 def open_session(graph):
-    file_dlg = QFileDialog.getOpenFileName(
-        graph.viewer(),
-        caption='Open Session Setup',
-        filter='Node Graph (*json) All Files (*)')
-    file_path = file_dlg[0]
+    current = graph.current_session()
+    viewer = graph.viewer()
+    file_path = viewer.load_dialog(current)
     if file_path:
         graph.load_session(file_path)
 
@@ -91,22 +90,29 @@ def save_session(graph):
     current = graph.current_session()
     if current:
         graph.save_session(current)
+        msg = 'Session layout saved:\n{}'.format(current)
+        viewer = graph.viewer()
+        viewer.message_dialog(msg, title='Session Saved')
     else:
         save_session_as(graph)
 
 
 def save_session_as(graph):
-    file_dlg = QFileDialog.getSaveFileName(
-        graph.viewer(),
-        caption='Save Session',
-        filter='Node Graph (*json})')
-    file_path = file_dlg[0]
-    if not file_path:
-        return
-    graph.save_session(file_path)
+    current = graph.current_session()
+    viewer = graph.viewer()
+    file_path = viewer.save_dialog(current)
+    if file_path:
+        graph.save_session(file_path)
 
 
 def clear_session(graph):
     viewer = graph.viewer()
-    if viewer.question_dialog('clear session', 'Clear current session?'):
+    if viewer.question_dialog('Clear Session', 'Clear Current Session?'):
         graph.clear_session()
+
+
+def clear_undo(graph):
+    viewer = graph.viewer()
+    msg = 'Clear all undo history, Are you sure?'
+    if viewer.question_dialog('Clear Undo History', msg):
+        graph.undo_stack().clear()
