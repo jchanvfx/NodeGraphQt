@@ -111,7 +111,7 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QGraphicsPixmapItem(pixmap, self)
         self._text_item = QGraphicsTextItem(self.name, self)
-        self._x_item = XDisabledItem(self, 'node disabled')
+        self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
         self._widgets = {}
