@@ -35,24 +35,37 @@ class NodeScene(QtWidgets.QGraphicsScene):
 
     def drawBackground(self, painter, rect):
         painter.save()
-        color = QtGui.QColor(*self._bg_color)
+
+        bg_color = QtGui.QColor(*self._bg_color)
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
-        painter.setBrush(color)
-        painter.drawRect(rect.normalized())
+        painter.setBrush(bg_color)
+        painter.drawRect(rect)
+
         if not self._grid:
             return
+
         zoom = self.viewer().get_zoom()
         grid_size = 20
+
         if zoom > -0.5:
-            color = QtGui.QColor(*self.grid_color)
-            pen = QtGui.QPen(color, 0.65)
+            pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
             self._draw_grid(painter, rect, pen, grid_size)
-        color = QtGui.QColor(*VIEWER_BG_COLOR)
-        color = color.darker(130)
+
+        color = bg_color.darker(150)
         if zoom < -0.0:
             color = color.darker(100 - int(zoom * 110))
         pen = QtGui.QPen(color, 0.65)
         self._draw_grid(painter, rect, pen, grid_size * 8)
+
+        # fix border issue on the scene edge.        
+        pen = QtGui.QPen(bg_color, 1)
+        pen.setCosmetic(True)
+        path = QtGui.QPainterPath()
+        path.addRect(rect)
+        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(pen)
+        painter.drawPath(path)
+
         painter.restore()
 
     def mousePressEvent(self, event):
