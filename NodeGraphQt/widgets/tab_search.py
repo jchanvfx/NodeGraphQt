@@ -67,11 +67,12 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         self._completer.setModel(self._model)
         self.setCompleter(self._completer)
 
+        popup = self._completer.popup()
+        popup.clicked.connect(self._on_search_submitted)
         self.returnPressed.connect(self._on_search_submitted)
 
-    def _on_search_submitted(self):
-        text = self.text()
-        node_type = self._node_dict.get(text)
+    def _on_search_submitted(self, index=0):
+        node_type = self._node_dict.get(self.text())
         if node_type:
             self.search_submitted.emit(node_type)
         self.close()
@@ -81,6 +82,9 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         super(TabSearchWidget, self).showEvent(event)
         self.setSelection(0, len(self.text()))
         self.setFocus()
+        if not self.text():
+            self.completer().popup().show()
+            self.completer().complete()
 
     def set_nodes(self, node_dict=None):
         self._node_dict = node_dict or {}
