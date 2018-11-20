@@ -215,14 +215,14 @@ class NodeObject(object):
 
         Args:
             name (str): name of the attribute.
-            value (str, int, float): data
+            value (object): data
         """
-        if not isinstance(name, str):
+        if not isinstance(name, basestring):
             raise TypeError('name must of str type.')
-        if not isinstance(value, (str, int, float, bool)):
-            err = 'value must be of type (String, Integer, Float, Bool)'
-            raise TypeError(err)
-        elif name in self.view.properties.keys():
+        # if not isinstance(value, (basestring, int, float, bool)):
+        #     err = 'value must be of type (String, Integer, Float, Bool)'
+        #     raise TypeError(err)
+        if name in self.view.properties.keys():
             raise KeyError('"{}" property already exists.'.format(name))
         elif name in self.model.properties.keys():
             raise KeyError('"{}" property already exists.'.format(name))
