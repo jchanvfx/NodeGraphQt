@@ -42,7 +42,6 @@ class TabSearchCompleter(QtWidgets.QCompleter):
         self._filter_model = QtCore.QSortFilterProxyModel(self)
         self._filter_model.setSourceModel(self._source_model)
         super(TabSearchCompleter, self).setModel(self._filter_model)
-        self.popup().setStyleSheet(STYLE_TABSEARCH_LIST)
         self._using_orig_model = True
 
 
@@ -68,6 +67,7 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         self.setCompleter(self._completer)
 
         popup = self._completer.popup()
+        popup.setStyleSheet(STYLE_TABSEARCH_LIST)
         popup.clicked.connect(self._on_search_submitted)
         self.returnPressed.connect(self._on_search_submitted)
 
@@ -84,6 +84,10 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         self.setFocus()
         if not self.text():
             self.completer().popup().show()
+            self.completer().complete()
+
+    def mousePressEvent(self, event):
+        if not self.text():
             self.completer().complete()
 
     def set_nodes(self, node_dict=None):

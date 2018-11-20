@@ -159,10 +159,13 @@ class NodeItem(AbstractNodeItem):
                                     rect.top() - (border_width / 2),
                                     rect.width() + border_width,
                                     rect.height() + border_width)
+
+        pen = QtGui.QPen(border_color, border_width)
+        pen.setCosmetic(self.viewer().get_zoom() < 0.0)
         path = QtGui.QPainterPath()
         path.addRoundedRect(border_rect, radius_x, radius_y)
         painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(QtGui.QPen(border_color, border_width))
+        painter.setPen(pen)
         painter.drawPath(path)
 
         painter.restore()
