@@ -4,8 +4,7 @@ import os
 import re
 
 from PySide2 import QtCore
-from PySide2.QtGui import QClipboard
-from PySide2.QtWidgets import QUndoStack, QAction
+from PySide2.QtWidgets import QUndoStack, QAction, QApplication
 
 from NodeGraphQt.base.actions import setup_actions
 from NodeGraphQt.base.commands import (NodeAddedCmd,
@@ -641,7 +640,7 @@ class NodeGraph(QtCore.QObject):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return False
-        clipboard = QClipboard()
+        clipboard = QApplication.clipboard()
         serial_data = self._serialize(nodes)
         serial_str = json.dumps(serial_data)
         if serial_str:
@@ -653,7 +652,7 @@ class NodeGraph(QtCore.QObject):
         """
         Pastes nodes from the clipboard.
         """
-        clipboard = QClipboard()
+        clipboard = QApplication.clipboard()
         cb_string = clipboard.text()
         if not cb_string:
             return
