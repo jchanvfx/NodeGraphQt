@@ -96,9 +96,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
-        # workaround fix on OSX shortcuts from the non-native menu actions
+        # workaround fix for OSX & linux shortcuts from the non-native menu actions
         # don't seem to trigger so we create a dummy menu bar.
-        if platform == 'darwin':
+        if platform in ['darwin', 'linux2']:
             menu_bar = QtWidgets.QMenuBar(self)
             menu_bar.setNativeMenuBar(False)
             menu_bar.resize(0, 0)
