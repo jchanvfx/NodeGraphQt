@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from distutils.version import LooseVersion
 from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
@@ -40,7 +41,8 @@ class ContextMenu(object):
             return ContextMenu(self.__view, menu)
 
     def add_action(self, action):
-        action.setShortcutVisibleInContextMenu(True)
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+            action.setShortcutVisibleInContextMenu(True)
         self.__menu.addAction(action)
 
     def add_menu(self, name):
@@ -51,7 +53,8 @@ class ContextMenu(object):
 
     def add_command(self, name, func=None, shortcut=None):
         action = QtWidgets.QAction(name, self.__view)
-        action.setShortcutVisibleInContextMenu(True)
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+            action.setShortcutVisibleInContextMenu(True)
         if shortcut:
             action.setShortcut(shortcut)
         if func:
