@@ -163,6 +163,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
+        self.modify_context_menu()
         self._context_menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -507,6 +508,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
         else:
             self._search_widget.setVisible(state)
             self.clearFocus()
+
+   	def modify_context_menu(self):
+		"""to be overridden at a higher level, intended to allow context
+		menu to show different items based on
+		well
+		context
+		"""
+		pass
 
     def context_menu(self):
         return ContextMenu(self, self._context_menu)
