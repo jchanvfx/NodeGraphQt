@@ -18,8 +18,10 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
-  
+
+    node_created = QtCore.Signal(NodeObject)
     node_selected = QtCore.Signal(NodeObject)
+    data_dropped = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -30,10 +32,14 @@ class NodeGraph(QtCore.QObject):
         self._wire_signals()
 
     def _wire_signals(self):
-        self._viewer.moved_nodes.connect(self._on_nodes_moved)
+        # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_changed.connect(self._on_connection_changed)
+        self._viewer.moved_nodes.connect(self._on_nodes_moved)
+
+        # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
+        self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
     def _init_actions(self):
         # setup tab search shortcut.
@@ -50,6 +56,28 @@ class NodeGraph(QtCore.QObject):
         self._viewer.tab_search_set_nodes(NodeVendor.names)
         self._viewer.tab_search_toggle()
 
+    def _on_node_selected(self, node_id):
+        """
+        called when a node in the viewer is selected on left click.
+        (emits the node object when the node is clicked)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+        """
+        node = self.get_node_by_id(node_id)
+        self.node_selected.emit(node)
+
+    def _on_node_data_dropped(self, data, pos):
+        """
+        called when data has been dropped on the viewer.
+        (emits the node type and the x,y position where the data was dropped)
+
+        Args:
+            data (str): text data.
+            pos (tuple): x, y scene position relative to the cursor.
+        """
+        self.data_dropped.emit(data, pos)
+
     def _on_nodes_moved(self, node_data):
         """
         called when selected nodes in the viewer has changed position.
@@ -62,17 +90,6 @@ class NodeGraph(QtCore.QObject):
             node = self._model.nodes[node_view.id]
             self._undo_stack.push(NodeMovedCmd(node, node.pos(), prev_pos))
         self._undo_stack.endMacro()
-
-    def _on_node_selected(self, node_id):
-        """
-        called when a node in the viewer is selected on left click.
-        (emits the node object when the node is clicked)
-
-        Args:
-            node_id (str): node id emitted by the viewer.
-        """
-        node = self.get_node_by_id(node_id)
-        self.node_selected.emit(node)
 
     def _on_search_triggered(self, node_type, pos):
         """
