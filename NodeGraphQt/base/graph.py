@@ -29,6 +29,7 @@ class NodeGraph(QtCore.QObject):
         self._undo_stack = QUndoStack(self)
         self._init_actions()
         self._wire_signals()
+        self.patch_context_menu()
 
     def _wire_signals(self):
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
@@ -191,7 +192,23 @@ class NodeGraph(QtCore.QObject):
             ContextMenu: node graph context menu object instance.
         """
         return self._viewer.context_menu()
+      
+    @staticmethod
+	  def modify_context_menu(viewer):
+        """
+        Viewer's method will be replaced with this one, 
+        called on every right-click
+        """
+        pass
 
+  	def patch_context_menu(self):
+        """
+        Patches viewer's modify_context_menu method to that of graph
+        """
+        self._viewer.modify_context_menu = types.MethodType(
+            self.modify_context_menu, self._viewer)
+
+  
     def acyclic(self):
         """
         Returns true if the current node graph is acyclic.
