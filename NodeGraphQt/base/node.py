@@ -217,9 +217,9 @@ class NodeObject(object):
             name (str): name of the attribute.
             value (object): data
         """
-        if not isinstance(name, basestring):
+        if not isinstance(name, str):
             raise TypeError('name must of str type.')
-        # if not isinstance(value, (basestring, int, float, bool)):
+        # if not isinstance(value, (str, int, float, bool)):
         #     err = 'value must be of type (String, Integer, Float, Bool)'
         #     raise TypeError(err)
         if name in self.view.properties.keys():
