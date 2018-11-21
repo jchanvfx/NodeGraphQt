@@ -67,7 +67,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
     connection_changed = QtCore.Signal(list, list)
+
+    # pass through signals
     node_selected = QtCore.Signal(str)
+    data_dropped = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
@@ -79,6 +82,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+        self.setAcceptDrops(True)
+
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._live_pipe = None
         self._detached_port = None
@@ -268,18 +273,31 @@ class NodeViewer(QtWidgets.QGraphicsView):
         adjust = (event.delta() / 120) * 0.1
         self._set_viewer_zoom(adjust)
 
-    # def dropEvent(self, event):
-    #     if event.mimeData().hasFormat('component/name'):
-    #         drop_str = str(event.mimeData().data('component/name'))
-    #         drop_pos = event.pos()
+    def dropEvent(self, event):
+        if event.mimeData().hasFormat('text/plain'):
+            pos = self.mapToScene(event.pos())
+            drop_pos = pos.x(), pos.y()
+            drop_str = event.mimeData().text()
+            event.setDropAction(QtCore.Qt.MoveAction)
+            event.accept()
+            self.data_dropped.emit(drop_str, drop_pos)
+        else:
+            event.ignore()
 
-    # def dragEnterEvent(self, event):
-    #     if event.mimeData().hasFormat('component/name'):
-    #         event.accept()
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasFormat('text/plain'):
+            event.accept()
+        else:
+            event.ignore()
 
-    # def dragMoveEvent(self, event):
-    #     if event.mimeData().hasFormat('component/name'):
-    #         event.accept()
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasFormat('text/plain'):
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragLeaveEvent(self, event):
+        event.ignore()
 
     # --- viewer methods ---
 
