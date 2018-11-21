@@ -42,6 +42,11 @@ class AbstractNodeItem(QGraphicsItem):
         self._properties['selected'] = True
         super(AbstractNodeItem, self).mousePressEvent(event)
 
+    def mouseDoubleClickEvent(self, event):
+        super(AbstractNodeItem, self).mouseDoubleClickEvent(event)
+        viewer = self.viewer()
+        viewer.node_double_clicked.emit(self.id)
+
     def setSelected(self, selected):
         self._properties['selected'] = selected
         super(AbstractNodeItem, self).setSelected(selected)

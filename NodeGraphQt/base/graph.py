@@ -21,6 +21,7 @@ class NodeGraph(QtCore.QObject):
 
     node_created = QtCore.Signal(NodeObject)
     node_selected = QtCore.Signal(NodeObject)
+    node_double_clicked = QtCore.Signal(NodeObject)
     data_dropped = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None):
@@ -39,6 +40,7 @@ class NodeGraph(QtCore.QObject):
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
+        self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
     def _init_actions(self):
@@ -66,6 +68,17 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
         self.node_selected.emit(node)
+
+    def _on_node_double_clicked(self, node_id):
+        """
+        Called when user double clicks on a node in the viewer.
+        (emits the node object when the node is clicked)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+        """
+        node = self.get_node_by_id(node_id)
+        self.node_double_clicked.emit(node)
 
     def _on_node_data_dropped(self, data, pos):
         """

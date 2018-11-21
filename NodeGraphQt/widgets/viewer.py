@@ -69,6 +69,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     connection_changed = QtCore.Signal(list, list)
 
     # pass through signals
+    node_double_clicked = QtCore.Signal(str)
     node_selected = QtCore.Signal(str)
     data_dropped = QtCore.Signal(str, tuple)
 
