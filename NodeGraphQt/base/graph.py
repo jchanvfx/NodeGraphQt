@@ -614,7 +614,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the saved node layout.
         """
-        serliazed_data = self._serialize(self.selected_nodes())
+        serliazed_data = self._serialize(self.all_nodes())
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
             json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
