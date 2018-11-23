@@ -1,5 +1,4 @@
 #!/usr/bin/python
-from distutils.version import LooseVersion
 from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
@@ -19,50 +18,6 @@ from NodeGraphQt.widgets.tab_search import TabSearchWidget
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
-
-
-class ContextMenu(object):
-
-    def __init__(self, view, menu):
-        self.__view = view
-        self.__menu = menu
-
-    @property
-    def _menu_obj(self):
-        return self.__menu
-
-    def get_menu(self, name):
-        ctx_menu = self.__view.context_menu()
-        root_menu = ctx_menu._menu_obj
-        for action in root_menu.actions():
-            if action.text() != name:
-                continue
-            menu = action.menu()
-            return ContextMenu(self.__view, menu)
-
-    def add_action(self, action):
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            action.setShortcutVisibleInContextMenu(True)
-        self.__menu.addAction(action)
-
-    def add_menu(self, name):
-        menu = QtWidgets.QMenu(None, title=name)
-        menu.setStyleSheet(STYLE_QMENU)
-        self.__menu.addMenu(menu)
-        return ContextMenu(self.__view, menu)
-
-    def add_command(self, name, func=None, shortcut=None):
-        action = QtWidgets.QAction(name, self.__view)
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            action.setShortcutVisibleInContextMenu(True)
-        if shortcut:
-            action.setShortcut(shortcut)
-        if func:
-            action.triggered.connect(func)
-        self.__menu.addAction(action, shortcut=shortcut)
-
-    def add_separator(self):
-        self.__menu.addSeparator()
 
 
 class NodeViewer(QtWidgets.QGraphicsView):
@@ -99,7 +54,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             QtWidgets.QRubberBand.Rectangle, self
         )
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._context_menu = QtWidgets.QMenu('nodes', self)
+        self._context_menu = QtWidgets.QMenu('main', self)
         self._context_menu.setStyleSheet(STYLE_QMENU)
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
@@ -532,7 +487,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.clearFocus()
 
     def context_menu(self):
-        return ContextMenu(self, self._context_menu)
+        return self._context_menu
 
     def question_dialog(self, title, text):
         dlg = QtWidgets.QMessageBox.question(
