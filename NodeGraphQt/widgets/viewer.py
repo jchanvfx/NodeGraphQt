@@ -564,7 +564,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not file_path:
             return
         ext = ext_map[file_dlg[1]]
-        if ext and file_path.endswith(ext):
+        if ext and not file_path.endswith(ext):
             file_path += ext
         return file_path
 
