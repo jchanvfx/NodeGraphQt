@@ -4,14 +4,15 @@ from distutils.version import LooseVersion
 from PySide2 import QtGui, QtCore
 
 
-def setup_actions(graph):
+def setup_context_menu(graph):
     """
-    build the base node graph menu commands.
+    build the default node graph context menu.
 
     Args:
-        graph (NodeGraphQt.NodeGraph):
+        graph (NodeGraphQt.NodeGraph): node graph controller.
     """
     root_menu = graph.context_menu()
+
     file_menu = root_menu.add_menu('&File')
     edit_menu = root_menu.add_menu('&Edit')
 
@@ -72,6 +73,9 @@ def setup_actions(graph):
                           'f')
 
     edit_menu.add_separator()
+
+
+# --- menu command functions. ---
 
 
 def zoom_in(graph):

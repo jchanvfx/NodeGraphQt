@@ -6,12 +6,12 @@ import re
 from PySide2 import QtCore
 from PySide2.QtWidgets import QUndoStack, QAction, QApplication
 
-from NodeGraphQt.base.actions import setup_actions
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
 from NodeGraphQt.base.menu import ContextMenu
+from NodeGraphQt.base.menu_setup import setup_context_menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.vendor import NodeVendor
@@ -50,7 +50,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.addAction(tab)
 
         # setup default context menu.
-        setup_actions(self)
+        setup_context_menu(self)
 
     def _toggle_tab_search(self):
         """
