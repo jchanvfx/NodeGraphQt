@@ -12,7 +12,7 @@ class ContextMenu(object):
         """
         Args:
             viewer (NodeViewer): node viewer.
-            qaction (QtWidgets.QMenu): menu object.
+            qmenu (QtWidgets.QMenu): menu object.
         """
         self.__viewer = viewer
         self.__qmenu = qmenu
@@ -71,11 +71,6 @@ class ContextMenu(object):
     def add_separator(self):
         self.qmenu.addSeparator()
 
-    def add_action(self, qaction):
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            qaction.setShortcutVisibleInContextMenu(True)
-        self.qmenu.addAction(qaction)
-
 
 class ContextMenuCommand(object):
 
@@ -102,3 +97,6 @@ class ContextMenuCommand(object):
     def set_shortcut(self, shortcut=None):
         shortcut = shortcut or QtGui.QKeySequence()
         self.qaction.setShortcut(shortcut)
+
+    def run_command(self):
+        self.qaction.trigger()

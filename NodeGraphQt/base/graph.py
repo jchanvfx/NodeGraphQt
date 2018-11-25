@@ -48,6 +48,8 @@ class NodeGraph(QtCore.QObject):
         tab.setShortcut('tab')
         tab.triggered.connect(self._toggle_tab_search)
         self._viewer.addAction(tab)
+
+        # setup default context menu.
         setup_actions(self)
 
     def _toggle_tab_search(self):
