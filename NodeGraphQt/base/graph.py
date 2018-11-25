@@ -347,6 +347,7 @@ class NodeGraph(QtCore.QObject):
                 node.set_color(*color)
             node.set_selected(selected)
             self._undo_stack.endMacro()
+            self.node_created.emit(node)
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
