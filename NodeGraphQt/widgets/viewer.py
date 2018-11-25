@@ -501,7 +501,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def load_dialog(self, current_dir=''):
         ext_filter = ';;'.join([
-            'Node Graph (*json *{})'.format(FILE_IO_EXT), 'All Files (*)'])
+            'Node Graph (*json *{} All Files (*))'.format(FILE_IO_EXT), 'All Files (*)'])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
         return file_dlg[0] or None
