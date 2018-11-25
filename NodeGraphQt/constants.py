@@ -35,7 +35,7 @@ VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_OVERLAY = True
 
 # GRAPH PATHS
-BASE_PATH = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.join(BASE_PATH, 'widgets', 'icons')
 ICON_DOWN_ARROW = os.path.join(ICON_PATH, 'down_arrow.png')
 ICON_NODE_BASE = os.path.join(ICON_PATH, 'node_base.png')

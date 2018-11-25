@@ -3,11 +3,11 @@ from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.widgets.constants import (IN_PORT, OUT_PORT,
-                                           PIPE_LAYOUT_CURVED,
-                                           PIPE_LAYOUT_STRAIGHT,
-                                           PIPE_STYLE_DASHED,
-                                           FILE_IO_EXT)
+from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
+                                   PIPE_LAYOUT_CURVED,
+                                   PIPE_LAYOUT_STRAIGHT,
+                                   PIPE_STYLE_DASHED,
+                                   FILE_IO_EXT)
 from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.pipe import Pipe
@@ -501,13 +501,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def load_dialog(self, current_dir=''):
         ext_filter = ';;'.join([
-            'Node Graph (*{} *json)'.format(FILE_IO_EXT), 'All Files (*)'])
+            'Node Graph (*json *{})'.format(FILE_IO_EXT), 'All Files (*)'])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
         return file_dlg[0] or None
 
     def save_dialog(self, current_dir=''):
-        ext_map = {'Node Graph (*{} *json)'.format(FILE_IO_EXT): '.json',
+        ext_map = {'Node Graph (*json *{})'.format(FILE_IO_EXT): '.json',
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
             self,

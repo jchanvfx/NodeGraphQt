@@ -1,8 +1,8 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.widgets.constants import (VIEWER_BG_COLOR,
-                                           VIEWER_GRID_OVERLAY,
-                                           VIEWER_GRID_COLOR)
+from NodeGraphQt.constants import (VIEWER_BG_COLOR,
+                                   VIEWER_GRID_OVERLAY,
+                                   VIEWER_GRID_COLOR)
 
 
 class NodeScene(QtWidgets.QGraphicsScene):

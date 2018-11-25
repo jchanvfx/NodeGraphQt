@@ -1,6 +1,6 @@
 import re
 
-from NodeGraphQt.widgets.constants import ICON_DOWN_ARROW
+from NodeGraphQt.constants import ICON_DOWN_ARROW
 
 # we reformat the icon file path on windows os.
 regex = re.compile('(\w:)')
