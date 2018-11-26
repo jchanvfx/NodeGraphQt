@@ -105,10 +105,12 @@ class NodeItem(AbstractNodeItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
-                                       QtCore.Qt.SmoothTransformation)
+        if pixmap.size().height() > NODE_ICON_SIZE:
+            pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                           QtCore.Qt.SmoothTransformation)
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QGraphicsPixmapItem(pixmap, self)
+        self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
         self._text_item = QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
@@ -478,8 +480,9 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
-        pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
-                                       QtCore.Qt.SmoothTransformation)
+        if pixmap.size().height() > NODE_ICON_SIZE:
+            pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
+                                           QtCore.Qt.SmoothTransformation)
         self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.post_init()
