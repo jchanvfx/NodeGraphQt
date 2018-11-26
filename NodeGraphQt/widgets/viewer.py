@@ -489,13 +489,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def context_menu(self):
         return self._context_menu
 
-    def question_dialog(self, title, text):
+    def question_dialog(self, text, title='Node Graph'):
         dlg = QtWidgets.QMessageBox.question(
             self, title, text,
             QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
-    def message_dialog(self, text, title='node graph'):
+    def message_dialog(self, text, title='Node Graph'):
         QtWidgets.QMessageBox.information(
             self, title, text, QtWidgets.QMessageBox.Ok)
 
