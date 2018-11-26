@@ -26,6 +26,7 @@ class NodeGraph(QtCore.QObject):
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
+        self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
         self._viewer = NodeViewer()
         self._undo_stack = QUndoStack(self)
