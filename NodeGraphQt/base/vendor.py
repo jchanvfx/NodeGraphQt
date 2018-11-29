@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-class _NodeVendor(object):
+class NodeVendor(object):
     """
     Node manager that stores all the node types.
     """
@@ -77,11 +77,9 @@ class _NodeVendor(object):
             self._aliases[alias] = node_type
             
     def clear_registered_nodes(self):
-       """
-       clear out registered nodes, to prevent conflicts on reset
-       """
-       self._nodes.clear()
-       self._names.clear()
-       self._aliases.clear()
-       
-NodeVendor = _NodeVendor()
+        """
+        clear out registered nodes, to prevent conflicts on reset.
+        """
+        self._nodes.clear()
+        self._names.clear()
+        self._aliases.clear()
