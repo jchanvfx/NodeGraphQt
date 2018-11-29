@@ -28,6 +28,7 @@ class NodeGraph(QtCore.QObject):
         super(NodeGraph, self).__init__(parent)
         self._model = NodeGraphModel()
         self._viewer = NodeViewer()
+        self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
         self._init_actions()
         self._wire_signals()
@@ -56,7 +57,7 @@ class NodeGraph(QtCore.QObject):
         """
         toggle the tab search widget.
         """
-        self._viewer.tab_search_set_nodes(NodeVendor.names)
+        self._viewer.tab_search_set_nodes(self._vendor.names)
         self._viewer.tab_search_toggle()
 
     def _on_node_selected(self, node_id):
@@ -301,7 +302,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             list[str]: node types.
         """
-        return sorted(NodeVendor.nodes.keys())
+        return sorted(self._vendor.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
@@ -311,7 +312,7 @@ class NodeGraph(QtCore.QObject):
             node (NodeGraphQt.Node): node object.
             alias (str): custom alias name for the node type.
         """
-        NodeVendor.register_node(node, alias)
+        self._vendor.register_node(node, alias)
 
     def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
         """
@@ -328,7 +329,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.Node: created instance of a node.
         """
-        NodeInstance = NodeVendor.create_node_instance(node_type)
+        NodeInstance = self._vendor.create_node_instance(node_type)
         if NodeInstance:
             node = NodeInstance()
             node._graph = self
@@ -560,7 +561,7 @@ class NodeGraph(QtCore.QObject):
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type']
-            NodeInstance = NodeVendor.create_node_instance(identifier)
+            NodeInstance = self._vendor.create_node_instance(identifier)
             if NodeInstance:
                 node = NodeInstance()
                 node._graph = self

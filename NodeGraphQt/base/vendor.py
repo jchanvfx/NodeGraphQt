@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-class _NodeVendor(object):
+class NodeVendor(object):
     """
     Node manager that stores all the node types.
     """
@@ -83,5 +83,3 @@ class _NodeVendor(object):
        self._nodes.clear()
        self._names.clear()
        self._aliases.clear()
-       
-NodeVendor = _NodeVendor()
