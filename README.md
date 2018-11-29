@@ -15,8 +15,7 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
 #### Requirements
 
-- Python 3
-- PySide2
+- Python3, PySide2
 
 #### Navigation Controls
 
