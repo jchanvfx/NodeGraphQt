@@ -2,6 +2,10 @@
 from NodeGraphQt.base.commands import PropertyChangedCmd
 from NodeGraphQt.base.model import NodeModel
 from NodeGraphQt.base.port import Port
+from NodeGraphQt.constants import (NODE_PROP,
+                                   NODE_PROP_QLINEEDIT,
+                                   NODE_PROP_QCOMBO,
+                                   NODE_PROP_QCHECKBOX)
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.node_base import NodeItem
 
@@ -209,24 +213,18 @@ class NodeObject(object):
         """
         self.set_property('selected', selected)
 
-    def create_property(self, name, value):
+    def create_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
         """
-        adds new property to the node.
+        Creates a custom property to the node.
 
         Args:
-            name (str): name of the attribute.
-            value (object): data
+            name (str): name of the property.
+            value (object): data.
+            items (list[str]): items used by widget type NODE_PROP_QCOMBO
+            range (tuple)): min, max values used by NODE_PROP_SLIDER
+            widget_type (int): widget type flag.
         """
-        if not isinstance(name, str):
-            raise TypeError('name must of str type.')
-        # if not isinstance(value, (str, int, float, bool)):
-        #     err = 'value must be of type (String, Integer, Float, Bool)'
-        #     raise TypeError(err)
-        if name in self.view.properties.keys():
-            raise KeyError('"{}" property already exists.'.format(name))
-        elif name in self.model.properties.keys():
-            raise KeyError('"{}" property already exists.'.format(name))
-        self.model.custom_properties[name] = value
+        self.model.add_property(name, value, items, range, widget_type)
 
     def properties(self):
         """
@@ -472,7 +470,8 @@ class Node(NodeObject):
             items (list[str]): items to be added into the menu.
         """
         items = items or []
-        self.create_property(name, items[0] if items else '')
+        self.create_property(
+            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO)
         widget = self.view.add_combo_menu(name, label, items)
         widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
 
@@ -485,7 +484,7 @@ class Node(NodeObject):
             label (str): label to be displayed.
             text (str): pre filled text.
         """
-        self.create_property(name, text)
+        self.create_property(name, text, widget_type=NODE_PROP_QLINEEDIT)
         widget = self.view.add_text_input(name, label, text)
         widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
 
@@ -499,7 +498,7 @@ class Node(NodeObject):
             text (str): checkbox text.
             state (bool): pre-check.
         """
-        self.create_property(name, state)
+        self.create_property(name, state, widget_type=NODE_PROP_QCHECKBOX)
         widget = self.view.add_checkbox(name, label, text, state)
         widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
 

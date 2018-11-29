@@ -58,7 +58,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         self._draw_grid(painter, rect, pen, grid_size * 8)
 
         # fix border issue on the scene edge.        
-        pen = QtGui.QPen(bg_color, 1)
+        pen = QtGui.QPen(bg_color, 2)
         pen.setCosmetic(True)
         path = QtGui.QPainterPath()
         path.addRect(rect)
