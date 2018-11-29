@@ -117,7 +117,7 @@ def save_session_as(graph):
 
 def clear_session(graph):
     viewer = graph.viewer()
-    if viewer.question_dialog('Clear Session', 'Clear Current Session?'):
+    if viewer.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
 
 
