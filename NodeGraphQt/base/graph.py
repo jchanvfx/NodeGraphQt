@@ -333,6 +333,19 @@ class NodeGraph(QtCore.QObject):
         if NodeInstance:
             node = NodeInstance()
             node._graph = self
+            node.model._graph_model = self.model
+
+            wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
+            prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
+
+            graph_attrs = self.model.node_property_attrs
+            if node.type not in graph_attrs.keys():
+                graph_attrs[node.type] = {
+                    n: {'widget_type': wt} for n, wt in wid_types.items()
+                }
+                for pname, pattrs in prop_attrs.items():
+                    graph_attrs[node.type][pname].update(pattrs)
+
             node.update()
 
             self._undo_stack.beginMacro('created node')
@@ -360,8 +373,21 @@ class NodeGraph(QtCore.QObject):
             node (NodeGraphQt.Node): node object.
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
+
+        wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
+        prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
+
+        graph_attrs = self.model.node_property_attrs
+        if node.type not in graph_attrs.keys():
+            graph_attrs[node.type] = {
+                n: {'widget_type': wt} for n, wt in wid_types.items()
+            }
+            for pname, pattrs in prop_attrs.items():
+                graph_attrs[node.type][pname].update(pattrs)
+
         node._graph = self
         node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
+        node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
         node.update()
         self._undo_stack.push(NodeAddedCmd(self, node))

@@ -88,12 +88,14 @@ class NodeModel(object):
 
     def add_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
         """
+        add custom property.
+
         Args:
-            name (str):
-            value (object):
-            items (list[str]):
-            range (list[int]):
-            widget_type (int):
+            name (str): name of the property.
+            value (object): data.
+            items (list[str]): items used by widget type NODE_PROP_QCOMBO.
+            range (tuple)): min, max values used by NODE_PROP_SLIDER.
+            widget_type (int): widget type flag.
         """
         if name in self.properties.keys():
             raise AssertionError('"{}" reserved for defaults.'.format(name))
@@ -104,6 +106,7 @@ class NodeModel(object):
 
         if self._graph_model is None:
             self._TEMP_property_widget_types[name] = widget_type
+            self._TEMP_property_attrs[name] = {}
             if items:
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
