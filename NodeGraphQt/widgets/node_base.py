@@ -119,40 +119,39 @@ class NodeItem(AbstractNodeItem):
 
     def paint(self, painter, option, widget):
         painter.save()
-
         bg_border = 1.0
         rect = QtCore.QRectF(0.5 - (bg_border / 2),
                              0.5 - (bg_border / 2),
                              self._width + bg_border,
                              self._height + bg_border)
-        radius_x = 5
-        radius_y = 5
+        radius = 2
+        border_color = QtGui.QColor(*self.border_color)
+
         path = QtGui.QPainterPath()
-        path.addRoundedRect(rect, radius_x, radius_y)
-        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 255), 1.5))
+        path.addRoundedRect(rect, radius, radius)
+        painter.setPen(QtGui.QPen(border_color.darker(200), 1.5))
         painter.drawPath(path)
 
         rect = self.boundingRect()
         bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRoundRect(rect, radius_x, radius_y)
+        painter.drawRoundRect(rect, radius, radius)
 
         if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-            painter.drawRoundRect(rect, radius_x, radius_y)
+            painter.drawRoundRect(rect, radius, radius)
 
-        label_rect = QtCore.QRectF(rect.left() + (radius_x / 2),
-                                   rect.top() + (radius_x / 2),
-                                   self._width - (radius_x / 1.25),
+        label_rect = QtCore.QRectF(rect.left() + (radius / 2),
+                                   rect.top() + (radius / 2),
+                                   self._width - (radius / 1.25),
                                    28)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(label_rect, radius_x / 1.5, radius_y / 1.5)
+        path.addRoundedRect(label_rect, radius / 1.5, radius / 1.5)
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
         border_width = 0.8
-        border_color = QtGui.QColor(*self.border_color)
         if self.selected and NODE_SEL_BORDER_COLOR:
             border_width = 1.2
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
@@ -164,7 +163,7 @@ class NodeItem(AbstractNodeItem):
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(border_rect, radius_x, radius_y)
+        path.addRoundedRect(border_rect, radius, radius)
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(pen)
         painter.drawPath(path)

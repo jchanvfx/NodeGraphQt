@@ -15,9 +15,6 @@ class FooNode(Node):
     def __init__(self):
         super(FooNode, self).__init__()
 
-        # set the node color.
-        self.set_color(2, 67, 81)
-
         # create node inputs.
         self.add_input('foo')
         self.add_input('bar')

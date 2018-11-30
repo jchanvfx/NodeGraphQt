@@ -17,8 +17,8 @@ class AbstractNodeItem(QGraphicsItem):
         self._properties = {
             'id': None,
             'name': name.strip(),
-            'color': (48, 58, 69, 255),
-            'border_color': (85, 100, 100, 255),
+            'color': (13, 18, 23, 255),
+            'border_color': (46, 57, 66, 255),
             'text_color': (255, 255, 255, 180),
             'type': 'AbstractBaseNode',
             'selected': False,

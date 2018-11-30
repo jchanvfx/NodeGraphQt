@@ -64,14 +64,14 @@ if __name__ == '__main__':
     # create example "TextInputNode".
     text_node = graph.create_node('com.chantasticvfx.TextInputNode',
                                   name='Text Node',
-                                  color='#6b273f',
+                                  color='#3a304a',
                                   pos=(-488.0, -158.0))
     text_node.set_disabled(True)
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
                                   name='Menu Node',
-                                  color='#005341',
+                                  color='#193a33',
                                   pos=(279.0, -209.0))
 
     # change node icon.
