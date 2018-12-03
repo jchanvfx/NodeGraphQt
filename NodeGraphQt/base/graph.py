@@ -14,6 +14,7 @@ from NodeGraphQt.base.menu import ContextMenu
 from NodeGraphQt.base.menu_setup import setup_context_menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
+from NodeGraphQt.base.port import Port
 from NodeGraphQt.base.vendor import NodeVendor
 from NodeGraphQt.widgets.viewer import NodeViewer
 
@@ -22,6 +23,7 @@ class NodeGraph(QtCore.QObject):
 
     node_created = QtCore.Signal(NodeObject)
     node_selected = QtCore.Signal(NodeObject)
+    port_connected = QtCore.Signal(Port, Port)
     data_dropped = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None):

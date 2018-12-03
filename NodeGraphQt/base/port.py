@@ -142,6 +142,9 @@ class Port(object):
         undo_stack.push(PortConnectedCmd(self, port))
         undo_stack.endMacro()
 
+        # emit "port_connected" signal from the parent graph.
+        graph.port_connected.emit(self, port)
+
     def disconnect_from(self, port=None):
         """
         Disconnect from the specified port.
@@ -152,4 +155,4 @@ class Port(object):
         if not port:
             return
         graph = self.node().graph
-        graph._undo_stack.push(PortDisconnectedCmd(self, port))
+        graph.undo_stack().push(PortDisconnectedCmd(self, port))
