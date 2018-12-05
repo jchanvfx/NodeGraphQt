@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import os
 from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
@@ -499,14 +500,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
         QtWidgets.QMessageBox.information(
             self, title, text, QtWidgets.QMessageBox.Ok)
 
-    def load_dialog(self, current_dir=''):
+    def load_dialog(self, current_dir=os.path.expanduser('~')):
         ext_filter = ';;'.join([
             'Node Graph (*json *{} All Files (*))'.format(FILE_IO_EXT), 'All Files (*)'])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
         return file_dlg[0] or None
 
-    def save_dialog(self, current_dir=''):
+    def save_dialog(self, current_dir=os.path.expanduser('~')):
         ext_map = {'Node Graph (*json *{})'.format(FILE_IO_EXT): '.json',
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
