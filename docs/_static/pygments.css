@@ -1,5 +1,26 @@
+.linenos {
+    background: #2e3133;
+}
+.linenos pre,
+td.linenos pre {
+    background-color: transparent;
+    color: #aaa;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
 .hll { background-color: #49483e }
-.highlight pre  { background: #232629; color: #f8f8f2; border: 0px; border-radius: 0px;}
+.code,
+.highlight pre  { 
+    background: #232629;
+}
+.highlight pre  {
+    color: #f8f8f2; 
+    border: 0px; 
+    border-radius: 0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
 .highlight .c { color: #75715e } /* Comment */
 .highlight .err { color: #960050; background-color: #1e0010 } /* Error */
 .highlight .k { color: #66d9ef } /* Keyword */
