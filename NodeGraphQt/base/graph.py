@@ -20,6 +20,9 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
+    """
+    base node graph controller.
+    """
 
     node_created = QtCore.Signal(NodeObject)
     node_selected = QtCore.Signal(NodeObject)
@@ -142,34 +145,30 @@ class NodeGraph(QtCore.QObject):
     @property
     def model(self):
         """
-        Return the node graph model.
+        Returns the model used to store the node graph data.
 
         Returns:
-            NodeGraphModel: model object.
+            NodeGraphQt.base.model.NodeGraphModel: node graph model.
         """
         return self._model
 
     def show(self):
         """
-        Show node graph viewer widget.
+        Show node graph viewer widget this is just a convenience
+        function to ``.viewer().show()``.
         """
         self._viewer.show()
 
-    def hide(self):
-        """
-        Hide node graph viewer widget.
-        """
-        self._viewer.hide()
-
     def close(self):
         """
-        Close node graph viewer widget.
+        Close node graph ``NodeViewer`` widget this is just a convenience
+        function to ``.viewer().close()``.
         """
         self._viewer.close()
 
     def viewer(self):
         """
-        Return the node graph viewer widget object.
+        Return the node graph viewer widget.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.
@@ -190,13 +189,13 @@ class NodeGraph(QtCore.QObject):
         Returns the undo stack used in the node graph
 
         Returns:
-            QUndoStack: undo stack.
+            QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
 
     def begin_undo(self, name='undo'):
         """
-        Start of an undo block followed by a end_undo().
+        Start of an undo block followed by a ``end_undo()``.
 
         Args:
             name (str): name for the undo block.
@@ -205,7 +204,7 @@ class NodeGraph(QtCore.QObject):
 
     def end_undo(self):
         """
-        End of an undo block started by begin_undo().
+        End of an undo block started by ``begin_undo()``.
         """
         self._undo_stack.endMacro()
 
@@ -223,7 +222,7 @@ class NodeGraph(QtCore.QObject):
         Returns true if the current node graph is acyclic.
 
         Returns:
-            bool: true if acyclic.
+            bool: true if acyclic (default: True).
         """
         return self._model.acyclic
 
@@ -292,7 +291,7 @@ class NodeGraph(QtCore.QObject):
 
     def center_selection(self):
         """
-        Center the node graph on the current selected nodes.
+        Centers on the current selected nodes.
         """
         nodes = self._viewer.selected_nodes()
         self._viewer.center_selection(nodes)
@@ -300,16 +299,16 @@ class NodeGraph(QtCore.QObject):
     def registered_nodes(self):
         """
         Return a list of all node types that have been registered.
-        To register a node see "NodeGraphWidget.register_node()"
+        To register a node see ``register_node()``
 
         Returns:
-            list[str]: node types.
+            list[str]: list of node type identifiers.
         """
         return sorted(self._vendor.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
-        Register a node.
+        Register the node to the node graphs vendor.
 
         Args:
             node (NodeGraphQt.Node): node object.
@@ -320,17 +319,18 @@ class NodeGraph(QtCore.QObject):
     def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
         """
         Create a new node in the node graph.
-        To list all node types see "NodeGraphWidget.registered_nodes()"
+
+        (To list all node types see ``registered_nodes()``)
 
         Args:
             node_type (str): node instance type.
             name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
+            color (tuple or str): node color ``(255, 255, 255)`` or ``'#FFFFFF'``.
             pos (tuple): set position of the node (x, y).
 
         Returns:
-            NodeGraphQt.Node: created instance of a node.
+            NodeGraphQt.Node: the created instance of the node.
         """
         NodeInstance = self._vendor.create_node_instance(node_type)
         if NodeInstance:
@@ -408,7 +408,7 @@ class NodeGraph(QtCore.QObject):
 
     def delete_nodes(self, nodes):
         """
-        Remove a list of nodes from the node graph.
+        Remove a list of specified nodes from the node graph.
 
         Args:
             nodes (list[NodeGraphQt.Node]): list of node instances.
@@ -441,7 +441,7 @@ class NodeGraph(QtCore.QObject):
 
     def select_all(self):
         """
-        Select all nodes in the current node graph.
+        Select all nodes in the node graph.
         """
         self._undo_stack.beginMacro('select all')
         for node in self.all_nodes():
@@ -459,10 +459,10 @@ class NodeGraph(QtCore.QObject):
 
     def get_node_by_id(self, node_id=None):
         """
-        Get the node object by it's id.
+        Returns the ``NodeObject()`` object from the node id.
 
         Args:
-            node_id (str): node id
+            node_id (str): node id (``NodeObject().id``)
 
         Returns:
             NodeGraphQt.NodeObject: node object.
@@ -476,7 +476,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             name (str): name of the node.
         Returns:
-            NodeGraphQt.Node: node object.
+            NodeGraphQt.NodeObject: node object.
         """
         for node_id, node in self._model.nodes.items():
             if node.name() == name:
@@ -484,7 +484,7 @@ class NodeGraph(QtCore.QObject):
 
     def get_unique_name(self, name):
         """
-        return a unique node name for the node.
+        Creates a unique node name to avoid having nodes with the same name.
 
         Args:
             name (str): node name.
@@ -514,7 +514,7 @@ class NodeGraph(QtCore.QObject):
 
     def current_session(self):
         """
-        returns the file path to the currently loaded session.
+        Returns the file path to the currently loaded session.
 
         Returns:
             str: path to the currently loaded session
@@ -523,7 +523,7 @@ class NodeGraph(QtCore.QObject):
 
     def clear_session(self):
         """
-        clear the loaded node layout session.
+        Clears the current node graph session.
         """
         for n in self.all_nodes():
             self.delete_node(n)
@@ -643,7 +643,7 @@ class NodeGraph(QtCore.QObject):
 
     def serialize_session(self):
         """
-        Serializes the current node graph layout.
+        Serializes the current node graph layout to a dictionary.
 
         Returns:
             dict: serialized session of the current node layout.
@@ -652,7 +652,7 @@ class NodeGraph(QtCore.QObject):
 
     def save_session(self, file_path):
         """
-        Saves the current node graph session layout to a JSON formatted file.
+        Saves the current node graph session layout to a `JSON` formatted file.
 
         Args:
             file_path (str): path to the saved node layout.
@@ -691,11 +691,10 @@ class NodeGraph(QtCore.QObject):
 
     def copy_nodes(self, nodes=None):
         """
-        copy nodes to the clipboard by default this method copies
-        the selected nodes from the node graph.
+        Copy nodes to the clipboard.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of node instances.
+            nodes (list[NodeGraphQt.Node]): list of nodes (default: selected nodes).
         """
         nodes = nodes or self.selected_nodes()
         if not nodes:
@@ -710,7 +709,7 @@ class NodeGraph(QtCore.QObject):
 
     def paste_nodes(self):
         """
-        Pastes nodes from the clipboard.
+        Pastes nodes copied from the clipboard.
         """
         clipboard = QApplication.clipboard()
         cb_string = clipboard.text()
@@ -726,10 +725,10 @@ class NodeGraph(QtCore.QObject):
 
     def duplicate_nodes(self, nodes):
         """
-        Create duplicates nodes.
+        Create duplicate copy from the list of nodes.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of node objects.
+            nodes (list[NodeGraphQt.Node]): list of nodes.
         Returns:
             list[NodeGraphQt.Node]: list of duplicated node instances.
         """
