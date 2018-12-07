@@ -24,7 +24,7 @@ import NodeGraphQt
 
 # -- Project information -----------------------------------------------------
 
-project = 'NodeGraphQT'
+project = 'NodeGraphQt'
 copyright = '2018, Johnny Chan'
 author = 'Johnny Chan'
 
@@ -74,6 +74,13 @@ pygments_style = None
 
 
 # -- Options for HTML output -------------------------------------------------
+
+# If given, this must be the name of an image file (path relative to the
+# configuration directory) that is the favicon of the docs.
+# Modern browsers use this as the icon for tabs, windows and bookmarks.
+# It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
+# pixels large. Default: None.
+html_favicon = '_images/favicon.png'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -182,3 +189,7 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
+
+# -- Options for autodoc ----------------------------------------------------
+autodoc_member_order = 'groupwise'

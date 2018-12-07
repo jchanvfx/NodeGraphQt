@@ -188,9 +188,10 @@ class NodeObject(object):
 
     def set_disabled(self, mode=False):
         """
-        disables the node.
+        Set the node state to either disabled or enabled.
 
-        Args (bool): true to disable node.
+        Args:
+            mode(bool): true to disable node.
         """
         self.set_property('disabled', mode)
 

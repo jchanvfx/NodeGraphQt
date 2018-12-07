@@ -1,35 +1,29 @@
-***********
-NodeGraphQT
-***********
+Node Graph Qt
+*************
 
-NodeGraphQt api documentation.
+Documentation for the NodeGraphQt module.
+
+GitHub: https://github.com/jchanvfx/NodeGraphQt
 
 .. image:: _images/screenshot.png
+    :width: 95%
 
-| NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
+NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
 
-.. image:: https://img.shields.io/badge/code%20style-PEP8-green.svg
-    :target: https://www.python.org/dev/peps/pep-0008
 
-.. image:: https://img.shields.io/badge/requirements-PySide2-green.svg
-    :target: https://wiki.qt.io/Qt_for_Python
-
-.. image:: https://img.shields.io/badge/project-GitHub-green.svg
-    :target: https://github.com/jchanvfx/NodeGraphQt
-
-module Classes
-**************
+Module Classes
+==============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    graph
    nodes
    port
 
 
-example
-*******
+Example
+=======
 
 A basic example snippet.
 

@@ -1,18 +1,16 @@
-.linenos {
+.linenos,
+td.lineos {
     background: #2e3133;
 }
-.linenos pre,
-td.linenos pre {
+.linenos pre {
     background-color: transparent;
     color: #aaa;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }
 .hll { background-color: #49483e }
-.code,
-.highlight pre  { 
-    background: #232629;
-}
+.code{ background: #232629; !important }
+.highlight pre  { background: #232629; !important }
 .highlight pre  {
     color: #f8f8f2; 
     border: 0px; 
