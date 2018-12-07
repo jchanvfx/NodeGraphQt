@@ -37,7 +37,7 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
 #### API Documentation
 
-_currently unavaliable_
+http://chantasticvfx.com/NodeGraphQt/index.html
 
 #### Example Code
 
