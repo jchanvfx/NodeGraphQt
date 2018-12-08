@@ -9,6 +9,8 @@ NodeObject()
 
 ( ``NodeObject`` )
 
+**Inherited by:** ``NodeGraphQt.Node``, ``NodeGraphQt.Backdrop``
+
 ----
 
 .. automodule:: NodeGraphQt.NodeObject
@@ -23,6 +25,10 @@ Node()
 
 ( ``NodeObject`` --> ``Node`` )
 
+
+.. image:: _images/node.png
+    :width: 250px
+
 ----
 
 .. automodule:: NodeGraphQt.Node
@@ -36,6 +42,9 @@ Backdrop()
 ==========
 
 ( ``NodeObject`` --> ``Backdrop`` )
+
+.. image:: _images/backdrop.png
+    :width: 250px
 
 ----
 

@@ -1,9 +1,7 @@
 Node Graph Qt
 *************
 
-Documentation for the NodeGraphQt module.
-
-GitHub: https://github.com/jchanvfx/NodeGraphQt
+Project: https://github.com/jchanvfx/NodeGraphQt
 
 .. image:: _images/screenshot.png
     :width: 95%
@@ -17,6 +15,7 @@ Module Classes
 .. toctree::
    :maxdepth: 3
 
+   constants
    graph
    nodes
    port

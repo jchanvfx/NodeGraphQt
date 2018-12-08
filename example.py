@@ -19,15 +19,15 @@ class MyNode(Node):
     __identifier__ = 'com.chantasticvfx'
 
     # set the initial default node name.
-    NODE_NAME = 'My Node'
+    NODE_NAME = 'Node'
 
     def __init__(self):
         super(MyNode, self).__init__()
-        self.set_color(81, 54, 88)
-        self.add_checkbox('cb_hello', '', 'Hello', True)
-        self.add_checkbox('cb_world', '', 'World', False)
-        self.add_input('in')
-        self.add_output('out')
+        # self.set_color(81, 54, 88)
+        # self.add_checkbox('cb_hello', '', 'Hello', True)
+        # self.add_checkbox('cb_world', '', 'World', False)
+        self.add_input('in port')
+        self.add_output('out port')
 
 
 if __name__ == '__main__':
@@ -54,11 +54,11 @@ if __name__ == '__main__':
 
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
-                                name='test',
+                                name='Foo Node',
                                 pos=(310.0, 10.0))
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
-                                 name='Foo Node',
+                                 name='Bar Node',
                                  pos=(-487.0, 141.0))
 
     # create example "TextInputNode".

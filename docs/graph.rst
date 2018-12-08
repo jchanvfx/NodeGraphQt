@@ -3,6 +3,9 @@ Graph
 
 The ``NodeGraph()`` class is the main controller for managing all nodes.
 
+.. image:: _images/graph.png
+    :width: 60%
+
 
 NodeGraph()
 ===========
