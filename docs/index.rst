@@ -6,15 +6,16 @@ Project: https://github.com/jchanvfx/NodeGraphQt
 .. image:: _images/screenshot.png
     :width: 95%
 
-NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
+NodeGraphQt api documentation.
 
 
-Module Classes
-==============
+Contents
+========
 
 .. toctree::
    :maxdepth: 3
 
+   overview
    constants
    graph
    nodes

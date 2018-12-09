@@ -1,8 +1,6 @@
 Nodes
 *****
 
-Node controllers that lives under the ``NodeGraphQt`` module.
-
 
 NodeObject()
 ============
