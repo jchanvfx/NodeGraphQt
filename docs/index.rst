@@ -1,12 +1,13 @@
 Node Graph Qt
 *************
 
-Project: https://github.com/jchanvfx/NodeGraphQt
+Welcome to the NodeGraphQt api documentation this project is still in a work in progress stage,
+so you might find not everything is fully documented.
 
 .. image:: _images/screenshot.png
     :width: 95%
 
-NodeGraphQt api documentation.
+Project: https://github.com/jchanvfx/NodeGraphQt
 
 
 Contents

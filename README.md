@@ -15,7 +15,11 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 ![screencap01](/docs/_images/screenshot.png)
 
 
-#### Navigation Controls
+#### Documentation
+
+http://chantasticvfx.com/nodeGraphQt/html/index.html
+
+#### Navigation
 
 | action        | controls                                     |
 | ------------- |:--------------------------------------------:|
@@ -31,10 +35,6 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
 #### Context Menu
 ![screencap02](/docs/_images/menu_hotkeys.png)
-
-#### Documentation
-
-http://chantasticvfx.com/NodeGraphQt/index.html
 
 #### Example Code
 
