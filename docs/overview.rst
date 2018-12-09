@@ -6,8 +6,8 @@ NodeGraphQt is a node graph framework that can be implemented and repurposed int
 .. image:: _images/overview.png
     :width: 60%
 
-Navigation Controls
-===================
+Navigation
+==========
 
 +---------------+----------------------------------------------+
 | action        | controls                                     |
@@ -17,6 +17,20 @@ Navigation Controls
 | Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
 +---------------+----------------------------------------------+
 
+Search
+======
+
+.. image:: _images/node_search.png
+    :width: 269px
+
+Node can be created with the tab node search popup menu similar to Nuke.
+
++-------------+--------+
+| action      | hotkey |
++=============+========+
+| Show Search | *Tab*  |
++-------------+--------+
+
 Hotkeys
 =======
 
@@ -24,3 +38,4 @@ The node graph comes built with some default action with assigned hotkeys.
 
 .. image:: _images/menu_hotkeys.png
     :width: 50%
+

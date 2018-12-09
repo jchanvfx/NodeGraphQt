@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(this_path, 'example', 'example_icon.png')
+    icon = os.path.join(this_path, 'example_nodes', 'example_icon.png')
     bar_node = graph.create_node('com.chantasticvfx.BarNode')
     bar_node.set_icon(icon)
     bar_node.set_name('Bar Node')
