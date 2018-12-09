@@ -12,13 +12,14 @@ It is still very much in a work in progress stage as I'm only working on in my s
 NodeGraphQt is a node graph framework that can be implemented and repurposed into 
 applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
-![screencap01](/example/screenshot.png)
+![screencap01](/docs/_images/screenshot.png)
 
-#### Requirements
 
-- Python3, PySide2
+#### Documentation
 
-#### Navigation Controls
+http://chantasticvfx.com/nodeGraphQt/html/index.html
+
+#### Navigation
 
 | action        | controls                                     |
 | ------------- |:--------------------------------------------:|
@@ -26,18 +27,14 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 | Pan           | `Alt + LMB + Drag` or `MMB + Drag`           |
 
 #### Node Search
-![screencap03](/example/screenshot_tab_search.png)
+![screencap03](/docs/_images/node_search.png)
 
 | action           | hotkey |
 | ---------------- |:------:|
 | Show node search | `Tab`  |
 
 #### Context Menu
-![screencap02](/example/screenshot_menu.png)
-
-#### API Documentation
-
-_currently unavaliable_
+![screencap02](/docs/_images/menu_hotkeys.png)
 
 #### Example Code
 

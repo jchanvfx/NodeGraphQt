@@ -21,7 +21,7 @@ class classproperty(object):
 
 class NodeObject(object):
     """
-    The base object of a node.
+    base skeleton class for all node objects.
     """
 
     __identifier__ = 'nodeGraphQt.nodes'
@@ -53,7 +53,7 @@ class NodeObject(object):
     @classproperty
     def type(cls):
         """
-        node type identifier followed by the class name.
+        Node type identifier followed by the class name.
         eg. com.chantasticvfx.FooNode
 
         Returns:
@@ -64,7 +64,7 @@ class NodeObject(object):
     @property
     def graph(self):
         """
-        The parent node graph.
+        The parent node graph controller.
 
         Returns:
             NodeGraphQt.NodeGraph: node graph.
@@ -188,9 +188,10 @@ class NodeObject(object):
 
     def set_disabled(self, mode=False):
         """
-        disables the node.
+        Set the node state to either disabled or enabled.
 
-        Args (bool): true to disable node.
+        Args:
+            mode(bool): true to disable node.
         """
         self.set_property('disabled', mode)
 
@@ -356,7 +357,7 @@ class NodeObject(object):
 
 class Node(NodeObject):
     """
-    Base class of a typical Node
+    base class of a typical Node with input and output ports.
     """
 
     NODE_NAME = 'Base Node'
@@ -569,7 +570,7 @@ class Node(NodeObject):
 
 class Backdrop(NodeObject):
     """
-    Base class of a Backdrop.
+    base class of a Backdrop node.
     """
 
     NODE_NAME = 'Backdrop'
