@@ -26,6 +26,18 @@ dl.docutils {
     padding: 4px 6px 1px 6px;
 }
 
+/* tables */
+table.docutils td, table.docutils th {
+    padding: 4px 6px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 2px solid #2b2c2f;
+    border-bottom: 2px solid #2b2c2f;
+    background: #3e4046;
+}
+
+/*-----------------------------------------*/
+
 /* modules index */
 table.indextable tr.cap {
     background-color: #3b3e40;

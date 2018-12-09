@@ -39,7 +39,7 @@ A basic example snippet.
 
     class FooNode(Node):
 
-        # unique node identifier.
+        # unique node identifier domain.
         __identifier__ = 'com.chantasticvfx'
 
         # initial default node name.
@@ -58,19 +58,19 @@ A basic example snippet.
     if __name__ == '__main__':
         app = QtWidgets.QApplication(sys.argv)
 
-        # create node graph.
+        # create node graph controller.
         graph = NodeGraph()
 
-        # register the FooNode node.
+        # register the FooNode node class.
         graph.register_node(FooNode)
 
         # show the node graph widget.
         viewer = graph.viewer()
         viewer.show()
 
-        # create a couple nodes.
-        node_a = graph.create_node('com.chantasticvfx.FooNode', name='hello')
-        node_b = graph.create_node('com.chantasticvfx.FooNode', name='world')
+        # create two nodes.
+        node_a = graph.create_node('com.chantasticvfx.FooNode', name='node A')
+        node_b = graph.create_node('com.chantasticvfx.FooNode', name='node B')
 
         # connect node_a to node_b
         node_a.set_output(0, node_b.input(2))

@@ -12,7 +12,7 @@ from example_nodes import simple_nodes, menu_node, text_input_node
 
 class MyNode(Node):
     """
-    This is a example test node.
+    example test node with 2 embedded QCheckBox widgets.
     """
 
     # set a unique node identifier.
@@ -23,9 +23,13 @@ class MyNode(Node):
 
     def __init__(self):
         super(MyNode, self).__init__()
-        # self.set_color(81, 54, 88)
-        # self.add_checkbox('cb_hello', '', 'checkbox', True)
-        # self.add_checkbox('cb_world', '', 'World', False)
+        self.set_color(81, 54, 88)
+
+        # create the checkboxes.
+        self.add_checkbox('cb_hello', '', 'Hello', True)
+        self.add_checkbox('cb_world', '', 'World', False)
+
+        # create input and output port.
         self.add_input('in port')
         self.add_output('out port')
 
@@ -54,23 +58,21 @@ if __name__ == '__main__':
 
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
-                                name='Foo Node',
+                                name='my node',
                                 pos=(310.0, 10.0))
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
-                                 name='Bar Node',
+                                 name='johnny',
                                  pos=(-487.0, 141.0))
 
     # create example "TextInputNode".
     text_node = graph.create_node('com.chantasticvfx.TextInputNode',
-                                  name='Text Node',
                                   color='#3a304a',
                                   pos=(-488.0, -158.0))
     text_node.set_disabled(True)
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
-                                  name='Menu Node',
                                   color='#193a33',
                                   pos=(279.0, -209.0))
 

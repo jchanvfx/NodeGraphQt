@@ -3,21 +3,21 @@ from NodeGraphQt import Node
 
 class TextInputNode(Node):
     """
-    A example of a node with a added text input.
+    A example of a node with a embedded QlineEdit.
     """
 
-    # set unique node identifier.
+    # unique node identifier.
     __identifier__ = 'com.chantasticvfx'
 
-    # set initial default node name.
-    NODE_NAME = 'Input text node'
+    # initial default node name.
+    NODE_NAME = 'text'
 
     def __init__(self):
         super(TextInputNode, self).__init__()
 
         # create input & output ports
-        self.add_input('hello')
-        self.add_output('world')
+        self.add_input('in port')
+        self.add_output('out port')
 
-        # create text input field to node.
+        # create QLineEdit text input widget.
         self.add_text_input('my_input', 'Text Input')

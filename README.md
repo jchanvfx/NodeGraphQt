@@ -47,11 +47,11 @@ from NodeGraphQt import NodeGraph, Node, Backdrop
 class MyNode(Node):
     """example test node."""
 
-    # unique node identifier.
+    # unique node identifier domain. ("com.chantasticvfx.MyNode")
     __identifier__ = 'com.chantasticvfx'
 
     # initial default node name.
-    NODE_NAME = 'Test Node'
+    NODE_NAME = 'My Node'
 
     def __init__(self):
         super(MyNode, self).__init__()
@@ -62,7 +62,7 @@ class MyNode(Node):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    # create the main node graph controller.
+    # create the node graph controller.
     graph = NodeGraph()
    
     # register backdrop node. (included in the NodeGraphQt module)
@@ -73,10 +73,10 @@ if __name__ == '__main__':
    
     # create nodes.
     backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
-    node_a = graph.create_node('com.chantasticvfx.MyNode', name='Foo Node')
-    node_b = graph.create_node('com.chantasticvfx.MyNode', name='Bar Node', color='#5b162f')
+    node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
+    node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
     
-    # connect nodes.
+    # connect node a input to node b output.
     node_a.set_input(0, node_b.output(0))    
 
     # show widget.
