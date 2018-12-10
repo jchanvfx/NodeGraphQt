@@ -155,14 +155,14 @@ class NodeGraph(QtCore.QObject):
     def show(self):
         """
         Show node graph viewer widget this is just a convenience
-        function to ``.viewer().show()``.
+        function to :meth:`NodeGraphQt.NodeGraph.viewer().show()`.
         """
         self._viewer.show()
 
     def close(self):
         """
         Close node graph ``NodeViewer`` widget this is just a convenience
-        function to ``.viewer().close()``.
+        function to :meth:`NodeGraphQt.NodeGraph.viewer().close()`.
         """
         self._viewer.close()
 
@@ -195,7 +195,8 @@ class NodeGraph(QtCore.QObject):
 
     def begin_undo(self, name='undo'):
         """
-        Start of an undo block followed by a ``end_undo()``.
+        Start of an undo block followed by a
+        :meth:`NodeGraphQt.NodeGraph.end_undo()`.
 
         Args:
             name (str): name for the undo block.
@@ -204,7 +205,8 @@ class NodeGraph(QtCore.QObject):
 
     def end_undo(self):
         """
-        End of an undo block started by ``begin_undo()``.
+        End of an undo block started by
+        :meth:`NodeGraphQt.NodeGraph.begin_undo()`.
         """
         self._undo_stack.endMacro()
 
@@ -299,7 +301,8 @@ class NodeGraph(QtCore.QObject):
     def registered_nodes(self):
         """
         Return a list of all node types that have been registered.
-        To register a node see :ref:`NodeGraphQt.NodeGraph.register_node`
+
+        To register a node see :meth:`NodeGraphQt.NodeGraph.register_node`
 
         Returns:
             list[str]: list of node type identifiers.
@@ -459,10 +462,10 @@ class NodeGraph(QtCore.QObject):
 
     def get_node_by_id(self, node_id=None):
         """
-        Returns the node instance from the node id string.
+        Returns the node from the node id string.
 
         Args:
-            node_id (str): node id (``NodeObject().id``)
+            node_id (str): node id (:meth:`NodeGraphQt.NodeGraph.NodeObject().id`)
 
         Returns:
             NodeGraphQt.NodeObject: node object.
@@ -471,7 +474,7 @@ class NodeGraph(QtCore.QObject):
 
     def get_node_by_name(self, name):
         """
-        Returns node instance that matches the name.
+        Returns node that matches the name.
 
         Args:
             name (str): name of the node.
