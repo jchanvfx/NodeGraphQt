@@ -17,6 +17,13 @@ from NodeGraphQt.widgets.port import PortItem
 
 
 class XDisabledItem(QGraphicsItem):
+    """
+    Node disabled overlay item.
+
+    Args:
+        parent (NodeItem): the parent node item.
+        text (str): disable overlay text.
+    """
 
     def __init__(self, parent=None, text=None):
         super(XDisabledItem, self).__init__(parent)
@@ -29,6 +36,15 @@ class XDisabledItem(QGraphicsItem):
         return self.parentItem().boundingRect()
 
     def paint(self, painter, option, widget):
+        """
+        Draws the overlay disabled X item on top of a node item.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         painter.save()
 
         margin = 20
@@ -100,6 +116,10 @@ class XDisabledItem(QGraphicsItem):
 class NodeItem(AbstractNodeItem):
     """
     Base Node item.
+
+    Args:
+        name (str): name displayed on the node.
+        parent (QtWidgets.QGraphicsItem): parent item.
     """
 
     def __init__(self, name='node', parent=None):
@@ -118,6 +138,15 @@ class NodeItem(AbstractNodeItem):
         self._widgets = {}
 
     def paint(self, painter, option, widget):
+        """
+        Draws the node base not the ports.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         painter.save()
         bg_border = 1.0
         rect = QtCore.QRectF(0.5 - (bg_border / 2),
@@ -489,7 +518,6 @@ class NodeItem(AbstractNodeItem):
     @AbstractNodeItem.width.setter
     def width(self, width=0.0):
         w, h = self.calc_size()
-        # self._width = width if width > w else w
         width = width if width > w else w
         AbstractNodeItem.width.fset(self, width)
 
@@ -497,7 +525,6 @@ class NodeItem(AbstractNodeItem):
     def height(self, height=0.0):
         w, h = self.calc_size()
         h = 70 if h < 70 else h
-        # self._height = height if height > h else h
         height = height if height > h else h
         AbstractNodeItem.height.fset(self, height)
 
