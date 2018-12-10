@@ -43,6 +43,15 @@ class PortItem(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def paint(self, painter, option, widget):
+        """
+        Draws the circular port.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         painter.save()
 
         rect = QtCore.QRectF(0.0, 0.8, self._width, self._height)
