@@ -19,7 +19,7 @@ PIPE_STYLES = {
 
 class Pipe(QtWidgets.QGraphicsPathItem):
     """
-    Base Pipe Item.
+    Base Pipe item used for drawing node connections.
     """
 
     def __init__(self, input_port=None, output_port=None):
@@ -56,6 +56,15 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.highlight()
 
     def paint(self, painter, option, widget):
+        """
+        Draws the connection line between nodes.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
         pen_width = PIPE_WIDTH
@@ -82,6 +91,15 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         painter.drawPath(self.path())
 
     def draw_path(self, start_port, end_port, cursor_pos=None):
+        """
+        Draws the path between ports.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            end_port (PortItem): port used to draw the end point.
+            cursor_pos (QtCore.QPointF): cursor position if specified this
+                will be the draw end point.
+        """
         if not start_port:
             return
         offset = (start_port.boundingRect().width() / 2)
