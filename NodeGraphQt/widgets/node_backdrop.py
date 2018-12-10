@@ -11,6 +11,13 @@ from NodeGraphQt.widgets.port import PortItem
 
 
 class BackdropSizer(QGraphicsItem):
+    """
+    Sizer item for resizing a backdrop node.
+
+    Args:
+        parent (BackdropNodeItem): the parent node item.
+        size (float): sizer size.
+    """
 
     def __init__(self, parent=None, size=6.0):
         super(BackdropSizer, self).__init__(parent)
@@ -49,6 +56,15 @@ class BackdropSizer(QGraphicsItem):
         item.on_sizer_double_clicked()
 
     def paint(self, painter, option, widget):
+        """
+        Draws the backdrop sizer on the bottom right corner.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         painter.save()
 
         rect = self.boundingRect()
@@ -72,6 +88,11 @@ class BackdropSizer(QGraphicsItem):
 class BackdropNodeItem(AbstractNodeItem):
     """
     Base Backdrop item.
+
+    Args:
+        name (str): name displayed on the node.
+        text (str): backdrop text.
+        parent (QtWidgets.QGraphicsItem): parent item.
     """
 
     def __init__(self, name='backdrop', text='', parent=None):
@@ -121,6 +142,15 @@ class BackdropNodeItem(AbstractNodeItem):
         self.auto_resize()
 
     def paint(self, painter, option, widget):
+        """
+        Draws the backdrop rect.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
         painter.save()
 
         rect = self.boundingRect()
