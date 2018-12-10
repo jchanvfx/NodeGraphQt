@@ -28,12 +28,12 @@ dl.docutils {
 
 /* tables */
 table.docutils td, table.docutils th {
-    padding: 4px 6px;
+    padding: 4px 8px;
     border-top: 0;
     border-left: 0;
     border-right: 2px solid #2b2c2f;
     border-bottom: 2px solid #2b2c2f;
-    background: #3e4046;
+    background: #24272b;
 }
 
 /*-----------------------------------------*/
@@ -298,9 +298,9 @@ code {
 }
 
 div.viewcode-block:target {
-    background-color: #f4debf;
-    border-top: 1px solid #ac9;
-    border-bottom: 1px solid #ac9;
+    background-color: #151617;
+    border-top: 1px solid #151617;
+    border-bottom: 1px solid #373c42;
 }
 
 div.code-block-caption {

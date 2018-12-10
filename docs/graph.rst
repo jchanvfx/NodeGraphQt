@@ -1,21 +1,20 @@
 Graph
 *****
 
-The ``NodeGraph()`` class is the main controller for managing all nodes.
+The NodeGraph class is the main controller for managing all nodes.
 
 .. image:: _images/graph.png
     :width: 60%
 
 
-NodeGraph()
-===========
+NodeGraphQt.NodeGraph
+=====================
 
-(``QtCore.QObject`` --> ``NodeGraph``)
+**Inherited from:** `QtCore.QObject <https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html?highlight=qobject>`_
+
 
 ----
 
-.. automodule:: NodeGraphQt.NodeGraph
 .. autoclass:: NodeGraphQt.NodeGraph
     :members:
     :exclude-members: model
-    :noindex:

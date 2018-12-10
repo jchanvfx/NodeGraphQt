@@ -24,10 +24,10 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
     """
 
-    node_created = QtCore.Signal(NodeObject)
-    node_selected = QtCore.Signal(NodeObject)
-    port_connected = QtCore.Signal(Port, Port)
-    data_dropped = QtCore.Signal(str, tuple)
+    node_created = QtCore.Signal(NodeObject)    #: emitted when a node has been created in the node graph.
+    node_selected = QtCore.Signal(NodeObject)   #: emitted when a node is selected.
+    port_connected = QtCore.Signal(Port, Port)  #: emitted when a node has been connected.
+    data_dropped = QtCore.Signal(str, tuple)    #: emitted when drop data has been added to the graph.
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -299,7 +299,7 @@ class NodeGraph(QtCore.QObject):
     def registered_nodes(self):
         """
         Return a list of all node types that have been registered.
-        To register a node see ``register_node()``
+        To register a node see :ref:`NodeGraphQt.NodeGraph.register_node`
 
         Returns:
             list[str]: list of node type identifiers.
@@ -320,13 +320,13 @@ class NodeGraph(QtCore.QObject):
         """
         Create a new node in the node graph.
 
-        (To list all node types see ``registered_nodes()``)
+        (To list all node types see :meth:`NodeGraphQt.NodeGraph.registered_nodes`)
 
         Args:
             node_type (str): node instance type.
             name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple or str): node color ``(255, 255, 255)`` or ``'#FFFFFF'``.
+            color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
             pos (tuple): set position of the node (x, y).
 
         Returns:
@@ -459,7 +459,7 @@ class NodeGraph(QtCore.QObject):
 
     def get_node_by_id(self, node_id=None):
         """
-        Returns the ``NodeObject()`` object from the node id.
+        Returns the node instance from the node id string.
 
         Args:
             node_id (str): node id (``NodeObject().id``)
@@ -471,7 +471,7 @@ class NodeGraph(QtCore.QObject):
 
     def get_node_by_name(self, name):
         """
-        Returns node object that matches the name.
+        Returns node instance that matches the name.
 
         Args:
             name (str): name of the node.

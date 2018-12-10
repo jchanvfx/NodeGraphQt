@@ -25,8 +25,8 @@ import NodeGraphQt
 # -- Project information -----------------------------------------------------
 
 project = 'NodeGraphQt'
-copyright = '2018, Johnny Chan'
-author = 'Johnny Chan'
+copyright = '2018, {}'.format(NodeGraphQt.__author__)
+author = NodeGraphQt.__author__
 
 # The short X.Y version
 version = '{0}.{1}'.format(*NodeGraphQt.__version__.split('.'))
@@ -43,9 +43,15 @@ release = NodeGraphQt.__version__
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.coverage',
-              'sphinx.ext.napoleon']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
+    # 'sphinx.ext.coverage',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
+]
+
+# intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

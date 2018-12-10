@@ -17,8 +17,8 @@ Navigation
 | Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
 +---------------+----------------------------------------------+
 
-Search
-======
+Node Search
+===========
 
 .. image:: _images/node_search.png
     :width: 269px
