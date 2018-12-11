@@ -7,13 +7,11 @@ from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 
 
 class ContextMenu(object):
+    """
+    base class for a context menu item.
+    """
 
     def __init__(self, viewer, qmenu):
-        """
-        Args:
-            viewer (NodeViewer): node viewer.
-            qmenu (QtWidgets.QMenu): menu object.
-        """
         self.__viewer = viewer
         self.__qmenu = qmenu
 
@@ -26,19 +24,49 @@ class ContextMenu(object):
         return self.__qmenu
 
     def name(self):
+        """
+        Returns the label for the menu.
+
+        Returns:
+            str: label name.
+        """
         return self.qmenu.title()
 
     def get_menu(self, name):
+        """
+        Returns the child context menu item by name.
+
+        Args:
+            name (str): name of the menu.
+
+        Returns:
+            NodeGraphQt.base.menu.ContextMenu: menu item.
+        """
         for action in self.qmenu.actions():
             if action.menu() and action.menu().title() == name:
                 return ContextMenu(self.__viewer, action.menu())
 
     def get_command(self, name):
+        """
+        Returns the child menu command item by name.
+
+        Args:
+            name (str): name of the command.
+
+        Returns:
+            NodeGraphQt.base.menu.ContextMenuCommand: context menu command.
+        """
         for action in self.qmenu.actions():
             if not action.menu() and action.text() == name:
                 return ContextMenuCommand(self.__viewer, action)
 
     def all_commands(self):
+        """
+        Returns all child and sub child commands from the current context menu.
+
+        Returns:
+            list[NodeGraphQt.base.menu.ContextMenuCommand]: list of commands.
+        """
         def get_actions(menu):
             actions = []
             for action in menu.actions():
@@ -52,12 +80,32 @@ class ContextMenu(object):
         return [ContextMenuCommand(self.__viewer, a) for a in child_actions]
 
     def add_menu(self, name):
+        """
+        Adds a child menu to the current menu.
+
+        Args:
+            name (str): menu name.
+
+        Returns:
+            NodeGraphQt.base.menu.ContextMenu: the appended menu.
+        """
         menu = QtWidgets.QMenu(None, title=name)
         menu.setStyleSheet(STYLE_QMENU)
         self.qmenu.addMenu(menu)
         return ContextMenu(self.__viewer, menu)
 
     def add_command(self, name, func=None, shortcut=None):
+        """
+        Adds a command to the menu.
+
+        Args:
+            name (str): command name.
+            func (): command function.
+            shortcut (str): shotcut key.
+
+        Returns:
+
+        """
         action = QtWidgets.QAction(name, self.__viewer)
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
@@ -69,17 +117,18 @@ class ContextMenu(object):
         return ContextMenuCommand(self.__viewer, qaction)
 
     def add_separator(self):
+        """
+        Adds a separator to the menu.
+        """
         self.qmenu.addSeparator()
 
 
 class ContextMenuCommand(object):
+    """
+    base class for a context menu command.
+    """
 
     def __init__(self, viewer, qaction):
-        """
-        Args:
-            viewer (NodeViewer): node viewer.
-            qaction (QtWidgets.QAction): action object.
-        """
         self.__viewer = viewer
         self.__qaction = qaction
 
@@ -92,11 +141,26 @@ class ContextMenuCommand(object):
         return self.__qaction
 
     def name(self):
+        """
+        Returns the label for the menu command.
+
+        Returns:
+            str: label name.
+        """
         return self.qaction.text()
 
     def set_shortcut(self, shortcut=None):
+        """
+        Sets the shortcut key combination for the menu command.
+
+        Args:
+            shortcut (str): shortcut key.
+        """
         shortcut = shortcut or QtGui.QKeySequence()
         self.qaction.setShortcut(shortcut)
 
     def run_command(self):
+        """
+        execute the menu command.
+        """
         self.qaction.trigger()

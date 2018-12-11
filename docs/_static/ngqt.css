@@ -25,6 +25,10 @@ dl.docutils {
     border-radius: 2px;
     padding: 4px 6px 1px 6px;
 }
+dt:target, 
+span.highlighted {
+    background-color: #165d53;
+}
 
 /* tables */
 table.docutils td, table.docutils th {

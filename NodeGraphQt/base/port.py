@@ -4,13 +4,15 @@ from NodeGraphQt.base.model import PortModel
 
 
 class Port(object):
+    """
+    base class for a :ref:`NodeGraphQt.Node` port.
+
+    Args:
+        node (NodeGraphQt.NodeObject): parent node.
+        port (PortItem): graphic item used for drawing.
+    """
 
     def __init__(self, node, port):
-        """
-        Args:
-            node (NodeGraphQt.NodeObject): parent node object.
-            port (NodeGraphQt.widgets.port.PortItem): port view item.
-        """
         self.__view = port
         self.__model = PortModel(node)
 
@@ -21,7 +23,7 @@ class Port(object):
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.node().id() == other.node().id()
+            return self.node().id == other.node().id
         return False
 
     def __ne__(self, other):

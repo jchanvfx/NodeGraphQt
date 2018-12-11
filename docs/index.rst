@@ -21,6 +21,7 @@ Contents
    graph
    nodes
    port
+   menu
 
 
 Example

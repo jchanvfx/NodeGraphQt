@@ -161,7 +161,7 @@ class NodeGraph(QtCore.QObject):
 
     def close(self):
         """
-        Close node graph ``NodeViewer`` widget this is just a convenience
+        Close node graph NodeViewer widget this is just a convenience
         function to :meth:`NodeGraphQt.NodeGraph.viewer().close()`.
         """
         self._viewer.close()
@@ -465,7 +465,7 @@ class NodeGraph(QtCore.QObject):
         Returns the node from the node id string.
 
         Args:
-            node_id (str): node id (:meth:`NodeGraphQt.NodeGraph.NodeObject().id`)
+            node_id (str): node id (:meth:`NodeGraphQt.NodeGraph.NodeObject.id`)
 
         Returns:
             NodeGraphQt.NodeObject: node object.

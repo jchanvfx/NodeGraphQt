@@ -41,3 +41,4 @@ __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 from .base.graph import NodeGraph
 from .base.node import NodeObject, Node, Backdrop
 from .base.port import Port
+from .base.menu import ContextMenu, ContextMenuCommand

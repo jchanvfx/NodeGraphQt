@@ -22,6 +22,9 @@ class classproperty(object):
 class NodeObject(object):
     """
     base skeleton class for all node objects.
+
+    Args:
+        node (AbstractNodeItem): graphic item used for drawing.
     """
 
     __identifier__ = 'nodeGraphQt.nodes'
