@@ -86,7 +86,7 @@ class NodeObject(object):
 
     def set_view(self, item):
         """
-        set the view item for the scene.
+        Sets the graphic item to use for the scene.
 
         Args:
             item (AbstractNodeItem): node view item.
@@ -98,7 +98,7 @@ class NodeObject(object):
     @property
     def model(self):
         """
-        returns the node model.
+        Returns the node model.
 
         Returns:
             NodeModel: node model object.
@@ -122,7 +122,7 @@ class NodeObject(object):
 
     def update_model(self):
         """
-        update the node model from view.
+        Update the node model from view.
         """
         for name, val in self.view.properties.items():
             if name in self.model.properties.keys():
@@ -182,7 +182,7 @@ class NodeObject(object):
 
     def disabled(self):
         """
-        returns weather the node is enabled or disabled.
+        Returns weather the node is enabled or disabled.
 
         Returns:
             bool: true if the node is disabled.
