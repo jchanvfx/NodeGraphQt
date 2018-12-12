@@ -155,14 +155,14 @@ class NodeGraph(QtCore.QObject):
     def show(self):
         """
         Show node graph viewer widget this is just a convenience
-        function to :meth:`NodeGraphQt.NodeGraph.viewer().show()`.
+        function to :meth:`NodeGraph.viewer().show()`.
         """
         self._viewer.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraphQt.NodeGraph.viewer().close()`.
+        function to :meth:`NodeGraph.viewer().close()`.
         """
         self._viewer.close()
 
@@ -189,14 +189,14 @@ class NodeGraph(QtCore.QObject):
         Returns the undo stack used in the node graph
 
         Returns:
-            QtWidgets.QUndoStack: undo stack.
+            PySide2.QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
 
     def begin_undo(self, name='undo'):
         """
         Start of an undo block followed by a
-        :meth:`NodeGraphQt.NodeGraph.end_undo()`.
+        :meth:`NodeGraph.end_undo()`.
 
         Args:
             name (str): name for the undo block.
@@ -206,7 +206,7 @@ class NodeGraph(QtCore.QObject):
     def end_undo(self):
         """
         End of an undo block started by
-        :meth:`NodeGraphQt.NodeGraph.begin_undo()`.
+        :meth:`NodeGraph.begin_undo()`.
         """
         self._undo_stack.endMacro()
 
@@ -269,7 +269,7 @@ class NodeGraph(QtCore.QObject):
         Set the zoom factor of the Node Graph the default is 0.0
 
         Args:
-            zoom (float): zoom factor max zoom out -0.9 max zoom in 2.0
+            zoom (float): zoom factor (max zoom out -0.9 / max zoom in 2.0)
         """
         self._viewer.set_zoom(zoom)
 
@@ -302,7 +302,7 @@ class NodeGraph(QtCore.QObject):
         """
         Return a list of all node types that have been registered.
 
-        To register a node see :meth:`NodeGraphQt.NodeGraph.register_node`
+        To register a node see :meth:`NodeGraph.register_node`
 
         Returns:
             list[str]: list of node type identifiers.
@@ -323,7 +323,7 @@ class NodeGraph(QtCore.QObject):
         """
         Create a new node in the node graph.
 
-        (To list all node types see :meth:`NodeGraphQt.NodeGraph.registered_nodes`)
+        (To list all node types see :meth:`NodeGraph.registered_nodes`)
 
         Args:
             node_type (str): node instance type.
@@ -465,7 +465,7 @@ class NodeGraph(QtCore.QObject):
         Returns the node from the node id string.
 
         Args:
-            node_id (str): node id (:meth:`NodeGraphQt.NodeGraph.NodeObject.id`)
+            node_id (str): node id (:meth:`NodeObject.id`)
 
         Returns:
             NodeGraphQt.NodeObject: node object.
@@ -536,6 +536,7 @@ class NodeGraph(QtCore.QObject):
     def _serialize(self, nodes):
         """
         serialize nodes to a dict.
+        (used internally by the node graph)
 
         Args:
             nodes (list[NodeGraphQt.Nodes]): list of node instances.
@@ -580,6 +581,7 @@ class NodeGraph(QtCore.QObject):
     def _deserialize(self, data, relative_pos=False, pos=None):
         """
         deserialize node data.
+        (used internally by the node graph)
 
         Args:
             data (dict): node data.
@@ -754,7 +756,9 @@ class NodeGraph(QtCore.QObject):
 
     def disable_nodes(self, nodes, mode=None):
         """
-        Disable/Enable specified nodes.
+        Set weather to Disable or Enable specified nodes.
+
+        see: :meth:`NodeObject.set_disabled`
 
         Args:
             nodes (list[NodeGraphQt.Node]): list of node instances.
@@ -772,3 +776,59 @@ class NodeGraph(QtCore.QObject):
             self._undo_stack.endMacro()
             return
         nodes[0].set_disabled(mode)
+
+    def question_dialog(self, text, title='Node Graph'):
+        """
+        Prompts a question open dialog with "Yes" and "No" buttons in
+        the node graph.
+
+        (convenience function to :meth:`NodeGraph.viewer().question_dialog`)
+
+        Args:
+            text (str): question text.
+            title (str): dialog window title.
+
+        Returns:
+            bool: true if user clicked yes.
+        """
+        self._viewer.question_dialog(text, title)
+
+    def message_dialog(self, text, title='Node Graph'):
+        """
+        Prompts a file open dialog in the node graph.
+
+        (convenience function to :meth:`NodeGraph.viewer().message_dialog`)
+
+        Args:
+            text (str): message text.
+            title (str): dialog window title.
+        """
+        self._viewer.message_dialog(text, title)
+
+    def load_dialog(self, current_dir=None):
+        """
+        Prompts a file open dialog in the node graph.
+
+        (convenience function to :meth:`NodeGraph.viewer().load_dialog`)
+
+        Args:
+            current_dir (str): path to a directory.
+
+        Returns:
+            str: selected file path.
+        """
+        return self._viewer.load_dialog(current_dir)
+
+    def save_dialog(self, current_dir=None):
+        """
+        Prompts a file save dialog in the node graph.
+
+        (convenience function to :meth:`NodeGraph.viewer().save_dialog`)
+
+        Args:
+            current_dir (str): path to a directory.
+
+        Returns:
+            str: selected file path.
+        """
+        return self._viewer.save_dialog(current_dir)

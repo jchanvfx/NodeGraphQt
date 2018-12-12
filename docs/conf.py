@@ -51,7 +51,10 @@ extensions = [
     'sphinx.ext.napoleon',
 ]
 
-# intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {
+    # 'python': ('https://docs.python.org/3', None),
+    'PySide2': ('https://doc.qt.io/qtforpython/', None),
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

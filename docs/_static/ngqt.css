@@ -30,6 +30,11 @@ span.highlighted {
     background-color: #165d53;
 }
 
+/* internal func code reference */
+code span.pre {
+    color: #00ccff;
+}
+
 /* tables */
 table.docutils td, table.docutils th {
     padding: 4px 8px;

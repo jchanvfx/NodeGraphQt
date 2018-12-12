@@ -247,7 +247,7 @@ class NodeObject(object):
             name (str): name of the property.
 
         Returns:
-            str, int or float: value of the node property.
+            object: property data.
         """
         if name in self.model.custom_properties.keys():
             if name == 'selected':
@@ -261,7 +261,7 @@ class NodeObject(object):
 
         Args:
             name (str): name of the property.
-            value: the new property value.
+            value (object): property data.
         """
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
@@ -324,8 +324,6 @@ class NodeObject(object):
             y (float): node Y position.
         """
         self.set_property('pos', (x, y))
-        # self.view.pos = [x, y]
-        # self.model.pos = (x, y)
 
     def x_pos(self):
         """
@@ -392,6 +390,8 @@ class Node(NodeObject):
         """
         Set the value on the node custom property and updates the node widget.
 
+        see :meth:`NodeObject.get_property()`
+
         Args:
             name (str): name of the property.
             value: the new property value.
@@ -422,7 +422,7 @@ class Node(NodeObject):
 
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
-        Add input port to node.
+        Add input :class:`Port` to node.
 
         Args:
             name (str): name for the input port. 
@@ -444,7 +444,7 @@ class Node(NodeObject):
 
     def add_output(self, name='output', multi_output=True, display_name=True):
         """
-        Add output port to node.
+        Add output :class:`Port` to node.
 
         Args:
             name (str): name for the output port. 
@@ -466,7 +466,7 @@ class Node(NodeObject):
 
     def add_combo_menu(self, name='', label='', items=None):
         """
-        Embed a NodeComboBox widget into the node.
+        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -481,7 +481,7 @@ class Node(NodeObject):
 
     def add_text_input(self, name='', label='', text=''):
         """
-        Embed a NodeLineEdit widget into the node.
+        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -494,7 +494,7 @@ class Node(NodeObject):
 
     def add_checkbox(self, name='', label='', text='', state=False):
         """
-        Embed a NodeCheckBox widget into the node.
+        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -538,7 +538,7 @@ class Node(NodeObject):
 
     def set_input(self, index, port):
         """
-        Creates a connection pipe to the targeted output port.
+        Creates a connection pipe to the targeted output :class:`Port`.
 
         Args:
             index (int): index of the port.
@@ -561,7 +561,7 @@ class Node(NodeObject):
 
     def set_output(self, index, port):
         """
-        Creates a connection pipe to the targeted input port.
+        Creates a connection pipe to the targeted input :class:`Port`.
 
         Args:
             index (int): index of the port.
