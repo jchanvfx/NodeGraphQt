@@ -36,6 +36,8 @@ Hotkeys
 
 The node graph comes built with some default action with assigned hotkeys.
 
+see: :ref:`Menus`
+
 .. image:: _images/menu_hotkeys.png
     :width: 50%
 

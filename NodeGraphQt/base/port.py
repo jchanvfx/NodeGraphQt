@@ -17,9 +17,8 @@ class Port(object):
         self.__model = PortModel(node)
 
     def __repr__(self):
-        module = str(self.__class__.__module__)
         port = str(self.__class__.__name__)
-        return '{}.{}(\'{}\')'.format(module, port, self.name())
+        return 'NodeGraphQt.{}(\'{}\')'.format(port, self.name())
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

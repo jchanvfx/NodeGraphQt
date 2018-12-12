@@ -17,7 +17,7 @@ class ContextMenu(object):
 
     def __repr__(self):
         cls_name = self.__class__.__name__
-        return '{}.{}(\'{}\')'.format(self.__module__, cls_name, self.name())
+        return 'NodeGraphQt.{}(\'{}\')'.format(cls_name, self.name())
 
     @property
     def qmenu(self):
@@ -54,7 +54,7 @@ class ContextMenu(object):
             name (str): name of the command.
 
         Returns:
-            NodeGraphQt.base.menu.ContextMenuCommand: context menu command.
+            NodeGraphQt.ContextMenuCommand: context menu command.
         """
         for action in self.qmenu.actions():
             if not action.menu() and action.text() == name:
@@ -65,7 +65,7 @@ class ContextMenu(object):
         Returns all child and sub child commands from the current context menu.
 
         Returns:
-            list[NodeGraphQt.base.menu.ContextMenuCommand]: list of commands.
+            list[NodeGraphQt.ContextMenuCommand]: list of commands.
         """
         def get_actions(menu):
             actions = []
@@ -87,7 +87,7 @@ class ContextMenu(object):
             name (str): menu name.
 
         Returns:
-            NodeGraphQt.base.menu.ContextMenu: the appended menu.
+            NodeGraphQt.ContextMenu: the appended menu.
         """
         menu = QtWidgets.QMenu(None, title=name)
         menu.setStyleSheet(STYLE_QMENU)
@@ -134,7 +134,7 @@ class ContextMenuCommand(object):
 
     def __repr__(self):
         cls_name = self.__class__.__name__
-        return '{}.{}(\'{}\')'.format(self.__module__, cls_name, self.name())
+        return 'NodeGraphQt.{}(\'{}\')'.format(cls_name, self.name())
 
     @property
     def qaction(self):

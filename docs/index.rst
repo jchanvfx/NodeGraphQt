@@ -14,14 +14,14 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 3
+    :maxdepth: 3
 
-   overview
-   constants
-   graph
-   nodes
-   port
-   menu
+    overview
+    constants
+    graph
+    nodes
+    port
+    menu
 
 
 Example
