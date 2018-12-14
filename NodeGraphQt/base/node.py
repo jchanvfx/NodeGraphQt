@@ -27,8 +27,10 @@ class NodeObject(object):
         node (AbstractNodeItem): graphic item used for drawing.
     """
 
+    #: unique node identifier domain.
     __identifier__ = 'nodeGraphQt.nodes'
 
+    #: initial default node name.
     NODE_NAME = None
 
     def __init__(self, node=None):

@@ -1,9 +1,6 @@
 NodeGraphQt API
 ***************
 
-Welcome to the NodeGraphQt api documentation this project is still in a work in progress stage,
-so you might find not everything is fully documented.
-
 .. image:: _images/screenshot.png
     :width: 95%
 

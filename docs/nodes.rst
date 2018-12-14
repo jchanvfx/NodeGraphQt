@@ -7,11 +7,15 @@ NodeGraphQt.NodeObject
 
 **Inherited by:** :ref:`NodeGraphQt.Node`, :ref:`NodeGraphQt.Backdrop`
 
+.. autoattribute:: NodeGraphQt.NodeObject.__identifier__
+.. autoattribute:: NodeGraphQt.NodeObject.NODE_NAME
+
 ----
+
 
 .. autoclass:: NodeGraphQt.NodeObject
     :members:
-    :exclude-members: model
+    :exclude-members: model, NODE_NAME
 
 
 

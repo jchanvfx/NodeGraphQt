@@ -24,10 +24,14 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
     """
 
-    node_created = QtCore.Signal(NodeObject)    #: emitted when a node has been created in the node graph.
-    node_selected = QtCore.Signal(NodeObject)   #: emitted when a node is selected.
-    port_connected = QtCore.Signal(Port, Port)  #: emitted when a node has been connected.
-    data_dropped = QtCore.Signal(str, tuple)    #: emitted when drop data has been added to the graph.
+    #: signal for when a node has been created in the node graph.
+    node_created = QtCore.Signal(NodeObject)
+    #: signal for when a node is selected.
+    node_selected = QtCore.Signal(NodeObject)
+    #: signal for when a node has been connected.
+    port_connected = QtCore.Signal(Port, Port)
+    #: signal for when drop data has been added to the graph.
+    data_dropped = QtCore.Signal(str, tuple)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)

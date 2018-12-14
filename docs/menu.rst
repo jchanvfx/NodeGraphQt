@@ -1,7 +1,7 @@
 Menus
 *****
 
-example.
+example to adding a menu and command.
 
 .. code-block:: python
     :linenos:
