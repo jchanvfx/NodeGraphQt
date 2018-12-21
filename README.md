@@ -17,7 +17,7 @@ applications that supports [PySide2](https://doc-snapshots.qt.io/qtforpython/).
 
 #### Documentation
 
-Sphinx Docs (not finished): http://chantasticvfx.com/nodeGraphQt/html/index.html
+api docs: http://chantasticvfx.com/nodeGraphQt/html/index.html
 
 
 #### Navigation
