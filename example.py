@@ -43,15 +43,14 @@ if __name__ == '__main__':
 
     # registered nodes.
     reg_nodes = [
-        Backdrop,
-        MyNode,
+        Backdrop, MyNode,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
         widget_nodes.DropdownMenuNode,
         widget_nodes.TextInputNode
     ]
-    [graph.register_node(n) for n in reg_nodes]
-
+    for n in reg_nodes:
+        graph.register_node(n)
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
                                 name='portal',

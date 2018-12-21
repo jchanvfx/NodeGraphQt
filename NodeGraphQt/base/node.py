@@ -68,6 +68,16 @@ class NodeObject(object):
         return cls.__identifier__ + '.' + cls.__name__
 
     @property
+    def id(self):
+        """
+        The node unique id.
+
+        Returns:
+            str: unique id string.
+        """
+        return self.model.id
+
+    @property
     def graph(self):
         """
         The parent node graph controller.
@@ -112,16 +122,6 @@ class NodeObject(object):
         self._model = model
         self._model.type = self.type
         self._model.id = self.view.id
-
-    @property
-    def id(self):
-        """
-        The node unique id.
-
-        Returns:
-            str: unique id string.
-        """
-        return self.model.id
 
     def update_model(self):
         """

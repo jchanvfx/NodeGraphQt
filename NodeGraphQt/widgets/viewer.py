@@ -7,8 +7,7 @@ from PySide2 import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,
-                                   PIPE_STYLE_DASHED,
-                                   FILE_IO_EXT)
+                                   PIPE_STYLE_DASHED)
 from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.pipe import Pipe
@@ -297,8 +296,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def acyclic_check(self, start_port, end_port):
         """
-        validate the connection doesn't loop itself and
-        returns True if port connection is valid.
+        validate the connection so it doesn't loop itself.
+
+        Returns:
+            bool: True if port connection is valid.
         """
         start_node = start_port.node
         check_nodes = [end_port.node]
@@ -501,19 +502,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
         QtWidgets.QMessageBox.information(
             self, title, text, QtWidgets.QMessageBox.Ok)
 
-    def load_dialog(self, current_dir=None):
+    def load_dialog(self, current_dir=None, ext=None):
         current_dir = current_dir or os.path.expanduser('~')
+        ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
-            'Node Graph (*json *{} All Files (*))'
-            .format(FILE_IO_EXT), 'All Files (*)']
-        )
+            'Node Graph ({}*json)'.format(ext), 'All Files (*)'
+        ])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
         return file_dlg[0] or None
 
-    def save_dialog(self, current_dir=None):
+    def save_dialog(self, current_dir=None, ext=None):
         current_dir = current_dir or os.path.expanduser('~')
-        ext_map = {'Node Graph (*json *{})'.format(FILE_IO_EXT): '.json',
+        ext_label = '*{} '.format(ext) if ext else ''
+        ext_type = '.{}'.format(ext) if ext else '.json'
+        ext_map = {'Node Graph ({} *json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
             self,

@@ -315,10 +315,10 @@ class NodeGraph(QtCore.QObject):
 
     def register_node(self, node, alias=None):
         """
-        Register the node to the node graphs vendor.
+        Register the node to the node graph vendor.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.NodeObject): node.
             alias (str): custom alias name for the node type.
         """
         self._vendor.register_node(node, alias)
@@ -809,7 +809,7 @@ class NodeGraph(QtCore.QObject):
         """
         self._viewer.message_dialog(text, title)
 
-    def load_dialog(self, current_dir=None):
+    def load_dialog(self, current_dir=None, ext=None):
         """
         Prompts a file open dialog in the node graph.
 
@@ -817,13 +817,14 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
+            ext (str): custom file type extension (default: json)
 
         Returns:
             str: selected file path.
         """
-        return self._viewer.load_dialog(current_dir)
+        return self._viewer.load_dialog(current_dir, ext)
 
-    def save_dialog(self, current_dir=None):
+    def save_dialog(self, current_dir=None, ext=None):
         """
         Prompts a file save dialog in the node graph.
 
@@ -831,8 +832,9 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
+            ext (str): custom file type extension (default: json)
 
         Returns:
             str: selected file path.
         """
-        return self._viewer.save_dialog(current_dir)
+        return self._viewer.save_dialog(current_dir, ext)

@@ -5,10 +5,10 @@ from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
 
 
-class _NodeGroubBox(QtWidgets.QGroupBox):
+class _NodeGroupBox(QtWidgets.QGroupBox):
 
     def __init__(self, label, parent=None):
-        super(_NodeGroubBox, self).__init__(parent)
+        super(_NodeGroupBox, self).__init__(parent)
         margin = (0, 0, 0, 0)
         padding_top = '14px'
         if label == '':
@@ -97,7 +97,7 @@ class NodeComboBox(NodeBaseWidget):
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         self._combo.setView(list_view)
         self._combo.clearFocus()
-        group = _NodeGroubBox(label)
+        group = _NodeGroupBox(label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
         self.add_items(items)
@@ -150,7 +150,7 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         self._ledit.textChanged.connect(self._value_changed)
         self._ledit.clearFocus()
-        group = _NodeGroubBox(label)
+        group = _NodeGroupBox(label)
         group.add_node_widget(self._ledit)
         self.setWidget(group)
         self.text = text
@@ -187,7 +187,7 @@ class NodeCheckBox(NodeBaseWidget):
         font.setPointSize(11)
         self._cbox.setFont(font)
         self._cbox.stateChanged.connect(self._value_changed)
-        group = _NodeGroubBox(label)
+        group = _NodeGroupBox(label)
         group.add_node_widget(self._cbox)
         self.setWidget(group)
         self.text = text

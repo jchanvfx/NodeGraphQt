@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 
 
@@ -84,8 +85,3 @@ Z_VAL_PIPE = -1
 Z_VAL_NODE = 1
 Z_VAL_PORT = 2
 Z_VAL_NODE_WIDGET = 3
-
-# === OTHER ===
-
-#: File extention format.
-FILE_IO_EXT = '.ngqt'
