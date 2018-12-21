@@ -35,6 +35,8 @@ PORT_HOVER_BORDER_COLOR = (136, 255, 35, 255)
 
 # === NODE DEFAULTS ===
 
+NODE_WIDTH = 100
+NODE_HEIGHT = 80
 NODE_ICON_SIZE = 24
 #: The draw overlay color for selected nodes.
 NODE_SEL_COLOR = (255, 255, 255, 30)

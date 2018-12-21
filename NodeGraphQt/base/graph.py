@@ -193,7 +193,7 @@ class NodeGraph(QtCore.QObject):
         Returns the undo stack used in the node graph
 
         Returns:
-            PySide2.QtWidgets.QUndoStack: undo stack.
+            QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
 
@@ -339,9 +339,9 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.Node: the created instance of the node.
         """
-        NodeInstance = self._vendor.create_node_instance(node_type)
-        if NodeInstance:
-            node = NodeInstance()
+        NodeCls = self._vendor.create_node_instance(node_type)
+        if NodeCls:
+            node = NodeCls()
             node._graph = self
             node.model._graph_model = self.model
 
@@ -599,9 +599,9 @@ class NodeGraph(QtCore.QObject):
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type']
-            NodeInstance = self._vendor.create_node_instance(identifier)
-            if NodeInstance:
-                node = NodeInstance()
+            NodeCls = self._vendor.create_node_instance(identifier)
+            if NodeCls:
+                node = NodeCls()
                 node._graph = self
 
                 name = self.get_unique_name(n_data.get('name', node.NODE_NAME))

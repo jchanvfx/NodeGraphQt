@@ -2,7 +2,7 @@
 from PySide2.QtCore import QRectF
 from PySide2.QtWidgets import QGraphicsItem
 
-from NodeGraphQt.constants import Z_VAL_NODE
+from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
 
 class AbstractNodeItem(QGraphicsItem):
@@ -24,8 +24,8 @@ class AbstractNodeItem(QGraphicsItem):
             'selected': False,
             'disabled': False,
         }
-        self._width = 120
-        self._height = 80
+        self._width = NODE_WIDTH
+        self._height = NODE_HEIGHT
 
     def __str__(self):
         return '{}.{}(\'{}\')'.format(

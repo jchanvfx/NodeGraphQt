@@ -5,6 +5,7 @@ from PySide2.QtWidgets import (QGraphicsItem,
                                QGraphicsTextItem)
 
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
+                                   NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                                    Z_VAL_NODE, Z_VAL_NODE_WIDGET)
@@ -236,6 +237,8 @@ class NodeItem(AbstractNodeItem):
         """
         setup initial base size.
         """
+        self._width = NODE_WIDTH
+        self._height = NODE_HEIGHT
         width, height = self.calc_size()
         if width > self._width:
             self._width = width
@@ -317,7 +320,9 @@ class NodeItem(AbstractNodeItem):
             port = list(self._output_items.keys())[0]
             port_height = port.boundingRect().height() * 2
 
-        height = port_height * (max([len(self.inputs), len(self.outputs)]) + 2)
+        in_count = len([p for p in self.inputs if p.isVisible()])
+        out_count = len([p for p in self.outputs if p.isVisible()])
+        height = port_height * (max([in_count, out_count]) + 2)
         if self._widgets:
             wid_height = sum(
                 [w.boundingRect().height() for w in self._widgets.values()])
@@ -370,33 +375,39 @@ class NodeItem(AbstractNodeItem):
         height = self._height - padding_y
 
         # adjust input position
-        if self.inputs:
-            port_width = self.inputs[0].boundingRect().width()
-            port_height = self.inputs[0].boundingRect().height()
-            chunk = (height / len(self.inputs))
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            chunk = (height / len(inputs))
             port_x = (port_width / 2) * -1
             port_y = (chunk / 2) - (port_height / 2)
-            for port in self.inputs:
+            for port in inputs:
                 port.setPos(port_x + padding_x, port_y + (padding_y / 2))
                 port_y += chunk
         # adjust input text position
         for port, text in self._input_items.items():
+            if not port.isVisible():
+                continue
             txt_height = text.boundingRect().height() - 8.0
             txt_x = port.x() + port.boundingRect().width()
             txt_y = port.y() - (txt_height / 2)
             text.setPos(txt_x + 3.0, txt_y)
         # adjust output position
-        if self.outputs:
-            port_width = self.outputs[0].boundingRect().width()
-            port_height = self.outputs[0].boundingRect().height()
-            chunk = height / len(self.outputs)
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            chunk = height / len(outputs)
             port_x = width - (port_width / 2)
             port_y = (chunk / 2) - (port_height / 2)
-            for port in self.outputs:
+            for port in outputs:
                 port.setPos(port_x, port_y + (padding_y / 2))
                 port_y += chunk
         # adjust output text position
         for port, text in self._output_items.items():
+            if not port.isVisible():
+                continue
             txt_width = text.boundingRect().width()
             txt_height = text.boundingRect().height() - 8.0
             txt_x = width - txt_width - (port.boundingRect().width() / 2)
@@ -551,10 +562,18 @@ class NodeItem(AbstractNodeItem):
 
     @property
     def inputs(self):
+        """
+        Returns:
+            list[PortItem]: input port graphic items.
+        """
         return list(self._input_items.keys())
 
     @property
     def outputs(self):
+        """
+        Returns:
+            list[PortItem]: output port graphic items.
+        """
         return list(self._output_items.keys())
 
     def add_input(self, name='input', multi_port=False, display_name=True):
@@ -586,7 +605,7 @@ class NodeItem(AbstractNodeItem):
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
-            display_name (bool): display the port name. 
+            display_name (bool): display the port name.
 
         Returns:
             PortItem: output item widget
@@ -604,6 +623,26 @@ class NodeItem(AbstractNodeItem):
         if self.scene():
             self.post_init()
         return port
+
+    def get_input_text_item(self, port_item):
+        """
+        Args:
+            port_item (PortItem): port item.
+
+        Returns:
+            QGraphicsTextItem: graphic item used for the port text.
+        """
+        return self._input_items[port_item]
+
+    def get_output_text_item(self, port_item):
+        """
+        Args:
+            port_item (PortItem): port item.
+
+        Returns:
+            QGraphicsTextItem: graphic item used for the port text.
+        """
+        return self._output_items[port_item]
 
     @property
     def widgets(self):

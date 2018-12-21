@@ -1,10 +1,17 @@
 #!/usr/bin/python
 from PySide2.QtWidgets import QUndoCommand
 
+from NodeGraphQt.constants import IN_PORT, OUT_PORT
+
 
 class PropertyChangedCmd(QUndoCommand):
     """
     Node property changed command.
+
+    Args:
+        node (NodeGraphQt.NodeObject): node.
+        name (str): node property name.
+        value (object): node property value.
     """
 
     def __init__(self, node, name, value):
@@ -48,6 +55,11 @@ class PropertyChangedCmd(QUndoCommand):
 class NodeMovedCmd(QUndoCommand):
     """
     Node moved command.
+
+    Args:
+        node (NodeGraphQt.NodeObject): node.
+        pos (tuple(float, float)): new node position.
+        prev_pos (tuple(float, float)): previous node position.
     """
 
     def __init__(self, node, pos, prev_pos):
@@ -70,6 +82,11 @@ class NodeMovedCmd(QUndoCommand):
 class NodeAddedCmd(QUndoCommand):
     """
     Node added command.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+        node (NodeGraphQt.NodeObject): node.
+        pos (tuple(float, float)): initial node position (optional).
     """
 
     def __init__(self, graph, node, pos=None):
@@ -92,6 +109,10 @@ class NodeAddedCmd(QUndoCommand):
 class NodeRemovedCmd(QUndoCommand):
     """
     Node deleted command.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+        node (NodeGraphQt.NodeObject): node.
     """
 
     def __init__(self, graph, node):
@@ -128,6 +149,10 @@ class NodeRemovedCmd(QUndoCommand):
 class PortConnectedCmd(QUndoCommand):
     """
     Port connected command.
+
+    Args:
+        src_port (NodeGraphQt.Port): source port.
+        trg_port (NodeGraphQt.Port): target port.
     """
 
     def __init__(self, src_port, trg_port):
@@ -170,6 +195,10 @@ class PortConnectedCmd(QUndoCommand):
 class PortDisconnectedCmd(QUndoCommand):
     """
     Port disconnected command.
+
+    Args:
+        src_port (NodeGraphQt.Port): source port.
+        trg_port (NodeGraphQt.Port): target port.
     """
 
     def __init__(self, src_port, trg_port):
@@ -207,3 +236,36 @@ class PortDisconnectedCmd(QUndoCommand):
             port_names.remove(self.source.name())
 
         self.source.view.disconnect_from(self.target.view)
+
+
+class PortVisibleCmd(QUndoCommand):
+    """
+    Port visibility command.
+
+    Args:
+        port (NodeGraphQt.Port): node port.
+    """
+
+    def __init__(self, port):
+        QUndoCommand.__init__(self)
+        self.port = port
+        self.visible = port.visible()
+
+    def set_visible(self, visible):
+        self.port.model.visible = visible
+        self.port.view.setVisible(visible)
+        node_view = self.port.node().view
+        text_item = None
+        if self.port.type() == IN_PORT:
+            text_item = node_view.get_input_text_item(self.port.view)
+        elif self.port.type() == OUT_PORT:
+            text_item = node_view.get_output_text_item(self.port.view)
+        if text_item:
+            text_item.setVisible(visible)
+        node_view.post_init()
+
+    def undo(self):
+        self.set_visible(self.visible)
+
+    def redo(self):
+        self.set_visible(not self.visible)
