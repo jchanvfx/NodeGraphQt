@@ -4,8 +4,8 @@
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/) 
 [![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)](https://github.com/orangemug/stability-badges/blob/master/README.md)
 
-This is a personal project I'm only working on in my spare time as a learning exercise to 
-writing a custom node graph framework. It's a work in progress and I'm only working on in my spare time.
+This is a project I'm working on in my spare time as a learning exercise to 
+writing a custom node graph framework. It's currently in a work in progress state.
 
 ---
 
