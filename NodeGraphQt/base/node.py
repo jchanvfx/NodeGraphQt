@@ -79,10 +79,10 @@ class NodeObject(object):
     @property
     def view(self):
         """
-        View item used in the scene.
+        Returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
-            QtWidgets.QGraphicsItem: node item.
+            AbstractNodeItem: node item.
         """
         return self._view
 
@@ -434,6 +434,8 @@ class Node(NodeObject):
         Returns:
             NodeGraphQt.Port: the created port object.
         """
+        if name in self.inputs().keys():
+            raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
         port.model.type = 'in'
@@ -456,6 +458,8 @@ class Node(NodeObject):
         Returns:
             NodeGraphQt.Port: the created port object.
         """
+        if name in self.outputs().keys():
+            raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
         port.model.type = 'out'

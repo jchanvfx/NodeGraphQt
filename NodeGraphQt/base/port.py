@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from NodeGraphQt.base.commands import PortConnectedCmd, PortDisconnectedCmd
 from NodeGraphQt.base.model import PortModel
+from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 
 class Port(object):
@@ -31,7 +32,7 @@ class Port(object):
     @property
     def view(self):
         """
-        returns the view item used in the scene.
+        returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
             PortItem: port item.
@@ -68,7 +69,7 @@ class Port(object):
 
     def node(self):
         """
-        Return the parent node of the port.
+        Return the parent node.
 
         Returns:
             NodeGraphQt.NodeObject: parent node object.
@@ -77,12 +78,53 @@ class Port(object):
 
     def name(self):
         """
-        name of the port.
+        Returns the port name.
 
         Returns:
             str: port name.
         """
         return self.model.name
+
+    def visible(self):
+        """
+        Port visible in the node graph.
+
+        Returns:
+            bool: true if visible.
+        """
+        return self.model.visible
+
+    def set_visible(self, visible=True):
+        """
+        Sets weather the port should be visible or not.
+
+        Args:
+            visible (bool): true if visible.
+        """
+        connected_ports = self.connected_ports()
+        if connected_ports:
+            undo_stack = self.node().graph.undo_stack()
+            undo_stack.beginMacro('disconnected ports')
+            for port in connected_ports():
+                undo_stack.push(PortDisconnectedCmd(self, port))
+            undo_stack.endMacro()
+
+        # TODO: implement undo command for visibility.
+        self.model.visible = visible
+        self.view.setVisible(visible)
+        node_view = self.node().view
+        text_item = None
+        if self.type() == IN_PORT:
+            text_item = node_view._input_items[self.view]
+        elif self.type() == OUT_PORT:
+            text_item = node_view._output_items[self.view]
+        if text_item:
+            text_item.setVisible(visible)
+
+        node_view.post_init()
+        # for port in node_item.inputs + node_item.outputs:
+        #     for pipe in port.connected_pipes:
+        #         pipe.draw_path(pipe.input_port, pipe.output_port)
 
     def connected_ports(self):
         """

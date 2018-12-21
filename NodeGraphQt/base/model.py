@@ -16,6 +16,7 @@ class PortModel(object):
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False
+        self.visible = True
         self.connected_ports = defaultdict(list)
 
     def __repr__(self):
