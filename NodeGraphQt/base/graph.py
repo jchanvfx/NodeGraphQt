@@ -193,7 +193,7 @@ class NodeGraph(QtCore.QObject):
         Returns the undo stack used in the node graph
 
         Returns:
-            PySide2.QtWidgets.QUndoStack: undo stack.
+            QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
 

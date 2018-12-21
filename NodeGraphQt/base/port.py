@@ -1,7 +1,8 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import PortConnectedCmd, PortDisconnectedCmd
+from NodeGraphQt.base.commands import (PortConnectedCmd,
+                                       PortDisconnectedCmd,
+                                       PortVisibleCmd)
 from NodeGraphQt.base.model import PortModel
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 
 class Port(object):
@@ -101,30 +102,17 @@ class Port(object):
         Args:
             visible (bool): true if visible.
         """
+        label = 'show' if visible else 'hide'
+        undo_stack = self.node().graph.undo_stack()
+        undo_stack.beginMacro('{} port'.format(label))
+
         connected_ports = self.connected_ports()
         if connected_ports:
-            undo_stack = self.node().graph.undo_stack()
-            undo_stack.beginMacro('disconnected ports')
-            for port in connected_ports():
+            for port in connected_ports:
                 undo_stack.push(PortDisconnectedCmd(self, port))
-            undo_stack.endMacro()
 
-        # TODO: implement undo command for visibility.
-        self.model.visible = visible
-        self.view.setVisible(visible)
-        node_view = self.node().view
-        text_item = None
-        if self.type() == IN_PORT:
-            text_item = node_view._input_items[self.view]
-        elif self.type() == OUT_PORT:
-            text_item = node_view._output_items[self.view]
-        if text_item:
-            text_item.setVisible(visible)
-
-        node_view.post_init()
-        # for port in node_item.inputs + node_item.outputs:
-        #     for pipe in port.connected_pipes:
-        #         pipe.draw_path(pipe.input_port, pipe.output_port)
+        undo_stack.push(PortVisibleCmd(self))
+        undo_stack.endMacro()
 
     def connected_ports(self):
         """

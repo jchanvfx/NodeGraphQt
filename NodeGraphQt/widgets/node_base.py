@@ -605,7 +605,7 @@ class NodeItem(AbstractNodeItem):
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
-            display_name (bool): display the port name. 
+            display_name (bool): display the port name.
 
         Returns:
             PortItem: output item widget
@@ -623,6 +623,26 @@ class NodeItem(AbstractNodeItem):
         if self.scene():
             self.post_init()
         return port
+
+    def get_input_text_item(self, port_item):
+        """
+        Args:
+            port_item (PortItem): port item.
+
+        Returns:
+            QGraphicsTextItem: graphic item used for the port text.
+        """
+        return self._input_items[port_item]
+
+    def get_output_text_item(self, port_item):
+        """
+        Args:
+            port_item (PortItem): port item.
+
+        Returns:
+            QGraphicsTextItem: graphic item used for the port text.
+        """
+        return self._output_items[port_item]
 
     @property
     def widgets(self):
