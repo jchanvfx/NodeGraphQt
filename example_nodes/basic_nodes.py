@@ -10,23 +10,24 @@ class FooNode(Node):
     __identifier__ = 'com.chantasticvfx'
 
     # initial default node name.
-    NODE_NAME = 'foo'
+    NODE_NAME = 'foo node'
 
     def __init__(self):
         super(FooNode, self).__init__()
 
         # create node inputs.
-        self.add_input('foo')
-        self.add_input('bar')
+        self.add_input('in A')
+        self.add_input('in B')
 
         # create node outputs.
-        self.add_output('apples')
-        self.add_output('bananas')
+        self.add_output('out A')
+        self.add_output('out B')
 
 
 class BarNode(Node):
     """
     A node class with 3 inputs and 3 outputs.
+    The last input and last output can take in multiple pipes.
     """
 
     # unique node identifier.
