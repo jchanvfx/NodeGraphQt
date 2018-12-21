@@ -5,7 +5,8 @@ from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
-                                   NODE_PROP_QCHECKBOX)
+                                   NODE_PROP_QCHECKBOX,
+                                   IN_PORT, OUT_PORT)
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.node_base import NodeItem
 
@@ -438,7 +439,7 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
-        port.model.type = 'in'
+        port.model.type = IN_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
@@ -462,7 +463,7 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
-        port.model.type = 'out'
+        port.model.type = OUT_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
