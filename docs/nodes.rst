@@ -10,12 +10,12 @@ NodeGraphQt.NodeObject
 ----
 
 
-Attributes
 .. autoattribute:: NodeGraphQt.NodeObject.__identifier__
 .. autoattribute:: NodeGraphQt.NodeObject.NODE_NAME
 
 
-Class
+----
+
 .. autoclass:: NodeGraphQt.NodeObject
     :members:
     :exclude-members: model, NODE_NAME
