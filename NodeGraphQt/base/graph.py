@@ -6,12 +6,12 @@ import re
 from PySide2 import QtCore
 from PySide2.QtWidgets import QUndoStack, QAction, QApplication
 
+from NodeGraphQt.base.actions import setup_context_menu
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
 from NodeGraphQt.base.menu import ContextMenu
-from NodeGraphQt.base.menu_setup import setup_context_menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
@@ -22,6 +22,9 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 class NodeGraph(QtCore.QObject):
     """
     base node graph controller.
+
+    Args:
+        default_actions(bool): true to initialize with default context menu actions.
     """
 
     #: signal for when a node has been created in the node graph.
@@ -33,14 +36,14 @@ class NodeGraph(QtCore.QObject):
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(str, tuple)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, default_actions=True):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
         self._viewer = NodeViewer()
         self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
-        self._init_actions()
+        self._init_actions(default_actions)
         self._wire_signals()
 
     def _wire_signals(self):
@@ -53,7 +56,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
-    def _init_actions(self):
+    def _init_actions(self, default_actions=False):
         # setup tab search shortcut.
         tab = QAction('Search Nodes', self)
         tab.setShortcut('tab')
@@ -61,7 +64,8 @@ class NodeGraph(QtCore.QObject):
         self._viewer.addAction(tab)
 
         # setup default context menu.
-        setup_context_menu(self)
+        if default_actions:
+            setup_context_menu(self)
 
     def _toggle_tab_search(self):
         """
@@ -196,6 +200,13 @@ class NodeGraph(QtCore.QObject):
             QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
+
+    def clear_undo_stack(self):
+        """
+        Clears the undo stack.
+        (convenience function to :meth:`NodeGraph.undo_stact().clear`)
+        """
+        self._undo_stack.clear()
 
     def begin_undo(self, name='undo'):
         """

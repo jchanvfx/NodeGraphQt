@@ -79,16 +79,34 @@ def setup_context_menu(graph):
 
 
 def zoom_in(graph):
+    """
+    Set the node graph to zoom in by 0.1
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     zoom = graph.get_zoom() + 0.1
     graph.set_zoom(zoom)
 
 
 def zoom_out(graph):
+    """
+    Set the node graph to zoom in by 0.1
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     zoom = graph.get_zoom() - 0.2
     graph.set_zoom(zoom)
 
 
 def open_session(graph):
+    """
+    Prompts a file open dialog to load a session.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     current = graph.current_session()
     viewer = graph.viewer()
     file_path = viewer.load_dialog(current)
@@ -97,6 +115,12 @@ def open_session(graph):
 
 
 def save_session(graph):
+    """
+    Prompts a file save dialog to serialize a session if required.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     current = graph.current_session()
     if current:
         graph.save_session(current)
@@ -108,6 +132,12 @@ def save_session(graph):
 
 
 def save_session_as(graph):
+    """
+    Prompts a file save dialog to serialize a session.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     current = graph.current_session()
     viewer = graph.viewer()
     file_path = viewer.save_dialog(current)
@@ -116,12 +146,24 @@ def save_session_as(graph):
 
 
 def clear_session(graph):
+    """
+    Prompts a warning dialog to clear the node graph session.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     viewer = graph.viewer()
     if viewer.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
 
 
 def clear_undo(graph):
+    """
+    Prompts a warning dialog to clear undo.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
     viewer = graph.viewer()
     msg = 'Clear all undo history, Are you sure?'
     if viewer.question_dialog('Clear Undo History', msg):
