@@ -91,7 +91,7 @@ class NodeGraph(QtCore.QObject):
         (emits the node type and the x,y position where the data was dropped)
 
         Args:
-            data (QtCore.QMimeData): text data.
+            data (QtCore.QMimeData): mime data.
             pos (QtCore.QPoint): x, y scene position relative to the cursor.
         """
         self.data_dropped.emit(data, pos)
