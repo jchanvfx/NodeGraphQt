@@ -28,7 +28,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # pass through signals
     node_selected = QtCore.Signal(str)
-    data_dropped = QtCore.Signal(str, tuple)
+    data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
@@ -233,15 +233,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._set_viewer_zoom(adjust)
 
     def dropEvent(self, event):
-        if event.mimeData().hasFormat('text/plain'):
-            pos = self.mapToScene(event.pos())
-            drop_pos = pos.x(), pos.y()
-            drop_str = event.mimeData().text()
-            event.setDropAction(QtCore.Qt.MoveAction)
-            event.accept()
-            self.data_dropped.emit(drop_str, drop_pos)
-        else:
-            event.ignore()
+        pos = self.mapToScene(event.pos())
+        event.setDropAction(QtCore.Qt.MoveAction)
+        self.data_dropped.emit(event.mimeData(), pos)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):

@@ -34,7 +34,7 @@ class NodeGraph(QtCore.QObject):
     #: signal for when a node has been connected.
     port_connected = QtCore.Signal(Port, Port)
     #: signal for when drop data has been added to the graph.
-    data_dropped = QtCore.Signal(str, tuple)
+    data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None, default_actions=True):
         super(NodeGraph, self).__init__(parent)
@@ -91,8 +91,8 @@ class NodeGraph(QtCore.QObject):
         (emits the node type and the x,y position where the data was dropped)
 
         Args:
-            data (str): text data.
-            pos (tuple): x, y scene position relative to the cursor.
+            data (QtCore.QMimeData): text data.
+            pos (QtCore.QPoint): x, y scene position relative to the cursor.
         """
         self.data_dropped.emit(data, pos)
 
