@@ -104,7 +104,7 @@ class ContextMenu(object):
             shortcut (str): shotcut key.
 
         Returns:
-
+            NodeGraphQt.ContextMenuCommand: the appended command.
         """
         action = QtWidgets.QAction(name, self.__viewer)
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):

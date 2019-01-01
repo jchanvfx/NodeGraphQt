@@ -42,6 +42,7 @@ __email__ = 'http://chantasticvfx.com/contact'
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
+from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
 from .base.node import NodeObject, Node, Backdrop
 from .base.port import Port

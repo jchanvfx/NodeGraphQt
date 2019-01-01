@@ -6,35 +6,36 @@ from PySide2 import QtGui, QtCore
 
 def setup_context_menu(graph):
     """
-    build the default node graph context menu.
+    convenience function that populates the node graphs context menu
+    with some default menus and commands.
 
     Args:
-        graph (NodeGraphQt.NodeGraph): node graph controller.
+        graph (NodeGraphQt.NodeGraph): node graph controller class.
     """
     root_menu = graph.context_menu()
 
     file_menu = root_menu.add_menu('&File')
     edit_menu = root_menu.add_menu('&Edit')
 
-    # File menu.
+    # create "File" menu.
     file_menu.add_command('Open...',
-                          lambda: open_session(graph),
+                          lambda: _open_session(graph),
                           QtGui.QKeySequence.Open)
     file_menu.add_command('Save...',
-                          lambda: save_session(graph),
+                          lambda: _save_session(graph),
                           QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...',
-                          lambda: save_session_as(graph),
+                          lambda: _save_session_as(graph),
                           'Ctrl+Shift+s')
-    file_menu.add_command('Clear', lambda: clear_session(graph))
+    file_menu.add_command('Clear', lambda: _clear_session(graph))
 
     file_menu.add_separator()
 
-    file_menu.add_command('Zoom In', lambda: zoom_in(graph), '=')
-    file_menu.add_command('Zoom Out', lambda: zoom_out(graph), '-')
+    file_menu.add_command('Zoom In', lambda: _zoom_in(graph), '=')
+    file_menu.add_command('Zoom Out', lambda: _zoom_out(graph), '-')
     file_menu.add_command('Reset Zoom', graph.reset_zoom, 'h')
 
-    # Edit menu.
+    # create "Edit" menu.
     undo_actn = graph.undo_stack().createUndoAction(graph.viewer(), '&Undo')
     if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
         undo_actn.setShortcutVisibleInContextMenu(True)
@@ -48,7 +49,7 @@ def setup_context_menu(graph):
     edit_menu.qmenu.addAction(redo_actn)
 
     edit_menu.add_separator()
-    edit_menu.add_command('Clear Undo History', lambda: clear_undo(graph))
+    edit_menu.add_command('Clear Undo History', lambda: _clear_undo(graph))
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', graph.copy_nodes, QtGui.QKeySequence.Copy)
@@ -78,7 +79,7 @@ def setup_context_menu(graph):
 # --- menu command functions. ---
 
 
-def zoom_in(graph):
+def _zoom_in(graph):
     """
     Set the node graph to zoom in by 0.1
 
@@ -89,7 +90,7 @@ def zoom_in(graph):
     graph.set_zoom(zoom)
 
 
-def zoom_out(graph):
+def _zoom_out(graph):
     """
     Set the node graph to zoom in by 0.1
 
@@ -100,7 +101,7 @@ def zoom_out(graph):
     graph.set_zoom(zoom)
 
 
-def open_session(graph):
+def _open_session(graph):
     """
     Prompts a file open dialog to load a session.
 
@@ -114,7 +115,7 @@ def open_session(graph):
         graph.load_session(file_path)
 
 
-def save_session(graph):
+def _save_session(graph):
     """
     Prompts a file save dialog to serialize a session if required.
 
@@ -128,10 +129,10 @@ def save_session(graph):
         viewer = graph.viewer()
         viewer.message_dialog(msg, title='Session Saved')
     else:
-        save_session_as(graph)
+        _save_session_as(graph)
 
 
-def save_session_as(graph):
+def _save_session_as(graph):
     """
     Prompts a file save dialog to serialize a session.
 
@@ -145,7 +146,7 @@ def save_session_as(graph):
         graph.save_session(file_path)
 
 
-def clear_session(graph):
+def _clear_session(graph):
     """
     Prompts a warning dialog to clear the node graph session.
 
@@ -157,7 +158,7 @@ def clear_session(graph):
         graph.clear_session()
 
 
-def clear_undo(graph):
+def _clear_undo(graph):
     """
     Prompts a warning dialog to clear undo.
 

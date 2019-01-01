@@ -4,7 +4,7 @@ import sys
 
 from PySide2 import QtWidgets
 
-from NodeGraphQt import NodeGraph, Node, Backdrop
+from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
@@ -35,6 +35,9 @@ if __name__ == '__main__':
 
     # create node graph.
     graph = NodeGraph()
+
+    # set up default menu and commands.
+    setup_context_menu(graph)
 
     viewer = graph.viewer()
     viewer.setWindowTitle('My Node Graph')

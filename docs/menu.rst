@@ -1,5 +1,5 @@
-Menus
-*****
+Menu & Commands
+***************
 
 example to adding a menu and command.
 
@@ -7,6 +7,10 @@ example to adding a menu and command.
     :linenos:
 
     from NodeGraphQt import NodeGraph
+
+    # test function.
+    def my_test_func():
+        print('Hello World')
 
     # create node graph.
     graph = NodeGraph()
@@ -18,7 +22,7 @@ example to adding a menu and command.
     foo_menu = root_menu.add_menu('Foo')
 
     # add "Bar" command to the "Foo" menu.
-    foo_menu.add_command('Bar', test, 'Shift+t')
+    foo_menu.add_command('Bar', my_test_func, 'Shift+t')
 
 
 

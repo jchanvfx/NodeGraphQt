@@ -34,7 +34,7 @@ api docs: http://chantasticvfx.com/nodeGraphQt/html/index.html
 ```python
 import sys
 from PySide2 import QtWidgets
-from NodeGraphQt import NodeGraph, Node, Backdrop
+from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 
 # create a example node object with a input/output port.
 class MyNode(Node):
@@ -57,6 +57,9 @@ if __name__ == '__main__':
 
     # create the node graph controller.
     graph = NodeGraph()
+    
+    # set up default menu and commands.
+    setup_context_menu(graph)
    
     # register backdrop node. (included in the NodeGraphQt module)
     graph.register_node(Backdrop)

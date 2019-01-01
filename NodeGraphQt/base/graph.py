@@ -24,7 +24,7 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
 
     Args:
-        default_actions(bool): true to initialize with default context menu actions.
+        tab_search_key(str): hotkey for the tab search widget (default: "tab").
     """
 
     #: signal for when a node has been created in the node graph.
@@ -36,14 +36,19 @@ class NodeGraph(QtCore.QObject):
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
-    def __init__(self, parent=None, default_actions=True):
+    def __init__(self, parent=None, tab_search_key='tab'):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
         self._viewer = NodeViewer()
         self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
-        self._init_actions(default_actions)
+
+        tab = QAction('Search Nodes', self)
+        tab.setShortcut(tab_search_key)
+        tab.triggered.connect(self._toggle_tab_search)
+        self._viewer.addAction(tab)
+
         self._wire_signals()
 
     def _wire_signals(self):
@@ -55,17 +60,6 @@ class NodeGraph(QtCore.QObject):
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
-
-    def _init_actions(self, default_actions=False):
-        # setup tab search shortcut.
-        tab = QAction('Search Nodes', self)
-        tab.setShortcut('tab')
-        tab.triggered.connect(self._toggle_tab_search)
-        self._viewer.addAction(tab)
-
-        # setup default context menu.
-        if default_actions:
-            setup_context_menu(self)
 
     def _toggle_tab_search(self):
         """
@@ -88,11 +82,10 @@ class NodeGraph(QtCore.QObject):
     def _on_node_data_dropped(self, data, pos):
         """
         called when data has been dropped on the viewer.
-        (emits the node type and the x,y position where the data was dropped)
 
         Args:
             data (QtCore.QMimeData): mime data.
-            pos (QtCore.QPoint): x, y scene position relative to the cursor.
+            pos (QtCore.QPoint): scene position relative to the drop.
         """
         self.data_dropped.emit(data, pos)
 
@@ -204,7 +197,7 @@ class NodeGraph(QtCore.QObject):
     def clear_undo_stack(self):
         """
         Clears the undo stack.
-        (convenience function to :meth:`NodeGraph.undo_stact().clear`)
+        (convenience function to :meth:`NodeGraph.undo_stack().clear`)
         """
         self._undo_stack.clear()
 

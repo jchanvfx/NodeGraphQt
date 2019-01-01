@@ -254,8 +254,9 @@ div.highlight{
 }
 
 div.note {
-    background-color: #eee;
-    border: 1px solid #ccc;
+    background-color: #28313a;
+    border: 1px solid #2f4c54;
+    border-radius: 4px;
 }
  
 div.seealso {

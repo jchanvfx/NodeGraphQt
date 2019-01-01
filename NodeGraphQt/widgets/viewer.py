@@ -7,7 +7,8 @@ from PySide2 import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,
-                                   PIPE_STYLE_DASHED)
+                                   PIPE_STYLE_DASHED,
+                                   SCENE_AREA)
 from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.pipe import Pipe
@@ -21,6 +22,12 @@ ZOOM_MAX = 2.0
 
 
 class NodeViewer(QtWidgets.QGraphicsView):
+    """
+    node viewer is the widget used for displaying the scene and nodes
+
+    functions in this class is used internally by the
+    `NodeGraphQt.NodeGraph` class.
+    """
 
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
@@ -32,10 +39,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
-        scene_area = 8000.0
-        scene_pos = (scene_area / 2) * -1
+        scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
-        self.setSceneRect(scene_pos, scene_pos, scene_area, scene_area)
+        self.setSceneRect(scene_pos, scene_pos, SCENE_AREA, SCENE_AREA)
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -60,11 +66,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
-        # workaround fix for OSX & linux shortcuts from the non-native menu actions
-        # don't seem to trigger so we create a dummy menu bar.
+        # workaround fix for OSX & linux, shortcuts from the non-native menu
+        # actions don't seem to trigger so we create a hidden menu bar.
         if platform in ['darwin', 'linux2']:
             menu_bar = QtWidgets.QMenuBar(self)
             menu_bar.setNativeMenuBar(False)
+            # can't use setVisibility(False) or shortcuts don't work.
             menu_bar.resize(0, 0)
             menu_bar.addMenu(self._context_menu)
 
@@ -81,7 +88,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)
 
-    # --- private methods ---
+    # --- private ---
 
     def _set_viewer_zoom(self, value):
         if value == 0.0:
@@ -121,7 +128,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = self.mapToScene(self._previous_pos)
         self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
-    # --- re-implemented methods ---
+    # --- reimplemented events ---
 
     def resizeEvent(self, event):
         super(NodeViewer, self).resizeEvent(event)
@@ -252,62 +259,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def dragLeaveEvent(self, event):
         event.ignore()
 
-    # --- viewer methods ---
-
-    def start_live_connection(self, selected_port):
-        """
-        create new pipe for the connection.
-        """
-        if not selected_port:
-            return
-        self._start_port = selected_port
-        self._live_pipe = Pipe()
-        self._live_pipe.activate()
-        self._live_pipe.style = PIPE_STYLE_DASHED
-        if self._start_port.type == IN_PORT:
-            self._live_pipe.input_port = self._start_port
-        elif self._start_port == OUT_PORT:
-            self._live_pipe.output_port = self._start_port
-        self.scene().addItem(self._live_pipe)
-
-    def end_live_connection(self):
-        """
-        delete live connection pipe and reset start port.
-        """
-        if self._live_pipe:
-            self._live_pipe.delete()
-            self._live_pipe = None
-        self._start_port = None
-
-    def establish_connection(self, start_port, end_port):
-        """
-        establish a new pipe connection.
-        """
-        pipe = Pipe()
-        self.scene().addItem(pipe)
-        pipe.set_connections(start_port, end_port)
-        pipe.draw_path(pipe.input_port, pipe.output_port)
-
-    def acyclic_check(self, start_port, end_port):
-        """
-        validate the connection so it doesn't loop itself.
-
-        Returns:
-            bool: True if port connection is valid.
-        """
-        start_node = start_port.node
-        check_nodes = [end_port.node]
-        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
-        while check_nodes:
-            check_node = check_nodes.pop(0)
-            for check_port in getattr(check_node, io_types[end_port.port_type]):
-                if check_port.connected_ports:
-                    for port in check_port.connected_ports:
-                        if port.node != start_node:
-                            check_nodes.append(port.node)
-                        else:
-                            return False
-        return True
+    # --- scene events ---
 
     def sceneMouseMoveEvent(self, event):
         """
@@ -327,7 +279,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def sceneMousePressEvent(self, event):
         """
-        triggered mouse press event for the scene (takes priority over viewer).
+        triggered mouse press event for the scene (takes priority over viewer event).
          - detect selected pipe and start connection.
          - remap Shift and Ctrl modifier.
 
@@ -389,7 +341,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         triggered mouse release event for the scene.
          - verify to make a the connection Pipe.
-        
+
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
@@ -464,6 +416,68 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._detached_port = None
         self.end_live_connection()
+
+    # --- port connections ---
+
+    def start_live_connection(self, selected_port):
+        """
+        create new pipe for the connection.
+        (draws the live pipe from the port following the cursor position)
+        """
+        if not selected_port:
+            return
+        self._start_port = selected_port
+        self._live_pipe = Pipe()
+        self._live_pipe.activate()
+        self._live_pipe.style = PIPE_STYLE_DASHED
+        if self._start_port.type == IN_PORT:
+            self._live_pipe.input_port = self._start_port
+        elif self._start_port == OUT_PORT:
+            self._live_pipe.output_port = self._start_port
+        self.scene().addItem(self._live_pipe)
+
+    def end_live_connection(self):
+        """
+        delete live connection pipe and reset start port.
+        (removes the pipe item used for drawing the live connection)
+        """
+        if self._live_pipe:
+            self._live_pipe.delete()
+            self._live_pipe = None
+        self._start_port = None
+
+    def establish_connection(self, start_port, end_port):
+        """
+        establish a new pipe connection.
+        (adds a new pipe item to draw between 2 ports)
+        """
+        pipe = Pipe()
+        self.scene().addItem(pipe)
+        pipe.set_connections(start_port, end_port)
+        pipe.draw_path(pipe.input_port, pipe.output_port)
+
+    def acyclic_check(self, start_port, end_port):
+        """
+        validate the connection so it doesn't loop itself.
+
+        Returns:
+            bool: True if port connection is valid.
+        """
+        start_node = start_port.node
+        check_nodes = [end_port.node]
+        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        while check_nodes:
+            check_node = check_nodes.pop(0)
+            for check_port in getattr(check_node, io_types[end_port.port_type]):
+                if check_port.connected_ports:
+                    for port in check_port.connected_ports:
+                        if port.node != start_node:
+                            check_nodes.append(port.node)
+                        else:
+                            return False
+        return True
+
+    # --- viewer ---
 
     def tab_search_set_nodes(self, nodes):
         self._search_widget.set_nodes(nodes)

@@ -44,7 +44,7 @@ NODE_SEL_COLOR = (255, 255, 255, 30)
 #: The draw border color for selected nodes.
 NODE_SEL_BORDER_COLOR = (254, 207, 42, 255)
 
-# === NODE PROPERTY WIDGET TYPES ===
+# === NODE PROPERTY TYPES ===
 
 #: Property type will hidden in the properties bin (default).
 NODE_PROP = 0
@@ -63,14 +63,14 @@ NODE_PROP_COLORPICKER = 6
 #: Property type represented with a Slider widget in the properties bin.
 NODE_PROP_SLIDER = 7
 
-# === NODE GRAPH VIEWER DEFAULTS ===
+# === NODE VIEWER DEFAULTS ===
 
 #: Node graph background color.
 VIEWER_BG_COLOR = (35, 35, 35)
-#: Node graph grid color.
 VIEWER_GRID_COLOR = (45, 45, 45)
-#: Node graph grid enabled.
 VIEWER_GRID_OVERLAY = True
+
+SCENE_AREA = 8000.0
 
 # === GRAPH PATHS ===
 

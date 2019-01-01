@@ -32,7 +32,7 @@ A basic example snippet.
     import sys
     from PySide2 import QtWidgets
 
-    from NodeGraphQt import NodeGraph, Node
+    from NodeGraphQt import NodeGraph, Node, setup_context_menu
 
 
     class FooNode(Node):
@@ -58,6 +58,9 @@ A basic example snippet.
 
         # create node graph controller.
         graph = NodeGraph()
+
+        # set up default menu and commands.
+        setup_context_menu(graph)
 
         # register the FooNode node class.
         graph.register_node(FooNode)

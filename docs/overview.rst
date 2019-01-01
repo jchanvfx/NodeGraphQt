@@ -31,15 +31,21 @@ Node can be created with the tab node search widget.
 | Show Search | *Tab*  |
 +-------------+--------+
 
-Context Menu
-============
+.. note::
+    To override the tab search widget hotkey see :ref:`NodeGraphQt.NodeGraph` class ``tab_search_key`` argument.
 
-By default the NodeGraph is has a default context menu with some actions.
+Context Menu Setup
+==================
+
+The ``NodeGraphQt`` module has a built in ``setup_context_menu`` function that'll populate the node graphs
+context menu some default menus and commands.
 
 
-
-see: :ref:`Menus`
+see also: :ref:`Menu & Commands`
 
 .. image:: _images/menu_hotkeys.png
     :width: 50%
 
+----
+
+.. autofunction:: NodeGraphQt.setup_context_menu
