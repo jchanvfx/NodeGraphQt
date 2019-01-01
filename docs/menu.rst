@@ -25,6 +25,16 @@ example to adding a menu and command.
     foo_menu.add_command('Bar', my_test_func, 'Shift+t')
 
 
+Default Setup
+=============
+
+The ``NodeGraphQt`` module has a built in ``setup_context_menu`` function that'll populate the node graphs
+context menu some default menus and commands.
+
+----
+
+.. autofunction:: NodeGraphQt.setup_context_menu
+
 
 ContextMenu
 ===========
