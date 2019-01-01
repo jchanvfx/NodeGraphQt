@@ -6,8 +6,8 @@ NodeGraphQt is a node graph framework that can be implemented and repurposed int
 .. image:: _images/overview.png
     :width: 60%
 
-Nav Controls
-============
+Navigation
+==========
 
 +---------------+----------------------------------------------+
 | action        | controls                                     |

@@ -6,8 +6,7 @@ from PySide2 import QtGui, QtCore
 
 def setup_context_menu(graph):
     """
-    convenience function that populates the node graphs context menu
-    with some default menus and commands.
+    Sets up the node graphs context menu with some basic menus and commands.
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph controller class.
