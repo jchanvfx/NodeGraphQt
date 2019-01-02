@@ -40,7 +40,7 @@ class ContextMenu(object):
             name (str): name of the menu.
 
         Returns:
-            NodeGraphQt.base.menu.ContextMenu: menu item.
+            NodeGraphQt.ContextMenu: menu item.
         """
         for action in self.qmenu.actions():
             if action.menu() and action.menu().title() == name:
@@ -100,7 +100,7 @@ class ContextMenu(object):
 
         Args:
             name (str): command name.
-            func (): command function.
+            func (function): command function.
             shortcut (str): shotcut key.
 
         Returns:

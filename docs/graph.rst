@@ -1,18 +1,12 @@
-Graph
-*****
+Node Graph
+**********
+
+**Inherited from:** :class:`PySide2.QtCore.QObject`
 
 The NodeGraph class is the main controller for managing all nodes.
 
 .. image:: _images/graph.png
     :width: 60%
-
-
-NodeGraphQt.NodeGraph
-=====================
-
-
-**Inherited from:** `QtCore.QObject <https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html?highlight=qobject>`_
-
 
 ----
 

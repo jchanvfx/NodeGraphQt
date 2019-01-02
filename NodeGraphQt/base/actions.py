@@ -9,7 +9,7 @@ def setup_context_menu(graph):
     Sets up the node graphs context menu with some basic menus and commands.
 
     Args:
-        graph (NodeGraphQt.NodeGraph): node graph controller class.
+        graph (NodeGraphQt.NodeGraph): node graph.
     """
     root_menu = graph.context_menu()
 

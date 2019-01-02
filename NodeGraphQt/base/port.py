@@ -7,7 +7,7 @@ from NodeGraphQt.base.model import PortModel
 
 class Port(object):
     """
-    base class for a :ref:`NodeGraphQt.Node` port.
+    base class for a :class:`NodeGraphQt.Node` port.
 
     Args:
         node (NodeGraphQt.NodeObject): parent node.

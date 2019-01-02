@@ -32,12 +32,12 @@ Node can be created with the tab node search widget.
 +-------------+--------+
 
 .. note::
-    To override the tab search widget hotkey see :ref:`NodeGraphQt.NodeGraph` class ``tab_search_key`` argument.
+    To override the tab search widget hotkey see :class:`NodeGraphQt.NodeGraph` class for the tab_search_key argument.
 
-Context Menu Setup
-==================
+Menu Setup
+==========
 
-The ``NodeGraphQt`` module has a built in ``setup_context_menu`` function that'll populate the node graphs
+The NodeGraphQt module has a built in :meth:`NodeGraphQt.setup_context_menu` method that'll help setup the node graphs
 context menu some default menus and commands.
 
 
@@ -49,3 +49,61 @@ see also: :ref:`Menu & Commands`
 ----
 
 .. autofunction:: NodeGraphQt.setup_context_menu
+
+
+Example
+=======
+
+A basic example snippet.
+
+.. code-block:: python
+    :linenos:
+
+    import sys
+    from PySide2 import QtWidgets
+
+    from NodeGraphQt import NodeGraph, Node, setup_context_menu
+
+
+    class FooNode(Node):
+
+        # unique node identifier domain.
+        __identifier__ = 'com.chantasticvfx'
+
+        # initial default node name.
+        NODE_NAME = 'Foo Node'
+
+        def __init__(self):
+            super(FooNode, self).__init__()
+
+            # create an input port.
+            self.add_input('in')
+
+            # create an output port.
+            self.add_output('out')
+
+
+    if __name__ == '__main__':
+        app = QtWidgets.QApplication(sys.argv)
+
+        # create node graph controller.
+        graph = NodeGraph()
+
+        # set up default menu and commands.
+        setup_context_menu(graph)
+
+        # register the FooNode node class.
+        graph.register_node(FooNode)
+
+        # show the node graph widget.
+        viewer = graph.viewer()
+        viewer.show()
+
+        # create two nodes.
+        node_a = graph.create_node('com.chantasticvfx.FooNode', name='node A')
+        node_b = graph.create_node('com.chantasticvfx.FooNode', name='node B')
+
+        # connect node_a to node_b
+        node_a.set_output(0, node_b.input(2))
+
+        app.exec_()

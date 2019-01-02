@@ -3,7 +3,7 @@
 
 class NodeVendor(object):
     """
-    Node manager that stores all the node types.
+    Node factory that stores all the node types.
     """
 
     def __init__(self):

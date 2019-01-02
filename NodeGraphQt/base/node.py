@@ -60,7 +60,7 @@ class NodeObject(object):
     def type(cls):
         """
         Node type identifier followed by the class name.
-        eg. com.chantasticvfx.FooNode
+        eg. com.chantasticvfx.MyNode
 
         Returns:
             str: node type.
@@ -229,7 +229,7 @@ class NodeObject(object):
             value (object): data.
             items (list[str]): items used by widget type NODE_PROP_QCOMBO
             range (tuple)): min, max values used by NODE_PROP_SLIDER
-            widget_type (int): widget type flag.
+            widget_type (int): widget type flag (not implemented yet).
         """
         self.model.add_property(name, value, items, range, widget_type)
 

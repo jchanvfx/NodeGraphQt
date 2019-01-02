@@ -39,8 +39,8 @@ if __name__ == '__main__':
     # set up default menu and commands.
     setup_context_menu(graph)
 
+    # viewer widget used for the node graph.
     viewer = graph.viewer()
-    viewer.setWindowTitle('My Node Graph')
     viewer.resize(1100, 800)
     viewer.show()
 
