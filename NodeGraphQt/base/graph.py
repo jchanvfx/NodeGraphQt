@@ -10,7 +10,7 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
-from NodeGraphQt.base.menu import ContextMenu
+from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
@@ -222,9 +222,9 @@ class NodeGraph(QtCore.QObject):
         Returns the node graph root context menu object.
 
         Returns:
-            ContextMenu: context menu object.
+            Menu: context menu object.
         """
-        return ContextMenu(self._viewer, self._viewer.context_menu())
+        return Menu(self._viewer, self._viewer.context_menu())
 
     def acyclic(self):
         """
