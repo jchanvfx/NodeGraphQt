@@ -480,10 +480,6 @@ class NodeItem(AbstractNodeItem):
             viewer (NodeGraphQt.widgets.viewer.NodeViewer): not used
             pos (tuple): cursor position.
         """
-        # set initial node position.
-        if pos:
-            self.setPos(pos[0], pos[1])
-
         # setup initial base size.
         self._set_base_size()
         # set text color when node is initialized.
@@ -491,8 +487,7 @@ class NodeItem(AbstractNodeItem):
         # set the tooltip
         self._tooltip_disable(self.disabled)
 
-        # setup node layout
-        # =================
+        # --- setup node layout ---
 
         # arrange label text
         self.arrange_label()
@@ -509,6 +504,10 @@ class NodeItem(AbstractNodeItem):
         # arrange input and output ports.
         self.arrange_ports(padding_y=35.0)
         self.offset_ports(0.0, 15.0)
+
+        # set initial node position.
+        if pos:
+            self.xy_pos = pos
 
     @property
     def icon(self):

@@ -166,7 +166,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 node.selected = not node.selected
 
         # update the recorded node positions.
-        self._node_positions.update({n: n.pos for n in self.selected_nodes()})
+        self._node_positions.update(
+            {n: n.xy_pos for n in self.selected_nodes()}
+        )
 
         # show selection selection marquee
         if self.LMB_state and not items:
@@ -197,7 +199,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # find position changed nodes and emit signal.
         moved_nodes = {
-            n: pos for n, pos in self._node_positions.items() if n.pos != pos}
+            n: xy_pos for n, xy_pos in self._node_positions.items()
+            if n.xy_pos != xy_pos
+        }
         if moved_nodes:
             self.moved_nodes.emit(moved_nodes)
 
@@ -313,7 +317,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
                 # record the node positions at selection time.
                 for n in node_items:
-                    self._node_positions[n] = n.pos
+                    self._node_positions[n] = n.xy_pos
 
                 # emit selected node id with LMB.
                 if event.button() == QtCore.Qt.LeftButton:

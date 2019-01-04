@@ -297,36 +297,36 @@ class NodeObject(object):
         """
         return name in self.model.properties.keys()
 
-    def set_x_pos(self, x=0.0):
+    def set_x_pos(self, x):
         """
         Set the node horizontal X position in the node graph.
 
         Args:
-            x (float): node x position:
+            x (float or int): node X position:
         """
         y = self.pos()[1]
-        self.set_pos(x, y)
+        self.set_pos(float(x), y)
 
-    def set_y_pos(self, y=0.0):
+    def set_y_pos(self, y):
         """
         Set the node horizontal Y position in the node graph.
 
         Args:
-            y (float): node x position:
+            y (float or int): node Y position:
         """
 
         x = self.pos()[0]
-        self.set_pos(x, y)
+        self.set_pos(x, float(y))
 
-    def set_pos(self, x=0.0, y=0.0):
+    def set_pos(self, x, y):
         """
         Set the node X and Y position in the node graph.
 
         Args:
-            x (float): node X position.
-            y (float): node Y position.
+            x (float or int): node X position.
+            y (float or int): node Y position.
         """
-        self.set_property('pos', (x, y))
+        self.set_property('pos', [float(x), float(y)])
 
     def x_pos(self):
         """
@@ -351,10 +351,10 @@ class NodeObject(object):
         Get the node XY position in the node graph.
 
         Returns:
-            tuple(float, float): x, y position.
+            list[float, float]: x, y position.
         """
-        if self.view.pos and self.view.pos != self.model.pos:
-            self.model.pos = self.view.pos
+        if self.view.xy_pos and self.view.xy_pos != self.model.pos:
+            self.model.pos = self.view.xy_pos
 
         return self.model.pos
 

@@ -41,6 +41,9 @@ class PropertyChangedCmd(QUndoCommand):
 
         # view properties.
         if name in view.properties.keys():
+            # remap "pos" to "xy_pos" node view has pre-existing pos method.
+            if name == 'pos':
+                name = 'xy_pos'
             setattr(view, name, value)
 
     def undo(self):
@@ -69,13 +72,13 @@ class NodeMovedCmd(QUndoCommand):
         self.prev_pos = prev_pos
 
     def undo(self):
-        self.node.view.pos = self.prev_pos
+        self.node.view.xy_pos = self.prev_pos
         self.node.model.pos = self.prev_pos
 
     def redo(self):
         if self.pos == self.prev_pos:
             return
-        self.node.view.pos = self.pos
+        self.node.view.xy_pos = self.pos
         self.node.model.pos = self.pos
 
 

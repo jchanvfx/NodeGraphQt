@@ -143,11 +143,11 @@ class AbstractNodeItem(QGraphicsItem):
         self.setSelected(selected)
 
     @property
-    def pos(self):
-        return float(self.scenePos().x()), float(self.scenePos().y())
+    def xy_pos(self):
+        return [float(self.scenePos().x()), float(self.scenePos().y())]
 
-    @pos.setter
-    def pos(self, pos=None):
+    @xy_pos.setter
+    def xy_pos(self, pos=None):
         pos = pos or [0.0, 0.0]
         self.setPos(pos[0], pos[1])
 
@@ -170,7 +170,7 @@ class AbstractNodeItem(QGraphicsItem):
         """
         props = {'width': self.width,
                  'height': self.height,
-                 'pos':  self.pos}
+                 'pos':  self.xy_pos}
         props.update(self._properties)
         return props
 
@@ -198,7 +198,9 @@ class AbstractNodeItem(QGraphicsItem):
         Args:
             node_dict (dict): serialized node dict.
         """
-        node_attrs = list(self._properties.keys()) + ['width', 'height']
+        node_attrs = list(self._properties.keys()) + ['width', 'height', 'pos']
         for name, value in node_dict.items():
             if name in node_attrs:
+                if name == 'pos':
+                    name = 'xy_pos'
                 setattr(self, name, value)

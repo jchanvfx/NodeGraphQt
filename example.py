@@ -58,22 +58,22 @@ if __name__ == '__main__':
     my_node = graph.create_node('com.chantasticvfx.MyNode',
                                 name='portal',
                                 color='#193a33',
-                                pos=(310.0, 10.0))
+                                pos=[310, 10])
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
                                  name='chantastic!',
-                                 pos=(-487.0, 141.0))
+                                 pos=[-480, 140])
     foo_node.set_disabled(True)
 
     # create example "TextInputNode".
     text_node = graph.create_node('com.chantasticvfx.TextInputNode',
                                   name='rick',
-                                  pos=(-488.0, -158.0))
+                                  pos=[-480, -160])
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
                                   name='morty',
-                                  pos=(279.0, -209.0))
+                                  pos=[280, -200])
 
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     bar_node = graph.create_node('com.chantasticvfx.BarNode')
     bar_node.set_icon(icon)
     bar_node.set_name('schwifty')
-    bar_node.set_pos(-77.0, 17.0)
+    bar_node.set_pos(-70, 10)
 
     # connect the nodes
     foo_node.set_output(0, bar_node.input(2))

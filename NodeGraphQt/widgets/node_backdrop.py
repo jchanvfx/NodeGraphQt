@@ -207,7 +207,7 @@ class BackdropNodeItem(AbstractNodeItem):
         if nodes:
             padding = 40
             nodes_rect = self._combined_rect(nodes)
-            self.pos = [nodes_rect.x() - padding, nodes_rect.y() - padding]
+            self.xy_pos = [nodes_rect.x() - padding, nodes_rect.y() - padding]
             self._sizer.set_pos(nodes_rect.width() + (padding * 2),
                                 nodes_rect.height() + (padding * 2))
             return
@@ -230,11 +230,11 @@ class BackdropNodeItem(AbstractNodeItem):
             group = scene.createItemGroup(nodes)
             rect = group.boundingRect()
             scene.destroyItemGroup(group)
-            self.pos = [rect.x() - padding, rect.y() - padding]
+            self.xy_pos = [rect.x() - padding, rect.y() - padding]
             self._sizer.set_pos(rect.width() + (padding * 2),
                                 rect.height() + (padding * 2))
         else:
-            self.pos = pos
+            self.xy_pos = pos
 
     @property
     def minimum_size(self):

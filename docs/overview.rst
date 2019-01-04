@@ -54,7 +54,12 @@ see also: :ref:`Menu & Commands`
 Example
 =======
 
-A basic example snippet.
+Here's a basic example for creating two nodes and connecting them together.
+
+.. image:: _images/example_result.png
+    :width: 60%
+
+example code:
 
 .. code-block:: python
     :linenos:
@@ -101,7 +106,7 @@ A basic example snippet.
 
         # create two nodes.
         node_a = graph.create_node('com.chantasticvfx.FooNode', name='node A')
-        node_b = graph.create_node('com.chantasticvfx.FooNode', name='node B')
+        node_b = graph.create_node('com.chantasticvfx.FooNode', name='node B', pos=(300, 50))
 
         # connect node_a to node_b
         node_a.set_output(0, node_b.input(2))

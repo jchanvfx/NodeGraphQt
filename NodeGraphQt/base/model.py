@@ -57,7 +57,7 @@ class NodeModel(object):
         self.selected = False
         self.width = 100.0
         self.height = 80.0
-        self.pos = (0.0, 0.0)
+        self.pos = [0.0, 0.0]
         self.inputs = {}
         self.outputs = {}
         self._custom_prop = {}
@@ -99,7 +99,7 @@ class NodeModel(object):
             widget_type (int): widget type flag.
         """
         if name in self.properties.keys():
-            raise AssertionError('"{}" reserved for defaults.'.format(name))
+            raise AssertionError('"{}" reserved for default property.'.format(name))
         if name in self._custom_prop.keys():
             raise AssertionError('"{}" property already exists.'.format(name))
 

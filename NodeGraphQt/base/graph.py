@@ -6,7 +6,6 @@ import re
 from PySide2 import QtCore
 from PySide2.QtWidgets import QUndoStack, QAction, QApplication
 
-from NodeGraphQt.base.actions import setup_context_menu
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
@@ -338,7 +337,7 @@ class NodeGraph(QtCore.QObject):
             name (str): set name of the node.
             selected (bool): set created node to be selected.
             color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
-            pos (tuple): set position of the node (x, y).
+            pos (list[int, int]): initial x, y position for the node (default: (0, 0)).
 
         Returns:
             NodeGraphQt.Node: the created instance of the node.
@@ -346,6 +345,7 @@ class NodeGraph(QtCore.QObject):
         NodeCls = self._vendor.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
+
             node._graph = self
             node.model._graph_model = self.model
 
@@ -360,21 +360,22 @@ class NodeGraph(QtCore.QObject):
                 for pname, pattrs in prop_attrs.items():
                     graph_attrs[node.type][pname].update(pattrs)
 
-            node.update()
-
-            self._undo_stack.beginMacro('created node')
-            self._undo_stack.push(NodeAddedCmd(self, node, pos))
-            if name:
-                node.set_name(name)
-            else:
-                node.set_name(node.NODE_NAME)
+            node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
+            node.model.name = node.NODE_NAME
+            node.model.selected = selected
             if color:
                 if isinstance(color, str):
                     color = color[1:] if color[0] is '#' else color
                     color = tuple(int(color[i:i + 2], 16) for i in (0, 2, 4))
-                node.set_color(*color)
-            node.set_selected(selected)
-            self._undo_stack.endMacro()
+                node.model.color = color
+            if pos:
+                node.model.pos = [float(pos[0]), float(pos[1])]
+
+            node.update()
+
+            undo_cmd = NodeAddedCmd(self, node, node.model.pos)
+            undo_cmd.setText('created node')
+            self._undo_stack.push(undo_cmd)
             self.node_created.emit(node)
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
