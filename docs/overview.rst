@@ -4,7 +4,7 @@ Overview
 NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
 
 .. image:: _images/overview.png
-    :width: 60%
+    :width: 70%
 
 Navigation
 ==========
@@ -37,18 +37,11 @@ Node can be created with the tab node search widget.
 Menu Setup
 ==========
 
-The NodeGraphQt module has a built in :meth:`NodeGraphQt.setup_context_menu` method that'll help setup the node graphs
-context menu some default menus and commands.
+The NodeGraphQt has a ``setup_context_menu`` method that'll setup the node graphs with basic menus and commands.
 
+`(see line:32 in the example code below)`
 
 see also: :ref:`Menu & Commands`
-
-.. image:: _images/menu_hotkeys.png
-    :width: 50%
-
-----
-
-.. autofunction:: NodeGraphQt.setup_context_menu
 
 
 Example
