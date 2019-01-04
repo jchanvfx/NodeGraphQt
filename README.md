@@ -15,11 +15,6 @@ applications that supports [PySide2](https://doc.qt.io/qtforpython/pysideapi2.ht
 ![screencap01](/docs/_images/screenshot.png)
 
 
-#### Documentation
-
-api docs: http://chantasticvfx.com/nodeGraphQt/html/index.html
-
-
 #### Navigation
 
 | action        | controls                                     |
