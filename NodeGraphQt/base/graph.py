@@ -3,8 +3,8 @@ import json
 import os
 import re
 
-from PySide2 import QtCore
-from PySide2.QtWidgets import QUndoStack, QAction, QApplication
+from ..vendor.Qt import QtCore
+from ..vendor.Qt.QtWidgets import QUndoStack, QAction, QApplication
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,

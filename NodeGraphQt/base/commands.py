@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide2.QtWidgets import QUndoCommand
+from ..vendor.Qt.QtWidgets import QUndoCommand
 
 from NodeGraphQt.constants import IN_PORT, OUT_PORT
 

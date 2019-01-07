@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore
-from PySide2.QtWidgets import (QGraphicsItem,
-                               QGraphicsPixmapItem,
-                               QGraphicsTextItem)
+from ..vendor.Qt import QtGui, QtCore
+from ..vendor.Qt.QtWidgets import (QGraphicsItem,
+                                   QGraphicsPixmapItem,
+                                   QGraphicsTextItem)
 
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,

@@ -1,4 +1,4 @@
-from PySide2 import QtGui, QtCore, QtWidgets
+from ..vendor.Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (VIEWER_BG_COLOR,
                                    VIEWER_GRID_OVERLAY,

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore, QtWidgets
+from ..vendor.Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     IN_PORT, OUT_PORT,

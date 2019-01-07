@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from PySide2 import QtGui, QtCore, QtWidgets
+from ..vendor.Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 

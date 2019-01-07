@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from PySide2.QtCore import QRectF
-from PySide2.QtWidgets import QGraphicsItem
+from ..vendor.Qt.QtCore import QRectF
+from ..vendor.Qt.QtWidgets import QGraphicsItem
 
 from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
