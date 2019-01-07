@@ -11,9 +11,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.widgets.port import PortItem
 
 PIPE_STYLES = {
-    PIPE_STYLE_DEFAULT: QtCore.Qt.PenStyle.SolidLine,
-    PIPE_STYLE_DASHED: QtCore.Qt.PenStyle.DashDotDotLine,
-    PIPE_STYLE_DOTTED: QtCore.Qt.PenStyle.DotLine
+    PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
+    PIPE_STYLE_DASHED: QtCore.Qt.DashDotDotLine,
+    PIPE_STYLE_DOTTED: QtCore.Qt.DotLine
 }
 
 

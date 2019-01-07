@@ -166,11 +166,11 @@ class NodeItem(AbstractNodeItem):
         bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRoundRect(rect, radius, radius)
+        painter.drawRoundedRect(rect, radius, radius)
 
         if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-            painter.drawRoundRect(rect, radius, radius)
+            painter.drawRoundedRect(rect, radius, radius)
 
         label_rect = QtCore.QRectF(rect.left() + (radius / 2),
                                    rect.top() + (radius / 2),
@@ -201,7 +201,7 @@ class NodeItem(AbstractNodeItem):
         painter.restore()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start
             x_pos = event.pos().x()

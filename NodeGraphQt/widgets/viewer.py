@@ -115,7 +115,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def _items_near(self, pos, item_type=None, width=20, height=20):
         x, y = pos.x() - width, pos.y() - height
-        rect = QtCore.QRect(x, y, width, height)
+        rect = QtCore.QRectF(x, y, width, height)
         items = []
         for item in self.scene().items(rect):
             if not item_type or isinstance(item, item_type):
@@ -238,7 +238,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).mouseMoveEvent(event)
 
     def wheelEvent(self, event):
-        adjust = (event.delta() / 120) * 0.1
+        try:
+            delta = event.delta()
+        except AttributeError:
+            # For PyQt5
+            delta = event.angleDelta().y()
+
+        adjust = (delta / 120) * 0.1
         self._set_viewer_zoom(adjust)
 
     def dropEvent(self, event):

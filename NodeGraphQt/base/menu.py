@@ -113,7 +113,7 @@ class Menu(object):
             action.setShortcut(shortcut)
         if func:
             action.triggered.connect(func)
-        qaction = self.qmenu.addAction(action, shortcut=shortcut)
+        qaction = self.qmenu.addAction(action)
         return MenuCommand(self.__viewer, qaction)
 
     def add_separator(self):
