@@ -39,7 +39,7 @@ class NodeGraph(QtCore.QObject):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
-        self._viewer = NodeViewer()
+        self._viewer = NodeViewer(parent)
         self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
 

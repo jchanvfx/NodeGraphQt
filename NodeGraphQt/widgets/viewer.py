@@ -38,6 +38,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
+        if parent is not None:
+            self.setWindowFlags(QtCore.Qt.Window)
+
         scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
         self.setSceneRect(scene_pos, scene_pos, SCENE_AREA, SCENE_AREA)
