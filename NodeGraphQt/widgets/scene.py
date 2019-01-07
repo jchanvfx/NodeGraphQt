@@ -42,6 +42,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.drawRect(rect)
 
         if not self._grid:
+            painter.restore()
             return
 
         zoom = self.viewer().get_zoom()

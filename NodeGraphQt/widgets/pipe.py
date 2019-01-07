@@ -86,9 +86,13 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         pen.setStyle(pen_style)
         pen.setCapStyle(QtCore.Qt.RoundCap)
 
+        painter.save()
+
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
+
+        painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
     def draw_path(self, start_port, end_port, cursor_pos=None):
         """
