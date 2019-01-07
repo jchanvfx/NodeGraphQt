@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import os
-from sys import platform
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
@@ -26,7 +25,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node viewer is the widget used for displaying the scene and nodes
 
     functions in this class is used internally by the
-    `NodeGraphQt.NodeGraph` class.
+    class:`NodeGraphQt.NodeGraph` class.
     """
 
     moved_nodes = QtCore.Signal(dict)
@@ -66,14 +65,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
-        # workaround fix for OSX & linux, shortcuts from the non-native menu
-        # actions don't seem to trigger so we create a hidden menu bar.
-        if platform in ['darwin', 'linux2']:
-            menu_bar = QtWidgets.QMenuBar(self)
-            menu_bar.setNativeMenuBar(False)
-            # can't use setVisibility(False) or shortcuts don't work.
-            menu_bar.resize(0, 0)
-            menu_bar.addMenu(self._context_menu)
+        # workaround fix for shortcuts from the non-native menu actions
+        # don't seem to trigger so we create a hidden menu bar.
+        menu_bar = QtWidgets.QMenuBar(self)
+        menu_bar.setNativeMenuBar(False)
+        # shortcuts don't work with "setVisibility(False)".
+        menu_bar.resize(0, 0)
+        menu_bar.addMenu(self._context_menu)
 
         self.acyclic = True
         self.LMB_state = False
