@@ -527,7 +527,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
+            self, 'Open Session Setup', current_dir, ext_filter)
         return file_dlg[0] or None
 
     def save_dialog(self, current_dir=None, ext=None):
@@ -537,11 +537,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
-            self,
-            caption='Save Session',
-            dir=current_dir,
-            filter=';;'.join(ext_map.keys())
-        )
+            self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
             return
