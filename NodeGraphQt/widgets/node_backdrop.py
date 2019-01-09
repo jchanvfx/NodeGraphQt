@@ -111,7 +111,7 @@ class BackdropNodeItem(AbstractNodeItem):
         return rect
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             pos = event.scenePos()
             rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]
