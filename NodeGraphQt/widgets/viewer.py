@@ -326,6 +326,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             pipe_items = self._items_near(pos, Pipe, 3, 3)
             if pipe_items:
+                if not self.LMB_state:
+                    return
                 pipe = pipe_items[0]
                 attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
                 from_port = pipe.port_from_pos(pos, True)
