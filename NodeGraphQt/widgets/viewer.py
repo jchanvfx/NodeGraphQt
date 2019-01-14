@@ -244,7 +244,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
         event.setDropAction(QtCore.Qt.MoveAction)
-        self.data_dropped.emit(event.mimeData(), pos)
+        self.data_dropped.emit(
+            event.mimeData(), QtCore.QPoint(pos.x(), pos.y()))
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasFormat('text/plain'):
