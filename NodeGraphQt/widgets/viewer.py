@@ -529,7 +529,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         current_dir = current_dir or os.path.expanduser('~')
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
-        ext_map = {'Node Graph ({} *json)'.format(ext_label): ext_type,
+        ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
             self,
