@@ -641,7 +641,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def reset_zoom(self):
         self.scale(1.0, 1.0)
-        self.resetMatrix()
+        self.resetTransform()
 
     def get_zoom(self):
         transform = self.transform()
