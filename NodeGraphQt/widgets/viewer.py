@@ -299,13 +299,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsScenePressEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
-        shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
-        if shift_modifier:
-            event.setModifiers(QtCore.Qt.ControlModifier)
-        elif ctrl_modifier:
-            event.setModifiers(QtCore.Qt.ShiftModifier)
+        # (NOTE) Please see commit message
+        # ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
+        # shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
+        # if shift_modifier:
+        #    event.setModifiers(QtCore.Qt.ControlModifier)
+        # elif ctrl_modifier:
+        #    event.setModifiers(QtCore.Qt.ShiftModifier)
 
         if not alt_modifier:
             pos = event.scenePos()
@@ -356,8 +357,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        if event.modifiers() == QtCore.Qt.ShiftModifier:
-            event.setModifiers(QtCore.Qt.ControlModifier)
+        # (NOTE) Please see commit message
+        # if event.modifiers() == QtCore.Qt.ShiftModifier:
+        #    event.setModifiers(QtCore.Qt.ControlModifier)
 
         if not self._live_pipe:
             return
