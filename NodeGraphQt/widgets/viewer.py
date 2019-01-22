@@ -300,13 +300,22 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 The event handler from the QtWidgets.QGraphicsScene
         """
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
-        # (NOTE) Please see commit message
-        # ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
-        # shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
-        # if shift_modifier:
-        #    event.setModifiers(QtCore.Qt.ControlModifier)
-        # elif ctrl_modifier:
-        #    event.setModifiers(QtCore.Qt.ShiftModifier)
+
+        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
+        # `setModifiers` in PyQt, and can't find a workaround for it.
+        # So the only option to work with PyQt for now was to drop the modifier
+        # remapping, but judging from the event passing flow and running a few
+        # tests, it looks like those remapping code didn't have any affect to
+        # the UI function.
+        # Should be safe to comment out the code below.
+        """
+        ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
+        shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
+        if shift_modifier:
+            event.setModifiers(QtCore.Qt.ControlModifier)
+        elif ctrl_modifier:
+            event.setModifiers(QtCore.Qt.ShiftModifier)
+        """
 
         if not alt_modifier:
             pos = event.scenePos()
