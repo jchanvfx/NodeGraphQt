@@ -353,12 +353,12 @@ class NodeGraph(QtCore.QObject):
             prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
 
             graph_attrs = self.model.node_property_attrs
-            if node.type not in graph_attrs.keys():
-                graph_attrs[node.type] = {
+            if node.type_ not in graph_attrs.keys():
+                graph_attrs[node.type_] = {
                     n: {'widget_type': wt} for n, wt in wid_types.items()
                 }
                 for pname, pattrs in prop_attrs.items():
-                    graph_attrs[node.type][pname].update(pattrs)
+                    graph_attrs[node.type_][pname].update(pattrs)
 
             node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
             node.model.name = node.NODE_NAME
@@ -393,12 +393,12 @@ class NodeGraph(QtCore.QObject):
         prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
 
         graph_attrs = self.model.node_property_attrs
-        if node.type not in graph_attrs.keys():
-            graph_attrs[node.type] = {
+        if node.type_ not in graph_attrs.keys():
+            graph_attrs[node.type_] = {
                 n: {'widget_type': wt} for n, wt in wid_types.items()
             }
             for pname, pattrs in prop_attrs.items():
-                graph_attrs[node.type][pname].update(pattrs)
+                graph_attrs[node.type_][pname].update(pattrs)
 
         node._graph = self
         node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
@@ -603,7 +603,7 @@ class NodeGraph(QtCore.QObject):
 
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
-            identifier = n_data['type']
+            identifier = n_data['type_']
             NodeCls = self._vendor.create_node_instance(identifier)
             if NodeCls:
                 node = NodeCls()

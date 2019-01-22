@@ -38,15 +38,15 @@ class NodeObject(object):
         assert node, 'node cannot be None.'
         self._graph = None
         self._model = NodeModel()
-        self._model.type = self.type
+        self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
         self._view = node
-        self._view.type = self.type
+        self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
 
     def __repr__(self):
-        return '{}(\'{}\')'.format(self.type, self.NODE_NAME)
+        return '{}(\'{}\')'.format(self.type_, self.NODE_NAME)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -57,7 +57,7 @@ class NodeObject(object):
         return not self.__eq__(other)
 
     @classproperty
-    def type(cls):
+    def type_(cls):
         """
         Node type identifier followed by the class name.
         eg. com.chantasticvfx.MyNode
@@ -120,7 +120,7 @@ class NodeObject(object):
 
     def set_model(self, model):
         self._model = model
-        self._model.type = self.type
+        self._model.type_ = self.type_
         self._model.id = self.view.id
 
     def update_model(self):
@@ -439,7 +439,7 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
-        port.model.type = IN_PORT
+        port.model.type_ = IN_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
@@ -463,7 +463,7 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
-        port.model.type = OUT_PORT
+        port.model.type_ = OUT_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output

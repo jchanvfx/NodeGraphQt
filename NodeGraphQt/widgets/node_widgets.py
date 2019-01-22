@@ -69,7 +69,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         self._label = label
 
     @property
-    def type(self):
+    def type_(self):
         return str(self.__class__.__name__)
 
     @property
@@ -103,7 +103,7 @@ class NodeComboBox(NodeBaseWidget):
         self.add_items(items)
 
     @property
-    def type(self):
+    def type_(self):
         return 'ComboNodeWidget'
 
     @property
@@ -156,7 +156,7 @@ class NodeLineEdit(NodeBaseWidget):
         self.text = text
 
     @property
-    def type(self):
+    def type_(self):
         return 'LineEditNodeWidget'
 
     @property
@@ -194,7 +194,7 @@ class NodeCheckBox(NodeBaseWidget):
         self.state = state
 
     @property
-    def type(self):
+    def type_(self):
         return 'CheckboxNodeWidget'
 
     @property
