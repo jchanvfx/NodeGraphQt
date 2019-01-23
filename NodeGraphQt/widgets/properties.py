@@ -201,18 +201,24 @@ class PropComboBox(QtWidgets.QComboBox):
         self.currentIndexChanged.connect(self._on_index_changed)
 
     def _on_index_changed(self):
-        self.value_changed.emit(self.toolTip(), self.value())
+        self.value_changed.emit(self.toolTip(), self.get_value())
 
     def items(self):
         return [self.itemText(i) for i in range(self.count())]
+
+    def set_items(self, items):
+        self.clear()
+        self.addItems(items)
 
     def get_value(self):
         return self.currentText()
 
     def set_value(self, value):
         if value != self.get_value():
-            self.setText(value)
-            self.value_changed.emit(self.toolTip(), value)
+            idx = self.findText(value, QtCore.Qt.MatchExactly)
+            if idx < 0:
+                self.setCurrentIndex(idx)
+                self.value_changed.emit(self.toolTip(), value)
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
@@ -348,6 +354,9 @@ class NodePropWidget(QtWidgets.QWidget):
             node (NodeGraphQt.Node): node class.
         """
         model = node.model
+        graph_model = node.graph.model
+
+        common_props = graph_model.get_node_common_properties(node.type)
 
         # sort tabs and properties.
         tab_mapping = defaultdict(list)
@@ -355,18 +364,28 @@ class NodePropWidget(QtWidgets.QWidget):
             tab_name = model.get_tab_name(prop_name)
             tab_mapping[tab_name].append((prop_name, prop_val))
 
-        # print(tab_mapping)
+        # populate "Properties" tab.
+        prop_window = self.__tab_windows['Properties']
+        for prop_name, value in tab_mapping.get('Properties', {}):
+            wid_type = model.get_widget_type(prop_name)
+            WidClass = WIDGET_MAP.get(wid_type)
 
-        # # populate "Properties" tab.
-        # prop_window = self.__tab_windows['Properties']
-        # for prop_name, value in tab_mapping.get('Properties', {}):
-        #     wid_type = model.get_widget_type(prop_name)
-        #     WidClass = WIDGET_MAP.get(wid_type)
-        #
-        #     widget = WidClass()
-        #     prop_window.add_widget(prop_name, widget, value)
-        #     widget.value_changed.connect(self._on_property_changed)
-        #
+            widget = WidClass()
+
+            if prop_name in common_props.keys():
+                if 'items' in common_props[prop_name].keys():
+                    widget.set_items(common_props[prop_name]['items'])
+                # if '' in common_props[prop_name].keys():
+                # if '' in common_props[prop_name].keys():
+                # if '' in common_props[prop_name].keys():
+                # if '' in common_props[prop_name].keys():
+                # if '' in common_props[prop_name].keys():
+
+
+
+            prop_window.add_widget(prop_name, widget, value)
+            widget.value_changed.connect(self._on_property_changed)
+
         # # add tabs.
         # for tab in sorted(tab_mapping.keys()):
         #     if tab != 'Properties':
@@ -493,10 +512,10 @@ if __name__ == '__main__':
         def __init__(self):
             super(TestNode, self).__init__()
             self.create_property('label_test', 'foo bar', widget_type=NODE_PROP_QLABEL)
-            # self.create_property('text_edit', 'hello', widget_type=NODE_PROP_QLINEEDIT)
-            # self.create_property('color_picker', (0, 0, 255), widget_type=NODE_PROP_COLORPICKER)
-            # self.create_property('integer', 10, widget_type=NODE_PROP_QSPINBOX)
-            # self.create_property('list', 'foo', items=['foo', 'bar'], widget_type=NODE_PROP_QCOMBO)
+            self.create_property('text_edit', 'hello', widget_type=NODE_PROP_QLINEEDIT)
+            self.create_property('color_picker', (0, 0, 255), widget_type=NODE_PROP_COLORPICKER)
+            self.create_property('integer', 10, widget_type=NODE_PROP_QSPINBOX)
+            self.create_property('list', 'foo', items=['foo', 'bar'], widget_type=NODE_PROP_QCOMBO)
             # self.create_property('range', 50, range=(1, 100), widget_type=NODE_PROP_SLIDER)
 
     app = QtWidgets.QApplication(sys.argv)
@@ -505,6 +524,7 @@ if __name__ == '__main__':
     graph.register_node(TestNode)
 
     test_node = graph.create_node('nodeGraphQt.nodes.TestNode')
+    print(graph.model.common_properties())
 
     wgt = NodePropWidget(node=test_node)
 
