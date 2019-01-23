@@ -366,9 +366,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        # (NOTE) Please see commit message
-        # if event.modifiers() == QtCore.Qt.ShiftModifier:
-        #    event.setModifiers(QtCore.Qt.ControlModifier)
+
+        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
+        # `setModifiers` in PyQt, please see the note above.
+        """
+        if event.modifiers() == QtCore.Qt.ShiftModifier:
+            event.setModifiers(QtCore.Qt.ControlModifier)
+        """
 
         if not self._live_pipe:
             return
