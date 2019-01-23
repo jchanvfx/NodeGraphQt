@@ -517,12 +517,22 @@ if __name__ == '__main__':
 
         def __init__(self):
             super(TestNode, self).__init__()
-            # self.create_property('label_test', 'foo bar', widget_type=NODE_PROP_QLABEL)
-            # self.create_property('text_edit', 'hello', widget_type=NODE_PROP_QLINEEDIT)
-            # self.create_property('color_picker', (0, 0, 255), widget_type=NODE_PROP_COLORPICKER)
-            # self.create_property('integer', 10, widget_type=NODE_PROP_QSPINBOX)
-            self.create_property('list', 'foo', items=['foo', 'bar'], widget_type=NODE_PROP_QCOMBO, tab='foo')
-            self.create_property('range', 50, range=(45, 55), widget_type=NODE_PROP_SLIDER)
+            self.create_property('label_test', 'foo bar',
+                                 widget_type=NODE_PROP_QLABEL)
+            self.create_property('text_edit', 'hello',
+                                 widget_type=NODE_PROP_QLINEEDIT)
+            self.create_property('color_picker', (0, 0, 255),
+                                 widget_type=NODE_PROP_COLORPICKER)
+            self.create_property('integer', 10,
+                                 widget_type=NODE_PROP_QSPINBOX)
+            self.create_property('list', 'foo',
+                                 items=['foo', 'bar'],
+                                 widget_type=NODE_PROP_QCOMBO,
+                                 tab='Foo')
+            self.create_property('range', 50,
+                                 range=(45, 55),
+                                 widget_type=NODE_PROP_SLIDER,
+                                 tab='Foo')
 
     app = QtWidgets.QApplication(sys.argv)
 
@@ -530,7 +540,6 @@ if __name__ == '__main__':
     graph.register_node(TestNode)
 
     test_node = graph.create_node('nodeGraphQt.nodes.TestNode')
-    print(graph.model.common_properties())
 
     wgt = NodePropWidget(node=test_node)
 
