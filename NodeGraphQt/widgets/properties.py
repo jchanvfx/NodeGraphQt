@@ -97,17 +97,12 @@ class PropColorPicker(BaseProperty):
 
 class PropSlider(BaseProperty):
 
-    def __init__(self, parent=None, min_val=None, max_val=None):
+    def __init__(self, parent=None):
         super(PropSlider, self).__init__(parent)
         self._block = False
         self._slider = QtWidgets.QSlider()
-        if isinstance(min_val, float):
-            self._spnbox = QtWidgets.QDoubleSpinBox()
-        else:
-            self._spnbox = QtWidgets.QSpinBox()
+        self._spnbox = QtWidgets.QSpinBox()
         self._init()
-        self.set_min(min_val or 0)
-        self.set_max(max_val or 100)
 
     def _init(self):
         self._slider.setOrientation(QtCore.Qt.Horizontal)
@@ -120,22 +115,24 @@ class PropSlider(BaseProperty):
         layout.addWidget(self._slider)
         self._spnbox.valueChanged.connect(self._on_spnbox_changed)
         self._slider.valueChanged.connect(self._on_slider_changed)
+        # store the original press event.
+        self._slider_press_event = self._slider.mousePressEvent
         self._slider.mousePressEvent = self.sliderMousePressEvent
         self._slider.mouseReleaseEvent = self.sliderMouseReleaseEvent
 
     def sliderMousePressEvent(self, event):
         self._block = True
+        self._slider_press_event(event)
 
     def sliderMouseReleaseEvent(self, event):
-        if self._slider.value() != self._spnbox.value():
-            self.value_changed.emit(self.toolTip(), self.get_value())
+        self.value_changed.emit(self.toolTip(), self.get_value())
         self._block = False
 
     def _on_slider_changed(self, value):
         self._spnbox.setValue(value)
 
     def _on_spnbox_changed(self, value):
-        if value != self._spnbox.value():
+        if value != self._slider.value():
             self._slider.setValue(value)
             if not self._block:
                 self.value_changed.emit(self.toolTip(), self.get_value())
@@ -150,11 +147,11 @@ class PropSlider(BaseProperty):
             self.value_changed.emit(self.toolTip(), value)
             self._block = False
 
-    def set_min(self, value):
+    def set_min(self, value=0):
         self._spnbox.setMinimum(value)
         self._slider.setMinimum(value)
 
-    def set_max(self, value):
+    def set_max(self, value=0):
         self._spnbox.setMaximum(value)
         self._slider.setMaximum(value)
 
@@ -533,6 +530,7 @@ if __name__ == '__main__':
                                  range=(45, 55),
                                  widget_type=NODE_PROP_SLIDER,
                                  tab='Foo')
+
 
     app = QtWidgets.QApplication(sys.argv)
 
