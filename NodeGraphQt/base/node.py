@@ -220,7 +220,8 @@ class NodeObject(object):
         """
         self.set_property('selected', selected)
 
-    def create_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
+    def create_property(self, name, value, items=None, range=None,
+                        widget_type=NODE_PROP, tab='Properties'):
         """
         Creates a custom property to the node.
 
@@ -230,8 +231,9 @@ class NodeObject(object):
             items (list[str]): items used by widget type NODE_PROP_QCOMBO
             range (tuple)): min, max values used by NODE_PROP_SLIDER
             widget_type (int): widget type flag (not implemented yet).
+            tab (str): name of the widget tab to display in.
         """
-        self.model.add_property(name, value, items, range, widget_type)
+        self.model.add_property(name, value, items, range, widget_type, tab)
 
     def properties(self):
         """
@@ -240,7 +242,9 @@ class NodeObject(object):
         Returns:
             dict: a dictionary of node properties.
         """
-        return self.model.to_dict
+        props = self.model.to_dict[self.id].copy()
+        props['id'] = self.id
+        return props
 
     def get_property(self, name):
         """

@@ -3,6 +3,7 @@ import json
 from collections import defaultdict
 
 from NodeGraphQt.constants import (NODE_PROP,
+                                   NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCHECKBOX,
                                    NODE_PROP_COLORPICKER)
@@ -71,13 +72,13 @@ class NodeModel(object):
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
-            'type': NODE_PROP,
+            'type': NODE_PROP_QLABEL,
             'id': NODE_PROP,
             'icon': NODE_PROP,
             'name': NODE_PROP_QLINEEDIT,
             'color': NODE_PROP_COLORPICKER,
             'border_color': NODE_PROP,
-            'text_color': NODE_PROP,
+            'text_color': NODE_PROP_COLORPICKER,
             'disabled': NODE_PROP_QCHECKBOX,
             'selected': NODE_PROP,
             'width': NODE_PROP,
@@ -87,7 +88,8 @@ class NodeModel(object):
             'outputs': NODE_PROP,
         }
 
-    def add_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
+    def add_property(self, name, value, items=None, range=None,
+                     widget_type=NODE_PROP, tab='Properties'):
         """
         add custom property.
 
@@ -97,6 +99,7 @@ class NodeModel(object):
             items (list[str]): items used by widget type NODE_PROP_QCOMBO.
             range (tuple)): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
+            tab (str): widget tab name.
         """
         if name in self.properties.keys():
             raise AssertionError('"{}" reserved for default property.'.format(name))
@@ -107,13 +110,16 @@ class NodeModel(object):
 
         if self._graph_model is None:
             self._TEMP_property_widget_types[name] = widget_type
-            self._TEMP_property_attrs[name] = {}
+            self._TEMP_property_attrs[name] = {'tab': tab}
             if items:
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
         else:
-            attrs = {self.type: {name: {'widget_type': widget_type}}}
+            attrs = {self.type: {name: {
+                'widget_type': widget_type,
+                'tab': tab
+            }}}
             if items:
                 attrs[self.type][name]['items'] = items
             if range:
@@ -139,6 +145,15 @@ class NodeModel(object):
             return self._TEMP_property_widget_types.get(name)
         return graph.node_property_attrs[self.type][name]['widget_type']
 
+    def get_tab_name(self, name):
+        graph = self._graph_model
+        if graph is None:
+            attrs = self._TEMP_property_attrs.get(name)
+            if attrs:
+                return attrs[name].get('tab')
+            return
+        return graph.node_property_attrs[self.type][name]['tab']
+
     @property
     def properties(self):
         """
@@ -148,7 +163,11 @@ class NodeModel(object):
             dict: default node properties.
         """
         props = self.__dict__.copy()
-        props.pop('_custom_prop')
+        exclude = ['_custom_prop',
+                   '_graph_model',
+                   '_TEMP_property_attrs',
+                   '_TEMP_property_widget_types']
+        [props.pop(i) for i in exclude if i in props.keys()]
         return props
 
     @property
@@ -240,6 +259,7 @@ class NodeGraphModel(object):
         # {'nodeGraphQt.nodes.FooNode': {
         #     'my_property':{
         #         'widget_type': 0,
+        #         'tab': 'Properties',
         #         'items': ['foo', 'bar', 'test'],
         #         'range': (0, 100)
         #         }
@@ -255,6 +275,11 @@ if __name__ == '__main__':
     n = NodeModel()
     n.inputs[p.name] = p
     n.add_property('foo', 'bar')
-    # print(n.properties)
+
+    print('-'*100)
+    print('property keys\n')
+    print(list(n.properties.keys()))
+    print('-'*100)
+    print('to_dict\n')
     for k, v in n.to_dict[n.id].items():
         print(k, v)

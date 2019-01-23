@@ -295,8 +295,9 @@ class NodeItem(AbstractNodeItem):
             widget_widths = [
                 w.boundingRect().width() for w in self._widgets.values()]
             width = max(widget_widths)
-        if self._text_item.boundingRect().width() > width:
-            width = self._text_item.boundingRect().width()
+
+        lbl_width = self._text_item.boundingRect().width()
+        width = lbl_width if lbl_width > width else width
 
         port_height = 0.0
         if self._input_items:
@@ -319,6 +320,9 @@ class NodeItem(AbstractNodeItem):
             width += max(output_widths)
             port = list(self._output_items.keys())[0]
             port_height = port.boundingRect().height() * 2
+
+        if not (self._input_items and self._output_items):
+            width += self._icon_item.boundingRect().width() * 3
 
         in_count = len([p for p in self.inputs if p.isVisible()])
         out_count = len([p for p in self.outputs if p.isVisible()])
@@ -491,7 +495,8 @@ class NodeItem(AbstractNodeItem):
 
         # arrange label text
         self.arrange_label()
-        self.offset_label(0.0, 5.0)
+        txt_y = self._text_item.boundingRect().height() / 10
+        self.offset_label(0.0, txt_y)
 
         # arrange icon
         self.arrange_icon()
