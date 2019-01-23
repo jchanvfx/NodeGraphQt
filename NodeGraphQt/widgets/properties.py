@@ -339,8 +339,6 @@ class NodePropWidget(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.__tab)
-        self.add_tab('Properties')
-        self.add_tab('Node')
         self._read_node(node)
 
     def _on_property_changed(self, name, value):
@@ -364,7 +362,35 @@ class NodePropWidget(QtWidgets.QWidget):
             tab_name = model.get_tab_name(prop_name)
             tab_mapping[tab_name].append((prop_name, prop_val))
 
+        # add tabs.
+        for tab in sorted(tab_mapping.keys()):
+            if tab not in ['Properties', 'Node']:
+                self.add_tab(tab)
+
+        # populate tab properties.
+        for tab in sorted(tab_mapping.keys()):
+            if tab == 'Properties':
+                continue
+            prop_window = self.__tab_windows[tab]
+            for prop_name, value in tab_mapping[tab]:
+                wid_type = model.get_widget_type(prop_name)
+                WidClass = WIDGET_MAP.get(wid_type)
+
+                widget = WidClass()
+
+                if prop_name in common_props.keys():
+                    if 'items' in common_props[prop_name].keys():
+                        widget.set_items(common_props[prop_name]['items'])
+                    if 'range' in common_props[prop_name].keys():
+                        prop_range = common_props[prop_name]['range']
+                        widget.set_min(prop_range[0])
+                        widget.set_max(prop_range[1])
+
+                prop_window.add_widget(prop_name, widget, value)
+                widget.value_changed.connect(self._on_property_changed)
+
         # populate "Properties" tab.
+        self.add_tab('Properties')
         prop_window = self.__tab_windows['Properties']
         for prop_name, value in tab_mapping.get('Properties', {}):
             wid_type = model.get_widget_type(prop_name)
@@ -375,36 +401,16 @@ class NodePropWidget(QtWidgets.QWidget):
             if prop_name in common_props.keys():
                 if 'items' in common_props[prop_name].keys():
                     widget.set_items(common_props[prop_name]['items'])
-                # if '' in common_props[prop_name].keys():
-                # if '' in common_props[prop_name].keys():
-                # if '' in common_props[prop_name].keys():
-                # if '' in common_props[prop_name].keys():
-                # if '' in common_props[prop_name].keys():
-
-
+                if 'range' in common_props[prop_name].keys():
+                    prop_range = common_props[prop_name]['range']
+                    widget.set_min(prop_range[0])
+                    widget.set_max(prop_range[1])
 
             prop_window.add_widget(prop_name, widget, value)
             widget.value_changed.connect(self._on_property_changed)
 
-        # # add tabs.
-        # for tab in sorted(tab_mapping.keys()):
-        #     if tab != 'Properties':
-        #         self.add_tab(tab)
-        #
-        # # populate tab properties.
-        # for tab in sorted(tab_mapping.keys()):
-        #     if tab == 'Properties':
-        #         continue
-        #     prop_window = self.__tab_windows[tab]
-        #     for prop_name, value in tab_mapping[tab]:
-        #         wid_type = model.get_widget_type(prop_name)
-        #         WidClass = WIDGET_MAP.get(wid_type)
-        #
-        #         widget = WidClass()
-        #         prop_window.add_widget(prop_name, widget, value)
-        #         widget.value_changed.connect(self._on_property_changed)
-
         # add "Node" tab properties.
+        self.add_tab('Node')
         default_props = ['type', 'name', 'color', 'text_color', 'disabled']
         prop_window = self.__tab_windows['Node']
         for prop_name in default_props:
@@ -415,7 +421,7 @@ class NodePropWidget(QtWidgets.QWidget):
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name))
-            # widget.value_changed.connect(self._on_property_changed)
+            widget.value_changed.connect(self._on_property_changed)
 
     def add_widget(self, name, widget, tab='Properties'):
         """
@@ -511,12 +517,12 @@ if __name__ == '__main__':
 
         def __init__(self):
             super(TestNode, self).__init__()
-            self.create_property('label_test', 'foo bar', widget_type=NODE_PROP_QLABEL)
-            self.create_property('text_edit', 'hello', widget_type=NODE_PROP_QLINEEDIT)
-            self.create_property('color_picker', (0, 0, 255), widget_type=NODE_PROP_COLORPICKER)
-            self.create_property('integer', 10, widget_type=NODE_PROP_QSPINBOX)
-            self.create_property('list', 'foo', items=['foo', 'bar'], widget_type=NODE_PROP_QCOMBO)
-            # self.create_property('range', 50, range=(1, 100), widget_type=NODE_PROP_SLIDER)
+            # self.create_property('label_test', 'foo bar', widget_type=NODE_PROP_QLABEL)
+            # self.create_property('text_edit', 'hello', widget_type=NODE_PROP_QLINEEDIT)
+            # self.create_property('color_picker', (0, 0, 255), widget_type=NODE_PROP_COLORPICKER)
+            # self.create_property('integer', 10, widget_type=NODE_PROP_QSPINBOX)
+            self.create_property('list', 'foo', items=['foo', 'bar'], widget_type=NODE_PROP_QCOMBO, tab='foo')
+            self.create_property('range', 50, range=(45, 55), widget_type=NODE_PROP_SLIDER)
 
     app = QtWidgets.QApplication(sys.argv)
 
