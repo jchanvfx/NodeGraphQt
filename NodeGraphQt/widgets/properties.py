@@ -178,7 +178,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
         self.returnPressed.connect(self._on_return_pressed)
 
     def _on_return_pressed(self):
-        self.set_value(self.value())
+        self.value_changed.emit(self.toolTip(), self.get_value())
 
     def get_value(self):
         return self.text()
@@ -316,7 +316,7 @@ class PropWindow(QtWidgets.QWidget):
                 return widget
 
 
-class NodePropWidget(QtWidgets.QWidget):
+class NodePropWidget(QtWidgets.QFrame):
     """
     Node properties widget for display a Node object.
 
@@ -325,16 +325,26 @@ class NodePropWidget(QtWidgets.QWidget):
         node (NodeGraphQt.Node): node.
     """
 
+    #: signal (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
         self.resize(350, 200)
+        self.setFrameStyle(self.StyledPanel)
         self.__node_id = node.id
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
+
+        name_wgt = PropLineEdit()
+        name_wgt.set_value(node.name())
+        name_wgt.value_changed.connect(self._on_property_changed)
+
+        name_layout = QtWidgets.QHBoxLayout()
+        name_layout.addWidget(QtWidgets.QLabel('name'))
+        name_layout.addWidget(name_wgt)
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addLayout(name_layout)
         layout.addWidget(self.__tab)
         self._read_node(node)
 
@@ -361,20 +371,17 @@ class NodePropWidget(QtWidgets.QWidget):
 
         # add tabs.
         for tab in sorted(tab_mapping.keys()):
-            if tab not in ['Properties', 'Node']:
+            if tab != 'Node':
                 self.add_tab(tab)
 
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
-            if tab == 'Properties':
-                continue
             prop_window = self.__tab_windows[tab]
             for prop_name, value in tab_mapping[tab]:
                 wid_type = model.get_widget_type(prop_name)
                 WidClass = WIDGET_MAP.get(wid_type)
 
                 widget = WidClass()
-
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])
@@ -386,29 +393,9 @@ class NodePropWidget(QtWidgets.QWidget):
                 prop_window.add_widget(prop_name, widget, value)
                 widget.value_changed.connect(self._on_property_changed)
 
-        # populate "Properties" tab.
-        self.add_tab('Properties')
-        prop_window = self.__tab_windows['Properties']
-        for prop_name, value in tab_mapping.get('Properties', {}):
-            wid_type = model.get_widget_type(prop_name)
-            WidClass = WIDGET_MAP.get(wid_type)
-
-            widget = WidClass()
-
-            if prop_name in common_props.keys():
-                if 'items' in common_props[prop_name].keys():
-                    widget.set_items(common_props[prop_name]['items'])
-                if 'range' in common_props[prop_name].keys():
-                    prop_range = common_props[prop_name]['range']
-                    widget.set_min(prop_range[0])
-                    widget.set_max(prop_range[1])
-
-            prop_window.add_widget(prop_name, widget, value)
-            widget.value_changed.connect(self._on_property_changed)
-
         # add "Node" tab properties.
         self.add_tab('Node')
-        default_props = ['type', 'name', 'color', 'text_color', 'disabled']
+        default_props = ['type', 'color', 'text_color', 'disabled', 'id']
         prop_window = self.__tab_windows['Node']
         for prop_name in default_props:
             wid_type = model.get_widget_type(prop_name)
@@ -419,6 +406,9 @@ class NodePropWidget(QtWidgets.QWidget):
                                    widget,
                                    model.get_property(prop_name))
             widget.value_changed.connect(self._on_property_changed)
+
+    def node_id(self):
+        return self.__node_id
 
     def add_widget(self, name, widget, tab='Properties'):
         """
@@ -467,19 +457,25 @@ class NodePropWidget(QtWidgets.QWidget):
                 return widget
 
 
-class PropBinWidget(QtWidgets.QWidget):
+class PropBinWidget(QtWidgets.QScrollArea):
     """
     Node property bin widget for displaying nodes.
     """
 
-    property_changed = QtCore.Signal(str, object)
+    #: signal (node_id, prop_name, prop_value)
+    property_changed = QtCore.Signal(str, str, object)
 
-    def __init__(self, parent=None, graph=None):
+    def __init__(self, parent=None):
         super(PropBinWidget, self).__init__(parent)
-        self._graph = graph
-        self._layout = QtWidgets.QVBoxLayout(self)
-        self._layout.setSpacing(2)
-        self.__nodes = {}
+        self.setWidgetResizable(True)
+        self.setMinimumSize(380, 300)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        container = QtWidgets.QWidget()
+        self.setWidget(container)
+        self.__layout = QtWidgets.QVBoxLayout(container)
+        self.__layout.setSpacing(2)
+        self.__layout.setContentsMargins(4, 6, 4, 6)
+        self.__node_wgts = {}
 
     def add_node(self, node):
         """
@@ -488,19 +484,22 @@ class PropBinWidget(QtWidgets.QWidget):
         Args:
             node (NodeGraphQt.Node): node object.
         """
+        if node.id in self.__node_wgts.keys():
+            self.remove_node(node.id)
         node_wgt = NodePropWidget(self, node)
-        self.__nodes[node.id()] = node_wgt
-        self.layout.addWidget(node_wgt)
+        node_wgt.property_changed.connect(self.property_changed.emit)
+        self.__node_wgts[node.id] = node_wgt
+        self.__layout.insertWidget(0, node_wgt)
 
     def nodes(self):
-        return list(self.__nodes.keys())
+        return list(self.__node_wgts.keys())
 
     def remove_node(self, node_id):
-        widget = self.__nodes.pop(node_id)
+        widget = self.__node_wgts.pop(node_id)
         widget.deleteLater()
 
-    def get_node_widget(self, node_id):
-        return self.__nodes.get(node_id)
+    def get_property_widget(self, node_id):
+        return self.__node_wgts.get(node_id)
 
 
 if __name__ == '__main__':
@@ -524,12 +523,15 @@ if __name__ == '__main__':
                                  widget_type=NODE_PROP_QSPINBOX)
             self.create_property('list', 'foo',
                                  items=['foo', 'bar'],
-                                 widget_type=NODE_PROP_QCOMBO,
-                                 tab='Foo')
+                                 widget_type=NODE_PROP_QCOMBO)
             self.create_property('range', 50,
                                  range=(45, 55),
-                                 widget_type=NODE_PROP_SLIDER,
-                                 tab='Foo')
+                                 widget_type=NODE_PROP_SLIDER)
+
+
+    def prop_changed(node_id, prop_name, prop_value):
+        print('-'*100)
+        print(node_id, prop_name, prop_value)
 
 
     app = QtWidgets.QApplication(sys.argv)
@@ -538,10 +540,14 @@ if __name__ == '__main__':
     graph.register_node(TestNode)
 
     test_node = graph.create_node('nodeGraphQt.nodes.TestNode')
+    test_node2 = graph.create_node('nodeGraphQt.nodes.TestNode')
 
-    wgt = NodePropWidget(node=test_node)
+    prop_bin = PropBinWidget()
+    prop_bin.property_changed.connect(prop_changed)
 
-    # graph.show()
-    wgt.show()
+    prop_bin.add_node(test_node)
+    prop_bin.add_node(test_node2)
+
+    prop_bin.show()
 
     app.exec_()

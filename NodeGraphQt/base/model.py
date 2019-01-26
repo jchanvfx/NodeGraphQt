@@ -73,7 +73,7 @@ class NodeModel(object):
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
             'type': NODE_PROP_QLABEL,
-            'id': NODE_PROP,
+            'id': NODE_PROP_QLABEL,
             'icon': NODE_PROP,
             'name': NODE_PROP_QLINEEDIT,
             'color': NODE_PROP_COLORPICKER,

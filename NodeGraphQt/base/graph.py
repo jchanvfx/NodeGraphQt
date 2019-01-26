@@ -16,6 +16,7 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.base.vendor import NodeVendor
 from NodeGraphQt.widgets.viewer import NodeViewer
+from NodeGraphQt.widgets.properties import PropBinWidget
 
 
 class NodeGraph(QtCore.QObject):
