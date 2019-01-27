@@ -327,6 +327,7 @@ class NodePropWidget(QtWidgets.QFrame):
 
     #: signal (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
+    property_closed = QtCore.Signal(str)
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
@@ -336,17 +337,28 @@ class NodePropWidget(QtWidgets.QFrame):
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
+        close_lbl = QtWidgets.QLabel('close')
+        close_lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignCenter)
+        close_btn = QtWidgets.QPushButton('X')
+        close_btn.clicked.connect(self._on_close)
+
         name_wgt = PropLineEdit()
         name_wgt.set_value(node.name())
         name_wgt.value_changed.connect(self._on_property_changed)
 
         name_layout = QtWidgets.QHBoxLayout()
+        name_layout.setContentsMargins(0, 0, 0, 0)
         name_layout.addWidget(QtWidgets.QLabel('name'))
         name_layout.addWidget(name_wgt)
+        name_layout.addWidget(close_lbl)
+        name_layout.addWidget(close_btn)
         layout = QtWidgets.QVBoxLayout(self)
         layout.addLayout(name_layout)
         layout.addWidget(self.__tab)
         self._read_node(node)
+
+    def _on_close(self):
+        self.property_closed.emit(self.__node_id)
 
     def _on_property_changed(self, name, value):
         self.property_changed.emit(self.__node_id, name, value)
@@ -487,11 +499,12 @@ class PropBinWidget(QtWidgets.QScrollArea):
         if node.id in self.__node_wgts.keys():
             self.remove_node(node.id)
         node_wgt = NodePropWidget(self, node)
+        node_wgt.property_closed.connect(self.remove_node)
         node_wgt.property_changed.connect(self.property_changed.emit)
         self.__node_wgts[node.id] = node_wgt
         self.__layout.insertWidget(0, node_wgt)
 
-    def nodes(self):
+    def node_ids(self):
         return list(self.__node_wgts.keys())
 
     def remove_node(self, node_id):
