@@ -539,6 +539,9 @@ class PropBinWidget(QtWidgets.QWidget):
     def container(self):
         return self.__contaner
 
+    def scroll_to_top(self):
+        self.__container.verticalScrollBar().setValue(0)
+
     def add_node(self, node):
         self.__contaner.add_node(node)
 

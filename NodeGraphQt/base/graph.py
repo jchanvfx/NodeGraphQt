@@ -99,8 +99,8 @@ class NodeGraph(QtCore.QObject):
             node_id (str): node id emitted by the viewer.
         """
         node = self.get_node_by_id(node_id)
-        self._properties_bin.container.add_node(node)
-        self._properties_bin.container.verticalScrollBar().setValue(0)
+        self._properties_bin.add_node(node)
+        self._properties_bin.scroll_to_top()
 
         self.node_double_clicked.emit(node)
 
