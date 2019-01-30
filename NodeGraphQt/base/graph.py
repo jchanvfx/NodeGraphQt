@@ -31,8 +31,12 @@ class NodeGraph(QtCore.QObject):
     node_created = QtCore.Signal(NodeObject)
     #: signal for when a node is selected.
     node_selected = QtCore.Signal(NodeObject)
+    #: signal for when a node is double clicked.
+    node_double_clicked = QtCore.Signal(NodeObject)
     #: signal for when a node has been connected.
     port_connected = QtCore.Signal(Port, Port)
+    #: signal for when a node property has changed.
+    property_changed = QtCore.Signal(NodeObject, str, object)
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
@@ -43,6 +47,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer = NodeViewer()
         self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
+        self._properties_bin = PropBinWidget()
 
         tab = QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
@@ -56,10 +61,14 @@ class NodeGraph(QtCore.QObject):
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
+        self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
+
+        self._properties_bin.container.property_changed.connect(
+            self._on_property_changed)
 
     def _toggle_tab_search(self):
         """
@@ -67,6 +76,33 @@ class NodeGraph(QtCore.QObject):
         """
         self._viewer.tab_search_set_nodes(self._vendor.names)
         self._viewer.tab_search_toggle()
+
+    def _on_property_changed(self, node_id, prop_name, prop_value):
+        """
+        called when a property widget has changed in the properties bin.
+        (emits the node object, property name, property value)
+
+        Args:
+            node_id (str): node id.
+            prop_name (str): node property name.
+            prop_value (object): python object.
+        """
+        node = self.get_node_by_id(node_id)
+        self.property_changed.emit(node, prop_name, prop_value)
+
+    def _on_node_double_clicked(self, node_id):
+        """
+        called when a node in the viewer is double click.
+        (emits the node object when the node is clicked)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+        """
+        node = self.get_node_by_id(node_id)
+        self._properties_bin.container.add_node(node)
+        self._properties_bin.container.verticalScrollBar().setValue(0)
+
+        self.node_double_clicked.emit(node)
 
     def _on_node_selected(self, node_id):
         """
@@ -184,6 +220,15 @@ class NodeGraph(QtCore.QObject):
             NodeGraphQt.widgets.scene.NodeScene: node scene.
         """
         return self._viewer.scene()
+
+    def properties_bin(self):
+        """
+        Return the node properties bin widget.
+
+        Returns:
+            PropBinWidget: widget.
+        """
+        return self._properties_bin
 
     def undo_stack(self):
         """

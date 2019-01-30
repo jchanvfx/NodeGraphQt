@@ -44,6 +44,13 @@ if __name__ == '__main__':
     viewer.resize(1100, 800)
     viewer.show()
 
+    properties_bin = graph.properties_bin()
+
+    def foo(n):
+        if not properties_bin.isVisible():
+            properties_bin.show()
+    graph.node_double_clicked.connect(foo)
+
     # registered nodes.
     reg_nodes = [
         Backdrop, MyNode,

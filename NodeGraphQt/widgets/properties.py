@@ -337,9 +337,8 @@ class NodePropWidget(QtWidgets.QFrame):
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
-        close_lbl = QtWidgets.QLabel('close')
-        close_lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignCenter)
         close_btn = QtWidgets.QPushButton('X')
+        close_btn.setToolTip('close window')
         close_btn.clicked.connect(self._on_close)
 
         name_wgt = PropLineEdit()
@@ -350,7 +349,6 @@ class NodePropWidget(QtWidgets.QFrame):
         name_layout.setContentsMargins(0, 0, 0, 0)
         name_layout.addWidget(QtWidgets.QLabel('name'))
         name_layout.addWidget(name_wgt)
-        name_layout.addWidget(close_lbl)
         name_layout.addWidget(close_btn)
         layout = QtWidgets.QVBoxLayout(self)
         layout.addLayout(name_layout)
@@ -469,7 +467,7 @@ class NodePropWidget(QtWidgets.QFrame):
                 return widget
 
 
-class PropBinWidget(QtWidgets.QScrollArea):
+class PropContainerWidget(QtWidgets.QScrollArea):
     """
     Node property bin widget for displaying nodes.
     """
@@ -478,7 +476,7 @@ class PropBinWidget(QtWidgets.QScrollArea):
     property_changed = QtCore.Signal(str, str, object)
 
     def __init__(self, parent=None):
-        super(PropBinWidget, self).__init__(parent)
+        super(PropContainerWidget, self).__init__(parent)
         self.setWidgetResizable(True)
         self.setMinimumSize(380, 300)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -504,15 +502,48 @@ class PropBinWidget(QtWidgets.QScrollArea):
         self.__node_wgts[node.id] = node_wgt
         self.__layout.insertWidget(0, node_wgt)
 
-    def node_ids(self):
-        return list(self.__node_wgts.keys())
-
     def remove_node(self, node_id):
         widget = self.__node_wgts.pop(node_id)
         widget.deleteLater()
 
-    def get_property_widget(self, node_id):
+    def node_ids(self):
+        return list(self.__node_wgts.keys())
+
+    def property_widget(self, node_id):
         return self.__node_wgts.get(node_id)
+
+    def property_widgets(self):
+        return self.__node_wgts
+
+    def clear(self):
+        for widget in self.__node_wgts.values():
+            widget.deleteLater()
+        self.__node_wgts = {}
+
+
+class PropBinWidget(QtWidgets.QWidget):
+
+    def __init__(self, parent=None):
+        super(PropBinWidget, self).__init__(parent)
+
+        self.__contaner = PropContainerWidget()
+
+        top_layout = QtWidgets.QHBoxLayout()
+        top_layout.addWidget(QtWidgets.QLabel('test'))
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addLayout(top_layout)
+        layout.addWidget(self.__contaner)
+
+    @property
+    def container(self):
+        return self.__contaner
+
+    def add_node(self, node):
+        self.__contaner.add_node(node)
+
+    def remove_node(self, node_id):
+        self.__contaner.remove_node(node_id)
 
 
 if __name__ == '__main__':
@@ -556,10 +587,10 @@ if __name__ == '__main__':
     test_node2 = graph.create_node('nodeGraphQt.nodes.TestNode')
 
     prop_bin = PropBinWidget()
-    prop_bin.property_changed.connect(prop_changed)
+    # prop_bin.container.property_changed.connect(prop_changed)
 
-    prop_bin.add_node(test_node)
-    prop_bin.add_node(test_node2)
+    prop_bin.container.add_node(test_node)
+    prop_bin.container.add_node(test_node2)
 
     prop_bin.show()
 

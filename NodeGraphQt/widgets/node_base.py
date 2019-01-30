@@ -215,6 +215,12 @@ class NodeItem(AbstractNodeItem):
             return
         super(NodeItem, self).mouseReleaseEvent(event)
 
+    def mouseDoubleClickEvent(self, event):
+        viewer = self.viewer()
+        if viewer:
+            viewer.node_double_clicked.emit(self.id)
+        super(NodeItem, self).mouseDoubleClickEvent(event)
+
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
             self.reset_pipes()
