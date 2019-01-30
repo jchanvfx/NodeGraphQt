@@ -529,7 +529,7 @@ class PropBinWidget(QtWidgets.QWidget):
         self.__contaner = PropContainerWidget()
 
         top_layout = QtWidgets.QHBoxLayout()
-        top_layout.addWidget(QtWidgets.QLabel('test'))
+        top_layout.addWidget(QtWidgets.QLabel('Properties'))
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addLayout(top_layout)
@@ -587,7 +587,7 @@ if __name__ == '__main__':
     test_node2 = graph.create_node('nodeGraphQt.nodes.TestNode')
 
     prop_bin = PropBinWidget()
-    # prop_bin.container.property_changed.connect(prop_changed)
+    prop_bin.container.property_changed.connect(prop_changed)
 
     prop_bin.container.add_node(test_node)
     prop_bin.container.add_node(test_node2)
