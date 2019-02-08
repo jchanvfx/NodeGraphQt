@@ -331,7 +331,6 @@ class NodePropWidget(QtWidgets.QFrame):
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
-        self.resize(350, 200)
         self.setFrameStyle(self.StyledPanel)
         self.__node_id = node.id
         self.__tab_windows = {}
@@ -467,88 +466,6 @@ class NodePropWidget(QtWidgets.QFrame):
                 return widget
 
 
-class PropContainerWidget(QtWidgets.QScrollArea):
-    """
-    Node property bin widget for displaying nodes.
-    """
-
-    #: signal (node_id, prop_name, prop_value)
-    property_changed = QtCore.Signal(str, str, object)
-
-    def __init__(self, parent=None):
-        super(PropContainerWidget, self).__init__(parent)
-        self.setWidgetResizable(True)
-        self.setMinimumSize(380, 300)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        container = QtWidgets.QWidget()
-        self.setWidget(container)
-        self.__layout = QtWidgets.QVBoxLayout(container)
-        self.__layout.setSpacing(2)
-        self.__layout.setContentsMargins(4, 6, 4, 6)
-        self.__node_wgts = {}
-
-    def add_node(self, node):
-        """
-        Add a node to the properties bin.
-
-        Args:
-            node (NodeGraphQt.Node): node object.
-        """
-        if node.id in self.__node_wgts.keys():
-            self.remove_node(node.id)
-        node_wgt = NodePropWidget(self, node)
-        node_wgt.property_closed.connect(self.remove_node)
-        node_wgt.property_changed.connect(self.property_changed.emit)
-        self.__node_wgts[node.id] = node_wgt
-        self.__layout.insertWidget(0, node_wgt)
-
-    def remove_node(self, node_id):
-        widget = self.__node_wgts.pop(node_id)
-        widget.deleteLater()
-
-    def node_ids(self):
-        return list(self.__node_wgts.keys())
-
-    def property_widget(self, node_id):
-        return self.__node_wgts.get(node_id)
-
-    def property_widgets(self):
-        return self.__node_wgts
-
-    def clear(self):
-        for widget in self.__node_wgts.values():
-            widget.deleteLater()
-        self.__node_wgts = {}
-
-
-class PropBinWidget(QtWidgets.QWidget):
-
-    def __init__(self, parent=None):
-        super(PropBinWidget, self).__init__(parent)
-
-        self.__contaner = PropContainerWidget()
-
-        top_layout = QtWidgets.QHBoxLayout()
-        top_layout.addWidget(QtWidgets.QLabel('Properties'))
-
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addLayout(top_layout)
-        layout.addWidget(self.__contaner)
-
-    @property
-    def container(self):
-        return self.__contaner
-
-    def scroll_to_top(self):
-        self.__container.verticalScrollBar().setValue(0)
-
-    def add_node(self, node):
-        self.__contaner.add_node(node)
-
-    def remove_node(self, node_id):
-        self.__contaner.remove_node(node_id)
-
-
 if __name__ == '__main__':
     import sys
     from NodeGraphQt import Node, NodeGraph
@@ -580,6 +497,10 @@ if __name__ == '__main__':
         print('-'*100)
         print(node_id, prop_name, prop_value)
 
+    def prop_close(node_id):
+        print('='*100)
+        print(node_id)
+
 
     app = QtWidgets.QApplication(sys.argv)
 
@@ -587,14 +508,10 @@ if __name__ == '__main__':
     graph.register_node(TestNode)
 
     test_node = graph.create_node('nodeGraphQt.nodes.TestNode')
-    test_node2 = graph.create_node('nodeGraphQt.nodes.TestNode')
 
-    prop_bin = PropBinWidget()
-    prop_bin.container.property_changed.connect(prop_changed)
-
-    prop_bin.container.add_node(test_node)
-    prop_bin.container.add_node(test_node2)
-
-    prop_bin.show()
+    node_prop = NodePropWidget(node=test_node)
+    node_prop.property_changed.connect(prop_changed)
+    node_prop.property_closed.connect(prop_close)
+    node_prop.show()
 
     app.exec_()

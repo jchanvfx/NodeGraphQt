@@ -15,8 +15,8 @@ from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.base.vendor import NodeVendor
+from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
-from NodeGraphQt.widgets.properties import PropBinWidget
 
 
 class NodeGraph(QtCore.QObject):
@@ -47,7 +47,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer = NodeViewer()
         self._vendor = NodeVendor()
         self._undo_stack = QUndoStack(self)
-        self._properties_bin = PropBinWidget()
+        self._properties_bin = PropertiesBinWidget()
 
         tab = QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
@@ -67,7 +67,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
-        self._properties_bin.container.property_changed.connect(
+        self._properties_bin.property_changed.connect(
             self._on_property_changed)
 
     def _toggle_tab_search(self):
@@ -100,7 +100,6 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
         self._properties_bin.add_node(node)
-        self._properties_bin.scroll_to_top()
 
         self.node_double_clicked.emit(node)
 
