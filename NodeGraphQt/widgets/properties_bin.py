@@ -9,6 +9,7 @@ class PropertiesList(QtWidgets.QTableWidget):
     def __init__(self, parent=None):
         super(PropertiesList, self).__init__(parent)
         self.setColumnCount(1)
+        self.setShowGrid(False)
         vh, hh = self.verticalHeader(), self.horizontalHeader()
         vh.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         vh.hide()
@@ -30,8 +31,11 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setMinimum(0)
         self.resize(400, 400)
 
+        btn_clr = QtWidgets.QPushButton('clear bin')
+        btn_clr.clicked.connect(self._prop_list.clear)
+
         top_layout = QtWidgets.QHBoxLayout()
-        top_layout.addWidget(QtWidgets.QLabel('Properties'))
+        top_layout.addWidget(btn_clr)
         top_layout.addStretch(1)
         top_layout.addWidget(QtWidgets.QLabel('limit'))
         top_layout.addWidget(self._limit)
@@ -48,11 +52,15 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
     def add_node(self, node):
         """
-        Add node to the properties list.
+        Add node to the properties bin.
 
         Args:
             node (NodeGraphQt.Node): node object.
         """
+        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        if itm_find:
+            self._prop_list.removeRow(itm_find[0].row())
+
         self._prop_list.insertRow(0)
         prop_widget = NodePropWidget(node=node)
         prop_widget.property_changed.connect(self.property_changed.emit)
@@ -60,12 +68,13 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
         item = QtWidgets.QTableWidgetItem(node.id)
-        item.setForeground(QtGui.QColor(0, 0, 0, 0))
+        item.setFlags(QtCore.Qt.NoItemFlags)
+        item.setForeground(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
         self._prop_list.setItem(0, 0, item)
 
     def remove_node(self, node):
         """
-        Remove node from the properties list.
+        Remove node from the properties bin.
 
         Args:
             node (NodeGraphQt.Node): node object.
