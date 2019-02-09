@@ -88,6 +88,7 @@ class NodeGraph(QtCore.QObject):
             prop_value (object): python object.
         """
         node = self.get_node_by_id(node_id)
+        node.set_property(prop_name, prop_value)
         self.property_changed.emit(node, prop_name, prop_value)
 
     def _on_node_double_clicked(self, node_id):

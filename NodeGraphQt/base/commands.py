@@ -25,12 +25,7 @@ class PropertyChangedCmd(QUndoCommand):
     def set_node_prop(self, name, value):
         # set model data.
         model = self.node.model
-        if name in model.properties.keys():
-            setattr(model, name, value)
-        elif name in model.custom_properties.keys():
-            model.custom_properties[name] = value
-        else:
-            raise KeyError('No property "{}"'.format(name))
+        model.set_property(name, value)
 
         # set view data.
         view = self.node.view

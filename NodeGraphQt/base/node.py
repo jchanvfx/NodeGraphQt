@@ -270,6 +270,9 @@ class NodeObject(object):
             name (str): name of the property.
             value (object): property data.
         """
+        if self.get_property(name) == value:
+            return
+
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
@@ -283,11 +286,9 @@ class NodeObject(object):
             undo_stack = self.graph.undo_stack()
             undo_stack.push(PropertyChangedCmd(self, name, value))
         else:
-            setattr(self.view, name, value)
-            if name in self.model.properties.keys():
-                setattr(self.model, name, value)
-            elif name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = value
+            if hasattr(self.view, name):
+                setattr(self.view, name, value)
+            self.model.set_property(name, value)
 
     def has_property(self, name):
         """

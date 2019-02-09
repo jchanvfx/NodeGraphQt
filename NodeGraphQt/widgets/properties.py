@@ -341,6 +341,7 @@ class NodePropWidget(QtWidgets.QFrame):
         close_btn.clicked.connect(self._on_close)
 
         name_wgt = PropLineEdit()
+        name_wgt.setToolTip('name')
         name_wgt.set_value(node.name())
         name_wgt.value_changed.connect(self._on_property_changed)
 
