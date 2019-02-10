@@ -81,6 +81,21 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         self.__on_prop_close(node.id)
 
+    def prop_widget(self, node):
+        """
+        Returns the node property widget.
+
+        Args:
+            node (NodeGraphQt.Node): node object.
+
+        Returns:
+            NodePropWidget: node property widget.
+        """
+        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        if itm_find:
+            item = itm_find[0]
+            return self._prop_list.cellWidget(item.row(), 0)
+
 
 if __name__ == '__main__':
     import sys

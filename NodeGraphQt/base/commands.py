@@ -23,6 +23,9 @@ class PropertyChangedCmd(QUndoCommand):
         self.new_val = value
 
     def set_node_prop(self, name, value):
+        """
+        updates the node view and model.
+        """
         # set model data.
         model = self.node.model
         model.set_property(name, value)
@@ -41,13 +44,29 @@ class PropertyChangedCmd(QUndoCommand):
                 name = 'xy_pos'
             setattr(view, name, value)
 
+    def update_prop_bin(self, name, value):
+        """
+        updates the property bin widget.
+        """
+        graph = self.node.graph
+        prop_bin = graph.properties_bin()
+        properties_wgt = prop_bin.prop_widget(self.node)
+        if properties_wgt:
+            prop_wgt = properties_wgt.get_widget(name)
+            # check if previous value is identical to current value,
+            # prevent signals from causing a infinite loop.
+            if prop_wgt.get_value() != value:
+                prop_wgt.set_value(value)
+
     def undo(self):
         if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.old_val)
+            self.update_prop_bin(self.name, self.old_val)
 
     def redo(self):
         if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.new_val)
+            self.update_prop_bin(self.name, self.new_val)
 
 
 class NodeMovedCmd(QUndoCommand):

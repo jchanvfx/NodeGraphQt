@@ -44,12 +44,13 @@ if __name__ == '__main__':
     viewer.resize(1100, 800)
     viewer.show()
 
-    properties_bin = graph.properties_bin()
-
-    def foo(n):
+    # show the properties bin when a node is "double clicked" in the graph.
+    def show_prop_bin(node):
+        properties_bin = graph.properties_bin()
         if not properties_bin.isVisible():
             properties_bin.show()
-    graph.node_double_clicked.connect(foo)
+
+    graph.node_double_clicked.connect(show_prop_bin)
 
     # registered nodes.
     reg_nodes = [

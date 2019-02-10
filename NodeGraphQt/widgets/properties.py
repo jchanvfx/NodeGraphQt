@@ -286,10 +286,12 @@ class PropWindow(QtWidgets.QWidget):
 
     def add_widget(self, name, widget, value):
         """
+        Add a property widget to the window.
+
         Args:
-            name (str):
-            widget (BaseProperty):
-            value (object):
+            name (str): property name to be displayed.
+            widget (BaseProperty): property widget.
+            value (object): property value.
         """
         widget.setToolTip(name)
         widget.set_value(value)
@@ -304,6 +306,8 @@ class PropWindow(QtWidgets.QWidget):
 
     def get_widget(self, name):
         """
+        Returns the property widget from the name.
+
         Args:
             name (str): property name.
 
@@ -311,9 +315,9 @@ class PropWindow(QtWidgets.QWidget):
             QtWidgets.QWidget: property widget.
         """
         for row in range(self.__layout.rowCount()):
-            widget = self.__layout.itemAtPosition(row, 1).widget()
-            if name == widget.toolTip():
-                return widget
+            item = self.__layout.itemAtPosition(row, 1)
+            if item and name == item.widget().toolTip():
+                return item.widget()
 
 
 class NodePropWidget(QtWidgets.QFrame):
@@ -340,15 +344,15 @@ class NodePropWidget(QtWidgets.QFrame):
         close_btn.setToolTip('close window')
         close_btn.clicked.connect(self._on_close)
 
-        name_wgt = PropLineEdit()
-        name_wgt.setToolTip('name')
-        name_wgt.set_value(node.name())
-        name_wgt.value_changed.connect(self._on_property_changed)
+        self.name_wgt = PropLineEdit()
+        self.name_wgt.setToolTip('name')
+        self.name_wgt.set_value(node.name())
+        self.name_wgt.value_changed.connect(self._on_property_changed)
 
         name_layout = QtWidgets.QHBoxLayout()
         name_layout.setContentsMargins(0, 0, 0, 0)
         name_layout.addWidget(QtWidgets.QLabel('name'))
-        name_layout.addWidget(name_wgt)
+        name_layout.addWidget(self.name_wgt)
         name_layout.addWidget(close_btn)
         layout = QtWidgets.QVBoxLayout(self)
         layout.addLayout(name_layout)
@@ -356,14 +360,24 @@ class NodePropWidget(QtWidgets.QFrame):
         self._read_node(node)
 
     def _on_close(self):
+        """
+        called by the close button.
+        """
         self.property_closed.emit(self.__node_id)
 
     def _on_property_changed(self, name, value):
+        """
+        slot function called when a property widget has changed.
+
+        Args:
+            name (str): property name.
+            value (object): new value.
+        """
         self.property_changed.emit(self.__node_id, name, value)
 
     def _read_node(self, node):
         """
-        populate widget from a node.
+        Populate widget from a node.
 
         Args:
             node (NodeGraphQt.Node): node class.
@@ -418,6 +432,12 @@ class NodePropWidget(QtWidgets.QFrame):
             widget.value_changed.connect(self._on_property_changed)
 
     def node_id(self):
+        """
+        Returns the node id linked to the widget.
+
+        Returns:
+            str: node id
+        """
         return self.__node_id
 
     def add_widget(self, name, widget, tab='Properties'):
@@ -461,6 +481,8 @@ class NodePropWidget(QtWidgets.QFrame):
         Returns:
             QtWidgets.QWidget: property widget.
         """
+        if name == 'name':
+            return self.name_wgt
         for tab_name, prop_win in self.__tab_windows.items():
             widget = prop_win.get_widget(name)
             if widget:

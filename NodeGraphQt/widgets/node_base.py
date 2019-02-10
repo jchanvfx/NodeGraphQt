@@ -570,6 +570,17 @@ class NodeItem(AbstractNodeItem):
         if self.scene():
             self.post_init()
 
+    @AbstractNodeItem.color.setter
+    def color(self, color=(100, 100, 100, 255)):
+        AbstractNodeItem.color.fset(self, color)
+        if self.scene():
+            self.scene().update()
+
+    @AbstractNodeItem.text_color.setter
+    def text_color(self, color=(100, 100, 100, 255)):
+        AbstractNodeItem.text_color.fset(self, color)
+        self._set_text_color(color)
+
     @property
     def inputs(self):
         """
