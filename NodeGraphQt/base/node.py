@@ -256,11 +256,7 @@ class NodeObject(object):
         Returns:
             object: property data.
         """
-        if name in self.model.custom_properties.keys():
-            if name == 'selected':
-                self.model.custom_properties[name] = self.view.selected
-            return self.model.custom_properties[name]
-        return self.model.properties.get(name)
+        return self.model.get_property(name)
 
     def set_property(self, name, value):
         """
@@ -376,9 +372,6 @@ class Node(NodeObject):
         self._inputs = []
         self._outputs = []
 
-    def _on_widget_changed(self, name, value):
-        self.model.custom_properties[name] = value
-
     def update_model(self):
         """
         update the node model from view.
@@ -386,29 +379,10 @@ class Node(NodeObject):
         for name, val in self.view.properties.items():
             if name in ['inputs', 'outputs']:
                 continue
-            if name in self.model.properties.keys():
-                setattr(self.model, name, val)
-            if name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = val
+            self.model.set_property(name, val)
+
         for name, widget in self.view.widgets.items():
-            if name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = widget.value
-
-    def set_property(self, name, value, update_widget=True):
-        """
-        Set the value on the node custom property and updates the node widget.
-
-        see :meth:`NodeObject.get_property()`
-
-        Args:
-            name (str): name of the property.
-            value: the new property value.
-            update_widget (bool): update the node widget (default=True).
-        """
-        node_widget = self.view.widgets.get(name)
-        if node_widget and update_widget:
-            node_widget.value = value
-        super(Node, self).set_property(name, value)
+            self.model.set_property(name, widget.value)
 
     def set_icon(self, icon=None):
         """
@@ -489,7 +463,7 @@ class Node(NodeObject):
         self.create_property(
             name, items[0], items=items, widget_type=NODE_PROP_QCOMBO)
         widget = self.view.add_combo_menu(name, label, items)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
 
     def add_text_input(self, name='', label='', text=''):
         """
@@ -502,7 +476,7 @@ class Node(NodeObject):
         """
         self.create_property(name, text, widget_type=NODE_PROP_QLINEEDIT)
         widget = self.view.add_text_input(name, label, text)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
 
     def add_checkbox(self, name='', label='', text='', state=False):
         """
@@ -516,7 +490,7 @@ class Node(NodeObject):
         """
         self.create_property(name, state, widget_type=NODE_PROP_QCHECKBOX)
         widget = self.view.add_checkbox(name, label, text, state)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
 
     def inputs(self):
         """

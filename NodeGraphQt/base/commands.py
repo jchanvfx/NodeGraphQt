@@ -16,7 +16,7 @@ class PropertyChangedCmd(QUndoCommand):
 
     def __init__(self, node, name, value):
         QUndoCommand.__init__(self)
-        self.setText('set {} ({})'.format(name, node.name()))
+        self.setText('property "{}:{}"'.format(node.name(), name))
         self.node = node
         self.name = name
         self.old_val = node.get_property(name)
@@ -35,7 +35,10 @@ class PropertyChangedCmd(QUndoCommand):
 
         # view widgets.
         if hasattr(view, 'widgets') and name in view.widgets.keys():
-            view.widgets[name].value = value
+            # check if previous value is identical to current value,
+            # prevent signals from causing a infinite loop.
+            if view.widgets[name].value != value:
+                view.widgets[name].value = value
 
         # view properties.
         if name in view.properties.keys():
