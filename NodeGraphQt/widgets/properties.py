@@ -320,7 +320,7 @@ class PropWindow(QtWidgets.QWidget):
                 return item.widget()
 
 
-class NodePropWidget(QtWidgets.QFrame):
+class NodePropWidget(QtWidgets.QWidget):
     """
     Node properties widget for display a Node object.
 
@@ -335,13 +335,12 @@ class NodePropWidget(QtWidgets.QFrame):
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
-        self.setFrameStyle(self.StyledPanel)
         self.__node_id = node.id
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
         close_btn = QtWidgets.QPushButton('X')
-        close_btn.setToolTip('close window')
+        close_btn.setToolTip('close property')
         close_btn.clicked.connect(self._on_close)
 
         self.name_wgt = PropLineEdit()

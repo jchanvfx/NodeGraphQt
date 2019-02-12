@@ -2,12 +2,46 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.widgets.properties import NodePropWidget
+from NodeGraphQt.constants import NODE_SEL_BORDER_COLOR
+
+
+class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
+
+    def paint(self, painter, option, index):
+        """
+        Args:
+            painter (QtGui.QPainter):
+            option (QtGui.QStyleOptionViewItem):
+            index (QtCore.QModelIndex):
+        """
+        rect = option.rect
+        painter.save()
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(option.palette.midlight())
+        painter.drawRect(rect)
+
+        if option.state & QtWidgets.QStyle.State_Selected:
+            bdr_clr = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+            bdr_clr.setAlpha(80)
+            painter.setPen(QtGui.QPen(bdr_clr, 1.5))
+        else:
+            bdr_clr = option.palette.dark().color()
+            painter.setPen(QtGui.QPen(bdr_clr, 1))
+
+        painter.setBrush(QtCore.Qt.NoBrush)
+        rect = QtCore.QRect(rect.x() + 1,
+                            rect.y() + 1,
+                            rect.width() - 2,
+                            rect.height() - 2)
+        painter.drawRect(rect)
+        painter.restore()
 
 
 class PropertiesList(QtWidgets.QTableWidget):
 
     def __init__(self, parent=None):
         super(PropertiesList, self).__init__(parent)
+        self.setItemDelegate(PropertiesDelegate())
         self.setColumnCount(1)
         self.setShowGrid(False)
         vh, hh = self.verticalHeader(), self.horizontalHeader()
@@ -32,7 +66,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self.resize(400, 400)
 
         btn_clr = QtWidgets.QPushButton('clear bin')
-        btn_clr.clicked.connect(self._prop_list.clear)
+        btn_clr.clicked.connect(self.clear_bin)
 
         top_layout = QtWidgets.QHBoxLayout()
         top_layout.addWidget(btn_clr)
@@ -68,8 +102,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
         item = QtWidgets.QTableWidgetItem(node.id)
-        item.setFlags(QtCore.Qt.NoItemFlags)
-        item.setForeground(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
+        # item.setForeground(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
         self._prop_list.setItem(0, 0, item)
 
     def remove_node(self, node):
@@ -80,6 +113,12 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             node (NodeGraphQt.Node): node object.
         """
         self.__on_prop_close(node.id)
+
+    def clear_bin(self):
+        """
+        Clear the properties bin.
+        """
+        self._prop_list.setRowCount(0)
 
     def prop_widget(self, node):
         """
