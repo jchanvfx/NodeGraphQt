@@ -23,7 +23,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = option.palette.dark().color()
+            bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
