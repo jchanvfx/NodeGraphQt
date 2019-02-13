@@ -70,7 +70,7 @@ class PropColorPicker(BaseProperty):
         layout.addWidget(button, 1, QtCore.Qt.AlignLeft)
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor()
+        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()))
         if color.isValid():
             self.set_value(color.getRgb())
 

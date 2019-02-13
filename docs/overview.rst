@@ -34,6 +34,14 @@ Node can be created with the tab node search widget.
 .. note::
     To override the tab search widget hotkey see :class:`NodeGraphQt.NodeGraph` class for the tab_search_key argument.
 
+
+Properties Bin
+==============
+
+.. image:: _images/prop_bin.png
+    :width: 950px
+
+
 Menu Setup
 ==========
 

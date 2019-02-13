@@ -2,7 +2,6 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.widgets.properties import NodePropWidget
-from NodeGraphQt.constants import NODE_SEL_BORDER_COLOR
 
 
 class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
@@ -14,26 +13,24 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             option (QtGui.QStyleOptionViewItem):
             index (QtCore.QModelIndex):
         """
-        rect = option.rect
         painter.save()
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(option.palette.midlight())
-        painter.drawRect(rect)
+        painter.drawRect(option.rect)
 
         if option.state & QtWidgets.QStyle.State_Selected:
-            bdr_clr = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
-            bdr_clr.setAlpha(80)
+            bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
             bdr_clr = option.palette.dark().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
-        rect = QtCore.QRect(rect.x() + 1,
-                            rect.y() + 1,
-                            rect.width() - 2,
-                            rect.height() - 2)
-        painter.drawRect(rect)
+        painter.drawRect(QtCore.QRect(option.rect.x() + 1,
+                                      option.rect.y() + 1,
+                                      option.rect.width() - 2,
+                                      option.rect.height() - 2))
         painter.restore()
 
 
