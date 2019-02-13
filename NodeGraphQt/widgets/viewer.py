@@ -333,12 +333,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 pipe = pipe_items[0]
                 attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
                 from_port = pipe.port_from_pos(pos, True)
-                to_port = getattr(pipe, attr[from_port.port_type])
-                if not from_port.multi_connection and from_port.connected_ports:
-                    self._detached_port = from_port.connected_ports[0]
-                elif not to_port.multi_connection:
-                    self._detached_port = to_port
 
+                self._detached_port = getattr(pipe, attr[from_port.port_type])
                 self.start_live_connection(from_port)
                 self._live_pipe.draw_path(self._start_port, None, pos)
                 pipe.delete()
