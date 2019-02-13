@@ -13,7 +13,7 @@ class PortModel(object):
 
     def __init__(self, node):
         self.node = node
-        self.type = ''
+        self.type_ = ''
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False
@@ -47,7 +47,7 @@ class PortModel(object):
 class NodeModel(object):
 
     def __init__(self):
-        self.type = None
+        self.type_ = None
         self.id = hex(id(self))
         self.icon = None
         self.name = 'node'
@@ -72,7 +72,7 @@ class NodeModel(object):
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
-            'type': NODE_PROP_QLABEL,
+            'type_': NODE_PROP_QLABEL,
             'id': NODE_PROP_QLABEL,
             'icon': NODE_PROP,
             'name': NODE_PROP_QLINEEDIT,
@@ -116,14 +116,14 @@ class NodeModel(object):
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
         else:
-            attrs = {self.type: {name: {
+            attrs = {self.type_: {name: {
                 'widget_type': widget_type,
                 'tab': tab
             }}}
             if items:
-                attrs[self.type][name]['items'] = items
+                attrs[self.type_][name]['items'] = items
             if range:
-                attrs[self.type][name]['range'] = range
+                attrs[self.type_][name]['range'] = range
             self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):
@@ -143,7 +143,7 @@ class NodeModel(object):
         model = self._graph_model
         if model is None:
             return self._TEMP_property_widget_types.get(name)
-        return model.get_node_common_properties(self.type)[name]['widget_type']
+        return model.get_node_common_properties(self.type_)[name]['widget_type']
 
     def get_tab_name(self, name):
         model = self._graph_model
@@ -152,7 +152,7 @@ class NodeModel(object):
             if attrs:
                 return attrs[name].get('tab')
             return
-        return model.get_node_common_properties(self.type)[name]['tab']
+        return model.get_node_common_properties(self.type_)[name]['tab']
 
     @property
     def properties(self):

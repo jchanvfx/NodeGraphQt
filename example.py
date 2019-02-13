@@ -2,9 +2,8 @@
 import os
 import sys
 
-from PySide2 import QtWidgets
-
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
+from NodeGraphQt.vendor.Qt import QtWidgets
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 
-from PySide2 import QtGui, QtCore, QtWidgets
+from ..vendor.Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
@@ -39,6 +39,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
+        if parent is not None:
+            self.setWindowFlags(QtCore.Qt.Window)
+
         scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
         self.setSceneRect(scene_pos, scene_pos, SCENE_AREA, SCENE_AREA)
@@ -116,7 +119,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def _items_near(self, pos, item_type=None, width=20, height=20):
         x, y = pos.x() - width, pos.y() - height
-        rect = QtCore.QRect(x, y, width, height)
+        rect = QtCore.QRectF(x, y, width, height)
         items = []
         for item in self.scene().items(rect):
             if not item_type or isinstance(item, item_type):
@@ -239,7 +242,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).mouseMoveEvent(event)
 
     def wheelEvent(self, event):
-        adjust = (event.delta() / 120) * 0.1
+        try:
+            delta = event.delta()
+        except AttributeError:
+            # For PyQt5
+            delta = event.angleDelta().y()
+
+        adjust = (delta / 120) * 0.1
         self._set_viewer_zoom(adjust)
 
     def dropEvent(self, event):
@@ -291,13 +300,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsScenePressEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
+
+        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
+        # `setModifiers` in PyQt, and can't find a workaround for it.
+        # So the only option to work with PyQt for now was to drop the modifier
+        # remapping, but judging from the event passing flow and running a few
+        # tests, it looks like those remapping code didn't have any affect to
+        # the UI function.
+        # Should be safe to comment out the code below.
+        """
+        ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
         shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
         if shift_modifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
         elif ctrl_modifier:
             event.setModifiers(QtCore.Qt.ShiftModifier)
+        """
 
         if not alt_modifier:
             pos = event.scenePos()
@@ -348,8 +367,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
+
+        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
+        # `setModifiers` in PyQt, please see the note above.
+        """
         if event.modifiers() == QtCore.Qt.ShiftModifier:
             event.setModifiers(QtCore.Qt.ControlModifier)
+        """
 
         if not self._live_pipe:
             return
@@ -519,7 +543,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Open Session Setup', dir=current_dir, filter=ext_filter)
+            self, 'Open Session Setup', current_dir, ext_filter)
         return file_dlg[0] or None
 
     def save_dialog(self, current_dir=None, ext=None):
@@ -529,11 +553,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
-            self,
-            caption='Save Session',
-            dir=current_dir,
-            filter=';;'.join(ext_map.keys())
-        )
+            self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
             return
@@ -635,7 +655,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def reset_zoom(self):
         self.scale(1.0, 1.0)
-        self.resetMatrix()
+        self.resetTransform()
 
     def get_zoom(self):
         transform = self.transform()

@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore
-from PySide2.QtWidgets import (QGraphicsItem,
-                               QGraphicsPixmapItem,
-                               QGraphicsTextItem)
+from ..vendor.Qt import QtGui, QtCore
+from ..vendor.Qt.QtWidgets import (QGraphicsItem,
+                                   QGraphicsPixmapItem,
+                                   QGraphicsTextItem)
 
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,
@@ -166,11 +166,11 @@ class NodeItem(AbstractNodeItem):
         bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRoundRect(rect, radius, radius)
+        painter.drawRoundedRect(rect, radius, radius)
 
         if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-            painter.drawRoundRect(rect, radius, radius)
+            painter.drawRoundedRect(rect, radius, radius)
 
         label_rect = QtCore.QRectF(rect.left() + (radius / 2),
                                    rect.top() + (radius / 2),
@@ -201,7 +201,7 @@ class NodeItem(AbstractNodeItem):
         painter.restore()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start
             x_pos = event.pos().x()
@@ -236,7 +236,7 @@ class NodeItem(AbstractNodeItem):
         tooltip = '<b>{}</b>'.format(self._properties['name'])
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
-        tooltip += '<br/>{}<br/>'.format(self._properties['type'])
+        tooltip += '<br/>{}<br/>'.format(self._properties['type_'])
         self.setToolTip(tooltip)
 
     def _set_base_size(self):

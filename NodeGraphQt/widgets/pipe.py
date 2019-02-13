@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from ..vendor.Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
@@ -11,9 +11,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.widgets.port import PortItem
 
 PIPE_STYLES = {
-    PIPE_STYLE_DEFAULT: QtCore.Qt.PenStyle.SolidLine,
-    PIPE_STYLE_DASHED: QtCore.Qt.PenStyle.DashDotDotLine,
-    PIPE_STYLE_DOTTED: QtCore.Qt.PenStyle.DotLine
+    PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
+    PIPE_STYLE_DASHED: QtCore.Qt.DashDotDotLine,
+    PIPE_STYLE_DOTTED: QtCore.Qt.DotLine
 }
 
 
@@ -91,6 +91,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
         painter.restore()
+
+        painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
     def draw_path(self, start_port, end_port, cursor_pos=None):
         """

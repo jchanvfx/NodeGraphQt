@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from PySide2.QtCore import QRectF
-from PySide2.QtWidgets import QGraphicsItem
+from ..vendor.Qt.QtCore import QRectF
+from ..vendor.Qt.QtWidgets import QGraphicsItem
 
 from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
@@ -20,7 +20,7 @@ class AbstractNodeItem(QGraphicsItem):
             'color': (13, 18, 23, 255),
             'border_color': (46, 57, 66, 255),
             'text_color': (255, 255, 255, 180),
-            'type': 'AbstractBaseNode',
+            'type_': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
         }
@@ -75,12 +75,12 @@ class AbstractNodeItem(QGraphicsItem):
         self._properties['id'] = unique_id
 
     @property
-    def type(self):
-        return self._properties['type']
+    def type_(self):
+        return self._properties['type_']
 
-    @type.setter
-    def type(self, node_type='NODE'):
-        self._properties['type'] = node_type
+    @type_.setter
+    def type_(self, node_type='NODE'):
+        self._properties['type_'] = node_type
 
     @property
     def size(self):

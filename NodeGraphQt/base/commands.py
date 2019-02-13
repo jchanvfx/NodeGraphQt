@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide2.QtWidgets import QUndoCommand
+from ..vendor.Qt.QtWidgets import QUndoCommand
 
 from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
@@ -279,9 +279,9 @@ class PortVisibleCmd(QUndoCommand):
         self.port.view.setVisible(visible)
         node_view = self.port.node().view
         text_item = None
-        if self.port.type() == IN_PORT:
+        if self.port.type_() == IN_PORT:
             text_item = node_view.get_input_text_item(self.port.view)
-        elif self.port.type() == OUT_PORT:
+        elif self.port.type_() == OUT_PORT:
             text_item = node_view.get_output_text_item(self.port.view)
         if text_item:
             text_item.setVisible(visible)
