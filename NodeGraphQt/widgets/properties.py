@@ -384,7 +384,7 @@ class NodePropWidget(QtWidgets.QWidget):
         model = node.model
         graph_model = node.graph.model
 
-        common_props = graph_model.get_node_common_properties(node.type)
+        common_props = graph_model.get_node_common_properties(node.type_)
 
         # sort tabs and properties.
         tab_mapping = defaultdict(list)
@@ -418,7 +418,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
         # add "Node" tab properties.
         self.add_tab('Node')
-        default_props = ['type', 'color', 'text_color', 'disabled', 'id']
+        default_props = ['type_', 'color', 'text_color', 'disabled', 'id']
         prop_window = self.__tab_windows['Node']
         for prop_name in default_props:
             wid_type = model.get_widget_type(prop_name)
