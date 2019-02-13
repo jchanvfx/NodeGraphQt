@@ -12,7 +12,7 @@ class PortModel(object):
 
     def __init__(self, node):
         self.node = node
-        self.type = ''
+        self.type_ = ''
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False
@@ -46,7 +46,7 @@ class PortModel(object):
 class NodeModel(object):
 
     def __init__(self):
-        self.type = None
+        self.type_ = None
         self.id = hex(id(self))
         self.icon = None
         self.name = 'node'
@@ -71,7 +71,7 @@ class NodeModel(object):
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
-            'type': NODE_PROP,
+            'type_': NODE_PROP,
             'id': NODE_PROP,
             'icon': NODE_PROP,
             'name': NODE_PROP_QLINEEDIT,
@@ -113,11 +113,11 @@ class NodeModel(object):
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
         else:
-            attrs = {self.type: {name: {'widget_type': widget_type}}}
+            attrs = {self.type_: {name: {'widget_type': widget_type}}}
             if items:
-                attrs[self.type][name]['items'] = items
+                attrs[self.type_][name]['items'] = items
             if range:
-                attrs[self.type][name]['range'] = range
+                attrs[self.type_][name]['range'] = range
             self._graph_model.node_property_attrs.update(attrs)
 
     def set_property(self, name, value):
@@ -137,7 +137,7 @@ class NodeModel(object):
         graph = self._graph_model
         if graph is None:
             return self._TEMP_property_widget_types.get(name)
-        return graph.node_property_attrs[self.type][name]['widget_type']
+        return graph.node_property_attrs[self.type_][name]['widget_type']
 
     @property
     def properties(self):
