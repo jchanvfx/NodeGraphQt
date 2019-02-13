@@ -14,6 +14,7 @@ applications that supports [PySide2](https://doc.qt.io/qtforpython/pysideapi2.ht
 
 ![screencap01](/docs/_images/screenshot.png)
 
+![screencap01](/docs/_images/prop_bin.png)
 
 #### Navigation
 
