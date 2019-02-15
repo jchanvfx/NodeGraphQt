@@ -43,11 +43,13 @@ __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat
+    from Qt import __version__ as qtpy_ver
 except ImportError as ie:
     print('Cannot import "Qt.py" shim falling back on "NodeGraphQt.vendor.Qt"')
     from .vendor.Qt import __version__ as qtpy_ver
     from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat
-    print('Qt.py version: {}'.format(qtpy_ver))
+
+print('Qt.py version: {}'.format(qtpy_ver))
 
 from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
