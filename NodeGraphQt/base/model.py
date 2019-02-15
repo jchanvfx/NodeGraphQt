@@ -101,6 +101,8 @@ class NodeModel(object):
             widget_type (int): widget type flag.
             tab (str): widget tab name.
         """
+        tab = tab or 'Properties'
+
         if name in self.properties.keys():
             raise AssertionError('"{}" reserved for default property.'.format(name))
         if name in self._custom_prop.keys():

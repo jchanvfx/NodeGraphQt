@@ -221,7 +221,7 @@ class NodeObject(object):
         self.set_property('selected', selected)
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab='Properties'):
+                        widget_type=NODE_PROP, tab=None):
         """
         Creates a custom property to the node.
 
@@ -397,15 +397,62 @@ class Node(NodeObject):
         """
         return self.model.icon
 
+    def add_combo_menu(self, name='', label='', items=None, tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            items (list[str]): items to be added into the menu.
+            tab (str): name of the widget tab to display in.
+        """
+        items = items or []
+        self.create_property(
+            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
+        widget = self.view.add_combo_menu(name, label, items)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
+    def add_text_input(self, name='', label='', text='', tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(
+            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+        widget = self.view.add_text_input(name, label, text)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
+    def add_checkbox(self, name='', label='', text='', state=False, tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): checkbox text.
+            state (bool): pre-check.
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(
+            name, state, widget_type=NODE_PROP_QCHECKBOX, tab=tab)
+        widget = self.view.add_checkbox(name, label, text, state)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
         Add input :class:`Port` to node.
 
         Args:
-            name (str): name for the input port. 
+            name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            
+
         Returns:
             NodeGraphQt.Port: the created port object.
         """
@@ -426,10 +473,10 @@ class Node(NodeObject):
         Add output :class:`Port` to node.
 
         Args:
-            name (str): name for the output port. 
+            name (str): name for the output port.
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-             
+
         Returns:
             NodeGraphQt.Port: the created port object.
         """
@@ -444,48 +491,6 @@ class Node(NodeObject):
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
-
-    def add_combo_menu(self, name='', label='', items=None):
-        """
-        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            items (list[str]): items to be added into the menu.
-        """
-        items = items or []
-        self.create_property(
-            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO)
-        widget = self.view.add_combo_menu(name, label, items)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-
-    def add_text_input(self, name='', label='', text=''):
-        """
-        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            text (str): pre filled text.
-        """
-        self.create_property(name, text, widget_type=NODE_PROP_QLINEEDIT)
-        widget = self.view.add_text_input(name, label, text)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-
-    def add_checkbox(self, name='', label='', text='', state=False):
-        """
-        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            text (str): checkbox text.
-            state (bool): pre-check.
-        """
-        self.create_property(name, state, widget_type=NODE_PROP_QCHECKBOX)
-        widget = self.view.add_checkbox(name, label, text, state)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
 
     def inputs(self):
         """
