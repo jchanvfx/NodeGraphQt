@@ -436,13 +436,13 @@ class NodeGraph(QtCore.QObject):
         wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
         prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
 
-        graph_attrs = self.model.node_property_attrs
-        if node.type_ not in graph_attrs.keys():
-            graph_attrs[node.type_] = {
+        if self.model.get_node_common_properties(node.type_) is None:
+            node_attrs = {node.type_: {
                 n: {'widget_type': wt} for n, wt in wid_types.items()
-            }
+            }}
             for pname, pattrs in prop_attrs.items():
-                graph_attrs[node.type_][pname].update(pattrs)
+                node_attrs[node.type_][pname].update(pattrs)
+            self.model.set_node_common_properties(node_attrs)
 
         node._graph = self
         node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
