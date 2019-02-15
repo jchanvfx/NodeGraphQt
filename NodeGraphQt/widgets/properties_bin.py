@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from NodeGraphQt import QtWidgets, QtCore, QtGui
+from NodeGraphQt import QtWidgets, QtCore, QtGui, QtCompat
 
 from NodeGraphQt.widgets.properties import NodePropWidget
 
@@ -41,11 +41,12 @@ class PropertiesList(QtWidgets.QTableWidget):
         self.setItemDelegate(PropertiesDelegate())
         self.setColumnCount(1)
         self.setShowGrid(False)
-        vh, hh = self.verticalHeader(), self.horizontalHeader()
-        vh.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        vh.hide()
-        hh.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        hh.hide()
+        QtCompat.QHeaderView.setSectionResizeMode(
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
+        self.verticalHeader().hide()
+        QtCompat.QHeaderView.setSectionResizeMode(
+            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
+        self.horizontalHeader().hide()
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
