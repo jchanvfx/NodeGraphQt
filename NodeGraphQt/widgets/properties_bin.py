@@ -122,8 +122,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
         item = QtWidgets.QTableWidgetItem(node.id)
-        # item.setForeground(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))
         self._prop_list.setItem(0, 0, item)
+        self._prop_list.selectRow(0)
 
     def remove_node(self, node):
         """
