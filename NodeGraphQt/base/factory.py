@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-class NodeVendor(object):
+class NodeFactory(object):
     """
     Node factory that stores all the node types.
     """

@@ -8,11 +8,11 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
+from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.base.vendor import NodeVendor
 from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
@@ -43,7 +43,7 @@ class NodeGraph(QtCore.QObject):
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
         self._viewer = NodeViewer(parent)
-        self._vendor = NodeVendor()
+        self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
         self._properties_bin = PropertiesBinWidget()
 
@@ -72,7 +72,7 @@ class NodeGraph(QtCore.QObject):
         """
         toggle the tab search widget.
         """
-        self._viewer.tab_search_set_nodes(self._vendor.names)
+        self._viewer.tab_search_set_nodes(self._node_factory.names)
         self._viewer.tab_search_toggle()
 
     def _on_property_changed(self, node_id, prop_name, prop_value):
@@ -358,7 +358,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             list[str]: list of node type identifiers.
         """
-        return sorted(self._vendor.nodes.keys())
+        return sorted(self._node_factory.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
@@ -368,7 +368,7 @@ class NodeGraph(QtCore.QObject):
             node (NodeGraphQt.NodeObject): node.
             alias (str): custom alias name for the node type.
         """
-        self._vendor.register_node(node, alias)
+        self._node_factory.register_node(node, alias)
 
     def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
         """
@@ -386,7 +386,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.Node: the created instance of the node.
         """
-        NodeCls = self._vendor.create_node_instance(node_type)
+        NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
 
@@ -648,7 +648,7 @@ class NodeGraph(QtCore.QObject):
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
-            NodeCls = self._vendor.create_node_instance(identifier)
+            NodeCls = self._node_factory.create_node_instance(identifier)
             if NodeCls:
                 node = NodeCls()
                 node._graph = self
