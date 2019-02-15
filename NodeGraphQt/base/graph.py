@@ -3,9 +3,7 @@ import json
 import os
 import re
 
-from ..vendor.Qt import QtCore
-from ..vendor.Qt.QtWidgets import QUndoStack, QAction, QApplication
-
+from NodeGraphQt import QtCore, QtWidgets
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
@@ -46,10 +44,10 @@ class NodeGraph(QtCore.QObject):
         self._model = NodeGraphModel()
         self._viewer = NodeViewer(parent)
         self._vendor = NodeVendor()
-        self._undo_stack = QUndoStack(self)
+        self._undo_stack = QtWidgets.QUndoStack(self)
         self._properties_bin = PropertiesBinWidget()
 
-        tab = QAction('Search Nodes', self)
+        tab = QtWidgets.QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
         tab.triggered.connect(self._toggle_tab_search)
         self._viewer.addAction(tab)
@@ -759,7 +757,7 @@ class NodeGraph(QtCore.QObject):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return False
-        clipboard = QApplication.clipboard()
+        clipboard = QtWidgets.QApplication.clipboard()
         serial_data = self._serialize(nodes)
         serial_str = json.dumps(serial_data)
         if serial_str:
@@ -771,7 +769,7 @@ class NodeGraph(QtCore.QObject):
         """
         Pastes nodes copied from the clipboard.
         """
-        clipboard = QApplication.clipboard()
+        clipboard = QtWidgets.QApplication.clipboard()
         cb_string = clipboard.text()
         if not cb_string:
             return

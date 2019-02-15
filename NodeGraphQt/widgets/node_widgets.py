@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from ..vendor.Qt import QtCore, QtWidgets
+from NodeGraphQt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
@@ -92,7 +92,7 @@ class NodeComboBox(NodeBaseWidget):
         self._combo = QtWidgets.QComboBox()
         self._combo.setStyleSheet(STYLE_QCOMBOBOX)
         self._combo.setMinimumHeight(24)
-        self._combo.activated.connect(self._value_changed)
+        self._combo.currentIndexChanged.connect(self._value_changed)
         list_view = QtWidgets.QListView(self._combo)
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         self._combo.setView(list_view)

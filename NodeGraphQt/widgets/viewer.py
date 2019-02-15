@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import os
 
-from ..vendor.Qt import QtGui, QtCore, QtWidgets
-
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,

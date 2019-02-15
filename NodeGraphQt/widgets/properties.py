@@ -1,8 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from PySide2 import QtWidgets, QtCore, QtGui
-
+from NodeGraphQt import QtWidgets, QtCore, QtGui
 from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
@@ -213,8 +212,8 @@ class PropComboBox(QtWidgets.QComboBox):
     def set_value(self, value):
         if value != self.get_value():
             idx = self.findText(value, QtCore.Qt.MatchExactly)
-            if idx < 0:
-                self.setCurrentIndex(idx)
+            self.setCurrentIndex(idx)
+            if idx >= 0:
                 self.value_changed.emit(self.toolTip(), value)
 
 
@@ -283,6 +282,9 @@ class PropWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout(self)
         layout.setAlignment(QtCore.Qt.AlignTop)
         layout.addLayout(self.__layout)
+
+    def __repr__(self):
+        return '<PropWindow object at {}>'.format(hex(id(self)))
 
     def add_widget(self, name, widget, value):
         """
@@ -357,6 +359,9 @@ class NodePropWidget(QtWidgets.QWidget):
         layout.addLayout(name_layout)
         layout.addWidget(self.__tab)
         self._read_node(node)
+
+    def __repr__(self):
+        return '<NodePropWidget object at {}>'.format(hex(id(self)))
 
     def _on_close(self):
         """

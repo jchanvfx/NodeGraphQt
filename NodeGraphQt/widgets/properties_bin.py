@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from PySide2 import QtWidgets, QtCore, QtGui
+from NodeGraphQt import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.widgets.properties import NodePropWidget
 

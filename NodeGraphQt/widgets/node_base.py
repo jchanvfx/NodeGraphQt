@@ -1,9 +1,6 @@
 #!/usr/bin/python
-from ..vendor.Qt import QtGui, QtCore
-from ..vendor.Qt.QtWidgets import (QGraphicsItem,
-                                   QGraphicsPixmapItem,
-                                   QGraphicsTextItem)
 
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
@@ -17,7 +14,7 @@ from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
 from NodeGraphQt.widgets.port import PortItem
 
 
-class XDisabledItem(QGraphicsItem):
+class XDisabledItem(QtWidgets.QGraphicsItem):
     """
     Node disabled overlay item.
 
@@ -130,9 +127,9 @@ class NodeItem(AbstractNodeItem):
             pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
                                            QtCore.Qt.SmoothTransformation)
         self._properties['icon'] = ICON_NODE_BASE
-        self._icon_item = QGraphicsPixmapItem(pixmap, self)
+        self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self._text_item = QGraphicsTextItem(self.name, self)
+        self._text_item = QtWidgets.QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
@@ -612,7 +609,7 @@ class NodeItem(AbstractNodeItem):
         port.port_type = IN_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
@@ -636,7 +633,7 @@ class NodeItem(AbstractNodeItem):
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)

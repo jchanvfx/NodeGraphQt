@@ -273,11 +273,6 @@ class NodeObject(object):
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
 
-        exists = any([name in self.model.properties.keys(),
-                      name in self.model.custom_properties.keys()])
-        if not exists:
-            raise KeyError('No property "{}"'.format(name))
-
         if self.graph:
             undo_stack = self.graph.undo_stack()
             undo_stack.push(PropertyChangedCmd(self, name, value))

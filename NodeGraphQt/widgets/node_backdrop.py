@@ -1,7 +1,6 @@
 #!/usr/bin/python
-from ..vendor.Qt import QtGui, QtCore
-from ..vendor.Qt.QtWidgets import QGraphicsItem
 
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (Z_VAL_PIPE,
                                    NODE_SEL_COLOR,
                                    NODE_SEL_BORDER_COLOR)
@@ -10,7 +9,7 @@ from NodeGraphQt.widgets.pipe import Pipe
 from NodeGraphQt.widgets.port import PortItem
 
 
-class BackdropSizer(QGraphicsItem):
+class BackdropSizer(QtWidgets.QGraphicsItem):
     """
     Sizer item for resizing a backdrop node.
 

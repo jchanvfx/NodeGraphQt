@@ -3,7 +3,7 @@ import os
 import sys
 
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
-from NodeGraphQt.vendor.Qt import QtWidgets
+from NodeGraphQt import QtWidgets
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
@@ -57,29 +57,35 @@ if __name__ == '__main__':
         basic_nodes.FooNode,
         basic_nodes.BarNode,
         widget_nodes.DropdownMenuNode,
-        widget_nodes.TextInputNode
+        widget_nodes.TextInputNode,
+        widget_nodes.CheckboxNode
     ]
     for n in reg_nodes:
         graph.register_node(n)
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
-                                name='portal',
+                                name='chantastic!',
                                 color='#193a33',
                                 pos=[310, 10])
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
-                                 name='chantastic!',
+                                 name='node',
                                  pos=[-480, 140])
     foo_node.set_disabled(True)
 
     # create example "TextInputNode".
     text_node = graph.create_node('com.chantasticvfx.TextInputNode',
-                                  name='rick',
+                                  name='text node',
                                   pos=[-480, -160])
+
+    # create example "TextInputNode".
+    checkbox_node = graph.create_node('com.chantasticvfx.CheckboxNode',
+                                  name='checkbox node',
+                                  pos=[-480, -60])
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
-                                  name='morty',
+                                  name='menu node',
                                   pos=[280, -200])
 
     # change node icon.
@@ -87,7 +93,7 @@ if __name__ == '__main__':
     icon = os.path.join(this_path, 'example_nodes', 'pear.png')
     bar_node = graph.create_node('com.chantasticvfx.BarNode')
     bar_node.set_icon(icon)
-    bar_node.set_name('schwifty')
+    bar_node.set_name('icon node')
     bar_node.set_pos(-70, 10)
 
     # connect the nodes
