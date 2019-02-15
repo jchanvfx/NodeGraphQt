@@ -59,18 +59,21 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self.setWindowTitle('Properties Bin')
         self._prop_list = PropertiesList()
         self._limit = QtWidgets.QSpinBox()
+        self._limit.setToolTip('Set node limit to display.')
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
+        self._limit.setValue(10)
+        self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(400, 400)
 
-        btn_clr = QtWidgets.QPushButton('clear bin')
+        btn_clr = QtWidgets.QPushButton('clear')
+        btn_clr.setToolTip('Clear the properties bin.')
         btn_clr.clicked.connect(self.clear_bin)
 
         top_layout = QtWidgets.QHBoxLayout()
-        top_layout.addWidget(btn_clr)
-        top_layout.addStretch(1)
-        top_layout.addWidget(QtWidgets.QLabel('limit'))
         top_layout.addWidget(self._limit)
+        top_layout.addStretch(1)
+        top_layout.addWidget(btn_clr)
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.addLayout(top_layout)
@@ -78,9 +81,21 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
     def __on_prop_close(self, node_id):
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
-        if items:
-            item = items[0]
-            self._prop_list.removeRow(item.row())
+        [self._prop_list.removeRow(i.row()) for i in items]
+
+    def __on_limit_changed(self, value):
+        rows = self._prop_list.rowCount()
+        if rows > value:
+            self._prop_list.removeRow(rows - 1)
+
+    def limit(self):
+        """
+        Returns the limit for how many nodes can be loaded into the bin.
+
+        Returns:
+            int: node limit.
+        """
+        return int(self._limit.value())
 
     def add_node(self, node):
         """
@@ -89,6 +104,13 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Args:
             node (NodeGraphQt.Node): node object.
         """
+        if self.limit() == 0:
+            return
+
+        rows = self._prop_list.rowCount()
+        if rows >= self.limit():
+            self._prop_list.removeRow(rows - 1)
+
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
         if itm_find:
             self._prop_list.removeRow(itm_find[0].row())
