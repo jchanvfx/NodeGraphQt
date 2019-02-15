@@ -1,4 +1,5 @@
-from PySide2 import QtGui, QtCore, QtWidgets
+#!/usr/bin/python
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (VIEWER_BG_COLOR,
                                    VIEWER_GRID_OVERLAY,
@@ -42,6 +43,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.drawRect(rect)
 
         if not self._grid:
+            painter.restore()
             return
 
         zoom = self.viewer().get_zoom()
@@ -57,7 +59,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         pen = QtGui.QPen(color, 0.65)
         self._draw_grid(painter, rect, pen, grid_size * 8)
 
-        # fix border issue on the scene edge.        
+        # fix border issue on the scene edge.
         pen = QtGui.QPen(bg_color, 2)
         pen.setCosmetic(True)
         path = QtGui.QPainterPath()

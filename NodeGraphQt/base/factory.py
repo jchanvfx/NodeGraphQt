@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-class NodeVendor(object):
+class NodeFactory(object):
     """
     Node factory that stores all the node types.
     """
@@ -54,7 +54,7 @@ class NodeVendor(object):
             return
 
         name = node.NODE_NAME
-        node_type = node.type
+        node_type = node.type_
 
         if self._nodes.get(node_type):
             raise AssertionError(

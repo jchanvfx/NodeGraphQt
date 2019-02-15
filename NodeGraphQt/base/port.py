@@ -50,14 +50,14 @@ class Port(object):
         """
         return self.__model
 
-    def type(self):
+    def type_(self):
         """
         Returns the port type.
 
         Returns:
             str: 'in' for input port or 'out' for output port.
         """
-        return self.model.type
+        return self.model.type_
 
     def multi_connection(self):
         """
@@ -126,9 +126,9 @@ class Port(object):
         for node_id, port_names in self.model.connected_ports.items():
             for port_name in port_names:
                 node = graph.get_node_by_id(node_id)
-                if self.type() == 'in':
+                if self.type_() == 'in':
                     ports.append(node.outputs()[port_name])
-                elif self.type() == 'out':
+                elif self.type_() == 'out':
                     ports.append(node.inputs()[port_name])
         return ports
 

@@ -1,9 +1,6 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore
-from PySide2.QtWidgets import (QGraphicsItem,
-                               QGraphicsPixmapItem,
-                               QGraphicsTextItem)
 
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
@@ -17,7 +14,7 @@ from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
 from NodeGraphQt.widgets.port import PortItem
 
 
-class XDisabledItem(QGraphicsItem):
+class XDisabledItem(QtWidgets.QGraphicsItem):
     """
     Node disabled overlay item.
 
@@ -130,9 +127,9 @@ class NodeItem(AbstractNodeItem):
             pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
                                            QtCore.Qt.SmoothTransformation)
         self._properties['icon'] = ICON_NODE_BASE
-        self._icon_item = QGraphicsPixmapItem(pixmap, self)
+        self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self._text_item = QGraphicsTextItem(self.name, self)
+        self._text_item = QtWidgets.QGraphicsTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
@@ -166,11 +163,11 @@ class NodeItem(AbstractNodeItem):
         bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRoundRect(rect, radius, radius)
+        painter.drawRoundedRect(rect, radius, radius)
 
         if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-            painter.drawRoundRect(rect, radius, radius)
+            painter.drawRoundedRect(rect, radius, radius)
 
         label_rect = QtCore.QRectF(rect.left() + (radius / 2),
                                    rect.top() + (radius / 2),
@@ -201,7 +198,7 @@ class NodeItem(AbstractNodeItem):
         painter.restore()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             start = PortItem().boundingRect().width()
             end = self.boundingRect().width() - start
             x_pos = event.pos().x()
@@ -214,6 +211,12 @@ class NodeItem(AbstractNodeItem):
             event.ignore()
             return
         super(NodeItem, self).mouseReleaseEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        viewer = self.viewer()
+        if viewer:
+            viewer.node_double_clicked.emit(self.id)
+        super(NodeItem, self).mouseDoubleClickEvent(event)
 
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
@@ -230,7 +233,7 @@ class NodeItem(AbstractNodeItem):
         tooltip = '<b>{}</b>'.format(self._properties['name'])
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
-        tooltip += '<br/>{}<br/>'.format(self._properties['type'])
+        tooltip += '<br/>{}<br/>'.format(self._properties['type_'])
         self.setToolTip(tooltip)
 
     def _set_base_size(self):
@@ -295,8 +298,9 @@ class NodeItem(AbstractNodeItem):
             widget_widths = [
                 w.boundingRect().width() for w in self._widgets.values()]
             width = max(widget_widths)
-        if self._text_item.boundingRect().width() > width:
-            width = self._text_item.boundingRect().width()
+
+        lbl_width = self._text_item.boundingRect().width()
+        width = lbl_width if lbl_width > width else width
 
         port_height = 0.0
         if self._input_items:
@@ -319,6 +323,9 @@ class NodeItem(AbstractNodeItem):
             width += max(output_widths)
             port = list(self._output_items.keys())[0]
             port_height = port.boundingRect().height() * 2
+
+        if not (self._input_items and self._output_items):
+            width += self._icon_item.boundingRect().width() * 3
 
         in_count = len([p for p in self.inputs if p.isVisible()])
         out_count = len([p for p in self.outputs if p.isVisible()])
@@ -491,7 +498,8 @@ class NodeItem(AbstractNodeItem):
 
         # arrange label text
         self.arrange_label()
-        self.offset_label(0.0, 5.0)
+        txt_y = self._text_item.boundingRect().height() / 10
+        self.offset_label(0.0, txt_y)
 
         # arrange icon
         self.arrange_icon()
@@ -559,6 +567,17 @@ class NodeItem(AbstractNodeItem):
         if self.scene():
             self.post_init()
 
+    @AbstractNodeItem.color.setter
+    def color(self, color=(100, 100, 100, 255)):
+        AbstractNodeItem.color.fset(self, color)
+        if self.scene():
+            self.scene().update()
+
+    @AbstractNodeItem.text_color.setter
+    def text_color(self, color=(100, 100, 100, 255)):
+        AbstractNodeItem.text_color.fset(self, color)
+        self._set_text_color(color)
+
     @property
     def inputs(self):
         """
@@ -590,7 +609,7 @@ class NodeItem(AbstractNodeItem):
         port.port_type = IN_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
@@ -614,7 +633,7 @@ class NodeItem(AbstractNodeItem):
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QGraphicsTextItem(port.name, self)
+        text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)

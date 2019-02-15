@@ -1,11 +1,10 @@
 #!/usr/bin/python
-from PySide2.QtCore import QRectF
-from PySide2.QtWidgets import QGraphicsItem
+from NodeGraphQt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
 
-class AbstractNodeItem(QGraphicsItem):
+class AbstractNodeItem(QtWidgets.QGraphicsItem):
     """
     The abstract base class of a node.
     """
@@ -20,7 +19,7 @@ class AbstractNodeItem(QGraphicsItem):
             'color': (13, 18, 23, 255),
             'border_color': (46, 57, 66, 255),
             'text_color': (255, 255, 255, 180),
-            'type': 'AbstractBaseNode',
+            'type_': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
         }
@@ -36,7 +35,7 @@ class AbstractNodeItem(QGraphicsItem):
             self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
-        return QRectF(0.0, 0.0, self._width, self._height)
+        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def mousePressEvent(self, event):
         self._properties['selected'] = True
@@ -75,12 +74,12 @@ class AbstractNodeItem(QGraphicsItem):
         self._properties['id'] = unique_id
 
     @property
-    def type(self):
-        return self._properties['type']
+    def type_(self):
+        return self._properties['type_']
 
-    @type.setter
-    def type(self, node_type='NODE'):
-        self._properties['type'] = node_type
+    @type_.setter
+    def type_(self, node_type='NODE'):
+        self._properties['type_'] = node_type
 
     @property
     def size(self):

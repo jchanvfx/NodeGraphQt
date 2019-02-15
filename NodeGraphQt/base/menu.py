@@ -1,8 +1,7 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from PySide2 import QtGui, QtCore, QtWidgets
-
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 
 
@@ -89,7 +88,7 @@ class Menu(object):
         Returns:
             NodeGraphQt.Menu: the appended menu item.
         """
-        menu = QtWidgets.QMenu(None, title=name)
+        menu = QtWidgets.QMenu(name, self.qmenu)
         menu.setStyleSheet(STYLE_QMENU)
         self.qmenu.addMenu(menu)
         return Menu(self.__viewer, menu)
@@ -113,7 +112,7 @@ class Menu(object):
             action.setShortcut(shortcut)
         if func:
             action.triggered.connect(func)
-        qaction = self.qmenu.addAction(action, shortcut=shortcut)
+        qaction = self.qmenu.addAction(action)
         return MenuCommand(self.__viewer, qaction)
 
     def add_separator(self):

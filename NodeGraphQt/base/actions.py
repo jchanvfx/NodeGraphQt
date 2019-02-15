@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from PySide2 import QtGui, QtCore
+from NodeGraphQt import QtGui, QtCore
 
 
 def setup_context_menu(graph):

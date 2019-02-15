@@ -38,15 +38,15 @@ class NodeObject(object):
         assert node, 'node cannot be None.'
         self._graph = None
         self._model = NodeModel()
-        self._model.type = self.type
+        self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
         self._view = node
-        self._view.type = self.type
+        self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
 
     def __repr__(self):
-        return '{}(\'{}\')'.format(self.type, self.NODE_NAME)
+        return '{}(\'{}\')'.format(self.type_, self.NODE_NAME)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -57,7 +57,7 @@ class NodeObject(object):
         return not self.__eq__(other)
 
     @classproperty
-    def type(cls):
+    def type_(cls):
         """
         Node type identifier followed by the class name.
         eg. com.chantasticvfx.MyNode
@@ -120,7 +120,7 @@ class NodeObject(object):
 
     def set_model(self, model):
         self._model = model
-        self._model.type = self.type
+        self._model.type_ = self.type_
         self._model.id = self.view.id
 
     def update_model(self):
@@ -220,7 +220,8 @@ class NodeObject(object):
         """
         self.set_property('selected', selected)
 
-    def create_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
+    def create_property(self, name, value, items=None, range=None,
+                        widget_type=NODE_PROP, tab=None):
         """
         Creates a custom property to the node.
 
@@ -230,8 +231,9 @@ class NodeObject(object):
             items (list[str]): items used by widget type NODE_PROP_QCOMBO
             range (tuple)): min, max values used by NODE_PROP_SLIDER
             widget_type (int): widget type flag (not implemented yet).
+            tab (str): name of the widget tab to display in.
         """
-        self.model.add_property(name, value, items, range, widget_type)
+        self.model.add_property(name, value, items, range, widget_type, tab)
 
     def properties(self):
         """
@@ -240,7 +242,9 @@ class NodeObject(object):
         Returns:
             dict: a dictionary of node properties.
         """
-        return self.model.to_dict
+        props = self.model.to_dict[self.id].copy()
+        props['id'] = self.id
+        return props
 
     def get_property(self, name):
         """
@@ -252,11 +256,7 @@ class NodeObject(object):
         Returns:
             object: property data.
         """
-        if name in self.model.custom_properties.keys():
-            if name == 'selected':
-                self.model.custom_properties[name] = self.view.selected
-            return self.model.custom_properties[name]
-        return self.model.properties.get(name)
+        return self.model.get_property(name)
 
     def set_property(self, name, value):
         """
@@ -266,24 +266,20 @@ class NodeObject(object):
             name (str): name of the property.
             value (object): property data.
         """
+        if self.get_property(name) == value:
+            return
+
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
-
-        exists = any([name in self.model.properties.keys(),
-                      name in self.model.custom_properties.keys()])
-        if not exists:
-            raise KeyError('No property "{}"'.format(name))
 
         if self.graph:
             undo_stack = self.graph.undo_stack()
             undo_stack.push(PropertyChangedCmd(self, name, value))
         else:
-            setattr(self.view, name, value)
-            if name in self.model.properties.keys():
-                setattr(self.model, name, value)
-            elif name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = value
+            if hasattr(self.view, name):
+                setattr(self.view, name, value)
+            self.model.set_property(name, value)
 
     def has_property(self, name):
         """
@@ -371,9 +367,6 @@ class Node(NodeObject):
         self._inputs = []
         self._outputs = []
 
-    def _on_widget_changed(self, name, value):
-        self.model.custom_properties[name] = value
-
     def update_model(self):
         """
         update the node model from view.
@@ -381,29 +374,10 @@ class Node(NodeObject):
         for name, val in self.view.properties.items():
             if name in ['inputs', 'outputs']:
                 continue
-            if name in self.model.properties.keys():
-                setattr(self.model, name, val)
-            if name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = val
+            self.model.set_property(name, val)
+
         for name, widget in self.view.widgets.items():
-            if name in self.model.custom_properties.keys():
-                self.model.custom_properties[name] = widget.value
-
-    def set_property(self, name, value, update_widget=True):
-        """
-        Set the value on the node custom property and updates the node widget.
-
-        see :meth:`NodeObject.get_property()`
-
-        Args:
-            name (str): name of the property.
-            value: the new property value.
-            update_widget (bool): update the node widget (default=True).
-        """
-        node_widget = self.view.widgets.get(name)
-        if node_widget and update_widget:
-            node_widget.value = value
-        super(Node, self).set_property(name, value)
+            self.model.set_property(name, widget.value)
 
     def set_icon(self, icon=None):
         """
@@ -423,15 +397,62 @@ class Node(NodeObject):
         """
         return self.model.icon
 
+    def add_combo_menu(self, name='', label='', items=None, tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            items (list[str]): items to be added into the menu.
+            tab (str): name of the widget tab to display in.
+        """
+        items = items or []
+        self.create_property(
+            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
+        widget = self.view.add_combo_menu(name, label, items)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
+    def add_text_input(self, name='', label='', text='', tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(
+            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+        widget = self.view.add_text_input(name, label, text)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
+    def add_checkbox(self, name='', label='', text='', state=False, tab=None):
+        """
+        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): checkbox text.
+            state (bool): pre-check.
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(
+            name, state, widget_type=NODE_PROP_QCHECKBOX, tab=tab)
+        widget = self.view.add_checkbox(name, label, text, state)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
         Add input :class:`Port` to node.
 
         Args:
-            name (str): name for the input port. 
+            name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            
+
         Returns:
             NodeGraphQt.Port: the created port object.
         """
@@ -439,7 +460,7 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
-        port.model.type = IN_PORT
+        port.model.type_ = IN_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
@@ -452,10 +473,10 @@ class Node(NodeObject):
         Add output :class:`Port` to node.
 
         Args:
-            name (str): name for the output port. 
+            name (str): name for the output port.
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-             
+
         Returns:
             NodeGraphQt.Port: the created port object.
         """
@@ -463,55 +484,13 @@ class Node(NodeObject):
             raise AssertionError('port name "{}" already taken.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
-        port.model.type = OUT_PORT
+        port.model.type_ = OUT_PORT
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
-
-    def add_combo_menu(self, name='', label='', items=None):
-        """
-        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            items (list[str]): items to be added into the menu.
-        """
-        items = items or []
-        self.create_property(
-            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO)
-        widget = self.view.add_combo_menu(name, label, items)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
-
-    def add_text_input(self, name='', label='', text=''):
-        """
-        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            text (str): pre filled text.
-        """
-        self.create_property(name, text, widget_type=NODE_PROP_QLINEEDIT)
-        widget = self.view.add_text_input(name, label, text)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
-
-    def add_checkbox(self, name='', label='', text='', state=False):
-        """
-        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            text (str): checkbox text.
-            state (bool): pre-check.
-        """
-        self.create_property(name, state, widget_type=NODE_PROP_QCHECKBOX)
-        widget = self.view.add_checkbox(name, label, text, state)
-        widget.value_changed.connect(lambda k, v: self._on_widget_changed(k, v))
 
     def inputs(self):
         """

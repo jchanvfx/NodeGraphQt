@@ -1,7 +1,6 @@
 #!/usr/bin/python
-from PySide2 import QtGui, QtCore
-from PySide2.QtWidgets import QGraphicsItem
 
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (Z_VAL_PIPE,
                                    NODE_SEL_COLOR,
                                    NODE_SEL_BORDER_COLOR)
@@ -10,7 +9,7 @@ from NodeGraphQt.widgets.pipe import Pipe
 from NodeGraphQt.widgets.port import PortItem
 
 
-class BackdropSizer(QGraphicsItem):
+class BackdropSizer(QtWidgets.QGraphicsItem):
     """
     Sizer item for resizing a backdrop node.
 
@@ -111,7 +110,7 @@ class BackdropNodeItem(AbstractNodeItem):
         return rect
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             pos = event.scenePos()
             rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]

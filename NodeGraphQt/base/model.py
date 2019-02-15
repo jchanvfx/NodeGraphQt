@@ -3,6 +3,7 @@ import json
 from collections import defaultdict
 
 from NodeGraphQt.constants import (NODE_PROP,
+                                   NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCHECKBOX,
                                    NODE_PROP_COLORPICKER)
@@ -12,7 +13,7 @@ class PortModel(object):
 
     def __init__(self, node):
         self.node = node
-        self.type = ''
+        self.type_ = ''
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False
@@ -46,7 +47,7 @@ class PortModel(object):
 class NodeModel(object):
 
     def __init__(self):
-        self.type = None
+        self.type_ = None
         self.id = hex(id(self))
         self.icon = None
         self.name = 'node'
@@ -71,13 +72,13 @@ class NodeModel(object):
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
-            'type': NODE_PROP,
-            'id': NODE_PROP,
+            'type_': NODE_PROP_QLABEL,
+            'id': NODE_PROP_QLABEL,
             'icon': NODE_PROP,
             'name': NODE_PROP_QLINEEDIT,
             'color': NODE_PROP_COLORPICKER,
             'border_color': NODE_PROP,
-            'text_color': NODE_PROP,
+            'text_color': NODE_PROP_COLORPICKER,
             'disabled': NODE_PROP_QCHECKBOX,
             'selected': NODE_PROP,
             'width': NODE_PROP,
@@ -87,7 +88,8 @@ class NodeModel(object):
             'outputs': NODE_PROP,
         }
 
-    def add_property(self, name, value, items=None, range=None, widget_type=NODE_PROP):
+    def add_property(self, name, value, items=None, range=None,
+                     widget_type=NODE_PROP, tab='Properties'):
         """
         add custom property.
 
@@ -97,7 +99,10 @@ class NodeModel(object):
             items (list[str]): items used by widget type NODE_PROP_QCOMBO.
             range (tuple)): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
+            tab (str): widget tab name.
         """
+        tab = tab or 'Properties'
+
         if name in self.properties.keys():
             raise AssertionError('"{}" reserved for default property.'.format(name))
         if name in self._custom_prop.keys():
@@ -107,18 +112,21 @@ class NodeModel(object):
 
         if self._graph_model is None:
             self._TEMP_property_widget_types[name] = widget_type
-            self._TEMP_property_attrs[name] = {}
+            self._TEMP_property_attrs[name] = {'tab': tab}
             if items:
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
         else:
-            attrs = {self.type: {name: {'widget_type': widget_type}}}
+            attrs = {self.type_: {name: {
+                'widget_type': widget_type,
+                'tab': tab
+            }}}
             if items:
-                attrs[self.type][name]['items'] = items
+                attrs[self.type_][name]['items'] = items
             if range:
-                attrs[self.type][name]['range'] = range
-            self._graph_model.node_property_attrs.update(attrs)
+                attrs[self.type_][name]['range'] = range
+            self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):
         if name in self.properties.keys():
@@ -134,10 +142,19 @@ class NodeModel(object):
         return self._custom_prop.get(name)
 
     def get_widget_type(self, name):
-        graph = self._graph_model
-        if graph is None:
+        model = self._graph_model
+        if model is None:
             return self._TEMP_property_widget_types.get(name)
-        return graph.node_property_attrs[self.type][name]['widget_type']
+        return model.get_node_common_properties(self.type_)[name]['widget_type']
+
+    def get_tab_name(self, name):
+        model = self._graph_model
+        if model is None:
+            attrs = self._TEMP_property_attrs.get(name)
+            if attrs:
+                return attrs[name].get('tab')
+            return
+        return model.get_node_common_properties(self.type_)[name]['tab']
 
     @property
     def properties(self):
@@ -148,7 +165,11 @@ class NodeModel(object):
             dict: default node properties.
         """
         props = self.__dict__.copy()
-        props.pop('_custom_prop')
+        exclude = ['_custom_prop',
+                   '_graph_model',
+                   '_TEMP_property_attrs',
+                   '_TEMP_property_widget_types']
+        [props.pop(i) for i in exclude if i in props.keys()]
         return props
 
     @property
@@ -234,18 +255,39 @@ class NodeGraphModel(object):
         self.nodes = {}
         self.session = ''
         self.acyclic = True
+        self.__common_node_props = {}
 
-        # store common node property attrs.
-        # eg.
-        # {'nodeGraphQt.nodes.FooNode': {
-        #     'my_property':{
-        #         'widget_type': 0,
-        #         'items': ['foo', 'bar', 'test'],
-        #         'range': (0, 100)
-        #         }
-        #     }
-        # }
-        self.node_property_attrs = {}
+    def common_properties(self):
+        return self.__common_node_props
+
+    def set_node_common_properties(self, attrs):
+        """
+        store common node properties.
+
+        Args:
+            attrs (dict): common node properties.
+                eg.
+                     {'nodeGraphQt.nodes.FooNode': {
+                        'my_property':{
+                            'widget_type': 0,
+                            'tab': 'Properties',
+                            'items': ['foo', 'bar', 'test'],
+                            'range': (0, 100)
+                            }
+                        }
+                    }
+        """
+        self.__common_node_props.update(attrs)
+
+    def get_node_common_properties(self, node_type):
+        """
+        Args:
+            node_type (str): node type.
+
+        Returns:
+            dict: node common properties.
+        """
+        return self.__common_node_props.get(node_type)
 
 
 if __name__ == '__main__':
@@ -255,6 +297,11 @@ if __name__ == '__main__':
     n = NodeModel()
     n.inputs[p.name] = p
     n.add_property('foo', 'bar')
-    # print(n.properties)
+
+    print('-'*100)
+    print('property keys\n')
+    print(list(n.properties.keys()))
+    print('-'*100)
+    print('to_dict\n')
     for k, v in n.to_dict[n.id].items():
         print(k, v)
