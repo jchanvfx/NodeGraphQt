@@ -46,7 +46,7 @@ __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat
 except ImportError as ie:
-    print('Cannot import "Qt.py" module falling back to "NodeGraphQt.vendor.Qt"')
+    print('Cannot import "Qt.py" module falling back on "NodeGraphQt.vendor.Qt"')
     from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat
 
 from .base.actions import setup_context_menu
