@@ -28,10 +28,10 @@ project = 'NodeGraphQt'
 copyright = '2018, {}'.format(NodeGraphQt.__author__)
 author = NodeGraphQt.__author__
 
-# The short X.Y version
-version = '{0}.{1}'.format(*NodeGraphQt.__version__.split('.'))
 # The full version, including alpha/beta/rc tags
 release = NodeGraphQt.__version__
+# The short X.Y version
+version = '{0}.{1}'.format(*release.split('.'))
 
 
 # -- General configuration ---------------------------------------------------
