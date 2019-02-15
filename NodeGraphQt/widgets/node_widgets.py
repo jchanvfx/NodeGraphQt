@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from ..vendor.Qt import QtCore, QtWidgets
+from NodeGraphQt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
@@ -92,7 +92,7 @@ class NodeComboBox(NodeBaseWidget):
         self._combo = QtWidgets.QComboBox()
         self._combo.setStyleSheet(STYLE_QCOMBOBOX)
         self._combo.setMinimumHeight(24)
-        self._combo.activated.connect(self._value_changed)
+        self._combo.currentIndexChanged.connect(self._value_changed)
         list_view = QtWidgets.QListView(self._combo)
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         self._combo.setView(list_view)
@@ -116,8 +116,9 @@ class NodeComboBox(NodeBaseWidget):
 
     @value.setter
     def value(self, text=''):
-        index = self._combo.findText(text, QtCore.Qt.MatchExactly)
-        self._combo.setCurrentIndex(index)
+        if text != self.value:
+            index = self._combo.findText(text, QtCore.Qt.MatchExactly)
+            self._combo.setCurrentIndex(index)
 
     def add_item(self, item):
         self._combo.addItem(item)
@@ -148,7 +149,7 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit = QtWidgets.QLineEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
-        self._ledit.textChanged.connect(self._value_changed)
+        self._ledit.returnPressed.connect(self._value_changed)
         self._ledit.clearFocus()
         group = _NodeGroupBox(label)
         group.add_node_widget(self._ledit)
@@ -169,7 +170,9 @@ class NodeLineEdit(NodeBaseWidget):
 
     @value.setter
     def value(self, text=''):
-        self._ledit.setText(text)
+        if text != self.value:
+            self._ledit.setText(text)
+            self._value_changed()
 
 
 class NodeCheckBox(NodeBaseWidget):
@@ -207,4 +210,5 @@ class NodeCheckBox(NodeBaseWidget):
 
     @value.setter
     def value(self, state=False):
-        self._cbox.setChecked(state)
+        if state != self.value:
+            self._cbox.setChecked(state)

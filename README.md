@@ -12,8 +12,7 @@ writing a custom node graph framework. It's currently in a work in progress stat
 NodeGraphQt is a node graph framework that can be implemented and re purposed into 
 applications that supports [PySide2](https://doc.qt.io/qtforpython/pysideapi2.html).
 
-![screencap01](/docs/_images/screenshot.png)
-
+<img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
 #### Navigation
 
@@ -23,6 +22,8 @@ applications that supports [PySide2](https://doc.qt.io/qtforpython/pysideapi2.ht
 | Pan           | `Alt + LMB + Drag` or `MMB + Drag`           |
 | Node search   | `Tab`                                        |
 
+#### Properties Bin
+<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
 
 #### Example
 

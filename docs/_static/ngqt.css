@@ -31,8 +31,15 @@ span.highlighted {
 }
 
 /* internal func code reference */
+a code span.pre {
+    color: #14f7b1;
+    transition: color .3s;
+}
+a:hover code span.pre {
+    color: #ff9d00;
+}
 code span.pre {
-    color: #00ccff;
+    color: #5cafb9;
 }
 
 /* tables */
@@ -198,7 +205,7 @@ div.sphinxsidebar .searchformwrapper {
 /* -- body styles ----------------------------------------------------------- */
  
 a {
-    color: #66bda2;
+    color: #14f7b1;
     text-decoration: none;
 }
  

@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import os
 
-from ..vendor.Qt import QtGui, QtCore, QtWidgets
-
+from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,
@@ -34,6 +33,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # pass through signals
     node_selected = QtCore.Signal(str)
+    node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None):

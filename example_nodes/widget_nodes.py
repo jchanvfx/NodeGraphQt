@@ -21,7 +21,7 @@ class DropdownMenuNode(Node):
         self.add_output('out A')
 
         # create the QComboBox menu.
-        items = ['item 1', 'item2', 'item3']
+        items = ['item 1', 'item 2', 'item 3']
         self.add_combo_menu('my_menu', 'Menu Test', items=items)
 
 
@@ -44,7 +44,7 @@ class TextInputNode(Node):
         self.add_output('out')
 
         # create QLineEdit text input widget.
-        self.add_text_input('my_input', 'Text Input')
+        self.add_text_input('my_input', 'Text Input', tab='widgets')
 
 
 class CheckboxNode(Node):

@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import math
 
-from ..vendor.Qt import QtCore, QtGui, QtWidgets
-
+from NodeGraphQt import QtCore, QtGui, QtWidgets
 from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
@@ -87,7 +86,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         pen.setCapStyle(QtCore.Qt.RoundCap)
 
         painter.save()
-
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())

@@ -1,11 +1,10 @@
 #!/usr/bin/python
-from ..vendor.Qt.QtCore import QRectF
-from ..vendor.Qt.QtWidgets import QGraphicsItem
+from NodeGraphQt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
 
-class AbstractNodeItem(QGraphicsItem):
+class AbstractNodeItem(QtWidgets.QGraphicsItem):
     """
     The abstract base class of a node.
     """
@@ -36,7 +35,7 @@ class AbstractNodeItem(QGraphicsItem):
             self.__module__, self.__class__.__name__, self.name)
 
     def boundingRect(self):
-        return QRectF(0.0, 0.0, self._width, self._height)
+        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def mousePressEvent(self, event):
         self._properties['selected'] = True

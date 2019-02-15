@@ -3,18 +3,17 @@ import json
 import os
 import re
 
-from ..vendor.Qt import QtCore
-from ..vendor.Qt.QtWidgets import QUndoStack, QAction, QApplication
-
+from NodeGraphQt import QtCore, QtWidgets
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
+from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.base.vendor import NodeVendor
+from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
@@ -30,8 +29,12 @@ class NodeGraph(QtCore.QObject):
     node_created = QtCore.Signal(NodeObject)
     #: signal for when a node is selected.
     node_selected = QtCore.Signal(NodeObject)
+    #: signal for when a node is double clicked.
+    node_double_clicked = QtCore.Signal(NodeObject)
     #: signal for when a node has been connected.
     port_connected = QtCore.Signal(Port, Port)
+    #: signal for when a node property has changed.
+    property_changed = QtCore.Signal(NodeObject, str, object)
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
@@ -40,10 +43,11 @@ class NodeGraph(QtCore.QObject):
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
         self._viewer = NodeViewer(parent)
-        self._vendor = NodeVendor()
-        self._undo_stack = QUndoStack(self)
+        self._node_factory = NodeFactory()
+        self._undo_stack = QtWidgets.QUndoStack(self)
+        self._properties_bin = PropertiesBinWidget()
 
-        tab = QAction('Search Nodes', self)
+        tab = QtWidgets.QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
         tab.triggered.connect(self._toggle_tab_search)
         self._viewer.addAction(tab)
@@ -55,17 +59,48 @@ class NodeGraph(QtCore.QObject):
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
+        self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
+        self._properties_bin.property_changed.connect(
+            self._on_property_changed)
+
     def _toggle_tab_search(self):
         """
         toggle the tab search widget.
         """
-        self._viewer.tab_search_set_nodes(self._vendor.names)
+        self._viewer.tab_search_set_nodes(self._node_factory.names)
         self._viewer.tab_search_toggle()
+
+    def _on_property_changed(self, node_id, prop_name, prop_value):
+        """
+        called when a property widget has changed in the properties bin.
+        (emits the node object, property name, property value)
+
+        Args:
+            node_id (str): node id.
+            prop_name (str): node property name.
+            prop_value (object): python object.
+        """
+        node = self.get_node_by_id(node_id)
+        node.set_property(prop_name, prop_value)
+        self.property_changed.emit(node, prop_name, prop_value)
+
+    def _on_node_double_clicked(self, node_id):
+        """
+        called when a node in the viewer is double click.
+        (emits the node object when the node is clicked)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+        """
+        node = self.get_node_by_id(node_id)
+        self._properties_bin.add_node(node)
+
+        self.node_double_clicked.emit(node)
 
     def _on_node_selected(self, node_id):
         """
@@ -183,6 +218,15 @@ class NodeGraph(QtCore.QObject):
             NodeGraphQt.widgets.scene.NodeScene: node scene.
         """
         return self._viewer.scene()
+
+    def properties_bin(self):
+        """
+        Return the node properties bin widget.
+
+        Returns:
+            PropBinWidget: widget.
+        """
+        return self._properties_bin
 
     def undo_stack(self):
         """
@@ -314,7 +358,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             list[str]: list of node type identifiers.
         """
-        return sorted(self._vendor.nodes.keys())
+        return sorted(self._node_factory.nodes.keys())
 
     def register_node(self, node, alias=None):
         """
@@ -324,7 +368,7 @@ class NodeGraph(QtCore.QObject):
             node (NodeGraphQt.NodeObject): node.
             alias (str): custom alias name for the node type.
         """
-        self._vendor.register_node(node, alias)
+        self._node_factory.register_node(node, alias)
 
     def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
         """
@@ -342,7 +386,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.Node: the created instance of the node.
         """
-        NodeCls = self._vendor.create_node_instance(node_type)
+        NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
 
@@ -352,13 +396,13 @@ class NodeGraph(QtCore.QObject):
             wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
             prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
 
-            graph_attrs = self.model.node_property_attrs
-            if node.type_ not in graph_attrs.keys():
-                graph_attrs[node.type_] = {
+            if self.model.get_node_common_properties(node.type_) is None:
+                node_attrs = {node.type_: {
                     n: {'widget_type': wt} for n, wt in wid_types.items()
-                }
+                }}
                 for pname, pattrs in prop_attrs.items():
-                    graph_attrs[node.type_][pname].update(pattrs)
+                    node_attrs[node.type_][pname].update(pattrs)
+                self.model.set_node_common_properties(node_attrs)
 
             node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
             node.model.name = node.NODE_NAME
@@ -392,13 +436,13 @@ class NodeGraph(QtCore.QObject):
         wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
         prop_attrs = node.model.__dict__.pop('_TEMP_property_attrs')
 
-        graph_attrs = self.model.node_property_attrs
-        if node.type_ not in graph_attrs.keys():
-            graph_attrs[node.type_] = {
+        if self.model.get_node_common_properties(node.type_) is None:
+            node_attrs = {node.type_: {
                 n: {'widget_type': wt} for n, wt in wid_types.items()
-            }
+            }}
             for pname, pattrs in prop_attrs.items():
-                graph_attrs[node.type_][pname].update(pattrs)
+                node_attrs[node.type_][pname].update(pattrs)
+            self.model.set_node_common_properties(node_attrs)
 
         node._graph = self
         node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
@@ -604,7 +648,7 @@ class NodeGraph(QtCore.QObject):
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
-            NodeCls = self._vendor.create_node_instance(identifier)
+            NodeCls = self._node_factory.create_node_instance(identifier)
             if NodeCls:
                 node = NodeCls()
                 node._graph = self
@@ -713,7 +757,7 @@ class NodeGraph(QtCore.QObject):
         nodes = nodes or self.selected_nodes()
         if not nodes:
             return False
-        clipboard = QApplication.clipboard()
+        clipboard = QtWidgets.QApplication.clipboard()
         serial_data = self._serialize(nodes)
         serial_str = json.dumps(serial_data)
         if serial_str:
@@ -725,7 +769,7 @@ class NodeGraph(QtCore.QObject):
         """
         Pastes nodes copied from the clipboard.
         """
-        clipboard = QApplication.clipboard()
+        clipboard = QtWidgets.QApplication.clipboard()
         cb_string = clipboard.text()
         if not cb_string:
             return
