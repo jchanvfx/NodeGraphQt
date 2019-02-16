@@ -286,7 +286,7 @@ class PropWindow(QtWidgets.QWidget):
     def __repr__(self):
         return '<PropWindow object at {}>'.format(hex(id(self)))
 
-    def add_widget(self, name, widget, value):
+    def add_widget(self, name, widget, value, label=None):
         """
         Add a property widget to the window.
 
@@ -294,15 +294,16 @@ class PropWindow(QtWidgets.QWidget):
             name (str): property name to be displayed.
             widget (BaseProperty): property widget.
             value (object): property value.
+            label (str): custom label to display.
         """
         widget.setToolTip(name)
         widget.set_value(value)
-        label = QtWidgets.QLabel(name)
-        label.setAlignment(QtCore.Qt.AlignCenter)
+        if label is None:
+            label = name
         row = self.__layout.rowCount()
         if row > 0:
             row += 1
-        self.__layout.addWidget(label, row, 0,
+        self.__layout.addWidget(QtWidgets.QLabel(label), row, 0,
                                 QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight)
         self.__layout.addWidget(widget, row, 1)
 
@@ -350,14 +351,23 @@ class NodePropWidget(QtWidgets.QWidget):
         self.name_wgt.set_value(node.name())
         self.name_wgt.value_changed.connect(self._on_property_changed)
 
+        self.type_wgt = QtWidgets.QLabel(node.type_)
+        self.type_wgt.setAlignment(QtCore.Qt.AlignRight)
+        self.type_wgt.setToolTip('type_')
+        font = self.type_wgt.font()
+        font.setPointSize(10)
+        self.type_wgt.setFont(font)
+
         name_layout = QtWidgets.QHBoxLayout()
         name_layout.setContentsMargins(0, 0, 0, 0)
         name_layout.addWidget(QtWidgets.QLabel('name'))
         name_layout.addWidget(self.name_wgt)
         name_layout.addWidget(close_btn)
         layout = QtWidgets.QVBoxLayout(self)
+        layout.setSpacing(4)
         layout.addLayout(name_layout)
         layout.addWidget(self.__tab)
+        layout.addWidget(self.type_wgt)
         self._read_node(node)
 
     def __repr__(self):
@@ -423,7 +433,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
         # add "Node" tab properties.
         self.add_tab('Node')
-        default_props = ['type_', 'color', 'text_color', 'disabled', 'id']
+        default_props = ['color', 'text_color', 'disabled', 'id']
         prop_window = self.__tab_windows['Node']
         for prop_name in default_props:
             wid_type = model.get_widget_type(prop_name)
@@ -433,7 +443,10 @@ class NodePropWidget(QtWidgets.QWidget):
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name))
+
             widget.value_changed.connect(self._on_property_changed)
+
+        self.type_wgt.setText(model.get_property('type_'))
 
     def node_id(self):
         """
