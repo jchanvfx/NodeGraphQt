@@ -165,9 +165,14 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         path.cubicTo(ctr_point1, ctr_point2, pos2)
         self.setPath(path)
 
-        # Draw Arrow
-        loc_pt = self.path().pointAtPercent(0.49)
-        tgt_pt = self.path().pointAtPercent(0.51)
+        # draw arrow
+        if start_port.port_type == IN_PORT:
+            loc_pt = self.path().pointAtPercent(0.49)
+            tgt_pt = self.path().pointAtPercent(0.51)
+        else:
+            loc_pt = self.path().pointAtPercent(0.51)
+            tgt_pt = self.path().pointAtPercent(0.49)
+
         radians = math.atan2(tgt_pt.y() - loc_pt.y(), tgt_pt.x() - loc_pt.x())
         degrees = math.degrees(radians) - 90
         self.__arrow.setPos(self.path().pointAtPercent(0.5))
