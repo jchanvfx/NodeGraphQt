@@ -92,13 +92,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
 
-        if self.input_port and self.output_port:
-            in_node = self.input_port.node
-            out_node = self.output_port.node
-            if in_node.disabled or out_node.disabled:
-                color.setAlpha(200)
-                pen_width += 0.2
-                pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
+        if self.disabled():
+            color.setAlpha(200)
+            pen_width += 0.2
+            pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
 
         pen = QtGui.QPen(color, pen_width)
         pen.setStyle(pen_style)
@@ -239,6 +236,13 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self.output_port = ports[OUT_PORT]
         ports[IN_PORT].add_pipe(self)
         ports[OUT_PORT].add_pipe(self)
+
+    def disabled(self):
+        if self.input_port and self.input_port.node.disabled:
+            return True
+        if self.output_port and self.output_port.node.disabled:
+            return True
+        return False
 
     @property
     def input_port(self):
