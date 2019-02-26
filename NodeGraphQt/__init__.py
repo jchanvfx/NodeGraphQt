@@ -49,7 +49,7 @@ except ImportError as ie:
     from .vendor.Qt import __version__ as qtpy_ver
     from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat
 
-print('Qt.py version: {}'.format(qtpy_ver))
+print('Qt.py v{}'.format(qtpy_ver))
 
 from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
