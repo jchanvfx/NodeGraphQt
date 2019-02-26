@@ -28,7 +28,7 @@ class PipeArrow(QtWidgets.QGraphicsPolygonItem):
     def set_size(self, size=5.0):
         triangle = QtGui.QPolygonF()
         triangle.append(QtCore.QPointF(-size, size))
-        triangle.append(QtCore.QPointF(0.0, -size))
+        triangle.append(QtCore.QPointF(0.0, -size*2))
         triangle.append(QtCore.QPointF(size, size))
         self.setPolygon(triangle)
 
