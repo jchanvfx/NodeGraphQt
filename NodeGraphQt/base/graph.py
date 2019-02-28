@@ -424,12 +424,13 @@ class NodeGraph(QtCore.QObject):
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
-    def add_node(self, node):
+    def add_node(self, node, pos=None):
         """
         Add a node into the node graph.
 
         Args:
             node (NodeGraphQt.Node): node object.
+            pos (list[float]): node x,y position. (optional)
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
 
@@ -449,7 +450,7 @@ class NodeGraph(QtCore.QObject):
         node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
         node.update()
-        self._undo_stack.push(NodeAddedCmd(self, node))
+        self._undo_stack.push(NodeAddedCmd(self, node, pos))
 
     def delete_node(self, node):
         """
@@ -651,27 +652,17 @@ class NodeGraph(QtCore.QObject):
             NodeCls = self._node_factory.create_node_instance(identifier)
             if NodeCls:
                 node = NodeCls()
-                node._graph = self
-
-                name = self.get_unique_name(n_data.get('name', node.NODE_NAME))
-                n_data['name'] = name
-
+                node.NODE_NAME = n_data.get('name', node.NODE_NAME)
                 # set properties.
-                for prop, val in node.model.properties.items():
+                for prop in node.model.properties.keys():
                     if prop in n_data.keys():
-                        setattr(node.model, prop, n_data[prop])
-
+                        node.model.set_property(prop, n_data[prop])
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
-                    if prop in node.model.custom_properties.keys():
-                        node.model.custom_properties[prop] = val
+                    node.model.set_property(prop, val)
 
-                node.update()
-
-                self._undo_stack.push(
-                    NodeAddedCmd(self, node, n_data.get('pos'))
-                )
                 nodes[n_id] = node
+                self.add_node(node, n_data.get('pos'))
 
         # build the connections.
         for connection in data.get('connections', []):
@@ -693,9 +684,10 @@ class NodeGraph(QtCore.QObject):
         node_objs = list(nodes.values())
         if relative_pos:
             self._viewer.move_nodes([n.view for n in node_objs])
-            [setattr(n.model, 'pos', n.view.pos) for n in node_objs]
+            [setattr(n.model, 'pos', n.view.xy_pos) for n in node_objs]
         elif pos:
             self._viewer.move_nodes([n.view for n in node_objs], pos=pos)
+            [setattr(n.model, 'pos', n.view.xy_pos) for n in node_objs]
 
         return node_objs
 
@@ -770,14 +762,14 @@ class NodeGraph(QtCore.QObject):
         Pastes nodes copied from the clipboard.
         """
         clipboard = QtWidgets.QApplication.clipboard()
-        cb_string = clipboard.text()
-        if not cb_string:
+        cb_text = clipboard.text()
+        if not cb_text:
             return
 
         self._undo_stack.beginMacro('pasted nodes')
-        serial_data = json.loads(cb_string)
+        serial_data = json.loads(cb_text)
         self.clear_selection()
-        nodes = self._deserialize(serial_data, True)
+        nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
         self._undo_stack.endMacro()
 

@@ -61,7 +61,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             prop_wgt = properties_wgt.get_widget(name)
             # check if previous value is identical to current value,
             # prevent signals from causing a infinite loop.
-            if prop_wgt.get_value() != value:
+            if prop_wgt and prop_wgt.get_value() != value:
                 prop_wgt.set_value(value)
 
     def undo(self):
@@ -161,6 +161,8 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
             [port.connect_to(p) for p in connected_ports]
 
     def redo(self):
+        self.graph.properties_bin().remove_node(self.node)
+
         for port, connected_ports in self.inputs:
             [port.disconnect_from(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
