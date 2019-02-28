@@ -11,7 +11,7 @@ from NodeGraphQt.widgets.port import PortItem
 
 class BackdropSizer(QtWidgets.QGraphicsItem):
     """
-    Sizer item for resizing a backdrop node.
+    Sizer item for resizing a backdrop item.
 
     Args:
         parent (BackdropNodeItem): the parent node item.

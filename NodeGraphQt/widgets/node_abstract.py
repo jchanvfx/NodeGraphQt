@@ -6,7 +6,7 @@ from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):
     """
-    The abstract base class of a node.
+    The abstract base class of a node item.
     """
 
     def __init__(self, name='node', parent=None):
