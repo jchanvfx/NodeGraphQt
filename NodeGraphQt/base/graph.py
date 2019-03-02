@@ -370,7 +370,8 @@ class NodeGraph(QtCore.QObject):
         """
         self._node_factory.register_node(node, alias)
 
-    def create_node(self, node_type, name=None, selected=True, color=None, pos=None):
+    def create_node(self, node_type, name=None, selected=True, color=None,
+                    text_color=None, pos=None):
         """
         Create a new node in the node graph.
 
@@ -381,6 +382,7 @@ class NodeGraph(QtCore.QObject):
             name (str): set name of the node.
             selected (bool): set created node to be selected.
             color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
+            text_color (tuple or str): node text color (255, 255, 255) or '#FFFFFF'.
             pos (list[int, int]): initial x, y position for the node (default: (0, 0)).
 
         Returns:
@@ -407,11 +409,17 @@ class NodeGraph(QtCore.QObject):
             node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
             node.model.name = node.NODE_NAME
             node.model.selected = selected
+
+            def format_color(clr):
+                if isinstance(clr, str):
+                    clr = clr.strip('#')
+                    return tuple(int(clr[i:i + 2], 16) for i in (0, 2, 4))
+                return clr
+
             if color:
-                if isinstance(color, str):
-                    color = color[1:] if color[0] is '#' else color
-                    color = tuple(int(color[i:i + 2], 16) for i in (0, 2, 4))
-                node.model.color = color
+                node.model.color = format_color(color)
+            if text_color:
+                node.model.text_color = format_color(text_color)
             if pos:
                 node.model.pos = [float(pos[0]), float(pos[1])]
 

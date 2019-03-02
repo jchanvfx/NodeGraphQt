@@ -66,7 +66,8 @@ if __name__ == '__main__':
 
     my_node = graph.create_node('com.chantasticvfx.MyNode',
                                 name='chantastic!',
-                                color='#193a33',
+                                color='#0a1e20',
+                                text_color='#feab20',
                                 pos=[310, 10])
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
