@@ -29,7 +29,7 @@ applications that supports [PySide2](https://doc.qt.io/qtforpython/pysideapi2.ht
 
 ```python
 import sys
-from PySide2 import QtWidgets
+from NodeGraphQt import QtWidgets
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 
 # create a example node object with a input/output port.

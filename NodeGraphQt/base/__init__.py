@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-# (c) 2017, Johnny Chan - www.chantasticvfx.com
-# All rights reserved.
+# (c) 2017, Johnny Chan
+# https://github.com/jchanvfx/NodeGraphQt
 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:

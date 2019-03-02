@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# (c) 2017, Johnny Chan - www.chantasticvfx.com
-# All rights reserved.
+# (c) 2017, Johnny Chan
+# https://github.com/jchanvfx/NodeGraphQt
 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat
-    from Qt import __version__ as qtpy_ver
 except ImportError as ie:
-    print('Cannot import "Qt.py" shim falling back on "NodeGraphQt.vendor.Qt"')
     from .vendor.Qt import __version__ as qtpy_ver
     from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat
-
-print('Qt.py v{}'.format(qtpy_ver))
+    print('Cannot import "Qt.py" module falling back on '
+          '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
 from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
