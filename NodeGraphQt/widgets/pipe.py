@@ -16,23 +16,6 @@ PIPE_STYLES = {
 }
 
 
-class PipeArrow(QtWidgets.QGraphicsPolygonItem):
-    """
-    Base pipe arrow item for indicating pipe direction.
-    """
-
-    def __init__(self, parent=None, size=5.0):
-        super(PipeArrow, self).__init__(parent)
-        self.set_size(size)
-
-    def set_size(self, size=5.0):
-        triangle = QtGui.QPolygonF()
-        triangle.append(QtCore.QPointF(-size, size))
-        triangle.append(QtCore.QPointF(0.0, -size*2))
-        triangle.append(QtCore.QPointF(size, size))
-        self.setPolygon(triangle)
-
-
 class Pipe(QtWidgets.QGraphicsPathItem):
     """
     Base Pipe item used for drawing node connections.
@@ -48,8 +31,11 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._highlight = False
         self._input_port = input_port
         self._output_port = output_port
-        self.__arrow = PipeArrow(self)
-        self.reset()
+        size = 5.0
+        self._arrow = QtGui.QPolygonF()
+        self._arrow.append(QtCore.QPointF(-size, size))
+        self._arrow.append(QtCore.QPointF(0.0, -size * 2))
+        self._arrow.append(QtCore.QPointF(size, size))
 
     def __str__(self):
         in_name = self._input_port.name if self._input_port else ''
@@ -88,6 +74,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         pen_width = PIPE_WIDTH
         if self._active:
             color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+            if pen_style == QtCore.Qt.DashDotDotLine:
+                pen_width += 1
+            else:
+                pen_width += 0.35
         elif self._highlight:
             color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
@@ -105,6 +95,28 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         painter.setPen(pen)
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
+
+        # draw arrow
+        if self.input_port and self.output_port:
+            transform = QtGui.QTransform()
+            transform.translate(self.path().pointAtPercent(0.5).x(),
+                                self.path().pointAtPercent(0.5).y())
+            loc_pt = self.path().pointAtPercent(0.49)
+            tgt_pt = self.path().pointAtPercent(0.51)
+            radians = math.atan2(tgt_pt.y() - loc_pt.y(),
+                                 tgt_pt.x() - loc_pt.x())
+            degrees = math.degrees(radians) - 90
+            transform.rotate(degrees)
+
+            color.setAlpha(255)
+            if self._highlight:
+                painter.setBrush(QtGui.QBrush(color.lighter(150)))
+            elif self._active or self.disabled():
+                painter.setBrush(QtGui.QBrush(color.darker(200)))
+            else:
+                painter.setBrush(QtGui.QBrush(color))
+            painter.setPen(QtGui.QPen(color, 0.6))
+            painter.drawPolygon(transform.map(self._arrow))
 
         painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
@@ -162,19 +174,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         path.cubicTo(ctr_point1, ctr_point2, pos2)
         self.setPath(path)
 
-        # draw arrow
-        if start_port.port_type == IN_PORT:
-            loc_pt = self.path().pointAtPercent(0.49)
-            tgt_pt = self.path().pointAtPercent(0.51)
-        else:
-            loc_pt = self.path().pointAtPercent(0.51)
-            tgt_pt = self.path().pointAtPercent(0.49)
-
-        radians = math.atan2(tgt_pt.y() - loc_pt.y(), tgt_pt.x() - loc_pt.x())
-        degrees = math.degrees(radians) - 90
-        self.__arrow.setPos(self.path().pointAtPercent(0.5))
-        self.__arrow.setRotation(degrees)
-
     def calc_distance(self, p1, p2):
         x = math.pow((p2.x() - p1.x()), 2)
         y = math.pow((p2.y() - p1.y()), 2)
@@ -199,10 +198,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
     def activate(self):
         self._active = True
         color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
-        pen = QtGui.QPen(color, 2, PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
+        pen = QtGui.QPen(color, 2.5, PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
         self.setPen(pen)
-        self.__arrow.setBrush(QtGui.QBrush(color.darker(200)))
-        self.__arrow.setPen(QtGui.QPen(color, 0.8))
 
     def active(self):
         return self._active
@@ -212,8 +209,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
         pen = QtGui.QPen(color, 2, PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
         self.setPen(pen)
-        self.__arrow.setBrush(QtGui.QBrush(color.darker(200)))
-        self.__arrow.setPen(QtGui.QPen(color, 0.8))
 
     def highlighted(self):
         return self._highlight
@@ -224,8 +219,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         color = QtGui.QColor(*self.color)
         pen = QtGui.QPen(color, 2, PIPE_STYLES.get(self.style))
         self.setPen(pen)
-        self.__arrow.setBrush(QtGui.QBrush(color.darker(130)))
-        self.__arrow.setPen(QtGui.QPen(color, 0.6))
 
     def set_connections(self, port1, port2):
         ports = {

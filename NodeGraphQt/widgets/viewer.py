@@ -299,63 +299,47 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsScenePressEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        alt_modifier = event.modifiers() == QtCore.Qt.AltModifier
+        if event.modifiers() == QtCore.Qt.AltModifier:
+            return
 
-        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
-        # `setModifiers` in PyQt, and can't find a workaround for it.
-        # So the only option to work with PyQt for now was to drop the modifier
-        # remapping, but judging from the event passing flow and running a few
-        # tests, it looks like those remapping code didn't have any affect to
-        # the UI function.
-        # Should be safe to comment out the code below.
-        """
-        ctrl_modifier = event.modifiers() == QtCore.Qt.ControlModifier
-        shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
-        if shift_modifier:
-            event.setModifiers(QtCore.Qt.ControlModifier)
-        elif ctrl_modifier:
-            event.setModifiers(QtCore.Qt.ShiftModifier)
-        """
+        pos = event.scenePos()
+        port_items = self._items_near(pos, PortItem, 5, 5)
+        if port_items:
+            port = port_items[0]
+            if not port.multi_connection and port.connected_ports:
+                self._detached_port = port.connected_ports[0]
+            self.start_live_connection(port)
+            if not port.multi_connection:
+                [p.delete() for p in port.connected_pipes]
+            return
 
-        if not alt_modifier:
-            pos = event.scenePos()
-            port_items = self._items_near(pos, PortItem, 5, 5)
-            if port_items:
-                port = port_items[0]
-                if not port.multi_connection and port.connected_ports:
-                    self._detached_port = port.connected_ports[0]
-                self.start_live_connection(port)
-                if not port.multi_connection:
-                    [p.delete() for p in port.connected_pipes]
+        node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
+        if node_items:
+            node = node_items[0]
+
+            # record the node positions at selection time.
+            for n in node_items:
+                self._node_positions[n] = n.xy_pos
+
+            # emit selected node id with LMB.
+            if event.button() == QtCore.Qt.LeftButton:
+                self.node_selected.emit(node.id)
+
+            if not isinstance(node, BackdropNodeItem):
                 return
 
-            node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
-            if node_items:
-                node = node_items[0]
+        pipe_items = self._items_near(pos, Pipe, 3, 3)
+        if pipe_items:
+            if not self.LMB_state:
+                return
+            pipe = pipe_items[0]
+            attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+            from_port = pipe.port_from_pos(pos, True)
 
-                # record the node positions at selection time.
-                for n in node_items:
-                    self._node_positions[n] = n.xy_pos
-
-                # emit selected node id with LMB.
-                if event.button() == QtCore.Qt.LeftButton:
-                    self.node_selected.emit(node.id)
-
-                if not isinstance(node, BackdropNodeItem):
-                    return
-
-            pipe_items = self._items_near(pos, Pipe, 3, 3)
-            if pipe_items:
-                if not self.LMB_state:
-                    return
-                pipe = pipe_items[0]
-                attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
-                from_port = pipe.port_from_pos(pos, True)
-
-                self._detached_port = getattr(pipe, attr[from_port.port_type])
-                self.start_live_connection(from_port)
-                self._live_pipe.draw_path(self._start_port, None, pos)
-                pipe.delete()
+            self._detached_port = getattr(pipe, attr[from_port.port_type])
+            self.start_live_connection(from_port)
+            self._live_pipe.draw_path(self._start_port, None, pos)
+            pipe.delete()
 
     def sceneMouseReleaseEvent(self, event):
         """
@@ -366,14 +350,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-
-        # (NOTE) The `QtWidgets.QGraphicsSceneMouseEvent` class doesn't have
-        # `setModifiers` in PyQt, please see the note above.
-        """
-        if event.modifiers() == QtCore.Qt.ShiftModifier:
-            event.setModifiers(QtCore.Qt.ControlModifier)
-        """
-
         if not self._live_pipe:
             return
 
@@ -480,6 +456,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(pipe)
         pipe.set_connections(start_port, end_port)
         pipe.draw_path(pipe.input_port, pipe.output_port)
+        if start_port.node.selected or end_port.node.selected:
+            pipe.highlight()
 
     def acyclic_check(self, start_port, end_port):
         """
