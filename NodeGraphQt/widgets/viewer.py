@@ -81,10 +81,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.RMB_state = False
         self.MMB_state = False
 
-    def __str__(self):
-        return '{}.{}()'.format(
-            self.__module__, self.__class__.__name__)
-
     def __repr__(self):
         return '{}.{}()'.format(
             self.__module__, self.__class__.__name__)

@@ -7,6 +7,7 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCHECKBOX,
                                    NODE_PROP_COLORPICKER)
+from NodeGraphQt.errors import NodePropertyError
 
 
 class PortModel(object):
@@ -104,9 +105,11 @@ class NodeModel(object):
         tab = tab or 'Properties'
 
         if name in self.properties.keys():
-            raise AssertionError('"{}" reserved for default property.'.format(name))
+            raise NodePropertyError(
+                '"{}" reserved for default property.'.format(name))
         if name in self._custom_prop.keys():
-            raise AssertionError('"{}" property already exists.'.format(name))
+            raise NodePropertyError(
+                '"{}" property already exists.'.format(name))
 
         self._custom_prop[name] = value
 
@@ -134,7 +137,7 @@ class NodeModel(object):
         elif name in self._custom_prop.keys():
             self._custom_prop[name] = value
         else:
-            raise KeyError('No property "{}"'.format(name))
+            raise NodePropertyError('No property "{}"'.format(name))
 
     def get_property(self, name):
         if name in self.properties.keys():

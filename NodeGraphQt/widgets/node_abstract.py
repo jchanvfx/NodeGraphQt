@@ -26,10 +26,6 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
 
-    def __str__(self):
-        return '{}.{}(\'{}\')'.format(
-            self.__module__, self.__class__.__name__, self.name)
-
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(
             self.__module__, self.__class__.__name__, self.name)

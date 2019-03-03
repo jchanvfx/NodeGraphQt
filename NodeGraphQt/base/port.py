@@ -22,14 +22,6 @@ class Port(object):
         port = str(self.__class__.__name__)
         return 'NodeGraphQt.{}(\'{}\')'.format(port, self.name())
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.node().id == other.node().id
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     @property
     def view(self):
         """

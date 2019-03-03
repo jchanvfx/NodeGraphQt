@@ -7,6 +7,7 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
                                    IN_PORT, OUT_PORT)
+from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
 from NodeGraphQt.widgets.node_base import NodeItem
 
@@ -47,14 +48,6 @@ class NodeObject(object):
 
     def __repr__(self):
         return '{}(\'{}\')'.format(self.type_, self.NODE_NAME)
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.id == other.id
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
     @classproperty
     def type_(cls):
@@ -457,7 +450,8 @@ class Node(NodeObject):
             NodeGraphQt.Port: the created port object.
         """
         if name in self.inputs().keys():
-            raise AssertionError('port name "{}" already taken.'.format(name))
+            raise PortRegistrationError(
+                'port name "{}" already taken.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
         port.model.type_ = IN_PORT
@@ -481,7 +475,8 @@ class Node(NodeObject):
             NodeGraphQt.Port: the created port object.
         """
         if name in self.outputs().keys():
-            raise AssertionError('port name "{}" already taken.'.format(name))
+            raise PortRegistrationError(
+                'port name "{}" already taken.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
         port.model.type_ = OUT_PORT

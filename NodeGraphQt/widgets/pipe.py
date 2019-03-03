@@ -37,12 +37,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(0.0, -size * 2))
         self._arrow.append(QtCore.QPointF(size, size))
 
-    def __str__(self):
-        in_name = self._input_port.name if self._input_port else ''
-        out_name = self._output_port.name if self._output_port else ''
-        return '{}.Pipe(\'{}\', \'{}\')'.format(
-            self.__module__, in_name, out_name)
-
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
         out_name = self._output_port.name if self._output_port else ''

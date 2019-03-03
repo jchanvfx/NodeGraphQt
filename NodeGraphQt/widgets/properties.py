@@ -9,6 +9,7 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QSPINBOX,
                                    NODE_PROP_COLORPICKER,
                                    NODE_PROP_SLIDER)
+from NodeGraphQt.errors import NodePropertyError
 
 
 class BaseProperty(QtWidgets.QWidget):

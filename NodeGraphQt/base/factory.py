@@ -1,27 +1,28 @@
 #!/usr/bin/python
 
+from NodeGraphQt.errors import NodeRegistrationError
+
 
 class NodeFactory(object):
     """
     Node factory that stores all the node types.
     """
 
-    def __init__(self):
-        self._aliases = {}
-        self._names = {}
-        self._nodes = {}
+    __aliases = {}
+    __names = {}
+    __nodes = {}
 
     @property
     def names(self):
-        return self._names
+        return self.__names
 
     @property
     def aliases(self):
-        return self._aliases
+        return self.__aliases
 
     @property
     def nodes(self):
-        return self._nodes
+        return self.__nodes
 
     def create_node_instance(self, node_type=None, alias=None):
         """
@@ -32,15 +33,15 @@ class NodeFactory(object):
             alias (str): alias name (optional).
 
         Returns:
-            NodeGraphQt.Node: new node instance object.
+            NodeGraphQt.Node: new node class object.
         """
         if alias and self.aliases.get(alias):
             node_type = self.aliases[alias]
 
-        NodeInstance = self._nodes.get(node_type)
-        if not NodeInstance:
+        NodeClass = self.__nodes.get(node_type)
+        if not NodeClass:
             print('can\'t find node type {}'.format(node_type))
-        return NodeInstance
+        return NodeClass
 
     def register_node(self, node, alias=None):
         """
@@ -56,30 +57,32 @@ class NodeFactory(object):
         name = node.NODE_NAME
         node_type = node.type_
 
-        if self._nodes.get(node_type):
-            raise AssertionError(
-                'Node: {} already exists! '
-                'Please specify a new plugin class name or identifier.'
+        if self.__nodes.get(node_type):
+            raise NodeRegistrationError(
+                'id "{}" already registered! '
+                'Please specify a new plugin class name or __identifier__.'
                 .format(node_type))
-        self._nodes[node_type] = node
+        self.__nodes[node_type] = node
 
-        if self._names.get(node_type):
-            raise AssertionError(
+        if self.__names.get(node_type):
+            raise NodeRegistrationError(
                 'Node Name: {} already exists!'
                 'Please specify a new node name for node: {}'
                 .format(name, node_type))
-        self._names[name] = node_type
+        self.__names[name] = node_type
 
         if alias:
-            if self._aliases.get(alias):
-                raise AssertionError(
-                    'Node Alias: {} already taken!'.format(alias))
-            self._aliases[alias] = node_type
+            if self.__aliases.get(alias):
+                raise NodeRegistrationError(
+                    'Alias: "{}" already registered to "{}"'
+                    .format(alias, self.__aliases.get(alias))
+                )
+            self.__aliases[alias] = node_type
             
     def clear_registered_nodes(self):
         """
         clear out registered nodes, to prevent conflicts on reset.
         """
-        self._nodes.clear()
-        self._names.clear()
-        self._aliases.clear()
+        self.__nodes.clear()
+        self.__names.clear()
+        self.__aliases.clear()

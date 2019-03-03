@@ -6,6 +6,7 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                                    Z_VAL_NODE, Z_VAL_NODE_WIDGET)
+from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
 from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
                                               NodeComboBox,
@@ -689,13 +690,13 @@ class NodeItem(AbstractNodeItem):
         if isinstance(widget, NodeBaseWidget):
             self._widgets[widget.name] = widget
         else:
-            raise TypeError('{} is not an instance of a node widget.')
+            raise NodeWidgetError('{} is not an instance of a node widget.')
 
     def get_widget(self, name):
         widget = self._widgets.get(name)
         if widget:
             return widget
-        raise KeyError('node has no widget "{}"'.format(name))
+        raise NodeWidgetError('node has no widget "{}"'.format(name))
 
     def delete(self):
         for port, text in self._input_items.items():
