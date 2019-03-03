@@ -130,7 +130,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             node_data (dict): {<node_view>: <previous_pos>}
         """
-        self._undo_stack.beginMacro('moved nodes')
+        self._undo_stack.beginMacro('move nodes')
         for node_view, prev_pos in node_data.items():
             node = self._model.nodes[node_view.id]
             self._undo_stack.push(NodeMovedCmd(node, node.pos(), prev_pos))
@@ -159,7 +159,7 @@ class NodeGraph(QtCore.QObject):
         if not (disconnected or connected):
             return
 
-        label = 'connected node(s)' if connected else 'disconnected node(s)'
+        label = 'connect node(s)' if connected else 'disconnect node(s)'
         ptypes = {'in': 'inputs', 'out': 'outputs'}
 
         self._undo_stack.beginMacro(label)
@@ -244,7 +244,7 @@ class NodeGraph(QtCore.QObject):
         """
         self._undo_stack.clear()
 
-    def begin_undo(self, name='undo'):
+    def begin_undo(self, name):
         """
         Start of an undo block followed by a
         :meth:`NodeGraph.end_undo()`.
@@ -478,7 +478,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.Node]): list of node instances.
         """
-        self._undo_stack.beginMacro('deleted nodes')
+        self._undo_stack.beginMacro('delete nodes')
         [self.delete_node(n) for n in nodes]
         self._undo_stack.endMacro()
 
@@ -517,7 +517,7 @@ class NodeGraph(QtCore.QObject):
         """
         Clears the selection in the node graph.
         """
-        self._undo_stack.beginMacro('deselected nodes')
+        self._undo_stack.beginMacro('clear selection')
         for node in self.all_nodes():
             node.set_selected(False)
         self._undo_stack.endMacro()
@@ -793,7 +793,7 @@ class NodeGraph(QtCore.QObject):
         if not nodes:
             return
 
-        self._undo_stack.beginMacro('duplicated nodes')
+        self._undo_stack.beginMacro('duplicate nodes')
 
         self.clear_selection()
         serial = self._serialize(nodes)
@@ -822,7 +822,7 @@ class NodeGraph(QtCore.QObject):
         if mode is None:
             mode = not nodes[0].disabled()
         if len(nodes) > 1:
-            text = {False: 'enabled', True: 'disabled'}[mode]
+            text = {False: 'enable', True: 'disable'}[mode]
             text = '{} ({}) nodes'.format(text, len(nodes))
             self._undo_stack.beginMacro(text)
             [n.set_disabled(mode) for n in nodes]

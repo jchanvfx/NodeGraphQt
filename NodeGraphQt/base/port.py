@@ -96,7 +96,7 @@ class Port(object):
         """
         label = 'show' if visible else 'hide'
         undo_stack = self.node().graph.undo_stack()
-        undo_stack.beginMacro('{} port'.format(label))
+        undo_stack.beginMacro('{} port {}'.format(label, self.name()))
 
         connected_ports = self.connected_ports()
         if connected_ports:
@@ -138,7 +138,7 @@ class Port(object):
         viewer = graph.viewer()
         undo_stack = graph.undo_stack()
 
-        undo_stack.beginMacro('connected port')
+        undo_stack.beginMacro('connect port')
 
         pre_conn_port = None
         src_conn_ports = self.connected_ports()
