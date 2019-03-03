@@ -426,7 +426,7 @@ class NodeGraph(QtCore.QObject):
             node.update()
 
             undo_cmd = NodeAddedCmd(self, node, node.model.pos)
-            undo_cmd.setText('created node')
+            undo_cmd.setText('create node: "{}"'.format(node.NODE_NAME))
             self._undo_stack.push(undo_cmd)
             self.node_created.emit(node)
             return node

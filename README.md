@@ -26,7 +26,7 @@ applications that supports PySide and PySide2.
 
 ```python
 import sys
-from NodeGraphQt import QtWidgets
+from PySide2 import QtWidgets
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 
 # create a example node object with a input/output port.
