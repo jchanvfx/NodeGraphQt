@@ -2,10 +2,15 @@
 # -*- coding: utf-8 -*-
 import setuptools
 
+from NodeGraphQt import __version__ as version
+
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
-version = __import__('NodeGraphQt').__version__
+description = (
+    'Node graph framework that can be re-implemented into applications that '
+    'supports PySide & PySide2'
+)
 classifiers = [
     'Programming Language :: Python :: 3.7.2',
     'License :: OSI Approved :: MIT License',
@@ -17,12 +22,16 @@ setuptools.setup(
     version=version,
     author='Johnny Chan',
     author_email='johnny@chantasticvfx.com',
-    description=(
-        'Node graph framework that can be re-implemented into applications '
-        'that supports PySide & PySide2'),
+    description=description,
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/jchanvfx/NodeGraphQt',
-    packages=setuptools.find_packages(),
+    packages=['NodeGraphQt'],
     classifiers=classifiers,
 )
+
+
+"""
+python setup.py sdist
+sudo python setup.py install
+"""
