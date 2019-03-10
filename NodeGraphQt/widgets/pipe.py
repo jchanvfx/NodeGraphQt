@@ -92,15 +92,15 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
         # draw arrow
         if self.input_port and self.output_port:
-            transform = QtGui.QTransform()
-            transform.translate(self.path().pointAtPercent(0.5).x(),
-                                self.path().pointAtPercent(0.5).y())
+            cen_x = self.path().pointAtPercent(0.5).x()
+            cen_y = self.path().pointAtPercent(0.5).y()
             loc_pt = self.path().pointAtPercent(0.49)
             tgt_pt = self.path().pointAtPercent(0.51)
-            radians = math.atan2(tgt_pt.y() - loc_pt.y(),
-                                 tgt_pt.x() - loc_pt.x())
-            degrees = math.degrees(radians) - 90
-            transform.rotate(degrees)
+
+            dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
+            if dist < 0.5:
+                painter.restore()
+                return
 
             color.setAlpha(255)
             if self._highlight:
@@ -109,7 +109,20 @@ class Pipe(QtWidgets.QGraphicsPathItem):
                 painter.setBrush(QtGui.QBrush(color.darker(200)))
             else:
                 painter.setBrush(QtGui.QBrush(color))
-            painter.setPen(QtGui.QPen(color, 0.6))
+
+            pen_width = 0.6
+            if dist < 1.0:
+                pen_width *= (1.0 + dist)
+            painter.setPen(QtGui.QPen(color, pen_width))
+
+            transform = QtGui.QTransform()
+            transform.translate(cen_x, cen_y)
+            radians = math.atan2(tgt_pt.y() - loc_pt.y(),
+                                 tgt_pt.x() - loc_pt.x())
+            degrees = math.degrees(radians) - 90
+            transform.rotate(degrees)
+            if dist < 1.0:
+                transform.scale(dist, dist)
             painter.drawPolygon(transform.map(self._arrow))
 
         painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
