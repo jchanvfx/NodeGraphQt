@@ -15,7 +15,6 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
             margin = (0, 2, 0, 0)
             padding_top = '2px'
         style = STYLE_QGROUPBOX.replace('$PADDING_TOP', padding_top)
-        self.setMaximumSize(120, 50)
         self.setTitle(label)
         self.setStyleSheet(style)
 
@@ -97,10 +96,10 @@ class NodeComboBox(NodeBaseWidget):
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         self._combo.setView(list_view)
         self._combo.clearFocus()
+        self.add_items(items)
         group = _NodeGroupBox(label)
         group.add_node_widget(self._combo)
         self.setWidget(group)
-        self.add_items(items)
 
     @property
     def type_(self):
@@ -153,6 +152,7 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit.clearFocus()
         group = _NodeGroupBox(label)
         group.add_node_widget(self._ledit)
+        group.setMaximumWidth(120)
         self.setWidget(group)
         self.text = text
 

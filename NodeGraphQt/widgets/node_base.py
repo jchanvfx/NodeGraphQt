@@ -157,8 +157,6 @@ class NodeItem(AbstractNodeItem):
 
         path = QtGui.QPainterPath()
         path.addRoundedRect(rect, radius, radius)
-        painter.setPen(QtGui.QPen(border_color.darker(200), 1.5))
-        painter.drawPath(path)
 
         rect = self.boundingRect()
         bg_color = QtGui.QColor(*self.color)

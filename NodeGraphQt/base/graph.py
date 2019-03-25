@@ -65,6 +65,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
+        # wire up properties bin widget.
         self._properties_bin.property_changed.connect(
             self._on_property_changed)
 
