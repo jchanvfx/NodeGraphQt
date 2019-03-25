@@ -15,8 +15,10 @@ QGroupBox {
     background-color: rgba(0, 0, 0, 0);
     border: 0px solid rgba(0, 0, 0, 0);
     margin-top: 1px;
-    padding: 2px;
     padding-top: $PADDING_TOP;
+    padding-bottom: 2px;
+    padding-left: 1px;
+    padding-right: 1px;
     font-size: 10pt;
 }
 QGroupBox::title {
