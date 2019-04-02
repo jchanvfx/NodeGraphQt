@@ -1,2 +1,2 @@
 PySide2>=5.12
-qtpy
+Qt.py
