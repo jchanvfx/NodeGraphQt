@@ -4,6 +4,7 @@ import math
 from NodeGraphQt import QtCore, QtGui, QtWidgets
 from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
+    PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
 )
@@ -31,10 +32,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._highlight = False
         self._input_port = input_port
         self._output_port = output_port
-        size = 5.0
+        size = 6.0
         self._arrow = QtGui.QPolygonF()
         self._arrow.append(QtCore.QPointF(-size, size))
-        self._arrow.append(QtCore.QPointF(0.0, -size * 2))
+        self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
 
     def __repr__(self):
@@ -77,7 +78,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
 
         if self.disabled():
-            color.setAlpha(200)
+            if not self._active:
+                color = QtGui.QColor(*PIPE_DISABLED_COLOR)
             pen_width += 0.2
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
 
@@ -108,7 +110,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             elif self._active or self.disabled():
                 painter.setBrush(QtGui.QBrush(color.darker(200)))
             else:
-                painter.setBrush(QtGui.QBrush(color))
+                painter.setBrush(QtGui.QBrush(color.darker(130)))
 
             pen_width = 0.6
             if dist < 1.0:
