@@ -7,8 +7,8 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                                    Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 from NodeGraphQt.errors import NodeWidgetError
-from NodeGraphQt.items.node_abstract import AbstractNodeItem
-from NodeGraphQt.items.port import PortItem
+from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from NodeGraphQt.qgraphics.port import PortItem
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):

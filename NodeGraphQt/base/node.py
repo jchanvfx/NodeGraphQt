@@ -8,8 +8,8 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QCHECKBOX,
                                    IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
-from NodeGraphQt.items.node_backdrop import BackdropNodeItem
-from NodeGraphQt.items.node_base import NodeItem
+from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
+from NodeGraphQt.qgraphics.node_base import NodeItem
 from NodeGraphQt.widgets.node_property import (NodeComboBox,
                                                NodeLineEdit,
                                                NodeCheckBox)
