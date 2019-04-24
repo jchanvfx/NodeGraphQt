@@ -7,12 +7,8 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
                                    Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 from NodeGraphQt.errors import NodeWidgetError
-from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
-from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
-                                              NodeComboBox,
-                                              NodeLineEdit,
-                                              NodeCheckBox)
-from NodeGraphQt.widgets.port import PortItem
+from NodeGraphQt.items.node_abstract import AbstractNodeItem
+from NodeGraphQt.items.port import PortItem
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
@@ -663,32 +659,10 @@ class NodeItem(AbstractNodeItem):
 
     @property
     def widgets(self):
-        return dict(self._widgets)
-
-    def add_combo_menu(self, name='', label='', items=None, tooltip=''):
-        items = items or []
-        widget = NodeComboBox(self, name, label, items)
-        widget.setToolTip(tooltip)
-        self.add_widget(widget)
-        return widget
-
-    def add_text_input(self, name='', label='', text='', tooltip=''):
-        widget = NodeLineEdit(self, name, label, text)
-        widget.setToolTip(tooltip)
-        self.add_widget(widget)
-        return widget
-
-    def add_checkbox(self, name='', label='', text='', state=False, tooltip=''):
-        widget = NodeCheckBox(self, name, label, text, state)
-        widget.setToolTip(tooltip)
-        self.add_widget(widget)
-        return widget
+        return self._widgets.copy()
 
     def add_widget(self, widget):
-        if isinstance(widget, NodeBaseWidget):
-            self._widgets[widget.name] = widget
-        else:
-            raise NodeWidgetError('{} is not an instance of a node widget.')
+        self._widgets[widget.name] = widget
 
     def get_widget(self, name):
         widget = self._widgets.get(name)

@@ -3,12 +3,12 @@ import math
 
 from NodeGraphQt import QtCore, QtGui, QtWidgets
 from NodeGraphQt.constants import (
-    PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR, PIPE_HIGHLIGHT_COLOR,
-    PIPE_DISABLED_COLOR,
+    PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
+    PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
 )
-from NodeGraphQt.widgets.port import PortItem
+from NodeGraphQt.items.port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
@@ -49,10 +49,11 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
     def hoverLeaveEvent(self, event):
         self.reset()
-        if self.input_port.node.selected:
-            self.highlight()
-        elif self.output_port.node.selected:
-            self.highlight()
+        if self.input_port and self.output_port:
+            if self.input_port.node.selected:
+                self.highlight()
+            elif self.output_port.node.selected:
+                self.highlight()
 
     def paint(self, painter, option, widget):
         """

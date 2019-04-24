@@ -8,8 +8,11 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QCHECKBOX,
                                    IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
-from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
-from NodeGraphQt.widgets.node_base import NodeItem
+from NodeGraphQt.items.node_backdrop import BackdropNodeItem
+from NodeGraphQt.items.node_base import NodeItem
+from NodeGraphQt.widgets.node_property import (NodeComboBox,
+                                               NodeLineEdit,
+                                               NodeCheckBox)
 
 
 class classproperty(object):
@@ -392,7 +395,8 @@ class Node(NodeObject):
 
     def add_combo_menu(self, name='', label='', items=None, tab=None):
         """
-        Embed a :class:`PySide2.QtWidgets.QComboBox` widget into the node.
+        Create a custom property and embed a
+        :class:`PySide2.QtWidgets.QComboBox` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -403,12 +407,15 @@ class Node(NodeObject):
         items = items or []
         self.create_property(
             name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
-        widget = self.view.add_combo_menu(name, label, items)
+
+        widget = NodeComboBox(self.view, name, label, items)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
 
     def add_text_input(self, name='', label='', text='', tab=None):
         """
-        Embed a :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
+        Create a custom property and embed a
+        :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -418,12 +425,14 @@ class Node(NodeObject):
         """
         self.create_property(
             name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
-        widget = self.view.add_text_input(name, label, text)
+        widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
 
     def add_checkbox(self, name='', label='', text='', state=False, tab=None):
         """
-        Embed a :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
+        Create a custom property and embed a
+        :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
 
         Args:
             name (str): name for the custom property.
@@ -434,8 +443,9 @@ class Node(NodeObject):
         """
         self.create_property(
             name, state, widget_type=NODE_PROP_QCHECKBOX, tab=tab)
-        widget = self.view.add_checkbox(name, label, text, state)
+        widget = NodeCheckBox(self.view, name, label, text, state)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True):
         """
@@ -451,7 +461,7 @@ class Node(NodeObject):
         """
         if name in self.inputs().keys():
             raise PortRegistrationError(
-                'port name "{}" already taken.'.format(name))
+                'port name "{}" already registered.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
         port = Port(self, view)
         port.model.type_ = IN_PORT
@@ -476,7 +486,7 @@ class Node(NodeObject):
         """
         if name in self.outputs().keys():
             raise PortRegistrationError(
-                'port name "{}" already taken.'.format(name))
+                'port name "{}" already registered.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
         port = Port(self, view)
         port.model.type_ = OUT_PORT

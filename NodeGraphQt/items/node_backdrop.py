@@ -4,9 +4,9 @@ from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (Z_VAL_PIPE,
                                    NODE_SEL_COLOR,
                                    NODE_SEL_BORDER_COLOR)
-from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
-from NodeGraphQt.widgets.pipe import Pipe
-from NodeGraphQt.widgets.port import PortItem
+from NodeGraphQt.items.node_abstract import AbstractNodeItem
+from NodeGraphQt.items.pipe import Pipe
+from NodeGraphQt.items.port import PortItem
 
 
 class BackdropSizer(QtWidgets.QGraphicsItem):

@@ -62,7 +62,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setToolTip('Set node limit to display.')
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
-        self._limit.setValue(10)
+        self._limit.setValue(5)
         self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(400, 400)
 

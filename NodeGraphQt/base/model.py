@@ -70,6 +70,7 @@ class NodeModel(object):
         # store the property attributes.
         # (deleted when node is added to the graph)
         self._TEMP_property_attrs = {}
+
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
