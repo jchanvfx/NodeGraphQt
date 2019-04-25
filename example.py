@@ -1,9 +1,11 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 import sys
 
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore
+
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
 

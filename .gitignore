@@ -9,6 +9,7 @@ docs/_build/
 *.db
 *.DS_Store
 
-# test
-*.ngqt
+# test stuff
+dist
+*.egg-info
 *.json

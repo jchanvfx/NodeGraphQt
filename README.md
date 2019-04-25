@@ -1,4 +1,4 @@
-## NodeGraphQT
+## NodeGraphQt
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md) 
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/) 
