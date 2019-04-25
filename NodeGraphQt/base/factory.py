@@ -49,7 +49,7 @@ class NodeFactory(object):
 
         Args:
             node (Node): node item
-            alias (str): custom alias for the node (optional).
+            alias (str): custom alias for the node identifier (optional).
         """
         if node is None:
             return
@@ -64,12 +64,10 @@ class NodeFactory(object):
                 .format(node_type))
         self.__nodes[node_type] = node
 
-        if self.__names.get(node_type):
-            raise NodeRegistrationError(
-                'Node Name: {} already exists!'
-                'Please specify a new node name for node: {}'
-                .format(name, node_type))
-        self.__names[name] = node_type
+        if self.__names.get(name):
+            self.__names[name].append(node_type)
+        else:
+            self.__names[name] = [node_type]
 
         if alias:
             if self.__aliases.get(alias):

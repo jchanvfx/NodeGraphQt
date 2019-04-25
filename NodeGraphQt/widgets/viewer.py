@@ -7,10 +7,10 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_STRAIGHT,
                                    PIPE_STYLE_DASHED,
                                    SCENE_AREA)
-from NodeGraphQt.widgets.node_abstract import AbstractNodeItem
-from NodeGraphQt.widgets.node_backdrop import BackdropNodeItem
-from NodeGraphQt.widgets.pipe import Pipe
-from NodeGraphQt.widgets.port import PortItem
+from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
+from NodeGraphQt.qgraphics.pipe import Pipe
+from NodeGraphQt.qgraphics.port import PortItem
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 from NodeGraphQt.widgets.tab_search import TabSearchWidget

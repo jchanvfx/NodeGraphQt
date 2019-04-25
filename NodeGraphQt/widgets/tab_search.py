@@ -91,7 +91,13 @@ class TabSearchWidget(QtWidgets.QLineEdit):
             self.completer().complete()
 
     def set_nodes(self, node_dict=None):
-        self._node_dict = node_dict or {}
+        self._node_dict = {}
+        for name, node_types in node_dict.items():
+            if len(node_types) == 1:
+                self._node_dict[name] = node_types[0]
+                continue
+            for node_id in node_types:
+                self._node_dict['{} ({})'.format(name, node_id)] = node_id
         node_names = sorted(self._node_dict.keys())
         self._model.setStringList(node_names)
         self._completer.setModel(self._model)

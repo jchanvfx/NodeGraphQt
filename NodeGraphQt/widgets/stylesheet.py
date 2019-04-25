@@ -2,12 +2,10 @@ import re
 
 from NodeGraphQt.constants import ICON_DOWN_ARROW
 
-# we reformat the icon file path on windows os.
-regex = re.compile('(\w:)')
-match = regex.match(ICON_DOWN_ARROW)
+# Reformat the icon path on Windows OS.
+match = re.match('(\\w:)', ICON_DOWN_ARROW)
 if match:
-    match_str = match.group(1)
-    ICON_DOWN_ARROW = ICON_DOWN_ARROW[len(match_str):]
+    ICON_DOWN_ARROW = ICON_DOWN_ARROW[len(match.group(1)):]
     ICON_DOWN_ARROW = ICON_DOWN_ARROW.replace('\\', '/')
 
 STYLE_QGROUPBOX = '''
