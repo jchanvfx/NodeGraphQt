@@ -55,11 +55,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         painter.save()
 
         rect = QtCore.QRectF(0.0, 0.8, self._width, self._height)
-        painter.setBrush(QtGui.QColor(0, 0, 0, 200))
-        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 255), 1.8))
         path = QtGui.QPainterPath()
         path.addEllipse(rect)
-        painter.drawPath(path)
 
         if self._hovered:
             color = QtGui.QColor(*PORT_HOVER_COLOR)
@@ -75,6 +72,28 @@ class PortItem(QtWidgets.QGraphicsItem):
         pen = QtGui.QPen(border_color, 1.5)
         painter.setPen(pen)
         painter.drawEllipse(self.boundingRect())
+
+        if self.connected_pipes and not self._hovered:
+            painter.setBrush(border_color)
+            w = self._width / 2.5
+            h = self._height / 2.5
+            rect = QtCore.QRectF(self.boundingRect().center().x() - w / 2,
+                                 self.boundingRect().center().y() - h / 2,
+                                 w, h)
+            painter.drawEllipse(rect)
+        elif self._hovered:
+            if self.multi_connection:
+                painter.setBrush(color)
+                w = self._width / 1.8
+                h = self._height / 1.8
+            else:
+                painter.setBrush(border_color)
+                w = self._width / 3.5
+                h = self._height / 3.5
+            rect = QtCore.QRectF(self.boundingRect().center().x() - w / 2,
+                                 self.boundingRect().center().y() - h / 2,
+                                 w, h)
+            painter.drawEllipse(rect)
 
         painter.restore()
 
