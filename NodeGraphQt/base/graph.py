@@ -13,6 +13,7 @@ from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
+from NodeGraphQt.widgets.node_list import NodeListWidget
 from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
@@ -45,7 +46,9 @@ class NodeGraph(QtCore.QObject):
         self._viewer = NodeViewer(parent)
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._properties_bin = PropertiesBinWidget()
+
+        self._properties_bin = None
+        self._nodes_list = None
 
         tab = QtWidgets.QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
@@ -64,10 +67,6 @@ class NodeGraph(QtCore.QObject):
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
-
-        # wire up properties bin widget.
-        self._properties_bin.property_changed.connect(
-            self._on_property_changed)
 
     def _toggle_tab_search(self):
         """
@@ -99,7 +98,8 @@ class NodeGraph(QtCore.QObject):
             node_id (str): node id emitted by the viewer.
         """
         node = self.get_node_by_id(node_id)
-        self._properties_bin.add_node(node)
+        if self._properties_bin:
+            self._properties_bin.add_node(node)
 
         self.node_double_clicked.emit(node)
 
@@ -222,12 +222,30 @@ class NodeGraph(QtCore.QObject):
 
     def properties_bin(self):
         """
-        Return the node properties bin widget.
+        Initializes the node properties bin widget when first called.
 
         Returns:
-            PropBinWidget: widget.
+            PropBinWidget: the initialized widget.
         """
+        if self._properties_bin is None:
+            self._properties_bin = PropertiesBinWidget()
+            # wire up widget.
+            self._properties_bin.property_changed.connect(
+                self._on_property_changed
+            )
         return self._properties_bin
+
+    def nodes_list(self):
+        """
+        Initializes the nodes list widget when first called.
+
+        Returns:
+            NodeListWidget: the initialized widget.
+        """
+        if self._nodes_list is None:
+            self._nodes_list = NodeListWidget()
+            self._nodes_list.set_node_factory(self._node_factory)
+        return self._nodes_list
 
     def undo_stack(self):
         """
