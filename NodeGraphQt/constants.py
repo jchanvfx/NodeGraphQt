@@ -65,6 +65,8 @@ VIEWER_GRID_OVERLAY = True
 
 SCENE_AREA = 8000.0
 
+DRAG_DROP_ID = 'n0deGraphQT'
+
 # === PATHS ===
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))

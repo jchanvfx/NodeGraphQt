@@ -44,15 +44,24 @@ if __name__ == '__main__':
     viewer.resize(1100, 800)
     viewer.show()
 
+
     # show the properties bin when a node is "double clicked" in the graph.
     properties_bin = graph.properties_bin()
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
-
     def show_prop_bin(node):
         if not properties_bin.isVisible():
             properties_bin.show()
-
     graph.node_double_clicked.connect(show_prop_bin)
+
+
+    # show the nodes list when a node is "double clicked" in the graph.
+    node_list = graph.nodes_list()
+    def show_nodes_list(node):
+        if not node_list.isVisible():
+            node_list.update()
+            node_list.show()
+    graph.node_double_clicked.connect(show_nodes_list)
+
 
     # registered nodes.
     reg_nodes = [

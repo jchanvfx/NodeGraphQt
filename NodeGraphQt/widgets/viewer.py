@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import os
 
 from NodeGraphQt import QtGui, QtCore, QtWidgets
