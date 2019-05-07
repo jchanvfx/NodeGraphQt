@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import json
 import os
 import re
@@ -13,6 +14,7 @@ from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
+from NodeGraphQt.constants import DRAG_DROP_ID
 from NodeGraphQt.widgets.node_list import NodeListWidget
 from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
@@ -122,6 +124,18 @@ class NodeGraph(QtCore.QObject):
             data (QtCore.QMimeData): mime data.
             pos (QtCore.QPoint): scene position relative to the drop.
         """
+
+        # don't emit signal for internal widget drops.
+        if data.hasFormat('text/plain'):
+            if data.text().startswith('<${}>:'.format(DRAG_DROP_ID)):
+                node_ids = data.text()[len('<${}>:'.format(DRAG_DROP_ID)):]
+                x, y = pos.x(), pos.y()
+                for node_id in node_ids.split(','):
+                    self.create_node(node_id, pos=[x, y])
+                x += 20
+                y += 20
+                return
+
         self.data_dropped.emit(data, pos)
 
     def _on_nodes_moved(self, node_data):
