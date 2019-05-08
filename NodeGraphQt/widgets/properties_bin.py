@@ -54,7 +54,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     #: Signal emitted (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,):
         super(PropertiesBinWidget, self).__init__(parent)
         self.setWindowTitle('Properties Bin')
         self._prop_list = PropertiesList()
@@ -102,7 +102,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Add node to the properties bin.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.BaseNode): node object.
         """
         if self.limit() == 0:
             return
@@ -130,7 +130,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Remove node from the properties bin.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.BaseNode): node object.
         """
         self.__on_prop_close(node.id)
 
@@ -145,7 +145,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Returns the node property widget.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.BaseNode): node object.
 
         Returns:
             NodePropWidget: node property widget.
@@ -158,7 +158,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
-    from NodeGraphQt import Node, NodeGraph
+    from NodeGraphQt import BaseNode, NodeGraph
     from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                        NODE_PROP_QLINEEDIT,
                                        NODE_PROP_QCOMBO,
@@ -167,7 +167,7 @@ if __name__ == '__main__':
                                        NODE_PROP_SLIDER)
 
 
-    class TestNode(Node):
+    class TestNode(BaseNode):
         NODE_NAME = 'test node'
 
         def __init__(self):

@@ -41,6 +41,16 @@ Properties Bin
 .. image:: _images/prop_bin.png
     :width: 950px
 
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import NodeGraph
+
+    graph = NodeGraph()
+
+    properties_bin = graph.properties_bin()
+    properties_bin.show()
+
 
 Menu Setup
 ==========

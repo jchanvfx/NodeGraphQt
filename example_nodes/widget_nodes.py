@@ -1,7 +1,7 @@
-from NodeGraphQt import Node
+from NodeGraphQt import BaseNode
 
 
-class DropdownMenuNode(Node):
+class DropdownMenuNode(BaseNode):
     """
     An example node with a embedded added QCombobox menu.
     """
@@ -25,7 +25,7 @@ class DropdownMenuNode(Node):
         self.add_combo_menu('my_menu', 'Menu Test', items=items)
 
 
-class TextInputNode(Node):
+class TextInputNode(BaseNode):
     """
     An example of a node with a embedded QLineEdit.
     """
@@ -47,7 +47,7 @@ class TextInputNode(Node):
         self.add_text_input('my_input', 'Text Input', tab='widgets')
 
 
-class CheckboxNode(Node):
+class CheckboxNode(BaseNode):
     """
     An example of a node with 2 embedded QCheckBox widgets.
     """

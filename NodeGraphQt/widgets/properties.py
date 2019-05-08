@@ -329,7 +329,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
     Args:
         parent:
-        node (NodeGraphQt.Node): node.
+        node (NodeGraphQt.BaseNode): node.
     """
 
     #: signal (node_id, prop_name, prop_value)
@@ -394,7 +394,7 @@ class NodePropWidget(QtWidgets.QWidget):
         Populate widget from a node.
 
         Args:
-            node (NodeGraphQt.Node): node class.
+            node (NodeGraphQt.BaseNode): node class.
         """
         model = node.model
         graph_model = node.graph.model
@@ -508,10 +508,10 @@ class NodePropWidget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
-    from NodeGraphQt import Node, NodeGraph
+    from NodeGraphQt import BaseNode, NodeGraph
 
 
-    class TestNode(Node):
+    class TestNode(BaseNode):
 
         NODE_NAME = 'test node'
 

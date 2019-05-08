@@ -371,7 +371,7 @@ class NodeGraph(QtCore.QObject):
         Center the node graph on the given nodes or all nodes by default.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): a list of nodes.
+            nodes (list[NodeGraphQt.BaseNode]): a list of nodes.
         """
         self._viewer.center_selection(nodes)
 
@@ -419,7 +419,7 @@ class NodeGraph(QtCore.QObject):
             pos (list[int, int]): initial x, y position for the node (default: (0, 0)).
 
         Returns:
-            NodeGraphQt.Node: the created instance of the node.
+            NodeGraphQt.BaseNode: the created instance of the node.
         """
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
@@ -470,7 +470,7 @@ class NodeGraph(QtCore.QObject):
         Add a node into the node graph.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.BaseNode): node object.
             pos (list[float]): node x,y position. (optional)
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
@@ -498,7 +498,7 @@ class NodeGraph(QtCore.QObject):
         Remove the node from the node graph.
 
         Args:
-            node (NodeGraphQt.Node): node object.
+            node (NodeGraphQt.BaseNode): node object.
         """
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
@@ -509,7 +509,7 @@ class NodeGraph(QtCore.QObject):
         Remove a list of specified nodes from the node graph.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of node instances.
+            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
         """
         self._undo_stack.beginMacro('delete nodes')
         [self.delete_node(n) for n in nodes]
@@ -520,7 +520,7 @@ class NodeGraph(QtCore.QObject):
         Return all nodes in the node graph.
 
         Returns:
-            list[NodeGraphQt.Node]: list of nodes.
+            list[NodeGraphQt.BaseNode]: list of nodes.
         """
         return list(self._model.nodes.values())
 
@@ -529,7 +529,7 @@ class NodeGraph(QtCore.QObject):
         Return all selected nodes that are in the node graph.
 
         Returns:
-            list[NodeGraphQt.Node]: list of nodes.
+            list[NodeGraphQt.BaseNode]: list of nodes.
         """
         nodes = []
         for item in self._viewer.selected_nodes():
@@ -785,7 +785,7 @@ class NodeGraph(QtCore.QObject):
         Copy nodes to the clipboard.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of nodes (default: selected nodes).
+            nodes (list[NodeGraphQt.BaseNode]): list of nodes (default: selected nodes).
         """
         nodes = nodes or self.selected_nodes()
         if not nodes:
@@ -819,9 +819,9 @@ class NodeGraph(QtCore.QObject):
         Create duplicate copy from the list of nodes.
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of nodes.
+            nodes (list[NodeGraphQt.BaseNode]): list of nodes.
         Returns:
-            list[NodeGraphQt.Node]: list of duplicated node instances.
+            list[NodeGraphQt.BaseNode]: list of duplicated node instances.
         """
         if not nodes:
             return
@@ -847,7 +847,7 @@ class NodeGraph(QtCore.QObject):
         see: :meth:`NodeObject.set_disabled`
 
         Args:
-            nodes (list[NodeGraphQt.Node]): list of node instances.
+            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
             mode (bool): (optional) disable state of the nodes.
         """
         if not nodes:

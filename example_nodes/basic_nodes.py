@@ -1,7 +1,7 @@
-from NodeGraphQt import Node
+from NodeGraphQt import BaseNode
 
 
-class FooNode(Node):
+class FooNode(BaseNode):
     """
     A node class with 2 inputs and 2 outputs.
     """
@@ -24,7 +24,7 @@ class FooNode(Node):
         self.add_output('out B')
 
 
-class BarNode(Node):
+class BarNode(BaseNode):
     """
     A node class with 3 inputs and 3 outputs.
     The last input and last output can take in multiple pipes.

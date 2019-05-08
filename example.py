@@ -3,14 +3,14 @@
 import os
 import sys
 
-from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
+from NodeGraphQt import NodeGraph, BaseNode, Backdrop, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
 
 
-class MyNode(Node):
+class MyNode(BaseNode):
     """
     example test node.
     """

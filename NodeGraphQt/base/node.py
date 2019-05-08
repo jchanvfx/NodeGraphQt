@@ -32,10 +32,10 @@ class NodeObject(object):
         node (AbstractNodeItem): graphic item used for drawing.
     """
 
-    #: unique node identifier domain.
+    #: (str) unique node identifier domain.
     __identifier__ = 'nodeGraphQt.nodes'
 
-    #: initial default node name.
+    #: (str) base node name.
     NODE_NAME = None
 
     def __init__(self, node=None):
@@ -351,7 +351,7 @@ class NodeObject(object):
         return self.model.pos
 
 
-class Node(NodeObject):
+class BaseNode(NodeObject):
     """
     base class of a typical Node with input and output ports.
     """
@@ -359,7 +359,7 @@ class Node(NodeObject):
     NODE_NAME = 'Base Node'
 
     def __init__(self):
-        super(Node, self).__init__(NodeItem())
+        super(BaseNode, self).__init__(NodeItem())
         self._inputs = []
         self._outputs = []
 
@@ -586,7 +586,7 @@ class Backdrop(NodeObject):
         Returns nodes wrapped within the backdrop node.
 
         Returns:
-            list[NodeGraphQt.Node]: list of node under the backdrop.
+            list[NodeGraphQt.BaseNode]: list of node under the backdrop.
         """
         node_ids = [n.id for n in self.view.get_nodes()]
         return [self.graph.get_node_by_id(nid) for nid in node_ids]

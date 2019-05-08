@@ -33,7 +33,7 @@ class NodeFactory(object):
             alias (str): alias name (optional).
 
         Returns:
-            NodeGraphQt.Node: new node class object.
+            NodeGraphQt.BaseNode: new node class object.
         """
         if alias and self.aliases.get(alias):
             node_type = self.aliases[alias]

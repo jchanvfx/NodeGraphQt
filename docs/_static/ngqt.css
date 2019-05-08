@@ -261,8 +261,8 @@ div.highlight{
 }
 
 div.note {
-    background-color: #28313a;
-    border: 1px solid #2f4c54;
+    background-color: #50313b;
+    border: 1px solid #733c4b;
     border-radius: 4px;
 }
  
@@ -324,4 +324,10 @@ div.code-block-caption {
     background-color: #ddd;
     color: #222;
     border: 1px solid #C6C9CB;
+}
+
+dl.field-list.simple {
+    background: #212325;
+    border-radius: 3px;
+    padding: 4px 12px 2px;
 }

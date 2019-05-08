@@ -5,7 +5,7 @@ Nodes
 Node Object
 ===========
 
-**Inherited by:** :class:`NodeGraphQt.Node`, :class:`NodeGraphQt.Backdrop`
+**Inherited by:** :class:`NodeGraphQt.BaseNode`, :class:`NodeGraphQt.Backdrop`
 
 The ``NodeObject`` class is the main base class that all nodes inherit from.
 
@@ -25,12 +25,12 @@ The ``NodeObject`` class is the main base class that all nodes inherit from.
     :exclude-members: model, NODE_NAME
 
 
-Node
-====
+Base Node
+=========
 
 **Inherited from:** :class:`NodeGraphQt.NodeObject`
 
-The ``Node`` class is the base class for nodes that allows port connections from one node to another.
+The ``BaseNode`` class is the base class for nodes that allows port connections from one node to another.
 
 
 .. image:: _images/node.png
@@ -38,13 +38,13 @@ The ``Node`` class is the base class for nodes that allows port connections from
 
 ----
 
-.. autoclass:: NodeGraphQt.Node
+.. autoclass:: NodeGraphQt.BaseNode
     :members:
     :exclude-members: update_model
 
 
-Backdrop
-========
+Backdrop Node
+=============
 
 **Inherited from:** :class:`NodeGraphQt.NodeObject`
 

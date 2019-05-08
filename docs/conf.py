@@ -14,6 +14,7 @@
 
 import os
 import sys
+from datetime import datetime
 
 base_path = os.path.abspath('.')
 root_path = os.path.split(base_path)[0]
@@ -21,11 +22,10 @@ sys.path.insert(0, root_path)
 
 import NodeGraphQt
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'NodeGraphQt'
-copyright = '2018, {}'.format(NodeGraphQt.__author__)
+copyright = '{}, {}'.format(datetime.now().year, NodeGraphQt.__author__)
 author = NodeGraphQt.__author__
 
 # The full version, including alpha/beta/rc tags
@@ -46,7 +46,7 @@ version = '{0}.{1}'.format(*release.split('.'))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosectionlabel',
-    # 'sphinx.ext.coverage',
+    'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
 ]
