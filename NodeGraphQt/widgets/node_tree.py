@@ -8,16 +8,16 @@ TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
 
 
-class BaseListWidgetItem(QtWidgets.QListWidgetItem):
+class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
 
     def __eq__(self, other):
         return id(self) == id(other)
 
 
-class NodeListWidget(QtWidgets.QTreeWidget):
+class NodeTreeWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, parent=None):
-        super(NodeListWidget, self).__init__(parent)
+        super(NodeTreeWidget, self).__init__(parent)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragOnly)
         self.setHeaderHidden(True)
         self._factory = None
@@ -25,7 +25,7 @@ class NodeListWidget(QtWidgets.QTreeWidget):
 
     def mimeData(self, items):
         node_ids = ','.join(i.toolTip(0) for i in items)
-        mime_data = super(NodeListWidget, self).mimeData(items)
+        mime_data = super(NodeTreeWidget, self).mimeData(items)
         mime_data.setText('<${}>:{}'.format(DRAG_DROP_ID, node_ids))
         return mime_data
 
@@ -47,9 +47,7 @@ class NodeListWidget(QtWidgets.QTreeWidget):
                 label = self._custom_labels[category]
             else:
                 label = '- {}'.format(category)
-            cat_item = QtWidgets.QTreeWidgetItem(
-                self, [label], type=TYPE_CATEGORY
-            )
+            cat_item = BaseNodeTreeItem(self, [label], type=TYPE_CATEGORY)
             cat_item.setFirstColumnSpanned(True)
             cat_item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.addTopLevelItem(cat_item)
@@ -60,13 +58,10 @@ class NodeListWidget(QtWidgets.QTreeWidget):
             category = '.'.join(node_id.split('.')[:-1])
             category_item = category_items[category]
 
-            item = QtWidgets.QTreeWidgetItem(
-                category_item, [node_name], type=TYPE_NODE
-            )
+            item = BaseNodeTreeItem(category_item, [node_name], type=TYPE_NODE)
             item.setToolTip(0, node_id)
 
             category_item.addChild(item)
-
 
     def set_node_factory(self, factory):
         """

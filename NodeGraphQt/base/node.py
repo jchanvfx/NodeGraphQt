@@ -562,7 +562,7 @@ class BaseNode(NodeObject):
         src_port.connect_to(port)
 
 
-class Backdrop(NodeObject):
+class BackdropNode(NodeObject):
     """
     base class of a Backdrop node.
     """
@@ -570,7 +570,7 @@ class Backdrop(NodeObject):
     NODE_NAME = 'Backdrop'
 
     def __init__(self):
-        super(Backdrop, self).__init__(BackdropNodeItem())
+        super(BackdropNode, self).__init__(BackdropNodeItem())
         # override base default color.
         self.model.color = (5, 129, 138, 255)
         self.create_property('bg_text', '')

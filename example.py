@@ -3,7 +3,7 @@
 import os
 import sys
 
-from NodeGraphQt import NodeGraph, BaseNode, Backdrop, setup_context_menu
+from NodeGraphQt import NodeGraph, BaseNode, BackdropNode, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore
 
 # import example nodes from the "example_nodes" package
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # registered nodes.
     reg_nodes = [
-        Backdrop, MyNode,
+        BackdropNode, MyNode,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
         widget_nodes.DropdownMenuNode,

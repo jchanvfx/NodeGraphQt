@@ -15,7 +15,7 @@ from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import DRAG_DROP_ID
-from NodeGraphQt.widgets.node_list import NodeListWidget
+from NodeGraphQt.widgets.node_tree import NodeTreeWidget
 from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
@@ -254,10 +254,10 @@ class NodeGraph(QtCore.QObject):
         Initializes the nodes list widget when first called.
 
         Returns:
-            NodeListWidget: the initialized widget.
+            NodeTreeWidget: the initialized widget.
         """
         if self._nodes_list is None:
-            self._nodes_list = NodeListWidget()
+            self._nodes_list = NodeTreeWidget()
             self._nodes_list.set_node_factory(self._node_factory)
         return self._nodes_list
 

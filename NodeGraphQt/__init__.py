@@ -51,6 +51,6 @@ except ImportError as ie:
 
 from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
-from .base.node import NodeObject, BaseNode, Backdrop
+from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
 from .base.menu import Menu, MenuCommand
