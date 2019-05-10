@@ -54,7 +54,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     #: Signal emitted (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
 
-    def __init__(self, parent=None,):
+    def __init__(self, parent=None):
         super(PropertiesBinWidget, self).__init__(parent)
         self.setWindowTitle('Properties Bin')
         self._prop_list = PropertiesList()
@@ -96,6 +96,15 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             int: node limit.
         """
         return int(self._limit.value())
+
+    def set_limit(self, limit):
+        """
+        Set limit of nodes to display.
+
+        Args:
+            limit (int): node limit.
+        """
+        self._limit.setValue(limit)
 
     def add_node(self, node):
         """

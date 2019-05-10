@@ -50,7 +50,8 @@ class NodeObject(object):
         self._view.id = self._model.id
 
     def __repr__(self):
-        return '{}(\'{}\')'.format(self.type_, self.NODE_NAME)
+        return '<{}(\'{}\') @ {}>'.format(
+            self.type_, self.NODE_NAME, hex(id(self)))
 
     @classproperty
     def type_(cls):

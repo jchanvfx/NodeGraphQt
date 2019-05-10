@@ -1,5 +1,5 @@
-Node Graph
-**********
+Graph
+*****
 
 **Inherited from:** :class:`PySide2.QtCore.QObject`
 

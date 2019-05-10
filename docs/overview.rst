@@ -17,22 +17,19 @@ Navigation
 | Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
 +---------------+----------------------------------------------+
 
-Tab Search
-==========
+Search
+======
 
 .. image:: _images/node_search.png
     :width: 269px
 
 Node can be created with the tab node search widget.
 
-+-------------+--------+
-| action      | hotkey |
-+=============+========+
-| Show Search | *Tab*  |
-+-------------+--------+
-
-.. note::
-    To override the tab search widget hotkey see :class:`NodeGraphQt.NodeGraph` class for the tab_search_key argument.
++-------------------+--------+
+| action            | hotkey |
++===================+========+
+| Toggle Visibility | *Tab*  |
++-------------------+--------+
 
 
 Properties Bin
@@ -59,7 +56,7 @@ The NodeGraphQt has a ``setup_context_menu`` method that'll setup the node graph
 
 `(see line:32 in the example code below)`
 
-see also: :ref:`Menu & Commands`
+see also: :ref:`Menus`
 
 
 Example

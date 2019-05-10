@@ -22,7 +22,8 @@ class PortModel(object):
         self.connected_ports = defaultdict(list)
 
     def __repr__(self):
-        return '{}(\'{}\')'.format(self.__class__.__name__, self.name)
+        return '<{}(\'{}\') @ {}>'.format(
+            self.__class__.__name__, self.name, hex(id(self)))
 
     @property
     def to_dict(self):

@@ -11,19 +11,14 @@ The ``NodeObject`` class is the main base class that all nodes inherit from.
 
 ----
 
-.. note::
-    These two attributes require reimplementing when subclassing any node object.
-
-.. autoattribute:: NodeGraphQt.NodeObject.__identifier__
-.. autoattribute:: NodeGraphQt.NodeObject.NODE_NAME
-
-
-----
-
 .. autoclass:: NodeGraphQt.NodeObject
     :members:
     :exclude-members: model, NODE_NAME
 
+Attributes
+
+.. autoattribute:: NodeGraphQt.NodeObject.__identifier__
+.. autoattribute:: NodeGraphQt.NodeObject.NODE_NAME
 
 Node
 ====
