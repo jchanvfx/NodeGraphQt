@@ -11,6 +11,10 @@ applications that supports PySide and PySide2.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
+#### Documentation
+
+http://chantasticvfx.com/nodeGraphQt/html/index.html
+
 #### Navigation
 
 | action        | controls                                     |
