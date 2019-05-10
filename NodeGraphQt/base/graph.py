@@ -59,6 +59,9 @@ class NodeGraph(QtCore.QObject):
 
         self._wire_signals()
 
+    def __repr__(self):
+        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+
     def _wire_signals(self):
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)

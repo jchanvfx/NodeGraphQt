@@ -23,6 +23,9 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         self._factory = None
         self._custom_labels = {}
 
+    def __repr__(self):
+        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+
     def mimeData(self, items):
         node_ids = ','.join(i.toolTip(0) for i in items)
         mime_data = super(NodeTreeWidget, self).mimeData(items)

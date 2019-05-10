@@ -71,6 +71,9 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         popup.clicked.connect(self._on_search_submitted)
         self.returnPressed.connect(self._on_search_submitted)
 
+    def __repr__(self):
+        return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
+
     def _on_search_submitted(self, index=0):
         node_type = self._node_dict.get(self.text())
         if node_type:

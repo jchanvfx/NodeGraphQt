@@ -79,6 +79,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         layout.addLayout(top_layout)
         layout.addWidget(self._prop_list, 1)
 
+    def __repr__(self):
+        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+
     def __on_prop_close(self, node_id):
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         [self._prop_list.removeRow(i.row()) for i in items]
