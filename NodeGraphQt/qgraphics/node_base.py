@@ -225,10 +225,10 @@ class NodeItem(AbstractNodeItem):
         return super(NodeItem, self).itemChange(change, value)
 
     def _tooltip_disable(self, state):
-        tooltip = '<b>{}</b>'.format(self._properties['name'])
+        tooltip = '<b>{}</b>'.format(self.name)
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
-        tooltip += '<br/>{}<br/>'.format(self._properties['type_'])
+        tooltip += '<br/>{}<br/>'.format(self.type_)
         self.setToolTip(tooltip)
 
     def _set_base_size(self):

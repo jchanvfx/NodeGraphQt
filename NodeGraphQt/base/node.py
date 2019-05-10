@@ -57,7 +57,7 @@ class NodeObject(object):
     def type_(cls):
         """
         Node type identifier followed by the class name.
-        eg. com.chantasticvfx.MyNode
+        eg. nodeGraphQt.nodes.MyNode
 
         Returns:
             str: node type.
@@ -574,7 +574,7 @@ class BackdropNode(NodeObject):
         super(BackdropNode, self).__init__(BackdropNodeItem())
         # override base default color.
         self.model.color = (5, 129, 138, 255)
-        self.create_property('bg_text', '')
+        self.create_property('backdrop_text', '')
 
     def auto_size(self):
         """

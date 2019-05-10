@@ -163,6 +163,16 @@ class BackdropNodeItem(AbstractNodeItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRect(top_rect)
 
+        if self.backdrop_text:
+            painter.setPen(QtGui.QColor(*self.text_color))
+            txt_rect = QtCore.QRectF(
+                top_rect.x() + 5.0, top_rect.height() + 2.0,
+                rect.width() - 5.0, rect.height())
+            painter.setPen(QtGui.QColor(*self.text_color))
+            painter.drawText(txt_rect,
+                             QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap,
+                             self.backdrop_text)
+
         if self.selected and NODE_SEL_COLOR:
             sel_color = [x for x in NODE_SEL_COLOR]
             sel_color[-1] = 10
@@ -170,7 +180,7 @@ class BackdropNodeItem(AbstractNodeItem):
             painter.setPen(QtCore.Qt.NoPen)
             painter.drawRect(rect)
 
-        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y() + 1.5,
+        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y() + 1.2,
                                  rect.width(), top_rect.height())
         painter.setPen(QtGui.QColor(*self.text_color))
         painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
@@ -250,6 +260,7 @@ class BackdropNodeItem(AbstractNodeItem):
     @backdrop_text.setter
     def backdrop_text(self, text):
         self._properties['backdrop_text'] = text
+        self.update(self.boundingRect())
 
     @AbstractNodeItem.width.setter
     def width(self, width=0.0):
