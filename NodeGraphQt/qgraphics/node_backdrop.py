@@ -109,6 +109,12 @@ class BackdropNodeItem(AbstractNodeItem):
         self.scene().destroyItemGroup(group)
         return rect
 
+    def mouseDoubleClickEvent(self, event):
+        viewer = self.viewer()
+        if viewer:
+            viewer.node_double_clicked.emit(self.id)
+        super(BackdropNodeItem, self).mouseDoubleClickEvent(event)
+
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             pos = event.scenePos()

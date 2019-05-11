@@ -4,6 +4,7 @@ from NodeGraphQt.base.model import NodeModel
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QLINEEDIT,
+                                   NODE_PROP_QTEXTEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
                                    IN_PORT, OUT_PORT)
@@ -574,7 +575,8 @@ class BackdropNode(NodeObject):
         super(BackdropNode, self).__init__(BackdropNodeItem())
         # override base default color.
         self.model.color = (5, 129, 138, 255)
-        self.create_property('backdrop_text', '')
+        self.create_property('backdrop_text', '',
+                             widget_type=NODE_PROP_QTEXTEDIT, tab='Backdrop')
 
     def auto_size(self):
         """
