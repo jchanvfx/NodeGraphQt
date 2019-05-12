@@ -32,33 +32,6 @@ Node can be created with the tab node search widget.
 +-------------------+--------+
 
 
-Properties Bin
-==============
-
-.. image:: _images/prop_bin.png
-    :width: 950px
-
-.. code-block:: python
-    :linenos:
-
-    from NodeGraphQt import NodeGraph
-
-    graph = NodeGraph()
-
-    properties_bin = graph.properties_bin()
-    properties_bin.show()
-
-
-Menu Setup
-==========
-
-The NodeGraphQt has a ``setup_context_menu`` method that'll setup the node graphs with basic menus and commands.
-
-`(see line:32 in the example code below)`
-
-see also: :ref:`Menus`
-
-
 Example
 =======
 

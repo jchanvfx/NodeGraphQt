@@ -50,7 +50,7 @@ class NodeGraph(QtCore.QObject):
         self._undo_stack = QtWidgets.QUndoStack(self)
 
         self._properties_bin = None
-        self._nodes_list = None
+        self._nodes_tree = None
 
         tab = QtWidgets.QAction('Search Nodes', self)
         tab.setShortcut(tab_search_key)
@@ -252,17 +252,17 @@ class NodeGraph(QtCore.QObject):
             )
         return self._properties_bin
 
-    def nodes_list(self):
+    def nodes_tree(self):
         """
         Initializes the nodes list widget when first called.
 
         Returns:
             NodeTreeWidget: the initialized widget.
         """
-        if self._nodes_list is None:
-            self._nodes_list = NodeTreeWidget()
-            self._nodes_list.set_node_factory(self._node_factory)
-        return self._nodes_list
+        if self._nodes_tree is None:
+            self._nodes_tree = NodeTreeWidget()
+            self._nodes_tree.set_node_factory(self._node_factory)
+        return self._nodes_tree
 
     def undo_stack(self):
         """

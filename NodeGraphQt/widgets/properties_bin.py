@@ -114,7 +114,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Add node to the properties bin.
 
         Args:
-            node (NodeGraphQt.BaseNode): node object.
+            node (NodeGraphQt.NodeObject): node object.
         """
         if self.limit() == 0:
             return
@@ -157,7 +157,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Returns the node property widget.
 
         Args:
-            node (NodeGraphQt.BaseNode): node object.
+            node (NodeGraphQt.NodeObject): node object.
 
         Returns:
             NodePropWidget: node property widget.
