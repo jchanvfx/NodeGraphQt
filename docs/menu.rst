@@ -1,6 +1,20 @@
 Menus
 *****
 
+.. image:: _images/menu_hotkeys.png
+    :width: 50%
+
+The ``NodeGraphQt.setup_context_menu`` has a built in function that'll populate the node graphs context menu a few
+default menus and commands.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import NodeGraph, setup_context_menu
+
+    graph = NodeGraph()
+    setup_context_menu(graph)
+
 example adding "Foo" menu to the node graphs context menu.
 
 .. code-block:: python
@@ -29,23 +43,6 @@ add "Bar" command to the "Foo" menu.
 
     # add "Bar" command to the "Foo" menu.
     foo_menu.add_command('Bar', my_test, 'Shift+t')
-
-Default Setup
-=============
-
-.. image:: _images/menu_hotkeys.png
-    :width: 50%
-
-The ``NodeGraphQt.setup_context_menu`` has a built in function that'll populate the node graphs context menu a few
-default menus and commands.
-
-.. code-block:: python
-    :linenos:
-
-    from NodeGraphQt import NodeGraph, setup_context_menu
-
-    graph = NodeGraph()
-    setup_context_menu(graph)
 
 ----
 

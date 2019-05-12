@@ -55,11 +55,11 @@ if __name__ == '__main__':
 
 
     # show the nodes list when a node is "double clicked" in the graph.
-    node_list = graph.nodes_list()
+    node_tree = graph.nodes_tree()
     def show_nodes_list(node):
-        if not node_list.isVisible():
-            node_list.update()
-            node_list.show()
+        if not node_tree.isVisible():
+            node_tree.update()
+            node_tree.show()
     graph.node_double_clicked.connect(show_nodes_list)
 
 

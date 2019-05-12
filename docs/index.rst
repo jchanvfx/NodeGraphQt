@@ -1,10 +1,8 @@
-NodeGraphQt API
-***************
+NodeGraphQt
+***********
 
-Welcome to the ``NodeGraphQt`` api documentation and just like the project on GitHub this is also a work in progress.
+Welcome to the ``NodeGraphQt`` documentation.
 
-.. image:: _images/screenshot.png
-    :width: 95%
 
 Project: https://github.com/jchanvfx/NodeGraphQt
 
@@ -16,10 +14,9 @@ Contents
     :maxdepth: 3
 
     overview
-    graph
-    nodes
-    connections
-    menu
     constants
+    classes
+    widgets
+    menu
 
 
