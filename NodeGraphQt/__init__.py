@@ -30,7 +30,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '0.0.2.b1'
+__version__ = '0.0.2'
 __status__ = 'Work in Progress'
 __license__ = 'MIT'
 
