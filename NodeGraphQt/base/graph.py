@@ -41,7 +41,7 @@ class NodeGraph(QtCore.QObject):
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
-    def __init__(self, parent=None, tab_search_key='tab'):
+    def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
@@ -53,7 +53,7 @@ class NodeGraph(QtCore.QObject):
         self._nodes_tree = None
 
         tab = QtWidgets.QAction('Search Nodes', self)
-        tab.setShortcut(tab_search_key)
+        tab.setShortcut('tab')
         tab.triggered.connect(self._toggle_tab_search)
         self._viewer.addAction(tab)
 

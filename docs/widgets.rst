@@ -23,6 +23,7 @@ PropertiesBinWidget
 
 .. autoclass:: NodeGraphQt.widgets.properties_bin.PropertiesBinWidget
     :members:
+    :exclude-members: property_changed
 
 NodeTreeWidget
 ==============
@@ -45,3 +46,4 @@ NodeTreeWidget
 
 .. autoclass:: NodeGraphQt.widgets.node_tree.NodeTreeWidget
     :members:
+    :exclude-members: mimeData, set_node_factory, property_changed

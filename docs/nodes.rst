@@ -28,9 +28,32 @@ BaseNode
 
 The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows port connections from one node to another.
 
-
 .. image:: _images/node.png
     :width: 250px
+
+code snippet.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import BaseNode
+
+    class FooNode(BaseNode):
+
+        # unique node identifier domain.
+        __identifier__ = 'com.chantasticvfx'
+
+        # initial default node name.
+        NODE_NAME = 'Foo Node'
+
+        def __init__(self):
+            super(FooNode, self).__init__()
+
+            # create an input port.
+            self.add_input('in')
+
+            # create an output port.
+            self.add_output('out')
 
 ----
 

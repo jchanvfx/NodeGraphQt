@@ -48,10 +48,10 @@ example code:
     import sys
     from PySide2 import QtWidgets
 
-    from NodeGraphQt import NodeGraph, Node, setup_context_menu
+    from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
 
 
-    class FooNode(Node):
+    class FooNode(BaseNode):
 
         # unique node identifier domain.
         __identifier__ = 'com.chantasticvfx'

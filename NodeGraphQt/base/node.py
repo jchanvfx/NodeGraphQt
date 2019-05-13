@@ -30,7 +30,7 @@ class NodeObject(object):
     base class for all node objects.
 
     Args:
-        node (AbstractNodeItem): graphic item used for drawing.
+        qgraphics_item (AbstractNodeItem): graphic item used for drawing.
     """
 
     #: (str) unique node identifier domain.
@@ -39,13 +39,13 @@ class NodeObject(object):
     #: (str) base node name.
     NODE_NAME = None
 
-    def __init__(self, node=None):
-        assert node, 'node cannot be None.'
+    def __init__(self, qgraphics_item=None):
+        assert qgraphics_item, 'qgraphics item cannot be None.'
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
-        self._view = node
+        self._view = qgraphics_item
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
