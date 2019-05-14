@@ -30,7 +30,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __status__ = 'Work in Progress'
 __license__ = 'MIT'
 
@@ -39,6 +39,11 @@ __email__ = 'http://chantasticvfx.com/contact'
 
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
+
+__all__ = [
+    'NodeGraph', 'NodeObject', 'BaseNode', 'BackdropNode', 'Port',
+    'Menu', 'MenuCommand', 'setup_context_menu'
+]
 
 
 try:
@@ -49,8 +54,10 @@ except ImportError as ie:
     print('Cannot import "Qt.py" module falling back on '
           '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
-from .base.actions import setup_context_menu
 from .base.graph import NodeGraph
 from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
 from .base.menu import Menu, MenuCommand
+
+# functions
+from .base.actions import setup_context_menu

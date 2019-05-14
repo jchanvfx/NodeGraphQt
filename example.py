@@ -3,7 +3,10 @@
 import os
 import sys
 
-from NodeGraphQt import NodeGraph, BaseNode, BackdropNode, setup_context_menu
+from NodeGraphQt import (NodeGraph,
+                         BaseNode,
+                         BackdropNode,
+                         setup_context_menu)
 from NodeGraphQt import QtWidgets, QtCore
 
 # import example nodes from the "example_nodes" package

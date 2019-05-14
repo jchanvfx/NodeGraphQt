@@ -50,6 +50,9 @@ class PropertiesList(QtWidgets.QTableWidget):
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
+    """
+    Node properties bin for displaying properties.
+    """
 
     #: Signal emitted (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
