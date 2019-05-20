@@ -50,29 +50,21 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
                 name = 'xy_pos'
             setattr(view, name, value)
 
-    def update_prop_bin(self, name, value):
-        """
-        updates the property bin widget.
-        """
-        graph = self.node.graph
-        prop_bin = graph.properties_bin()
-        properties_wgt = prop_bin.prop_widget(self.node)
-        if properties_wgt:
-            prop_wgt = properties_wgt.get_widget(name)
-            # check if previous value is identical to current value,
-            # prevent signals from causing a infinite loop.
-            if prop_wgt and prop_wgt.get_value() != value:
-                prop_wgt.set_value(value)
-
     def undo(self):
         if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.old_val)
-            self.update_prop_bin(self.name, self.old_val)
+
+            # emit property changed signal.
+            graph = self.node.graph
+            graph.property_changed.emit(self.node, self.name, self.old_val)
 
     def redo(self):
         if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.new_val)
-            self.update_prop_bin(self.name, self.new_val)
+
+            # emit property changed signal.
+            graph = self.node.graph
+            graph.property_changed.emit(self.node, self.name, self.new_val)
 
 
 class NodeMovedCmd(QtWidgets.QUndoCommand):

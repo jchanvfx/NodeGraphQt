@@ -11,17 +11,17 @@ PropertiesBinWidget
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
+    from NodeGraphQt import NodeGraph, PropertiesBinWidget
 
     graph = NodeGraph()
 
     # create properties bin widget.
-    properties_bin = graph.properties_bin()
+    properties_bin = PropertiesBinWidget(node_graph=graph)
     properties_bin.show()
 
 ----
 
-.. autoclass:: NodeGraphQt.widgets.properties_bin.PropertiesBinWidget
+.. autoclass:: NodeGraphQt.PropertiesBinWidget
     :members:
     :exclude-members: property_changed
 

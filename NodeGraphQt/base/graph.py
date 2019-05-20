@@ -16,16 +16,12 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import DRAG_DROP_ID
 from NodeGraphQt.widgets.node_tree import NodeTreeWidget
-from NodeGraphQt.widgets.properties_bin import PropertiesBinWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
     """
     base node graph controller.
-
-    Args:
-        tab_search_key(str): hotkey for the tab search widget (default: "tab").
     """
 
     #: signal for when a node has been created in the node graph.
@@ -49,7 +45,6 @@ class NodeGraph(QtCore.QObject):
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
 
-        self._properties_bin = None
         self._nodes_tree = None
 
         tab = QtWidgets.QAction('Search Nodes', self)
@@ -80,9 +75,9 @@ class NodeGraph(QtCore.QObject):
         self._viewer.tab_search_set_nodes(self._node_factory.names)
         self._viewer.tab_search_toggle()
 
-    def _on_property_changed(self, node_id, prop_name, prop_value):
+    def _on_property_bin_changed(self, node_id, prop_name, prop_value):
         """
-        called when a property widget has changed in the properties bin.
+        called when a property widget has changed in a properties bin.
         (emits the node object, property name, property value)
 
         Args:
@@ -91,8 +86,10 @@ class NodeGraph(QtCore.QObject):
             prop_value (object): python object.
         """
         node = self.get_node_by_id(node_id)
-        node.set_property(prop_name, prop_value)
-        self.property_changed.emit(node, prop_name, prop_value)
+
+        # prevent signals from causing a infinite loop.
+        if node.get_property(prop_name) != prop_value:
+            node.set_property(prop_name, prop_value)
 
     def _on_node_double_clicked(self, node_id):
         """
@@ -103,9 +100,6 @@ class NodeGraph(QtCore.QObject):
             node_id (str): node id emitted by the viewer.
         """
         node = self.get_node_by_id(node_id)
-        if self._properties_bin:
-            self._properties_bin.add_node(node)
-
         self.node_double_clicked.emit(node)
 
     def _on_node_selected(self, node_id):
@@ -237,20 +231,14 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.scene()
 
-    def properties_bin(self):
+    def add_properties_bin(self, prop_bin):
         """
-        Initializes the node properties bin widget when first called.
+        Wire up a properties bin widget to the node graph.
 
-        Returns:
-            PropBinWidget: the initialized widget.
+        Args:
+            prop_bin (NodeGraphQt.PropertiesBinWidget): properties widget.
         """
-        if self._properties_bin is None:
-            self._properties_bin = PropertiesBinWidget()
-            # wire up widget.
-            self._properties_bin.property_changed.connect(
-                self._on_property_changed
-            )
-        return self._properties_bin
+        prop_bin.property_changed.connect(self._on_property_bin_changed)
 
     def nodes_tree(self):
         """

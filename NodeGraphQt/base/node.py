@@ -264,6 +264,8 @@ class NodeObject(object):
             name (str): name of the property.
             value (object): property data.
         """
+
+        # prevent signals from causing a infinite loop.
         if self.get_property(name) == value:
             return
 
