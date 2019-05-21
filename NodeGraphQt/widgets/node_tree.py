@@ -15,13 +15,21 @@ class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
 
 
 class NodeTreeWidget(QtWidgets.QTreeWidget):
+    """
+    Node tree for displaying node types.
 
-    def __init__(self, parent=None):
+    Args:
+        parent (QtWidgets.QWidget): parent of the new widget.
+        node_graph (NodeGraphQt.NodeGraph): node graph.
+    """
+
+    def __init__(self, parent=None, node_graph=None):
         super(NodeTreeWidget, self).__init__(parent)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragOnly)
         self.setHeaderHidden(True)
         self._factory = None
         self._custom_labels = {}
+        self._set_node_factory(node_graph._node_factory)
 
     def __repr__(self):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -66,7 +74,7 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
 
             category_item.addChild(item)
 
-    def set_node_factory(self, factory):
+    def _set_node_factory(self, factory):
         """
         Set current node factory.
 
@@ -87,6 +95,6 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
 
     def update(self):
         """
-        Update and refresh the node list widget.
+        Update and refresh the node tree widget.
         """
         self._build_tree()

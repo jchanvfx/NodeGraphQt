@@ -17,6 +17,3 @@ Contents
     constants
     classes
     widgets
-    menu
-
-

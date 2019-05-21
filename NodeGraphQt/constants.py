@@ -60,7 +60,6 @@ NODE_PROP_SLIDER = 9
 
 # === NODE VIEWER ===
 
-#: Node graph background color.
 VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_OVERLAY = True

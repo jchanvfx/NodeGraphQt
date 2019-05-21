@@ -54,7 +54,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     Node properties bin for displaying properties.
 
     Args:
-        parent (QtWidgets.QWidget): parent object.
+        parent (QtWidgets.QWidget): parent of the new widget.
         node_graph (NodeGraphQt.NodeGraph): node graph.
     """
 

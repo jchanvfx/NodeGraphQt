@@ -42,8 +42,8 @@ __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
 __all__ = [
     'BackdropNode', 'BaseNode', 'Menu', 'MenuCommand', 'NodeGraph',
-    'NodeObject', 'Port', 'PropertiesBinWidget', 'constants',
-    'setup_context_menu'
+    'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget',
+    'constants', 'setup_context_menu'
 ]
 
 try:
@@ -63,4 +63,5 @@ from .base.menu import Menu, MenuCommand
 from .base.actions import setup_context_menu
 
 # widgets
+from .widgets.node_tree import NodeTreeWidget
 from .widgets.properties_bin import PropertiesBinWidget

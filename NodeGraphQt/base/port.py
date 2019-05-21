@@ -28,7 +28,7 @@ class Port(object):
         returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
-            PortItem: port item.
+            NodeGraphQt.qgraphics.port.PortItem: port item.
         """
         return self.__view
 
@@ -38,7 +38,7 @@ class Port(object):
         returns the port model.
 
         Returns:
-            PortModel: port model.
+            NodeGraphQt.base.model.PortModel: port model.
         """
         return self.__model
 

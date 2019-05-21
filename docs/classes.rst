@@ -11,3 +11,4 @@ Classes
     graph
     nodes
     connections
+    menu

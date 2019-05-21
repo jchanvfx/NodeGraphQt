@@ -15,7 +15,6 @@ from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import DRAG_DROP_ID
-from NodeGraphQt.widgets.node_tree import NodeTreeWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
@@ -44,8 +43,6 @@ class NodeGraph(QtCore.QObject):
         self._viewer = NodeViewer(parent)
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
-
-        self._nodes_tree = None
 
         tab = QtWidgets.QAction('Search Nodes', self)
         tab.setShortcut('tab')
@@ -231,6 +228,55 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.scene()
 
+    def background_color(self):
+        """
+        Return the node graph background color.
+
+        Returns:
+            tuple: r, g ,b
+        """
+        return self.scene().background_color
+
+    def set_background_color(self, r, g, b):
+        """
+        Set node graph background color.
+
+        Args:
+            r (int): red value.
+            g (int): green value.
+            b (int): blue value.
+        """
+        self.scene().background_color = (r, g, b)
+
+    def grid_color(self):
+        """
+        Return the node graph grid color.
+
+        Returns:
+            tuple: r, g ,b
+        """
+        return self.scene().grid_color
+
+    def set_grid_color(self, r, g, b):
+        """
+        Set node graph grid color.
+
+        Args:
+            r (int): red value.
+            g (int): green value.
+            b (int): blue value.
+        """
+        self.scene().grid_color = (r, g, b)
+
+    def display_grid(self, display=True):
+        """
+        Display node graph background grid.
+
+        Args:
+            display: False to not draw the background grid.
+        """
+        self.scene().grid = display
+
     def add_properties_bin(self, prop_bin):
         """
         Wire up a properties bin widget to the node graph.
@@ -239,18 +285,6 @@ class NodeGraph(QtCore.QObject):
             prop_bin (NodeGraphQt.PropertiesBinWidget): properties widget.
         """
         prop_bin.property_changed.connect(self._on_property_bin_changed)
-
-    def nodes_tree(self):
-        """
-        Initializes the nodes list widget when first called.
-
-        Returns:
-            NodeTreeWidget: the initialized widget.
-        """
-        if self._nodes_tree is None:
-            self._nodes_tree = NodeTreeWidget()
-            self._nodes_tree.set_node_factory(self._node_factory)
-        return self._nodes_tree
 
     def undo_stack(self):
         """
@@ -303,12 +337,12 @@ class NodeGraph(QtCore.QObject):
         """
         return self._model.acyclic
 
-    def set_acyclic(self, mode=True):
+    def set_acyclic(self, mode=False):
         """
-        Set the node graph to be acyclic or not. (default=True)
+        Enable the node graph to be a acyclic graph. (default=False)
 
         Args:
-            mode (bool): false to disable acyclic.
+            mode (bool): true to enable acyclic.
         """
         self._model.acyclic = mode
         self._viewer.acyclic = mode

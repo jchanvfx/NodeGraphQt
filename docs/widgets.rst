@@ -13,6 +13,7 @@ PropertiesBinWidget
 
     from NodeGraphQt import NodeGraph, PropertiesBinWidget
 
+    # create node graph.
     graph = NodeGraph()
 
     # create properties bin widget.
@@ -34,12 +35,13 @@ NodeTreeWidget
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
+    from NodeGraphQt import NodeGraph, NodeTreeWidget
 
+    # create node graph.
     graph = NodeGraph()
 
     # create node tree widget.
-    nodes_tree = graph.nodes_tree()
+    nodes_tree = NodeTreeWidget(node_graph=graph)
     nodes_tree.show()
 
 ----

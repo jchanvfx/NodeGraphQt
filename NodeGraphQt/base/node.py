@@ -91,16 +91,16 @@ class NodeObject(object):
         Returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
-            AbstractNodeItem: node item.
+            NodeGraphQt.qgraphics.node_abstract.AbstractNodeItem: node item.
         """
         return self._view
 
     def set_view(self, item):
         """
-        Sets the graphic item to use for the scene.
+        Sets the qgraphics item to use for the scene.
 
         Args:
-            item (AbstractNodeItem): node view item.
+            item (NodeGraphQt.qgraphics.node_abstract.AbstractNodeItem): node item.
         """
         self._view = item
         self._view.id = self.model.id
@@ -109,14 +109,20 @@ class NodeObject(object):
     @property
     def model(self):
         """
-        Returns the node model.
+        Return the node model.
 
         Returns:
-            NodeModel: node model object.
+            NodeGraphQt.base.model.NodeModel: node model object.
         """
         return self._model
 
     def set_model(self, model):
+        """
+        Set the node model.
+
+        Args:
+            model (NodeGraphQt.base.model.NodeModel): node model object.
+        """
         self._model = model
         self._model.type_ = self.type_
         self._model.id = self.view.id
