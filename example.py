@@ -7,7 +7,7 @@ from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
                          setup_context_menu)
-from NodeGraphQt import QtWidgets, QtCore
+from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
 
     # show the properties bin when a node is "double clicked" in the graph.
-    properties_bin = graph.properties_bin()
+    properties_bin = PropertiesBinWidget(node_graph=graph)
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
     def show_prop_bin(node):
         if not properties_bin.isVisible():
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
 
     # show the nodes list when a node is "double clicked" in the graph.
-    node_tree = graph.nodes_tree()
+    node_tree = NodeTreeWidget(node_graph=graph)
     def show_nodes_list(node):
         if not node_tree.isVisible():
             node_tree.update()

@@ -41,10 +41,10 @@ __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
 
 __all__ = [
-    'NodeGraph', 'NodeObject', 'BaseNode', 'BackdropNode', 'Port',
-    'Menu', 'MenuCommand', 'setup_context_menu'
+    'BackdropNode', 'BaseNode', 'Menu', 'MenuCommand', 'NodeGraph',
+    'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget',
+    'constants', 'setup_context_menu'
 ]
-
 
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat
@@ -61,3 +61,7 @@ from .base.menu import Menu, MenuCommand
 
 # functions
 from .base.actions import setup_context_menu
+
+# widgets
+from .widgets.node_tree import NodeTreeWidget
+from .widgets.properties_bin import PropertiesBinWidget

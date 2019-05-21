@@ -330,7 +330,7 @@ class NodePropWidget(QtWidgets.QWidget):
     Node properties widget for display a Node object.
 
     Args:
-        parent:
+        parent (QtWidgets.QWidget): parent object.
         node (NodeGraphQt.BaseNode): node.
     """
 
