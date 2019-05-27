@@ -23,11 +23,13 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
     """
 
-    #: signal for when a node has been created in the node graph.
+    #: signal triggered when a node has been created in the node graph.
     node_created = QtCore.Signal(NodeObject)
-    #: signal for when a node is selected.
+    #: signal triggered when nodes has been deleted in the node graph.
+    nodes_deleted = QtCore.Signal(list)
+    #: signal triggered when a node is selected.
     node_selected = QtCore.Signal(NodeObject)
-    #: signal for when a node is double clicked.
+    #: signal triggered when a node is double clicked.
     node_double_clicked = QtCore.Signal(NodeObject)
     #: signal for when a node has been connected.
     port_connected = QtCore.Signal(Port, Port)
@@ -527,6 +529,7 @@ class NodeGraph(QtCore.QObject):
         """
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
+        self.nodes_deleted.emit([node.id])
         self._undo_stack.push(NodeRemovedCmd(self, node))
 
     def delete_nodes(self, nodes):
@@ -536,8 +539,9 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
         """
+        self.nodes_deleted.emit([n.id for n in nodes])
         self._undo_stack.beginMacro('delete nodes')
-        [self.delete_node(n) for n in nodes]
+        [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
         self._undo_stack.endMacro()
 
     def all_nodes(self):

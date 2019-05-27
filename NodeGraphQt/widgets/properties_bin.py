@@ -91,6 +91,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         # wire up node graph.
         node_graph.add_properties_bin(self)
         node_graph.node_double_clicked.connect(self.add_node)
+        node_graph.nodes_deleted.connect(self.__on_nodes_deleted)
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
     def __repr__(self):
@@ -104,6 +105,15 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         rows = self._prop_list.rowCount()
         if rows > value:
             self._prop_list.removeRow(rows - 1)
+
+    def __on_nodes_deleted(self, nodes):
+        """
+        Slot function when a node has been deleted.
+
+        Args:
+            nodes (list[str]): list of node ids.
+        """
+        [self.__on_prop_close(n) for n in nodes]
 
     def __on_graph_property_changed(self, node, prop_name, prop_value):
         """
@@ -187,9 +197,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Remove node from the properties bin.
 
         Args:
-            node (NodeGraphQt.BaseNode): node object.
+            node (str or NodeGraphQt.BaseNode): node id or node object.
         """
-        self.__on_prop_close(node.id)
+        node_id = node if isinstance(node, str) else node.id
+        self.__on_prop_close(node_id)
 
     def clear_bin(self):
         """
@@ -202,12 +213,13 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Returns the node property widget.
 
         Args:
-            node (NodeGraphQt.NodeObject): node object.
+            node (str or NodeGraphQt.NodeObject): node id or node object.
 
         Returns:
             NodePropWidget: node property widget.
         """
-        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        node_id = node if isinstance(node, str) else node.id
+        itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         if itm_find:
             item = itm_find[0]
             return self._prop_list.cellWidget(item.row(), 0)
