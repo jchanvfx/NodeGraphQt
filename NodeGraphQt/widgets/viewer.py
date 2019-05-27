@@ -88,10 +88,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- private ---
 
-    def _set_viewer_zoom(self, value):
+    def _set_viewer_zoom(self, value, sensitivity=0.0):
         if value == 0.0:
             return
-        scale = 0.9 if value < 0.0 else 1.1
+        scale = (0.9 + sensitivity) if value < 0.0 else (1.1 - sensitivity)
         zoom = self.get_zoom()
         if ZOOM_MIN >= zoom:
             if scale == 0.9:
@@ -214,7 +214,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if self.MMB_state and alt_modifier:
             pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
-            self._set_viewer_zoom(zoom)
+            self._set_viewer_zoom(zoom, 0.05)
         elif self.MMB_state or (self.LMB_state and alt_modifier):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
