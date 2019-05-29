@@ -26,8 +26,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/jchanvfx/NodeGraphQt',
-    packages=['NodeGraphQt'],
+    packages=setuptools.find_packages(exclude=["example_nodes"]),
     classifiers=classifiers,
+    include_package_data=True,
 )
 
 
