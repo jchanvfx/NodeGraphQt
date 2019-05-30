@@ -5,8 +5,13 @@ Widgets
 PropertiesBinWidget
 ===================
 
+The ``PropertiesBinWidget`` is a list widget for displaying and editing a
+nodes properties.
+
 .. image:: _images/prop_bin.png
     :width: 950px
+
+example
 
 .. code-block:: python
     :linenos:
@@ -17,7 +22,7 @@ PropertiesBinWidget
     graph = NodeGraph()
 
     # create properties bin widget.
-    properties_bin = PropertiesBinWidget(node_graph=graph)
+    properties_bin = PropertiesBinWidget(parent=None, node_graph=graph)
     properties_bin.show()
 
 ----
@@ -29,8 +34,13 @@ PropertiesBinWidget
 NodeTreeWidget
 ==============
 
+The ``NodeTreeWidget`` is a widget for displaying all registered nodes from the
+node graph with this widget a user can create nodes by dragging and dropping.
+
 .. image:: _images/nodes_tree.png
     :width: 300px
+
+example
 
 .. code-block:: python
     :linenos:
@@ -41,7 +51,7 @@ NodeTreeWidget
     graph = NodeGraph()
 
     # create node tree widget.
-    nodes_tree = NodeTreeWidget(node_graph=graph)
+    nodes_tree = NodeTreeWidget(parent=None, node_graph=graph)
     nodes_tree.show()
 
 ----
