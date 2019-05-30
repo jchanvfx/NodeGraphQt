@@ -11,6 +11,10 @@ TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
 class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
 
     def __eq__(self, other):
+        """
+        Workaround fix for QTreeWidgetItem "operator not implemented error".
+        see link: https://bugreports.qt.io/browse/PYSIDE-74
+        """
         return id(self) == id(other)
 
 
