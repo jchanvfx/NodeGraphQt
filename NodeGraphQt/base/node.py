@@ -620,22 +620,22 @@ class BackdropNode(NodeObject):
         """
         return self.get_property('backdrop_text')
 
-    def set_size(self, size=None):
+    def set_size(self, width, height):
         """
         Sets the backdrop size.
 
         Args:
-            size (tuple): width, height size.
+            width (float): backdrop width size.
+            height (float): backdrop height size.
         """
-        if size:
-            if self.graph:
-                self.graph.begin_undo('backdrop size')
-                self.set_property('width', size[0])
-                self.set_property('height', size[1])
-                self.graph.end_undo()
-                return
-            self.view.width, self.view.height = size
-            self.model.width, self.model.height = size
+        if self.graph:
+            self.graph.begin_undo('backdrop size')
+            self.set_property('width', width)
+            self.set_property('height', height)
+            self.graph.end_undo()
+            return
+        self.view.width, self.view.height = width, height
+        self.model.width, self.model.height = width, height
 
     def size(self):
         """
