@@ -2,6 +2,7 @@
 from NodeGraphQt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (VIEWER_BG_COLOR,
+                                   VIEWER_GRID_SIZE,
                                    VIEWER_GRID_OVERLAY,
                                    VIEWER_GRID_COLOR)
 
@@ -47,17 +48,16 @@ class NodeScene(QtWidgets.QGraphicsScene):
             return
 
         zoom = self.viewer().get_zoom()
-        grid_size = 20
 
         if zoom > -0.5:
             pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
-            self._draw_grid(painter, rect, pen, grid_size)
+            self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE)
 
         color = bg_color.darker(150)
         if zoom < -0.0:
             color = color.darker(100 - int(zoom * 110))
         pen = QtGui.QPen(color, 0.65)
-        self._draw_grid(painter, rect, pen, grid_size * 8)
+        self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE * 8)
 
         # fix border issue on the scene edge.
         pen = QtGui.QPen(bg_color, 2)
