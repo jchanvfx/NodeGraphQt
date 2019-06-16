@@ -13,7 +13,7 @@ PIPE_DEFAULT_COLOR = (150, 80, 40, 255)
 PIPE_DISABLED_COLOR = (190, 20, 20, 255)
 PIPE_ACTIVE_COLOR = (70, 255, 220, 255)
 PIPE_HIGHLIGHT_COLOR = (232, 184, 13, 255)
-PIPE_SLICER_COLOR = (140, 255, 170)
+PIPE_SLICER_COLOR = (255, 50, 75)
 #: The draw the connection pipes as straight lines.
 PIPE_LAYOUT_STRAIGHT = 0
 #: The draw the connection pipes as curved lines.
