@@ -59,6 +59,7 @@ class NodeGraph(QtCore.QObject):
     def _wire_signals(self):
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
+        self._viewer.connection_sliced.connect(self._on_connection_sliced)
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
@@ -187,6 +188,17 @@ class NodeGraph(QtCore.QObject):
             port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
             port1.connect_to(port2)
         self._undo_stack.endMacro()
+
+    def _on_connection_sliced(self, ports):
+        """
+        slot when connection pipes have been sliced.
+
+        Args:
+            ports (list[list[widgets.port.PortItem]]):
+                pair list of port connections (in port, out port)
+        """
+        for in_port, out_port in ports:
+            print(in_port, out_port)
 
     @property
     def model(self):
