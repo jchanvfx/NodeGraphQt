@@ -197,8 +197,17 @@ class NodeGraph(QtCore.QObject):
             ports (list[list[widgets.port.PortItem]]):
                 pair list of port connections (in port, out port)
         """
-        for in_port, out_port in ports:
-            print(in_port, out_port)
+        if not ports:
+            return
+        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        self._undo_stack.beginMacro('slice connections')
+        for p1_view, p2_view in ports:
+            node1 = self._model.nodes[p1_view.node.id]
+            node2 = self._model.nodes[p2_view.node.id]
+            port1 = getattr(node1, ptypes[p1_view.port_type])()[p1_view.name]
+            port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
+            port1.disconnect_from(port2)
+        self._undo_stack.endMacro()
 
     @property
     def model(self):
