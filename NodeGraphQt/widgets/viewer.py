@@ -6,14 +6,13 @@ from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,
-                                   PIPE_SLICER_COLOR,
                                    PIPE_STYLE_DASHED,
-                                   Z_VAL_NODE_WIDGET,
                                    SCENE_AREA)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import Pipe
 from NodeGraphQt.qgraphics.port import PortItem
+from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 from NodeGraphQt.widgets.tab_search import TabSearchWidget
@@ -66,12 +65,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._rubber_band = QtWidgets.QRubberBand(
             QtWidgets.QRubberBand.Rectangle, self
         )
-        slicer_color = QtGui.QColor(*PIPE_SLICER_COLOR)
-        slicer_pen = QtGui.QPen(slicer_color, 1.5, QtCore.Qt.DashLine)
-        self._pipe_slicer = QtWidgets.QGraphicsLineItem()
-        self._pipe_slicer.setPen(slicer_pen)
+        self._pipe_slicer = SlicerPipe()
         self._pipe_slicer.setVisible(False)
-        self._pipe_slicer.setZValue(Z_VAL_NODE_WIDGET + 2)
         self.scene().addItem(self._pipe_slicer)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
@@ -137,10 +132,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = self.mapToScene(self._previous_pos)
         self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
-    def _on_pipes_sliced(self, line):
-        path = QtGui.QPainterPath()
-        path.moveTo(line.p1())
-        path.lineTo(line.p2())
+    def _on_pipes_sliced(self, path):
         self.connection_sliced.emit([
             [i.input_port, i.output_port]
             for i in self.scene().items(path) if isinstance(i, Pipe)
@@ -178,7 +170,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # pipe slicer enabled.
         if event.modifiers() == (QtCore.Qt.AltModifier | QtCore.Qt.ShiftModifier):
-            self._pipe_slicer.setLine(QtCore.QLineF(map_pos, map_pos))
+            self._pipe_slicer.draw_path(map_pos, map_pos)
             self._pipe_slicer.setVisible(True)
             return
 
@@ -220,8 +212,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # hide pipe slicer.
         if self._pipe_slicer.isVisible():
-            self._on_pipes_sliced(self._pipe_slicer.line())
-            self._pipe_slicer.setLine(QtCore.QLineF(0.0, 0.0, 0.0, 0.0))
+            self._on_pipes_sliced(self._pipe_slicer.path())
+            p = QtCore.QPointF(0.0, 0.0)
+            self._pipe_slicer.draw_path(p, p)
             self._pipe_slicer.setVisible(False)
 
         # hide selection marquee
@@ -249,9 +242,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         shift_modifier = event.modifiers() == QtCore.Qt.ShiftModifier
         if event.modifiers() == (QtCore.Qt.AltModifier | QtCore.Qt.ShiftModifier):
             if self.LMB_state:
-                p1 = self._pipe_slicer.line().p1()
+                p1 = self._pipe_slicer.path().pointAtPercent(0)
                 p2 = self.mapToScene(self._previous_pos)
-                self._pipe_slicer.setLine(QtCore.QLineF(p1, p2))
+                self._pipe_slicer.draw_path(p1, p2)
                 self._previous_pos = event.pos()
                 super(NodeViewer, self).mouseMoveEvent(event)
                 return
