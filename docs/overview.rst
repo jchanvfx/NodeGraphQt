@@ -23,6 +23,7 @@ Port Connections
 .. image:: _images/slicer.png
     :width: 600px
 
+Connection pipes can be disconnected easily with the built in slice tool.
 
 +---------------------+----------------------------+
 | action              | controls                   |
