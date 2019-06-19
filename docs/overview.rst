@@ -17,6 +17,21 @@ Navigation
 | Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
 +---------------+----------------------------------------------+
 
+Port Connections
+================
+
+.. image:: _images/slicer.png
+    :width: 600px
+
+Connection pipes can be disconnected easily with the built in slice tool.
+
++---------------------+----------------------------+
+| action              | controls                   |
++=====================+============================+
+| Slice connections   | *Alt + Shift + LMB + Drag* |
++---------------------+----------------------------+
+
+
 Node Search
 ===========
 

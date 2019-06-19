@@ -59,6 +59,7 @@ class NodeGraph(QtCore.QObject):
     def _wire_signals(self):
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
+        self._viewer.connection_sliced.connect(self._on_connection_sliced)
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
@@ -186,6 +187,26 @@ class NodeGraph(QtCore.QObject):
             port1 = getattr(node1, ptypes[p1_view.port_type])()[p1_view.name]
             port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
             port1.connect_to(port2)
+        self._undo_stack.endMacro()
+
+    def _on_connection_sliced(self, ports):
+        """
+        slot when connection pipes have been sliced.
+
+        Args:
+            ports (list[list[widgets.port.PortItem]]):
+                pair list of port connections (in port, out port)
+        """
+        if not ports:
+            return
+        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        self._undo_stack.beginMacro('slice connections')
+        for p1_view, p2_view in ports:
+            node1 = self._model.nodes[p1_view.node.id]
+            node2 = self._model.nodes[p2_view.node.id]
+            port1 = getattr(node1, ptypes[p1_view.port_type])()[p1_view.name]
+            port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
+            port1.disconnect_from(port2)
         self._undo_stack.endMacro()
 
     @property

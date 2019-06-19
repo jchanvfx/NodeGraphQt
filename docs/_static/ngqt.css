@@ -43,13 +43,18 @@ code span.pre {
 }
 
 /* tables */
-table.docutils td, table.docutils th {
+table.docutils td, 
+table.docutils th {
     padding: 4px 8px;
     border-top: 0;
     border-left: 0;
     border-right: 2px solid #2b2c2f;
     border-bottom: 2px solid #2b2c2f;
     background: #24272b;
+}
+
+table.align-center {
+    margin-left: unset;
 }
 
 /*-----------------------------------------*/

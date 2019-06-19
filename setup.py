@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 import setuptools
 
-from NodeGraphQt import __version__ as version
+import NodeGraphQt
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
+
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
 
 description = (
     'Node graph framework that can be re-implemented into applications that '
@@ -19,7 +22,8 @@ classifiers = [
 
 setuptools.setup(
     name='NodeGraphQt',
-    version=version,
+    version=NodeGraphQt.__version__,
+    install_requires=requirements,
     author='Johnny Chan',
     author_email='johnny@chantasticvfx.com',
     description=description,
@@ -28,7 +32,7 @@ setuptools.setup(
     url='https://github.com/jchanvfx/NodeGraphQt',
     packages=setuptools.find_packages(exclude=["example_nodes"]),
     classifiers=classifiers,
-    include_package_data=True,
+    include_package_data=True
 )
 
 
