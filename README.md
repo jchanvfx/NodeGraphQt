@@ -7,7 +7,7 @@
 ---
 
 NodeGraphQt is a node graph framework that can be implemented and re purposed into 
-applications that supports PySide and PySide2.
+applications that supports PySide2.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
@@ -30,7 +30,8 @@ http://chantasticvfx.com/nodeGraphQt/html/index.html
 
 ```python
 import sys
-from PySide2 import QtWidgets
+
+from NodeGraphQt import QtWidgets
 from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
 
 # create a example node object with a input/output port.
