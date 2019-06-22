@@ -321,7 +321,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
         if not self._start_port:
             return
+
         pos = event.scenePos()
+        items = self.scene().items(pos)
+        if items and isinstance(items[0], PortItem):
+            y = items[0].boundingRect().height() / 2
+            pos = items[0].scenePos()
+            pos.setY(pos.y() + y)
+
         self._live_pipe.draw_path(self._start_port, None, pos)
 
     def sceneMousePressEvent(self, event):
