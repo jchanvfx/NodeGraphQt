@@ -61,8 +61,8 @@ example code:
     :linenos:
 
     import sys
-    from PySide2 import QtWidgets
 
+    from NodeGraphQt import QtWidgets
     from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
 
 

@@ -234,8 +234,8 @@ class NodeObject(object):
             value (object): data.
             items (list[str]): items used by widget type NODE_PROP_QCOMBO
             range (tuple)): min, max values used by NODE_PROP_SLIDER
-            widget_type (int): widget type flag (not implemented yet).
-            tab (str): name of the widget tab to display in.
+            widget_type (int): widget flag to display in the properties bin.
+            tab (str): name of the widget tab to display in the properties bin.
         """
         self.model.add_property(name, value, items, range, widget_type, tab)
 
