@@ -53,11 +53,6 @@ class PortItem(QtWidgets.QGraphicsItem):
             widget (QtWidgets.QWidget): not used.
         """
         painter.save()
-
-        rect = QtCore.QRectF(0.0, 0.8, self._width, self._height)
-        path = QtGui.QPainterPath()
-        path.addEllipse(rect)
-
         if self._hovered:
             color = QtGui.QColor(*PORT_HOVER_COLOR)
             border_color = QtGui.QColor(*PORT_HOVER_BORDER_COLOR)
@@ -94,7 +89,6 @@ class PortItem(QtWidgets.QGraphicsItem):
                                  self.boundingRect().center().y() - h / 2,
                                  w, h)
             painter.drawEllipse(rect)
-
         painter.restore()
 
     def itemChange(self, change, value):

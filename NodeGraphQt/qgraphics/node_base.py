@@ -290,12 +290,13 @@ class NodeItem(AbstractNodeItem):
         """
         width = 0.0
         if self._widgets:
-            widget_widths = [
-                w.boundingRect().width() for w in self._widgets.values()]
-            width = max(widget_widths)
+            width = max([
+                w.boundingRect().width() for w in self._widgets.values()
+            ])
 
         lbl_width = self._text_item.boundingRect().width()
-        width = lbl_width if lbl_width > width else width
+        if lbl_width > width:
+            width = lbl_width
 
         port_height = 0.0
         if self._input_items:
