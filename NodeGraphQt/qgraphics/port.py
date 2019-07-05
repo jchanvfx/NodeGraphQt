@@ -22,8 +22,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
         self._pipes = []
-        self._width = 10.0
-        self._height = 10.0
+        self._width = 18.5
+        self._height = 18.5
         self._hovered = False
         self._name = 'port'
         self._display_name = True
@@ -53,6 +53,13 @@ class PortItem(QtWidgets.QGraphicsItem):
             widget (QtWidgets.QWidget): not used.
         """
         painter.save()
+
+        rect_w = self._width / 1.5
+        rect_h = self._height / 1.5
+        rect_x = self._width - (rect_w * 1.25)
+        rect_y = self._height - (rect_h * 1.25)
+        port_rect = QtCore.QRectF(rect_x, rect_y, rect_w, rect_h)
+
         if self._hovered:
             color = QtGui.QColor(*PORT_HOVER_COLOR)
             border_color = QtGui.QColor(*PORT_HOVER_BORDER_COLOR)
@@ -64,29 +71,31 @@ class PortItem(QtWidgets.QGraphicsItem):
             border_color = QtGui.QColor(*self.border_color)
 
         painter.setBrush(color)
-        pen = QtGui.QPen(border_color, 1.5)
+        pen = QtGui.QPen(border_color, 1.8)
         painter.setPen(pen)
-        painter.drawEllipse(self.boundingRect())
+        painter.drawEllipse(port_rect)
 
         if self.connected_pipes and not self._hovered:
             painter.setBrush(border_color)
-            w = self._width / 2.5
-            h = self._height / 2.5
-            rect = QtCore.QRectF(self.boundingRect().center().x() - w / 2,
-                                 self.boundingRect().center().y() - h / 2,
+            w = port_rect.width() / 2.5
+            h = port_rect.height() / 2.5
+            rect = QtCore.QRectF(port_rect.center().x() - w / 2,
+                                 port_rect.center().y() - h / 2,
                                  w, h)
             painter.drawEllipse(rect)
         elif self._hovered:
             if self.multi_connection:
+                pen = QtGui.QPen(border_color, 1.4)
+                painter.setPen(pen)
                 painter.setBrush(color)
-                w = self._width / 1.8
-                h = self._height / 1.8
+                w = port_rect.width() / 1.8
+                h = port_rect.height() / 1.8
             else:
                 painter.setBrush(border_color)
-                w = self._width / 3.5
-                h = self._height / 3.5
-            rect = QtCore.QRectF(self.boundingRect().center().x() - w / 2,
-                                 self.boundingRect().center().y() - h / 2,
+                w = port_rect.width() / 3.5
+                h = port_rect.height() / 3.5
+            rect = QtCore.QRectF(port_rect.center().x() - w / 2,
+                                 port_rect.center().y() - h / 2,
                                  w, h)
             painter.drawEllipse(rect)
         painter.restore()
