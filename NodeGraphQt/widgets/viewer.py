@@ -7,7 +7,8 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
                                    PIPE_LAYOUT_STRAIGHT,
                                    PIPE_STYLE_DASHED,
-                                   SCENE_AREA)
+                                   SCENE_AREA,
+                                   Z_VAL_NODE_WIDGET)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import Pipe
@@ -325,8 +326,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = event.scenePos()
         items = self.scene().items(pos)
         if items and isinstance(items[0], PortItem):
+            x = items[0].boundingRect().width() / 2
             y = items[0].boundingRect().height() / 2
             pos = items[0].scenePos()
+            pos.setX(pos.x() + x)
             pos.setY(pos.y() + y)
 
         self._live_pipe.draw_path(self._start_port, None, pos)
@@ -381,6 +384,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pipe = pipe_items[0]
             attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
             from_port = pipe.port_from_pos(pos, True)
+            from_port._hovered = True
 
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
@@ -398,6 +402,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         if not self._live_pipe:
             return
+
+        self._start_port._hovered = False
 
         # find the end port.
         end_port = None
@@ -475,6 +481,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
         self._start_port = selected_port
         self._live_pipe = Pipe()
+        self._live_pipe.setZValue(Z_VAL_NODE_WIDGET)
         self._live_pipe.activate()
         self._live_pipe.style = PIPE_STYLE_DASHED
         if self._start_port.type == IN_PORT:

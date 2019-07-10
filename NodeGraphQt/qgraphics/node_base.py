@@ -5,7 +5,7 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                                   Z_VAL_NODE, Z_VAL_NODE_WIDGET)
+                                   PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET)
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.port import PortItem
@@ -194,7 +194,7 @@ class NodeItem(AbstractNodeItem):
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
-            start = PortItem().boundingRect().width()
+            start = PortItem().boundingRect().width() - PORT_FALLOFF
             end = self.boundingRect().width() - start
             x_pos = event.pos().x()
             if not start <= x_pos <= end:
@@ -300,17 +300,19 @@ class NodeItem(AbstractNodeItem):
         height = self._text_item.boundingRect().height()
 
         if self._widgets:
-            width = max([
+            wid_width = max([
                 w.boundingRect().width() for w in self._widgets.values()
             ])
+            if width < wid_width:
+                width = wid_width
 
         port_height = 0.0
         if self._input_items:
             input_widths = []
             for port, text in self._input_items.items():
-                input_width = port.boundingRect().width()
+                input_width = port.boundingRect().width() - PORT_FALLOFF
                 if text.isVisible():
-                    input_width += text.boundingRect().width()
+                    input_width += text.boundingRect().width() / 1.5
                 input_widths.append(input_width)
             width += max(input_widths)
             port_height = port.boundingRect().height()
@@ -320,7 +322,7 @@ class NodeItem(AbstractNodeItem):
             for port, text in self._output_items.items():
                 output_width = port.boundingRect().width()
                 if text.isVisible():
-                    output_width += text.boundingRect().width()
+                    output_width += text.boundingRect().width() / 1.5
                 output_widths.append(output_width)
             width += max(output_widths)
             port_height = port.boundingRect().height()
@@ -395,6 +397,8 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): port vertical offset.
         """
         width = self._width
+        txt_offset = PORT_FALLOFF - 2
+        spacing = 1
 
         # adjust input position
         inputs = [p for p in self.inputs if p.isVisible()]
@@ -405,11 +409,12 @@ class NodeItem(AbstractNodeItem):
             port_y = v_offset
             for port in inputs:
                 port.setPos(port_x, port_y)
-                port_y += port_height
+                port_y += port_height + spacing
         # adjust input text position
         for port, text in self._input_items.items():
             if port.isVisible():
-                text.setPos(port.boundingRect().width() / 2, port.y() - 1.5)
+                txt_x = port.boundingRect().width() / 2 - txt_offset
+                text.setPos(txt_x, port.y() - 1.5)
 
         # adjust output position
         outputs = [p for p in self.outputs if p.isVisible()]
@@ -420,14 +425,13 @@ class NodeItem(AbstractNodeItem):
             port_y = v_offset
             for port in outputs:
                 port.setPos(port_x, port_y)
-                port_y += port_height
+                port_y += port_height + spacing
         # adjust output text position
         for port, text in self._output_items.items():
-            if not port.isVisible():
-                continue
-            txt_width = text.boundingRect().width()
-            txt_x = port.x() - txt_width
-            text.setPos(txt_x, port.y() - 1.5)
+            if port.isVisible():
+                txt_width = text.boundingRect().width() - txt_offset
+                txt_x = port.x() - txt_width
+                text.setPos(txt_x, port.y() - 1.5)
 
     def offset_label(self, x=0.0, y=0.0):
         """
@@ -441,14 +445,9 @@ class NodeItem(AbstractNodeItem):
         icon_y = self._text_item.pos().y() + y
         self._text_item.setPos(icon_x, icon_y)
 
-    def post_init(self, viewer=None, pos=None):
+    def draw_node(self):
         """
-        Called after node has been added into the scene.
-        Adjust the node layout and form after the node has been added.
-
-        Args:
-            viewer (NodeGraphQt.widgets.viewer.NodeViewer): not used
-            pos (tuple): cursor position.
+        Draw the node item in the scene.
         """
         height = self._text_item.boundingRect().height()
 
@@ -469,6 +468,17 @@ class NodeItem(AbstractNodeItem):
         self.arrange_ports(v_offset=height + (height / 2))
         # arrange node widgets
         self.arrange_widgets(v_offset=height / 2)
+
+    def post_init(self, viewer=None, pos=None):
+        """
+        Called after node has been added into the scene.
+        Adjust the node layout and form after the node has been added.
+
+        Args:
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): not used
+            pos (tuple): cursor position.
+        """
+        self.draw_node()
 
         # set initial node position.
         if pos:
@@ -522,7 +532,7 @@ class NodeItem(AbstractNodeItem):
         AbstractNodeItem.name.fset(self, name)
         self._text_item.setPlainText(name)
         if self.scene():
-            self.post_init()
+            self.draw_node()
 
     @AbstractNodeItem.color.setter
     def color(self, color=(100, 100, 100, 255)):

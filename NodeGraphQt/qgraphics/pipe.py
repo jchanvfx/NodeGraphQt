@@ -12,7 +12,7 @@ from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
-    PIPE_STYLE_DASHED: QtCore.Qt.DashDotDotLine,
+    PIPE_STYLE_DASHED: QtCore.Qt.DashLine,
     PIPE_STYLE_DOTTED: QtCore.Qt.DotLine
 }
 
@@ -142,17 +142,15 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         """
         if not start_port:
             return
-        offset = (start_port.boundingRect().width() / 2)
         pos1 = start_port.scenePos()
-        pos1.setX(pos1.x() + offset)
-        pos1.setY(pos1.y() + offset)
+        pos1.setX(pos1.x() + (start_port.boundingRect().width() / 2))
+        pos1.setY(pos1.y() + (start_port.boundingRect().height() / 2))
         if cursor_pos:
             pos2 = cursor_pos
         elif end_port:
-            offset = start_port.boundingRect().width() / 2
             pos2 = end_port.scenePos()
-            pos2.setX(pos2.x() + offset)
-            pos2.setY(pos2.y() + offset)
+            pos2.setX(pos2.x() + (start_port.boundingRect().width() / 2))
+            pos2.setY(pos2.y() + (start_port.boundingRect().height() / 2))
         else:
             return
 

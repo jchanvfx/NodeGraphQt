@@ -3,6 +3,8 @@ from NodeGraphQt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     IN_PORT, OUT_PORT,
+    PORT_DEFAULT_SIZE,
+    PORT_FALLOFF,
     PORT_HOVER_COLOR,
     PORT_HOVER_BORDER_COLOR,
     PORT_ACTIVE_COLOR,
@@ -22,8 +24,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
         self._pipes = []
-        self._width = 18.5
-        self._height = 18.5
+        self._width = PORT_DEFAULT_SIZE
+        self._height = PORT_DEFAULT_SIZE
         self._hovered = False
         self._name = 'port'
         self._display_name = True
@@ -40,7 +42,7 @@ class PortItem(QtWidgets.QGraphicsItem):
         return '{}.PortItem("{}")'.format(self.__module__, self.name)
 
     def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
+        return QtCore.QRectF(0.0, 0.0, self._width + PORT_FALLOFF, self._height)
 
     def paint(self, painter, option, widget):
         """
@@ -54,10 +56,16 @@ class PortItem(QtWidgets.QGraphicsItem):
         """
         painter.save()
 
-        rect_w = self._width / 1.5
-        rect_h = self._height / 1.5
-        rect_x = self._width - (rect_w * 1.25)
-        rect_y = self._height - (rect_h * 1.25)
+        ### display the falloff colision ###
+        # pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 80), 0.8)
+        # pen.setStyle(QtCore.Qt.DotLine)
+        # painter.setPen(pen)
+        # painter.drawRect(self.boundingRect())
+
+        rect_w = self._width / 1.8
+        rect_h = self._height / 1.8
+        rect_x = self.boundingRect().center().x() - (rect_w / 2)
+        rect_y = self.boundingRect().center().y() - (rect_h / 2)
         port_rect = QtCore.QRectF(rect_x, rect_y, rect_w, rect_h)
 
         if self._hovered:
