@@ -66,5 +66,5 @@ class CheckboxNode(BaseNode):
         self.add_checkbox('cb_world', '', 'World', False)
 
         # create input and output port.
-        self.add_input('in')
-        self.add_output('out')
+        self.add_input('in', color=(200, 100, 0))
+        self.add_output('out', color=(0, 100, 200))

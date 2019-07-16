@@ -457,7 +457,8 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_input(self, name='input', multi_input=False, display_name=True):
+    def add_input(self, name='input', multi_input=False, display_name=True,
+                  color=None):
         """
         Add input :class:`Port` to node.
 
@@ -465,6 +466,7 @@ class BaseNode(NodeObject):
             name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
+            color (tuple): initial port color (r, g, b) 0-255.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -473,6 +475,9 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
+        if color:
+            view.color = color
+            view.border_color = [min([255, max([0, i + 80])]) for i in color]
         port = Port(self, view)
         port.model.type_ = IN_PORT
         port.model.name = name
@@ -482,7 +487,8 @@ class BaseNode(NodeObject):
         self.model.inputs[port.name()] = port.model
         return port
 
-    def add_output(self, name='output', multi_output=True, display_name=True):
+    def add_output(self, name='output', multi_output=True, display_name=True,
+                   color=None):
         """
         Add output :class:`Port` to node.
 
@@ -490,6 +496,7 @@ class BaseNode(NodeObject):
             name (str): name for the output port.
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
+            color (tuple): initial port color (r, g, b) 0-255.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -498,6 +505,9 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
         view = self.view.add_output(name, multi_output, display_name)
+        if color:
+            view.color = color
+            view.border_color = [min([255, max([0, i + 80])]) for i in color]
         port = Port(self, view)
         port.model.type_ = OUT_PORT
         port.model.name = name

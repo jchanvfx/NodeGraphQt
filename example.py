@@ -29,7 +29,7 @@ class MyNode(BaseNode):
         self.set_color(25, 58, 51)
 
         # create input and output port.
-        self.add_input('in port')
+        self.add_input('in port', color=(200, 10, 0))
         self.add_output('out port')
 
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # create example "TextInputNode".
     checkbox_node = graph.create_node('com.chantasticvfx.CheckboxNode',
                                   name='checkbox node',
-                                  pos=[-480, -60])
+                                  pos=[-480, -20])
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',

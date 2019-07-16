@@ -3,6 +3,8 @@ from NodeGraphQt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     IN_PORT, OUT_PORT,
+    PORT_DEFAULT_COLOR,
+    PORT_DEFAULT_BORDER_COLOR,
     PORT_DEFAULT_SIZE,
     PORT_FALLOFF,
     PORT_HOVER_COLOR,
@@ -29,8 +31,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._hovered = False
         self._name = 'port'
         self._display_name = True
-        self._color = (49, 115, 100, 255)
-        self._border_color = (29, 202, 151, 255)
+        self._color = PORT_DEFAULT_COLOR
+        self._border_color = PORT_DEFAULT_BORDER_COLOR
         self._border_size = 1
         self._port_type = None
         self._multi_connection = False
@@ -78,9 +80,9 @@ class PortItem(QtWidgets.QGraphicsItem):
             color = QtGui.QColor(*self.color)
             border_color = QtGui.QColor(*self.border_color)
 
-        painter.setBrush(color)
         pen = QtGui.QPen(border_color, 1.8)
         painter.setPen(pen)
+        painter.setBrush(color)
         painter.drawEllipse(port_rect)
 
         if self.connected_pipes and not self._hovered:
@@ -90,6 +92,10 @@ class PortItem(QtWidgets.QGraphicsItem):
             rect = QtCore.QRectF(port_rect.center().x() - w / 2,
                                  port_rect.center().y() - h / 2,
                                  w, h)
+            border_color = QtGui.QColor(*self.border_color)
+            pen = QtGui.QPen(border_color, 1.6)
+            painter.setPen(pen)
+            painter.setBrush(border_color)
             painter.drawEllipse(rect)
         elif self._hovered:
             if self.multi_connection:
