@@ -47,7 +47,7 @@ class MyNode(Node):
 
     def __init__(self):
         super(MyNode, self).__init__()
-        self.add_input('foo')
+        self.add_input('foo', color=(180, 80, 0))
         self.add_output('bar')
 
 

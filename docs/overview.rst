@@ -78,7 +78,7 @@ example code:
             super(FooNode, self).__init__()
 
             # create an input port.
-            self.add_input('in')
+            self.add_input('in', color=(180, 80, 0))
 
             # create an output port.
             self.add_output('out')
