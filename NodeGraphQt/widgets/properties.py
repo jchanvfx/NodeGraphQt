@@ -189,7 +189,8 @@ class PropLineEdit(QtWidgets.QLineEdit):
         self.__prev_text = ''
 
     def _on_return_pressed(self):
-        self.value_changed.emit(self.toolTip(), self.get_value())
+        if self.__prev_text != self.text():
+            self.value_changed.emit(self.toolTip(), self.text())
 
     def get_value(self):
         return self.text()
