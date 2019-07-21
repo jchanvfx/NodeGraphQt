@@ -146,7 +146,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
-        self._context_menu.exec_(event.globalPos())
+        if self._context_menu.isEnabled():
+            self._context_menu.exec_(event.globalPos())
+        else:
+            return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
         alt_modifier = event.modifiers() == QtCore.Qt.AltModifier

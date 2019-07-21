@@ -351,6 +351,17 @@ class NodeGraph(QtCore.QObject):
         """
         return Menu(self._viewer, self._viewer.context_menu())
 
+    def disable_context_menu(self, disabled=True):
+        """
+        Disable/Enable node graph context menu.
+
+        Args:
+            disabled (bool): true to enable context menu.
+        """
+        menu = self._viewer.context_menu()
+        menu.setDisabled(disabled)
+        menu.setVisible(not disabled)
+
     def acyclic(self):
         """
         Returns true if the current node graph is acyclic.
