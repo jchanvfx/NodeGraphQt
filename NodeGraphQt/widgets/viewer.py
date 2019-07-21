@@ -5,7 +5,6 @@ import os
 from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED,
-                                   PIPE_LAYOUT_STRAIGHT,
                                    PIPE_STYLE_DASHED,
                                    SCENE_AREA,
                                    Z_VAL_NODE_WIDGET)
@@ -677,12 +676,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def get_pipe_layout(self):
         return self._pipe_layout
 
-    def set_pipe_layout(self, layout=''):
-        layout_types = {
-            'curved': PIPE_LAYOUT_CURVED,
-            'straight': PIPE_LAYOUT_STRAIGHT
-        }
-        self._pipe_layout = layout_types.get(layout, 'curved')
+    def set_pipe_layout(self, layout):
+        self._pipe_layout = layout
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 

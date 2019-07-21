@@ -14,7 +14,9 @@ from NodeGraphQt.base.menu import Menu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import DRAG_DROP_ID
+from NodeGraphQt.constants import (DRAG_DROP_ID,
+                                   PIPE_LAYOUT_CURVED,
+                                   PIPE_LAYOUT_STRAIGHT)
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
@@ -381,15 +383,20 @@ class NodeGraph(QtCore.QObject):
         self._model.acyclic = mode
         self._viewer.acyclic = mode
 
-    def set_pipe_layout(self, layout='curved'):
+    def set_pipe_style(self, style=None):
         """
         Set node graph pipes to be drawn straight or curved by default
-        all pipes are set curved. (default='curved')
+        all pipes are set curved. (default=0)
+
+        PIPE_LAYOUT_CURVED = 0
+        PIPE_LAYOUT_STRAIGHT = 1
 
         Args:
-            layout (str): 'straight' or 'curved'
+            style (int): pipe style.
         """
-        self._viewer.set_pipe_layout(layout)
+        pipe_default = max([PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT])
+        style = PIPE_LAYOUT_STRAIGHT if style > pipe_default else style
+        self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
         """
