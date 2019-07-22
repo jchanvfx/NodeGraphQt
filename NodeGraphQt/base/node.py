@@ -260,6 +260,9 @@ class NodeObject(object):
         Returns:
             object: property data.
         """
+        if self.graph and name == 'selected':
+            self.model.set_property(self.view.selected)
+
         return self.model.get_property(name)
 
     def set_property(self, name, value):
