@@ -148,7 +148,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
-        self.scene().addItem(self.node.view)
+        self.scene.addItem(self.node.view)
         for port, connected_ports in self.inputs:
             [port.connect_to(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
