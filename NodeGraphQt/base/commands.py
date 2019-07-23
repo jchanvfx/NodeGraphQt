@@ -107,18 +107,19 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
     def __init__(self, graph, node, pos=None):
         QtWidgets.QUndoCommand.__init__(self)
         self.setText('added node')
-        self.graph = graph
+        self.viewer = graph.viewer()
+        self.model = graph.model
         self.node = node
         self.pos = pos
 
     def undo(self):
         self.pos = self.pos or self.node.pos()
-        self.graph.model.nodes.pop(self.node.id)
+        self.model.nodes.pop(self.node.id)
         self.node.view.delete()
 
     def redo(self):
         self.graph.model.nodes[self.node.id] = self.node
-        self.graph.viewer().add_node(self.node.view, self.pos)
+        self.viewer.add_node(self.node.view, self.pos)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
@@ -133,7 +134,8 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
     def __init__(self, graph, node):
         QtWidgets.QUndoCommand.__init__(self)
         self.setText('deleted node')
-        self.graph = graph
+        self.scene = graph.scene()
+        self.model = graph.model
         self.node = node
         self.inputs = []
         self.outputs = []
@@ -145,8 +147,8 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
     def undo(self):
-        self.graph.model.nodes[self.node.id] = self.node
-        self.graph.scene().addItem(self.node.view)
+        self.model.nodes[self.node.id] = self.node
+        self.scene().addItem(self.node.view)
         for port, connected_ports in self.inputs:
             [port.connect_to(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
@@ -157,7 +159,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
             [port.disconnect_from(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
             [port.disconnect_from(p) for p in connected_ports]
-        self.graph.model.nodes.pop(self.node.id)
+        self.model.nodes.pop(self.node.id)
         self.node.view.delete()
 
 
