@@ -692,7 +692,7 @@ class NodeGraph(QtCore.QObject):
         Clears the current node graph session.
         """
         for n in self.all_nodes():
-            self.delete_node(n)
+            self._undo_stack.push(NodeRemovedCmd(self, n))
         self._undo_stack.clear()
         self._model.session = None
 
