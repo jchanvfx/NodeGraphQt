@@ -18,11 +18,19 @@ http://chantasticvfx.com/nodeGraphQt/html/index.html
 
 #### Navigation
 
-| action        | controls                                     |
-| ------------- |:--------------------------------------------:|
-| Zoom in/out   | `Alt + MMB + Drag` or `Mouse Scroll Up/Down` |
-| Pan           | `Alt + LMB + Drag` or `MMB + Drag`           |
-| Node search   | `Tab`                                        |
+| action        | controls                                   |
+| ------------- |:------------------------------------------:|
+| Zoom in/out   | `Alt + MMB Drag` or `Mouse Scroll Up/Down` |
+| Pan           | `Alt + LMB Drag` or `MMB Drag`             |
+| Node search   | `Tab`                                      |
+
+#### Slice Connections
+
+<img src="/docs/_images/slicer.png" width="500" title="Pipe Slicer">
+
+| action            | controls                 |
+| ----------------- |:------------------------:|
+| Slice Connections | `Shift + Alt + LMB Drag` |
 
 #### Properties Bin
 <img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
