@@ -118,7 +118,7 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.node.view.delete()
 
     def redo(self):
-        self.graph.model.nodes[self.node.id] = self.node
+        self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
 
 
