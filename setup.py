@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import setuptools
-
-import NodeGraphQt
+import .pkg_info as pkg_info
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
@@ -21,18 +20,19 @@ classifiers = [
 ]
 
 setuptools.setup(
-    name='NodeGraphQt',
-    version=NodeGraphQt.__version__,
-    install_requires=requirements,
-    author='Johnny Chan',
-    author_email='johnny@chantasticvfx.com',
+    name=pkg_info.__module_name__,
+    version=pkg_info.__version__,
+    author=pkg_info.__author__,
+    author_email=pkg_info.__email__,
     description=description,
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/jchanvfx/NodeGraphQt',
-    packages=setuptools.find_packages(exclude=["example_nodes"]),
+    url=pkg_info.__url__,
+    packages=setuptools.find_packages(exclude=['example_nodes']),
     classifiers=classifiers,
-    include_package_data=True
+    install_requires=requirements,
+    include_package_data=True,
+    python_requires='>=3.6'
 )
 
 

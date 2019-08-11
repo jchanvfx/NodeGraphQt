@@ -30,22 +30,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__version__ = '0.0.9'
-__status__ = 'Work in Progress'
-__license__ = 'MIT'
-
-__author__ = 'Johnny Chan'
-__email__ = 'http://chantasticvfx.com/contact'
-
-__module_name__ = 'NodeGraphQt'
-__url__ = 'https://github.com/jchanvfx/NodeGraphQt'
-
-__all__ = [
-    'BackdropNode', 'BaseNode', 'Menu', 'MenuCommand', 'NodeGraph',
-    'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget',
-    'constants', 'setup_context_menu'
-]
-
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat
 except ImportError as ie:
@@ -55,9 +39,10 @@ except ImportError as ie:
           '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
 from .base.graph import NodeGraph
+from .base.menu import Menu, MenuCommand
 from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
-from .base.menu import Menu, MenuCommand
+from .pkg_info import __version__ as VERSION
 
 # functions
 from .base.actions import setup_context_menu
@@ -65,3 +50,10 @@ from .base.actions import setup_context_menu
 # widgets
 from .widgets.node_tree import NodeTreeWidget
 from .widgets.properties_bin import PropertiesBinWidget
+
+__version__ = VERSION
+__all__ = [
+    'BackdropNode', 'BaseNode', 'Menu', 'MenuCommand', 'NodeGraph',
+    'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget', 'VERSION',
+    'constants', 'setup_context_menu'
+]
