@@ -25,11 +25,11 @@ import NodeGraphQt
 # -- Project information -----------------------------------------------------
 
 project = 'NodeGraphQt'
-copyright = '{}, {}'.format(datetime.now().year, NodeGraphQt.__author__)
-author = NodeGraphQt.__author__
+author = NodeGraphQt.pkg_info.__author__
+copyright = '{}, {}'.format(datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
-release = NodeGraphQt.__version__
+release = NodeGraphQt.VERSION
 # The short X.Y version
 version = '{0}.{1}'.format(*release.split('.'))
 
@@ -154,7 +154,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'NodeGraphQT.tex', 'NodeGraphQT Documentation',
+    (master_doc, 'NodeGraphQT.tex', 'NodeGraphQt Documentation',
      'Johnny Chan', 'manual'),
 ]
 
@@ -164,7 +164,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nodegraphqt', 'NodeGraphQT Documentation',
+    (master_doc, 'nodegraphqt', 'NodeGraphQt Documentation',
      [author], 1)
 ]
 
@@ -176,9 +176,9 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc,
-     'NodeGraphQT', 'NodeGraphQT Documentation',
+     'NodeGraphQt', 'NodeGraphQT Documentation',
      author,
-     'NodeGraphQT',
+     'NodeGraphQt',
      'Node graph framework that can be re-implemented into apps that supports PySide2.',
      'Miscellaneous'),
 ]
