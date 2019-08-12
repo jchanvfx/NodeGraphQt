@@ -29,6 +29,47 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+NodeGraphQt is a node graph framework that can be implemented and re purposed
+into applications that supports PySide2.
+
+url: https://github.com/jchanvfx/NodeGraphQt
+docs: http://chantasticvfx.com/nodeGraphQt/html/index.html
+
+Basic Example:
+
+import sys
+from NodeGraphQt import QtWidgets, NodeGraph, BaseNode
+
+
+class MyNode(BaseNode):
+
+    __identifier__ = 'com.chantasticvfx'
+    NODE_NAME = 'My Node'
+
+    def __init__(self):
+        super(MyNode, self).__init__()
+        self.add_input('foo', color=(180, 80, 0))
+        self.add_output('bar')
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    graph = NodeGraph()
+
+    graph.register_node(BaseNode)
+    graph.register_node(BackdropNode)
+
+    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
+    node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
+    node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
+
+    node_a.set_input(0, node_b.output(0))
+
+    viewer = graph.viewer()
+    viewer.show()
+
+    app.exec_()
+"""
 
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat

@@ -41,10 +41,10 @@ http://chantasticvfx.com/nodeGraphQt/html/index.html
 import sys
 
 from NodeGraphQt import QtWidgets
-from NodeGraphQt import NodeGraph, Node, Backdrop, setup_context_menu
+from NodeGraphQt import NodeGraph, BaseNode, BackdropNode, setup_context_menu
 
 # create a example node object with a input/output port.
-class MyNode(Node):
+class MyNode(BaseNode):
     """example test node."""
 
     # unique node identifier domain. ("com.chantasticvfx.MyNode")
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     setup_context_menu(graph)
    
     # register backdrop node. (included in the NodeGraphQt module)
-    graph.register_node(Backdrop)
+    graph.register_node(BackdropNode)
    
     # register example node into the node graph.
     graph.register_node(MyNode)
