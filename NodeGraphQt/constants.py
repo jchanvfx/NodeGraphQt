@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+from .pkg_info import __version__
 
+#: Version of the NodeGraphQt framework.
+VERSION = __version__
 
 # === PIPE ===
 

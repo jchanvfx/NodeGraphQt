@@ -126,7 +126,8 @@ class Port(object):
 
     def connect_to(self, port=None):
         """
-        Create connection to the specified port.
+        Create connection to the specified port and emits the "port_connected"
+        signal from the parent node graph.
 
         Args:
             port (NodeGraphQt.Port): port object.
@@ -170,7 +171,8 @@ class Port(object):
 
     def disconnect_from(self, port=None):
         """
-        Disconnect from the specified port.
+        Disconnect from the specified port and emits the "port_disconnected"
+        signal from the parent node graph.
 
         Args:
             port (NodeGraphQt.Port): port object.
@@ -179,3 +181,6 @@ class Port(object):
             return
         graph = self.node().graph
         graph.undo_stack().push(PortDisconnectedCmd(self, port))
+
+        # emit "port_disconnected" signal from the parent graph.
+        graph.port_disconnected.emit(self, port)
