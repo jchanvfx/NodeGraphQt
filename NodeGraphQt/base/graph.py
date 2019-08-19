@@ -35,6 +35,8 @@ class NodeGraph(QtCore.QObject):
     node_double_clicked = QtCore.Signal(NodeObject)
     #: signal for when a node has been connected emits (source port, target port).
     port_connected = QtCore.Signal(Port, Port)
+    #: signal for when a node has been disconnected emits (source port, target port).
+    port_disconnected = QtCore.Signal(Port, Port)
     #: signal for when a node property has changed emits (node, property name, property value).
     property_changed = QtCore.Signal(NodeObject, str, object)
     #: signal for when drop data has been added to the graph.

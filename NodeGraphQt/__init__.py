@@ -84,6 +84,7 @@ from .base.menu import Menu, MenuCommand
 from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
 from .pkg_info import __version__ as VERSION
+from .pkg_info import __license__ as LICENSE
 
 # functions
 from .base.actions import setup_context_menu
@@ -94,7 +95,7 @@ from .widgets.properties_bin import PropertiesBinWidget
 
 __version__ = VERSION
 __all__ = [
-    'BackdropNode', 'BaseNode', 'Menu', 'MenuCommand', 'NodeGraph',
+    'BackdropNode', 'BaseNode', 'LICENSE', 'Menu', 'MenuCommand', 'NodeGraph',
     'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget', 'VERSION',
     'constants', 'setup_context_menu'
 ]
