@@ -391,7 +391,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
             self._live_pipe.draw_path(self._start_port, None, pos)
-            pipe.delete()
 
     def sceneMouseReleaseEvent(self, event):
         """
