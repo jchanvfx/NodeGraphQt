@@ -6,7 +6,8 @@ from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
-    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
+    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
+    Z_VAL_NODE_WIDGET
 )
 from NodeGraphQt.qgraphics.port import PortItem
 
@@ -130,7 +131,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
         painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
-    def draw_path(self, start_port, end_port, cursor_pos=None):
+    def draw_path(self, start_port, end_port=None, cursor_pos=None):
         """
         Draws the path between ports.
 
@@ -180,6 +181,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
         ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
         path.cubicTo(ctr_point1, ctr_point2, pos2)
+        self.setPath(path)
+
+    def reset_path(self):
+        path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
 
     def calc_distance(self, p1, p2):
@@ -293,3 +298,12 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         # TODO: not sure if we need this...?
         del self
 
+
+class LivePipe(Pipe):
+
+    def __init__(self, input_port=None, output_port=None):
+        super(LivePipe, self).__init__(input_port, output_port)
+        self.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self.activate()
+        self.style = PIPE_STYLE_DASHED
+        self.shift_selected = False
