@@ -63,13 +63,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
             QtWidgets.QRubberBand.Rectangle, self
         )
 
-        self._live_pipe = LivePipe()
-        self._live_pipe.setVisible(False)
-        self.scene().addItem(self._live_pipe)
+        self._LIVE_PIPE = LivePipe()
+        self._LIVE_PIPE.setVisible(False)
+        self.scene().addItem(self._LIVE_PIPE)
 
-        self._pipe_slicer = SlicerPipe()
-        self._pipe_slicer.setVisible(False)
-        self.scene().addItem(self._pipe_slicer)
+        self._SLICER_PIPE = SlicerPipe()
+        self._SLICER_PIPE.setVisible(False)
+        self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
         self._context_menu = QtWidgets.QMenu('main', self)
@@ -128,7 +128,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         x, y = pos.x() - width, pos.y() - height
         rect = QtCore.QRectF(x, y, width, height)
         items = []
-        excl = [self._live_pipe, self._pipe_slicer]
+        excl = [self._LIVE_PIPE, self._SLICER_PIPE]
         for item in self.scene().items(rect):
             if item in excl:
                 continue
@@ -144,7 +144,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.connection_sliced.emit([
             [i.input_port, i.output_port]
             for i in self.scene().items(path)
-            if isinstance(i, Pipe) and i != self._live_pipe
+            if isinstance(i, Pipe) and i != self._LIVE_PIPE
         ])
 
     # --- reimplemented events ---
@@ -180,8 +180,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # pipe slicer enabled.
         if self.ALT_state and self.SHIFT_state:
-            self._pipe_slicer.draw_path(map_pos, map_pos)
-            self._pipe_slicer.setVisible(True)
+            self._SLICER_PIPE.draw_path(map_pos, map_pos)
+            self._SLICER_PIPE.setVisible(True)
             return
 
         # pan mode.
@@ -224,11 +224,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.MMB_state = False
 
         # hide pipe slicer.
-        if self._pipe_slicer.isVisible():
-            self._on_pipes_sliced(self._pipe_slicer.path())
+        if self._SLICER_PIPE.isVisible():
+            self._on_pipes_sliced(self._SLICER_PIPE.path())
             p = QtCore.QPointF(0.0, 0.0)
-            self._pipe_slicer.draw_path(p, p)
-            self._pipe_slicer.setVisible(False)
+            self._SLICER_PIPE.draw_path(p, p)
+            self._SLICER_PIPE.setVisible(False)
 
         # hide selection marquee
         if self._rubber_band.isVisible():
@@ -252,11 +252,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def mouseMoveEvent(self, event):
         if self.ALT_state and self.SHIFT_state:
-            if self.LMB_state and self._pipe_slicer.isVisible():
-                p1 = self._pipe_slicer.path().pointAtPercent(0)
+            if self.LMB_state and self._SLICER_PIPE.isVisible():
+                p1 = self._SLICER_PIPE.path().pointAtPercent(0)
                 p2 = self.mapToScene(self._previous_pos)
-                self._pipe_slicer.draw_path(p1, p2)
-                self._pipe_slicer.show()
+                self._SLICER_PIPE.draw_path(p1, p2)
+                self._SLICER_PIPE.show()
             self._previous_pos = event.pos()
             super(NodeViewer, self).mouseMoveEvent(event)
             return
@@ -347,7 +347,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        if not self._live_pipe.isVisible():
+        if not self._LIVE_PIPE.isVisible():
             return
         if not self._start_port:
             return
@@ -361,7 +361,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos.setX(pos.x() + x)
             pos.setY(pos.y() + y)
 
-        self._live_pipe.draw_path(self._start_port, cursor_pos=pos)
+        self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
 
     def sceneMousePressEvent(self, event):
         """
@@ -417,10 +417,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
-            self._live_pipe.draw_path(self._start_port, cursor_pos=pos)
+            self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
 
             if self.SHIFT_state:
-                self._live_pipe.shift_selected = True
+                self._LIVE_PIPE.shift_selected = True
                 return
 
             pipe.delete()
@@ -434,7 +434,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        if not self._live_pipe.isVisible():
+        if not self._LIVE_PIPE.isVisible():
             return
 
         self._start_port._hovered = False
@@ -451,7 +451,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # if port disconnected from existing pipe.
         if end_port is None:
-            if self._detached_port and not self._live_pipe.shift_selected:
+            if self._detached_port and not self._LIVE_PIPE.shift_selected:
                 disconnected.append((self._start_port, self._detached_port))
                 self.connection_changed.emit(disconnected, connected)
 
@@ -515,19 +515,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
         self._start_port = selected_port
         if self._start_port.type == IN_PORT:
-            self._live_pipe.input_port = self._start_port
+            self._LIVE_PIPE.input_port = self._start_port
         elif self._start_port == OUT_PORT:
-            self._live_pipe.output_port = self._start_port
-        self._live_pipe.setVisible(True)
+            self._LIVE_PIPE.output_port = self._start_port
+        self._LIVE_PIPE.setVisible(True)
 
     def end_live_connection(self):
         """
         delete live connection pipe and reset start port.
         (hides the pipe item used for drawing the live connection)
         """
-        self._live_pipe.reset_path()
-        self._live_pipe.setVisible(False)
-        self._live_pipe.shift_selected = False
+        self._LIVE_PIPE.reset_path()
+        self._LIVE_PIPE.setVisible(False)
+        self._LIVE_PIPE.shift_selected = False
         self._start_port = None
 
     def establish_connection(self, start_port, end_port):
@@ -624,7 +624,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def all_pipes(self):
         pipes = []
-        excl = [self._live_pipe, self._pipe_slicer]
+        excl = [self._LIVE_PIPE, self._SLICER_PIPE]
         for item in self.scene().items():
             if isinstance(item, Pipe) and item not in excl:
                 pipes.append(item)
