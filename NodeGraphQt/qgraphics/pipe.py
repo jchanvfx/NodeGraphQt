@@ -339,11 +339,9 @@ class LivePipe(Pipe):
             return
 
         # draw circle
-        size = 10 * (dist / 100)
-        if size > 10.0:
-            size = 10.0
-        elif size < 5.0:
-            size = 5.0
+        size = 10.0
+        if dist < 50.0:
+            size *= (dist / 50.0)
         rect = QtCore.QRectF(cen_x-(size/2), cen_y-(size/2), size, size)
         painter.setBrush(color)
         painter.setPen(QtGui.QPen(color.darker(130), pen_width))
@@ -355,7 +353,7 @@ class LivePipe(Pipe):
 
         pen_width = 0.6
         if dist < 1.0:
-            pen_width *= (1.0 + dist)
+            pen_width *= 1.0 + dist
         painter.setPen(QtGui.QPen(color, pen_width))
 
         transform = QtGui.QTransform()
@@ -366,7 +364,9 @@ class LivePipe(Pipe):
         degrees = math.degrees(radians) + 90
         transform.rotate(degrees)
 
-        if dist < 10.0:
-            transform.scale(0.5, 0.5)
+        scale = 1.0
+        if dist < 20.0:
+            scale = dist / 20.0
+        transform.scale(scale, scale)
         painter.drawPolygon(transform.map(self._arrow))
         painter.restore()
