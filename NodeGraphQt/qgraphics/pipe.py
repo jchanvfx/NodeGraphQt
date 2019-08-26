@@ -6,7 +6,8 @@ from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
-    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE
+    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
+    Z_VAL_NODE_WIDGET
 )
 from NodeGraphQt.qgraphics.port import PortItem
 
@@ -130,7 +131,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
         painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
-    def draw_path(self, start_port, end_port, cursor_pos=None):
+    def draw_path(self, start_port, end_port=None, cursor_pos=None):
         """
         Draws the path between ports.
 
@@ -180,6 +181,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
         ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
         path.cubicTo(ctr_point1, ctr_point2, pos2)
+        self.setPath(path)
+
+    def reset_path(self):
+        path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
 
     def calc_distance(self, p1, p2):
@@ -293,3 +298,76 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         # TODO: not sure if we need this...?
         del self
 
+
+class LivePipe(Pipe):
+
+    def __init__(self):
+        super(LivePipe, self).__init__()
+        self.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self.shift_selected = False
+
+    def paint(self, painter, option, widget):
+        """
+        Draws the connection line.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
+        color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+        pen_style = PIPE_STYLES.get(PIPE_STYLE_DASHED)
+        pen_width = PIPE_WIDTH + 0.35
+
+        pen = QtGui.QPen(color, pen_width)
+        pen.setStyle(pen_style)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
+
+        painter.save()
+        painter.setPen(pen)
+        painter.setRenderHint(painter.Antialiasing, True)
+        painter.drawPath(self.path())
+
+        cen_x = self.path().pointAtPercent(0.5).x()
+        cen_y = self.path().pointAtPercent(0.5).y()
+        loc_pt = self.path().pointAtPercent(0.9)
+        tgt_pt = self.path().pointAtPercent(1.0)
+
+        dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
+        if dist < 0.05:
+            painter.restore()
+            return
+
+        # draw circle
+        size = 10.0
+        if dist < 50.0:
+            size *= (dist / 50.0)
+        rect = QtCore.QRectF(cen_x-(size/2), cen_y-(size/2), size, size)
+        painter.setBrush(color)
+        painter.setPen(QtGui.QPen(color.darker(130), pen_width))
+        painter.drawEllipse(rect)
+
+        # draw arrow
+        color.setAlpha(255)
+        painter.setBrush(color.darker(200))
+
+        pen_width = 0.6
+        if dist < 1.0:
+            pen_width *= 1.0 + dist
+        painter.setPen(QtGui.QPen(color, pen_width))
+
+        transform = QtGui.QTransform()
+        transform.translate(tgt_pt.x(), tgt_pt.y())
+
+        radians = math.atan2(tgt_pt.y() - loc_pt.y(),
+                             tgt_pt.x() - loc_pt.x())
+        degrees = math.degrees(radians) + 90
+        transform.rotate(degrees)
+
+        scale = 1.0
+        if dist < 20.0:
+            scale = dist / 20.0
+        transform.scale(scale, scale)
+        painter.drawPolygon(transform.map(self._arrow))
+        painter.restore()

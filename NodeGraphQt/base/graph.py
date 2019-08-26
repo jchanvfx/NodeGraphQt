@@ -390,8 +390,8 @@ class NodeGraph(QtCore.QObject):
         Set node graph pipes to be drawn straight or curved by default
         all pipes are set curved. (default=0)
 
-        PIPE_LAYOUT_CURVED = 0
-        PIPE_LAYOUT_STRAIGHT = 1
+        ``NodeGraphQt.constants.PIPE_LAYOUT_CURVED`` = 0
+        ``NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`` = 1
 
         Args:
             style (int): pipe style.
