@@ -304,6 +304,7 @@ class LivePipe(Pipe):
     def __init__(self):
         super(LivePipe, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self.shift_selected = False
 
     def paint(self, painter, option, widget):
         """

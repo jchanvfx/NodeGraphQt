@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import math
 
 from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
@@ -412,7 +413,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 return
             pipe = pipe_items[0]
             from_port = pipe.port_from_pos(pos, True)
-            from_port._hovered = True
+            from_port.hovered = True
 
             attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
             self._detached_port = getattr(pipe, attr[from_port.port_type])
@@ -437,7 +438,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not self._LIVE_PIPE.isVisible():
             return
 
-        self._start_port._hovered = False
+        self._start_port.hovered = False
 
         # find the end port.
         end_port = None
@@ -452,8 +453,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # if port disconnected from existing pipe.
         if end_port is None:
             if self._detached_port and not self._LIVE_PIPE.shift_selected:
-                disconnected.append((self._start_port, self._detached_port))
-                self.connection_changed.emit(disconnected, connected)
+                dist = math.hypot(self._previous_pos.x() - self._origin_pos.x(),
+                                  self._previous_pos.y() - self._origin_pos.y())
+                if dist <= 2.0:  # cursor pos threshold.
+                    self.establish_connection(self._start_port,
+                                              self._detached_port)
+                    self._detached_port = None
+                else:
+                    disconnected.append((self._start_port, self._detached_port))
+                    self.connection_changed.emit(disconnected, connected)
 
             self._detached_port = None
             self.end_live_connection()

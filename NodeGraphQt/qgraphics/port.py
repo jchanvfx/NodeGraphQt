@@ -167,6 +167,14 @@ class PortItem(QtWidgets.QGraphicsItem):
         return ports
 
     @property
+    def hovered(self):
+        return self._hovered
+
+    @hovered.setter
+    def hovered(self, value=False):
+        self._hovered = value
+
+    @property
     def node(self):
         return self.parentItem()
 
