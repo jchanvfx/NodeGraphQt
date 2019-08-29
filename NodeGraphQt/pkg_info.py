@@ -5,7 +5,7 @@ __status__ = 'Work in Progress'
 __license__ = 'MIT'
 
 __author__ = 'Johnny Chan'
-__email__ = 'http://chantasticvfx.com/contact'
+__email__ = 'johnny@chantasticvfx.com'
 
 __module_name__ = 'NodeGraphQt'
 __url__ = 'https://github.com/jchanvfx/NodeGraphQt'
