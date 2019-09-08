@@ -348,21 +348,47 @@ class NodeGraph(QtCore.QObject):
 
     def context_menu(self):
         """
-        Returns the node graph root context menu object.
+        Returns the main context menu from the node graph.
 
         Returns:
             Menu: context menu object.
         """
-        return Menu(self._viewer, self._viewer.context_menu())
+        return Menu(self._viewer, self._viewer.context_menus()['Main'])
 
-    def disable_context_menu(self, disabled=True):
+    def get_context_menu(self, name='Main'):
         """
-        Disable/Enable node graph context menu.
+        Returns the context menu specified by the name.
+
+        Menu types:
+            "Main" - context menu from the node graph.
+            "Node" - context menu from a Node.
+            "Port" - context menu from a Port.
+
+        Args:
+            name (str): menu name.
+
+        Returns:
+            Menu: context menu object.
+        """
+        menus = self._viewer.context_menus()
+        if name not in menus:
+            return
+        return Menu(self._viewer, menus['Main'])
+
+    def disable_context_menu(self, disabled=True, name='Main'):
+        """
+        Disable/Enable the main context menu from the node graph.
+
+        Menu types:
+            "Main" - context menu from the node graph.
+            "Node" - context menu from a Node.
+            "Port" - context menu from a Port.
 
         Args:
             disabled (bool): true to enable context menu.
+            name (str): menu name. (default: Main)
         """
-        menu = self._viewer.context_menu()
+        menu = self._viewer.context_menus()[name]
         menu.setDisabled(disabled)
         menu.setVisible(not disabled)
 

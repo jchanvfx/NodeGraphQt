@@ -2,6 +2,7 @@
 from distutils.version import LooseVersion
 
 from NodeGraphQt import QtGui, QtCore, QtWidgets
+from NodeGraphQt.errors import NodeMenuError
 from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 
 
@@ -31,6 +32,15 @@ class Menu(object):
         """
         return self.qmenu.title()
 
+    def set_name(self, name):
+        """
+        Set the name for the menu.
+
+        Args:
+            name (str): label name.
+        """
+        self.qmenu.setTitle(name)
+
     def get_menu(self, name):
         """
         Returns the child menu by name.
@@ -45,7 +55,7 @@ class Menu(object):
             if action.menu() and action.menu().title() == name:
                 return Menu(self.__viewer, action.menu())
 
-    def get_command(self, name):
+    def get_action(self, name):
         """
         Returns the child menu command by name.
 
@@ -57,7 +67,7 @@ class Menu(object):
         """
         for action in self.qmenu.actions():
             if not action.menu() and action.text() == name:
-                return MenuCommand(self.__viewer, action)
+                return MenuAction(self.__viewer, action)
 
     def all_commands(self):
         """
@@ -78,9 +88,9 @@ class Menu(object):
         child_actions = get_actions(self.qmenu)
         return [MenuCommand(self.__viewer, a) for a in child_actions]
 
-    def add_menu(self, name):
+    def create_menu(self, name):
         """
-        Adds a child menu to the current menu.
+        Create a child menu to the current menu.
 
         Args:
             name (str): menu name.
@@ -88,56 +98,58 @@ class Menu(object):
         Returns:
             NodeGraphQt.Menu: the appended menu item.
         """
-        menu = QtWidgets.QMenu(name, self.qmenu)
-        menu.setStyleSheet(STYLE_QMENU)
+        menu = QtWidgets.QMenu(name, self.__viewer)
         self.qmenu.addMenu(menu)
         return Menu(self.__viewer, menu)
 
-    def add_command(self, name, func=None, shortcut=None):
+    def create_action(self, name):
         """
-        Adds a command to the menu.
+        Create a command to the menu.
 
         Args:
-            name (str): command name.
-            func (function): command function.
-            shortcut (str): function shotcut key.
+            name (NodeGraphQt.MenuCommand): menu command.
 
-        Returns:
-            NodeGraphQt.MenuCommand: the appended command.
+
         """
         action = QtWidgets.QAction(name, self.__viewer)
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            action.setShortcutVisibleInContextMenu(True)
-        if shortcut:
-            action.setShortcut(shortcut)
-        if func:
-            action.triggered.connect(func)
         qaction = self.qmenu.addAction(action)
-        return MenuCommand(self.__viewer, qaction)
+        return MenuAction(self.__viewer, qaction)
 
-    def add_separator(self):
+    def create_separator(self):
         """
-        Adds a separator to the menu.
+        Create a separator to the menu.
         """
         self.qmenu.addSeparator()
 
 
-class MenuCommand(object):
+class MenuAction(QtWidgets.QAction):
     """
     base class for a menu command.
     """
 
-    def __init__(self, viewer, qaction):
+    #: signal emits when the action has triggered in the node graph.
+    executed = QtCore.QSignal(object)
+
+    def __init__(self, parent=None, viewer=None, name=''):
+        super(MenuAction, self).__init__(parent)
         self.__viewer = viewer
-        self.__qaction = qaction
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+            self.setShortcutVisibleInContextMenu(True)
+        self.setText(name)
+        self.triggered.connect(self._on_triggered)
 
     def __repr__(self):
         cls_name = self.__class__.__name__
         return 'NodeGraphQt.{}(\'{}\')'.format(cls_name, self.name())
 
-    @property
-    def qaction(self):
-        return self.__qaction
+    def _on_triggered(self):
+        menu = self.menu()
+        pos = self.mapToScene(menu.pos())
+
+        items = self.__viewer._items_near(pos)
+        
+
+        self.triggered.emit()
 
     def name(self):
         """
@@ -146,7 +158,16 @@ class MenuCommand(object):
         Returns:
             str: label name.
         """
-        return self.qaction.text()
+        return self.text()
+
+    def set_name(self, name):
+        """
+        Set the name for the menu command.
+
+        Args:
+            name (str): label name.
+        """
+        self.setText(name)
 
     def set_shortcut(self, shortcut=None):
         """
@@ -157,9 +178,3 @@ class MenuCommand(object):
         """
         shortcut = shortcut or QtGui.QKeySequence()
         self.qaction.setShortcut(shortcut)
-
-    def run_command(self):
-        """
-        execute the menu command.
-        """
-        self.qaction.trigger()

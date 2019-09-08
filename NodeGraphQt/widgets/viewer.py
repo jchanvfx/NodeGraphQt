@@ -73,8 +73,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._context_menu = QtWidgets.QMenu('main', self)
-        self._context_menu.setStyleSheet(STYLE_QMENU)
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
@@ -84,7 +82,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
         menu_bar.resize(0, 0)
-        menu_bar.addMenu(self._context_menu)
+
+        self._context_menus = {}
+        for name in ['Main', 'Node', 'Port']:
+            menu = QtWidgets.QMenu(name, self)
+            menu.setStyleSheet(STYLE_QMENU)
+            self._context_menus[name] = menu
+            menu_bar.addMenu(menu)
 
         self.acyclic = True
         self.LMB_state = False
@@ -155,8 +159,17 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
-        if self._context_menu.isEnabled():
-            self._context_menu.exec_(event.globalPos())
+
+        pos = self.mapToScene(self._previous_pos)
+        items = self._items_near(pos)
+        ports = [i for i in items if isinstance(i, PortItem)]
+        nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
+        if self._context_menus['Port'].isEnabled() and ports:
+            self._context_menus['Port'].exec_(event.globalPos())
+        elif self._context_menus['Node'].isEnabled() and nodes:
+            self._context_menus['Node'].exec_(event.globalPos())
+        elif self._context_menus['Main'].isEnabled():
+            self._context_menus['Main'].exec_(event.globalPos())
         else:
             return super(NodeViewer, self).contextMenuEvent(event)
 
@@ -591,8 +604,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._search_widget.setVisible(state)
             self.clearFocus()
 
-    def context_menu(self):
-        return self._context_menu
+    def context_menus(self):
+        return self._context_menus
 
     def question_dialog(self, text, title='Node Graph'):
         dlg = QtWidgets.QMessageBox.question(
