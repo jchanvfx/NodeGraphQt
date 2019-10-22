@@ -269,7 +269,7 @@ if __name__ == '__main__':
     prop_bin = PropertiesBinWidget()
     prop_bin.property_changed.connect(prop_changed)
 
-    node = graph.create_node('nodeGraphQt.nodes.TestNode')
+    node = graph.create_node('NodeGraphQt.nodes.TestNode')
 
     prop_bin.add_node(node)
     prop_bin.show()

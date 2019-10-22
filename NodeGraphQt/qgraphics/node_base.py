@@ -131,6 +131,7 @@ class NodeItem(AbstractNodeItem):
         self._input_items = {}
         self._output_items = {}
         self._widgets = {}
+        self._widgets_hidden = {}
 
     def paint(self, painter, option, widget):
         """
@@ -242,8 +243,8 @@ class NodeItem(AbstractNodeItem):
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
         width, height = self.calc_size(add_w, add_h)
-        if width > self._width:
-            self._width = width
+        # if width > self._width:
+        #     self._width = width
         if height > self._height:
             self._height = height
 
@@ -635,6 +636,18 @@ class NodeItem(AbstractNodeItem):
 
     def add_widget(self, widget):
         self._widgets[widget.name] = widget
+    
+    def del_widget(self, name):
+        self.get_widget(name).deleteLater()
+        del self._widgets[name]
+    
+    def hide_widget(self, name):
+        self._widgets_hidden[name] = self._widgets[name]
+        del self._widgets[name]
+
+    def show_widget(self, name):
+        self._widgets[name] = self._widgets_hidden[name]
+        del self._widgets_hidden[name]
 
     def get_widget(self, name):
         widget = self._widgets.get(name)

@@ -92,7 +92,7 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         Set custom display label for a node category.
 
         Args:
-            category (str): node identifier category eg. "nodeGraphQt.nodes"
+            category (str): node identifier category eg. "NodeGraphQt.nodes"
             label (str): custom display label.
         """
         self._custom_labels[category] = label

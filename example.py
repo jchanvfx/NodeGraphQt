@@ -33,6 +33,9 @@ class MyNode(BaseNode):
         self.add_output('out port')
 
 
+def test(a, b):
+    a.show_widget("cb_hello")
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
@@ -104,6 +107,7 @@ if __name__ == '__main__':
                                   name='menu node',
                                   pos=[280, -200])
 
+
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example_nodes', 'pear.png')
@@ -117,5 +121,6 @@ if __name__ == '__main__':
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
 
+    graph.property_changed.connect(test)
 
     app.exec_()

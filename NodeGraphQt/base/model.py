@@ -64,6 +64,7 @@ class NodeModel(object):
         self.inputs = {}
         self.outputs = {}
         self._custom_prop = {}
+        self._custom_prop_hidden = {}
 
         # node graph model set at node added time.
         self._graph_model = None
@@ -132,6 +133,21 @@ class NodeModel(object):
             if range:
                 attrs[self.type_][name]['range'] = range
             self._graph_model.set_node_common_properties(attrs)
+
+    def del_property(self, name):
+        if name in self._custom_prop.keys():
+            del self._custom_prop[name]
+        else:
+            NodePropertyError(
+                '"{}" property does not exists.'.format(name))
+    
+    def hide_property(self, name):
+        self._custom_prop_hidden[name] = self._custom_prop[name]
+        del self._custom_prop[name]
+
+    def show_property(self, name):
+        self._custom_prop[name] = self._custom_prop_hidden[name]
+        del self._custom_prop_hidden[name]
 
     def set_property(self, name, value):
         if name in self.properties.keys():
@@ -272,7 +288,7 @@ class NodeGraphModel(object):
         Args:
             attrs (dict): common node properties.
                 eg.
-                     {'nodeGraphQt.nodes.FooNode': {
+                     {'NodeGraphQt.nodes.FooNode': {
                         'my_property':{
                             'widget_type': 0,
                             'tab': 'Properties',

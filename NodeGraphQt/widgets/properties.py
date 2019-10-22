@@ -602,7 +602,7 @@ if __name__ == '__main__':
     graph = NodeGraph()
     graph.register_node(TestNode)
 
-    test_node = graph.create_node('nodeGraphQt.nodes.TestNode')
+    test_node = graph.create_node('NodeGraphQt.nodes.TestNode')
 
     node_prop = NodePropWidget(node=test_node)
     node_prop.property_changed.connect(prop_changed)

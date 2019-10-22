@@ -63,8 +63,13 @@ class CheckboxNode(BaseNode):
 
         # create the checkboxes.
         self.add_checkbox('cb_hello', '', 'Hello', True)
+        self.add_checkbox('cb_hello1', '', 'Hello', True)
+        self.add_checkbox('cb_hello2', '', 'Hello', True)
+        self.add_checkbox('cb_hello3', '', 'Hello', True)
         self.add_checkbox('cb_world', '', 'World', False)
 
         # create input and output port.
         self.add_input('in', color=(200, 100, 0))
         self.add_output('out', color=(0, 100, 200))
+        self.hide_widget('cb_hello')
+

@@ -34,7 +34,7 @@ class NodeObject(object):
     """
 
     #: (str) unique node identifier domain.
-    __identifier__ = 'nodeGraphQt.nodes'
+    __identifier__ = 'NodeGraphQt.nodes'
 
     #: (str) base node name.
     NODE_NAME = None
@@ -58,7 +58,7 @@ class NodeObject(object):
     def type_(cls):
         """
         Node type identifier followed by the class name.
-        eg. nodeGraphQt.nodes.MyNode
+        eg. NodeGraphQt.nodes.MyNode
 
         Returns:
             str: node type.
@@ -238,6 +238,26 @@ class NodeObject(object):
             tab (str): name of the widget tab to display in the properties bin.
         """
         self.model.add_property(name, value, items, range, widget_type, tab)
+    
+    def delete_property(self, name):
+        """
+        Creates a custom property to the node.
+
+        Args:
+            name (str): name of the property.
+            value (object): data.
+            items (list[str]): items used by widget type NODE_PROP_QCOMBO
+            range (tuple)): min, max values used by NODE_PROP_SLIDER
+            widget_type (int): widget flag to display in the properties bin.
+            tab (str): name of the widget tab to display in the properties bin.
+        """
+        self.model.del_property(name)
+
+    def hide_property(self, name):
+        self.model.hide_property(name)
+
+    def show_property(self, name):
+        self.model.show_property(name)
 
     def properties(self):
         """
@@ -459,6 +479,23 @@ class BaseNode(NodeObject):
         widget = NodeCheckBox(self.view, name, label, text, state)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
+    
+    def del_widget(self, name=''):
+        self.view.del_widget(name)
+        self.delete_property(name)
+        self.update()
+    
+    def hide_widget(self, name=''):
+        self.view.get_widget(name).hide()
+        self.view.hide_widget(name)
+        self.hide_property(name)
+        self.update()
+
+    def show_widget(self, name=''):
+        self.view.show_widget(name)
+        self.view.get_widget(name).show()
+        self.show_property(name)
+        self.update()
 
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None):

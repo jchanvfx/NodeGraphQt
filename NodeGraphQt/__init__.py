@@ -34,7 +34,7 @@ NodeGraphQt is a node graph framework that can be implemented and re purposed
 into applications that supports PySide2.
 
 url: https://github.com/jchanvfx/NodeGraphQt
-docs: http://chantasticvfx.com/nodeGraphQt/html/index.html
+docs: http://chantasticvfx.com/NodeGraphQt/html/index.html
 
 Basic Example:
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     graph.register_node(BaseNode)
     graph.register_node(BackdropNode)
 
-    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
+    backdrop = graph.create_node('NodeGraphQt.nodes.Backdrop', name='Backdrop')
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
 
