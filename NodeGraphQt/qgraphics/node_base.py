@@ -243,8 +243,8 @@ class NodeItem(AbstractNodeItem):
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
         width, height = self.calc_size(add_w, add_h)
-        # if width > self._width:
-        #     self._width = width
+        if width > self._width:
+            self._width = width
         if height > self._height:
             self._height = height
 

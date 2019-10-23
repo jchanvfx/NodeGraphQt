@@ -18,12 +18,13 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         self.setTitle(label)
         self.setStyleSheet(style)
 
-        self._layout = QtWidgets.QVBoxLayout(self)
+        self._layout = QtWidgets.QHBoxLayout(self)
         self._layout.setContentsMargins(*margin)
         self._layout.setSpacing(1)
 
-    def add_node_widget(self, widget):
-        self._layout.addWidget(widget)
+    def add_node_widget(self, *widgets):
+        for widget in widgets:
+            self._layout.addWidget(widget)
 
 
 class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
@@ -49,14 +50,6 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     @property
     def widget(self):
-        raise NotImplementedError
-
-    @property
-    def value(self):
-        raise NotImplementedError
-
-    @value.setter
-    def value(self, text):
         raise NotImplementedError
 
     @property
@@ -212,3 +205,42 @@ class NodeCheckBox(NodeBaseWidget):
     def value(self, state=False):
         if state != self.value:
             self._cbox.setChecked(state)
+
+
+class NodePushButton(NodeBaseWidget):
+    """
+    CheckBox Node Widget.
+    """
+
+    def __init__(self, parent=None, name='', label='', text='', state=False):
+        super(NodePushButton, self).__init__(parent, name, label)
+        self._cbox = QtWidgets.QPushButton(text)
+        self._cbox.setMinimumWidth(80)
+        self._cbox.setStyleSheet(STYLE_PUSHBUTTON)
+        font = self._cbox.font()
+        font.setPointSize(11)
+        self._cbox.setFont(font)
+        self._cbox.clicked.connect(self._value_changed)
+        group = _NodeGroupBox(label)
+        group.add_node_widget(self._cbox)
+        self.setWidget(group)
+        self.text = text
+        self.state = state
+        self.x = 0
+
+    @property
+    def type_(self):
+        return 'NodePushButtonWidget'
+
+    @property
+    def widget(self):
+        return self._cbox
+        
+    @property
+    def value(self):
+        self.x += 1
+        return self.x
+
+    @value.setter
+    def value(self, state=False):
+        self.x = self.value
