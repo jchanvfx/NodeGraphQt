@@ -48,25 +48,25 @@ NODE_SEL_BORDER_COLOR = (254, 207, 42, 255)
 
 # === NODE PROPERTY ===
 
-#: Property type will hidden in the properties bin (default).
-NODE_PROP = 0
-#: Property type represented with a QLabel widget in the properties bin.
-NODE_PROP_QLABEL = 2
-#: Property type represented with a QLineEdit widget in the properties bin.
-NODE_PROP_QLINEEDIT = 3
-#: Property type represented with a QTextEdit widget in the properties bin.
-NODE_PROP_QTEXTEDIT = 4
-#: Property type represented with a QComboBox widget in the properties bin.
-NODE_PROP_QCOMBO = 5
-#: Property type represented with a QCheckBox widget in the properties bin.
-NODE_PROP_QCHECKBOX = 6
-#: Property type represented with a QSpinBox widget in the properties bin.
-NODE_PROP_QSPINBOX = 7
-#: Property type represented with a ColorPicker widget in the properties bin.
-NODE_PROP_COLORPICKER = 8
-#: Property type represented with a Slider widget in the properties bin.
-NODE_PROP_SLIDER = 9
-NODE_PROP_QPUSHBUTTON = 10
+# #: Property type will hidden in the properties bin (default).
+# NODE_PROP = 0
+# #: Property type represented with a QLabel widget in the properties bin.
+# NODE_PROP_QLABEL = 2
+# #: Property type represented with a QLineEdit widget in the properties bin.
+# NODE_PROP_QLINEEDIT = 3
+# #: Property type represented with a QTextEdit widget in the properties bin.
+# NODE_PROP_QTEXTEDIT = 4
+# #: Property type represented with a QComboBox widget in the properties bin.
+# NODE_PROP_QCOMBO = 5
+# #: Property type represented with a QCheckBox widget in the properties bin.
+# NODE_PROP_QCHECKBOX = 6
+# #: Property type represented with a QSpinBox widget in the properties bin.
+# NODE_PROP_QSPINBOX = 7
+# #: Property type represented with a ColorPicker widget in the properties bin.
+# NODE_PROP_COLORPICKER = 8
+# #: Property type represented with a Slider widget in the properties bin.
+# NODE_PROP_SLIDER = 9
+# NODE_PROP_QPUSHBUTTON = 10
 
 # === NODE VIEWER ===
 

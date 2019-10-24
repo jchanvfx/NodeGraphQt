@@ -7,7 +7,7 @@ from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
                          setup_context_menu)
-from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
+from NodeGraphQt import QtWidgets, QtCore
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
@@ -33,7 +33,13 @@ class MyNode(BaseNode):
         self.add_output('out port', display_name=False)
 
         self.add_combo_menu('knobs', 'knobs', ['asdasd', '123'])
-        self.add_button('test', 'test', 'test')
+
+        self.add_button('refresh', '', 'refresh')
+        self.add_button('refresh2', '', 'refresh')
+
+        self.get_widget('knobs').clear()
+        self.get_widget('knobs').add_items(["cycki", 'dupa'])
+        # self.get_widget('knobs').addItem('dupa')
 
 def test(a, b, c):
     print(a.name())
@@ -53,24 +59,6 @@ if __name__ == '__main__':
     viewer = graph.viewer()
     viewer.resize(1100, 800)
     viewer.show()
-
-
-    # show the properties bin when a node is "double clicked" in the graph.
-    properties_bin = PropertiesBinWidget(node_graph=graph)
-    properties_bin.setWindowFlags(QtCore.Qt.Tool)
-    def show_prop_bin(node):
-        if not properties_bin.isVisible():
-            properties_bin.show()
-    graph.node_double_clicked.connect(show_prop_bin)
-
-
-    # show the nodes list when a node is "double clicked" in the graph.
-    node_tree = NodeTreeWidget(node_graph=graph)
-    def show_nodes_list(node):
-        if not node_tree.isVisible():
-            node_tree.update()
-            node_tree.show()
-    graph.node_double_clicked.connect(show_nodes_list)
 
 
     # registered nodes.

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import nuke
 
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
@@ -29,20 +30,21 @@ class MyNode(BaseNode):
         self.set_color(25, 58, 51)
 
         # create input and output port.
-        self.add_input('in port', color=(200, 10, 0), display_name=False)
-        self.add_output('out port', display_name=False)
+        self.add_input('in port', color=(200, 10, 0))
+        self.add_output('out port')
 
-        self.add_combo_menu('knobs', 'knobs', ['asdasd', '123'])
-        self.add_button('test', 'test', 'test')
+        self.add_combo_menu('knobs', 'knobs', ['asd', '123', '355'])
 
-def test(a, b, c):
-    print(a.name())
-    print(b)
-    print(c)
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
+def test(a, b):
+    a.show_widget("cb_hello")
 
+
+def test2(a, b):
+    nuke.message("dropped")
+
+
+def show():
     # create node graph.
     graph = NodeGraph()
 
@@ -52,8 +54,6 @@ if __name__ == '__main__':
     # viewer widget used for the node graph.
     viewer = graph.viewer()
     viewer.resize(1100, 800)
-    viewer.show()
-
 
     # show the properties bin when a node is "double clicked" in the graph.
     properties_bin = PropertiesBinWidget(node_graph=graph)
@@ -92,24 +92,24 @@ if __name__ == '__main__':
                                 pos=[310, 10])
 
     foo_node = graph.create_node('com.chantasticvfx.FooNode',
-                                 name='node',
-                                 pos=[-480, 140])
+                                    name='node',
+                                    pos=[-480, 140])
     foo_node.set_disabled(True)
 
     # create example "TextInputNode".
     text_node = graph.create_node('com.chantasticvfx.TextInputNode',
-                                  name='text node',
-                                  pos=[-480, -160])
+                                    name='text node',
+                                    pos=[-480, -160])
 
     # create example "TextInputNode".
     checkbox_node = graph.create_node('com.chantasticvfx.CheckboxNode',
-                                  name='checkbox node',
-                                  pos=[-480, -20])
+                                    name='checkbox node',
+                                    pos=[-480, -20])
 
     # create node with a combo box menu.
     menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
-                                  name='menu node',
-                                  pos=[280, -200])
+                                    name='menu node',
+                                    pos=[280, -200])
 
 
     # change node icon.
@@ -126,5 +126,8 @@ if __name__ == '__main__':
     bar_node.set_input(0, text_node.output(0))
 
     graph.property_changed.connect(test)
+    graph.data_dropped.connect(test2)
 
-    app.exec_()
+    nuke.message("dziala")
+
+    viewer.show()

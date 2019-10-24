@@ -18,7 +18,7 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         self.setTitle(label)
         self.setStyleSheet(style)
 
-        self._layout = QtWidgets.QHBoxLayout(self)
+        self._layout = QtWidgets.QVBoxLayout(self)
         self._layout.setContentsMargins(*margin)
         self._layout.setSpacing(1)
 
@@ -146,13 +146,49 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit.clearFocus()
         group = _NodeGroupBox(label)
         group.add_node_widget(self._ledit)
-        group.setMaximumWidth(120)
         self.setWidget(group)
         self.text = text
 
     @property
     def type_(self):
         return 'LineEditNodeWidget'
+
+    @property
+    def widget(self):
+        return self._ledit
+
+    @property
+    def value(self):
+        return str(self._ledit.text())
+
+    @value.setter
+    def value(self, text=''):
+        if text != self.value:
+            self._ledit.setText(text)
+            self._value_changed()
+
+
+class NodeMultiLineEdit(NodeBaseWidget):
+    """
+    LineEdit Node Widget.
+    """
+    # WIP
+    def __init__(self, parent=None, name='', label='', text='', col=3, row=3):
+        super(NodeLineEdit, self).__init__(parent, name, label)
+        self._ledit = QtWidgets.QLineEdit()
+        self._ledit.setStyleSheet(STYLE_QLINEEDIT)
+        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
+        self._ledit.returnPressed.connect(self._value_changed)
+        self._ledit.clearFocus()
+        group = _NodeGroupBox(label)
+        group.add_node_widget(self._ledit)
+        group.setMaximumWidth(120)
+        self.setWidget(group)
+        self.text = text
+
+    @property
+    def type_(self):
+        return 'MultiLineEditNodeWidget'
 
     @property
     def widget(self):
@@ -227,7 +263,7 @@ class NodePushButton(NodeBaseWidget):
         group.add_node_widget(self._cbox)
         self.setWidget(group)
         self.text = text
-        self.pushes = 0
+        self.pushes = 1
 
     @property
     def type_(self):
@@ -245,3 +281,4 @@ class NodePushButton(NodeBaseWidget):
     @value.setter
     def value(self, value):
         self.pushes -= 1
+

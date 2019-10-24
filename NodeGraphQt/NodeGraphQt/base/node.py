@@ -2,13 +2,7 @@
 from NodeGraphQt.base.commands import PropertyChangedCmd
 from NodeGraphQt.base.model import NodeModel
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (NODE_PROP,
-                                   NODE_PROP_QLINEEDIT,
-                                   NODE_PROP_QTEXTEDIT,
-                                   NODE_PROP_QCOMBO,
-                                   NODE_PROP_QCHECKBOX,
-                                   NODE_PROP_QPUSHBUTTON,
-                                   IN_PORT, OUT_PORT)
+from NodeGraphQt.constants import (IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -40,6 +34,7 @@ class NodeObject(object):
 
     #: (str) base node name.
     NODE_NAME = None
+    NODE_TIP = ''
 
     def __init__(self, qgraphics_item=None):
         assert qgraphics_item, 'qgraphics item cannot be None.'
@@ -226,8 +221,7 @@ class NodeObject(object):
         """
         self.set_property('selected', selected)
 
-    def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None):
+    def create_property(self, name, value, items=None, range=None):
         """
         Creates a custom property to the node.
 
@@ -239,27 +233,7 @@ class NodeObject(object):
             widget_type (int): widget flag to display in the properties bin.
             tab (str): name of the widget tab to display in the properties bin.
         """
-        self.model.add_property(name, value, items, range, widget_type, tab)
-    
-    def delete_property(self, name):
-        """
-        Creates a custom property to the node.
-
-        Args:
-            name (str): name of the property.
-            value (object): data.
-            items (list[str]): items used by widget type NODE_PROP_QCOMBO
-            range (tuple)): min, max values used by NODE_PROP_SLIDER
-            widget_type (int): widget flag to display in the properties bin.
-            tab (str): name of the widget tab to display in the properties bin.
-        """
-        self.model.del_property(name)
-
-    def hide_property(self, name):
-        self.model.hide_property(name)
-
-    def show_property(self, name):
-        self.model.show_property(name)
+        self.model.add_property(name, value, items, range)
 
     def properties(self):
         """
@@ -428,7 +402,9 @@ class BaseNode(NodeObject):
         """
         return self.model.icon
 
-    def add_combo_menu(self, name='', label='', items=None, tab=None):
+    # NODE WIDGETS
+    # --------------------------------------------------------------
+    def add_combo_menu(self, name='', label='', items=None):
         """
         Create a custom property and embed a
         :class:`PySide2.QtWidgets.QComboBox` widget into the node.
@@ -440,13 +416,13 @@ class BaseNode(NodeObject):
             tab (str): name of the widget tab to display in.
         """
         items = items or []
-        self.create_property(name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
+        self.create_property(name, items[0], items=items)
 
         widget = NodeComboBox(self.view, name, label, items)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_checkbox(self, name='', label='', text='', state=False, tab=None):
+    def add_checkbox(self, name='', label='', text='', state=False):
         """
         Create a custom property and embed a
         :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
@@ -458,12 +434,12 @@ class BaseNode(NodeObject):
             state (bool): pre-check.
             tab (str): name of the widget tab to display in.
         """
-        self.create_property(name, state, widget_type=NODE_PROP_QCHECKBOX, tab=tab)
+        self.create_property(name, state)
         widget = NodeCheckBox(self.view, name, label, text, state)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_button(self, name='', label='', text='', state=False, tab=None):
+    def add_button(self, name='', label='', text='', state=False):
         """
         Create a custom property and embed a
         :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
@@ -475,12 +451,12 @@ class BaseNode(NodeObject):
             state (bool): pre-check.
             tab (str): name of the widget tab to display in.
         """
-        self.create_property(name, state, widget_type=NODE_PROP_QPUSHBUTTON, tab=tab)
+        self.create_property(name, state)
         widget = NodePushButton(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_text_input(self, name='', label='', text='', tab=None):
+    def add_text_input(self, name='', label='', text=''):
         """
         Create a custom property and embed a
         :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
@@ -491,28 +467,30 @@ class BaseNode(NodeObject):
             text (str): pre filled text.
             tab (str): name of the widget tab to display in.
         """
-        self.create_property(name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+        self.create_property(name, text)
         widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
- 
-    def del_widget(self, name=''):
-        self.view.del_widget(name)
-        self.delete_property(name)
-        self.update()
-    
-    def hide_widget(self, name=''):
-        self.view.get_widget(name).hide()
-        self.view.hide_widget(name)
-        self.hide_property(name)
-        self.update()
 
-    def show_widget(self, name=''):
-        self.view.show_widget(name)
-        self.view.get_widget(name).show()
-        self.show_property(name)
-        self.update()
+    # WIP
+    def add_multitext_input(self, name='', label='', text=[''], col=3, row=3):
+        """
+        Create a custom property and embed a
+        :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
 
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(name, text)
+        widget = NodeLineEdit(self.view, name, label, text)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
+    # NODE INPUTS
+    # --------------------------------------------------------------
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None):
         """
@@ -572,6 +550,11 @@ class BaseNode(NodeObject):
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
+  
+    # WIDGETS UTILITIES
+    # --------------------------------------------------------------  
+    def get_widget(self, name):
+        return self.view.get_widget(name)
 
     def inputs(self):
         """
@@ -649,8 +632,7 @@ class BackdropNode(NodeObject):
         super(BackdropNode, self).__init__(BackdropNodeItem())
         # override base default color.
         self.model.color = (5, 129, 138, 255)
-        self.create_property('backdrop_text', '',
-                             widget_type=NODE_PROP_QTEXTEDIT, tab='Backdrop')
+        self.create_property('backdrop_text', '')
 
     def auto_size(self):
         """

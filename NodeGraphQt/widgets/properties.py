@@ -9,7 +9,8 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QCHECKBOX,
                                    NODE_PROP_QSPINBOX,
                                    NODE_PROP_COLORPICKER,
-                                   NODE_PROP_SLIDER)
+                                   NODE_PROP_SLIDER,
+                                   NODE_PROP_QPUSHBUTTON)
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -280,6 +281,26 @@ class PropCheckBox(QtWidgets.QCheckBox):
             self.value_changed.emit(self.toolTip(), value)
 
 
+class PropPushButton(QtWidgets.QPushButton):
+
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropPushButton, self).__init__(parent)
+        self.clicked.connect(self._on_clicked)
+        self.value = 0
+
+    def _on_clicked(self):
+        self.value_changed.emit(self.toolTip(), self.get_value())
+
+    def get_value(self):
+        self.value += 1
+        return self.value
+
+    def set_value(self, value):
+        self.value -= 1
+
+
 class PropSpinBox(QtWidgets.QSpinBox):
 
     value_changed = QtCore.Signal(str, object)
@@ -309,6 +330,7 @@ WIDGET_MAP = {
     NODE_PROP_QSPINBOX:     PropSpinBox,
     NODE_PROP_COLORPICKER:  PropColorPicker,
     NODE_PROP_SLIDER:       PropSlider,
+    NODE_PROP_QPUSHBUTTON:  PropPushButton
 }
 
 
