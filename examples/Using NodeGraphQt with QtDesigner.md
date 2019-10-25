@@ -12,7 +12,7 @@ See the QtDesigner's documentation for more information on promoting widgets.
 
 Then in your GUI init, you can use it like normal!
 
-```
+```python
 class GUI(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self):
