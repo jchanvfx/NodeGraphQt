@@ -40,7 +40,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
-        if parent is not None:
+        if parent is None:
             self.setWindowFlags(QtCore.Qt.Window)
 
         scene_pos = (SCENE_AREA / 2) * -1

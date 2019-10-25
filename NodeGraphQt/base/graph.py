@@ -42,11 +42,11 @@ class NodeGraph(QtCore.QObject):
     #: signal for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, view=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
         self._model = NodeGraphModel()
-        self._viewer = NodeViewer(parent)
+        self._viewer = view or NodeViewer(parent)
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
 
