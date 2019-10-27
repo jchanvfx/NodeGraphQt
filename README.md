@@ -75,7 +75,7 @@ if __name__ == '__main__':
     graph.register_node(MyNode)
    
     # create nodes.
-    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
+    backdrop = graph.create_node('nodeGraphQt.nodes.BackdropNode', name='Backdrop')
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
     
