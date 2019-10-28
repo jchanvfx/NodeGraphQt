@@ -9,8 +9,8 @@ from NodeGraphQt import (NodeGraph,
                          setup_context_menu)
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
 
-# import example nodes from the "example_nodes" package
-from example_nodes import basic_nodes, widget_nodes
+# import example nodes from the "examples" package
+from examples import basic_nodes, widget_nodes
 
 
 class MyNode(BaseNode):
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(this_path, 'example_nodes', 'pear.png')
+    icon = os.path.join(this_path, 'examples', 'pear.png')
     bar_node = graph.create_node('com.chantasticvfx.BarNode')
     bar_node.set_icon(icon)
     bar_node.set_name('icon node')
