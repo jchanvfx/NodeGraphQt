@@ -811,6 +811,17 @@ class NodeGraph(QtCore.QObject):
         """
         return self._serialize(self.all_nodes())
 
+    def deserialize_session(self, layout_data):
+        """
+        Load node graph session from a dictionary object.
+
+        Args:
+            layout_data (dict): dictionary object containing a node session.
+        """
+        self.clear_session()
+        self._deserialize(layout_data)
+        self._undo_stack.clear()
+
     def save_session(self, file_path):
         """
         Saves the current node graph session layout to a `JSON` formatted file.
