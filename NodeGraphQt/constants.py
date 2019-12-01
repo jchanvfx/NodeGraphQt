@@ -21,6 +21,8 @@ PIPE_SLICER_COLOR = (255, 50, 75)
 PIPE_LAYOUT_STRAIGHT = 0
 #: The draw the connection pipes as curved lines.
 PIPE_LAYOUT_CURVED = 1
+#: The draw the connection pipes as angled lines.
+PIPE_LAYOUT_ANGLE = 2
 
 # === PORT ===
 
