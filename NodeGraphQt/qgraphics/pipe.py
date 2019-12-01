@@ -200,7 +200,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             path.lineTo(pos2)
             self.setPath(path)
 
-
     def reset_path(self):
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
