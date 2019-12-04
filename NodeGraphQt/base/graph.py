@@ -385,22 +385,23 @@ class NodeGraph(QtCore.QObject):
         self._model.acyclic = mode
         self._viewer.acyclic = mode
 
-    def set_pipe_style(self, style=None):
+    def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
         """
-        Set node graph pipes to be drawn straight or curved by default
-        all pipes are set curved. (default=0)
+        Set node graph pipes to be drawn as straight, curved or angled.
+        By default all pipes are set curved.
 
-        ``NodeGraphQt.constants.PIPE_LAYOUT_CURVED`` = 0
-        ``NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`` = 1
-        ``NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`` = 2
+        Pipe Styles:
+            ``NodeGraphQt.constants.PIPE_LAYOUT_CURVED``
+            ``NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT``
+            ``NodeGraphQt.constants.PIPE_LAYOUT_ANGLE``
 
         Args:
             style (int): pipe style.
         """
-        pipe_default = max([PIPE_LAYOUT_CURVED,
-                            PIPE_LAYOUT_STRAIGHT,
-                            PIPE_LAYOUT_ANGLE])
-        style = PIPE_LAYOUT_STRAIGHT if style > pipe_default else style
+        pipe_max = max([PIPE_LAYOUT_CURVED,
+                        PIPE_LAYOUT_STRAIGHT,
+                        PIPE_LAYOUT_ANGLE])
+        style = style if 0 >= style >= pipe_max else PIPE_LAYOUT_CURVED
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
