@@ -9,16 +9,24 @@ NodeObject
 
 The ``NodeGraphQt.NodeObject`` class is the main base class that all nodes inherit from.
 
-----
 
-.. autoclass:: NodeGraphQt.NodeObject
-    :members:
-    :exclude-members: model, NODE_NAME
-
-Attributes
+NodeObject Attributes
+---------------------
 
 .. autoattribute:: NodeGraphQt.NodeObject.__identifier__
 .. autoattribute:: NodeGraphQt.NodeObject.NODE_NAME
+.. autoattribute:: NodeGraphQt.NodeObject.graph
+.. autoattribute:: NodeGraphQt.NodeObject.id
+.. autoattribute:: NodeGraphQt.NodeObject.model
+.. autoattribute:: NodeGraphQt.NodeObject.view
+
+
+NodeObject Class
+----------------
+
+.. autoclass:: NodeGraphQt.NodeObject
+    :members:
+    :exclude-members: NODE_NAME, graph, id, model, view
 
 
 BaseNode
@@ -55,7 +63,8 @@ code snippet.
             # create an output port.
             self.add_output('out')
 
-----
+Base Class
+----------
 
 .. autoclass:: NodeGraphQt.BaseNode
     :members:
@@ -72,7 +81,8 @@ The ``NodeGraphQt.BackdropNode`` class allows other node object to be nested ins
 .. image:: _images/backdrop.png
     :width: 250px
 
-----
+BackdropNode Class
+------------------
 
 .. autoclass:: NodeGraphQt.BackdropNode
     :members:

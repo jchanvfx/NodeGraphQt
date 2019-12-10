@@ -25,28 +25,29 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
     """
 
-    #: signal emits the node object when a node is created in the node graph.
+    #: (signal) emits the node object when a node is created in the node graph.
     node_created = QtCore.Signal(NodeObject)
-    #: signal emits a list of node ids from the deleted nodes.
+    #: (signal) emits a list of node ids from the deleted nodes.
     nodes_deleted = QtCore.Signal(list)
-    #: signal emits the node object when selected in the node graph.
+    #: (signal) emits the node object when selected in the node graph.
     node_selected = QtCore.Signal(NodeObject)
-    #: signal triggered when a node is double clicked and emits the node.
+    #: (signal) triggered when a node is double clicked and emits the node.
     node_double_clicked = QtCore.Signal(NodeObject)
-    #: signal for when a node has been connected emits (source port, target port).
+    #: (signal) for when a node has been connected emits (source port, target port).
     port_connected = QtCore.Signal(Port, Port)
-    #: signal for when a node has been disconnected emits (source port, target port).
+    #: (signal) for when a node has been disconnected emits (source port, target port).
     port_disconnected = QtCore.Signal(Port, Port)
-    #: signal for when a node property has changed emits (node, property name, property value).
+    #: (signal) for when a node property has changed emits (node, property name, property value).
     property_changed = QtCore.Signal(NodeObject, str, object)
-    #: signal for when drop data has been added to the graph.
+    #: (signal) for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
+        self._widget = None
         self._model = NodeGraphModel()
-        self._viewer = NodeViewer(parent)
+        self._viewer = NodeViewer()
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
 
@@ -223,23 +224,42 @@ class NodeGraph(QtCore.QObject):
         """
         return self._model
 
+    @property
+    def widget(self):
+        """
+        Return the node graph widget.
+
+        Returns:
+            QtWidgets.QWidget: node graph widget.
+        """
+        if self._widget is None:
+            self._widget = QtWidgets.QWidget()
+            layout = QtWidgets.QVBoxLayout(self._widget)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.addWidget(self._viewer)
+        return self._widget
+
     def show(self):
         """
-        Show node graph viewer widget this is just a convenience
-        function to :meth:`NodeGraph.viewer().show()`.
+        Show node graph widget this is just a convenience
+        function to :meth:`NodeGraph.widget.show()`.
         """
-        self._viewer.show()
+        self._widget.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraph.viewer().close()`.
+        function to :meth:`NodeGraph.widget.close()`.
         """
-        self._viewer.close()
+        self._widget.close()
 
     def viewer(self):
         """
-        Return the node graph viewer widget.
+        Returns the view interface used by the node graph.
+
+        Note:
+            All functions in the `NodeViewer` should only be used internally
+            by the `NodeGraph` class.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.

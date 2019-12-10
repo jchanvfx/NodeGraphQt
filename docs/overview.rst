@@ -97,8 +97,8 @@ example code:
         graph.register_node(FooNode)
 
         # show the node graph widget.
-        viewer = graph.viewer()
-        viewer.show()
+        graph_widget = graph.widget
+        graph_widget.show()
 
         # create two nodes.
         node_a = graph.create_node('com.chantasticvfx.FooNode', name='node A')

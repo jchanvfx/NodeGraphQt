@@ -42,10 +42,10 @@ if __name__ == '__main__':
     # set up default menu and commands.
     setup_context_menu(graph)
 
-    # viewer widget used for the node graph.
-    viewer = graph.viewer()
-    viewer.resize(1100, 800)
-    viewer.show()
+    # widget used for the node graph.
+    graph_widget = graph.widget
+    graph_widget.resize(1100, 800)
+    graph_widget.show()
 
 
     # show the properties bin when a node is "double clicked" in the graph.
@@ -116,6 +116,5 @@ if __name__ == '__main__':
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
-
 
     app.exec_()

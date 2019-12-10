@@ -82,9 +82,9 @@ if __name__ == '__main__':
     # connect node a input to node b output.
     node_a.set_input(0, node_b.output(0))    
 
-    # show widget.
-    viewer = graph.viewer()
-    viewer.show()
+    # get the widget and show.
+    graph_widget = graph.widget
+    graph_widget.show()
 
     app.exec_()
 ```
