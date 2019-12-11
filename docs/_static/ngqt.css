@@ -266,14 +266,15 @@ div.highlight{
 }
 
 div.note {
-    background-color: #50313b;
-    border: 1px solid #733c4b;
+    background-color: #544322;
+    border: 1px solid #bf9d3b;
     border-radius: 4px;
 }
- 
+
 div.seealso {
-    background-color: #ffc;
-    border: 1px solid #ff6;
+    background-color: #5a5a37;
+    border: 1px solid #bdbd40;
+    border-radius: 4px;
 }
  
 div.topic {
@@ -281,8 +282,9 @@ div.topic {
 }
  
 div.warning {
-    background-color: #ffe4e4;
-    border: 1px solid #f66;
+    background-color: #50313b;
+    border: 1px solid #b7395b;
+    border-radius: 4px;
 }
  
 p.admonition-title {
