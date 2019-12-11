@@ -217,7 +217,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def model(self):
         """
-        Returns the model used for storing the node graph data.
+        The model used for storing the node graph data.
 
         Returns:
             NodeGraphQt.base.model.NodeGraphModel: node graph model.
@@ -227,7 +227,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def widget(self):
         """
-        Return the wrapper widget containing the node graph.
+        The node graph widget for adding into a layout.
 
         Returns:
             QtWidgets.QWidget: node graph widget.
@@ -242,14 +242,14 @@ class NodeGraph(QtCore.QObject):
     def show(self):
         """
         Show node graph widget this is just a convenience
-        function to :meth:`NodeGraph.widget.show()`.
+        function to :meth:`NodeGraphQt.NodeGraph.widget.show()`.
         """
         self._widget.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraph.widget.close()`.
+        function to :meth:`NodeGraphQt.NodeGraph.widget.close()`.
         """
         self._widget.close()
 
@@ -258,15 +258,15 @@ class NodeGraph(QtCore.QObject):
         Returns the view interface used by the node graph.
 
         Warnings:
-            Methods in the `NodeViewer` widget should only be used internally
+            Methods in the `NodeViewer` are used internally
             by `NodeGraphQt` components.
 
         See Also:
-            To add the node graph into a QLayout see
-            :attr:`NodeGraph.widget` attribute.
+            :attr:`NodeGraph.widget` for adding the node graph into a 
+            QtWidgets.QLayout.
 
         Returns:
-            NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.
+            NodeGraphQt.widgets.viewer.NodeViewer: viewer interface.
         """
         return self._viewer
 
@@ -353,7 +353,10 @@ class NodeGraph(QtCore.QObject):
     def clear_undo_stack(self):
         """
         Clears the undo stack.
-        (convenience function to :meth:`NodeGraph.undo_stack().clear`)
+        
+        Note:
+            Convenience function to 
+            :meth:`NodeGraphQt.NodeGraph.undo_stack().clear`
 
         See Also:
             :meth:`NodeGraph.begin_undo()`,
@@ -993,8 +996,8 @@ class NodeGraph(QtCore.QObject):
         the node graph.
 
         Note:
-            This is a convenience function to
-            :meth:`NodeGraph.viewer().question_dialog`)
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().question_dialog`
 
         Args:
             text (str): question text.
@@ -1010,8 +1013,8 @@ class NodeGraph(QtCore.QObject):
         Prompts a file open dialog in the node graph.
 
         Note:
-            This is a convenience function to
-            :meth:`NodeGraph.viewer().message_dialog`
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().message_dialog`
 
         Args:
             text (str): message text.
@@ -1024,8 +1027,8 @@ class NodeGraph(QtCore.QObject):
         Prompts a file open dialog in the node graph.
 
         Note:
-            This is a convenience function to
-            :meth:`NodeGraph.viewer().load_dialog`
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().load_dialog`
 
         Args:
             current_dir (str): path to a directory.
@@ -1041,8 +1044,8 @@ class NodeGraph(QtCore.QObject):
         Prompts a file save dialog in the node graph.
 
         Note:
-            This is a convenience function to
-            :meth:`NodeGraph.viewer().save_dialog`
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().save_dialog`
 
         Args:
             current_dir (str): path to a directory.
