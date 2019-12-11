@@ -63,8 +63,8 @@ code snippet.
             # create an output port.
             self.add_output('out')
 
-Base Class
-----------
+BaseNode Class
+--------------
 
 .. autoclass:: NodeGraphQt.BaseNode
     :members:
