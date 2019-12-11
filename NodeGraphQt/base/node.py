@@ -307,7 +307,7 @@ class NodeObject(object):
         Set the node horizontal X position in the node graph.
 
         Args:
-            x (float or int): node X position:
+            x (float or int): node X position.
         """
         y = self.pos()[1]
         self.set_pos(float(x), y)
@@ -317,7 +317,7 @@ class NodeObject(object):
         Set the node horizontal Y position in the node graph.
 
         Args:
-            y (float or int): node Y position:
+            y (float or int): node Y position.
         """
 
         x = self.pos()[0]
@@ -522,7 +522,7 @@ class BaseNode(NodeObject):
 
     def inputs(self):
         """
-        Returns all the input port for the node.
+        Returns all the input ports from the node.
         
         Returns:
             dict: {<port_name>: <port_object>}
@@ -531,7 +531,7 @@ class BaseNode(NodeObject):
 
     def outputs(self):
         """
-        Returns all the output port for the node.
+        Returns all the output ports from the node.
 
         Returns:
             dict: {<port_name>: <port_object>}
