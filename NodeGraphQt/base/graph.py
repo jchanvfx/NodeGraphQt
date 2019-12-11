@@ -217,7 +217,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def model(self):
         """
-        Returns the model used to store the node graph data.
+        Returns the model used for storing the node graph data.
 
         Returns:
             NodeGraphQt.base.model.NodeGraphModel: node graph model.
@@ -227,7 +227,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def widget(self):
         """
-        Return the node graph widget.
+        Return the wrapper widget containing the node graph.
 
         Returns:
             QtWidgets.QWidget: node graph widget.
@@ -257,9 +257,13 @@ class NodeGraph(QtCore.QObject):
         """
         Returns the view interface used by the node graph.
 
-        Note:
-            All functions in the `NodeViewer` should only be used internally
-            by the `NodeGraph` class.
+        Warnings:
+            Methods in the `NodeViewer` widget should only be used internally
+            by `NodeGraphQt` components.
+
+        See Also:
+            To add the node graph into a QLayout see
+            :attr:`NodeGraph.widget` attribute.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.
@@ -335,7 +339,11 @@ class NodeGraph(QtCore.QObject):
 
     def undo_stack(self):
         """
-        Returns the undo stack used in the node graph
+        Returns the undo stack used in the node graph.
+
+        See Also:
+            :meth:`NodeGraph.begin_undo()`,
+            :meth:`NodeGraph.end_undo()`
 
         Returns:
             QtWidgets.QUndoStack: undo stack.
@@ -346,6 +354,11 @@ class NodeGraph(QtCore.QObject):
         """
         Clears the undo stack.
         (convenience function to :meth:`NodeGraph.undo_stack().clear`)
+
+        See Also:
+            :meth:`NodeGraph.begin_undo()`,
+            :meth:`NodeGraph.end_undo()`,
+            :meth:`NodeGraph.undo_stack()`
         """
         self._undo_stack.clear()
 
@@ -408,15 +421,18 @@ class NodeGraph(QtCore.QObject):
     def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
-        By default all pipes are set curved.
 
-        Pipe Styles:
-            ``NodeGraphQt.constants.PIPE_LAYOUT_CURVED``
-            ``NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT``
-            ``NodeGraphQt.constants.PIPE_LAYOUT_ANGLE``
+        Note:
+            By default all pipes are set curved.
+
+            Pipe Layout Styles:
+
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_CURVED`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`
 
         Args:
-            style (int): pipe style.
+            style (int): pipe layout style.
         """
         pipe_max = max([PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
@@ -478,7 +494,8 @@ class NodeGraph(QtCore.QObject):
         """
         Return a list of all node types that have been registered.
 
-        To register a node see :meth:`NodeGraph.register_node`
+        See Also:
+            To register a node :meth:`NodeGraph.register_node`
 
         Returns:
             list[str]: list of node type identifiers.
@@ -500,7 +517,8 @@ class NodeGraph(QtCore.QObject):
         """
         Create a new node in the node graph.
 
-        (To list all node types see :meth:`NodeGraph.registered_nodes`)
+        See Also:
+            To list all node types :meth:`NodeGraph.registered_nodes`
 
         Args:
             node_type (str): node instance type.
@@ -949,7 +967,8 @@ class NodeGraph(QtCore.QObject):
         """
         Set weather to Disable or Enable specified nodes.
 
-        see: :meth:`NodeObject.set_disabled`
+        See Also:
+            :meth:`NodeObject.set_disabled`
 
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
@@ -973,7 +992,9 @@ class NodeGraph(QtCore.QObject):
         Prompts a question open dialog with "Yes" and "No" buttons in
         the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().question_dialog`)
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraph.viewer().question_dialog`)
 
         Args:
             text (str): question text.
@@ -988,7 +1009,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file open dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().message_dialog`)
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraph.viewer().message_dialog`
 
         Args:
             text (str): message text.
@@ -1000,7 +1023,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file open dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().load_dialog`)
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraph.viewer().load_dialog`
 
         Args:
             current_dir (str): path to a directory.
@@ -1015,7 +1040,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file save dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().save_dialog`)
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraph.viewer().save_dialog`
 
         Args:
             current_dir (str): path to a directory.
