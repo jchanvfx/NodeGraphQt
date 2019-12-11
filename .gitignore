@@ -1,5 +1,5 @@
 # sphinx documentation
-docs/_build/
+docs/_build/doctrees
 
 # python stuff
 *.pyc
