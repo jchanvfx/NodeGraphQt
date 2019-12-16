@@ -15,7 +15,7 @@ description = (
     'supports PySide & PySide2'
 )
 classifiers = [
-    'Programming Language :: Python :: 3.7.2',
+    'Programming Language :: Python :: 3.7',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
 ]
