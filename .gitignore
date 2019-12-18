@@ -12,5 +12,8 @@ docs/_build/
 # test stuff
 dist
 build
+
+tests/*
+
 *.egg-info
 *.json

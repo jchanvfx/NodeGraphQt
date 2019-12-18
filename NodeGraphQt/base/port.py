@@ -3,6 +3,7 @@ from NodeGraphQt.base.commands import (PortConnectedCmd,
                                        PortDisconnectedCmd,
                                        PortVisibleCmd)
 from NodeGraphQt.base.model import PortModel
+from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 
 class Port(object):
@@ -118,9 +119,9 @@ class Port(object):
         for node_id, port_names in self.model.connected_ports.items():
             for port_name in port_names:
                 node = graph.get_node_by_id(node_id)
-                if self.type_() == 'in':
+                if self.type_() == IN_PORT:
                     ports.append(node.outputs()[port_name])
-                elif self.type_() == 'out':
+                elif self.type_() == OUT_PORT:
                     ports.append(node.inputs()[port_name])
         return ports
 

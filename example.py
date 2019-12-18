@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
-import sys
 
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
@@ -34,7 +33,7 @@ class MyNode(BaseNode):
 
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication([])
 
     # create node graph.
     graph = NodeGraph()

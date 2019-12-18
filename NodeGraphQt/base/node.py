@@ -529,6 +529,15 @@ class BaseNode(NodeObject):
         """
         return {p.name(): p for p in self._inputs}
 
+    def input_ports(self):
+        """
+        Return all input ports.
+
+        Returns:
+            list[NodeGraphQt.Port]: node input ports.
+        """
+        return self._inputs
+
     def outputs(self):
         """
         Returns all the output ports from the node.
@@ -537,6 +546,15 @@ class BaseNode(NodeObject):
             dict: {<port_name>: <port_object>}
         """
         return {p.name(): p for p in self._outputs}
+
+    def output_ports(self):
+        """
+        Return all output ports.
+
+        Returns:
+            list[NodeGraphQt.Port]: node output ports.
+        """
+        return self._outputs
 
     def input(self, index):
         """
