@@ -14,7 +14,7 @@ applications that supports PySide2.
 
 #### Documentation
 
-https://jchanvfx.github.io/NodeGraphQt
+<a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">https://jchanvfx.github.io/NodeGraphQt</a>
 
 #### Navigation
 
