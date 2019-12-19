@@ -33,7 +33,7 @@ class NodeObject(object):
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
     """
 
-    #: (str) unique node identifier domain.
+    #: (str) unique node identifier domain. (default: "nodeGraphQt.nodes")
     __identifier__ = 'nodeGraphQt.nodes'
 
     #: (str) base node name.
@@ -601,6 +601,44 @@ class BaseNode(NodeObject):
         """
         src_port = self.output(index)
         src_port.connect_to(port)
+
+    def connected_input_nodes(self):
+        """
+        Returns all nodes connected from the input ports.
+
+        Returns:
+            dict: {<input_port>: <node_list>}
+        """
+        nodes = {}
+        for p in self.input_ports():
+            nodes[p] = [cp.node() for cp in p.connected_ports()]
+        return nodes
+
+    def connected_output_nodes(self):
+        """
+        Returns all nodes connected from the output ports.
+
+        Returns:
+            dict: {<output_port>: <node_list>}
+        """
+        nodes = {}
+        for p in self.output_ports():
+            nodes[p] = [cp.node() for cp in p.connected_ports()]
+        return nodes
+
+    def on_input_connected(self, in_port, out_port):
+        """
+        Callback function that is triggered when a OUTPUT port from another
+        node has connected to a INPUT port for this node.
+
+        Note:
+            re-implement this function if you require logic to run for this event.
+
+        Args:
+            in_port (NodeGraphQt.Port): input port from this node.
+            out_port (NodeGraphQt.Port): output port connecting to this node.
+        """
+        return
 
 
 class BackdropNode(NodeObject):

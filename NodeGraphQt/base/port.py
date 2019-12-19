@@ -66,7 +66,7 @@ class Port(object):
         Return the parent node.
 
         Returns:
-            NodeGraphQt.NodeObject: parent node object.
+            NodeGraphQt.BaseNode: parent node object.
         """
         return self.model.node
 

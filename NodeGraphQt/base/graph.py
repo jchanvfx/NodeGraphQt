@@ -16,7 +16,9 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (DRAG_DROP_ID,
                                    PIPE_LAYOUT_CURVED,
-                                   PIPE_LAYOUT_STRAIGHT, PIPE_LAYOUT_ANGLE)
+                                   PIPE_LAYOUT_STRAIGHT,
+                                   PIPE_LAYOUT_ANGLE,
+                                   IN_PORT, OUT_PORT)
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
@@ -73,6 +75,9 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
+        # node events.
+        self.port_connected.connect(self._on_port_connected)
+
     def _toggle_tab_search(self):
         """
         toggle the tab search widget.
@@ -95,6 +100,22 @@ class NodeGraph(QtCore.QObject):
         # prevent signals from causing a infinite loop.
         if node.get_property(prop_name) != prop_value:
             node.set_property(prop_name, prop_value)
+
+    def _on_port_connected(self, src_port, tgt_port):
+        """
+        called when a port connection has been made.
+        (executes the "on_input_connected" method on the node.)
+
+        Args:
+            src_port (NodeGraphQt.Port): source port.
+            tgt_port (NodeGraphQt.Port): target port.
+        """
+        if tgt_port.type_() == IN_PORT:
+            node = tgt_port.node()
+            node.on_input_connected(tgt_port, src_port)
+        elif tgt_port.type_() == OUT_PORT:
+            node = src_port.node()
+            node.on_input_connected(src_port, tgt_port)
 
     def _on_node_double_clicked(self, node_id):
         """
@@ -177,7 +198,7 @@ class NodeGraph(QtCore.QObject):
             return
 
         label = 'connect node(s)' if connected else 'disconnect node(s)'
-        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
 
         self._undo_stack.beginMacro(label)
         for p1_view, p2_view in disconnected:
@@ -204,7 +225,7 @@ class NodeGraph(QtCore.QObject):
         """
         if not ports:
             return
-        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
         self._undo_stack.beginMacro('slice connections')
         for p1_view, p2_view in ports:
             node1 = self._model.nodes[p1_view.node.id]
