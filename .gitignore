@@ -1,5 +1,6 @@
 # sphinx documentation
 docs/_build/
+api
 
 # python stuff
 *.pyc
