@@ -27,21 +27,21 @@ class NodeGraph(QtCore.QObject):
     base node graph controller.
     """
 
-    #: (signal) emits the node object when a node is created in the node graph.
+    #:QtCore.Signal: emits the node object when a node is created in the node graph.
     node_created = QtCore.Signal(NodeObject)
-    #: (signal) emits a list of node ids from the deleted nodes.
+    #:QtCore.Signal: emits a ``list[str]`` of node ids from the deleted nodes.
     nodes_deleted = QtCore.Signal(list)
-    #: (signal) emits the node object when selected in the node graph.
+    #:QtCore.Signal: emits the node object when selected in the node graph.
     node_selected = QtCore.Signal(NodeObject)
-    #: (signal) triggered when a node is double clicked and emits the node.
+    #:QtCore.Signal: triggered when a node is double clicked and emits the node.
     node_double_clicked = QtCore.Signal(NodeObject)
-    #: (signal) for when a node has been connected emits (source port, target port).
+    #:QtCore.Signal: for when a node has been connected emits (``input port``, ``output port``).
     port_connected = QtCore.Signal(Port, Port)
-    #: (signal) for when a node has been disconnected emits (source port, target port).
+    #:QtCore.Signal: for when a node has been disconnected emits (``input port``, ``output port``).
     port_disconnected = QtCore.Signal(Port, Port)
-    #: (signal) for when a node property has changed emits (node, property name, property value).
+    #:QtCore.Signal: for when a node property has changed emits (``node``, ``property name``, ``property value``).
     property_changed = QtCore.Signal(NodeObject, str, object)
-    #: (signal) for when drop data has been added to the graph.
+    #:QtCore.Signal: for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None):
@@ -75,9 +75,6 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
-        # node events.
-        self.port_connected.connect(self._on_port_connected)
-
     def _toggle_tab_search(self):
         """
         toggle the tab search widget.
@@ -100,22 +97,6 @@ class NodeGraph(QtCore.QObject):
         # prevent signals from causing a infinite loop.
         if node.get_property(prop_name) != prop_value:
             node.set_property(prop_name, prop_value)
-
-    def _on_port_connected(self, src_port, tgt_port):
-        """
-        called when a port connection has been made.
-        (executes the "on_input_connected" method on the node.)
-
-        Args:
-            src_port (NodeGraphQt.Port): source port.
-            tgt_port (NodeGraphQt.Port): target port.
-        """
-        if tgt_port.type_() == IN_PORT:
-            node = tgt_port.node()
-            node.on_input_connected(tgt_port, src_port)
-        elif tgt_port.type_() == OUT_PORT:
-            node = src_port.node()
-            node.on_input_connected(src_port, tgt_port)
 
     def _on_node_double_clicked(self, node_id):
         """
@@ -263,14 +244,14 @@ class NodeGraph(QtCore.QObject):
     def show(self):
         """
         Show node graph widget this is just a convenience
-        function to :meth:`NodeGraphQt.NodeGraph.widget.show()`.
+        function to :meth:`NodeGraph.widget().show()`.
         """
         self._widget.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraphQt.NodeGraph.widget.close()`.
+        function to :meth:`NodeGraph.widget().close()`.
         """
         self._widget.close()
 
@@ -377,7 +358,7 @@ class NodeGraph(QtCore.QObject):
         
         Note:
             Convenience function to 
-            :meth:`NodeGraphQt.NodeGraph.undo_stack().clear`
+            :meth:`NodeGraph.undo_stack().clear()`
 
         See Also:
             :meth:`NodeGraph.begin_undo()`,
@@ -793,14 +774,16 @@ class NodeGraph(QtCore.QObject):
             for pname, conn_data in inputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {'in': [n_id, pname], 'out': [conn_id, conn_prt]}
+                        pipe = {IN_PORT: [n_id, pname],
+                                OUT_PORT: [conn_id, conn_prt]}
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
             for pname, conn_data in outputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {'out': [n_id, pname], 'in': [conn_id, conn_prt]}
+                        pipe = {OUT_PORT: [n_id, pname],
+                                IN_PORT: [conn_id, conn_prt]}
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 

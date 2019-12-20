@@ -1,7 +1,9 @@
 #!/usr/bin/python
 from NodeGraphQt.base.commands import (PortConnectedCmd,
                                        PortDisconnectedCmd,
-                                       PortVisibleCmd)
+                                       PortVisibleCmd,
+                                       NodeInputConnectedCmd,
+                                       NodeInputDisconnectedCmd)
 from NodeGraphQt.base.model import PortModel
 from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
@@ -138,8 +140,8 @@ class Port(object):
 
         graph = self.node().graph
         viewer = graph.viewer()
-        undo_stack = graph.undo_stack()
 
+        undo_stack = graph.undo_stack()
         undo_stack.beginMacro('connect port')
 
         pre_conn_port = None
@@ -149,26 +151,33 @@ class Port(object):
 
         if not port:
             if pre_conn_port:
+                undo_stack.push(NodeInputDisconnectedCmd(self, port))
                 undo_stack.push(PortDisconnectedCmd(self, port))
             return
 
         if graph.acyclic() and viewer.acyclic_check(self.view, port.view):
             if pre_conn_port:
+                undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
                 undo_stack.push(PortDisconnectedCmd(self, pre_conn_port))
                 return
 
         trg_conn_ports = port.connected_ports()
         if not port.multi_connection() and trg_conn_ports:
             dettached_port = trg_conn_ports[0]
+            undo_stack.push(NodeInputDisconnectedCmd(port, dettached_port))
             undo_stack.push(PortDisconnectedCmd(port, dettached_port))
         if pre_conn_port:
+            undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
             undo_stack.push(PortDisconnectedCmd(self, pre_conn_port))
 
+        undo_stack.push(NodeInputConnectedCmd(self, port))
         undo_stack.push(PortConnectedCmd(self, port))
+
         undo_stack.endMacro()
 
         # emit "port_connected" signal from the parent graph.
-        graph.port_connected.emit(self, port)
+        ports = {p.type_(): p for p in [self, port]}
+        graph.port_connected.emit(ports[IN_PORT], ports[OUT_PORT])
 
     def disconnect_from(self, port=None):
         """
@@ -181,7 +190,11 @@ class Port(object):
         if not port:
             return
         graph = self.node().graph
+        graph.undo_stack().beginMacro('disconnect port')
+        graph.undo_stack().push(NodeInputDisconnectedCmd(self, port))
         graph.undo_stack().push(PortDisconnectedCmd(self, port))
+        graph.undo_stack().endMacro()
 
         # emit "port_disconnected" signal from the parent graph.
-        graph.port_disconnected.emit(self, port)
+        ports = {p.type_(): p for p in [self, port]}
+        graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])

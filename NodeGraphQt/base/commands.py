@@ -163,6 +163,60 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node.view.delete()
 
 
+class NodeInputConnectedCmd(QtWidgets.QUndoCommand):
+    """
+    "BaseNode.on_input_connected()" command.
+
+    Args:
+        src_port (NodeGraphQt.Port): source port.
+        trg_port (NodeGraphQt.Port): target port.
+    """
+
+    def __init__(self, src_port, trg_port):
+        QtWidgets.QUndoCommand.__init__(self)
+        if src_port.type_() == IN_PORT:
+            self.source = src_port
+            self.target = trg_port
+        else:
+            self.source = trg_port
+            self.target = src_port
+
+    def undo(self):
+        node = self.source.node()
+        node.on_input_disconnected(self.source, self.target)
+
+    def redo(self):
+        node = self.source.node()
+        node.on_input_connected(self.source, self.target)
+
+
+class NodeInputDisconnectedCmd(QtWidgets.QUndoCommand):
+    """
+    Node "on_input_disconnected()" command.
+
+    Args:
+        src_port (NodeGraphQt.Port): source port.
+        trg_port (NodeGraphQt.Port): target port.
+    """
+
+    def __init__(self, src_port, trg_port):
+        QtWidgets.QUndoCommand.__init__(self)
+        if src_port.type_() == IN_PORT:
+            self.source = src_port
+            self.target = trg_port
+        else:
+            self.source = trg_port
+            self.target = src_port
+
+    def undo(self):
+        node = self.source.node()
+        node.on_input_connected(self.source, self.target)
+
+    def redo(self):
+        node = self.source.node()
+        node.on_input_disconnected(self.source, self.target)
+
+
 class PortConnectedCmd(QtWidgets.QUndoCommand):
     """
     Port connected command.

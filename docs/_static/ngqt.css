@@ -42,6 +42,11 @@ code span.pre {
     color: #5cafb9;
 }
 
+/* properties */
+em.property {
+    color: #5d86c3;
+}
+
 /* tables */
 table.docutils td, 
 table.docutils th {

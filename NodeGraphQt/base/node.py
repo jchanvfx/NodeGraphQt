@@ -33,10 +33,10 @@ class NodeObject(object):
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
     """
 
-    #: (str) unique node identifier domain. (default: "nodeGraphQt.nodes")
+    #:str: unique node identifier domain.
     __identifier__ = 'nodeGraphQt.nodes'
 
-    #: (str) base node name.
+    #:str: base node name.
     NODE_NAME = None
 
     def __init__(self, qgraphics_item=None):
@@ -261,7 +261,7 @@ class NodeObject(object):
             object: property data.
         """
         if self.graph and name == 'selected':
-            self.model.set_property(self.view.selected)
+            self.model.set_property(name, self.view.selected)
 
         return self.model.get_property(name)
 
@@ -628,15 +628,36 @@ class BaseNode(NodeObject):
 
     def on_input_connected(self, in_port, out_port):
         """
-        Callback function that is triggered when a OUTPUT port from another
-        node has connected to a INPUT port for this node.
+        Callback triggered when a new pipe connection is made.
+
+        *The default of this function does nothing re-implement if you require
+        logic to run for this event.*
 
         Note:
-            re-implement this function if you require logic to run for this event.
+            to work with undo & redo for this method re-implement
+            :meth:`BaseNode.on_input_disconnected` with the reverse logic.
 
         Args:
-            in_port (NodeGraphQt.Port): input port from this node.
-            out_port (NodeGraphQt.Port): output port connecting to this node.
+            in_port (NodeGraphQt.Port): source input port from this node.
+            out_port (NodeGraphQt.Port): output port that connected to this node.
+        """
+        return
+
+    def on_input_disconnected(self, in_port, out_port):
+        """
+        Callback triggered when a pipe connection has been disconnected
+        from a INPUT port.
+
+        *The default of this function does nothing re-implement if you require
+        logic to run for this event.*
+
+        Note:
+            to work with undo & redo for this method re-implement
+            :meth:`BaseNode.on_input_connected` with the reverse logic.
+
+        Args:
+            in_port (NodeGraphQt.Port): source input port from this node.
+            out_port (NodeGraphQt.Port): output port that was disconnected.
         """
         return
 
