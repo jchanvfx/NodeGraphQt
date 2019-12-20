@@ -40,7 +40,7 @@ class NodeObject(object):
     NODE_NAME = None
 
     def __init__(self, qgraphics_item=None):
-        assert qgraphics_item, 'qgraphics item cannot be None.'
+        assert qgraphics_item, 'qgraphics_item item cannot be None.'
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
