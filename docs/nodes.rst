@@ -1,5 +1,5 @@
 Nodes
-*****
+#####
 
 .. image:: _images/screenshot.png
     :width: 95%
