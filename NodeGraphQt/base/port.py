@@ -10,7 +10,10 @@ from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 class Port(object):
     """
-    base class for a node port.
+    The ``Port`` class is used for connecting one node to another.
+
+    .. image:: ../_images/port.png
+        :width: 50%
 
     Args:
         node (NodeGraphQt.NodeObject): parent node.

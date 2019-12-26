@@ -24,7 +24,12 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 class NodeGraph(QtCore.QObject):
     """
-    base node graph controller.
+    The ``NodeGraph`` class is the main controller for managing all nodes.
+
+    Inherited from: ``PySide2.QtCore.QObject``
+
+    .. image:: _images/graph.png
+        :width: 60%
     """
 
     #:QtCore.Signal: emits the node object when a node is created in the node graph.

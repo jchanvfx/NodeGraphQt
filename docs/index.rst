@@ -1,21 +1,22 @@
 NodeGraphQt
-***********
+###########
 
 Welcome to the ``NodeGraphQt`` documentation.
 
-.. image:: _images/example_result.png
-    :width: 60%
+.. image:: _images/screenshot.png
+    :width: 95%
 
-Project: https://github.com/jchanvfx/NodeGraphQt
+Project Repo: https://github.com/jchanvfx/NodeGraphQt
 
-
-Contents
-========
+----
 
 .. toctree::
+    :name: mastertoc
     :maxdepth: 3
 
     overview
     constants
-    classes
+    graph
+    nodes
+    menu
     widgets

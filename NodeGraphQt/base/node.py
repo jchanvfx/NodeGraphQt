@@ -27,7 +27,10 @@ class classproperty(object):
 
 class NodeObject(object):
     """
-    base class for all node objects.
+    The ``NodeGraphQt.NodeObject`` class is the main base class that all
+    nodes inherit from.
+
+    **Inherited by:** :class:`NodeGraphQt.BaseNode`, :class:`NodeGraphQt.BackdropNode`
 
     Args:
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
@@ -78,7 +81,7 @@ class NodeObject(object):
     @property
     def graph(self):
         """
-        The parent node graph controller.
+        The parent node graph.
 
         Returns:
             NodeGraphQt.NodeGraph: node graph.
@@ -366,7 +369,37 @@ class NodeObject(object):
 
 class BaseNode(NodeObject):
     """
-    base class of a typical Node with input and output ports.
+    The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows
+    port connections from one node to another.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/node.png
+        :width: 250px
+
+    example snippet:
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import BaseNode
+
+        class FooNode(BaseNode):
+
+            # unique node identifier domain.
+            __identifier__ = 'com.chantasticvfx'
+
+            # initial default node name.
+            NODE_NAME = 'Foo Node'
+
+            def __init__(self):
+                super(FooNode, self).__init__()
+
+                # create an input port.
+                self.add_input('in')
+
+                # create an output port.
+                self.add_output('out')
     """
 
     NODE_NAME = 'Base Node'
@@ -664,7 +697,13 @@ class BaseNode(NodeObject):
 
 class BackdropNode(NodeObject):
     """
-    base class of a Backdrop node.
+    The ``NodeGraphQt.BackdropNode`` class allows other node object to be
+    nested inside, it's mainly good for grouping nodes together.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/backdrop.png
+        :width: 250px
     """
 
     NODE_NAME = 'Backdrop'
