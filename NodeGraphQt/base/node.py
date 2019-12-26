@@ -27,20 +27,23 @@ class classproperty(object):
 
 class NodeObject(object):
     """
-    base class for all node objects.
+    The ``NodeGraphQt.NodeObject`` class is the main base class that all
+    nodes inherit from.
+
+    **Inherited by:** :class:`NodeGraphQt.BaseNode`, :class:`NodeGraphQt.BackdropNode`
 
     Args:
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
     """
 
-    #: (str) unique node identifier domain.
+    #:str: unique node identifier domain.
     __identifier__ = 'nodeGraphQt.nodes'
 
-    #: (str) base node name.
+    #:str: base node name.
     NODE_NAME = None
 
     def __init__(self, qgraphics_item=None):
-        assert qgraphics_item, 'qgraphics item cannot be None.'
+        assert qgraphics_item, 'qgraphics_item item cannot be None.'
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
@@ -78,7 +81,7 @@ class NodeObject(object):
     @property
     def graph(self):
         """
-        The parent node graph controller.
+        The parent node graph.
 
         Returns:
             NodeGraphQt.NodeGraph: node graph.
@@ -261,7 +264,7 @@ class NodeObject(object):
             object: property data.
         """
         if self.graph and name == 'selected':
-            self.model.set_property(self.view.selected)
+            self.model.set_property(name, self.view.selected)
 
         return self.model.get_property(name)
 
@@ -307,7 +310,7 @@ class NodeObject(object):
         Set the node horizontal X position in the node graph.
 
         Args:
-            x (float or int): node X position:
+            x (float or int): node X position.
         """
         y = self.pos()[1]
         self.set_pos(float(x), y)
@@ -317,7 +320,7 @@ class NodeObject(object):
         Set the node horizontal Y position in the node graph.
 
         Args:
-            y (float or int): node Y position:
+            y (float or int): node Y position.
         """
 
         x = self.pos()[0]
@@ -366,7 +369,37 @@ class NodeObject(object):
 
 class BaseNode(NodeObject):
     """
-    base class of a typical Node with input and output ports.
+    The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows
+    port connections from one node to another.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/node.png
+        :width: 250px
+
+    example snippet:
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import BaseNode
+
+        class FooNode(BaseNode):
+
+            # unique node identifier domain.
+            __identifier__ = 'com.chantasticvfx'
+
+            # initial default node name.
+            NODE_NAME = 'Foo Node'
+
+            def __init__(self):
+                super(FooNode, self).__init__()
+
+                # create an input port.
+                self.add_input('in')
+
+                # create an output port.
+                self.add_output('out')
     """
 
     NODE_NAME = 'Base Node'
@@ -522,21 +555,39 @@ class BaseNode(NodeObject):
 
     def inputs(self):
         """
-        Returns all the input port for the node.
+        Returns all the input ports from the node.
         
         Returns:
             dict: {<port_name>: <port_object>}
         """
         return {p.name(): p for p in self._inputs}
 
+    def input_ports(self):
+        """
+        Return all input ports.
+
+        Returns:
+            list[NodeGraphQt.Port]: node input ports.
+        """
+        return self._inputs
+
     def outputs(self):
         """
-        Returns all the output port for the node.
+        Returns all the output ports from the node.
 
         Returns:
             dict: {<port_name>: <port_object>}
         """
         return {p.name(): p for p in self._outputs}
+
+    def output_ports(self):
+        """
+        Return all output ports.
+
+        Returns:
+            list[NodeGraphQt.Port]: node output ports.
+        """
+        return self._outputs
 
     def input(self, index):
         """
@@ -584,10 +635,75 @@ class BaseNode(NodeObject):
         src_port = self.output(index)
         src_port.connect_to(port)
 
+    def connected_input_nodes(self):
+        """
+        Returns all nodes connected from the input ports.
+
+        Returns:
+            dict: {<input_port>: <node_list>}
+        """
+        nodes = {}
+        for p in self.input_ports():
+            nodes[p] = [cp.node() for cp in p.connected_ports()]
+        return nodes
+
+    def connected_output_nodes(self):
+        """
+        Returns all nodes connected from the output ports.
+
+        Returns:
+            dict: {<output_port>: <node_list>}
+        """
+        nodes = {}
+        for p in self.output_ports():
+            nodes[p] = [cp.node() for cp in p.connected_ports()]
+        return nodes
+
+    def on_input_connected(self, in_port, out_port):
+        """
+        Callback triggered when a new pipe connection is made.
+
+        *The default of this function does nothing re-implement if you require
+        logic to run for this event.*
+
+        Note:
+            to work with undo & redo for this method re-implement
+            :meth:`BaseNode.on_input_disconnected` with the reverse logic.
+
+        Args:
+            in_port (NodeGraphQt.Port): source input port from this node.
+            out_port (NodeGraphQt.Port): output port that connected to this node.
+        """
+        return
+
+    def on_input_disconnected(self, in_port, out_port):
+        """
+        Callback triggered when a pipe connection has been disconnected
+        from a INPUT port.
+
+        *The default of this function does nothing re-implement if you require
+        logic to run for this event.*
+
+        Note:
+            to work with undo & redo for this method re-implement
+            :meth:`BaseNode.on_input_connected` with the reverse logic.
+
+        Args:
+            in_port (NodeGraphQt.Port): source input port from this node.
+            out_port (NodeGraphQt.Port): output port that was disconnected.
+        """
+        return
+
 
 class BackdropNode(NodeObject):
     """
-    base class of a Backdrop node.
+    The ``NodeGraphQt.BackdropNode`` class allows other node object to be
+    nested inside, it's mainly good for grouping nodes together.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/backdrop.png
+        :width: 250px
     """
 
     NODE_NAME = 'Backdrop'

@@ -1,5 +1,6 @@
 # sphinx documentation
 docs/_build/
+api
 
 # python stuff
 *.pyc
@@ -11,5 +12,9 @@ docs/_build/
 
 # test stuff
 dist
+build
+
+tests/*
+
 *.egg-info
 *.json

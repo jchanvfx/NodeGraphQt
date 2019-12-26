@@ -16,37 +16,45 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (DRAG_DROP_ID,
                                    PIPE_LAYOUT_CURVED,
-                                   PIPE_LAYOUT_STRAIGHT)
+                                   PIPE_LAYOUT_STRAIGHT,
+                                   PIPE_LAYOUT_ANGLE,
+                                   IN_PORT, OUT_PORT)
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
 class NodeGraph(QtCore.QObject):
     """
-    base node graph controller.
+    The ``NodeGraph`` class is the main controller for managing all nodes.
+
+    Inherited from: ``PySide2.QtCore.QObject``
+
+    .. image:: _images/graph.png
+        :width: 60%
     """
 
-    #: signal emits the node object when a node is created in the node graph.
+    #:QtCore.Signal: emits the node object when a node is created in the node graph.
     node_created = QtCore.Signal(NodeObject)
-    #: signal emits a list of node ids from the deleted nodes.
+    #:QtCore.Signal: emits a ``list[str]`` of node ids from the deleted nodes.
     nodes_deleted = QtCore.Signal(list)
-    #: signal emits the node object when selected in the node graph.
+    #:QtCore.Signal: emits the node object when selected in the node graph.
     node_selected = QtCore.Signal(NodeObject)
-    #: signal triggered when a node is double clicked and emits the node.
+    #:QtCore.Signal: triggered when a node is double clicked and emits the node.
     node_double_clicked = QtCore.Signal(NodeObject)
-    #: signal for when a node has been connected emits (source port, target port).
+    #:QtCore.Signal: for when a node has been connected emits (``input port``, ``output port``).
     port_connected = QtCore.Signal(Port, Port)
-    #: signal for when a node has been disconnected emits (source port, target port).
+    #:QtCore.Signal: for when a node has been disconnected emits (``input port``, ``output port``).
     port_disconnected = QtCore.Signal(Port, Port)
-    #: signal for when a node property has changed emits (node, property name, property value).
+    #:QtCore.Signal: for when a node property has changed emits (``node``, ``property name``, ``property value``).
     property_changed = QtCore.Signal(NodeObject, str, object)
-    #: signal for when drop data has been added to the graph.
+    #:QtCore.Signal: for when drop data has been added to the graph.
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
+        self._widget = None
         self._model = NodeGraphModel()
-        self._viewer = NodeViewer(parent)
+        self._viewer = NodeViewer()
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
 
@@ -176,7 +184,7 @@ class NodeGraph(QtCore.QObject):
             return
 
         label = 'connect node(s)' if connected else 'disconnect node(s)'
-        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
 
         self._undo_stack.beginMacro(label)
         for p1_view, p2_view in disconnected:
@@ -203,7 +211,7 @@ class NodeGraph(QtCore.QObject):
         """
         if not ports:
             return
-        ptypes = {'in': 'inputs', 'out': 'outputs'}
+        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
         self._undo_stack.beginMacro('slice connections')
         for p1_view, p2_view in ports:
             node1 = self._model.nodes[p1_view.node.id]
@@ -216,33 +224,56 @@ class NodeGraph(QtCore.QObject):
     @property
     def model(self):
         """
-        Returns the model used to store the node graph data.
+        The model used for storing the node graph data.
 
         Returns:
             NodeGraphQt.base.model.NodeGraphModel: node graph model.
         """
         return self._model
 
+    @property
+    def widget(self):
+        """
+        The node graph widget for adding into a layout.
+
+        Returns:
+            QtWidgets.QWidget: node graph widget.
+        """
+        if self._widget is None:
+            self._widget = QtWidgets.QWidget()
+            layout = QtWidgets.QVBoxLayout(self._widget)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.addWidget(self._viewer)
+        return self._widget
+
     def show(self):
         """
-        Show node graph viewer widget this is just a convenience
-        function to :meth:`NodeGraph.viewer().show()`.
+        Show node graph widget this is just a convenience
+        function to :meth:`NodeGraph.widget().show()`.
         """
-        self._viewer.show()
+        self._widget.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraph.viewer().close()`.
+        function to :meth:`NodeGraph.widget().close()`.
         """
-        self._viewer.close()
+        self._widget.close()
 
     def viewer(self):
         """
-        Return the node graph viewer widget.
+        Returns the view interface used by the node graph.
+
+        Warnings:
+            Methods in the `NodeViewer` are used internally
+            by `NodeGraphQt` components.
+
+        See Also:
+            :attr:`NodeGraph.widget` for adding the node graph into a 
+            QtWidgets.QLayout.
 
         Returns:
-            NodeGraphQt.widgets.viewer.NodeViewer: viewer widget.
+            NodeGraphQt.widgets.viewer.NodeViewer: viewer interface.
         """
         return self._viewer
 
@@ -315,7 +346,11 @@ class NodeGraph(QtCore.QObject):
 
     def undo_stack(self):
         """
-        Returns the undo stack used in the node graph
+        Returns the undo stack used in the node graph.
+
+        See Also:
+            :meth:`NodeGraph.begin_undo()`,
+            :meth:`NodeGraph.end_undo()`
 
         Returns:
             QtWidgets.QUndoStack: undo stack.
@@ -325,7 +360,15 @@ class NodeGraph(QtCore.QObject):
     def clear_undo_stack(self):
         """
         Clears the undo stack.
-        (convenience function to :meth:`NodeGraph.undo_stack().clear`)
+        
+        Note:
+            Convenience function to 
+            :meth:`NodeGraph.undo_stack().clear()`
+
+        See Also:
+            :meth:`NodeGraph.begin_undo()`,
+            :meth:`NodeGraph.end_undo()`,
+            :meth:`NodeGraph.undo_stack()`
         """
         self._undo_stack.clear()
 
@@ -411,19 +454,26 @@ class NodeGraph(QtCore.QObject):
         self._model.acyclic = mode
         self._viewer.acyclic = mode
 
-    def set_pipe_style(self, style=None):
+    def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
         """
-        Set node graph pipes to be drawn straight or curved by default
-        all pipes are set curved. (default=0)
+        Set node graph pipes to be drawn as straight, curved or angled.
 
-        ``NodeGraphQt.constants.PIPE_LAYOUT_CURVED`` = 0
-        ``NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`` = 1
+        Note:
+            By default all pipes are set curved.
+
+            Pipe Layout Styles:
+
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_CURVED`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`
 
         Args:
-            style (int): pipe style.
+            style (int): pipe layout style.
         """
-        pipe_default = max([PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT])
-        style = PIPE_LAYOUT_STRAIGHT if style > pipe_default else style
+        pipe_max = max([PIPE_LAYOUT_CURVED,
+                        PIPE_LAYOUT_STRAIGHT,
+                        PIPE_LAYOUT_ANGLE])
+        style = style if 0 >= style >= pipe_max else PIPE_LAYOUT_CURVED
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
@@ -480,7 +530,8 @@ class NodeGraph(QtCore.QObject):
         """
         Return a list of all node types that have been registered.
 
-        To register a node see :meth:`NodeGraph.register_node`
+        See Also:
+            To register a node :meth:`NodeGraph.register_node`
 
         Returns:
             list[str]: list of node type identifiers.
@@ -502,7 +553,8 @@ class NodeGraph(QtCore.QObject):
         """
         Create a new node in the node graph.
 
-        (To list all node types see :meth:`NodeGraph.registered_nodes`)
+        See Also:
+            To list all node types :meth:`NodeGraph.registered_nodes`
 
         Args:
             node_type (str): node instance type.
@@ -753,14 +805,16 @@ class NodeGraph(QtCore.QObject):
             for pname, conn_data in inputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {'in': [n_id, pname], 'out': [conn_id, conn_prt]}
+                        pipe = {IN_PORT: [n_id, pname],
+                                OUT_PORT: [conn_id, conn_prt]}
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
             for pname, conn_data in outputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {'out': [n_id, pname], 'in': [conn_id, conn_prt]}
+                        pipe = {OUT_PORT: [n_id, pname],
+                                IN_PORT: [conn_id, conn_prt]}
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
@@ -836,6 +890,17 @@ class NodeGraph(QtCore.QObject):
             dict: serialized session of the current node layout.
         """
         return self._serialize(self.all_nodes())
+
+    def deserialize_session(self, layout_data):
+        """
+        Load node graph session from a dictionary object.
+
+        Args:
+            layout_data (dict): dictionary object containing a node session.
+        """
+        self.clear_session()
+        self._deserialize(layout_data)
+        self._undo_stack.clear()
 
     def save_session(self, file_path):
         """
@@ -940,7 +1005,8 @@ class NodeGraph(QtCore.QObject):
         """
         Set weather to Disable or Enable specified nodes.
 
-        see: :meth:`NodeObject.set_disabled`
+        See Also:
+            :meth:`NodeObject.set_disabled`
 
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
@@ -964,7 +1030,9 @@ class NodeGraph(QtCore.QObject):
         Prompts a question open dialog with "Yes" and "No" buttons in
         the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().question_dialog`)
+        Note:
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().question_dialog`
 
         Args:
             text (str): question text.
@@ -979,7 +1047,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file open dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().message_dialog`)
+        Note:
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().message_dialog`
 
         Args:
             text (str): message text.
@@ -991,7 +1061,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file open dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().load_dialog`)
+        Note:
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().load_dialog`
 
         Args:
             current_dir (str): path to a directory.
@@ -1006,7 +1078,9 @@ class NodeGraph(QtCore.QObject):
         """
         Prompts a file save dialog in the node graph.
 
-        (convenience function to :meth:`NodeGraph.viewer().save_dialog`)
+        Note:
+            Convenience function to
+            :meth:`NodeGraphQt.NodeGraph.viewer().save_dialog`
 
         Args:
             current_dir (str): path to a directory.

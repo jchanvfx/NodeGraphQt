@@ -1,5 +1,5 @@
 Menus
-*****
+#####
 
 .. image:: _images/menu_hotkeys.png
     :width: 50%
@@ -53,7 +53,7 @@ add "Bar" command to the "Foo" menu.
 
 
 Menu
-====
+****
 
 Node graph menu.
 
@@ -65,7 +65,7 @@ Node graph menu.
 
 
 Command
-=======
+*******
 
 Node graph menu command.
 

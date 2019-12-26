@@ -15,9 +15,11 @@ description = (
     'supports PySide & PySide2'
 )
 classifiers = [
-    'Programming Language :: Python :: 3.7.2',
-    'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3.7',
+    'Documentation' :: 'https://jchanvfx.github.io/NodeGraphQt/api/html/index.html',
+    'Source' :: 'https://github.com/jchanvfx/NodeGraphQt/',
 ]
 
 setuptools.setup(

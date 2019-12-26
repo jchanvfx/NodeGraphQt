@@ -1,5 +1,5 @@
 Constants
-*********
+#########
 
 .. automodule:: NodeGraphQt.constants
     :members:

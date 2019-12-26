@@ -22,9 +22,9 @@ ZOOM_MAX = 2.0
 
 class NodeViewer(QtWidgets.QGraphicsView):
     """
-    node viewer is the widget used for displaying the scene and nodes
+    The widget interface used for displaying the scene and nodes.
 
-    functions in this class is used internally by the
+    functions in this class are called by the
     class:`NodeGraphQt.NodeGraph` class.
     """
 
@@ -40,8 +40,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
-        if parent is not None:
-            self.setWindowFlags(QtCore.Qt.Window)
 
         scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
@@ -51,7 +49,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
         self.setAcceptDrops(True)
-        self.resize(1000, 800)
+        self.resize(850, 800)
 
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None

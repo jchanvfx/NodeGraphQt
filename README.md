@@ -14,7 +14,7 @@ applications that supports PySide2.
 
 #### Documentation
 
-http://chantasticvfx.com/nodeGraphQt/html/index.html
+<a href="https://jchanvfx.github.io/NodeGraphQt">NodeGraphQt Documentation</a>
 
 #### Navigation
 
@@ -82,9 +82,9 @@ if __name__ == '__main__':
     # connect node a input to node b output.
     node_a.set_input(0, node_b.output(0))    
 
-    # show widget.
-    viewer = graph.viewer()
-    viewer.show()
+    # get the widget and show.
+    graph_widget = graph.widget
+    graph_widget.show()
 
     app.exec_()
 ```

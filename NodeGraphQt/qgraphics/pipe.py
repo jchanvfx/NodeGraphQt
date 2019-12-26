@@ -7,8 +7,8 @@ from NodeGraphQt.constants import (
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
-    Z_VAL_NODE_WIDGET
-)
+    Z_VAL_NODE_WIDGET,
+    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED)
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
@@ -163,25 +163,42 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             path.lineTo(pos2)
             self.setPath(path)
             return
+        elif self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
+            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
+            tangent = ctr_offset_x1 - ctr_offset_x2
+            tangent = (tangent * -1) if tangent < 0 else tangent
 
-        ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
-        tangent = ctr_offset_x1 - ctr_offset_x2
-        tangent = (tangent * -1) if tangent < 0 else tangent
+            max_width = start_port.node.boundingRect().width() / 2
+            tangent = max_width if tangent > max_width else tangent
+            if start_port.port_type == IN_PORT:
+                ctr_offset_x1 -= tangent
+                ctr_offset_x2 += tangent
+            else:
+                ctr_offset_x1 += tangent
+                ctr_offset_x2 -= tangent
 
-        max_width = start_port.node.boundingRect().width() / 2
-        tangent = max_width if tangent > max_width else tangent
+            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
+            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
+            path.cubicTo(ctr_point1, ctr_point2, pos2)
+            self.setPath(path)
+        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
+            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
+            distance = ctr_offset_x1 - ctr_offset_x2
+            distance = (distance * -1) if distance < 0 else distance
+            distance /= 2
+            if start_port.port_type == IN_PORT:
+                ctr_offset_x1 -= distance
+                ctr_offset_x2 += distance
+            else:
+                ctr_offset_x1 += distance
+                ctr_offset_x2 -= distance
 
-        if start_port.port_type == IN_PORT:
-            ctr_offset_x1 -= tangent
-            ctr_offset_x2 += tangent
-        else:
-            ctr_offset_x1 += tangent
-            ctr_offset_x2 -= tangent
-
-        ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
-        ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
-        path.cubicTo(ctr_point1, ctr_point2, pos2)
-        self.setPath(path)
+            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
+            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
+            path.lineTo(ctr_point1)
+            path.lineTo(ctr_point2)
+            path.lineTo(pos2)
+            self.setPath(path)
 
     def reset_path(self):
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
