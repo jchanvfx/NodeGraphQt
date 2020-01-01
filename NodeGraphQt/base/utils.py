@@ -11,28 +11,22 @@ def setup_context_menu(graph):
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
     """
-    root_menu = graph.context_menu()
+    root_menu = graph.get_context_menu('graph')
 
     file_menu = root_menu.add_menu('&File')
     edit_menu = root_menu.add_menu('&Edit')
 
     # create "File" menu.
-    file_menu.add_command('Open...',
-                          lambda: _open_session(graph),
-                          QtGui.QKeySequence.Open)
-    file_menu.add_command('Save...',
-                          lambda: _save_session(graph),
-                          QtGui.QKeySequence.Save)
-    file_menu.add_command('Save As...',
-                          lambda: _save_session_as(graph),
-                          'Ctrl+Shift+s')
-    file_menu.add_command('Clear', lambda: _clear_session(graph))
+    file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
+    file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
+    file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+s')
+    file_menu.add_command('Clear', _clear_session)
 
     file_menu.add_separator()
 
-    file_menu.add_command('Zoom In', lambda: _zoom_in(graph), '=')
-    file_menu.add_command('Zoom Out', lambda: _zoom_out(graph), '-')
-    file_menu.add_command('Reset Zoom', graph.reset_zoom, 'h')
+    file_menu.add_command('Zoom In', _zoom_in, '=')
+    file_menu.add_command('Zoom Out', _zoom_out, '-')
+    file_menu.add_command('Reset Zoom', _reset_zoom, 'h')
 
     # create "Edit" menu.
     undo_actn = graph.undo_stack().createUndoAction(graph.viewer(), '&Undo')
@@ -48,29 +42,21 @@ def setup_context_menu(graph):
     edit_menu.qmenu.addAction(redo_actn)
 
     edit_menu.add_separator()
-    edit_menu.add_command('Clear Undo History', lambda: _clear_undo(graph))
+    edit_menu.add_command('Clear Undo History', _clear_undo)
     edit_menu.add_separator()
 
-    edit_menu.add_command('Copy', graph.copy_nodes, QtGui.QKeySequence.Copy)
-    edit_menu.add_command('Paste', graph.paste_nodes, QtGui.QKeySequence.Paste)
-    edit_menu.add_command('Delete',
-                          lambda: graph.delete_nodes(graph.selected_nodes()),
-                          QtGui.QKeySequence.Delete)
+    edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
+    edit_menu.add_command('Paste', _paste_nodes, QtGui.QKeySequence.Paste)
+    edit_menu.add_command('Delete', _delete_nodes, QtGui.QKeySequence.Delete)
 
     edit_menu.add_separator()
 
-    edit_menu.add_command('Select all', graph.select_all, 'Ctrl+A')
-    edit_menu.add_command('Deselect all', graph.clear_selection, 'Ctrl+Shift+A')
-    edit_menu.add_command('Enable/Disable',
-                          lambda: graph.disable_nodes(graph.selected_nodes()),
-                          'd')
+    edit_menu.add_command('Select all', _select_all_nodes, 'Ctrl+A')
+    edit_menu.add_command('Deselect all', _clear_node_selection, 'Ctrl+Shift+A')
+    edit_menu.add_command('Enable/Disable', _disable_nodes, 'd')
 
-    edit_menu.add_command('Duplicate',
-                          lambda: graph.duplicate_nodes(graph.selected_nodes()),
-                          'Alt+c')
-    edit_menu.add_command('Center Selection',
-                          graph.fit_to_selection,
-                          'f')
+    edit_menu.add_command('Duplicate', _duplicate_nodes, 'Alt+c')
+    edit_menu.add_command('Center Selection', _fit_to_selection, 'f')
 
     edit_menu.add_separator()
 
@@ -98,6 +84,10 @@ def _zoom_out(graph):
     """
     zoom = graph.get_zoom() - 0.2
     graph.set_zoom(zoom)
+
+
+def _reset_zoom(graph):
+    graph.reset_zoom()
 
 
 def _open_session(graph):
@@ -168,3 +158,35 @@ def _clear_undo(graph):
     msg = 'Clear all undo history, Are you sure?'
     if viewer.question_dialog('Clear Undo History', msg):
         graph.undo_stack().clear()
+
+
+def _copy_nodes(graph):
+    graph.copy_nodes()
+
+
+def _paste_nodes(graph):
+    graph.paste_nodes()
+
+
+def _delete_nodes(graph):
+    graph.delete_nodes(graph.selected_nodes())
+
+
+def _select_all_nodes(graph):
+    graph.select_all()
+
+
+def _clear_node_selection(graph):
+    graph.clear_selection()
+
+
+def _disable_nodes(graph):
+    graph.disable_nodes(graph.selected_nodes())
+
+
+def _duplicate_nodes(graph):
+    graph.duplicate_nodes(graph.selected_nodes())
+
+
+def _fit_to_selection(graph):
+    graph.fit_to_selection()

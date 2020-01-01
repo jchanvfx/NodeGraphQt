@@ -52,15 +52,20 @@ add "Bar" command to the "Foo" menu.
 
 
 
-Menu
-****
+Graph Menus
+***********
 
 Node graph menu.
 
 
 ----
 
-.. autoclass:: NodeGraphQt.Menu
+.. autoclass:: NodeGraphQt.NodeGraphMenu
+    :members:
+
+----
+
+.. autoclass:: NodeGraphQt.NodesMenu
     :members:
 
 
@@ -71,5 +76,5 @@ Node graph menu command.
 
 ----
 
-.. autoclass:: NodeGraphQt.MenuCommand
+.. autoclass:: NodeGraphQt.NodeGraphCommand
     :members:
