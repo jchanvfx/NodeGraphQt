@@ -163,12 +163,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos = self.mapToScene(self._previous_pos)
             items = self._items_near(pos)
             nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-            # if nodes:
-            #     node = nodes[0]
-            #     ctx_menu = self._ctx_node_menu.get_menu(node.type_)
-            #     for action in ctx_menu.actions():
-            #         if not action.menu():
-            #             action.node_id = node.id
+            if nodes:
+                node = nodes[0]
+                ctx_menu = self._ctx_node_menu.get_menu(node.type_)
+                for action in ctx_menu.actions():
+                    if not action.menu():
+                        action.node_id = node.id
         if ctx_menu and ctx_menu.isEnabled():
             ctx_menu.exec_(event.globalPos())
         else:

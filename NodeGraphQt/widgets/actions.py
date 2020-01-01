@@ -9,9 +9,11 @@ class BaseMenu(QtWidgets.QMenu):
         super(BaseMenu, self).__init__(*args, **kwargs)
         self.setStyleSheet(STYLE_QMENU)
 
-    # def hideEvent(self, event):
-    #     super(BaseMenu, self).hideEvent(event)
-    #     print('foo')
+    def hideEvent(self, event):
+        super(BaseMenu, self).hideEvent(event)
+        for a in self.actions():
+            if hasattr(a, 'node_id'):
+                a.node_id = None
 
     def get_menu(self, name):
         for action in self.actions():
