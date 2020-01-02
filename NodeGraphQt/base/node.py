@@ -174,7 +174,7 @@ class NodeObject(object):
         Returns the node color in (red, green, blue) value.
 
         Returns:
-            tuple: (r, g, b) from 0-255 range.
+            tuple: ``(r, g, b)`` from ``0-255`` range.
         """
         r, g, b, a = self.model.color
         return r, g, b
@@ -184,9 +184,9 @@ class NodeObject(object):
         Sets the color of the node in (red, green, blue) value.
 
         Args:
-            r (int): red value 0-255 range.
-            g (int): green value 0-255 range.
-            b (int): blue value 0-255 range.
+            r (int): red value ``0-255`` range.
+            g (int): green value ``0-255`` range.
+            b (int): blue value ``0-255`` range.
         """
         self.set_property('color', (r, g, b, 255))
 
@@ -195,7 +195,7 @@ class NodeObject(object):
         Returns weather the node is enabled or disabled.
 
         Returns:
-            bool: true if the node is disabled.
+            bool: True if the node is disabled.
         """
         return self.model.disabled
 
@@ -204,7 +204,7 @@ class NodeObject(object):
         Set the node state to either disabled or enabled.
 
         Args:
-            mode(bool): true to disable node.
+            mode(bool): True to disable node.
         """
         self.set_property('disabled', mode)
 
@@ -235,8 +235,8 @@ class NodeObject(object):
         Args:
             name (str): name of the property.
             value (object): data.
-            items (list[str]): items used by widget type NODE_PROP_QCOMBO
-            range (tuple)): min, max values used by NODE_PROP_SLIDER
+            items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
+            range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
             widget_type (int): widget flag to display in the properties bin.
             tab (str): name of the widget tab to display in the properties bin.
         """
@@ -502,7 +502,7 @@ class BaseNode(NodeObject):
             name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            color (tuple): initial port color (r, g, b) 0-255.
+            color (tuple): initial port color (r, g, b) ``0-255``.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -532,7 +532,7 @@ class BaseNode(NodeObject):
             name (str): name for the output port.
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            color (tuple): initial port color (r, g, b) 0-255.
+            color (tuple): initial port color (r, g, b) ``0-255``.
 
         Returns:
             NodeGraphQt.Port: the created port object.

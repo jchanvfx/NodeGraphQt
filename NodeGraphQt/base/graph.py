@@ -265,8 +265,8 @@ class NodeGraph(QtCore.QObject):
         Returns the view interface used by the node graph.
 
         Warnings:
-            Methods in the `NodeViewer` are used internally
-            by `NodeGraphQt` components.
+            Methods in the ``NodeViewer`` are used internally
+            by ``NodeGraphQt`` components.
 
         See Also:
             :attr:`NodeGraph.widget` for adding the node graph into a 
@@ -279,7 +279,7 @@ class NodeGraph(QtCore.QObject):
 
     def scene(self):
         """
-        Return the scene object.
+        Returns the ``QGraphicsScene`` object used in the node graph.
 
         Returns:
             NodeGraphQt.widgets.scene.NodeScene: node scene.
@@ -421,9 +421,9 @@ class NodeGraph(QtCore.QObject):
         """
         Returns the context menu specified by the name.
 
-        Menu types:
-            "graph" - context menu from the node graph.
-            "nodes" - context menu for the nodes.
+        Menu Types:
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
 
         Args:
             menu (str): menu name.
@@ -466,13 +466,13 @@ class NodeGraph(QtCore.QObject):
         Returns true if the current node graph is acyclic.
 
         Returns:
-            bool: true if acyclic (default: True).
+            bool: true if acyclic (default: ``True``).
         """
         return self._model.acyclic
 
     def set_acyclic(self, mode=False):
         """
-        Enable the node graph to be a acyclic graph. (default=False)
+        Enable the node graph to be a acyclic graph. (default: ``False``)
 
         Args:
             mode (bool): true to enable acyclic.
@@ -520,10 +520,10 @@ class NodeGraph(QtCore.QObject):
 
     def set_zoom(self, zoom=0):
         """
-        Set the zoom factor of the Node Graph the default is 0.0
+        Set the zoom factor of the Node Graph the default is ``0.0``
 
         Args:
-            zoom (float): zoom factor (max zoom out -0.9 / max zoom in 2.0)
+            zoom (float): zoom factor (max zoom out ``-0.9`` / max zoom in ``2.0``)
         """
         self._viewer.set_zoom(zoom)
 
@@ -586,9 +586,9 @@ class NodeGraph(QtCore.QObject):
             node_type (str): node instance type.
             name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
-            text_color (tuple or str): node text color (255, 255, 255) or '#FFFFFF'.
-            pos (list[int, int]): initial x, y position for the node (default: (0, 0)).
+            color (tuple or str): node color ``(255, 255, 255)`` or ``"#FFFFFF"``.
+            text_color (tuple or str): text color ``(255, 255, 255)`` or ``"#FFFFFF"``.
+            pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
 
         Returns:
             NodeGraphQt.BaseNode: the created instance of the node.
@@ -734,7 +734,7 @@ class NodeGraph(QtCore.QObject):
         Returns the node from the node id string.
 
         Args:
-            node_id (str): node id (:meth:`NodeObject.id`)
+            node_id (str): node id (:attr:`NodeObject.id`)
 
         Returns:
             NodeGraphQt.NodeObject: node object.
@@ -1053,7 +1053,7 @@ class NodeGraph(QtCore.QObject):
 
     def question_dialog(self, text, title='Node Graph'):
         """
-        Prompts a question open dialog with "Yes" and "No" buttons in
+        Prompts a question open dialog with ``"Yes"`` and ``"No"`` buttons in
         the node graph.
 
         Note:
@@ -1093,7 +1093,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
-            ext (str): custom file type extension (default: json)
+            ext (str): custom file type extension (default: ``"json"``)
 
         Returns:
             str: selected file path.
@@ -1110,7 +1110,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
-            ext (str): custom file type extension (default: json)
+            ext (str): custom file type extension (default: ``"json"``)
 
         Returns:
             str: selected file path.
