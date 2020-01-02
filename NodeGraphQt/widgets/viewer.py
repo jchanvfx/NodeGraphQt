@@ -83,10 +83,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
+        self._ctx_port_menu = BaseMenu('Ports', self)
         menu_bar.addMenu(self._ctx_menu)
         menu_bar.addMenu(self._ctx_node_menu)
+        menu_bar.addMenu(self._ctx_port_menu)
 
         self._ctx_node_menu.setDisabled(True)
+        self._ctx_port_menu.setDisabled(True)
 
         self.acyclic = True
         self.LMB_state = False
@@ -157,7 +160,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
-        ctx_menu = self._ctx_menu
+        ctx_menu = None
 
         if self._ctx_node_menu.isEnabled():
             pos = self.mapToScene(self._previous_pos)
@@ -166,10 +169,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if nodes:
                 node = nodes[0]
                 ctx_menu = self._ctx_node_menu.get_menu(node.type_)
-                for action in ctx_menu.actions():
-                    if not action.menu():
-                        action.node_id = node.id
-        if ctx_menu and ctx_menu.isEnabled():
+                if ctx_menu:
+                    for action in ctx_menu.actions():
+                        if not action.menu():
+                            action.node_id = node.id
+
+        ctx_menu = ctx_menu or self._ctx_menu
+        if ctx_menu.isEnabled():
             ctx_menu.exec_(event.globalPos())
         else:
             return super(NodeViewer, self).contextMenuEvent(event)

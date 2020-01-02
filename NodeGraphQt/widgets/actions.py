@@ -39,15 +39,13 @@ class GraphAction(QtWidgets.QAction):
                 return action
 
 
-class NodeAction(QtWidgets.QAction):
+class NodeAction(GraphAction):
 
     executed = QtCore.Signal(object, object)
 
     def __init__(self, *args, **kwargs):
         super(NodeAction, self).__init__(*args, **kwargs)
-        self.graph = None
         self.node_id = None
-        self.triggered.connect(self._on_triggered)
 
     def _on_triggered(self):
         node = self.graph.get_node_by_id(self.node_id)
