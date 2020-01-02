@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
 import math
+import os
 
 from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
@@ -12,8 +12,8 @@ from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import Pipe, LivePipe
 from NodeGraphQt.qgraphics.port import PortItem
 from NodeGraphQt.qgraphics.slicer import SlicerPipe
+from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
-from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 from NodeGraphQt.widgets.tab_search import TabSearchWidget
 
 ZOOM_MIN = -0.95
@@ -71,8 +71,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._context_menu = QtWidgets.QMenu('main', self)
-        self._context_menu.setStyleSheet(STYLE_QMENU)
         self._search_widget = TabSearchWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
@@ -82,7 +80,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
         menu_bar.resize(0, 0)
-        menu_bar.addMenu(self._context_menu)
+
+        self._ctx_menu = BaseMenu('NodeGraph', self)
+        self._ctx_node_menu = BaseMenu('Nodes', self)
+        menu_bar.addMenu(self._ctx_menu)
+        menu_bar.addMenu(self._ctx_node_menu)
+
+        self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
         self.LMB_state = False
@@ -153,8 +157,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
-        if self._context_menu.isEnabled():
-            self._context_menu.exec_(event.globalPos())
+        ctx_menu = None
+
+        if self._ctx_node_menu.isEnabled():
+            pos = self.mapToScene(self._previous_pos)
+            items = self._items_near(pos)
+            nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
+            if nodes:
+                node = nodes[0]
+                ctx_menu = self._ctx_node_menu.get_menu(node.type_)
+                if ctx_menu:
+                    for action in ctx_menu.actions():
+                        if not action.menu():
+                            action.node_id = node.id
+
+        ctx_menu = ctx_menu or self._ctx_menu
+        if ctx_menu.isEnabled():
+            ctx_menu.exec_(event.globalPos())
         else:
             return super(NodeViewer, self).contextMenuEvent(event)
 
@@ -589,8 +608,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._search_widget.setVisible(state)
             self.clearFocus()
 
-    def context_menu(self):
-        return self._context_menu
+    def context_menus(self):
+        return {'graph': self._ctx_menu,
+                'nodes': self._ctx_node_menu}
 
     def question_dialog(self, text, title='Node Graph'):
         dlg = QtWidgets.QMessageBox.question(

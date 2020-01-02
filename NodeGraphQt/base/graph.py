@@ -10,7 +10,7 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
 from NodeGraphQt.base.factory import NodeFactory
-from NodeGraphQt.base.menu import Menu
+from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
@@ -391,23 +391,75 @@ class NodeGraph(QtCore.QObject):
 
     def context_menu(self):
         """
-        Returns the node graph root context menu object.
+        Returns the main context menu from the node graph.
+
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            with the arg ``menu="graph"``
 
         Returns:
-            Menu: context menu object.
+            NodeGraphQt.NodeGraphMenu: context menu object.
         """
-        return Menu(self._viewer, self._viewer.context_menu())
+        return self.get_context_menu('graph')
 
-    def disable_context_menu(self, disabled=True):
+    def context_nodes_menu(self):
         """
-        Disable/Enable node graph context menu.
+        Returns the main context menu for the nodes.
+
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            with the arg ``menu="nodes"``
+
+        Returns:
+            NodeGraphQt.NodesMenu: context menu object.
+        """
+        return self.get_context_menu('nodes')
+
+    def get_context_menu(self, menu):
+        """
+        Returns the context menu specified by the name.
+
+        Menu types:
+            "graph" - context menu from the node graph.
+            "nodes" - context menu for the nodes.
+
+        Args:
+            menu (str): menu name.
+
+        Returns:
+            NodeGraphMenu or NodesMenu: context menu object.
+        """
+        menus = self._viewer.context_menus()
+        if menus.get(menu):
+            if menu == 'graph':
+                return NodeGraphMenu(self, menus[menu])
+            elif menu == 'nodes':
+                return NodesMenu(self, menus[menu])
+
+    def disable_context_menu(self, disabled=True, name='all'):
+        """
+        Disable/Enable context menus from the node graph.
+
+        Menu Types:
+            - ``"all"`` all context menus from the node graph.
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
 
         Args:
             disabled (bool): true to enable context menu.
+            name (str): menu name. (default: ``"all"``)
         """
-        menu = self._viewer.context_menu()
-        menu.setDisabled(disabled)
-        menu.setVisible(not disabled)
+        if name == 'all':
+            for k, menu in self._viewer.context_menus().items():
+                menu.setDisabled(disabled)
+                menu.setVisible(not disabled)
+            return
+        menus = self._viewer.context_menus()
+        if menus.get(name):
+            menus[name].setDisabled(disabled)
+            menus[name].setVisible(not disabled)
 
     def acyclic(self):
         """

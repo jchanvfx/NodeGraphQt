@@ -80,14 +80,14 @@ except ImportError as ie:
           '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
 from .base.graph import NodeGraph
-from .base.menu import Menu, MenuCommand
+from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
 from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
 from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE
 
 # functions
-from .base.actions import setup_context_menu
+from .base.utils import setup_context_menu
 
 # widgets
 from .widgets.node_tree import NodeTreeWidget
@@ -95,7 +95,19 @@ from .widgets.properties_bin import PropertiesBinWidget
 
 __version__ = VERSION
 __all__ = [
-    'BackdropNode', 'BaseNode', 'LICENSE', 'Menu', 'MenuCommand', 'NodeGraph',
-    'NodeObject', 'NodeTreeWidget', 'Port', 'PropertiesBinWidget', 'VERSION',
-    'constants', 'setup_context_menu'
+    'BackdropNode',
+    'BaseNode',
+    'LICENSE',
+    'NodeGraph',
+    'NodeGraphCommand',
+    'NodeGraphMenu',
+    'NodeObject',
+    'NodeTreeWidget',
+    'NodesMenu',
+    'Port',
+    'PropertiesBinWidget',
+    'VERSION',
+    'constants',
+    'setup_context_menu'
 ]
+
