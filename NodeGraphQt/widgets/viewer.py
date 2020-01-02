@@ -83,13 +83,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
-        self._ctx_port_menu = BaseMenu('Ports', self)
         menu_bar.addMenu(self._ctx_menu)
         menu_bar.addMenu(self._ctx_node_menu)
-        menu_bar.addMenu(self._ctx_port_menu)
 
         self._ctx_node_menu.setDisabled(True)
-        self._ctx_port_menu.setDisabled(True)
 
         self.acyclic = True
         self.LMB_state = False
