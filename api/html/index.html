@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>NodeGraphQt &#8212; NodeGraphQt 0.0.15 documentation</title>
+    <title>NodeGraphQt &#8212; NodeGraphQt 0.0.16 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -28,7 +28,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.15 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -40,11 +40,10 @@
   <div class="section" id="nodegraphqt">
 <h1>NodeGraphQt<a class="headerlink" href="#nodegraphqt" title="Permalink to this headline">¶</a></h1>
 <p>Welcome to the <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code> documentation.</p>
-<a class="reference internal image-reference" href="_images/example_result.png"><img alt="_images/example_result.png" src="_images/example_result.png" style="width: 60%;" /></a>
-<p>Project: <a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt">https://github.com/jchanvfx/NodeGraphQt</a></p>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
+<a class="reference internal image-reference" href="_images/screenshot.png"><img alt="_images/screenshot.png" src="_images/screenshot.png" style="width: 95%;" /></a>
+<p>Project Repo: <a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt">https://github.com/jchanvfx/NodeGraphQt</a></p>
+<hr class="docutils" />
+<div class="toctree-wrapper compound" id="mastertoc">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#navigation">Navigation</a></li>
@@ -54,23 +53,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="graph.html">Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="graph.html#nodegraph">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/NodeObject.html">NodeObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/BaseNode.html">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/Port.html">Port</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/BackdropNode.html">BackdropNode</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="nodes.html">Nodes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="nodes.html#nodeobject">NodeObject</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nodes.html#basenode">BaseNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nodes.html#backdropnode">BackdropNode</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="connections.html">Port</a></li>
-<li class="toctree-l2"><a class="reference internal" href="menu.html">Menus</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="menu.html#menu">Menu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="menu.html#command">Command</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#graph-menu">Graph Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#nodes-menu">Nodes Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#command">Command</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a><ul>
@@ -79,7 +73,6 @@
 </ul>
 </li>
 </ul>
-</div>
 </div>
 </div>
 
@@ -93,7 +86,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
 </ul>
 
@@ -130,11 +125,11 @@
         <li class="right" >
           <a href="overview.html" title="Overview"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.15 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Johnny Chan.
+        &#169; Copyright 2020, Johnny Chan.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>

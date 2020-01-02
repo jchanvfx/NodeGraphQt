@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Menus &#8212; NodeGraphQt 0.0.15 documentation</title>
+    <title>Menus &#8212; NodeGraphQt 0.0.16 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Widgets" href="widgets.html" />
-    <link rel="prev" title="Port" href="connections.html" /> 
+    <link rel="prev" title="BackdropNode" href="nodes/BackdropNode.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,10 +30,9 @@
           <a href="widgets.html" title="Widgets"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="connections.html" title="Port"
+          <a href="nodes/BackdropNode.html" title="BackdropNode"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.15 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Classes</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -45,18 +44,8 @@
   <div class="section" id="menus">
 <h1>Menus<a class="headerlink" href="#menus" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="_images/menu_hotkeys.png"><img alt="_images/menu_hotkeys.png" src="_images/menu_hotkeys.png" style="width: 50%;" /></a>
-<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.setup_context_menu</span></code> has a built in function that’ll populate the node graphs context menu a few
-default menus and commands.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">setup_context_menu</span>
-
-<span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
-<span class="n">setup_context_menu</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-<p>example adding “Foo” menu to the node graphs context menu.</p>
+<p>Here’s an example where we add a <code class="docutils literal notranslate"><span class="pre">&quot;Foo&quot;</span></code> menu and then a <code class="docutils literal notranslate"><span class="pre">&quot;Bar&quot;</span></code> command with
+the function <code class="docutils literal notranslate"><span class="pre">my_test()</span></code> registered.</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -66,37 +55,52 @@ default menus and commands.</p>
  7
  8
  9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
+
+<span class="c1"># test function.</span>
+<span class="k">def</span> <span class="nf">my_test</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="n">selected_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">selected_nodes</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Number of nodes selected: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_nodes</span><span class="p">)))</span>
 
 <span class="c1"># create node graph.</span>
 <span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
 
 <span class="c1"># get the main context menu.</span>
-<span class="n">root_menu</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">context_menu</span><span class="p">()</span>
+<span class="n">context_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
 
 <span class="c1"># add a menu called &quot;Foo&quot;.</span>
-<span class="n">foo_menu</span> <span class="o">=</span> <span class="n">root_menu</span><span class="o">.</span><span class="n">add_menu</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-<p>add “Bar” command to the “Foo” menu.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>11
-12
-13
-14
-15
-16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># test function.</span>
-<span class="k">def</span> <span class="nf">my_test</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hello World&#39;</span><span class="p">)</span>
+<span class="n">foo_menu</span> <span class="o">=</span> <span class="n">context_menu</span><span class="o">.</span><span class="n">add_menu</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">)</span>
 
 <span class="c1"># add &quot;Bar&quot; command to the &quot;Foo&quot; menu.</span>
+<span class="c1"># we also assign a short cut key &quot;Shift+t&quot; for this example.</span>
 <span class="n">foo_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">&#39;Bar&#39;</span><span class="p">,</span> <span class="n">my_test</span><span class="p">,</span> <span class="s1">&#39;Shift+t&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <hr class="docutils" />
+<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.setup_context_menu</span></code> is a built in function that’ll populate
+the node graphs context menu a few default menus and commands.</p>
 <dl class="function">
 <dt>
 <code class="descclassname">NodeGraphQt.</code><code class="descname">setup_context_menu</code><span class="sig-paren">(</span><em>graph</em><span class="sig-paren">)</span></dt>
 <dd><p>Sets up the node graphs context menu with some basic menus and commands.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">setup_context_menu</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="n">setup_context_menu</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>graph</strong> (<a class="reference internal" href="graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><em>NodeGraphQt.NodeGraph</em></a>) – node graph.</p>
@@ -104,38 +108,57 @@ default menus and commands.</p>
 </dl>
 </dd></dl>
 
-<div class="section" id="menu">
-<h2>Menu<a class="headerlink" href="#menu" title="Permalink to this headline">¶</a></h2>
-<p>Node graph menu.</p>
-<hr class="docutils" />
+<div class="section" id="graph-menu">
+<h2>Graph Menu<a class="headerlink" href="#graph-menu" title="Permalink to this headline">¶</a></h2>
+<p>The context menu triggered from the node graph.</p>
 <dl class="class">
-<dt id="NodeGraphQt.Menu">
-<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">Menu</code><span class="sig-paren">(</span><em>viewer</em>, <em>qmenu</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu" title="Permalink to this definition">¶</a></dt>
-<dd><p>base class for a menu item.</p>
+<dt id="NodeGraphQt.NodeGraphMenu">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraphMenu</code><span class="sig-paren">(</span><em>graph</em>, <em>qmenu</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphMenu</span></code> is the context menu triggered from the node graph.</p>
+<p>example for accessing the node graph context menu.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
+
+<span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+
+<span class="c1"># get the context menu for the node graph.</span>
+<span class="n">context_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">context_menu</span><span class="p">)</span>
+<span class="c1"># &gt;&gt; &lt;NodeGraphMenu(&quot;NodeGraph&quot;) object at 0x10910fdd8&gt;</span>
+</pre></div>
+</td></tr></table></div>
 <dl class="method">
-<dt id="NodeGraphQt.Menu.add_command">
-<code class="descname">add_command</code><span class="sig-paren">(</span><em>name</em>, <em>func=None</em>, <em>shortcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.add_command" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.add_command">
+<code class="descname">add_command</code><span class="sig-paren">(</span><em>name</em>, <em>func=None</em>, <em>shortcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.add_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a command to the menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – command name.</p></li>
-<li><p><strong>func</strong> (<em>function</em>) – command function.</p></li>
-<li><p><strong>shortcut</strong> (<em>str</em>) – function shotcut key.</p></li>
+<li><p><strong>func</strong> (<em>function</em>) – command function eg. “func(<code class="docutils literal notranslate"><span class="pre">graph</span></code>)”.</p></li>
+<li><p><strong>shortcut</strong> (<em>str</em>) – shotcut key.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the appended command.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.MenuCommand" title="NodeGraphQt.MenuCommand">NodeGraphQt.MenuCommand</a></p>
+<dd class="field-odd"><p>NodeGraphQt.MenuCommand</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.add_menu">
-<code class="descname">add_menu</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.add_menu" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.add_menu">
+<code class="descname">add_menu</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.add_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a child menu to the current menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -145,34 +168,34 @@ default menus and commands.</p>
 <dd class="field-even"><p>the appended menu item.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.Menu" title="NodeGraphQt.Menu">NodeGraphQt.Menu</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.add_separator">
-<code class="descname">add_separator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.add_separator" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.add_separator">
+<code class="descname">add_separator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.add_separator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a separator to the menu.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.all_commands">
-<code class="descname">all_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.all_commands" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.all_commands">
+<code class="descname">all_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.all_commands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all child and sub child commands from the current context menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>list of commands.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="#NodeGraphQt.MenuCommand" title="NodeGraphQt.MenuCommand">NodeGraphQt.MenuCommand</a>]</p>
+<dd class="field-even"><p>list[NodeGraphQt.MenuCommand]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.get_command">
-<code class="descname">get_command</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.get_command" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.get_command">
+<code class="descname">get_command</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.get_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the child menu command by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -182,14 +205,14 @@ default menus and commands.</p>
 <dd class="field-even"><p>context menu command.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.MenuCommand" title="NodeGraphQt.MenuCommand">NodeGraphQt.MenuCommand</a></p>
+<dd class="field-odd"><p>NodeGraphQt.MenuCommand</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.get_menu">
-<code class="descname">get_menu</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.get_menu" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.get_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the child menu by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -199,14 +222,14 @@ default menus and commands.</p>
 <dd class="field-even"><p>menu item.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.Menu" title="NodeGraphQt.Menu">NodeGraphQt.Menu</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.Menu.name">
-<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Menu.name" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphMenu.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name for the menu.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -218,20 +241,124 @@ default menus and commands.</p>
 </dl>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraphMenu.qmenu">
+<code class="descname">qmenu</code><a class="headerlink" href="#NodeGraphQt.NodeGraphMenu.qmenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The underlying qmenu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>qmenu object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BaseMenu</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="nodes-menu">
+<h2>Nodes Menu<a class="headerlink" href="#nodes-menu" title="Permalink to this headline">¶</a></h2>
+<p>The context menu triggered from a node.</p>
+<dl class="class">
+<dt id="NodeGraphQt.NodesMenu">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodesMenu</code><span class="sig-paren">(</span><em>graph</em>, <em>qmenu</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodesMenu</span></code> is the context menu triggered from the nodes.</p>
+<p><strong>Inherited from:</strong> <a class="reference internal" href="#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraphMenu</span></code></a></p>
+<p>example for adding a command to the nodes context menu.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span>
+
+<span class="c1"># example node.</span>
+<span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+
+    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;com.chantasticvfx&#39;</span>
+    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;my node&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+
+<span class="c1"># create node graph.</span>
+<span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+
+<span class="c1"># register example node.</span>
+<span class="n">node_graph</span><span class="o">.</span><span class="n">register_node</span><span class="p">(</span><span class="n">MyNode</span><span class="p">)</span>
+
+<span class="c1"># get the context menu for the nodes.</span>
+<span class="n">nodes_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">)</span>
+
+<span class="c1"># create a command</span>
+<span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Clicked on node: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
+
+<span class="n">nodes_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
+                       <span class="n">func</span><span class="o">=</span><span class="n">test_func</span><span class="p">,</span>
+                       <span class="n">node_type</span><span class="o">=</span><span class="s1">&#39;com.chantasticvfx.MyNode&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<dl class="method">
+<dt id="NodeGraphQt.NodesMenu.add_command">
+<code class="descname">add_command</code><span class="sig-paren">(</span><em>name</em>, <em>func=None</em>, <em>node_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesMenu.add_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-implemented to add a command to the specified node type menu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – command name.</p></li>
+<li><p><strong>func</strong> (<em>function</em>) – command function eg. “func(<code class="docutils literal notranslate"><span class="pre">graph</span></code>, <code class="docutils literal notranslate"><span class="pre">node</span></code>)”.</p></li>
+<li><p><strong>node_type</strong> (<em>str</em>) – specified node type for the command.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the appended command.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NodeGraphQt.MenuCommand</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 <div class="section" id="command">
 <h2>Command<a class="headerlink" href="#command" title="Permalink to this headline">¶</a></h2>
-<p>Node graph menu command.</p>
-<hr class="docutils" />
 <dl class="class">
-<dt id="NodeGraphQt.MenuCommand">
-<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">MenuCommand</code><span class="sig-paren">(</span><em>viewer</em>, <em>qaction</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.MenuCommand" title="Permalink to this definition">¶</a></dt>
-<dd><p>base class for a menu command.</p>
+<dt id="NodeGraphQt.NodeGraphCommand">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraphCommand</code><span class="sig-paren">(</span><em>graph</em>, <em>qaction</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node graph menu command.</p>
 <dl class="method">
-<dt id="NodeGraphQt.MenuCommand.name">
-<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.MenuCommand.name" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphCommand.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name for the menu command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -244,18 +371,32 @@ default menus and commands.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.MenuCommand.run_command">
-<code class="descname">run_command</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.MenuCommand.run_command" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphCommand.run_command">
+<code class="descname">run_command</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.run_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>execute the menu command.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.MenuCommand.set_shortcut">
-<code class="descname">set_shortcut</code><span class="sig-paren">(</span><em>shortcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.MenuCommand.set_shortcut" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeGraphCommand.set_shortcut">
+<code class="descname">set_shortcut</code><span class="sig-paren">(</span><em>shortcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.set_shortcut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the shortcut key combination for the menu command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>shortcut</strong> (<em>str</em>) – shortcut key.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraphCommand.qaction">
+<code class="descname">qaction</code><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.qaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The underlying qaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>qaction object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>BaseAction</p>
 </dd>
 </dl>
 </dd></dl>
@@ -275,23 +416,20 @@ default menus and commands.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="classes.html">Classes</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="graph.html">Graph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nodes.html">Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="connections.html">Port</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Menus</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#menu">Menu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#command">Command</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Menus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graph-menu">Graph Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodes-menu">Nodes Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command">Command</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="connections.html"
-                        title="previous chapter">Port</a></p>
+  <p class="topless"><a href="nodes/BackdropNode.html"
+                        title="previous chapter">BackdropNode</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="widgets.html"
                         title="next chapter">Widgets</a></p>
@@ -326,14 +464,13 @@ default menus and commands.</p>
           <a href="widgets.html" title="Widgets"
              >next</a> |</li>
         <li class="right" >
-          <a href="connections.html" title="Port"
+          <a href="nodes/BackdropNode.html" title="BackdropNode"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.15 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" >Classes</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Johnny Chan.
+        &#169; Copyright 2020, Johnny Chan.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>

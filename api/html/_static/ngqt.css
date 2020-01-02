@@ -271,8 +271,8 @@ div.highlight{
 }
 
 div.note {
-    background-color: #544322;
-    border: 1px solid #bf9d3b;
+    background-color: #223854;
+    border: 1px solid #3b7cbf;
     border-radius: 4px;
 }
 
@@ -283,7 +283,9 @@ div.seealso {
 }
  
 div.topic {
-    background-color: #eee;
+    background-color: #232427;
+    border: 1px solid #2f3b4c;
+    border-radius: 4px;
 }
  
 div.warning {

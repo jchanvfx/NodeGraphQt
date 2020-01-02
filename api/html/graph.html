@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Graph &#8212; NodeGraphQt 0.0.15 documentation</title>
+    <title>NodeGraph &#8212; NodeGraphQt 0.0.16 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Nodes" href="nodes.html" />
-    <link rel="prev" title="Classes" href="classes.html" /> 
+    <link rel="prev" title="Constants" href="constants.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,10 +30,9 @@
           <a href="nodes.html" title="Nodes"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classes.html" title="Classes"
+          <a href="constants.html" title="Constants"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.15 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" accesskey="U">Classes</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -42,57 +41,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="graph">
-<h1>Graph<a class="headerlink" href="#graph" title="Permalink to this headline">¶</a></h1>
-<p><strong>Inherited from:</strong> <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html#PySide2.QtCore.QObject" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></a></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes.</p>
-<a class="reference internal image-reference" href="_images/graph.png"><img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" /></a>
-<div class="section" id="nodegraph">
-<h2>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="nodegraph-attributes">
-<h3>NodeGraph Attributes<a class="headerlink" href="#nodegraph-attributes" title="Permalink to this headline">¶</a></h3>
-<dl class="attribute">
-<dt id="NodeGraphQt.NodeGraph.widget">
-<code class="descclassname">NodeGraph.</code><code class="descname">widget</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
-<dd><p>The node graph widget for adding into a layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node graph widget.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>QtWidgets.QWidget</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="NodeGraphQt.NodeGraph.model">
-<code class="descclassname">NodeGraph.</code><code class="descname">model</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>The model used for storing the node graph data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node graph model.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>NodeGraphQt.base.model.NodeGraphModel</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="nodegraph-class">
-<h3>NodeGraph Class<a class="headerlink" href="#nodegraph-class" title="Permalink to this headline">¶</a></h3>
+  <div class="section" id="nodegraph">
+<h1>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="NodeGraphQt.NodeGraph">
 <em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraph</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph" title="Permalink to this definition">¶</a></dt>
-<dd><p>base node graph controller.</p>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes.</p>
+<p>Inherited from: <code class="docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></p>
+<a class="reference internal image-reference" href="_images/graph.png"><img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" /></a>
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.acyclic">
 <code class="descname">acyclic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.acyclic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if the current node graph is acyclic.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>true if acyclic (default: True).</p>
+<dd class="field-odd"><p>true if acyclic (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>bool</p>
@@ -107,7 +70,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>node</strong> (<a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p></li>
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p></li>
 <li><p><strong>pos</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – node x,y position. (optional)</p></li>
 </ul>
 </dd>
@@ -134,7 +97,7 @@
 <dd class="field-odd"><p>list of nodes.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -171,7 +134,7 @@
 <dd><p>Center the node graph on the given nodes or all nodes by default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – a list of nodes.</p>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – a list of nodes.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -221,13 +184,39 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.context_menu">
 <code class="descname">context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.context_menu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the node graph root context menu object.</p>
+<dd><p>Returns the main context menu from the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a convenience function to
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu" title="NodeGraphQt.NodeGraph.get_context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.get_context_menu()</span></code></a>
+with the arg <code class="docutils literal notranslate"><span class="pre">menu=&quot;graph&quot;</span></code></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>context menu object.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="menu.html#NodeGraphQt.Menu" title="NodeGraphQt.Menu">Menu</a></p>
+<dd class="field-even"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.NodeGraph.context_nodes_menu">
+<code class="descname">context_nodes_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.context_nodes_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the main context menu for the nodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a convenience function to
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu" title="NodeGraphQt.NodeGraph.get_context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.get_context_menu()</span></code></a>
+with the arg <code class="docutils literal notranslate"><span class="pre">menu=&quot;nodes&quot;</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>context menu object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodeGraphQt.NodesMenu</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -238,7 +227,7 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Copy nodes to the clipboard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes (default: selected nodes).</p>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes (default: selected nodes).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -257,16 +246,16 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <li><p><strong>node_type</strong> (<em>str</em>) – node instance type.</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – set name of the node.</p></li>
 <li><p><strong>selected</strong> (<em>bool</em>) – set created node to be selected.</p></li>
-<li><p><strong>color</strong> (<em>tuple</em><em> or </em><em>str</em>) – node color (255, 255, 255) or ‘#FFFFFF’.</p></li>
-<li><p><strong>text_color</strong> (<em>tuple</em><em> or </em><em>str</em>) – node text color (255, 255, 255) or ‘#FFFFFF’.</p></li>
-<li><p><strong>pos</strong> (<em>list</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – initial x, y position for the node (default: (0, 0)).</p></li>
+<li><p><strong>color</strong> (<em>tuple</em><em> or </em><em>str</em>) – node color <code class="docutils literal notranslate"><span class="pre">(255,</span> <span class="pre">255,</span> <span class="pre">255)</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;#FFFFFF&quot;</span></code>.</p></li>
+<li><p><strong>text_color</strong> (<em>tuple</em><em> or </em><em>str</em>) – text color <code class="docutils literal notranslate"><span class="pre">(255,</span> <span class="pre">255,</span> <span class="pre">255)</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;#FFFFFF&quot;</span></code>.</p></li>
+<li><p><strong>pos</strong> (<em>list</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – initial x, y position for the node (default: <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the created instance of the node.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -291,7 +280,7 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Remove the node from the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,7 +291,7 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Remove a list of specified nodes from the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -320,11 +309,22 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.disable_context_menu">
-<code class="descname">disable_context_menu</code><span class="sig-paren">(</span><em>disabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.disable_context_menu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disable/Enable node graph context menu.</p>
+<code class="descname">disable_context_menu</code><span class="sig-paren">(</span><em>disabled=True</em>, <em>name='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.disable_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable/Enable context menus from the node graph.</p>
+<dl class="simple">
+<dt>Menu Types:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> all context menus from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>disabled</strong> (<em>bool</em>) – true to enable context menu.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>disabled</strong> (<em>bool</em>) – true to enable context menu.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – menu name. (default: <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -335,12 +335,12 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Set weather to Disable or Enable specified nodes.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="nodes.html#NodeGraphQt.NodeObject.set_disabled" title="NodeGraphQt.NodeObject.set_disabled"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_disabled()</span></code></a></p>
+<p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_disabled" title="NodeGraphQt.NodeObject.set_disabled"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_disabled()</span></code></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p></li>
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p></li>
 <li><p><strong>mode</strong> (<em>bool</em>) – (optional) disable state of the nodes.</p></li>
 </ul>
 </dd>
@@ -364,13 +364,13 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Create duplicate copy from the list of nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes.</p>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list of duplicated node instances.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[<a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+<dd class="field-odd"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -390,18 +390,42 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.NodeGraph.get_context_menu">
+<code class="descname">get_context_menu</code><span class="sig-paren">(</span><em>menu</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu specified by the name.</p>
+<dl class="simple">
+<dt>Menu Types:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>menu</strong> (<em>str</em>) – menu name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>context menu object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphMenu</a> or <a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodesMenu</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.NodeGraph.get_node_by_id">
 <code class="descname">get_node_by_id</code><span class="sig-paren">(</span><em>node_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_node_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the node from the node id string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>node_id</strong> (<em>str</em>) – node id (<a class="reference internal" href="nodes.html#NodeGraphQt.NodeObject.id" title="NodeGraphQt.NodeObject.id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.id()</span></code></a>)</p>
+<dd class="field-odd"><p><strong>node_id</strong> (<em>str</em>) – node id (<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.id" title="NodeGraphQt.NodeObject.id"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeObject.id</span></code></a>)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>node object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="nodes.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -418,7 +442,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dd class="field-even"><p>node object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="nodes.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -481,7 +505,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
-<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: json)</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">&quot;json&quot;</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -532,7 +556,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.question_dialog">
 <code class="descname">question_dialog</code><span class="sig-paren">(</span><em>text</em>, <em>title='Node Graph'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.question_dialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prompts a question open dialog with “Yes” and “No” buttons in
+<dd><p>Prompts a question open dialog with <code class="docutils literal notranslate"><span class="pre">&quot;Yes&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;No&quot;</span></code> buttons in
 the node graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -562,7 +586,7 @@ the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>node</strong> (<a class="reference internal" href="nodes.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a>) – node.</p></li>
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a>) – node.</p></li>
 <li><p><strong>alias</strong> (<em>str</em>) – custom alias name for the node type.</p></li>
 </ul>
 </dd>
@@ -606,7 +630,7 @@ the node graph.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
-<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: json)</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">&quot;json&quot;</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -632,7 +656,7 @@ the node graph.</p>
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.scene">
 <code class="descname">scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.scene" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the scene object.</p>
+<dd><p>Returns the <code class="docutils literal notranslate"><span class="pre">QGraphicsScene</span></code> object used in the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>node scene.</p>
@@ -658,7 +682,7 @@ the node graph.</p>
 <dd class="field-odd"><p>list of nodes.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="nodes.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -680,7 +704,7 @@ the node graph.</p>
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.set_acyclic">
 <code class="descname">set_acyclic</code><span class="sig-paren">(</span><em>mode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_acyclic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable the node graph to be a acyclic graph. (default=False)</p>
+<dd><p>Enable the node graph to be a acyclic graph. (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – true to enable acyclic.</p>
@@ -742,10 +766,10 @@ the node graph.</p>
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.set_zoom">
 <code class="descname">set_zoom</code><span class="sig-paren">(</span><em>zoom=0</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_zoom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the zoom factor of the Node Graph the default is 0.0</p>
+<dd><p>Set the zoom factor of the Node Graph the default is <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>zoom</strong> (<em>float</em>) – zoom factor (max zoom out -0.9 / max zoom in 2.0)</p>
+<dd class="field-odd"><p><strong>zoom</strong> (<em>float</em>) – zoom factor (max zoom out <code class="docutils literal notranslate"><span class="pre">-0.9</span></code> / max zoom in <code class="docutils literal notranslate"><span class="pre">2.0</span></code>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -782,8 +806,8 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dd><p>Returns the view interface used by the node graph.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Methods in the <cite>NodeViewer</cite> are used internally
-by <cite>NodeGraphQt</cite> components.</p>
+<p>Methods in the <code class="docutils literal notranslate"><span class="pre">NodeViewer</span></code> are used internally
+by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code> components.</p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -890,8 +914,35 @@ QtWidgets.QLayout.</p>
 
 </dd></dl>
 
-</div>
-</div>
+<hr class="docutils" />
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.widget">
+<code class="descclassname">NodeGraph.</code><code class="descname">widget</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node graph widget for adding into a layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph widget.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QtWidgets.QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.model">
+<code class="descclassname">NodeGraph.</code><code class="descname">model</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The model used for storing the node graph data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>NodeGraphQt.base.model.NodeGraphModel</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -904,22 +955,15 @@ QtWidgets.QLayout.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="classes.html">Classes</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nodegraph">NodeGraph</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nodes.html">Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="connections.html">Port</a></li>
-<li class="toctree-l2"><a class="reference internal" href="menu.html">Menus</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="classes.html"
-                        title="previous chapter">Classes</a></p>
+  <p class="topless"><a href="constants.html"
+                        title="previous chapter">Constants</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="nodes.html"
                         title="next chapter">Nodes</a></p>
@@ -954,14 +998,13 @@ QtWidgets.QLayout.</p>
           <a href="nodes.html" title="Nodes"
              >next</a> |</li>
         <li class="right" >
-          <a href="classes.html" title="Classes"
+          <a href="constants.html" title="Constants"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.15 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="classes.html" >Classes</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Johnny Chan.
+        &#169; Copyright 2020, Johnny Chan.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
