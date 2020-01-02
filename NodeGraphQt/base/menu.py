@@ -10,7 +10,7 @@ class NodeGraphMenu(object):
     """
     The ``NodeGraphMenu`` is the context menu triggered from the node graph.
 
-    example to accessing the node graph context menu.
+    example for accessing the node graph context menu.
 
     .. code-block:: python
         :linenos:
@@ -21,6 +21,9 @@ class NodeGraphMenu(object):
 
         # get the context menu for the node graph.
         context_menu = node_graph.get_context_menu('graph')
+
+        print(context_menu)
+        # >> <NodeGraphMenu("NodeGraph") object at 0x10910fdd8>
     """
 
     def __init__(self, graph, qmenu):
