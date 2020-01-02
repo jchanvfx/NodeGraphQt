@@ -10,7 +10,10 @@ from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 class Port(object):
     """
-    base class for a node port.
+    The ``Port`` class is used for connecting one node to another.
+
+    .. image:: ../_images/port.png
+        :width: 50%
 
     Args:
         node (NodeGraphQt.NodeObject): parent node.
@@ -49,8 +52,12 @@ class Port(object):
         """
         Returns the port type.
 
+        Port Types:
+            - :attr:`NodeGraphQt.constants.IN_PORT` for input port
+            - :attr:`NodeGraphQt.constants.OUT_PORT` for output port
+
         Returns:
-            str: 'in' for input port or 'out' for output port.
+            str: port connection type.
         """
         return self.model.type_
 
@@ -129,8 +136,8 @@ class Port(object):
 
     def connect_to(self, port=None):
         """
-        Create connection to the specified port and emits the "port_connected"
-        signal from the parent node graph.
+        Create connection to the specified port and emits the
+        :attr:`NodeGraph.port_connected` signal from the parent node graph.
 
         Args:
             port (NodeGraphQt.Port): port object.
@@ -181,8 +188,8 @@ class Port(object):
 
     def disconnect_from(self, port=None):
         """
-        Disconnect from the specified port and emits the "port_disconnected"
-        signal from the parent node graph.
+        Disconnect from the specified port and emits the
+        :attr:`NodeGraph.port_disconnected` signal from the parent node graph.
 
         Args:
             port (NodeGraphQt.Port): port object.

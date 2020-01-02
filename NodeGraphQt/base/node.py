@@ -27,7 +27,10 @@ class classproperty(object):
 
 class NodeObject(object):
     """
-    base class for all node objects.
+    The ``NodeGraphQt.NodeObject`` class is the main base class that all
+    nodes inherit from.
+
+    **Inherited by:** :class:`NodeGraphQt.BaseNode`, :class:`NodeGraphQt.BackdropNode`
 
     Args:
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
@@ -78,7 +81,7 @@ class NodeObject(object):
     @property
     def graph(self):
         """
-        The parent node graph controller.
+        The parent node graph.
 
         Returns:
             NodeGraphQt.NodeGraph: node graph.
@@ -171,7 +174,7 @@ class NodeObject(object):
         Returns the node color in (red, green, blue) value.
 
         Returns:
-            tuple: (r, g, b) from 0-255 range.
+            tuple: ``(r, g, b)`` from ``0-255`` range.
         """
         r, g, b, a = self.model.color
         return r, g, b
@@ -181,9 +184,9 @@ class NodeObject(object):
         Sets the color of the node in (red, green, blue) value.
 
         Args:
-            r (int): red value 0-255 range.
-            g (int): green value 0-255 range.
-            b (int): blue value 0-255 range.
+            r (int): red value ``0-255`` range.
+            g (int): green value ``0-255`` range.
+            b (int): blue value ``0-255`` range.
         """
         self.set_property('color', (r, g, b, 255))
 
@@ -192,7 +195,7 @@ class NodeObject(object):
         Returns weather the node is enabled or disabled.
 
         Returns:
-            bool: true if the node is disabled.
+            bool: True if the node is disabled.
         """
         return self.model.disabled
 
@@ -201,7 +204,7 @@ class NodeObject(object):
         Set the node state to either disabled or enabled.
 
         Args:
-            mode(bool): true to disable node.
+            mode(bool): True to disable node.
         """
         self.set_property('disabled', mode)
 
@@ -232,8 +235,8 @@ class NodeObject(object):
         Args:
             name (str): name of the property.
             value (object): data.
-            items (list[str]): items used by widget type NODE_PROP_QCOMBO
-            range (tuple)): min, max values used by NODE_PROP_SLIDER
+            items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
+            range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
             widget_type (int): widget flag to display in the properties bin.
             tab (str): name of the widget tab to display in the properties bin.
         """
@@ -366,7 +369,37 @@ class NodeObject(object):
 
 class BaseNode(NodeObject):
     """
-    base class of a typical Node with input and output ports.
+    The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows
+    port connections from one node to another.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/node.png
+        :width: 250px
+
+    example snippet:
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import BaseNode
+
+        class FooNode(BaseNode):
+
+            # unique node identifier domain.
+            __identifier__ = 'com.chantasticvfx'
+
+            # initial default node name.
+            NODE_NAME = 'Foo Node'
+
+            def __init__(self):
+                super(FooNode, self).__init__()
+
+                # create an input port.
+                self.add_input('in')
+
+                # create an output port.
+                self.add_output('out')
     """
 
     NODE_NAME = 'Base Node'
@@ -469,7 +502,7 @@ class BaseNode(NodeObject):
             name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            color (tuple): initial port color (r, g, b) 0-255.
+            color (tuple): initial port color (r, g, b) ``0-255``.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -499,7 +532,7 @@ class BaseNode(NodeObject):
             name (str): name for the output port.
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
-            color (tuple): initial port color (r, g, b) 0-255.
+            color (tuple): initial port color (r, g, b) ``0-255``.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -664,7 +697,13 @@ class BaseNode(NodeObject):
 
 class BackdropNode(NodeObject):
     """
-    base class of a Backdrop node.
+    The ``NodeGraphQt.BackdropNode`` class allows other node object to be
+    nested inside, it's mainly good for grouping nodes together.
+
+    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+
+    .. image:: ../_images/backdrop.png
+        :width: 250px
     """
 
     NODE_NAME = 'Backdrop'

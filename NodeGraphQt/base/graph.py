@@ -10,7 +10,7 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
 from NodeGraphQt.base.factory import NodeFactory
-from NodeGraphQt.base.menu import Menu
+from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
@@ -24,7 +24,12 @@ from NodeGraphQt.widgets.viewer import NodeViewer
 
 class NodeGraph(QtCore.QObject):
     """
-    base node graph controller.
+    The ``NodeGraph`` class is the main controller for managing all nodes.
+
+    Inherited from: ``PySide2.QtCore.QObject``
+
+    .. image:: _images/graph.png
+        :width: 60%
     """
 
     #:QtCore.Signal: emits the node object when a node is created in the node graph.
@@ -260,8 +265,8 @@ class NodeGraph(QtCore.QObject):
         Returns the view interface used by the node graph.
 
         Warnings:
-            Methods in the `NodeViewer` are used internally
-            by `NodeGraphQt` components.
+            Methods in the ``NodeViewer`` are used internally
+            by ``NodeGraphQt`` components.
 
         See Also:
             :attr:`NodeGraph.widget` for adding the node graph into a 
@@ -274,7 +279,7 @@ class NodeGraph(QtCore.QObject):
 
     def scene(self):
         """
-        Return the scene object.
+        Returns the ``QGraphicsScene`` object used in the node graph.
 
         Returns:
             NodeGraphQt.widgets.scene.NodeScene: node scene.
@@ -386,36 +391,88 @@ class NodeGraph(QtCore.QObject):
 
     def context_menu(self):
         """
-        Returns the node graph root context menu object.
+        Returns the main context menu from the node graph.
+
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            with the arg ``menu="graph"``
 
         Returns:
-            Menu: context menu object.
+            NodeGraphQt.NodeGraphMenu: context menu object.
         """
-        return Menu(self._viewer, self._viewer.context_menu())
+        return self.get_context_menu('graph')
 
-    def disable_context_menu(self, disabled=True):
+    def context_nodes_menu(self):
         """
-        Disable/Enable node graph context menu.
+        Returns the main context menu for the nodes.
+
+        Note:
+            This is a convenience function to
+            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            with the arg ``menu="nodes"``
+
+        Returns:
+            NodeGraphQt.NodesMenu: context menu object.
+        """
+        return self.get_context_menu('nodes')
+
+    def get_context_menu(self, menu):
+        """
+        Returns the context menu specified by the name.
+
+        Menu Types:
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
+
+        Args:
+            menu (str): menu name.
+
+        Returns:
+            NodeGraphMenu or NodesMenu: context menu object.
+        """
+        menus = self._viewer.context_menus()
+        if menus.get(menu):
+            if menu == 'graph':
+                return NodeGraphMenu(self, menus[menu])
+            elif menu == 'nodes':
+                return NodesMenu(self, menus[menu])
+
+    def disable_context_menu(self, disabled=True, name='all'):
+        """
+        Disable/Enable context menus from the node graph.
+
+        Menu Types:
+            - ``"all"`` all context menus from the node graph.
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
 
         Args:
             disabled (bool): true to enable context menu.
+            name (str): menu name. (default: ``"all"``)
         """
-        menu = self._viewer.context_menu()
-        menu.setDisabled(disabled)
-        menu.setVisible(not disabled)
+        if name == 'all':
+            for k, menu in self._viewer.context_menus().items():
+                menu.setDisabled(disabled)
+                menu.setVisible(not disabled)
+            return
+        menus = self._viewer.context_menus()
+        if menus.get(name):
+            menus[name].setDisabled(disabled)
+            menus[name].setVisible(not disabled)
 
     def acyclic(self):
         """
         Returns true if the current node graph is acyclic.
 
         Returns:
-            bool: true if acyclic (default: True).
+            bool: true if acyclic (default: ``True``).
         """
         return self._model.acyclic
 
     def set_acyclic(self, mode=False):
         """
-        Enable the node graph to be a acyclic graph. (default=False)
+        Enable the node graph to be a acyclic graph. (default: ``False``)
 
         Args:
             mode (bool): true to enable acyclic.
@@ -463,10 +520,10 @@ class NodeGraph(QtCore.QObject):
 
     def set_zoom(self, zoom=0):
         """
-        Set the zoom factor of the Node Graph the default is 0.0
+        Set the zoom factor of the Node Graph the default is ``0.0``
 
         Args:
-            zoom (float): zoom factor (max zoom out -0.9 / max zoom in 2.0)
+            zoom (float): zoom factor (max zoom out ``-0.9`` / max zoom in ``2.0``)
         """
         self._viewer.set_zoom(zoom)
 
@@ -529,9 +586,9 @@ class NodeGraph(QtCore.QObject):
             node_type (str): node instance type.
             name (str): set name of the node.
             selected (bool): set created node to be selected.
-            color (tuple or str): node color (255, 255, 255) or '#FFFFFF'.
-            text_color (tuple or str): node text color (255, 255, 255) or '#FFFFFF'.
-            pos (list[int, int]): initial x, y position for the node (default: (0, 0)).
+            color (tuple or str): node color ``(255, 255, 255)`` or ``"#FFFFFF"``.
+            text_color (tuple or str): text color ``(255, 255, 255)`` or ``"#FFFFFF"``.
+            pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
 
         Returns:
             NodeGraphQt.BaseNode: the created instance of the node.
@@ -677,7 +734,7 @@ class NodeGraph(QtCore.QObject):
         Returns the node from the node id string.
 
         Args:
-            node_id (str): node id (:meth:`NodeObject.id`)
+            node_id (str): node id (:attr:`NodeObject.id`)
 
         Returns:
             NodeGraphQt.NodeObject: node object.
@@ -996,7 +1053,7 @@ class NodeGraph(QtCore.QObject):
 
     def question_dialog(self, text, title='Node Graph'):
         """
-        Prompts a question open dialog with "Yes" and "No" buttons in
+        Prompts a question open dialog with ``"Yes"`` and ``"No"`` buttons in
         the node graph.
 
         Note:
@@ -1036,7 +1093,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
-            ext (str): custom file type extension (default: json)
+            ext (str): custom file type extension (default: ``"json"``)
 
         Returns:
             str: selected file path.
@@ -1053,7 +1110,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             current_dir (str): path to a directory.
-            ext (str): custom file type extension (default: json)
+            ext (str): custom file type extension (default: ``"json"``)
 
         Returns:
             str: selected file path.

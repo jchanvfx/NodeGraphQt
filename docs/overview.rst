@@ -1,5 +1,5 @@
 Overview
-********
+########
 
 NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
 
@@ -7,7 +7,7 @@ NodeGraphQt is a node graph framework that can be implemented and repurposed int
     :width: 70%
 
 Navigation
-==========
+**********
 
 +---------------+----------------------------------------------+
 | action        | controls                                     |
@@ -18,7 +18,7 @@ Navigation
 +---------------+----------------------------------------------+
 
 Port Connections
-================
+****************
 
 .. image:: _images/slicer.png
     :width: 600px
@@ -33,7 +33,7 @@ Connection pipes can be disconnected easily with the built in slice tool.
 
 
 Node Search
-===========
+***********
 
 .. image:: _images/node_search.png
     :width: 269px
@@ -48,7 +48,7 @@ Node can be created with the tab node search widget.
 
 
 Example
-=======
+*******
 
 Here's a basic example for creating two nodes and connecting them together.
 

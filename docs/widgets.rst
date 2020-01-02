@@ -1,9 +1,9 @@
 Widgets
-*******
+#######
 
 
 PropertiesBinWidget
-===================
+*******************
 
 The ``PropertiesBinWidget`` is a list widget for displaying and editing a
 nodes properties.
@@ -32,7 +32,7 @@ example
     :exclude-members: property_changed
 
 NodeTreeWidget
-==============
+**************
 
 The ``NodeTreeWidget`` is a widget for displaying all registered nodes from the
 node graph with this widget a user can create nodes by dragging and dropping.

@@ -46,6 +46,7 @@ version = '{0}.{1}'.format(*release.split('.'))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
@@ -55,6 +56,12 @@ intersphinx_mapping = {
     # 'python': ('https://docs.python.org/3', None),
     'PySide2': ('https://doc.qt.io/qtforpython/', None),
 }
+
+# autosummary generate stubs.
+autosummary_generate = True
+
+# autosummary overwrite generated stubs files.
+autosummary_generate_option = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
