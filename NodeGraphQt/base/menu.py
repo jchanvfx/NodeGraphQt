@@ -10,7 +10,17 @@ class NodeGraphMenu(object):
     """
     The ``NodeGraphMenu`` is the context menu triggered from the node graph.
 
-    This class is an abstraction layer for the QMenu object.
+    example to accessing the node graph context menu.
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import NodeGraph
+
+        node_graph = NodeGraph()
+
+        # get the context menu for the node graph.
+        context_menu = node_graph.get_context_menu('graph')
     """
 
     def __init__(self, graph, qmenu):
@@ -135,19 +145,52 @@ class NodesMenu(NodeGraphMenu):
     """
     The ``NodesMenu`` is the context menu triggered from the nodes.
 
-    This class is an abstraction layer for the QMenu object.
-
     **Inherited from:** :class:`NodeGraphQt.NodeGraphMenu`
+
+    example for adding a command to the nodes context menu.
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import BaseNode, NodeGraph
+
+        # example node.
+        class MyNode(BaseNode):
+
+            __identifier__ = 'com.chantasticvfx'
+            NODE_NAME = 'my node'
+
+            def __init__(self):
+                super(MyNode, self).__init__()
+                self.add_input('in')
+                self.add_output('out')
+
+        # create node graph.
+        node_graph = NodeGraph()
+
+        # register example node.
+        node_graph.register_node(MyNode)
+
+        # get the context menu for the nodes.
+        nodes_menu = node_graph.get_context_menu('nodes')
+
+        # create a command
+        def test_func(graph, node):
+            print('Clicked on node: {}'.format(node.name()))
+
+        nodes_menu.add_command('test',
+                               func=test_func,
+                               node_type='com.chantasticvfx.MyNode')
+
     """
 
-    def add_command(self, name, func=None, shortcut=None, node_type=None):
+    def add_command(self, name, func=None, node_type=None):
         """
         Re-implemented to add a command to the specified node type menu.
 
         Args:
             name (str): command name.
             func (function): command function eg. "func(``graph``, ``node``)".
-            shortcut (str): shotcut key.
             node_type (str): specified node type for the command.
 
         Returns:
@@ -168,8 +211,6 @@ class NodesMenu(NodeGraphMenu):
         action.graph = self._graph
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
-        if shortcut:
-            action.setShortcut(shortcut)
         if func:
             action.executed.connect(func)
         qaction = node_menu.addAction(action)
@@ -178,7 +219,7 @@ class NodesMenu(NodeGraphMenu):
 
 class NodeGraphCommand(object):
     """
-    base class for a menu command.
+    Node graph menu command.
     """
 
     def __init__(self, graph, qaction):

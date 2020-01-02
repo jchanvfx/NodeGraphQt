@@ -8,6 +8,14 @@ def setup_context_menu(graph):
     """
     Sets up the node graphs context menu with some basic menus and commands.
 
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import NodeGraph, setup_context_menu
+
+        graph = NodeGraph()
+        setup_context_menu(graph)
+
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
     """
