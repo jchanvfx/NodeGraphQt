@@ -41,8 +41,8 @@ the node graphs context menu a few default menus and commands.
     :noindex:
 
 
-NodeGraph Menu
-**************
+Graph Menu
+**********
 
 The context menu triggered from the node graph.
 
