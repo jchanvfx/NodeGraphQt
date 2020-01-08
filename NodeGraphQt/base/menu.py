@@ -122,7 +122,7 @@ class NodeGraphMenu(object):
             shortcut (str): shotcut key.
 
         Returns:
-            NodeGraphQt.MenuCommand: the appended command.
+            NodeGraphQt.NodeGraphCommand: the appended command.
         """
         action = GraphAction(name, self._graph.viewer())
         action.graph = self._graph
@@ -171,7 +171,7 @@ class NodesMenu(NodeGraphMenu):
             node_type (str): specified node type for the command.
 
         Returns:
-            NodeGraphQt.MenuCommand: the appended command.
+            NodeGraphQt.NodeGraphCommand: the appended command.
         """
         if not node_type:
             raise NodeMenuError('Node type not specified!')
@@ -213,7 +213,7 @@ class NodeGraphCommand(object):
         The underlying qaction.
 
         Returns:
-            BaseAction: qaction object.
+            GraphAction: qaction object.
         """
         return self._qaction
 

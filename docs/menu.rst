@@ -18,6 +18,7 @@ The context menu triggered from the node graph.
 
 .. autoclass:: NodeGraphMenu
     :members:
+    :exclude-members: qmenu
 
 
 Nodes Menu
@@ -34,3 +35,4 @@ Command
 
 .. autoclass:: NodeGraphCommand
     :members:
+    :exclude-members: qaction
