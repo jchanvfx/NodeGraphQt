@@ -26,4 +26,6 @@ GitHub Project: https://github.com/jchanvfx/NodeGraphQt
     :name: examplestoc
     :maxdepth: 3
 
-    examples/ex_toc
+    examples/ex_overview
+    examples/ex_node
+    examples/ex_menu

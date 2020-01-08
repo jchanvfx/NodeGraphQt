@@ -26,7 +26,7 @@ class NodeGraph(QtCore.QObject):
     """
     The ``NodeGraph`` class is the main controller for managing all nodes.
 
-    Inherited from: ``PySide2.QtCore.QObject``
+    Inherited from: :class:`PySide2.QtCore.QObject`
 
     .. image:: _images/graph.png
         :width: 60%
@@ -86,6 +86,7 @@ class NodeGraph(QtCore.QObject):
     Signal is triggered when data has been dropped to the graph.
     
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
+    :emits: mime data, node graph position
     """
 
     def __init__(self, parent=None):
@@ -309,7 +310,7 @@ class NodeGraph(QtCore.QObject):
 
         See Also:
             :attr:`NodeGraph.widget` for adding the node graph into a 
-            QtWidgets.QLayout.
+            :class:`PySide2.QtWidgets.QLayout`.
 
         Returns:
             NodeGraphQt.widgets.viewer.NodeViewer: viewer interface.
@@ -468,7 +469,7 @@ class NodeGraph(QtCore.QObject):
             menu (str): menu name.
 
         Returns:
-            NodeGraphMenu or NodesMenu: context menu object.
+            NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu: context menu object.
         """
         menus = self._viewer.context_menus()
         if menus.get(menu):

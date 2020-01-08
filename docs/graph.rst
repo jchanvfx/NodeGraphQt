@@ -1,6 +1,10 @@
 NodeGraph
 #########
 
+`See` :ref:`Basic Example` `from the NodeGraph overview.`
+
+----
+
 .. autoclass:: NodeGraphQt.NodeGraph
     :members:
     :exclude-members: model, widget

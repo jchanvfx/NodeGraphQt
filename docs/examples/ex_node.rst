@@ -5,7 +5,7 @@ Creating Nodes
 **************
 
 | Creating is done simply by calling the :func:`NodeGraphQt.NodeGraph.create_node` function.
-| (`see example below` ``line22``)
+| (`see example below` ``line: 22``)
 
 .. code-block:: python
     :linenos:
@@ -66,16 +66,16 @@ connecting nodes with the port objects:
     # make the connection.
     port_a.connect_to(port_b)
 
+`more on ports and connections.`
 
-more on ports and connections:
-    - :func:`NodeGraphQt.BaseNode.input`,
-    - :func:`NodeGraphQt.BaseNode.output`
-    - :func:`NodeGraphQt.BaseNode.set_input`,
-    - :func:`NodeGraphQt.BaseNode.set_output`,
-    - :func:`NodeGraphQt.BaseNode.inputs`,
-    - :func:`NodeGraphQt.BaseNode.outputs`
-    - :func:`NodeGraphQt.Port.connect_to`,
-    - :func:`NodeGraphQt.Port.disconnect_from`
+        - :func:`NodeGraphQt.BaseNode.input`
+        - :func:`NodeGraphQt.BaseNode.output`
+        - :func:`NodeGraphQt.BaseNode.set_input`
+        - :func:`NodeGraphQt.BaseNode.set_output`
+        - :func:`NodeGraphQt.BaseNode.inputs`
+        - :func:`NodeGraphQt.BaseNode.outputs`
+        - :func:`NodeGraphQt.Port.connect_to`
+        - :func:`NodeGraphQt.Port.disconnect_from`
 
 
 Widget Example
@@ -133,6 +133,7 @@ Here's an example where we subclass the ``NodeGraph`` and connect it up to a
 
         app.exec_()
 
-more on the properties bin and node_double_clicked signal:
+`more on the properties bin and node_double_clicked signal`
+
     - :class:`NodeGraphQt.PropertiesBinWidget`
     - :attr:`NodeGraphQt.NodeGraph.node_double_clicked`

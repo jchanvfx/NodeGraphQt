@@ -1,5 +1,5 @@
-Graph Overview
-##############
+NodeGraph Overview
+##################
 
 User interface overview for the node graph.
 
@@ -68,6 +68,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
     from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
 
 
+    # create a node class object inherited from BaseNode.
     class FooNode(BaseNode):
 
         # unique node identifier domain.
