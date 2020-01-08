@@ -1,5 +1,5 @@
-Examples
-########
+NodeGraphQt Examples
+####################
 
 .. image:: ../_images/overview.png
     :width: 70%
@@ -7,10 +7,8 @@ Examples
 ----
 
 .. toctree::
-    :name: examplestoc
+    :caption: Module Examples
     :maxdepth: 3
 
-    ex_overview
-    ex_menu
-    ex_node
+    ex_toc
 

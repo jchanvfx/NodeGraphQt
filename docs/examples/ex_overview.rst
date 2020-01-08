@@ -1,7 +1,10 @@
-Graph UI Overview
-#################
+Graph Overview
+##############
 
 User interface overview for the node graph.
+
+.. image:: ../_images/overview.png
+    :width: 70%
 
 Navigation
 **********
