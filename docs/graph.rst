@@ -5,7 +5,5 @@ NodeGraph
     :members:
     :exclude-members: model, widget
 
-----
-
-.. autoattribute:: NodeGraphQt.NodeGraph.widget
-.. autoattribute:: NodeGraphQt.NodeGraph.model
+    .. autoattribute:: NodeGraphQt.NodeGraph.widget
+    .. autoattribute:: NodeGraphQt.NodeGraph.model

@@ -6,7 +6,9 @@ from NodeGraphQt import QtGui, QtCore
 
 def setup_context_menu(graph):
     """
-    Sets up the node graphs context menu with some basic menus and commands.
+    populate the specified graph's context menu with essential menus commands.
+
+    example code:
 
     .. code-block:: python
         :linenos:
@@ -15,6 +17,11 @@ def setup_context_menu(graph):
 
         graph = NodeGraph()
         setup_context_menu(graph)
+
+    result:
+
+    .. image:: _images/menu_hotkeys.png
+        :width: 300px
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.

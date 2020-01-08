@@ -1,10 +1,7 @@
-Overview
-########
+Graph UI Overview
+#################
 
-NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports ``PySide2``.
-
-.. image:: _images/overview.png
-    :width: 70%
+User interface overview for the node graph.
 
 Navigation
 **********
@@ -17,10 +14,32 @@ Navigation
 | Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
 +---------------+----------------------------------------------+
 
-Port Connections
-****************
+Node Selection
+**************
 
-.. image:: _images/slicer.png
+.. image:: ../_images/selection.png
+    :width: 500px
+
+Nodes can be selected/unselected with the selection marquee using LMB + Drag
+
+Tab Search
+**********
+
+.. image:: ../_images/node_search.png
+    :width: 269px
+
+Nodes registered in the node graph can be created with the tab search widget.
+
++-------------------+--------+
+| action            | hotkey |
++===================+========+
+| Toggle Visibility | *Tab*  |
++-------------------+--------+
+
+Pipe Slicing
+************
+
+.. image:: ../_images/slicer.png
     :width: 600px
 
 Connection pipes can be disconnected easily with the built in slice tool.
@@ -32,30 +51,10 @@ Connection pipes can be disconnected easily with the built in slice tool.
 +---------------------+----------------------------+
 
 
-Node Search
-***********
+Basic Example
+*************
 
-.. image:: _images/node_search.png
-    :width: 269px
-
-Node can be created with the tab node search widget.
-
-+-------------------+--------+
-| action            | hotkey |
-+===================+========+
-| Toggle Visibility | *Tab*  |
-+-------------------+--------+
-
-
-Example
-*******
-
-Here's a basic example for creating two nodes and connecting them together.
-
-.. image:: _images/example_result.png
-    :width: 60%
-
-example code:
+Here's a basic example snippet for creating two nodes and connecting them together.
 
 .. code-block:: python
     :linenos:
@@ -108,3 +107,8 @@ example code:
         node_a.set_output(0, node_b.input(2))
 
         app.exec_()
+
+result:
+
+.. image:: ../_images/example_result.png
+    :width: 60%

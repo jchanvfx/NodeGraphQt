@@ -32,22 +32,61 @@ class NodeGraph(QtCore.QObject):
         :width: 60%
     """
 
-    #:QtCore.Signal: emits the node object when a node is created in the node graph.
     node_created = QtCore.Signal(NodeObject)
-    #:QtCore.Signal: emits a ``list[str]`` of node ids from the deleted nodes.
+    """
+    Signal triggered when a node is created in the node graph.
+    
+    :parameters: :class:`NodeGraphQt.NodeObject`
+    :emits: created node
+    """
     nodes_deleted = QtCore.Signal(list)
-    #:QtCore.Signal: emits the node object when selected in the node graph.
+    """
+    Signal triggered when nodes have been deleted from the node graph.
+
+    :parameters: list[str]
+    :emits: list of deleted node ids.
+    """
     node_selected = QtCore.Signal(NodeObject)
-    #:QtCore.Signal: triggered when a node is double clicked and emits the node.
+    """
+    Signal triggered when a node is clicked with the LMB.
+    
+    :parameters: :class:`NodeGraphQt.NodeObject`
+    :emits: selected node
+    """
     node_double_clicked = QtCore.Signal(NodeObject)
-    #:QtCore.Signal: for when a node has been connected emits (``input port``, ``output port``).
+    """
+    Signal triggered when a node is double clicked and emits the node.
+
+    :parameters: :class:`NodeGraphQt.NodeObject`
+    :emits: selected node
+    """
     port_connected = QtCore.Signal(Port, Port)
-    #:QtCore.Signal: for when a node has been disconnected emits (``input port``, ``output port``).
+    """
+    Signal triggered when a node port has been connected.
+
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :emits: input port, output port
+    """
     port_disconnected = QtCore.Signal(Port, Port)
-    #:QtCore.Signal: for when a node property has changed emits (``node``, ``property name``, ``property value``).
+    """
+    Signal triggered when a node port has been disconnected.
+
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :emits: input port, output port
+    """
     property_changed = QtCore.Signal(NodeObject, str, object)
-    #:QtCore.Signal: for when drop data has been added to the graph.
+    """
+    Signal is triggered when a property has changed on a node.  
+
+    :parameters: :class:`NodeGraphQt.BaseNode`, str, object
+    :emits: triggered node, property name, property value
+    """
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    """
+    Signal is triggered when data has been dropped to the graph.
+    
+    :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
+    """
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -237,7 +276,7 @@ class NodeGraph(QtCore.QObject):
         The node graph widget for adding into a layout.
 
         Returns:
-            QtWidgets.QWidget: node graph widget.
+            PySide2.QtWidgets.QWidget: node graph widget.
         """
         if self._widget is None:
             self._widget = QtWidgets.QWidget()
@@ -249,16 +288,16 @@ class NodeGraph(QtCore.QObject):
     def show(self):
         """
         Show node graph widget this is just a convenience
-        function to :meth:`NodeGraph.widget().show()`.
+        function to :meth:`NodeGraph.widget.show()`.
         """
-        self._widget.show()
+        self.widget.show()
 
     def close(self):
         """
         Close node graph NodeViewer widget this is just a convenience
-        function to :meth:`NodeGraph.widget().close()`.
+        function to :meth:`NodeGraph.widget.close()`.
         """
-        self._widget.close()
+        self.widget.close()
 
     def viewer(self):
         """

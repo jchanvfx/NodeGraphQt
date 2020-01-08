@@ -8,7 +8,7 @@ from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
 
 class NodeGraphMenu(object):
     """
-    The ``NodeGraphMenu`` is the context menu triggered from the node graph.
+    The ``NodeGraphMenu`` is the main context menu triggered from the node graph.
 
     example for accessing the node graph context menu.
 
@@ -22,8 +22,6 @@ class NodeGraphMenu(object):
         # get the context menu for the node graph.
         context_menu = node_graph.get_context_menu('graph')
 
-        print(context_menu)
-        # >> <NodeGraphMenu("NodeGraph") object at 0x10910fdd8>
     """
 
     def __init__(self, graph, qmenu):
@@ -146,45 +144,21 @@ class NodeGraphMenu(object):
 
 class NodesMenu(NodeGraphMenu):
     """
-    The ``NodesMenu`` is the context menu triggered from the nodes.
+    The ``NodesMenu`` is the context menu triggered from a node.
 
     **Inherited from:** :class:`NodeGraphQt.NodeGraphMenu`
 
-    example for adding a command to the nodes context menu.
+    example for accessing the nodes context menu.
 
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import BaseNode, NodeGraph
+        from NodeGraphQt import NodeGraph
 
-        # example node.
-        class MyNode(BaseNode):
-
-            __identifier__ = 'com.chantasticvfx'
-            NODE_NAME = 'my node'
-
-            def __init__(self):
-                super(MyNode, self).__init__()
-                self.add_input('in')
-                self.add_output('out')
-
-        # create node graph.
         node_graph = NodeGraph()
 
-        # register example node.
-        node_graph.register_node(MyNode)
-
-        # get the context menu for the nodes.
+        # get the nodes context menu.
         nodes_menu = node_graph.get_context_menu('nodes')
-
-        # create a command
-        def test_func(graph, node):
-            print('Clicked on node: {}'.format(node.name()))
-
-        nodes_menu.add_command('test',
-                               func=test_func,
-                               node_type='com.chantasticvfx.MyNode')
-
     """
 
     def add_command(self, name, func=None, node_type=None):
