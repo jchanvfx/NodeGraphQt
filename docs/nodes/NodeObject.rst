@@ -6,17 +6,21 @@ NodeObject
     :exclude-members: NODE_NAME, graph, id, model, type_, view
 
     .. autoattribute:: NODE_NAME
-        :annotation: = (re-implementation required)
+        :annotation:
 
         Initial base node name.
+
+        .. note:: re-implement this attribute to provide a base node name.
 
         :return: node name
         :rtype: str
 
     .. autoattribute:: __identifier__
-        :annotation: = (re-implementation required)
+        :annotation:
 
         Unique node identifier domain. eg. ``"com.chantacticvfx"``
+
+        .. note:: re-implement this attribute to provide a unique node type.
 
         :return: node identifer domain
         :rtype: str
@@ -25,11 +29,11 @@ NodeObject
     .. autoattribute:: id
     .. autoattribute:: model
     .. autoattribute:: type_
-        :annotation: = (__identifier__.__className__)
+        :annotation:
 
         Node type identifier followed by the class name. `eg.` ``"com.chantacticvfx.NodeObject"``
 
-        :return: node type
+        :return: node type (``__identifier__.__className__``)
         :rtype: str
 
     .. autoattribute:: view
