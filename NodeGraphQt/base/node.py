@@ -36,10 +36,10 @@ class NodeObject(object):
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.
     """
 
-    #:str: unique node identifier domain.
+    # Unique node identifier domain. `eg.` ``"com.chantacticvfx"``
     __identifier__ = 'nodeGraphQt.nodes'
 
-    #:str: base node name.
+    # Base node name.
     NODE_NAME = None
 
     def __init__(self, qgraphics_item=None):
@@ -61,7 +61,7 @@ class NodeObject(object):
     def type_(cls):
         """
         Node type identifier followed by the class name.
-        eg. nodeGraphQt.nodes.MyNode
+        `eg.` ``"com.chantacticvfx.NodeObject"``
 
         Returns:
             str: node type.
