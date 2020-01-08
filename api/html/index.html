@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>NodeGraphQt &#8212; NodeGraphQt 0.0.16 documentation</title>
+    <title>NodeGraphQt API &#8212; NodeGraphQt 0.0.16 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview" href="overview.html" /> 
+    <link rel="next" title="Constants" href="constants.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,7 +26,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="Constants"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
@@ -37,21 +40,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="nodegraphqt">
-<h1>NodeGraphQt<a class="headerlink" href="#nodegraphqt" title="Permalink to this headline">¶</a></h1>
-<p>Welcome to the <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code> documentation.</p>
+  <div class="section" id="nodegraphqt-api">
+<h1>NodeGraphQt API<a class="headerlink" href="#nodegraphqt-api" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to the NodeGraphQt documentation.</p>
 <a class="reference internal image-reference" href="_images/screenshot.png"><img alt="_images/screenshot.png" src="_images/screenshot.png" style="width: 95%;" /></a>
-<p>Project Repo: <a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt">https://github.com/jchanvfx/NodeGraphQt</a></p>
+<p>GitHub Project: <a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt">https://github.com/jchanvfx/NodeGraphQt</a></p>
 <hr class="docutils" />
-<div class="toctree-wrapper compound" id="mastertoc">
+<div class="toctree-wrapper compound" id="moduletoc">
+<p class="caption"><span class="caption-text">Module Contents</span><a class="headerlink" href="#moduletoc" title="Permalink to this toctree">¶</a></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#navigation">Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#port-connections">Port Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#node-search">Node Search</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#example">Example</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a><ul>
@@ -62,14 +59,40 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#setup-context-menu">Setup Context Menu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="menu.html#graph-menu">Graph Menu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="menu.html#nodes-menu">Nodes Menu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="menu.html#command">Command</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="widgets.html#propertiesbinwidget">PropertiesBinWidget</a></li>
-<li class="toctree-l2"><a class="reference internal" href="widgets.html#nodetreewidget">NodeTreeWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets.html#properties-bin">Properties Bin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets.html#nodes-tree">Nodes Tree</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound" id="examplestoc">
+<p class="caption"><span class="caption-text">Module Examples</span><a class="headerlink" href="#examplestoc" title="Permalink to this toctree">¶</a></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_overview.html#navigation">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_overview.html#node-selection">Node Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_overview.html#tab-search">Tab Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_overview.html#pipe-slicing">Pipe Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_overview.html#basic-example">Basic Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_node.html#creating-nodes">Creating Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_node.html#connecting-nodes">Connecting Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_node.html#widget-example">Widget Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_menu.html#default-menu-setup">Default Menu Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_menu.html#adding-to-the-graph-menu">Adding to the Graph Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/ex_menu.html#adding-to-the-nodes-menu">Adding to the Nodes Menu</a></li>
 </ul>
 </li>
 </ul>
@@ -83,18 +106,24 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Module Contents</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Module Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a></li>
+</ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="next chapter">Overview</a></p>
+  <p class="topless"><a href="constants.html"
+                        title="next chapter">Constants</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -123,7 +152,10 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constants.html" title="Constants"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>

@@ -27,6 +27,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="nodes.html" title="Nodes"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -43,12 +46,42 @@
             
   <div class="section" id="nodegraph">
 <h1>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this headline">¶</a></h1>
+<p><cite>See</cite> <a class="reference internal" href="examples/ex_overview.html#basic-example"><span class="std std-ref">Basic Example</span></a> <cite>from the NodeGraph overview.</cite></p>
+<hr class="docutils" />
 <dl class="class">
 <dt id="NodeGraphQt.NodeGraph">
 <em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraph</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes.</p>
-<p>Inherited from: <code class="docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></p>
+<p>Inherited from: <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html#PySide2.QtCore.QObject" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></a></p>
 <a class="reference internal image-reference" href="_images/graph.png"><img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" /></a>
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.widget">
+<code class="descname">widget</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node graph widget for adding into a layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph widget.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.QWidget" title="(in PySide v5.14.0)">PySide2.QtWidgets.QWidget</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.model">
+<code class="descname">model</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The model used for storing the node graph data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>NodeGraphQt.base.model.NodeGraphModel</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.acyclic">
 <code class="descname">acyclic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.acyclic" title="Permalink to this definition">¶</a></dt>
@@ -178,7 +211,7 @@
 <dt id="NodeGraphQt.NodeGraph.close">
 <code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close node graph NodeViewer widget this is just a convenience
-function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget().close()</span></code>.</p>
+function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget.close()</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -408,7 +441,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dd class="field-even"><p>context menu object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphMenu</a> or <a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodesMenu</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a> or <a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodeGraphQt.NodesMenu</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -751,9 +784,9 @@ the node graph.</p>
 <p>By default all pipes are set curved.</p>
 <p>Pipe Layout Styles:</p>
 <ul class="simple">
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_CURVED</span></code></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT</span></code></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_ANGLE</span></code></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_CURVED" title="NodeGraphQt.constants.PIPE_LAYOUT_CURVED"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_CURVED</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT" title="NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_ANGLE" title="NodeGraphQt.constants.PIPE_LAYOUT_ANGLE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_ANGLE</span></code></a></p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -778,7 +811,7 @@ the node graph.</p>
 <dt id="NodeGraphQt.NodeGraph.show">
 <code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show node graph widget this is just a convenience
-function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget().show()</span></code>.</p>
+function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget.show()</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -812,7 +845,7 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a> for adding the node graph into a
-QtWidgets.QLayout.</p>
+<a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLayout.html#PySide2.QtWidgets.QLayout" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLayout</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -827,10 +860,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.data_dropped">
 <code class="descname">data_dropped</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.data_dropped" title="Permalink to this definition">¶</a></dt>
-<dd><p>for when drop data has been added to the graph.</p>
+<dd><p>Signal is triggered when data has been dropped to the graph.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QMimeData.html#PySide2.QtCore.QMimeData" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QMimeData</span></code></a>, <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QPoint.html#PySide2.QtCore.QPoint" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QPoint</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>mime data, node graph position</p>
 </dd>
 </dl>
 </dd></dl>
@@ -838,10 +874,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.node_created">
 <code class="descname">node_created</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_created" title="Permalink to this definition">¶</a></dt>
-<dd><p>emits the node object when a node is created in the node graph.</p>
+<dd><p>Signal triggered when a node is created in the node graph.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>created node</p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,10 +888,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.node_double_clicked">
 <code class="descname">node_double_clicked</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_double_clicked" title="Permalink to this definition">¶</a></dt>
-<dd><p>triggered when a node is double clicked and emits the node.</p>
+<dd><p>Signal triggered when a node is double clicked and emits the node.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>selected node</p>
 </dd>
 </dl>
 </dd></dl>
@@ -860,10 +902,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.node_selected">
 <code class="descname">node_selected</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_selected" title="Permalink to this definition">¶</a></dt>
-<dd><p>emits the node object when selected in the node graph.</p>
+<dd><p>Signal triggered when a node is clicked with the LMB.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>selected node</p>
 </dd>
 </dl>
 </dd></dl>
@@ -871,10 +916,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.nodes_deleted">
 <code class="descname">nodes_deleted</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.nodes_deleted" title="Permalink to this definition">¶</a></dt>
-<dd><p>emits a <code class="docutils literal notranslate"><span class="pre">list[str]</span></code> of node ids from the deleted nodes.</p>
+<dd><p>Signal triggered when nodes have been deleted from the node graph.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>list of deleted node ids.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -882,10 +930,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.port_connected">
 <code class="descname">port_connected</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.port_connected" title="Permalink to this definition">¶</a></dt>
-<dd><p>for when a node has been connected emits (<code class="docutils literal notranslate"><span class="pre">input</span> <span class="pre">port</span></code>, <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">port</span></code>).</p>
+<dd><p>Signal triggered when a node port has been connected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>input port, output port</p>
 </dd>
 </dl>
 </dd></dl>
@@ -893,10 +944,13 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.port_disconnected">
 <code class="descname">port_disconnected</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.port_disconnected" title="Permalink to this definition">¶</a></dt>
-<dd><p>for when a node has been disconnected emits (<code class="docutils literal notranslate"><span class="pre">input</span> <span class="pre">port</span></code>, <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">port</span></code>).</p>
+<dd><p>Signal triggered when a node port has been disconnected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>input port, output port</p>
 </dd>
 </dl>
 </dd></dl>
@@ -904,43 +958,17 @@ QtWidgets.QLayout.</p>
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.property_changed">
 <code class="descname">property_changed</code><em class="property"> = &lt;PySide2.QtCore.Signal object&gt;</em><a class="headerlink" href="#NodeGraphQt.NodeGraph.property_changed" title="Permalink to this definition">¶</a></dt>
-<dd><p>for when a node property has changed emits (<code class="docutils literal notranslate"><span class="pre">node</span></code>, <code class="docutils literal notranslate"><span class="pre">property</span> <span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">property</span> <span class="pre">value</span></code>).</p>
+<dd><p>Signal is triggered when a property has changed on a node.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>QtCore.Signal</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a>, str, object</p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>triggered node, property name, property value</p>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<hr class="docutils" />
-<dl class="attribute">
-<dt id="NodeGraphQt.NodeGraph.widget">
-<code class="descclassname">NodeGraph.</code><code class="descname">widget</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
-<dd><p>The node graph widget for adding into a layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node graph widget.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>QtWidgets.QWidget</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="NodeGraphQt.NodeGraph.model">
-<code class="descclassname">NodeGraph.</code><code class="descname">model</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>The model used for storing the node graph data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node graph model.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>NodeGraphQt.base.model.NodeGraphModel</p>
-</dd>
-</dl>
 </dd></dl>
 
 </div>
@@ -952,13 +980,19 @@ QtWidgets.QLayout.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Module Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">NodeGraph</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Module Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a></li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -994,6 +1028,9 @@ QtWidgets.QLayout.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="nodes.html" title="Nodes"
              >next</a> |</li>

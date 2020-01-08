@@ -5,34 +5,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Overview &#8212; NodeGraphQt 0.0.16 documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <link rel="shortcut icon" href="_static/favicon.png"/>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Constants" href="constants.html" />
-    <link rel="prev" title="NodeGraphQt" href="index.html" /> 
+    <title>NodeGraph Overview &#8212; NodeGraphQt 0.0.16 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/ngqt.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Node Examples" href="ex_node.html" />
+    <link rel="prev" title="Widgets" href="../widgets.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="constants.html" title="Constants"
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ex_node.html" title="Node Examples"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="NodeGraphQt"
+          <a href="../widgets.html" title="Widgets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -41,10 +44,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>NodeGraphQt is a node graph framework that can be implemented and repurposed into applications that supports <code class="docutils literal notranslate"><span class="pre">PySide2</span></code>.</p>
-<a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 70%;" /></a>
+  <div class="section" id="nodegraph-overview">
+<h1>NodeGraph Overview<a class="headerlink" href="#nodegraph-overview" title="Permalink to this headline">¶</a></h1>
+<p>User interface overview for the node graph.</p>
+<a class="reference internal image-reference" href="../_images/overview.png"><img alt="../_images/overview.png" src="../_images/overview.png" style="width: 70%;" /></a>
 <div class="section" id="navigation">
 <h2>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-center">
@@ -67,9 +70,35 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="port-connections">
-<h2>Port Connections<a class="headerlink" href="#port-connections" title="Permalink to this headline">¶</a></h2>
-<a class="reference internal image-reference" href="_images/slicer.png"><img alt="_images/slicer.png" src="_images/slicer.png" style="width: 600px;" /></a>
+<div class="section" id="node-selection">
+<h2>Node Selection<a class="headerlink" href="#node-selection" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/selection.png"><img alt="../_images/selection.png" src="../_images/selection.png" style="width: 500px;" /></a>
+<p>Nodes can be selected/unselected with the selection marquee using LMB + Drag</p>
+</div>
+<div class="section" id="tab-search">
+<h2>Tab Search<a class="headerlink" href="#tab-search" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/node_search.png"><img alt="../_images/node_search.png" src="../_images/node_search.png" style="width: 269px;" /></a>
+<p>Nodes registered in the node graph can be created with the tab search widget.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 70%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>action</p></th>
+<th class="head"><p>hotkey</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Toggle Visibility</p></td>
+<td><p><em>Tab</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pipe-slicing">
+<h2>Pipe Slicing<a class="headerlink" href="#pipe-slicing" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/slicer.png"><img alt="../_images/slicer.png" src="../_images/slicer.png" style="width: 600px;" /></a>
 <p>Connection pipes can be disconnected easily with the built in slice tool.</p>
 <table class="docutils align-center">
 <colgroup>
@@ -88,32 +117,9 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="node-search">
-<h2>Node Search<a class="headerlink" href="#node-search" title="Permalink to this headline">¶</a></h2>
-<a class="reference internal image-reference" href="_images/node_search.png"><img alt="_images/node_search.png" src="_images/node_search.png" style="width: 269px;" /></a>
-<p>Node can be created with the tab node search widget.</p>
-<table class="docutils align-center">
-<colgroup>
-<col style="width: 70%" />
-<col style="width: 30%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>action</p></th>
-<th class="head"><p>hotkey</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Toggle Visibility</p></td>
-<td><p><em>Tab</em></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p>Here’s a basic example for creating two nodes and connecting them together.</p>
-<a class="reference internal image-reference" href="_images/example_result.png"><img alt="_images/example_result.png" src="_images/example_result.png" style="width: 60%;" /></a>
-<p>example code:</p>
+<div class="section" id="basic-example">
+<h2>Basic Example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a basic example snippet for creating two nodes and connecting them together.</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -161,12 +167,14 @@
 45
 46
 47
-48</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+48
+49</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
 <span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">setup_context_menu</span>
 
 
+<span class="c1"># create a node class object inherited from BaseNode.</span>
 <span class="k">class</span> <span class="nc">FooNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 
     <span class="c1"># unique node identifier domain.</span>
@@ -211,6 +219,8 @@
     <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
+<p>result:</p>
+<a class="reference internal image-reference" href="../_images/example_result.png"><img alt="../_images/example_result.png" src="../_images/example_result.png" style="width: 60%;" /></a>
 </div>
 </div>
 
@@ -220,39 +230,46 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h3><a href="index.html">Table of Contents</a></h3>
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Module Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../graph.html">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../widgets.html">Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Module Examples</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NodeGraph Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#navigation">Navigation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#port-connections">Port Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#node-search">Node Search</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#node-selection">Node Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tab-search">Tab Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipe-slicing">Pipe Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-example">Basic Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph.html">NodeGraph</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
-<li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex_node.html">Node Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex_menu.html">Menu Examples</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">NodeGraphQt</a></p>
+  <p class="topless"><a href="../widgets.html"
+                        title="previous chapter">Widgets</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="constants.html"
-                        title="next chapter">Constants</a></p>
+  <p class="topless"><a href="ex_node.html"
+                        title="next chapter">Node Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/overview.rst.txt"
+      <li><a href="../_sources/examples/ex_overview.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
     </form>
@@ -267,15 +284,18 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="constants.html" title="Constants"
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ex_node.html" title="Node Examples"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="NodeGraphQt"
+          <a href="../widgets.html" title="Widgets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
