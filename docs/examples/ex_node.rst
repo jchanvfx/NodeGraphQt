@@ -67,7 +67,7 @@ connecting nodes with the port objects:
     port_a.connect_to(port_b)
 
 
-See functions:
+more on ports and connections:
     - :func:`NodeGraphQt.BaseNode.input`,
     - :func:`NodeGraphQt.BaseNode.output`
     - :func:`NodeGraphQt.BaseNode.set_input`,
@@ -78,6 +78,61 @@ See functions:
     - :func:`NodeGraphQt.Port.disconnect_from`
 
 
-Properties Bin Setup
-********************
+Widget Example
+**************
 
+Here's an example where we subclass the ``NodeGraph`` and connect it up to a
+``PropertiesBinWidget`` and have it show when a node is double clicked.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import BaseNode, NodeGraph, PropertiesBinWidget, QtCore, QtWidgets
+
+
+    class MyNode(BaseNode):
+
+        __identifier__ = 'com.chantasticvfx'
+        NODE_NAME = 'my node'
+
+        def __init__(self):
+            super(MyNode, self).__init__()
+            self.add_input('in')
+            self.add_output('out')
+
+
+    class MyNodeGraph(NodeGraph):
+
+        def __init__(self, parent=None):
+            super(MyNodeGraph, self).__init__(parent)
+
+            # properties bin widget.
+            self._prop_bin = PropertiesBinWidget(node_graph=self)
+            self._prop_bin.setWindowFlags(QtCore.Qt.Tool)
+
+            # wire signal.
+            self.node_double_clicked.connect(self.display_prop_bin)
+
+        def display_prop_bin(self, node):
+            """
+            function for displaying the properties bin when a node
+            is double clicked
+            """
+            if not self._prop_bin.isVisible():
+                self._prop_bin.show()
+
+
+    if __name__ == '__main__':
+        app = QtWidgets.QApplication([])
+
+        node_graph = MyNodeGraph()
+        node_graph.register_node(MyNode)
+        node_graph.widget.show()
+
+        node_a = node_graph.create_node('com.chantasticvfx.MyNode')
+
+        app.exec_()
+
+more on the properties bin and node_double_clicked signal:
+    - :class:`NodeGraphQt.PropertiesBinWidget`
+    - :attr:`NodeGraphQt.NodeGraph.node_double_clicked`
