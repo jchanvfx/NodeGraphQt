@@ -53,7 +53,7 @@
 <em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraph</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes.</p>
 <p>Inherited from: <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html#PySide2.QtCore.QObject" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></a></p>
-<a class="reference internal image-reference" href="_images/graph.png"><img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" /></a>
+<img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" />
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.widget">
 <code class="descname">widget</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
@@ -86,6 +86,10 @@
 <dt id="NodeGraphQt.NodeGraph.acyclic">
 <code class="descname">acyclic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.acyclic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if the current node graph is acyclic.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_acyclic" title="NodeGraphQt.NodeGraph.set_acyclic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.set_acyclic()</span></code></a></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>true if acyclic (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
@@ -738,6 +742,10 @@ the node graph.</p>
 <dt id="NodeGraphQt.NodeGraph.set_acyclic">
 <code class="descname">set_acyclic</code><span class="sig-paren">(</span><em>mode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_acyclic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable the node graph to be a acyclic graph. (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.acyclic" title="NodeGraphQt.NodeGraph.acyclic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.acyclic()</span></code></a></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – true to enable acyclic.</p>

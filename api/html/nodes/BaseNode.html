@@ -53,7 +53,7 @@
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code> class is the base class for nodes that allows
 port connections from one node to another.</p>
 <p><strong>Inherited from:</strong> <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
-<a class="reference internal image-reference" href="../_images/node.png"><img alt="../_images/node.png" src="../_images/node.png" style="width: 250px;" /></a>
+<img alt="../_images/node.png" src="../_images/node.png" style="width: 250px;" />
 <p>example snippet:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -95,8 +95,14 @@ port connections from one node to another.</p>
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_checkbox">
 <code class="descname">add_checkbox</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a custom property and embed a
-<a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QCheckBox.html#PySide2.QtWidgets.QCheckBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code></a> widget into the node.</p>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QCheckBox.html#PySide2.QtWidgets.QCheckBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -113,8 +119,14 @@ port connections from one node to another.</p>
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_combo_menu">
 <code class="descname">add_combo_menu</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>items=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a custom property and embed a
-<a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QComboBox.html#PySide2.QtWidgets.QComboBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code></a> widget into the node.</p>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QComboBox.html#PySide2.QtWidgets.QComboBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -174,8 +186,14 @@ port connections from one node to another.</p>
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_text_input">
 <code class="descname">add_text_input</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a custom property and embed a
-<a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget into the node.</p>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

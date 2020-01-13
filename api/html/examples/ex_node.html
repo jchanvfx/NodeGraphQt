@@ -49,7 +49,7 @@
 <div class="section" id="creating-nodes">
 <h2>Creating Nodes<a class="headerlink" href="#creating-nodes" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">Creating is done simply by calling the <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.create_node()</span></code></a> function.</div>
+<div class="line">Creating a node is done by calling the <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.create_node()</span></code></a> function.</div>
 <div class="line">(<cite>see example below</cite> <code class="docutils literal notranslate"><span class="pre">line:</span> <span class="pre">22</span></code>)</div>
 </div>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -106,6 +106,50 @@
 </pre></div>
 </td></tr></table></div>
 </div>
+<div class="section" id="embedding-widgets">
+<h2>Embedding Widgets<a class="headerlink" href="#embedding-widgets" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode()</span></code></a> class allows you to embed widgets inside a node here’s a
+example to simply embed a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> widget when reimplementing the <code class="docutils literal notranslate"><span class="pre">BaseNode</span></code>.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
+
+<span class="k">class</span> <span class="nc">MyListNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+
+    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;com.chantasticvfx&#39;</span>
+    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;node&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyListNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;apples&#39;</span><span class="p">,</span> <span class="s1">&#39;bananas&#39;</span><span class="p">,</span> <span class="s1">&#39;pears&#39;</span><span class="p">,</span> <span class="s1">&#39;mangos&#39;</span><span class="p">,</span> <span class="s1">&#39;oranges&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_combo_menu</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;My List&#39;</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>To you update the widget you can call the <a class="reference internal" href="../nodes/NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject.set_property()</span></code></a> function.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">node</span> <span class="o">=</span> <span class="n">MyListNode</span><span class="p">()</span>
+<span class="n">node</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;mangos&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p><cite>functions for embedding widgets into a base node:</cite></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QComboBox</span></code>: <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_combo_menu" title="NodeGraphQt.BaseNode.add_combo_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_combo_menu()</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code>: <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_checkbox()</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code>: <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_text_input()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+</div>
 <div class="section" id="connecting-nodes">
 <h2>Connecting Nodes<a class="headerlink" href="#connecting-nodes" title="Permalink to this headline">¶</a></h2>
 <p>There a multiple ways for connecting node ports here are a few examples below.</p>
@@ -140,8 +184,8 @@
 </ul>
 </div></blockquote>
 </div>
-<div class="section" id="widget-example">
-<h2>Widget Example<a class="headerlink" href="#widget-example" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connecting-a-propertiesbin">
+<h2>Connecting a PropertiesBin<a class="headerlink" href="#connecting-a-propertiesbin" title="Permalink to this headline">¶</a></h2>
 <p>Here’s an example where we subclass the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> and connect it up to a
 <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> and have it show when a node is double clicked.</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -265,8 +309,9 @@
 <li class="toctree-l1"><a class="reference internal" href="ex_overview.html">NodeGraph Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Node Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-nodes">Creating Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#embedding-widgets">Embedding Widgets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#connecting-nodes">Connecting Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#widget-example">Widget Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-a-propertiesbin">Connecting a PropertiesBin</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ex_menu.html">Menu Examples</a></li>
