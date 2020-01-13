@@ -211,3 +211,6 @@ epub_exclude_files = ['search.html']
 
 # -- Options for autodoc ----------------------------------------------------
 autodoc_member_order = 'groupwise'
+
+# -- Options for image link -------------------------------------------------
+html_scaled_image_link = False

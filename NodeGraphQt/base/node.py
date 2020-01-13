@@ -232,12 +232,26 @@ class NodeObject(object):
         """
         Creates a custom property to the node.
 
+        Widget Types:
+            - :attr:`NodeGraphQt.constants.NODE_PROP`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QLABEL`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QLINEEDIT`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QTEXTEDIT`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QCOMBO`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QCHECKBOX`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_QSPINBOX`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_COLORPICKER`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_SLIDER`
+
+        See Also:
+            :class:`NodeGraphQt.PropertiesBinWidget`
+
         Args:
             name (str): name of the property.
             value (object): data.
             items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
             range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
-            widget_type (int): widget flag to display in the properties bin.
+            widget_type (int): widget flag to display in the ``PropertiesBinWidget``
             tab (str): name of the widget tab to display in the properties bin.
         """
         self.model.add_property(name, value, items, range, widget_type, tab)
@@ -441,8 +455,13 @@ class BaseNode(NodeObject):
 
     def add_combo_menu(self, name='', label='', items=None, tab=None):
         """
-        Create a custom property and embed a
-        :class:`PySide2.QtWidgets.QComboBox` widget into the node.
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QComboBox` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
 
         Args:
             name (str): name for the custom property.
@@ -460,8 +479,13 @@ class BaseNode(NodeObject):
 
     def add_text_input(self, name='', label='', text='', tab=None):
         """
-        Create a custom property and embed a
-        :class:`PySide2.QtWidgets.QLineEdit` widget into the node.
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
 
         Args:
             name (str): name for the custom property.
@@ -477,8 +501,13 @@ class BaseNode(NodeObject):
 
     def add_checkbox(self, name='', label='', text='', state=False, tab=None):
         """
-        Create a custom property and embed a
-        :class:`PySide2.QtWidgets.QCheckBox` widget into the node.
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QCheckBox` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
 
         Args:
             name (str): name for the custom property.
