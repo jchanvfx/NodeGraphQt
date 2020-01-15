@@ -4,7 +4,7 @@ Node Examples
 Creating Nodes
 **************
 
-| Creating is done simply by calling the :func:`NodeGraphQt.NodeGraph.create_node` function.
+| Creating a node is done by calling the :func:`NodeGraphQt.NodeGraph.create_node` function.
 | (`see example below` ``line: 22``)
 
 .. code-block:: python
@@ -36,6 +36,44 @@ Creating Nodes
         node_b = node_graph.create_node('com.chantasticvfx.MyNode', name='node b', pos=[300, 100])
 
         app.exec_()
+
+
+Embedding Widgets
+*****************
+
+The :meth:`NodeGraphQt.BaseNode` class allows you to embed widgets inside a node here's a
+example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNode``.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import BaseNode
+
+    class MyListNode(BaseNode):
+
+        __identifier__ = 'com.chantasticvfx'
+        NODE_NAME = 'node'
+
+        def __init__(self):
+            super(MyListNode, self).__init__()
+
+            items = ['apples', 'bananas', 'pears', 'mangos', 'oranges']
+            self.add_combo_menu('my_list', 'My List', items)
+
+To you update the widget you can call the :meth:`NodeGraphQt.NodeObject.set_property` function.
+
+.. code-block:: python
+    :linenos:
+
+    node = MyListNode()
+    node.set_property('my_list', 'mangos')
+
+
+`functions for embedding widgets into a base node:`
+
+ - ``QComboBox``: :meth:`NodeGraphQt.BaseNode.add_combo_menu`
+ - ``QCheckBox``: :meth:`NodeGraphQt.BaseNode.add_checkbox`
+ - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
 
 
 Connecting Nodes
@@ -78,8 +116,8 @@ connecting nodes with the port objects:
         - :func:`NodeGraphQt.Port.disconnect_from`
 
 
-Widget Example
-**************
+Connecting a PropertiesBin
+**************************
 
 Here's an example where we subclass the ``NodeGraph`` and connect it up to a
 ``PropertiesBinWidget`` and have it show when a node is double clicked.

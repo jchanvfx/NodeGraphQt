@@ -1,13 +1,8 @@
 Nodes
 #####
 
-.. image:: _images/screenshot.png
-    :width: 95%
-
-----
-
 .. toctree::
-    :caption: Contents
+    :caption: Node Classes
     :name: nodestoc
     :maxdepth: 2
 
