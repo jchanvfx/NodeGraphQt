@@ -32,6 +32,12 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
 
     value_changed = QtCore.Signal(str, object)
+    """
+    Signal triggered when the ``value`` attribute has changed.
+
+    :parameters: str, object
+    :emits: property name, propety value
+    """
 
     def __init__(self, parent=None, name='widget', label=''):
         super(NodeBaseWidget, self).__init__(parent)
@@ -49,40 +55,89 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     @property
     def widget(self):
+        """
+        Returns the embedded QWidget used in the node.
+
+        Returns:
+            QtWidgets.QWidget: nested QWidget
+        """
         raise NotImplementedError
 
     @property
     def value(self):
+        """
+        Returns the widgets current value.
+
+        Returns:
+            str: current property value.
+        """
         raise NotImplementedError
 
     @value.setter
     def value(self, text):
+        """
+        Sets the widgets current value.
+
+        Args:
+            text (str): new text value.
+        """
         raise NotImplementedError
 
     @property
     def label(self):
+        """
+        Returns the label text displayed above the embedded node widget.
+
+        Returns:
+            str: label text.
+        """
         return self._label
 
     @label.setter
     def label(self, label):
+        """
+        Sets the label text above the embedded widget.
+
+        Args:
+            label (str): new label ext.
+        """
         self._label = label
 
     @property
     def type_(self):
+        """
+        Returns the node widget type.
+
+        Returns:
+            str: widget type.
+        """
         return str(self.__class__.__name__)
 
     @property
     def node(self):
+        """
+        Returns the parent node object.
+
+        Returns:
+            NodeGraphQt.BaseNode: parent node.
+        """
         self.parentItem()
 
     @property
     def name(self):
+        """
+        Returns the parent node property name.
+
+        Returns:
+            str: property name.
+        """
         return self._name
 
 
 class NodeComboBox(NodeBaseWidget):
     """
-    ComboBox Node Widget.
+    ComboBox Node Widget inherits from:
+    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
     """
 
     def __init__(self, parent=None, name='', label='', items=None):
@@ -111,6 +166,12 @@ class NodeComboBox(NodeBaseWidget):
 
     @property
     def value(self):
+        """
+        Returns the QComboBox current text.
+
+        Returns:
+            str: current property value.
+        """
         return str(self._combo.currentText())
 
     @value.setter
@@ -140,7 +201,8 @@ class NodeComboBox(NodeBaseWidget):
 
 class NodeLineEdit(NodeBaseWidget):
     """
-    LineEdit Node Widget.
+    LineEdit Node Widget inherits from:
+    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
     """
 
     def __init__(self, parent=None, name='', label='', text=''):
@@ -166,6 +228,12 @@ class NodeLineEdit(NodeBaseWidget):
 
     @property
     def value(self):
+        """
+        Returns the QLineEdit current text.
+
+        Returns:
+            str: current property value.
+        """
         return str(self._ledit.text())
 
     @value.setter
@@ -177,7 +245,8 @@ class NodeLineEdit(NodeBaseWidget):
 
 class NodeCheckBox(NodeBaseWidget):
     """
-    CheckBox Node Widget.
+    CheckBox Node Widget inherits from:
+    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
     """
 
     def __init__(self, parent=None, name='', label='', text='', state=False):
@@ -206,6 +275,12 @@ class NodeCheckBox(NodeBaseWidget):
 
     @property
     def value(self):
+        """
+        Returns the QCheckBox checked state.
+
+        Returns:
+            bool: current property value.
+        """
         return self._cbox.isChecked()
 
     @value.setter
