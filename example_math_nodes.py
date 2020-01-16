@@ -47,7 +47,8 @@ class DataInputNode(BaseNode):
         super(DataInputNode, self).__init__()
         self.output = self.add_output('out')
         self.add_text_input('out', 'Data Input', text='4', tab='widgets')
-
+        self.view.widgets['out'].value_changed.connect(partial(update_streams, self))
+        
     def run(self):
         return
 
