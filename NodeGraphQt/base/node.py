@@ -317,7 +317,7 @@ class NodeObject(object):
         Returns:
             bool: true if property name exists in the Node.
         """
-        return name in self.model.properties.keys()
+        return name in self.model.custom_properties.keys()
 
     def set_x_pos(self, x):
         """
@@ -617,7 +617,7 @@ class BaseNode(NodeObject):
             list[NodeGraphQt.Port]: node output ports.
         """
         return self._outputs
-
+    
     def input(self, index):
         """
         Return the input port with the matching index.

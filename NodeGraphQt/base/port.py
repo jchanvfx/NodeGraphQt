@@ -158,27 +158,27 @@ class Port(object):
 
         if not port:
             if pre_conn_port:
-                undo_stack.push(NodeInputDisconnectedCmd(self, port))
                 undo_stack.push(PortDisconnectedCmd(self, port))
+                undo_stack.push(NodeInputDisconnectedCmd(self, port))
             return
 
         if graph.acyclic() and viewer.acyclic_check(self.view, port.view):
             if pre_conn_port:
-                undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
                 undo_stack.push(PortDisconnectedCmd(self, pre_conn_port))
+                undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
                 return
 
         trg_conn_ports = port.connected_ports()
         if not port.multi_connection() and trg_conn_ports:
             dettached_port = trg_conn_ports[0]
-            undo_stack.push(NodeInputDisconnectedCmd(port, dettached_port))
             undo_stack.push(PortDisconnectedCmd(port, dettached_port))
+            undo_stack.push(NodeInputDisconnectedCmd(port, dettached_port))
         if pre_conn_port:
-            undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
             undo_stack.push(PortDisconnectedCmd(self, pre_conn_port))
+            undo_stack.push(NodeInputDisconnectedCmd(self, pre_conn_port))
 
-        undo_stack.push(NodeInputConnectedCmd(self, port))
         undo_stack.push(PortConnectedCmd(self, port))
+        undo_stack.push(NodeInputConnectedCmd(self, port))
 
         undo_stack.endMacro()
 
@@ -198,8 +198,8 @@ class Port(object):
             return
         graph = self.node().graph
         graph.undo_stack().beginMacro('disconnect port')
-        graph.undo_stack().push(NodeInputDisconnectedCmd(self, port))
         graph.undo_stack().push(PortDisconnectedCmd(self, port))
+        graph.undo_stack().push(NodeInputDisconnectedCmd(self, port))
         graph.undo_stack().endMacro()
 
         # emit "port_disconnected" signal from the parent graph.
