@@ -1,14 +1,15 @@
 Node Widgets
 ############
 
-Node widgets are widgets that are embedded in the :class:`NodeGraphQt.BaseNode` class.
+Node widgets are widgets that are embedded in a :class:`NodeGraphQt.BaseNode`
+object displayed in the node graph.
 
 NodeBaseWidget
 **************
 
 .. autoclass:: NodeGraphQt.widgets.node_widgets.NodeBaseWidget
     :members:
-    :exclude-members: node, setToolTip, value, widget
+    :exclude-members: node, setToolTip, type_, value, widget
 
 NodeComboBox
 ************

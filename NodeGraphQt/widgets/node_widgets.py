@@ -28,7 +28,8 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
 
 class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
-    Base Node Widget.
+    NodeBaseWidget is the main base class for all node widgets that is
+    embedded in a :class:`NodeGraphQt.BaseNode` object.
     """
 
     value_changed = QtCore.Signal(str, object)
@@ -136,8 +137,12 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
 class NodeComboBox(NodeBaseWidget):
     """
-    ComboBox Node Widget inherits from:
-    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
+    NodeComboBox widget is subclassed from :class:`NodeBaseWidget`,
+    this widget is displayed as a ``QComboBox`` embedded in a node.
+
+    .. note::
+        `To embed a ``QComboBox`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_combo_menu`
     """
 
     def __init__(self, parent=None, name='', label='', items=None):
@@ -167,10 +172,10 @@ class NodeComboBox(NodeBaseWidget):
     @property
     def value(self):
         """
-        Returns the QComboBox current text.
+        Returns the widget current text.
 
         Returns:
-            str: current property value.
+            str: current text.
         """
         return str(self._combo.currentText())
 
@@ -201,8 +206,12 @@ class NodeComboBox(NodeBaseWidget):
 
 class NodeLineEdit(NodeBaseWidget):
     """
-    LineEdit Node Widget inherits from:
-    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
+    NodeLineEdit widget is subclassed from :class:`NodeBaseWidget`,
+    this widget is displayed as a ``QLineEdit`` embedded in a node.
+
+    .. note::
+        `To embed a ``QLineEdit`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_text_input`
     """
 
     def __init__(self, parent=None, name='', label='', text=''):
@@ -229,10 +238,10 @@ class NodeLineEdit(NodeBaseWidget):
     @property
     def value(self):
         """
-        Returns the QLineEdit current text.
+        Returns the widgets current text.
 
         Returns:
-            str: current property value.
+            str: current text.
         """
         return str(self._ledit.text())
 
@@ -245,8 +254,12 @@ class NodeLineEdit(NodeBaseWidget):
 
 class NodeCheckBox(NodeBaseWidget):
     """
-    CheckBox Node Widget inherits from:
-    :class:`NodeGraphQt.widgets.node_widgets.NodeBaseWidget`
+    NodeCheckBox widget is subclassed from :class:`NodeBaseWidget`,
+    this widget is displayed as a ``QCheckBox`` embedded in a node.
+
+    .. note::
+        `To embed a ``QCheckBox`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_checkbox`
     """
 
     def __init__(self, parent=None, name='', label='', text='', state=False):
@@ -279,10 +292,10 @@ class NodeCheckBox(NodeBaseWidget):
     @property
     def value(self):
         """
-        Returns the QCheckBox checked state.
+        Returns the widget checked state.
 
         Returns:
-            bool: current property value.
+            bool: checked state.
         """
         return self._cbox.isChecked()
 
