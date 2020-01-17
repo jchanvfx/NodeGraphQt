@@ -116,10 +116,10 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     @property
     def node(self):
         """
-        Returns the parent node object.
+        Returns the parent base node qgraphics item.
 
         Returns:
-            NodeGraphQt.BaseNode: parent node.
+            NodeItem: parent node.
         """
         self.parentItem()
 
@@ -188,7 +188,7 @@ class NodeComboBox(NodeBaseWidget):
             self._combo.addItems(items)
 
     def all_items(self):
-        return [self._combo.itemText(i) for i in range(self._combo.count)]
+        return [self._combo.itemText(i) for i in range(self._combo.count())]
 
     def sort_items(self):
         items = sorted(self.all_items())
@@ -254,7 +254,10 @@ class NodeCheckBox(NodeBaseWidget):
         self._cbox = QtWidgets.QCheckBox(text)
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
-        self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+
+        # issue #144: disabled stylesheet for now
+        # self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+
         font = self._cbox.font()
         font.setPointSize(11)
         self._cbox.setFont(font)

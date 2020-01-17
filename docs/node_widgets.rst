@@ -8,7 +8,7 @@ NodeBaseWidget
 
 .. autoclass:: NodeGraphQt.widgets.node_widgets.NodeBaseWidget
     :members:
-    :exclude-members: setToolTip, widget, value
+    :exclude-members: node, setToolTip, value, widget
 
 NodeComboBox
 ************

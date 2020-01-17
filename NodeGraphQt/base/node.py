@@ -458,7 +458,7 @@ class BaseNode(NodeObject):
         Returns all embedded widgets from this node.
 
         See Also:
-            :meth:`BaseNode.get_widget`,
+            :meth:`BaseNode.get_widget`
 
         Returns:
             dict: embedded node widgets. {``property_name``: ``node_widget``}
