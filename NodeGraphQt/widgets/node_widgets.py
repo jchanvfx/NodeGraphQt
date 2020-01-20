@@ -219,7 +219,7 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit = QtWidgets.QLineEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
-        self._ledit.returnPressed.connect(self._value_changed)
+        self._ledit.editingFinished.connect(self._value_changed)
         self._ledit.clearFocus()
         group = _NodeGroupBox(label)
         group.add_node_widget(self._ledit)
