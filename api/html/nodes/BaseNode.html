@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>BaseNode &#8212; NodeGraphQt 0.0.16 documentation</title>
+    <title>BaseNode &#8212; NodeGraphQt 0.0.17 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/ngqt.css" type="text/css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" accesskey="U">Nodes</a> &#187;</li> 
       </ul>
     </div>  
@@ -94,7 +94,7 @@ port connections from one node to another.</p>
 </td></tr></table></div>
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_checkbox">
-<code class="descname">add_checkbox</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_checkbox</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QCheckBox.html#PySide2.QtWidgets.QCheckBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code></a> widget
 into the node.</p>
@@ -118,7 +118,7 @@ function use this function to to update the widget.</p>
 
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_combo_menu">
-<code class="descname">add_combo_menu</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>items=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_combo_menu</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>items=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QComboBox.html#PySide2.QtWidgets.QComboBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code></a> widget
 into the node.</p>
@@ -185,7 +185,7 @@ function use this function to to update the widget.</p>
 
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_text_input">
-<code class="descname">add_text_input</code><span class="sig-paren">(</span><em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_text_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
 into the node.</p>
@@ -230,6 +230,29 @@ function use this function to to update the widget.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.get_widget">
+<code class="descname">get_widget</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the embedded widget associated with the property name.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_combo_menu" title="NodeGraphQt.BaseNode.add_combo_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.add_combo_menu()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.add_text_input()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.add_checkbox()</span></code></a>,</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node property name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>embedded node widget.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../node_widgets.html#NodeGraphQt.widgets.node_widgets.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget">NodeBaseWidget</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -420,6 +443,24 @@ logic to run for this event.</em></p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.widgets">
+<code class="descname">widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.widgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all embedded widgets from this node.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_widget" title="NodeGraphQt.BaseNode.get_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.get_widget()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>embedded node widgets. {<code class="docutils literal notranslate"><span class="pre">property_name</span></code>: <code class="docutils literal notranslate"><span class="pre">node_widget</span></code>}</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -444,6 +485,7 @@ logic to run for this event.</em></p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../widgets.html">Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Module Examples</span></p>
 <ul>
@@ -494,7 +536,7 @@ logic to run for this event.</em></p>
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" >Nodes</a> &#187;</li> 
       </ul>
     </div>

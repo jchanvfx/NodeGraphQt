@@ -20,6 +20,7 @@ GitHub Project: https://github.com/jchanvfx/NodeGraphQt
     nodes
     menu
     widgets
+    node_widgets
 
 .. toctree::
     :caption: Module Examples

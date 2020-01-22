@@ -1,12 +1,14 @@
 Widgets
 #######
 
+Custom widgets included in the NodeGraphQt module.
+
 
 Properties Bin
 **************
 
-The ``PropertiesBinWidget`` is a list widget for displaying and editing a
-nodes properties.
+The :class:`NodeGraphQt.PropertiesBinWidget` is a list widget for displaying
+and editing a nodes properties.
 
 .. image:: _images/prop_bin.png
     :width: 950px
@@ -34,8 +36,9 @@ example
 Nodes Tree
 **********
 
-The ``NodeTreeWidget`` is a widget for displaying all registered nodes from the
-node graph with this widget a user can create nodes by dragging and dropping.
+The :class:`NodeGraphQt.NodeTreeWidget` is a widget for displaying all
+registered nodes from the node graph with this widget a user can create nodes
+by dragging and dropping.
 
 .. image:: _images/nodes_tree.png
     :width: 300px
@@ -56,6 +59,6 @@ example
 
 ----
 
-.. autoclass:: NodeGraphQt.widgets.node_tree.NodeTreeWidget
+.. autoclass:: NodeGraphQt.NodeTreeWidget
     :members:
     :exclude-members: mimeData, set_node_factory, property_changed

@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Widgets &#8212; NodeGraphQt 0.0.16 documentation</title>
+    <title>Widgets &#8212; NodeGraphQt 0.0.17 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="NodeGraph Overview" href="examples/ex_overview.html" />
+    <link rel="next" title="Node Widgets" href="node_widgets.html" />
     <link rel="prev" title="Menus" href="menu.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,12 +30,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples/ex_overview.html" title="NodeGraph Overview"
+          <a href="node_widgets.html" title="Node Widgets"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="menu.html" title="Menus"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -46,10 +46,11 @@
             
   <div class="section" id="widgets">
 <h1>Widgets<a class="headerlink" href="#widgets" title="Permalink to this headline">¶</a></h1>
+<p>Custom widgets included in the NodeGraphQt module.</p>
 <div class="section" id="properties-bin">
 <h2>Properties Bin<a class="headerlink" href="#properties-bin" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> is a list widget for displaying and editing a
-nodes properties.</p>
+<p>The <a class="reference internal" href="#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> is a list widget for displaying
+and editing a nodes properties.</p>
 <img alt="_images/prop_bin.png" src="_images/prop_bin.png" style="width: 950px;" />
 <p>example</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -157,8 +158,9 @@ nodes properties.</p>
 </div>
 <div class="section" id="nodes-tree">
 <h2>Nodes Tree<a class="headerlink" href="#nodes-tree" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">NodeTreeWidget</span></code> is a widget for displaying all registered nodes from the
-node graph with this widget a user can create nodes by dragging and dropping.</p>
+<p>The <a class="reference internal" href="#NodeGraphQt.NodeTreeWidget" title="NodeGraphQt.NodeTreeWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeTreeWidget</span></code></a> is a widget for displaying all
+registered nodes from the node graph with this widget a user can create nodes
+by dragging and dropping.</p>
 <img alt="_images/nodes_tree.png" src="_images/nodes_tree.png" style="width: 300px;" />
 <p>example</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -180,8 +182,8 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
 </td></tr></table></div>
 <hr class="docutils" />
 <dl class="class">
-<dt id="NodeGraphQt.widgets.node_tree.NodeTreeWidget">
-<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_tree.</code><code class="descname">NodeTreeWidget</code><span class="sig-paren">(</span><em>parent=None</em>, <em>node_graph=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_tree.NodeTreeWidget" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeTreeWidget">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeTreeWidget</code><span class="sig-paren">(</span><em>parent=None</em>, <em>node_graph=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeTreeWidget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Node tree for displaying node types.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -192,8 +194,8 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
 </dd>
 </dl>
 <dl class="method">
-<dt id="NodeGraphQt.widgets.node_tree.NodeTreeWidget.set_category_label">
-<code class="descname">set_category_label</code><span class="sig-paren">(</span><em>category</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_tree.NodeTreeWidget.set_category_label" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeTreeWidget.set_category_label">
+<code class="descname">set_category_label</code><span class="sig-paren">(</span><em>category</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeTreeWidget.set_category_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set custom display label for a node category.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -206,8 +208,8 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.widgets.node_tree.NodeTreeWidget.update">
-<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_tree.NodeTreeWidget.update" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.NodeTreeWidget.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeTreeWidget.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update and refresh the node tree widget.</p>
 </dd></dl>
 
@@ -234,6 +236,7 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
 <li class="toctree-l2"><a class="reference internal" href="#nodes-tree">Nodes Tree</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Module Examples</span></p>
 <ul>
@@ -246,8 +249,8 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
   <p class="topless"><a href="menu.html"
                         title="previous chapter">Menus</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="examples/ex_overview.html"
-                        title="next chapter">NodeGraph Overview</a></p>
+  <p class="topless"><a href="node_widgets.html"
+                        title="next chapter">Node Widgets</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -279,12 +282,12 @@ node graph with this widget a user can create nodes by dragging and dropping.</p
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples/ex_overview.html" title="NodeGraph Overview"
+          <a href="node_widgets.html" title="Node Widgets"
              >next</a> |</li>
         <li class="right" >
           <a href="menu.html" title="Menus"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
