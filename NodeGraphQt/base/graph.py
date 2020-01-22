@@ -545,7 +545,7 @@ class NodeGraph(QtCore.QObject):
         pipe_max = max([PIPE_LAYOUT_CURVED,
                         PIPE_LAYOUT_STRAIGHT,
                         PIPE_LAYOUT_ANGLE])
-        style = style if 0 >= style >= pipe_max else PIPE_LAYOUT_CURVED
+        style = style if 0 <= style <= pipe_max else PIPE_LAYOUT_CURVED
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):

@@ -176,7 +176,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(PropLineEdit, self).__init__(parent)
         self.__prev_text = ''
-        self.returnPressed.connect(self._on_return_pressed)
+        self.editingFinished.connect(self._on_return_pressed)
 
     def focusInEvent(self, event):
         super(PropLineEdit, self).focusInEvent(event)

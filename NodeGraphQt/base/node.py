@@ -11,9 +11,9 @@ from NodeGraphQt.constants import (NODE_PROP,
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.node_base import NodeItem
-from NodeGraphQt.widgets.node_property import (NodeComboBox,
-                                               NodeLineEdit,
-                                               NodeCheckBox)
+from NodeGraphQt.widgets.node_widgets import (NodeComboBox,
+                                              NodeLineEdit,
+                                              NodeCheckBox)
 
 
 class classproperty(object):
@@ -317,7 +317,7 @@ class NodeObject(object):
         Returns:
             bool: true if property name exists in the Node.
         """
-        return name in self.model.properties.keys()
+        return name in self.model.custom_properties.keys()
 
     def set_x_pos(self, x):
         """
@@ -453,7 +453,36 @@ class BaseNode(NodeObject):
         """
         return self.model.icon
 
-    def add_combo_menu(self, name='', label='', items=None, tab=None):
+    def widgets(self):
+        """
+        Returns all embedded widgets from this node.
+
+        See Also:
+            :meth:`BaseNode.get_widget`
+
+        Returns:
+            dict: embedded node widgets. {``property_name``: ``node_widget``}
+        """
+        return self.view.widgets
+
+    def get_widget(self, name):
+        """
+        Returns the embedded widget associated with the property name.
+
+        See Also:
+            :meth:`BaseNode.add_combo_menu`,
+            :meth:`BaseNode.add_text_input`,
+            :meth:`BaseNode.add_checkbox`,
+
+        Args:
+            name (str): node property name.
+
+        Returns:
+            NodeBaseWidget: embedded node widget.
+        """
+        return self.view.widgets.get(name)
+
+    def add_combo_menu(self, name, label='', items=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QComboBox` widget
@@ -477,7 +506,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_text_input(self, name='', label='', text='', tab=None):
+    def add_text_input(self, name, label='', text='', tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -499,7 +528,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_checkbox(self, name='', label='', text='', state=False, tab=None):
+    def add_checkbox(self, name, label='', text='', state=False, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QCheckBox` widget
@@ -617,7 +646,7 @@ class BaseNode(NodeObject):
             list[NodeGraphQt.Port]: node output ports.
         """
         return self._outputs
-
+    
     def input(self, index):
         """
         Return the input port with the matching index.
