@@ -70,7 +70,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setToolTip('Set display nodes limit.')
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
-        self._limit.setValue(5)
+        self._limit.setValue(1)
         self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(400, 400)
 
@@ -91,7 +91,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         # wire up node graph.
         node_graph.add_properties_bin(self)
-        node_graph.node_double_clicked.connect(self.add_node)
+        node_graph.node_selected.connect(self.add_node)
         node_graph.nodes_deleted.connect(self.__on_nodes_deleted)
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
@@ -130,7 +130,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             return
 
         property_window = properties_widget.get_widget(prop_name)
-        if prop_value != property_window.get_value():
+
+        if property_window and prop_value != property_window.get_value():
             self._block_signal = True
             property_window.set_value(prop_value)
             self._block_signal = False
@@ -175,12 +176,11 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if self.limit() == 0:
             return
 
-        rows = self._prop_list.rowCount()
-        if rows >= self.limit():
-            self._prop_list.removeRow(rows - 1)
-
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+
         if itm_find:
+            if itm_find[0].row() == 0:
+                return
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
@@ -192,6 +192,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         item = QtWidgets.QTableWidgetItem(node.id)
         self._prop_list.setItem(0, 0, item)
         self._prop_list.selectRow(0)
+
+        rows = self._prop_list.rowCount()
+        if rows > self.limit():
+            self._prop_list.removeRow(rows - 1)
 
     def remove_node(self, node):
         """
