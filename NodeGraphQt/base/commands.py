@@ -139,6 +139,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node = node
         self.inputs = []
         self.outputs = []
+
         if hasattr(self.node, 'inputs'):
             input_ports = self.node.inputs().values()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
