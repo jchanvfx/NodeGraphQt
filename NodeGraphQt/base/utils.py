@@ -62,7 +62,7 @@ def setup_context_menu(graph):
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
     edit_menu.add_command('Paste', _paste_nodes, QtGui.QKeySequence.Paste)
-    edit_menu.add_command('Delete', _delete_nodes, QtGui.QKeySequence.Delete)
+    edit_menu.add_command('Delete', _delete_items, QtGui.QKeySequence.Delete)
 
     edit_menu.add_separator()
 
@@ -183,8 +183,9 @@ def _paste_nodes(graph):
     graph.paste_nodes()
 
 
-def _delete_nodes(graph):
+def _delete_items(graph):
     graph.delete_nodes(graph.selected_nodes())
+    graph.delete_pipes(graph._viewer.selected_pipes())
 
 
 def _select_all_nodes(graph):

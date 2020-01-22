@@ -115,10 +115,26 @@ class NodeGraph(QtCore.QObject):
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
+        self._viewer.insert_node.connect(self._insert_node)
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
+
+    def _insert_node(self,items):
+        pipe = items[0]
+        node = self.get_node_by_id(items[1])
+        in_port_node = self.get_node_by_id(pipe.input_port.node.id)
+        out_port_node = self.get_node_by_id(pipe.output_port.node.id)
+        in_port = in_port_node.inputs()[pipe.input_port.name]
+        out_port = out_port_node.outputs()[pipe.output_port.name]
+
+        self.delete_pipe(pipe)
+
+        if node.inputs():
+            node.set_input(0, out_port)
+        if node.outputs():
+            node.set_output(0, in_port)
 
     def _toggle_tab_search(self):
         """
@@ -734,6 +750,16 @@ class NodeGraph(QtCore.QObject):
         self._undo_stack.beginMacro('delete nodes')
         [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
         self._undo_stack.endMacro()
+
+    def delete_pipe(self, pipe):
+        self._on_connection_changed([(pipe.input_port, pipe.output_port)], [])
+
+    def delete_pipes(self, pipes):
+        disconnected = []
+        for pipe in pipes:
+            disconnected.append((pipe.input_port, pipe.output_port))
+        if disconnected:
+            self._on_connection_changed(disconnected, [])
 
     def all_nodes(self):
         """

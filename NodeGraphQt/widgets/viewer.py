@@ -32,6 +32,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     search_triggered = QtCore.Signal(str, tuple)
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
+    insert_node = QtCore.Signal(list)
 
     # pass through signals
     node_selected = QtCore.Signal(str)
@@ -56,7 +57,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._start_port = None
         self._origin_pos = None
         self._previous_pos = QtCore.QPoint(self.width(), self.height())
-        self._prev_selection = []
+        self._prev_selection_nodes = []
+        self._prev_selection_pipes = []
         self._node_positions = {}
         self._rubber_band = QtWidgets.QRubberBand(
             QtWidgets.QRubberBand.Rectangle, self
@@ -95,6 +97,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
         self.CTRL_state = False
         self.SHIFT_state = False
+        self.Colliding_state = False
 
     def __repr__(self):
         return '{}.{}()'.format(
@@ -187,7 +190,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
-        self._prev_selection = self.selected_nodes()
+        self._prev_selection_nodes , self._prev_selection_pipes = self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
@@ -266,6 +269,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # reset recorded positions.
         self._node_positions = {}
 
+        if self.Colliding_state:
+            nodes,pipes = self.selected_items()
+            if nodes and pipes:
+                self.insert_node.emit([pipes[0], nodes[0].id])
+
         super(NodeViewer, self).mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -297,10 +305,26 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
 
-            if self.SHIFT_state and self._prev_selection:
-                for node in self._prev_selection:
-                    if node not in self.selected_nodes():
+            for i in self.scene().selectedItems():
+                if self.SHIFT_state and isinstance(i,Pipe):
+                    for pipe in self._prev_selection_pipes:
+                        pipe.setSelected(True)
+                elif self.SHIFT_state and isinstance(i,AbstractNodeItem):
+                    for node in self._prev_selection_nodes:
                         node.selected = True
+        elif self.LMB_state:
+            self.Colliding_state = False
+            nodes = self.selected_nodes()
+            if len(nodes) == 1:
+                node = nodes[0]
+                for pipe in self.selected_pipes():
+                    pipe.setSelected(False)
+                for item in node.collidingItems():
+                    if isinstance(item, Pipe):
+                        if not item.input_port.node is node and not item.output_port.node is node:
+                            item.setSelected(True)
+                            self.Colliding_state = True
+                            break
 
         self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
@@ -669,6 +693,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
         return nodes
+
+    def selected_pipes(self):
+        pipes = []
+        for item in self.scene().selectedItems():
+            if isinstance(item, Pipe):
+                pipes.append(item)
+        return pipes
+
+    def selected_items(self):
+        nodes = []
+        pipes = []
+        for item in self.scene().selectedItems():
+            if isinstance(item, AbstractNodeItem):
+                nodes.append(item)
+            elif isinstance(item, Pipe):
+                pipes.append(item)
+        return nodes,pipes
 
     def add_node(self, node, pos=None):
         pos = pos or (self._previous_pos.x(), self._previous_pos.y())
