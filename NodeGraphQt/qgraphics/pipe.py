@@ -38,6 +38,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(-size, size))
         self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
@@ -243,6 +244,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
     def highlighted(self):
         return self._highlight
 
+
     def reset(self):
         self._active = False
         self._highlight = False
@@ -266,6 +268,13 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         if self.output_port and self.output_port.node.disabled:
             return True
         return False
+
+    def itemChange(self, change, value):
+        if change == self.ItemSelectedChange and self.scene():
+            self.reset()
+            if value:
+                self.highlight()
+        return super(Pipe, self).itemChange(change, value)
 
     @property
     def input_port(self):
