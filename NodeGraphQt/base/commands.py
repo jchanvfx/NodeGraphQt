@@ -336,7 +336,7 @@ class PortVisibleCmd(QtWidgets.QUndoCommand):
         node_view.post_init()
 
     def undo(self):
-        self.set_visible(self.visible)
-
-    def redo(self):
         self.set_visible(not self.visible)
+        
+    def redo(self):
+        self.set_visible(self.visible)
