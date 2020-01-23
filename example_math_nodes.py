@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
-import math
 import inspect
+import math
 from functools import partial
 
 # add basic math functions to math library
@@ -68,7 +67,6 @@ class DataInputNode(BaseNode):
 class MathFunctionsNode(BaseNode):
     """
     Math functions node.
-
     """
 
     # set a unique node identifier.

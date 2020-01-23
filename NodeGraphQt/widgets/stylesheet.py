@@ -17,7 +17,7 @@ QGroupBox {
     padding-bottom: 2px;
     padding-left: 1px;
     padding-right: 1px;
-    font-size: 10pt;
+    font-size: 8pt;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
@@ -158,6 +158,7 @@ QMenu::separator {
 STYLE_QCHECKBOX = '''
 QCheckBox {
     color: rgba(255, 255, 255, 150);
+    background-color: transparent;
     spacing: 8px 2px;
     padding-top: 2px;
     padding-bottom: 2px;

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets
+from NodeGraphQt import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
@@ -252,6 +252,40 @@ class NodeLineEdit(NodeBaseWidget):
             self._value_changed()
 
 
+class NodeFloatEdit(NodeLineEdit):
+    """
+    NodeFloatEdit widget is subclassed from :class:`NodeLineEdit`,
+    this widget is displayed as a ``QLineEdit`` embedded in a node.
+
+    .. note::
+        `To embed a ``QLineEdit`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_float_input`
+    """
+
+    def __init__(self, parent=None, name='', label='', value=0.0):
+        super(NodeFloatEdit, self).__init__(parent, name, label)
+        regex = '\\d+|\\d+\\.\\d+'
+        validator = QtGui.QRegExpValidator(regex, self._ledit)
+        self._ledit.setValidator(validator)
+        self.text = str(value)
+
+    @property
+    def value(self):
+        """
+        Returns the widgets current float value.
+
+        Returns:
+            float: float value.
+        """
+        return float(self._ledit.text() or '0')
+
+    @value.setter
+    def value(self, text=0.0):
+        if text != self.value:
+            self._ledit.setText(str(text))
+            self._value_changed()
+
+
 class NodeCheckBox(NodeBaseWidget):
     """
     NodeCheckBox widget is subclassed from :class:`NodeBaseWidget`,
@@ -268,8 +302,7 @@ class NodeCheckBox(NodeBaseWidget):
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
 
-        # issue #144: disabled stylesheet for now
-        # self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+        self._cbox.setStyleSheet(STYLE_QCHECKBOX)
 
         font = self._cbox.font()
         font.setPointSize(11)

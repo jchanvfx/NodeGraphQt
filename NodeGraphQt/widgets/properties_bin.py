@@ -16,14 +16,15 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.save()
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(option.palette.midlight())
+
+        painter.setBrush(QtCore.Qt.NoBrush)
         painter.drawRect(option.rect)
 
         if option.state & QtWidgets.QStyle.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = option.palette.alternateBase().color()
+            bdr_clr = QtGui.QColor(100, 100, 100)
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
@@ -69,19 +70,27 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setToolTip('Set display nodes limit.')
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
-        self._limit.setValue(5)
+        self._limit.setValue(2)
         self._limit.valueChanged.connect(self.__on_limit_changed)
-        self.resize(400, 400)
+        self.resize(450, 400)
 
         self._block_signal = False
+
+        self._lock = False
+        self.btn_lock = QtWidgets.QPushButton('lock')
+        self.btn_lock.setToolTip(
+            'Lock the properties bin prevent nodes from being loaded.')
+        self.btn_lock.clicked.connect(self.lock_bin)
 
         btn_clr = QtWidgets.QPushButton('clear')
         btn_clr.setToolTip('Clear the properties bin.')
         btn_clr.clicked.connect(self.clear_bin)
 
         top_layout = QtWidgets.QHBoxLayout()
+        top_layout.setSpacing(2)
         top_layout.addWidget(self._limit)
         top_layout.addStretch(1)
+        top_layout.addWidget(self.btn_lock)
         top_layout.addWidget(btn_clr)
 
         layout = QtWidgets.QVBoxLayout(self)
@@ -129,7 +138,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             return
 
         property_window = properties_widget.get_widget(prop_name)
-        if prop_value != property_window.get_value():
+
+        if property_window and prop_value != property_window.get_value():
             self._block_signal = True
             property_window.set_value(prop_value)
             self._block_signal = False
@@ -173,13 +183,14 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         if self.limit() == 0:
             return
-
-        rows = self._prop_list.rowCount()
-        if rows >= self.limit():
-            self._prop_list.removeRow(rows - 1)
+        if self._lock:
+            return
 
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+
         if itm_find:
+            if itm_find[0].row() == 0:
+                return
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
@@ -192,6 +203,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._prop_list.setItem(0, 0, item)
         self._prop_list.selectRow(0)
 
+        rows = self._prop_list.rowCount()
+        if rows > self.limit():
+            self._prop_list.removeRow(rows - 1)
+
     def remove_node(self, node):
         """
         Remove node from the properties bin.
@@ -201,6 +216,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         node_id = node if isinstance(node, str) else node.id
         self.__on_prop_close(node_id)
+
+    def lock_bin(self):
+        """
+        Lock/UnLock the properties bin.
+        """
+        self._lock = not self._lock
+        if self._lock:
+            self.btn_lock.setText('UnLock')
+        else:
+            self.btn_lock.setText('Lock')
 
     def clear_bin(self):
         """
@@ -266,7 +291,7 @@ if __name__ == '__main__':
     graph = NodeGraph()
     graph.register_node(TestNode)
 
-    prop_bin = PropertiesBinWidget()
+    prop_bin = PropertiesBinWidget(node_graph=graph)
     prop_bin.property_changed.connect(prop_changed)
 
     node = graph.create_node('nodeGraphQt.nodes.TestNode')

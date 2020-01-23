@@ -197,7 +197,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
     def set_value(self, value):
         if value != self.get_value():
-            self.setText(value)
+            self.setText(str(value))
             self.value_changed.emit(self.toolTip(), value)
 
 

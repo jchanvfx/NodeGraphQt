@@ -27,6 +27,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         super(Pipe, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
         self._color = PIPE_DEFAULT_COLOR
         self._style = PIPE_STYLE_DEFAULT
         self._active = False
@@ -55,6 +56,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
                 self.highlight()
             elif self.output_port.node.selected:
                 self.highlight()
+        if self.isSelected():
+            self.highlight()
 
     def paint(self, painter, option, widget):
         """
@@ -243,6 +246,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
     def highlighted(self):
         return self._highlight
 
+
     def reset(self):
         self._active = False
         self._highlight = False
@@ -266,6 +270,13 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         if self.output_port and self.output_port.node.disabled:
             return True
         return False
+
+    def itemChange(self, change, value):
+        if change == self.ItemSelectedChange and self.scene():
+            self.reset()
+            if value:
+                self.highlight()
+        return super(Pipe, self).itemChange(change, value)
 
     @property
     def input_port(self):
