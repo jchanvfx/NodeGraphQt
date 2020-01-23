@@ -319,8 +319,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 for pipe in self.selected_pipes():
                     pipe.setSelected(False)
                 for item in node.collidingItems():
-                    if isinstance(item, Pipe):
-                        if not item.input_port.node is node and not item.output_port.node is node:
+                    if isinstance(item, Pipe) and item.isVisible():
+                        if not item.input_port:
+                            continue
+                        if not item.input_port.node is node and \
+                                not item.output_port.node is node:
                             item.setSelected(True)
                             self.Colliding_state = True
                             break
