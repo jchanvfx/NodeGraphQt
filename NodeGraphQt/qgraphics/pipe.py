@@ -56,6 +56,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
                 self.highlight()
             elif self.output_port.node.selected:
                 self.highlight()
+        if self.isSelected():
+            self.highlight()
 
     def paint(self, painter, option, widget):
         """
