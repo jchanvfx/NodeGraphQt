@@ -251,6 +251,73 @@ class NodeLineEdit(NodeBaseWidget):
             self._ledit.setText(text)
             self._value_changed()
 
+class NodeFloatEdit(NodeLineEdit):
+    """
+    NodeFloatEdit widget is subclassed from :class:`NodeBaseWidget`,
+    this widget is displayed as a ``QLineEdit`` embedded in a node.
+
+    .. note::
+        `To embed a ``QLineEdit`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_float_input`
+    """
+
+    def __init__(self, parent=None, name='', label='', value=0):
+        super(NodeFloatEdit, self).__init__(parent, name, label)
+        self.text = self._convertValue(value)
+        self._ledit = QtWidgets.QLineEdit(self.text)
+        self._ledit.setStyleSheet(STYLE_QLINEEDIT)
+        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
+        self._ledit.editingFinished.connect(lambda:self._editFinished())
+        self._ledit.clearFocus()
+        group = _NodeGroupBox(label)
+        group.add_node_widget(self._ledit)
+        group.setMaximumWidth(120)
+        self.setWidget(group)
+
+
+    def _convertValue(self,value):
+        if type(value) == float or type(value) == int:
+            return str(value)
+        elif type(value) == str:
+            if value.replace(".", "").isdigit():
+                if len(value.split(".")) > 2:
+                    return "0"
+                return value
+            else:
+                return "0"
+        else:
+            return "0"
+
+    def _setValue(self,value):
+        self._ledit.setText(self._convertValue(value))
+        self._value_changed()
+
+    def _editFinished(self):
+        self._setValue(self._ledit.text())
+
+    @property
+    def type_(self):
+        return 'FloatEditNodeWidget'
+
+    @property
+    def value(self):
+        """
+        Returns the widgets current text.
+
+        Returns:
+            float: current value.
+        """
+        text = self._ledit.text()
+        if text:
+            return float(self._ledit.text())
+        else:
+            return 0
+
+    @value.setter
+    def value(self, value=0):
+        if value != self.value:
+            self._setValue(value)
+
 
 class NodeCheckBox(NodeBaseWidget):
     """
@@ -268,8 +335,7 @@ class NodeCheckBox(NodeBaseWidget):
         self._cbox.setChecked(state)
         self._cbox.setMinimumWidth(80)
 
-        # issue #144: disabled stylesheet for now
-        # self._cbox.setStyleSheet(STYLE_QCHECKBOX)
+        self._cbox.setStyleSheet(STYLE_QCHECKBOX)
 
         font = self._cbox.font()
         font.setPointSize(11)
