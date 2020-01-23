@@ -305,13 +305,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
 
-            for i in self.scene().selectedItems():
-                if self.SHIFT_state and isinstance(i,Pipe):
-                    for pipe in self._prev_selection_pipes:
-                        pipe.setSelected(True)
-                elif self.SHIFT_state and isinstance(i,AbstractNodeItem):
-                    for node in self._prev_selection_nodes:
-                        node.selected = True
+            if self.SHIFT_state:
+                for pipe in self._prev_selection_pipes:
+                    pipe.setSelected(True)
+                for node in self._prev_selection_nodes:
+                    node.selected = True
+
         elif self.LMB_state:
             self.Colliding_state = False
             nodes = self.selected_nodes()
