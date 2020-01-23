@@ -69,11 +69,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setToolTip('Set display nodes limit.')
         self._limit.setMaximum(10)
         self._limit.setMinimum(0)
-        self._limit.setValue(1)
+        self._limit.setValue(2)
         self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(400, 400)
 
         self._block_signal = False
+
+        self.lock = False
+        self.btn_lock = QtWidgets.QPushButton('lock')
+        self.btn_lock.setToolTip('Lock the properties bin.')
+        self.btn_lock.clicked.connect(self.lock_bin)
 
         btn_clr = QtWidgets.QPushButton('clear')
         btn_clr.setToolTip('Clear the properties bin.')
@@ -82,6 +87,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         top_layout = QtWidgets.QHBoxLayout()
         top_layout.addWidget(self._limit)
         top_layout.addStretch(1)
+        top_layout.addWidget(self.btn_lock)
         top_layout.addWidget(btn_clr)
 
         layout = QtWidgets.QVBoxLayout(self)
@@ -90,7 +96,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         # wire up node graph.
         node_graph.add_properties_bin(self)
-        node_graph.node_selected.connect(self.add_node)
+        node_graph.node_double_clicked.connect(self.add_node)
         node_graph.nodes_deleted.connect(self.__on_nodes_deleted)
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
@@ -174,6 +180,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         if self.limit() == 0:
             return
+        if self.lock:
+            return
 
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
 
@@ -205,6 +213,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         node_id = node if isinstance(node, str) else node.id
         self.__on_prop_close(node_id)
+
+    def lock_bin(self):
+        """
+        Lock/UnLock the properties bin.
+        """
+        self.lock = not self.lock
+        if self.lock:
+            self.btn_lock.setText("UnLock")
+        else:
+            self.btn_lock.setText("Lock")
 
     def clear_bin(self):
         """
