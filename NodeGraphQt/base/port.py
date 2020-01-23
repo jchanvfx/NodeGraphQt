@@ -104,14 +104,13 @@ class Port(object):
         Args:
             visible (bool): true if visible.
         """
+        self.model.visible = visible
         label = 'show' if visible else 'hide'
         undo_stack = self.node().graph.undo_stack()
         undo_stack.beginMacro('{} port {}'.format(label, self.name()))
 
-        connected_ports = self.connected_ports()
-        if connected_ports:
-            for port in connected_ports:
-                undo_stack.push(PortDisconnectedCmd(self, port))
+        for port in self.connected_ports():
+            undo_stack.push(PortDisconnectedCmd(self, port))
 
         undo_stack.push(PortVisibleCmd(self))
         undo_stack.endMacro()
