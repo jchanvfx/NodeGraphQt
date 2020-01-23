@@ -1,3 +1,6 @@
+# virtual enviroment
+env/*
+
 # sphinx documentation
 docs/_build/
 api
