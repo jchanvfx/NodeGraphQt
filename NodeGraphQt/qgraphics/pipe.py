@@ -27,6 +27,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         super(Pipe, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
         self._color = PIPE_DEFAULT_COLOR
         self._style = PIPE_STYLE_DEFAULT
         self._active = False
@@ -38,7 +39,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(-size, size))
         self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''

@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
-import math
 import inspect
+import math
 from functools import partial
 
 # add basic math functions to math library

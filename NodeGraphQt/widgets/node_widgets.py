@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets
+from NodeGraphQt import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
@@ -251,9 +251,10 @@ class NodeLineEdit(NodeBaseWidget):
             self._ledit.setText(text)
             self._value_changed()
 
+
 class NodeFloatEdit(NodeLineEdit):
     """
-    NodeFloatEdit widget is subclassed from :class:`NodeBaseWidget`,
+    NodeFloatEdit widget is subclassed from :class:`NodeLineEdit`,
     this widget is displayed as a ``QLineEdit`` embedded in a node.
 
     .. note::
@@ -261,62 +262,28 @@ class NodeFloatEdit(NodeLineEdit):
         :meth:`NodeGraphQt.BaseNode.add_float_input`
     """
 
-    def __init__(self, parent=None, name='', label='', value=0):
+    def __init__(self, parent=None, name='', label='', value=0.0):
         super(NodeFloatEdit, self).__init__(parent, name, label)
-        self.text = self._convertValue(value)
-        self._ledit = QtWidgets.QLineEdit(self.text)
-        self._ledit.setStyleSheet(STYLE_QLINEEDIT)
-        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
-        self._ledit.editingFinished.connect(lambda:self._editFinished())
-        self._ledit.clearFocus()
-        group = _NodeGroupBox(label)
-        group.add_node_widget(self._ledit)
-        group.setMaximumWidth(120)
-        self.setWidget(group)
-
-
-    def _convertValue(self,value):
-        if type(value) == float or type(value) == int:
-            return str(value)
-        elif type(value) == str:
-            if value.replace(".", "").isdigit():
-                if len(value.split(".")) > 2:
-                    return "0"
-                return value
-            else:
-                return "0"
-        else:
-            return "0"
-
-    def _setValue(self,value):
-        self._ledit.setText(self._convertValue(value))
-        self._value_changed()
-
-    def _editFinished(self):
-        self._setValue(self._ledit.text())
-
-    @property
-    def type_(self):
-        return 'FloatEditNodeWidget'
+        regex = '\\d+|\\d+\\.\\d+'
+        validator = QtGui.QRegExpValidator(regex, self._ledit)
+        self._ledit.setValidator(validator)
+        self.text = str(value)
 
     @property
     def value(self):
         """
-        Returns the widgets current text.
+        Returns the widgets current float value.
 
         Returns:
-            float: current value.
+            float: float value.
         """
-        text = self._ledit.text()
-        if text:
-            return float(self._ledit.text())
-        else:
-            return 0
+        return float(self._ledit.text() or '0')
 
     @value.setter
-    def value(self, value=0):
-        if value != self.value:
-            self._setValue(value)
+    def value(self, text=0.0):
+        if text != self.value:
+            self._ledit.setText(str(text))
+            self._value_changed()
 
 
 class NodeCheckBox(NodeBaseWidget):
