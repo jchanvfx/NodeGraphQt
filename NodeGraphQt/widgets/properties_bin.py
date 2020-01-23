@@ -5,7 +5,6 @@ from NodeGraphQt.widgets.properties import NodePropWidget
 
 
 class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
-    #pass
     def paint(self, painter, option, index):
         """
         Args:
@@ -16,7 +15,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.save()
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
-        #painter.setBrush(option.palette.midlight())
+
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.drawRect(option.rect)
 
@@ -24,7 +23,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = QtGui.QColor(100,100,100)#option.palette.alternateBase().color()
+            bdr_clr = QtGui.QColor(100,100,100)
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)

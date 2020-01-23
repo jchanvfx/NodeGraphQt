@@ -124,17 +124,14 @@ class NodeGraph(QtCore.QObject):
     def _insert_node(self,items):
         pipe = items[0]
         node = self.get_node_by_id(items[1])
-        in_port_node = self.get_node_by_id(pipe.input_port.node.id)
-        out_port_node = self.get_node_by_id(pipe.output_port.node.id)
-        in_port = in_port_node.inputs()[pipe.input_port.name]
-        out_port = out_port_node.outputs()[pipe.output_port.name]
 
-        self.delete_pipe(pipe)
-
+        disconnected = [(pipe.input_port, pipe.output_port)]
+        connected = []
         if node.inputs():
-            node.set_input(0, out_port)
+            connected.append((pipe.output_port,node.input(0).view))
         if node.outputs():
-            node.set_output(0, in_port)
+            connected.append((node.output(0).view,pipe.input_port))
+        self._on_connection_changed(disconnected,connected)
 
     def _toggle_tab_search(self):
         """

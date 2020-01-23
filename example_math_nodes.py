@@ -1,36 +1,51 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import math
 import inspect
 from functools import partial
+
+# add basic math functions to math library
+math.add = lambda x, y: x + y
+math.sub = lambda x, y: x - y
+math.mul = lambda x, y: x * y
+math.div = lambda x, y: x / y
+
+# Transform float to functions
+for constant in ['pi', 'e', 'tau', 'inf', 'nan']:
+    setattr(math, constant, partial(lambda x: x, getattr(math, constant)))
+
 
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          setup_context_menu)
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
 
-def updateNextNode(node):
-    for nodeList in node.connected_output_nodes().values():
-        for n in nodeList:
-            n.run()
 
-def getData(node,port):
-    try:
-        if type(port) is int:
-            to_port = node.input(port)
-        else:
-            to_port = node.inputs()[port]
-    except:
-        print(node.inputs().keys())
-        return 0.0
+def update_streams(node, *args):
+    """
+    Update all nodes joined by pipes
+    """
+    nodes = []
+    trash = []
 
-    from_ports = to_port.connected_ports()
-    if not from_ports:
-        return 0.0
-    
-    for from_port in from_ports:
-        data = from_port.node().get_property(from_port.name())
-        return float(data)
+    for port, nodeList in node.connected_output_nodes().items():
+        nodes.extend(nodeList)
+
+    while nodes:
+        node = nodes.pop()
+        if node not in trash:
+            trash.append(node)
+
+        for port, nodeList in node.connected_output_nodes().items():
+            nodes.extend(nodeList)
+
+        if not nodes:
+            try:
+                node.run()
+            except Exception as error:
+                print("Error Update Streams: %s" % str(error))
+
 
 class DataInputNode(BaseNode):
     """
@@ -43,40 +58,16 @@ class DataInputNode(BaseNode):
     def __init__(self):
         super(DataInputNode, self).__init__()
         self.output = self.add_output('out')
-        self.add_text_input('out', 'Data Input', text='4', tab='widgets')
-        #self.view.widgets['out'].value_changed.connect(partial(update_streams, self))
-        self.view.widgets['out'].value_changed.connect(lambda: self.run())
-
-    def result(self):
-        return self.get_property("out")
+        self.add_text_input('out', 'Data Input', text='0.4', tab='widgets')
+        self.view.widgets['out'].value_changed.connect(partial(update_streams, self))
 
     def run(self):
-        updateNextNode(self)
-
-def add(a, b):
-    return a + b
-
-
-def sub(a, b):
-    return a - b
-
-
-def mul(a, b):
-    return a * b
-
-
-def div(a, b):
-    return a / b
-
-
-# create a dict with all function
-funcs = {'add': add, 'sub': sub, 'mul': mul, 'div': div}
+        return
 
 
 class MathFunctionsNode(BaseNode):
     """
     Math functions node.
-
     """
 
     # set a unique node identifier.
@@ -85,60 +76,82 @@ class MathFunctionsNode(BaseNode):
     # set the initial default node name.
     NODE_NAME = 'Functions node'
 
+    mathFuncs = [func for func in dir(math) if not func.startswith('_')]
+
     def __init__(self):
         super(MathFunctionsNode, self).__init__()
         self.set_color(25, 58, 51)
-        self.add_combo_menu('functions', 'Functions',
-                            items=funcs.keys(), tab='widgets')
+        self.add_combo_menu('functions', 'Functions', items=self.mathFuncs,
+                            tab='widgets')
+
         # switch math function type
         self.view.widgets['functions'].value_changed.connect(self.addFunction)
-        self.set_property('functions', 'add')
-        # self.view.widgets['functions'].value_changed.connect(
-        #     partial(update_streams, self))
-        self.view.widgets['functions'].value_changed.connect(lambda: self.run())
+        update = partial(update_streams, self)
+        self.view.widgets['functions'].value_changed.connect(update)
         self.output = self.add_output('output')
         self.create_property(self.output.name(), None)
+        self.trigger_type = 'no_inPorts'
 
-        self.add_input("a")
-        self.create_property("a", 0)
-        self.add_input("b")
-        self.create_property("b", 0)
+        self.view.widgets['functions'].widget.setCurrentIndex(2)
 
     def addFunction(self, prop, func):
         """
         Create inputs based on math functions arguments.
         """
-        self.func = funcs[func]   # add, sub, mul, div
+        self.func = getattr(math, func)
+        dataFunc = inspect.getfullargspec(self.func)
+
+        for arg in dataFunc.args:
+            if not self.has_property(arg):
+                inPort = self.add_input(arg)
+                inPort.trigger = True
+                self.create_property(arg, None)
+
+        for inPort in self._inputs:
+            if inPort.name() in dataFunc.args:
+                if not inPort.visible():
+                    inPort.set_visible(True)
+            else:
+                inPort.set_visible(False)
 
     def run(self):
         """
         Evaluate all entries, pass them as arguments of the
         chosen mathematical function.
         """
+        for to_port in self.input_ports():
+            if to_port.visible() == False:
+                continue
+            from_ports = to_port.connected_ports()
+            if not from_ports:
+                raise Exception('Port %s not connected!' % to_port.name(),
+                                to_port)
+
+            for from_port in from_ports:
+                from_port.node().run()
+                data = from_port.node().get_property(from_port.name())
+                self.set_property(to_port.name(), float(data))
 
         try:
-            a = getData(self,0)
-            b = getData(self,1)
-            #print(a,b)
             # Execute math function with arguments.
-            output = self.func(a,b)
+            output = self.func(*[self.get_property(inport.name()) for inport in self._inputs if inport.visible()])
+
             self.set_property('output', output)
-        except Exception as e:
-            self.set_property('output', 0)
-
-        updateNextNode(self)
-
-    def result(self):
-        return self.get_property('output')
+        except KeyError as error:
+            print("An input is missing! %s" % str(error))
+        except TypeError as error:
+            print("Error evaluating function: %s" % str(error))
 
     def on_input_connected(self, to_port, from_port):
         """Override node callback method."""
-        #self.set_property(to_port.name(), None)
-        self.run()
+        self.set_property(to_port.name(), from_port.node().run())
+        update_streams(self)
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
-        self.run()
+        self.set_property('output', None)
+        update_streams(self)
+
 
 class DataViewerNode(BaseNode):
     __identifier__ = 'com.chantasticvfx'
@@ -153,11 +166,14 @@ class DataViewerNode(BaseNode):
         """Evaluate input to show it."""
         for source in self.input.connected_ports():
             from_node = source.node()
+            try:
+                from_node.run()
+            except Exception as error:
+                print("%s no inputs connected: %s" % (from_node.name(), str(error)))
+                self.set_property('data', None)
+                return
             value = from_node.get_property(source.name())
             self.set_property('data', str(value))
-
-    def result(self):
-        return self.get_property('data')
 
     def on_input_connected(self, to_port, from_port):
         """Override node callback method"""
@@ -165,7 +181,7 @@ class DataViewerNode(BaseNode):
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method"""
-        self.set_property('data', "0")
+        self.set_property('data', None)
 
 
 if __name__ == '__main__':
@@ -185,7 +201,6 @@ if __name__ == '__main__':
     # show the properties bin when a node is "double clicked" in the graph.
     properties_bin = PropertiesBinWidget(node_graph=graph)
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
-    properties_bin.setStyleSheet("background-color: rgb(50,50,50);color:rgb(200,200,200)")
 
     def show_prop_bin(node):
         if not properties_bin.isVisible():
@@ -207,19 +222,19 @@ if __name__ == '__main__':
     for n in reg_nodes:
         graph.register_node(n)
 
-    my_node = graph.create_node('com.chantasticvfx.MathFunctionsNode',
+    mathNodeA = graph.create_node('com.chantasticvfx.MathFunctionsNode',
                                 name='Math Functions A',
                                 color='#0a1e20',
                                 text_color='#feab20',
                                 pos=[-250, 70])
 
-    my_node = graph.create_node('com.chantasticvfx.MathFunctionsNode',
+    mathNodeB = graph.create_node('com.chantasticvfx.MathFunctionsNode',
                                 name='Math Functions B',
                                 color='#0a1e20',
                                 text_color='#feab20',
                                 pos=[-250, -70])
 
-    my_node = graph.create_node('com.chantasticvfx.MathFunctionsNode',
+    mathNodeC = graph.create_node('com.chantasticvfx.MathFunctionsNode',
                                 name='Math Functions C',
                                 color='#0a1e20',
                                 text_color='#feab20',
