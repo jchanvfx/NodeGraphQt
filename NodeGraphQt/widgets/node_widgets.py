@@ -268,6 +268,7 @@ class NodeFloatEdit(NodeLineEdit):
         validator = QtGui.QRegExpValidator(regex, self._ledit)
         self._ledit.setValidator(validator)
         self.text = str(value)
+        self._ledit.setText(self.text)
 
     @property
     def value(self):
