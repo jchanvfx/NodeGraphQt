@@ -12,7 +12,7 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
 from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
-from NodeGraphQt.base.node import NodeObject,BaseNode
+from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (DRAG_DROP_ID,
                                    PIPE_LAYOUT_CURVED,
@@ -121,21 +121,31 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
-    def _insert_node(self, items):
-        pipe = items[0]
-        node = self.get_node_by_id(items[1])
-        if not isinstance(node,BaseNode):
-            return
+    def _insert_node(self, pipe, node_id, prev_node_pos):
+        """
+        Slot function triggered when a selected node has collided with a pipe.
+
+        Args:
+            pipe (Pipe): collided pipe item.
+            node_id (str): selected node id to insert.
+            prev_node_pos (dict): previous node position. {NodeItem: [prev_x, prev_y]}
+        """
+        node = self.get_node_by_id(node_id)
 
         disconnected = [(pipe.input_port, pipe.output_port)]
         connected = []
 
         if node.inputs():
-            connected.append((pipe.output_port, list(node.inputs().values())[0].view))
+            connected.append(
+                (pipe.output_port, list(node.inputs().values())[0].view)
+            )
         if node.outputs():
-            connected.append((list(node.outputs().values())[0].view, pipe.input_port))
+            connected.append((node.output(0).view, pipe.input_port))
 
+        self._undo_stack.beginMacro('inserted node')
         self._on_connection_changed(disconnected, connected)
+        self._on_nodes_moved(prev_node_pos)
+        self._undo_stack.endMacro()
 
     def _toggle_tab_search(self):
         """

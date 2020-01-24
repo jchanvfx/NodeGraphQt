@@ -5,6 +5,7 @@ from NodeGraphQt.widgets.properties import NodePropWidget
 
 
 class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
+
     def paint(self, painter, option, index):
         """
         Args:
@@ -23,7 +24,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = QtGui.QColor(100,100,100)
+            bdr_clr = QtGui.QColor(100, 100, 100)
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
@@ -71,13 +72,14 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.setMinimum(0)
         self._limit.setValue(2)
         self._limit.valueChanged.connect(self.__on_limit_changed)
-        self.resize(400, 400)
+        self.resize(450, 400)
 
         self._block_signal = False
 
-        self.lock = False
+        self._lock = False
         self.btn_lock = QtWidgets.QPushButton('lock')
-        self.btn_lock.setToolTip('Lock the properties bin.')
+        self.btn_lock.setToolTip(
+            'Lock the properties bin prevent nodes from being loaded.')
         self.btn_lock.clicked.connect(self.lock_bin)
 
         btn_clr = QtWidgets.QPushButton('clear')
@@ -85,6 +87,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         btn_clr.clicked.connect(self.clear_bin)
 
         top_layout = QtWidgets.QHBoxLayout()
+        top_layout.setSpacing(2)
         top_layout.addWidget(self._limit)
         top_layout.addStretch(1)
         top_layout.addWidget(self.btn_lock)
@@ -180,7 +183,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         if self.limit() == 0:
             return
-        if self.lock:
+        if self._lock:
             return
 
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
@@ -218,11 +221,11 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         Lock/UnLock the properties bin.
         """
-        self.lock = not self.lock
-        if self.lock:
-            self.btn_lock.setText("UnLock")
+        self._lock = not self._lock
+        if self._lock:
+            self.btn_lock.setText('UnLock')
         else:
-            self.btn_lock.setText("Lock")
+            self.btn_lock.setText('Lock')
 
     def clear_bin(self):
         """
@@ -288,7 +291,7 @@ if __name__ == '__main__':
     graph = NodeGraph()
     graph.register_node(TestNode)
 
-    prop_bin = PropertiesBinWidget()
+    prop_bin = PropertiesBinWidget(node_graph=graph)
     prop_bin.property_changed.connect(prop_changed)
 
     node = graph.create_node('nodeGraphQt.nodes.TestNode')

@@ -32,7 +32,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     search_triggered = QtCore.Signal(str, tuple)
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
-    insert_node = QtCore.Signal(list)
+    insert_node = QtCore.Signal(object, str, dict)
 
     # pass through signals
     node_selected = QtCore.Signal(str)
@@ -97,7 +97,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
         self.CTRL_state = False
         self.SHIFT_state = False
-        self.Colliding_state = False
+        self.COLLIDING_state = False
 
     def __repr__(self):
         return '{}.{}()'.format(
@@ -190,7 +190,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
-        self._prev_selection_nodes , self._prev_selection_pipes = self.selected_items()
+        self._prev_selection_nodes, \
+            self._prev_selection_pipes = self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
@@ -263,16 +264,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             n: xy_pos for n, xy_pos in self._node_positions.items()
             if n.xy_pos != xy_pos
         }
-        if moved_nodes:
+        # only emit of node is not colliding with a pipe.
+        if moved_nodes and not self.COLLIDING_state:
             self.moved_nodes.emit(moved_nodes)
 
         # reset recorded positions.
         self._node_positions = {}
 
-        if self.Colliding_state:
-            nodes,pipes = self.selected_items()
+        # emit signal if selected node collides with pipe.
+        # Note: if collide state is true then only 1 node is selected.
+        if self.COLLIDING_state:
+            nodes, pipes = self.selected_items()
             if nodes and pipes:
-                self.insert_node.emit([pipes[0], nodes[0].id])
+                self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
@@ -312,7 +316,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     node.selected = True
 
         elif self.LMB_state:
-            self.Colliding_state = False
+            self.COLLIDING_state = False
             nodes = self.selected_nodes()
             if len(nodes) == 1:
                 node = nodes[0]
@@ -325,7 +329,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                         if not item.input_port.node is node and \
                                 not item.output_port.node is node:
                             item.setSelected(True)
-                            self.Colliding_state = True
+                            self.COLLIDING_state = True
                             break
 
         self._previous_pos = event.pos()
@@ -711,7 +715,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 nodes.append(item)
             elif isinstance(item, Pipe):
                 pipes.append(item)
-        return nodes,pipes
+        return nodes, pipes
 
     def add_node(self, node, pos=None):
         pos = pos or (self._previous_pos.x(), self._previous_pos.y())
