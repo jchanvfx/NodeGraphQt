@@ -181,9 +181,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Args:
             node (NodeGraphQt.NodeObject): node object.
         """
-        if self.limit() == 0:
-            return
-        if self._lock:
+        if self.limit() == 0 or self._lock:
             return
 
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)

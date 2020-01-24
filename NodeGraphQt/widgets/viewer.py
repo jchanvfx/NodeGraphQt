@@ -14,7 +14,7 @@ from NodeGraphQt.qgraphics.port import PortItem
 from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
-from NodeGraphQt.widgets.tab_search import TabSearchWidget
+from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -73,7 +73,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._search_widget = TabSearchWidget(self)
+        self._search_widget = TabSearchMenuWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         # workaround fix for shortcuts from the non-native menu actions
@@ -652,6 +652,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
+        if type(self._search_widget) is TabSearchMenuWidget:
+            return
+
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
         if state:
