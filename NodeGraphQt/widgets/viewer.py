@@ -218,6 +218,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if self.SHIFT_state:
             for node in nodes:
                 node.selected = not node.selected
+        elif self.CTRL_state:
+            for node in nodes:
+                node.selected = False
 
         # update the recorded node positions.
         self._node_positions.update(
@@ -234,7 +237,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._rubber_band.show()
 
         # allow new live pipe with the shift modifier.
-        if not self.SHIFT_state or self.SHIFT_state and pipes:
+        if (not self.SHIFT_state and not self.CTRL_state) or\
+                (self.SHIFT_state and pipes):
             super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -309,11 +313,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
 
-            if self.SHIFT_state:
+            if self.SHIFT_state or self.CTRL_state:
+                nodes, pipes = self.selected_items()
+
                 for pipe in self._prev_selection_pipes:
                     pipe.setSelected(True)
                 for node in self._prev_selection_nodes:
                     node.selected = True
+
+                if self.CTRL_state:
+                    for pipe in pipes:
+                        pipe.setSelected(False)
+                    for node in nodes:
+                        node.selected = False
 
         elif self.LMB_state:
             self.COLLIDING_state = False
@@ -427,6 +439,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # viewer pan mode.
         if self.ALT_state:
             return
+        if self._LIVE_PIPE.isVisible():
+            self.apply_live_connection(event)
+            return
 
         pos = event.scenePos()
         port_items = self._items_near(pos, PortItem, 5, 5)
@@ -476,6 +491,17 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def sceneMouseReleaseEvent(self, event):
         """
         triggered mouse release event for the scene.
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent):
+                The event handler from the QtWidgets.QGraphicsScene
+        """
+        self.apply_live_connection(event)
+
+    # --- port connections ---
+
+    def apply_live_connection(self, event):
+        """
+        triggered mouse press/release event for the scene.
          - verify to make a the connection Pipe.
 
         Args:
@@ -513,6 +539,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._detached_port = None
             self.end_live_connection()
             return
+
+        else:
+            if self._start_port is end_port:
+                return
 
         # restore connection check.
         restore_connection = any([
@@ -558,8 +588,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._detached_port = None
         self.end_live_connection()
-
-    # --- port connections ---
 
     def start_live_connection(self, selected_port):
         """
@@ -694,17 +722,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return nodes
 
     def selected_nodes(self):
-        nodes = []
-        for item in self.scene().selectedItems():
-            if isinstance(item, AbstractNodeItem):
-                nodes.append(item)
+        nodes = [item for item in self.scene().selectedItems()\
+                 if isinstance(item,AbstractNodeItem)]
         return nodes
 
     def selected_pipes(self):
-        pipes = []
-        for item in self.scene().selectedItems():
-            if isinstance(item, Pipe):
-                pipes.append(item)
+        pipes = [item for item in self.scene().selectedItems()\
+                 if isinstance(item,Pipe)]
         return pipes
 
     def selected_items(self):
