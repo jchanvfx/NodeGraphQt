@@ -782,7 +782,7 @@ class BaseNode(NodeObject):
         nodes = []
         trash = []
 
-        for port, nodeList in node.connected_output_nodes().items():
+        for port, nodeList in self.connected_output_nodes().items():
             nodes.extend(nodeList)
 
         while nodes:
