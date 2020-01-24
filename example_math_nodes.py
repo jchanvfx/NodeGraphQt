@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import inspect
 import math
+import inspect
 from functools import partial
 
 # add basic math functions to math library
@@ -21,31 +21,6 @@ from NodeGraphQt import (NodeGraph,
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
 
 
-def update_streams(node, *args):
-    """
-    Update all nodes joined by pipes
-    """
-    nodes = []
-    trash = []
-
-    for port, nodeList in node.connected_output_nodes().items():
-        nodes.extend(nodeList)
-
-    while nodes:
-        node = nodes.pop()
-        if node not in trash:
-            trash.append(node)
-
-        for port, nodeList in node.connected_output_nodes().items():
-            nodes.extend(nodeList)
-
-        if not nodes:
-            try:
-                node.run()
-            except Exception as error:
-                print("Error Update Streams: %s" % str(error))
-
-
 class DataInputNode(BaseNode):
     """
     Input node data.
@@ -58,10 +33,7 @@ class DataInputNode(BaseNode):
         super(DataInputNode, self).__init__()
         self.add_output('out')
         self.add_text_input('out', 'Data Output', text='0.4', tab='widgets')
-        self.view.widgets['out'].value_changed.connect(partial(update_streams, self))
-
-    def run(self):
-        return
+        self.view.widgets['out'].value_changed.connect(self.update_streams)
 
 
 class MathFunctionsNode(BaseNode):
@@ -80,18 +52,17 @@ class MathFunctionsNode(BaseNode):
     def __init__(self):
         super(MathFunctionsNode, self).__init__()
         self.set_color(25, 58, 51)
-        self.add_combo_menu('functions', 'Functions', items=self.mathFuncs,
+        self.add_combo_menu('funcs', 'Functions', items=self.mathFuncs,
                             tab='widgets')
 
         # switch math function type
-        self.view.widgets['functions'].value_changed.connect(self.addFunction)
-        update = partial(update_streams, self)
-        self.view.widgets['functions'].value_changed.connect(update)
+        self.view.widgets['funcs'].value_changed.connect(self.addFunction)
+        self.view.widgets['funcs'].value_changed.connect(self.update_streams)
         self.add_output('output')
         self.create_property('output', None)
         self.trigger_type = 'no_inPorts'
 
-        self.view.widgets['functions'].widget.setCurrentIndex(2)
+        self.view.widgets['funcs'].widget.setCurrentIndex(2)
 
     def addFunction(self, prop, func):
         """
@@ -144,12 +115,12 @@ class MathFunctionsNode(BaseNode):
     def on_input_connected(self, to_port, from_port):
         """Override node callback method."""
         self.set_property(to_port.name(), from_port.node().run())
-        update_streams(self)
+        self.update_streams()
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
         self.set_property('output', None)
-        update_streams(self)
+        self.update_streams()
 
 
 class DataViewerNode(BaseNode):
