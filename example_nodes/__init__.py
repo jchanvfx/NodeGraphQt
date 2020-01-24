@@ -25,3 +25,10 @@
 #         param = info[1]
 #         tb = info[2]
 #         traceback.print_exception(type, param, tb, file=sys.stderr)
+
+# Manually loading nodes
+from .math_node import MathFunctionsNode
+from .input_nodes import (DataInputNode, TickTimeNode, TextFileInputNode)
+from .viewer_nodes import DataViewerNode
+from .basic_nodes import (FooNode, BarNode)
+from .widget_nodes import (DropdownMenuNode, TextInputNode, CheckboxNode)

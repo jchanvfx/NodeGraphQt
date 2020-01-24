@@ -787,6 +787,8 @@ class BaseNode(NodeObject):
 
         while nodes:
             node = nodes.pop()
+            if node.disabled():
+                continue
             if node not in trash:
                 trash.append(node)
 
