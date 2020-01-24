@@ -56,8 +56,8 @@ class DataInputNode(BaseNode):
 
     def __init__(self):
         super(DataInputNode, self).__init__()
-        self.output = self.add_output('out')
-        self.add_text_input('out', 'Data Input', text='0.4', tab='widgets')
+        self.add_output('out')
+        self.add_text_input('out', 'Data Output', text='0.4', tab='widgets')
         self.view.widgets['out'].value_changed.connect(partial(update_streams, self))
 
     def run(self):
@@ -87,8 +87,8 @@ class MathFunctionsNode(BaseNode):
         self.view.widgets['functions'].value_changed.connect(self.addFunction)
         update = partial(update_streams, self)
         self.view.widgets['functions'].value_changed.connect(update)
-        self.output = self.add_output('output')
-        self.create_property(self.output.name(), None)
+        self.add_output('output')
+        self.create_property('output', None)
         self.trigger_type = 'no_inPorts'
 
         self.view.widgets['functions'].widget.setCurrentIndex(2)
@@ -133,9 +133,9 @@ class MathFunctionsNode(BaseNode):
 
         try:
             # Execute math function with arguments.
-            output = self.func(*[self.get_property(inport.name()) for inport in self._inputs if inport.visible()])
+            data = self.func(*[self.get_property(inport.name()) for inport in self._inputs if inport.visible()])
 
-            self.set_property('output', output)
+            self.set_property('output', data)
         except KeyError as error:
             print("An input is missing! %s" % str(error))
         except TypeError as error:
@@ -158,12 +158,12 @@ class DataViewerNode(BaseNode):
 
     def __init__(self):
         super(DataViewerNode, self).__init__()
-        self.input = self.add_input('in data')
+        self.inPort = self.add_input('data')
         self.add_text_input('data', 'Data Viewer', tab='widgets')
 
     def run(self):
         """Evaluate input to show it."""
-        for source in self.input.connected_ports():
+        for source in self.inPort.connected_ports():
             from_node = source.node()
             try:
                 from_node.run()
