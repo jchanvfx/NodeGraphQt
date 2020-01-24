@@ -29,13 +29,11 @@ class TabSearchCompleter(QtWidgets.QCompleter):
             return []
         return []
 
-    def updateModel(self,text=None):
+    def updateModel(self):
         if not self._using_orig_model:
             self._filter_model.setSourceModel(self._source_model)
 
-        text = text or self._local_completion_prefix
-        print(text)
-        pattern = QtCore.QRegExp(text,
+        pattern = QtCore.QRegExp(self._local_completion_prefix,
                                  QtCore.Qt.CaseInsensitive,
                                  QtCore.QRegExp.FixedString)
         self._filter_model.setFilterRegExp(pattern)
@@ -73,7 +71,6 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         popup.setStyleSheet(STYLE_TABSEARCH_LIST)
         popup.clicked.connect(self._on_search_submitted)
         self.returnPressed.connect(self._on_search_submitted)
-        self.textChanged.connect(self._on_text_changed)
 
     def __repr__(self):
         return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -90,11 +87,6 @@ class TabSearchWidget(QtWidgets.QLineEdit):
 
         self.close()
         self.parentWidget().clearFocus()
-
-    def _on_text_changed(self, text):
-        if not text:
-            # TODO: show all items
-            pass
 
     def showEvent(self, event):
         super(TabSearchWidget, self).showEvent(event)
