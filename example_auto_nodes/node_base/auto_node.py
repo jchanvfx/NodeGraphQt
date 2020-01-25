@@ -72,7 +72,8 @@ class AutoNode(BaseNode):
 
 
     def run(self):
-        print("RUN {} Node".format(self.name()))
+        pass
+        #print("RUN {} Node".format(self.name()))
 
     def on_input_connected(self, to_port, from_port):
         if self.checkPortType(to_port, from_port):
@@ -86,7 +87,6 @@ class AutoNode(BaseNode):
             self.needCook = True
             return
         self.cook()
-        print("cook")
 
     def set_disabled(self, mode=False):
         super(AutoNode, self).set_disabled(mode)
