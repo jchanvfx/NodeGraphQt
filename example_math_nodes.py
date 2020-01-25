@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import example_nodes as Nodes
+from example_nodes import Nodes
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          setup_context_menu)
@@ -40,12 +40,7 @@ if __name__ == '__main__':
     graph.node_double_clicked.connect(show_nodes_list)
 
     # registered nodes.
-    reg_nodes = [
-        Nodes.__dict__[n] for n in Nodes.__dict__
-        if hasattr(Nodes.__dict__[n], 'NODE_NAME')
-    ]
-
-    for n in reg_nodes:
+    for n in Nodes:
         graph.register_node(n)
 
     mathNodeA = graph.create_node('Math.MathFunctionsNode',
