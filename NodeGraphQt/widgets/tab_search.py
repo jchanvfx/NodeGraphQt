@@ -196,6 +196,10 @@ class TabSearchMenuWidget(QtWidgets.QLineEdit):
         node_names = sorted(self._node_dict.keys())
         node_types = sorted(self._node_dict.values())
 
+        self._menus.clear()
+        self._actions.clear()
+        self._searched_actions.clear()
+
         for node_type in node_types:
             menu_name = ".".join(node_type.split(".")[:-1])
             if menu_name not in self._menus.keys():
@@ -220,7 +224,7 @@ class TabSearchMenuWidget(QtWidgets.QLineEdit):
 
     def set_nodes(self, node_dict=None):
         if not self._node_dict:
-            self._node_dict = {}
+            self._node_dict.clear()
             for name, node_types in node_dict.items():
                 if len(node_types) == 1:
                     self._node_dict[name] = node_types[0]
