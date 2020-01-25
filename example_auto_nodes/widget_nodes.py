@@ -25,28 +25,6 @@ class DropdownMenuNode(AutoNode):
         self.add_combo_menu('my_menu', 'Menu Test', items=items)
 
 
-class TextInputNode(AutoNode):
-    """
-    An example of a node with a embedded QLineEdit.
-    """
-
-    # unique node identifier.
-    __identifier__ = 'com.chantasticvfx'
-
-    # initial default node name.
-    NODE_NAME = 'text'
-
-    def __init__(self):
-        super(TextInputNode, self).__init__()
-
-        # create input & output ports
-        self.add_input('in')
-        self.add_output('out')
-
-        # create QLineEdit text input widget.
-        self.add_text_input('my_input', 'Text Input', tab='widgets')
-
-
 class CheckboxNode(AutoNode):
     """
     An example of a node with 2 embedded QCheckBox widgets.

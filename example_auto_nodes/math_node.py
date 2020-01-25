@@ -92,6 +92,10 @@ class MathFunctionsNode(AutoNode):
             self.error("Error : %s" % str(error))
 
 class VectorValue(AutoNode):
+    """
+    Create a basic vector data
+    """
+
     __identifier__ = 'Math'
     NODE_NAME = 'Vector'
 
@@ -119,6 +123,10 @@ class VectorValue(AutoNode):
 
 
 class VectorSplit(AutoNode):
+    """
+    Splict a vector to x,y,z
+    """
+
     __identifier__ = 'Math'
     NODE_NAME = 'Vector Split'
 
@@ -135,8 +143,6 @@ class VectorSplit(AutoNode):
 
         self.add_input("in vector",list)
 
-
-
     def run(self):
         value = self.getInputData(0)
         self.set_property("x", value[0])
@@ -145,6 +151,10 @@ class VectorSplit(AutoNode):
 
 
 class VectorMaker(AutoNode):
+    """
+    Create a vector by three float value
+    """
+
     __identifier__ = 'Math'
     NODE_NAME = 'Vector Maker'
 

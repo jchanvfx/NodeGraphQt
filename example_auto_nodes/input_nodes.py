@@ -77,9 +77,34 @@ class TextFileInputNode(AutoNode):
     def run(self):
         path = self.get_property('path')
         if os.path.exists(path):
-            with open(path, 'r') as fread:
-                data = fread.read()
-                self.set_property('output', data)
+            try:
+                with open(path, 'r') as fread:
+                    data = fread.read()
+                    self.set_property('out', data)
+            except Exception as e:
+                self.error(e)
         else:
-            print('No existe %s' % path)
-            self.set_property('output', '')
+            self.error('No existe %s' % path)
+            self.set_property('out', '')
+
+
+class TextInputNode(AutoNode):
+    """
+    An example of a node with a embedded QLineEdit.
+    """
+
+    # unique node identifier.
+    __identifier__ = 'Inputs'
+
+    # initial default node name.
+    NODE_NAME = 'text'
+
+    def __init__(self):
+        super(TextInputNode, self).__init__()
+
+        # create input & output ports
+        self.add_output('out')
+
+        # create QLineEdit text input widget.
+        self.add_text_input('out', 'Text Input', tab='widgets')
+        self.view.widgets['out'].value_changed.connect(self.cook)
