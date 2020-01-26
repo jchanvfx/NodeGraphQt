@@ -293,8 +293,11 @@ class NodeObject(object):
         """
 
         # prevent signals from causing a infinite loop.
-        if self.get_property(name) == value:
-            return
+        try:
+            if self.get_property(name) == value:
+                return
+        except:
+            pass
 
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
