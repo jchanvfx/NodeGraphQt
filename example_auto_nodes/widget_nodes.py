@@ -1,4 +1,3 @@
-from NodeGraphQt import BaseNode
 from .node_base.auto_node import AutoNode
 
 class DropdownMenuNode(AutoNode):

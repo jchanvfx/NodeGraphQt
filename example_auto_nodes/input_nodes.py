@@ -2,21 +2,6 @@ from NodeGraphQt import QtCore
 from.node_base.auto_node import AutoNode
 import os
 
-class DataInputNode(AutoNode):
-    """
-    Input node data.
-    """
-
-    __identifier__ = 'Inputs'
-    NODE_NAME = 'Basic Input'
-
-    def __init__(self):
-        super(DataInputNode, self).__init__()
-        self.add_output('out')
-        self.add_text_input('out', 'Data Output', text='0.4', tab='widgets')
-        self.view.widgets['out'].value_changed.connect(self.cook)
-
-
 class FloatInputNode(AutoNode):
     """
     Input float data.
@@ -97,7 +82,7 @@ class TextInputNode(AutoNode):
     __identifier__ = 'Inputs'
 
     # initial default node name.
-    NODE_NAME = 'text'
+    NODE_NAME = 'Text'
 
     def __init__(self):
         super(TextInputNode, self).__init__()
