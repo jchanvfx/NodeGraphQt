@@ -23,9 +23,9 @@ def _get_functions_from_module(module, function_dict, max_depth=1, module_name=N
             function_dict[new_module_name] = obj
 
 
-def get_functions_from_module(module, max_depth=1, module_name=None):
+def get_functions_from_module(module, max_depth=1):
     function_dict = {}
-    _get_functions_from_module(module, function_dict, max_depth, module_name)
+    _get_functions_from_module(module, function_dict, max_depth)
     return function_dict
 
 
@@ -124,7 +124,7 @@ class ModuleNode(AutoNode):
                 return self.defaultValue
 
         try:
-            # Execute math function with arguments.
+            # Execute function with arguments.
             if self.is_function(self.func):
                 data = self.func(*args)
             else:

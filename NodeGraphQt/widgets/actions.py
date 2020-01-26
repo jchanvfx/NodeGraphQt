@@ -9,11 +9,12 @@ class BaseMenu(QtWidgets.QMenu):
         super(BaseMenu, self).__init__(*args, **kwargs)
         self.setStyleSheet(STYLE_QMENU)
 
-    def hideEvent(self, event):
-        super(BaseMenu, self).hideEvent(event)
-        for a in self.actions():
-            if hasattr(a, 'node_id'):
-                a.node_id = None
+    # disable for issue #142
+    # def hideEvent(self, event):
+    #     super(BaseMenu, self).hideEvent(event)
+    #     for a in self.actions():
+    #         if hasattr(a, 'node_id'):
+    #             a.node_id = None
 
     def get_menu(self, name):
         for action in self.actions():
@@ -50,8 +51,3 @@ class NodeAction(GraphAction):
     def _on_triggered(self):
         node = self.graph.get_node_by_id(self.node_id)
         self.executed.emit(self.graph, node)
-
-    def get_action(self, name):
-        for action in self.qmenu.actions():
-            if not action.menu() and action.text() == name:
-                return action
