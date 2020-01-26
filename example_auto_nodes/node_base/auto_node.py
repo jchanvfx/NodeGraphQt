@@ -16,14 +16,17 @@ def rand_color(seed_type):
 
 
 class AutoNode(BaseNode):
-    def __init__(self):
+    def __init__(self,defaultInputType=None,defaultOutputType=None):
         super(AutoNode, self).__init__()
         self.needCook = True
-        self.defaultValue = None
         self._error = False
+        self.matchTypes = [[float, int]]
+        self.errorColor = (200, 50, 50)
 
         self.defaultColor = self.get_property("color")
-        self.errorColor = (200,50,50)
+        self.defaultValue = None
+        self.defaultInputType = defaultInputType
+        self.defaultOutputType = defaultOutputType
 
     def cookNextNode(self):
         for nodeList in self.connected_output_nodes().values():
@@ -93,10 +96,12 @@ class AutoNode(BaseNode):
         if self.input_ports():
             self.cook()
 
-    @staticmethod
-    def checkPortType(to_port, from_port):
+    def checkPortType(self, to_port, from_port):
         if hasattr(to_port,"DataType") and hasattr(from_port,"DataType"):
             if to_port.DataType is not from_port.DataType:
+                for types in self.matchTypes:
+                    if to_port.DataType in types and from_port.DataType in types:
+                        return True
                 return False
 
         return True
@@ -106,10 +111,6 @@ class AutoNode(BaseNode):
         self.set_port_type(name, type(value))
 
     def set_port_type(self, port, value_type):
-
-        if value_type is int:
-            value_type = float
-
         current_port = None
 
         if type(port) is Port:
@@ -147,6 +148,8 @@ class AutoNode(BaseNode):
         new_port = super(AutoNode, self).add_input(name, multi_input, display_name, color)
         if data_type:
             self.set_port_type(new_port, data_type)
+        elif self.defaultInputType:
+            self.set_port_type(new_port, self.defaultInputType)
         return new_port
 
     def add_output(self, name='output', data_type=None, multi_output=True, display_name=True,
@@ -154,6 +157,8 @@ class AutoNode(BaseNode):
         new_port = super(AutoNode, self).add_output(name, multi_output, display_name, color)
         if data_type:
             self.set_port_type(new_port, data_type)
+        elif self.defaultOutputType:
+            self.set_port_type(new_port, self.defaultOutputType)
         return new_port
 
     def _close_error(self):
@@ -162,6 +167,10 @@ class AutoNode(BaseNode):
         self._view._tooltip_disable(False)
 
     def _show_error(self,message):
+        if not self._error:
+            self.defaultColor = self.get_property("color")
+
+        self._error = True
         self.set_property('color', self.errorColor)
         tooltip = '<b>{}</b>'.format(self.name())
         tooltip += ' <font color="red"><br>({})</br></font>'.format(message)
@@ -172,5 +181,4 @@ class AutoNode(BaseNode):
         if message is None:
             return self._error
 
-        self._error = True
         self._show_error(message)

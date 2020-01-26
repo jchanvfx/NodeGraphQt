@@ -167,7 +167,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
             if nodes:
                 node = nodes[0]
-                ctx_menu = self._ctx_node_menu.get_menu(node.type_)
+                ctx_menu = self._ctx_node_menu.get_menu(node.type_,node.id)
                 if ctx_menu:
                     for action in ctx_menu.actions():
                         if not action.menu():

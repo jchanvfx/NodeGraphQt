@@ -161,7 +161,7 @@ class NodesMenu(NodeGraphMenu):
         nodes_menu = node_graph.get_context_menu('nodes')
     """
 
-    def add_command(self, name, func=None, node_type=None):
+    def add_command(self, name, func=None, node_type=None, node_class=None):
         """
         Re-implemented to add a command to the specified node type menu.
 
@@ -169,16 +169,24 @@ class NodesMenu(NodeGraphMenu):
             name (str): command name.
             func (function): command function eg. "func(``graph``, ``node``)".
             node_type (str): specified node type for the command.
+            node_class (class): specified node class for the command.
 
         Returns:
             NodeGraphQt.NodeGraphCommand: the appended command.
         """
-        if not node_type:
-            raise NodeMenuError('Node type not specified!')
+        if not node_type and not node_class:
+            raise NodeMenuError('Node type or Node class not specified!')
+        if node_class:
+            node_type = node_class.__name__
 
         node_menu = self.qmenu.get_menu(node_type)
         if not node_menu:
             node_menu = BaseMenu(node_type, self.qmenu)
+
+            if node_class:
+                node_menu.node_class = node_class
+                node_menu.graph = self._graph
+
             self.qmenu.addMenu(node_menu)
 
         if not self.qmenu.isEnabled():
@@ -190,6 +198,14 @@ class NodesMenu(NodeGraphMenu):
             action.setShortcutVisibleInContextMenu(True)
         if func:
             action.executed.connect(func)
+
+        if node_class:
+            node_menus = self.qmenu.get_menus(node_class)
+            if node_menu in node_menus:
+                node_menus.remove(node_menu)
+            for menu in node_menus:
+                menu.addAction(action)
+
         qaction = node_menu.addAction(action)
         return NodeGraphCommand(self._graph, qaction)
 

@@ -1,6 +1,6 @@
-from example_auto_nodes.node_base.module_node import (ModuleNode,
-                                                      get_functions_from_module,
-                                                      get_functions_from_type)
+from .node_base.module_node import (ModuleNode,
+                                    get_functions_from_module,
+                                    get_functions_from_type)
 
 import math
 import os
@@ -31,7 +31,7 @@ class MathModuleNode(ModuleNode):
     module_functions = get_functions_from_type(math)
 
     def __init__(self):
-        super(MathModuleNode, self).__init__()
+        super(MathModuleNode, self).__init__(float, float)
         self.defaultValue = 0.0
 
 
@@ -51,6 +51,7 @@ class osModuleNode(ModuleNode):
 
     def __init__(self):
         super(osModuleNode, self).__init__()
+
 
 class sysModuleNode(ModuleNode):
     """
@@ -82,8 +83,7 @@ class randomModuleNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'random module'
 
-    module_functions = get_functions_from_module(random,max_depth=2)
-
+    module_functions = get_functions_from_module(random, max_depth=2)
 
     def __init__(self):
         super(randomModuleNode, self).__init__()
@@ -100,21 +100,20 @@ class numpyModuleNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'numpy module'
 
-    module_functions = get_functions_from_module(numpy,max_depth=2)
-
+    module_functions = get_functions_from_module(numpy, max_depth=2)
 
     def __init__(self):
         super(numpyModuleNode, self).__init__()
 
-    def is_function(self,obj):
-        result = super(numpyModuleNode,self).is_function(obj)
+    def is_function(self, obj):
+        result = super(numpyModuleNode, self).is_function(obj)
         if result:
             return True
         elif type(obj).__name__ == "ufunc":
             return True
         return False
 
-    def get_numpy_args(self,func):
+    def get_numpy_args(self, func):
         args = []
         info = numpydoc.docscrape.FunctionDoc(func)
         for i in info["Parameters"]:
@@ -139,7 +138,7 @@ class numpyModuleNode(ModuleNode):
                     args = self.get_numpy_args(self.func)
                 except Exception as error:
                     if type(self.func).__name__ == "ufunc":
-                        args = ["input"+str(i+1) for i in range(self.func.nin)]
+                        args = ["input" + str(i + 1) for i in range(self.func.nin)]
 
         self.process_args(args)
 

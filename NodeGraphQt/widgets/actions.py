@@ -8,6 +8,8 @@ class BaseMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
         super(BaseMenu, self).__init__(*args, **kwargs)
         self.setStyleSheet(STYLE_QMENU)
+        self.node_class = None
+        self.graph = None
 
     # disable for issue #142
     # def hideEvent(self, event):
@@ -16,11 +18,26 @@ class BaseMenu(QtWidgets.QMenu):
     #         if hasattr(a, 'node_id'):
     #             a.node_id = None
 
-    def get_menu(self, name):
+    def get_menu(self, name,node_id=None):
         for action in self.actions():
-            if action.menu() and action.menu().title() == name:
-                return action.menu()
+            menu = action.menu()
+            if not menu:
+                continue
+            if menu.title() == name:
+                return menu
+            if node_id and menu.node_class:
+                node = menu.graph.get_node_by_id(node_id)
+                if isinstance(node,menu.node_class):
+                    return menu
 
+    def get_menus(self,node_class):
+        menus = []
+        for action in self.actions():
+            menu = action.menu()
+            if menu.node_class:
+                if issubclass(menu.node_class,node_class):
+                    menus.append(menu)
+        return menus
 
 class GraphAction(QtWidgets.QAction):
 

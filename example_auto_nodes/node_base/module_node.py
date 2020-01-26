@@ -1,5 +1,5 @@
 import inspect
-from example_auto_nodes.node_base.auto_node import AutoNode
+from .auto_node import AutoNode
 
 
 def _get_functions_from_module(module, function_dict, max_depth=1, module_name=None):
@@ -44,8 +44,8 @@ class ModuleNode(AutoNode):
 
     module_functions = {}
 
-    def __init__(self):
-        super(ModuleNode, self).__init__()
+    def __init__(self,defaultInputType=None,defaultOutputType=None):
+        super(ModuleNode, self).__init__(defaultInputType,defaultOutputType)
         self.set_color(25, 58, 51)
         self.add_combo_menu('funcs', 'Functions', items=list(self.module_functions.keys()), tab='widgets')
 

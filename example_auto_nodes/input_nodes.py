@@ -1,5 +1,5 @@
 from NodeGraphQt import QtCore
-from.node_base.auto_node import AutoNode
+from .node_base.auto_node import AutoNode
 import os
 
 class FloatInputNode(AutoNode):
