@@ -27,8 +27,7 @@ class _ColorSolid(QtWidgets.QWidget):
 
     def __init__(self, parent=None, color=None):
         super(_ColorSolid, self).__init__(parent)
-        self.setMinimumSize(15, 15)
-        self.setMaximumSize(15, 15)
+        self.setFixedSize(15, 15)
         self.color = color or (0, 0, 0)
 
     def paintEvent(self, event):
@@ -37,7 +36,7 @@ class _ColorSolid(QtWidgets.QWidget):
         painter = QtGui.QPainter(self)
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(QtGui.QColor(*self._color))
-        painter.drawRoundedRect(rect, 4, 4)
+        painter.drawRoundedRect(rect, 1, 1)
 
     @property
     def color(self):
@@ -56,7 +55,6 @@ class PropColorPicker(BaseProperty):
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
         self._solid = _ColorSolid(self)
-        self._solid.setMaximumHeight(15)
         self._label = QtWidgets.QLabel()
         self._update_label()
 
@@ -70,7 +68,7 @@ class PropColorPicker(BaseProperty):
         layout.addWidget(button, 1, QtCore.Qt.AlignLeft)
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()))
+        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()),options=QtWidgets.QColorDialog.ShowAlphaChannel)
         if color.isValid():
             self.set_value(color.getRgb())
 
@@ -165,7 +163,7 @@ class PropLabel(QtWidgets.QLabel):
 
     def set_value(self, value):
         if value != self.get_value():
-            self.setText(value)
+            self.setText(str(value))
             self.value_changed.emit(self.toolTip(), value)
 
 
@@ -460,6 +458,7 @@ class NodePropWidget(QtWidgets.QWidget):
             if tab != 'Node':
                 self.add_tab(tab)
 
+        widget_height = 25
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
             prop_window = self.__tab_windows[tab]
@@ -470,6 +469,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
                 WidClass = WIDGET_MAP.get(wid_type)
                 widget = WidClass()
+                widget.setFixedHeight(widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])
@@ -491,6 +491,7 @@ class NodePropWidget(QtWidgets.QWidget):
             WidClass = WIDGET_MAP.get(wid_type)
 
             widget = WidClass()
+            widget.setFixedHeight(widget_height)
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name),

@@ -18,13 +18,13 @@ class VectorValue(AutoNode):
         self.add_output('out',list)
         self.create_property("out", value)
 
-        self.add_float_input('0', 'X', value=value[0], tab='widgets')
+        self.add_float_input('0', 'X', value=value[0])
         self.view.widgets['0'].value_changed.connect(lambda: self.updateValue(0))
 
-        self.add_float_input('1', 'Y', value=value[1], tab='widgets')
+        self.add_float_input('1', 'Y', value=value[1])
         self.view.widgets['1'].value_changed.connect(lambda: self.updateValue(1))
 
-        self.add_float_input('2', 'Z', value=value[2], tab='widgets')
+        self.add_float_input('2', 'Z', value=value[2])
         self.view.widgets['2'].value_changed.connect(lambda: self.updateValue(2))
 
         self.defaultValue = value
@@ -105,7 +105,7 @@ class DataConvect(AutoNode):
         items.append("all to float")
         items.append("all to string")
         items.append("eval string")
-        self.add_combo_menu('method', 'Method', items=items, tab='widgets')
+        self.add_combo_menu('method', 'Method', items=items)
         self.view.widgets['method'].value_changed.connect(self.cook)
 
     def run(self):

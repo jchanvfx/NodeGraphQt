@@ -81,13 +81,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar = QtWidgets.QMenuBar(self)
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
-        menu_bar.resize(0, 0)
+        # menu_bar.resize(0, 0)
+        menu_bar.setMaximumWidth(0)
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
         menu_bar.addMenu(self._ctx_menu)
-        # menu_bar.addMenu(self._ctx_node_menu)
-        # self._ctx_node_menu.setDisabled(True)
+        menu_bar.addMenu(self._ctx_node_menu)
+        self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
         self.LMB_state = False

@@ -6,7 +6,7 @@ import random
 
 def rand_color(seed_type):
     seed = id(seed_type)
-    random.seed(seed+10)
+    random.seed(seed + 10)
     r = random.randint(50, 200)
     random.seed(seed + 5)
     g = random.randint(50, 200)
@@ -16,14 +16,14 @@ def rand_color(seed_type):
 
 
 class AutoNode(BaseNode):
-    def __init__(self,defaultInputType=None,defaultOutputType=None):
+    def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(AutoNode, self).__init__()
         self.needCook = True
         self._autoCook = True
         self._error = False
         self.matchTypes = [[float, int]]
         self.errorColor = (200, 50, 50)
-        self.stopCookColor = (200,200,200)
+        self.stopCookColor = (200, 200, 200)
 
         self.defaultColor = self.get_property("color")
         self.defaultValue = None
@@ -35,13 +35,13 @@ class AutoNode(BaseNode):
         return self._autoCook
 
     @autoCook.setter
-    def autoCook(self,mode):
+    def autoCook(self, mode):
         if mode is self._autoCook:
             return
 
         self._autoCook = mode
         if mode:
-            self.set_property('color',self.defaultColor)
+            self.set_property('color', self.defaultColor)
         else:
             self.defaultColor = self.get_property("color")
             self.set_property('color', self.stopCookColor)
@@ -70,7 +70,7 @@ class AutoNode(BaseNode):
             data = from_port.node().get_property(from_port.name())
             return data
 
-    def cook(self, forceCook = False):
+    def cook(self, forceCook=False):
         if not self._autoCook and forceCook is not True:
             return
 
@@ -94,10 +94,9 @@ class AutoNode(BaseNode):
 
         self.cookNextNode()
 
-
     def run(self):
         pass
-        #print("RUN {} Node".format(self.name()))
+        # print("RUN {} Node".format(self.name()))
 
     def on_input_connected(self, to_port, from_port):
         if self.checkPortType(to_port, from_port):
@@ -118,7 +117,7 @@ class AutoNode(BaseNode):
             self.cook()
 
     def checkPortType(self, to_port, from_port):
-        if hasattr(to_port,"DataType") and hasattr(from_port,"DataType"):
+        if hasattr(to_port, "DataType") and hasattr(from_port, "DataType"):
             if to_port.DataType is not from_port.DataType:
                 for types in self.matchTypes:
                     if to_port.DataType in types and from_port.DataType in types:
@@ -145,7 +144,7 @@ class AutoNode(BaseNode):
                 current_port = outputs[port]
 
         if current_port:
-            if hasattr(current_port,"DataType"):
+            if hasattr(current_port, "DataType"):
                 if current_port.DataType is value_type:
                     return
             else:
@@ -154,8 +153,8 @@ class AutoNode(BaseNode):
             current_port.border_color = rand_color(value_type)
             current_port.color = rand_color(value_type)
             conn_type = 'multi' if current_port.multi_connection() else 'single'
-            dtat_type_name = value_type.__name__ if value_type else "all"
-            current_port.view.setToolTip('{}: {} ({}) '.format(current_port.name(),dtat_type_name,conn_type))
+            data_type_name = value_type.__name__ if value_type else "all"
+            current_port.view.setToolTip('{}: {} ({}) '.format(current_port.name(), data_type_name, conn_type))
 
     def create_property(self, name, value, items=None, range=None,
                         widget_type=NODE_PROP, tab=None):
@@ -187,7 +186,7 @@ class AutoNode(BaseNode):
         self.set_property('color', self.defaultColor)
         self._view._tooltip_disable(False)
 
-    def _show_error(self,message):
+    def _show_error(self, message):
         if not self._error:
             self.defaultColor = self.get_property("color")
 
@@ -198,7 +197,7 @@ class AutoNode(BaseNode):
         tooltip += '<br/>{}<br/>'.format(self._view.type_)
         self._view.setToolTip(tooltip)
 
-    def error(self,message = None):
+    def error(self, message=None):
         if message is None:
             return self._error
 

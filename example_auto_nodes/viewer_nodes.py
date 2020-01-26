@@ -7,7 +7,7 @@ class DataViewerNode(AutoNode):
     def __init__(self):
         super(DataViewerNode, self).__init__()
         self.add_input('in data')
-        self.add_text_input('data', 'Data Viewer', tab='widgets')
+        self.add_text_input('data', 'Data Viewer')
         self.add_output("out")
         self.create_property("out",None)
 

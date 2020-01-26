@@ -47,7 +47,7 @@ class ModuleNode(AutoNode):
     def __init__(self,defaultInputType=None,defaultOutputType=None):
         super(ModuleNode, self).__init__(defaultInputType,defaultOutputType)
         self.set_color(25, 58, 51)
-        self.add_combo_menu('funcs', 'Functions', items=list(self.module_functions.keys()), tab='widgets')
+        self.add_combo_menu('funcs', 'Functions', items=list(self.module_functions.keys()))
 
         # switch math function type
         self.view.widgets['funcs'].value_changed.connect(self.addFunction)

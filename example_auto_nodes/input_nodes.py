@@ -15,7 +15,7 @@ class FloatInputNode(AutoNode):
         self.defaultValue = 0.0
 
         self.output = self.add_output('out',float)
-        self.add_float_input('out', 'Float Value', value=self.defaultValue, tab='widgets')
+        self.add_float_input('out', 'Float Value', value=self.defaultValue)
         self.view.widgets['out'].value_changed.connect(self.cook)
 
 
@@ -30,7 +30,7 @@ class TickTimeNode(AutoNode):
     def __init__(self):
         super(TickTimeNode, self).__init__()
         self.add_output('out',float)
-        self.add_float_input('out', 'Data Input', value=0.0, tab='widgets')
+        self.add_float_input('out', 'Data Input', value=0.0)
         self.view.widgets['out'].value_changed.connect(self.cook)
 
         self.timer = QtCore.QTimer()
@@ -56,7 +56,7 @@ class TextFileInputNode(AutoNode):
         super(TextFileInputNode, self).__init__()
         self.add_output('out',str)
         self.create_property('out', "")
-        self.add_text_input('path', 'Text File Path', text='', tab='widgets')
+        self.add_text_input('path', 'Text File Path', text='')
         self.view.widgets['path'].value_changed.connect(self.cook)
 
     def run(self):
@@ -91,5 +91,5 @@ class TextInputNode(AutoNode):
         self.add_output('out')
 
         # create QLineEdit text input widget.
-        self.add_text_input('out', 'Text Input', tab='widgets')
+        self.add_text_input('out', 'Text Input')
         self.view.widgets['out'].value_changed.connect(self.cook)
