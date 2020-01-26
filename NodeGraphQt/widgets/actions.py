@@ -18,7 +18,7 @@ class BaseMenu(QtWidgets.QMenu):
     #         if hasattr(a, 'node_id'):
     #             a.node_id = None
 
-    def get_menu(self, name,node_id=None):
+    def get_menu(self, name, node_id=None):
         for action in self.actions():
             menu = action.menu()
             if not menu:

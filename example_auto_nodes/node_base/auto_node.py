@@ -19,14 +19,32 @@ class AutoNode(BaseNode):
     def __init__(self,defaultInputType=None,defaultOutputType=None):
         super(AutoNode, self).__init__()
         self.needCook = True
+        self._autoCook = True
         self._error = False
         self.matchTypes = [[float, int]]
         self.errorColor = (200, 50, 50)
+        self.stopCookColor = (200,200,200)
 
         self.defaultColor = self.get_property("color")
         self.defaultValue = None
         self.defaultInputType = defaultInputType
         self.defaultOutputType = defaultOutputType
+
+    @property
+    def autoCook(self):
+        return self._autoCook
+
+    @autoCook.setter
+    def autoCook(self,mode):
+        if mode is self._autoCook:
+            return
+
+        self._autoCook = mode
+        if mode:
+            self.set_property('color',self.defaultColor)
+        else:
+            self.defaultColor = self.get_property("color")
+            self.set_property('color', self.stopCookColor)
 
     def cookNextNode(self):
         for nodeList in self.connected_output_nodes().values():
@@ -52,7 +70,10 @@ class AutoNode(BaseNode):
             data = from_port.node().get_property(from_port.name())
             return data
 
-    def cook(self):
+    def cook(self, forceCook = False):
+        if not self._autoCook and forceCook is not True:
+            return
+
         if self.disabled():
             num = len(self.input_ports())
             for index, out_port in enumerate(self.output_ports()):

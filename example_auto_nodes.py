@@ -10,6 +10,9 @@ import os
 import sys
 import inspect
 import importlib
+from example_auto_nodes.node_base.auto_node import AutoNode
+from example_auto_nodes.node_base.module_node import ModuleNode
+
 
 def GetNodesFromFolder(FolderPath):
     path, FolderName = os.path.split(FolderPath)
@@ -30,6 +33,17 @@ def GetNodesFromFolder(FolderPath):
                     nodes.append(obj)
     return nodes
 
+
+def cook_node(graph,node):
+    node.cook()
+
+
+def print_functions(graph,node):
+    for func in node.module_functions:
+        print(func)
+
+def toggle_auto_cook(graph,node):
+    node.autoCook = not node.autoCook
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
@@ -68,19 +82,24 @@ if __name__ == '__main__':
     for n in reg_nodes:
         graph.register_node(n)
 
-    mathNodeA = graph.create_node('Math.MathFunctionsNode',
+    node_menu = graph.context_nodes_menu()
+    node_menu.add_command('Print Functions', print_functions, node_class=ModuleNode)
+    node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
+    node_menu.add_command('Toggle Auto Cook', toggle_auto_cook, node_class=AutoNode)
+
+    mathNodeA = graph.create_node('Module.MathModuleNode',
                                 name='Math Functions A',
                                 color='#0a1e20',
                                 text_color='#feab20',
                                 pos=[-250, 70])
 
-    mathNodeB = graph.create_node('Math.MathFunctionsNode',
+    mathNodeB = graph.create_node('Module.MathModuleNode',
                                 name='Math Functions B',
                                 color='#0a1e20',
                                 text_color='#feab20',
                                 pos=[-250, -70])
 
-    mathNodeC = graph.create_node('Math.MathFunctionsNode',
+    mathNodeC = graph.create_node('Module.MathModuleNode',
                                   name='Math Functions C',
                                   color='#0a1e20',
                                   text_color='#feab20',
