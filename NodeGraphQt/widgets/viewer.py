@@ -5,8 +5,7 @@ import os
 
 from NodeGraphQt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
-                                   PIPE_LAYOUT_CURVED,
-                                   SCENE_AREA)
+                                   PIPE_LAYOUT_CURVED)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import Pipe, LivePipe
@@ -42,15 +41,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
 
-        scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
-        self.setSceneRect(scene_pos, scene_pos, SCENE_AREA, SCENE_AREA)
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+
         self.setAcceptDrops(True)
         self.resize(850, 800)
+
+        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        self._update_scene()
+        self._last_size = self.size()
 
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None
@@ -81,7 +83,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar = QtWidgets.QMenuBar(self)
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
-        # menu_bar.resize(0, 0)
         menu_bar.setMaximumWidth(0)
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
@@ -105,7 +106,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- private ---
 
-    def _set_viewer_zoom(self, value, sensitivity=0.0):
+    def _set_viewer_zoom(self, value, sensitivity=None):
+        if sensitivity is None:
+            scale = 1.001 ** value
+            self.scale(scale,scale)
+            return
+
         if value == 0.0:
             return
         scale = (0.9 + sensitivity) if value < 0.0 else (1.1 - sensitivity)
@@ -119,10 +125,28 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scale(scale, scale)
 
     def _set_viewer_pan(self, pos_x, pos_y):
-        scroll_x = self.horizontalScrollBar()
-        scroll_y = self.verticalScrollBar()
-        scroll_x.setValue(scroll_x.value() - pos_x)
-        scroll_y.setValue(scroll_y.value() - pos_y)
+        speed = self._scene_range.width() * 0.001
+        x = -pos_x * speed
+        y = -pos_y * speed
+        self._scene_range.adjust(x, y, x, y)
+        self._update_scene()
+
+    def scale(self, sx, sy):
+        scale = [sx, sy]
+        scale[0] = scale[1]
+
+        center = self._scene_range.center()
+
+        w = self._scene_range.width() / scale[0]
+        h = self._scene_range.height() / scale[1]
+        self._scene_range = QtCore.QRectF(center.x() - (center.x() - self._scene_range.left()) / scale[0],
+                                   center.y() - (center.y() - self._scene_range.top()) / scale[1], w, h)
+
+        self._update_scene()
+
+    def _update_scene(self):
+        self.setSceneRect(self._scene_range)
+        self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
 
     def _combined_rect(self, nodes):
         group = self.scene().createItemGroup(nodes)
@@ -156,6 +180,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- reimplemented events ---
 
     def resizeEvent(self, event):
+        delta = max(self.size().width()/self._last_size.width(),
+                        self.size().height()/self._last_size.height())
+        self._set_viewer_zoom(delta)
+        self._last_size = self.size()
         super(NodeViewer, self).resizeEvent(event)
 
     def contextMenuEvent(self, event):
@@ -353,9 +381,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         except AttributeError:
             # For PyQt5
             delta = event.angleDelta().y()
+            if delta == 0:
+                delta = event.angleDelta().x()
 
-        adjust = (delta / 120) * 0.1
-        self._set_viewer_zoom(adjust)
+        self._set_viewer_zoom(delta)
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
@@ -811,8 +840,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
     def reset_zoom(self):
-        self.scale(1.0, 1.0)
-        self.resetTransform()
+        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        self._update_scene()
 
     def get_zoom(self):
         transform = self.transform()
@@ -831,7 +860,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not (ZOOM_MIN <= value <= ZOOM_MAX):
                 return
         value = value - zoom
-        self._set_viewer_zoom(value)
+        self._set_viewer_zoom(value,0.0)
 
     def zoom_to_nodes(self, nodes):
         rect = self._combined_rect(nodes)
