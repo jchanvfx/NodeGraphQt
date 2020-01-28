@@ -27,7 +27,7 @@ class TickTimeNode(BaseNode):
     def __init__(self):
         super(TickTimeNode, self).__init__()
         self.add_output('out')
-        self.add_text_input('out', 'Data Input', text='0', tab='widgets')
+        self.add_text_input('out', 'Ticks', text='0', tab='widgets')
         self.view.widgets['out'].value_changed.connect(self.update_streams)
 
         self.timer = QtCore.QTimer()
