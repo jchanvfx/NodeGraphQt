@@ -143,6 +143,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         """
         return self.style().standardIcon(QtWidgets.QStyle.StandardPixmap(name))
 
+
 class NodeComboBox(NodeBaseWidget):
     """
     NodeComboBox widget is subclassed from :class:`NodeBaseWidget`,

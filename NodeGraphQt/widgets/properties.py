@@ -28,7 +28,7 @@ class _ColorSolid(QtWidgets.QWidget):
     def __init__(self, parent=None, color=None):
         super(_ColorSolid, self).__init__(parent)
         self.setFixedSize(15, 15)
-        self._color = color or (0, 0, 0)
+        self.color = color or (0, 0, 0)
 
     def paintEvent(self, event):
         size = self.geometry()
@@ -63,7 +63,6 @@ class PropColorPicker(BaseProperty):
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 8, 0)
         layout.setSpacing(4)
-        # layout.addWidget(self._solid, 0, QtCore.Qt.AlignCenter)
         layout.addWidget(self._label, 0, QtCore.Qt.AlignCenter)
         layout.addWidget(self._button, 1, QtCore.Qt.AlignLeft)
 
@@ -475,7 +474,8 @@ class NodePropWidget(QtWidgets.QWidget):
 
                 WidClass = WIDGET_MAP.get(wid_type)
                 widget = WidClass()
-                widget.setFixedHeight(widget_height)
+                if wid_type != NODE_PROP_QTEXTEDIT:
+                    widget.setFixedHeight(widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])

@@ -40,9 +40,7 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
-
         painter.save()
-        painter.setClipRect(option.exposedRect)
 
         margin = 20
         rect = self.boundingRect()
@@ -135,10 +133,6 @@ class NodeItem(AbstractNodeItem):
         self._widgets = {}
         self._proxy_mode = False
         self._porxy_mode_threshold = 70
-
-    # def paint(self, painter, option, widget,force=False):
-    #     if self.auto_switch_mode() or force:
-    #         self._paint(self, painter, option, widget)
 
     def paint(self, painter, option, widget):
         """

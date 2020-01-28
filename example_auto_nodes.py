@@ -50,6 +50,7 @@ if __name__ == '__main__':
 
     # create node graph.
     graph = NodeGraph()
+    graph.use_opengl()
 
     # set up default menu and commands.
     setup_context_menu(graph)
@@ -117,4 +118,4 @@ if __name__ == '__main__':
                                    name='Output',
                                    pos=[250, 0])
 
-    app.exec_()
+    sys.exit(app.exec_())
