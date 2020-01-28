@@ -5,11 +5,11 @@ from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                                   PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET)
+                                   PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET,
+                                   ITEM_CACHE_MODE)
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.port import PortItem
-
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
     """
@@ -40,7 +40,9 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
+
         painter.save()
+        painter.setClipRect(option.exposedRect)
 
         margin = 20
         rect = self.boundingRect()
@@ -131,6 +133,12 @@ class NodeItem(AbstractNodeItem):
         self._input_items = {}
         self._output_items = {}
         self._widgets = {}
+        self._proxy_mode = False
+        self._porxy_mode_threshold = 70
+
+    # def paint(self, painter, option, widget,force=False):
+    #     if self.auto_switch_mode() or force:
+    #         self._paint(self, painter, option, widget)
 
     def paint(self, painter, option, widget):
         """
@@ -142,6 +150,8 @@ class NodeItem(AbstractNodeItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
+        self.auto_switch_mode()
+
         painter.save()
         bg_border = 1.0
         rect = QtCore.QRectF(0.5 - (bg_border / 2),
@@ -155,6 +165,7 @@ class NodeItem(AbstractNodeItem):
         path.addRoundedRect(rect, radius, radius)
 
         rect = self.boundingRect()
+
         bg_color = QtGui.QColor(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
@@ -392,7 +403,7 @@ class NodeItem(AbstractNodeItem):
     def arrange_ports(self, v_offset=0.0):
         """
         Arrange input, output ports in the node layout.
-    
+
         Args:
             v_offset (float): port vertical offset.
         """
@@ -468,6 +479,7 @@ class NodeItem(AbstractNodeItem):
         self.arrange_ports(v_offset=height + (height / 2))
         # arrange node widgets
         self.arrange_widgets(v_offset=height / 2)
+        self.update()
 
     def post_init(self, viewer=None, pos=None):
         """
@@ -484,6 +496,42 @@ class NodeItem(AbstractNodeItem):
         if pos:
             self.xy_pos = pos
 
+    def auto_switch_mode(self):
+        if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.ItemCoordinateCache:
+            return
+        rect= self.sceneBoundingRect()
+        l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
+        r = self.viewer().mapToGlobal(self.viewer().mapFromScene( rect.topRight()))
+        # with is the node with in screen
+        width = r.x()-l.x()
+
+        self.set_proxy_mode(width < self._porxy_mode_threshold)
+
+    def set_proxy_mode(self,mode):
+        if mode is self._proxy_mode:
+            return
+
+        self._proxy_mode = mode
+
+        visible = not mode
+
+        for w in self._widgets.values():
+            w.widget.setVisible(visible)
+        for port, text in self._input_items.items():
+            port.setVisible(visible)
+            text.setVisible(visible)
+            for pipe in port.connected_pipes:
+                pipe.setVisible(visible)
+
+        for port, text in self._output_items.items():
+            port.setVisible(visible)
+            text.setVisible(visible)
+            for pipe in port.connected_pipes:
+                pipe.setVisible(visible)
+
+        self._text_item.setVisible(visible)
+        self._icon_item.setVisible(visible)
+
     @property
     def icon(self):
         return self._properties['icon']
@@ -499,6 +547,8 @@ class NodeItem(AbstractNodeItem):
         self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.post_init()
+
+        self.update()
 
     @AbstractNodeItem.width.setter
     def width(self, width=0.0):
@@ -533,17 +583,20 @@ class NodeItem(AbstractNodeItem):
         self._text_item.setPlainText(name)
         if self.scene():
             self.draw_node()
+        self.update()
 
     @AbstractNodeItem.color.setter
     def color(self, color=(100, 100, 100, 255)):
         AbstractNodeItem.color.fset(self, color)
         if self.scene():
             self.scene().update()
+        self.update()
 
     @AbstractNodeItem.text_color.setter
     def text_color(self, color=(100, 100, 100, 255)):
         AbstractNodeItem.text_color.fset(self, color)
         self._set_text_color(color)
+        self.update()
 
     @property
     def inputs(self):
@@ -566,7 +619,7 @@ class NodeItem(AbstractNodeItem):
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
-            display_name (bool): display the port name. 
+            display_name (bool): display the port name.
 
         Returns:
             PortItem: input item widget
@@ -580,6 +633,7 @@ class NodeItem(AbstractNodeItem):
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
+        text.setCacheMode(ITEM_CACHE_MODE)
         self._input_items[port] = text
         if self.scene():
             self.post_init()
@@ -604,6 +658,7 @@ class NodeItem(AbstractNodeItem):
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(display_name)
+        text.setCacheMode(ITEM_CACHE_MODE)
         self._output_items[port] = text
         if self.scene():
             self.post_init()

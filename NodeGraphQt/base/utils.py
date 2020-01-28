@@ -35,7 +35,7 @@ def setup_context_menu(graph):
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
     file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+s')
-    file_menu.add_command('Clear', _clear_session)
+    file_menu.add_command('New', _new_session)
 
     file_menu.add_separator()
 
@@ -150,9 +150,9 @@ def _save_session_as(graph):
         graph.save_session(file_path)
 
 
-def _clear_session(graph):
+def _new_session(graph):
     """
-    Prompts a warning dialog to clear the node graph session.
+    Prompts a warning dialog to new a node graph session.
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.

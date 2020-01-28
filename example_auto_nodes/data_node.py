@@ -105,6 +105,7 @@ class DataConvect(AutoNode):
         items.append("all to float")
         items.append("all to string")
         items.append("eval string")
+        items.append("all to list")
         self.add_combo_menu('method', 'Method', items=items)
         self.view.widgets['method'].value_changed.connect(self.cook)
 
@@ -112,13 +113,15 @@ class DataConvect(AutoNode):
         method = self.get_property("method")
         try:
             if method == "all to int":
-                data = int(self.getInputData(0))
+                data = int(float(self.getInputData(0)))
             elif method == "all to float":
                 data = float(self.getInputData(0))
             elif method == "all to string":
                 data = str(self.getInputData(0))
             elif method == "eval string":
                 data = eval(self.getInputData(0))
+            elif method == "all to list":
+                data = list(self.getInputData(0))
             self.set_property("out", data)
         except Exception as error:
             self.error(error)

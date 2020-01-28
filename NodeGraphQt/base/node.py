@@ -14,7 +14,8 @@ from NodeGraphQt.qgraphics.node_base import NodeItem
 from NodeGraphQt.widgets.node_widgets import (NodeComboBox,
                                               NodeLineEdit,
                                               NodeFloatEdit,
-                                              NodeCheckBox)
+                                              NodeCheckBox,
+                                              NodeFilePath)
 
 
 class classproperty(object):
@@ -530,6 +531,30 @@ class BaseNode(NodeObject):
             name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
         widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
+    def add_file_input(self, name, label='', text='', tab=None, ext="*"):
+        """
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+            ext (str): file ext
+        """
+        self.create_property(
+            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+        widget = NodeFilePath(self.view, name, label, text,ext)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        widget._node = self
         self.view.add_widget(widget)
 
     def add_float_input(self, name, label='', value=0.0, tab=None):

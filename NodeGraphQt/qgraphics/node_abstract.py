@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from NodeGraphQt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
+from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT, ITEM_CACHE_MODE
 
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):
@@ -25,6 +25,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         }
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
+
+        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(

@@ -28,7 +28,7 @@ class _ColorSolid(QtWidgets.QWidget):
     def __init__(self, parent=None, color=None):
         super(_ColorSolid, self).__init__(parent)
         self.setFixedSize(15, 15)
-        self.color = color or (0, 0, 0)
+        self._color = color or (0, 0, 0)
 
     def paintEvent(self, event):
         size = self.geometry()
@@ -54,42 +54,48 @@ class PropColorPicker(BaseProperty):
 
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
-        self._solid = _ColorSolid(self)
+        self._color = (0, 0, 0)
         self._label = QtWidgets.QLabel()
-        self._update_label()
+        self._button = QtWidgets.QPushButton()
+        self._update_color()
 
-        button = QtWidgets.QPushButton('select color')
-        button.clicked.connect(self._on_select_color)
+        self._button.clicked.connect(self._on_select_color)
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 8, 0)
         layout.setSpacing(4)
-        layout.addWidget(self._solid, 0, QtCore.Qt.AlignCenter)
+        # layout.addWidget(self._solid, 0, QtCore.Qt.AlignCenter)
         layout.addWidget(self._label, 0, QtCore.Qt.AlignCenter)
-        layout.addWidget(button, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(self._button, 1, QtCore.Qt.AlignLeft)
+
+        self._label.setStyleSheet('QLabel {color: rgba(255, 255, 255, 150);}')
 
     def _on_select_color(self):
         color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()),options=QtWidgets.QColorDialog.ShowAlphaChannel)
         if color.isValid():
             self.set_value(color.getRgb())
 
-    def _update_label(self):
-        self._label.setStyleSheet(
-            'QLabel {{color: rgba({}, {}, {}, 255);}}'
-            .format(*self._solid.color))
-        self._label.setText(self.hex_color())
+    def _update_color(self):
+        hex = self.hex_color()
+        self._label.setText(hex)
         self._label.setAlignment(QtCore.Qt.AlignCenter)
         self._label.setMinimumWidth(60)
 
+        self._button.setStyleSheet(
+            '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
+               QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}'''
+            .format(*self._color))
+        self._button.setToolTip('rgb: {}\nhex: {}'.format(self._color[0:3], hex))
+
     def hex_color(self):
-        return '#{0:02x}{1:02x}{2:02x}'.format(*self._solid.color)
+        return '#{0:02x}{1:02x}{2:02x}'.format(*self._color)
 
     def get_value(self):
-        return self._solid.color
+        return self._color
 
     def set_value(self, value):
         if value != self.get_value():
-            self._solid.color = value
-            self._update_label()
+            self._color = value
+            self._update_color()
             self.value_changed.emit(self.toolTip(), value)
 
 

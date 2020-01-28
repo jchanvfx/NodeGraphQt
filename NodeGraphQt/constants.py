@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from .pkg_info import __version__
+from NodeGraphQt import QtWidgets
 
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__
@@ -91,3 +92,12 @@ Z_VAL_PIPE = -1
 Z_VAL_NODE = 1
 Z_VAL_PORT = 2
 Z_VAL_NODE_WIDGET = 3
+
+
+# === ITEM CACHE MODE ===
+
+# QGraphicsItem.NoCache
+# QGraphicsItem.ItemCoordinateCache
+# QGraphicsItem.DeviceCoordinateCache
+
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache

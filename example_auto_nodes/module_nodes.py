@@ -17,6 +17,14 @@ math.mul = lambda x, y: x * y
 math.div = lambda x, y: x / y
 
 
+def get_value(self,index):
+    return self[index]
+
+
+def get_item(self,index):
+    return self.items()[index]
+
+
 class MathModuleNode(ModuleNode):
     """
     Math functions node.
@@ -155,6 +163,7 @@ class StringFunctionsNode(ModuleNode):
     NODE_NAME = 'String Functions'
 
     module_functions = get_functions_from_type(str)
+    module_functions["get value"] = get_value
 
     def __init__(self):
         super(StringFunctionsNode, self).__init__()
@@ -172,6 +181,7 @@ class ListFunctionsNode(ModuleNode):
     NODE_NAME = 'List Functions'
 
     module_functions = get_functions_from_type(list)
+    module_functions["get value"] = get_value
 
     def __init__(self):
         super(ListFunctionsNode, self).__init__()
@@ -189,6 +199,7 @@ class DictFunctionsNode(ModuleNode):
     NODE_NAME = 'Dict Functions'
 
     module_functions = get_functions_from_type(list)
+    module_functions["get item"] = get_item
 
     def __init__(self):
         super(DictFunctionsNode, self).__init__()
@@ -206,6 +217,7 @@ class TupleFunctionsNode(ModuleNode):
     NODE_NAME = 'Tuple Functions'
 
     module_functions = get_functions_from_type(tuple)
+    module_functions["get value"] = get_value
 
     def __init__(self):
         super(TupleFunctionsNode, self).__init__()

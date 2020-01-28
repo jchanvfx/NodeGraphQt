@@ -50,27 +50,29 @@ class TextFileInputNode(AutoNode):
     """
 
     __identifier__ = 'Inputs'
-    NODE_NAME = 'Text File'
+    NODE_NAME = 'File'
 
     def __init__(self):
         super(TextFileInputNode, self).__init__()
-        self.add_output('out',str)
-        self.create_property('out', "")
-        self.add_text_input('path', 'Text File Path', text='')
-        self.view.widgets['path'].value_changed.connect(self.cook)
+        self.add_output('file content',str)
+        self.create_property('file content', "")
+        self.add_output('file path', str)
+
+        self.add_file_input('file path', 'File Path')
+        self.view.widgets['file path'].value_changed.connect(self.cook)
 
     def run(self):
-        path = self.get_property('path')
+        path = self.get_property('file path')
         if os.path.exists(path):
             try:
                 with open(path, 'r') as fread:
                     data = fread.read()
-                    self.set_property('out', data)
+                    self.set_property('file content', data)
             except Exception as e:
                 self.error(e)
         else:
             self.error('No existe %s' % path)
-            self.set_property('out', '')
+            self.set_property('file content', '')
 
 
 class TextInputNode(AutoNode):

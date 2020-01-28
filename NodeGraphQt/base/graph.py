@@ -88,7 +88,13 @@ class NodeGraph(QtCore.QObject):
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
     :emits: mime data, node graph position
     """
+    session_changed = QtCore.Signal(str)
+    """
+    Signal is triggered when session has been changed.
 
+    :parameters: :str
+    :emits: new session path
+    """
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
@@ -890,6 +896,7 @@ class NodeGraph(QtCore.QObject):
             self._undo_stack.push(NodeRemovedCmd(self, n))
         self._undo_stack.clear()
         self._model.session = None
+        self.session_changed.emit("")
 
     def _serialize(self, nodes):
         """
@@ -1028,6 +1035,9 @@ class NodeGraph(QtCore.QObject):
         with open(file_path, 'w') as file_out:
             json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
 
+        self._model.session = file_path
+        self.session_changed.emit(file_path)
+
     def load_session(self, file_path):
         """
         Load node graph session layout file.
@@ -1054,6 +1064,7 @@ class NodeGraph(QtCore.QObject):
         self._deserialize(layout_data)
         self._undo_stack.clear()
         self._model.session = file_path
+        self.session_changed.emit(file_path)
 
     def copy_nodes(self, nodes=None):
         """
@@ -1204,3 +1215,9 @@ class NodeGraph(QtCore.QObject):
             str: selected file path.
         """
         return self._viewer.save_dialog(current_dir, ext)
+
+    def use_opengl(self):
+        """
+        use opengl to draw the graph
+        """
+        self._viewer.use_opengl()

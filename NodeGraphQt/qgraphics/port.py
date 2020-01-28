@@ -11,7 +11,8 @@ from NodeGraphQt.constants import (
     PORT_HOVER_BORDER_COLOR,
     PORT_ACTIVE_COLOR,
     PORT_ACTIVE_BORDER_COLOR,
-    Z_VAL_PORT)
+    Z_VAL_PORT,
+    ITEM_CACHE_MODE)
 
 
 class PortItem(QtWidgets.QGraphicsItem):
@@ -36,6 +37,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._border_size = 1
         self._port_type = None
         self._multi_connection = False
+
+        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __str__(self):
         return '{}.PortItem("{}")'.format(self.__module__, self.name)
@@ -201,6 +204,7 @@ class PortItem(QtWidgets.QGraphicsItem):
     @color.setter
     def color(self, color=(0, 0, 0, 255)):
         self._color = color
+        self.update()
 
     @property
     def border_color(self):

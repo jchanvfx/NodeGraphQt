@@ -170,3 +170,26 @@ QCheckBox::indicator {
     height: 13px;
 }
 '''
+
+STYLE_QPUSHBUTTON = '''
+QPushButton {
+    background: transparent;
+    border-style: outset;
+    border-radius: 1px;  
+    border-width: 1px;
+    border-color: rgb(30,30,30);
+    max-width: 200;
+}
+QPushButton::pressed {
+    border-style: inset;
+}
+QPushButton::hover {
+    background: rgba(255,255,255,30);
+}
+'''
+STYLE_QWIDGET = '''
+QWidget{
+    border: 0px;
+    background-color: transparent;
+}
+'''
