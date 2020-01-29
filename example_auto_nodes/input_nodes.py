@@ -1,6 +1,11 @@
 from NodeGraphQt import QtCore
+from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
+                                   NODE_PROP_VECTOR3,
+                                   NODE_PROP_VECTOR4)
+
 from .node_base.auto_node import AutoNode
 import os
+
 
 class FloatInputNode(AutoNode):
     """
@@ -12,11 +17,55 @@ class FloatInputNode(AutoNode):
 
     def __init__(self):
         super(FloatInputNode, self).__init__()
-        self.defaultValue = 0.0
+        self.output = self.add_output('out', float)
+        self.add_float_input('out', 'Float Value', value=0.0)
 
-        self.output = self.add_output('out',float)
-        self.add_float_input('out', 'Float Value', value=self.defaultValue)
-        self.view.widgets['out'].value_changed.connect(self.cook)
+
+class IntInputNode(AutoNode):
+    """
+    Input int data.
+    """
+
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Int'
+
+    def __init__(self):
+        super(IntInputNode, self).__init__()
+        self.output = self.add_output('out', int)
+        self.add_int_input('out', 'Int Value', value=0)
+
+
+class Vector2InputNode(AutoNode):
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Vector2'
+
+    def __init__(self):
+        super(Vector2InputNode, self).__init__()
+        self.output = self.add_output('out', list)
+        self.create_property(
+            "out", [0, 0], widget_type=NODE_PROP_VECTOR2)
+
+
+class Vector3InputNode(AutoNode):
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Vector3'
+
+    def __init__(self):
+        super(Vector3InputNode, self).__init__()
+        self.output = self.add_output('out', list)
+        self.create_property(
+            "out", [0, 0, 0], widget_type=NODE_PROP_VECTOR3)
+
+
+class Vector4InputNode(AutoNode):
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Vector4'
+
+    def __init__(self):
+        super(Vector4InputNode, self).__init__()
+        self.output = self.add_output('out', list)
+        self.create_property(
+            "out", [0, 0, 0, 0], widget_type=NODE_PROP_VECTOR4)
 
 
 class TickTimeNode(AutoNode):
@@ -29,9 +78,8 @@ class TickTimeNode(AutoNode):
 
     def __init__(self):
         super(TickTimeNode, self).__init__()
-        self.add_output('out',float)
+        self.add_output('out', float)
         self.add_float_input('out', 'Data Input', value=0.0)
-        self.view.widgets['out'].value_changed.connect(self.cook)
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.tick)
@@ -41,7 +89,7 @@ class TickTimeNode(AutoNode):
         if not self.disabled():
             current = self.get_property('out')
             current += 1
-            self.set_property("out",current)
+            self.set_property("out", current)
 
 
 class TextFileInputNode(AutoNode):
@@ -54,12 +102,11 @@ class TextFileInputNode(AutoNode):
 
     def __init__(self):
         super(TextFileInputNode, self).__init__()
-        self.add_output('file content',str)
+        self.add_output('file content', str)
         self.create_property('file content', "")
         self.add_output('file path', str)
 
         self.add_file_input('file path', 'File Path')
-        self.view.widgets['file path'].value_changed.connect(self.cook)
 
     def run(self):
         path = self.get_property('file path')
@@ -94,4 +141,3 @@ class TextInputNode(AutoNode):
 
         # create QLineEdit text input widget.
         self.add_text_input('out', 'Text Input')
-        self.view.widgets['out'].value_changed.connect(self.cook)

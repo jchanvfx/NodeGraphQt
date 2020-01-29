@@ -141,10 +141,10 @@ class numpyModuleNode(ModuleNode):
         if self.is_function(self.func):
             try:
                 args = inspect.getfullargspec(self.func).args
-            except Exception as error:
+            except:
                 try:
                     args = self.get_numpy_args(self.func)
-                except Exception as error:
+                except:
                     if type(self.func).__name__ == "ufunc":
                         args = ["input" + str(i + 1) for i in range(self.func.nin)]
 

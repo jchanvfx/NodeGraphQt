@@ -274,9 +274,7 @@ class NodeFloatEdit(NodeLineEdit):
 
     def __init__(self, parent=None, name='', label='', value=0.0):
         super(NodeFloatEdit, self).__init__(parent, name, label)
-        regex = '\\d+|\\d+\\.\\d+'
-        validator = QtGui.QRegExpValidator(regex, self._ledit)
-        self._ledit.setValidator(validator)
+        self._ledit.setValidator(QtGui.QDoubleValidator())
         self.text = str(value)
         self._ledit.setText(self.text)
 
@@ -288,12 +286,41 @@ class NodeFloatEdit(NodeLineEdit):
         Returns:
             float: float value.
         """
-        try:
-            value = float(self._ledit.text())
-        except:
-            value = 0.0
-            self._ledit.setText(str(value))
+        value = float(self._ledit.text())
+        return value
 
+    @value.setter
+    def value(self, text=0.0):
+        if text != self.value:
+            self._ledit.setText(str(text))
+            self._value_changed()
+
+
+class NodeIntEdit(NodeLineEdit):
+    """
+    NodeIntEdit widget is subclassed from :class:`NodeLineEdit`,
+    this widget is displayed as a ``QLineEdit`` embedded in a node.
+
+    .. note::
+        `To embed a ``QLineEdit`` in a node see func:`
+        :meth:`NodeGraphQt.BaseNode.add_float_input`
+    """
+
+    def __init__(self, parent=None, name='', label='', value=0.0):
+        super(NodeIntEdit, self).__init__(parent, name, label)
+        self._ledit.setValidator(QtGui.QIntValidator())
+        self.text = str(value)
+        self._ledit.setText(self.text)
+
+    @property
+    def value(self):
+        """
+        Returns the widgets current int value.
+
+        Returns:
+            int: int value.
+        """
+        value = int(self._ledit.text())
         return value
 
     @value.setter

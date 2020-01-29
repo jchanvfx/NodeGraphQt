@@ -51,7 +51,6 @@ class ModuleNode(AutoNode):
 
         # switch math function type
         self.view.widgets['funcs'].value_changed.connect(self.addFunction)
-        self.view.widgets['funcs'].value_changed.connect(self.cook)
         self.add_output('output')
         self.create_property('output', None)
 
@@ -129,6 +128,8 @@ class ModuleNode(AutoNode):
                 data = self.func(*args)
             else:
                 data = self.func
+            if data is None:
+                data = args[0]
             self.set_property('output', data)
         except Exception as error:
             self.error("Error : %s" % str(error))

@@ -2,7 +2,7 @@ from NodeGraphQt.base.node import BaseNode
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NODE_PROP
 import random
-
+import copy
 
 def rand_color(seed_type):
     seed = id(seed_type)
@@ -64,15 +64,18 @@ class AutoNode(BaseNode):
 
         from_ports = to_port.connected_ports()
         if not from_ports:
-            return self.defaultValue
+            return copy.deepcopy(self.defaultValue)
 
         for from_port in from_ports:
             data = from_port.node().get_property(from_port.name())
-            return data
+            return copy.deepcopy(data)
 
     def cook(self, forceCook=False):
         if not self._autoCook and forceCook is not True:
             return
+
+        _tmp = self._autoCook
+        self._autoCook = False
 
         if self.disabled():
             num = len(self.input_ports())
@@ -87,7 +90,14 @@ class AutoNode(BaseNode):
         if self.error():
             self._close_error()
 
-        self.run()
+        try:
+            self.run()
+        except Exception as error:
+            self._autoCook = _tmp
+            self.error(error)
+            return
+
+        self._autoCook = _tmp
 
         if self.error():
             return
@@ -129,6 +139,8 @@ class AutoNode(BaseNode):
     def set_property(self, name, value):
         super(AutoNode, self).set_property(name, value)
         self.set_port_type(name, type(value))
+        if name in self.model.custom_properties.keys():
+            self.cook()
 
     def set_port_type(self, port, value_type):
         current_port = None

@@ -71,6 +71,16 @@ NODE_PROP_COLORPICKER = 8
 NODE_PROP_SLIDER = 9
 #: Property type represented with a file selector widget in the properties bin.
 NODE_PROP_FILE = 10
+#: Property type represented with a vector2 widget in the properties bin.
+NODE_PROP_VECTOR2 = 11
+#: Property type represented with vector3 widget in the properties bin.
+NODE_PROP_VECTOR3 = 12
+#: Property type represented with vector4 widget in the properties bin.
+NODE_PROP_VECTOR4 = 13
+#: Property type represented with float widget in the properties bin.
+NODE_PROP_FLOAT = 14
+#: Property type represented with int widget in the properties bin.
+NODE_PROP_INT = 15
 
 # === NODE VIEWER ===
 

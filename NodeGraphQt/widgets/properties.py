@@ -10,7 +10,12 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QSPINBOX,
                                    NODE_PROP_COLORPICKER,
                                    NODE_PROP_SLIDER,
-                                   NODE_PROP_FILE)
+                                   NODE_PROP_FILE,
+                                   NODE_PROP_VECTOR2,
+                                   NODE_PROP_VECTOR3,
+                                   NODE_PROP_VECTOR4,
+                                   NODE_PROP_FLOAT,
+                                   NODE_PROP_INT)
 from NodeGraphQt.widgets.file_dialog import file_dialog
 
 
@@ -67,8 +72,6 @@ class PropColorPicker(BaseProperty):
         layout.setSpacing(4)
         layout.addWidget(self._label, 0, QtCore.Qt.AlignCenter)
         layout.addWidget(self._button, 1, QtCore.Qt.AlignLeft)
-
-        self._label.setStyleSheet('QLabel {color: rgba(255, 255, 255, 150);}')
 
     def _on_select_color(self):
         color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()),options=QtWidgets.QColorDialog.ShowAlphaChannel)
@@ -180,22 +183,10 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         super(PropLineEdit, self).__init__(parent)
-        self.__prev_text = ''
-        self.editingFinished.connect(self._on_return_pressed)
+        self.editingFinished.connect(self._on_editing_finished)
 
-    def focusInEvent(self, event):
-        super(PropLineEdit, self).focusInEvent(event)
-        self.__prev_text = self.text()
-
-    def focusOutEvent(self, event):
-        super(PropLineEdit, self).focusOutEvent(event)
-        if self.__prev_text != self.text():
-            self.value_changed.emit(self.toolTip(), self.text())
-        self.__prev_text = ''
-
-    def _on_return_pressed(self):
-        if self.__prev_text != self.text():
-            self.value_changed.emit(self.toolTip(), self.text())
+    def _on_editing_finished(self):
+        self.value_changed.emit(self.toolTip(), self.text())
 
     def get_value(self):
         return self.text()
@@ -224,9 +215,6 @@ class PropTextEdit(QtWidgets.QTextEdit):
         if self.__prev_text != self.toPlainText():
             self.value_changed.emit(self.toolTip(), self.toPlainText())
         self.__prev_text = ''
-
-    def _on_return_pressed(self):
-        self.value_changed.emit(self.toolTip(), self.get_value())
 
     def get_value(self):
         return self.toPlainText()
@@ -350,6 +338,115 @@ class PropFilePath(QtWidgets.QWidget):
             self._on_value_change(_value)
 
 
+class PropVector(BaseProperty):
+    def __init__(self, parent=None,dim=3):
+        super(PropVector, self).__init__(parent)
+        hbox = QtWidgets.QHBoxLayout()
+        self._value = []
+        self._items = []
+
+        for i in range(dim):
+            self._add_item(i, hbox)
+
+        self._can_emit = True
+        self.setLayout(hbox)
+
+    def _add_item(self,index,hbox):
+        _ledit = QtWidgets.QLineEdit()
+        _ledit.index = index
+        _ledit.setText("0")
+        _ledit.setAlignment(QtCore.Qt.AlignLeft)
+        _ledit.editingFinished.connect(lambda: self._on_value_change(_ledit.text(), _ledit.index))
+        _ledit.setValidator(QtGui.QDoubleValidator())
+        _ledit.setStyleSheet("QLineEdit{border:1px solid}")
+
+        hbox.addWidget(_ledit)
+        self._value.append(0.0)
+        self._items.append(_ledit)
+
+    def _on_value_change(self, value=None,index=None):
+        if self._can_emit:
+            if index is not None:
+                self._value[index] = float(value)
+
+            self.value_changed.emit(self.toolTip(), self._value)
+
+    def _update_items(self):
+        for index ,value in enumerate(self._value):
+            if float(self._items[index].text()) != value:
+                self._items[index].setText(str(value))
+
+    def get_value(self):
+        return self._value
+
+    def set_value(self, value):
+        if value != self.get_value():
+            self._value = value.copy()
+            self._can_emit = False
+            self._update_items()
+            self._can_emit = True
+            self._on_value_change()
+
+
+class PropVector2(PropVector):
+    def __init__(self,parent=None):
+        super(PropVector2,self).__init__(parent,2)
+
+
+class PropVector3(PropVector):
+    def __init__(self,parent=None):
+        super(PropVector3,self).__init__(parent,3)
+
+
+class PropVector4(PropVector):
+    def __init__(self,parent=None):
+        super(PropVector4,self).__init__(parent,4)
+
+
+class PropFloat(QtWidgets.QLineEdit):
+
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropFloat, self).__init__(parent)
+        self.setText("0.0")
+        self.setValidator(QtGui.QDoubleValidator())
+        self.editingFinished.connect(self._on_editing_finished)
+
+    def _on_editing_finished(self):
+        self.value_changed.emit(self.toolTip(), float(self.text()))
+
+    def get_value(self):
+        return float(self.text())
+
+    def set_value(self, value):
+        if value != self.get_value():
+            self.setText(str(value))
+            self.value_changed.emit(self.toolTip(), value)
+
+
+class PropInt(QtWidgets.QLineEdit):
+
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropInt, self).__init__(parent)
+        self.setText("0")
+        self.setValidator(QtGui.QIntValidator())
+        self.editingFinished.connect(self._on_editing_finished)
+
+    def _on_editing_finished(self):
+        self.value_changed.emit(self.toolTip(), int(self.text()))
+
+    def get_value(self):
+        return int(self.text())
+
+    def set_value(self, value):
+        if value != self.get_value():
+            self.setText(str(value))
+            self.value_changed.emit(self.toolTip(), value)
+
+
 WIDGET_MAP = {
     NODE_PROP_QLABEL:       PropLabel,
     NODE_PROP_QLINEEDIT:    PropLineEdit,
@@ -359,7 +456,12 @@ WIDGET_MAP = {
     NODE_PROP_QSPINBOX:     PropSpinBox,
     NODE_PROP_COLORPICKER:  PropColorPicker,
     NODE_PROP_SLIDER:       PropSlider,
-    NODE_PROP_FILE:         PropFilePath
+    NODE_PROP_FILE:         PropFilePath,
+    NODE_PROP_VECTOR2:      PropVector2,
+    NODE_PROP_VECTOR3:      PropVector3,
+    NODE_PROP_VECTOR4:      PropVector4,
+    NODE_PROP_FLOAT:        PropFloat,
+    NODE_PROP_INT:          PropInt,
 }
 
 
