@@ -1,4 +1,6 @@
 from .node_base.auto_node import AutoNode
+from NodeGraphQt.constants import NODE_PROP_QTEXTEDIT
+from NodeGraphQt.widgets.node_widgets import NodeLineEdit
 
 class DataViewerNode(AutoNode):
     __identifier__ = 'Viewers'
@@ -7,7 +9,7 @@ class DataViewerNode(AutoNode):
     def __init__(self):
         super(DataViewerNode, self).__init__()
         self.add_input('in data')
-        self.add_text_input('data', 'Data Viewer')
+        self.add_text_input('data', 'Data Viewer',multi_line=True)
         self.add_output("out")
         self.create_property("out",None)
 

@@ -7,7 +7,8 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QTEXTEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
-                                   IN_PORT, OUT_PORT)
+                                   IN_PORT, OUT_PORT,
+                                   NODE_PROP_FILE)
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -511,7 +512,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_text_input(self, name, label='', text='', tab=None):
+    def add_text_input(self, name, label='', text='', tab=None, multi_line=False):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -526,9 +527,14 @@ class BaseNode(NodeObject):
             label (str): label to be displayed.
             text (str): pre filled text.
             tab (str): name of the widget tab to display in.
+            multi_line (bool): if create multi line property.
         """
+        if multi_line:
+            wid_type = NODE_PROP_QTEXTEDIT
+        else:
+            wid_type = NODE_PROP_QLINEEDIT
         self.create_property(
-            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+            name, text, widget_type=wid_type, tab=tab)
         widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
@@ -551,10 +557,9 @@ class BaseNode(NodeObject):
             ext (str): file ext
         """
         self.create_property(
-            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+            name, text, widget_type=NODE_PROP_FILE, tab=tab)
         widget = NodeFilePath(self.view, name, label, text,ext)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-        widget._node = self
         self.view.add_widget(widget)
 
     def add_float_input(self, name, label='', value=0.0, tab=None):

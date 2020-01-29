@@ -3,6 +3,7 @@ from NodeGraphQt import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
+from NodeGraphQt.widgets.file_dialog import file_dialog
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
@@ -230,10 +231,10 @@ class NodeLineEdit(NodeBaseWidget):
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         self._ledit.editingFinished.connect(self._value_changed)
         self._ledit.clearFocus()
-        self.group = _NodeGroupBox(label)
-        self.group.add_node_widget(self._ledit)
-        self.group.setMaximumWidth(120)
-        self.setWidget(self.group)
+        group = _NodeGroupBox(label)
+        group.add_node_widget(self._ledit)
+        group.setMaximumWidth(120)
+        self.setWidget(group)
         self.text = text
 
     @property
@@ -364,38 +365,35 @@ class NodeFilePath(NodeLineEdit):
         :meth:`NodeGraphQt.BaseNode.add_float_input`
     """
 
-    def __init__(self, parent=None, name='', label='', text='',ext="*"):
-        super(NodeLineEdit,self).__init__(parent, name, label)
+    def __init__(self, parent=None, name='', label='', text='', ext="*"):
+        super(NodeLineEdit, self).__init__(parent, name, label)
         self._ledit = QtWidgets.QLineEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         self._ledit.editingFinished.connect(self._value_changed)
         self._ledit.clearFocus()
 
-        self._button = QtWidgets.QPushButton()
-        self._button.setStyleSheet(STYLE_QPUSHBUTTON)
-        self._button.setIcon(self.get_icon(21))
+        _button = QtWidgets.QPushButton()
+        _button.setStyleSheet(STYLE_QPUSHBUTTON)
+        _button.setIcon(self.get_icon(21))
 
         widget = QtWidgets.QWidget()
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._ledit)
-        hbox.addWidget(self._button)
+        hbox.addWidget(_button)
         widget.setLayout(hbox)
         widget.setStyleSheet(STYLE_QWIDGET)
 
-        self.group = _NodeGroupBox(label)
-        self.group.add_node_widget(widget)
+        group = _NodeGroupBox(label)
+        group.add_node_widget(widget)
         self.text = text
 
-        self._button.clicked.connect(self._on_select_file)
-        self.setWidget(self.group)
-
-        self._node = None
+        _button.clicked.connect(self._on_select_file)
+        self.setWidget(group)
         self._ext = ext
 
     def _on_select_file(self):
-        if self._node:
-            viewer = self._node.graph.viewer()
-            file_path = viewer.load_dialog(ext=self._ext)
-            if file_path:
-                self.value = file_path
+        file_path = file_dialog.getOpenFileName()
+        file = file_path[0] or None
+        if file:
+            self.value = file

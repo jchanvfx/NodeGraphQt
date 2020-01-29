@@ -69,6 +69,8 @@ NODE_PROP_QSPINBOX = 7
 NODE_PROP_COLORPICKER = 8
 #: Property type represented with a Slider widget in the properties bin.
 NODE_PROP_SLIDER = 9
+#: Property type represented with a file selector widget in the properties bin.
+NODE_PROP_FILE = 10
 
 # === NODE VIEWER ===
 
@@ -100,4 +102,4 @@ Z_VAL_NODE_WIDGET = 3
 # QGraphicsItem.ItemCoordinateCache
 # QGraphicsItem.DeviceCoordinateCache
 
-ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.ItemCoordinateCache

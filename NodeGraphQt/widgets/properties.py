@@ -9,7 +9,9 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QCHECKBOX,
                                    NODE_PROP_QSPINBOX,
                                    NODE_PROP_COLORPICKER,
-                                   NODE_PROP_SLIDER)
+                                   NODE_PROP_SLIDER,
+                                   NODE_PROP_FILE)
+from NodeGraphQt.widgets.file_dialog import file_dialog
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -199,9 +201,10 @@ class PropLineEdit(QtWidgets.QLineEdit):
         return self.text()
 
     def set_value(self, value):
-        if value != self.get_value():
-            self.setText(str(value))
-            self.value_changed.emit(self.toolTip(), value)
+        _value = str(value)
+        if _value != self.get_value():
+            self.setText(_value)
+            self.value_changed.emit(self.toolTip(), _value)
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
@@ -229,9 +232,10 @@ class PropTextEdit(QtWidgets.QTextEdit):
         return self.toPlainText()
 
     def set_value(self, value):
-        if value != self.get_value():
-            self.setPlainText(value)
-            self.value_changed.emit(self.toolTip(), value)
+        _value = str(value)
+        if _value != self.get_value():
+            self.setPlainText(_value)
+            self.value_changed.emit(self.toolTip(), _value)
 
 
 class PropComboBox(QtWidgets.QComboBox):
@@ -303,6 +307,49 @@ class PropSpinBox(QtWidgets.QSpinBox):
             self.setValue(value)
 
 
+class PropFilePath(QtWidgets.QWidget):
+
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropFilePath, self).__init__(parent)
+        self._ledit = QtWidgets.QLineEdit()
+        self._ledit.setAlignment(QtCore.Qt.AlignLeft)
+        self._ledit.editingFinished.connect(self._on_value_change)
+        self._ledit.clearFocus()
+
+        icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap(21))
+        _button = QtWidgets.QPushButton()
+        _button.setIcon(icon)
+
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._ledit)
+        hbox.addWidget(_button)
+        self.setLayout(hbox)
+        _button.clicked.connect(self._on_select_file)
+
+        self._ledit.setStyleSheet("QLineEdit{border:1px solid}")
+        _button.setStyleSheet("QPushButton{border:1px solid}")
+
+    def _on_select_file(self):
+        file_path = file_dialog.getOpenFileName(self)
+        file = file_path[0] or None
+        if file:
+            self.set_value(file)
+
+    def _on_value_change(self, value):
+        self.value_changed.emit(self.toolTip(), value)
+
+    def get_value(self):
+        return self._ledit.text()
+
+    def set_value(self, value):
+        _value = str(value)
+        if _value != self.get_value():
+            self._ledit.setText(_value)
+            self._on_value_change(_value)
+
+
 WIDGET_MAP = {
     NODE_PROP_QLABEL:       PropLabel,
     NODE_PROP_QLINEEDIT:    PropLineEdit,
@@ -312,6 +359,7 @@ WIDGET_MAP = {
     NODE_PROP_QSPINBOX:     PropSpinBox,
     NODE_PROP_COLORPICKER:  PropColorPicker,
     NODE_PROP_SLIDER:       PropSlider,
+    NODE_PROP_FILE:         PropFilePath
 }
 
 
@@ -463,7 +511,7 @@ class NodePropWidget(QtWidgets.QWidget):
             if tab != 'Node':
                 self.add_tab(tab)
 
-        widget_height = 25
+        min_widget_height = 25
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
             prop_window = self.__tab_windows[tab]
@@ -474,8 +522,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
                 WidClass = WIDGET_MAP.get(wid_type)
                 widget = WidClass()
-                if wid_type != NODE_PROP_QTEXTEDIT:
-                    widget.setFixedHeight(widget_height)
+                widget.setMinimumHeight(min_widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])
@@ -497,7 +544,7 @@ class NodePropWidget(QtWidgets.QWidget):
             WidClass = WIDGET_MAP.get(wid_type)
 
             widget = WidClass()
-            widget.setFixedHeight(widget_height)
+            widget.setMinimumHeight(min_widget_height)
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name),

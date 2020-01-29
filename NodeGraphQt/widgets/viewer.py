@@ -3,7 +3,7 @@
 import math
 import os
 
-from NodeGraphQt import QtGui, QtCore, QtWidgets
+from NodeGraphQt import QtGui, QtCore, QtWidgets ,QtOpenGL
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
                                    PIPE_LAYOUT_CURVED)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -14,7 +14,7 @@ from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
-from Qt import QtOpenGL
+from NodeGraphQt.widgets.file_dialog import file_dialog
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -57,7 +57,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
         self._last_size = self.size()
 
-        self.current_dir = os.path.expanduser('~')
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None
         self._start_port = None
@@ -722,28 +721,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self, title, text, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
-        self.current_dir = current_dir or self.current_dir
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
-        file_dlg = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Open File', self.current_dir, ext_filter)
+        file_dlg = file_dialog.getOpenFileName(
+            self, 'Open File', current_dir, ext_filter)
         file = file_dlg[0] or None
-        if file:
-            if os.path.isdir(file):
-                self.current_dir = file
-            elif os.path.isfile(file):
-                self.current_dir = os.path.split(file)[0]
         return file
 
     def save_dialog(self, current_dir=None, ext=None):
-        current_dir = current_dir or os.path.expanduser('~')
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
-        file_dlg = QtWidgets.QFileDialog.getSaveFileName(
+        file_dlg = file_dialog.getSaveFileName(
             self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
@@ -752,7 +744,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if ext and not file_path.endswith(ext):
             file_path += ext
 
-        self.current_dir = os.path.split(file_path)[0]
         return file_path
 
     def all_pipes(self):
