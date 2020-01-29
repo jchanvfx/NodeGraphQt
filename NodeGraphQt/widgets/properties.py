@@ -20,7 +20,6 @@ from NodeGraphQt.widgets.file_dialog import file_dialog
 
 
 class BaseProperty(QtWidgets.QWidget):
-
     value_changed = QtCore.Signal(str, object)
 
     def set_value(self, value):
@@ -74,7 +73,8 @@ class PropColorPicker(BaseProperty):
         layout.addWidget(self._button, 1, QtCore.Qt.AlignLeft)
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()),options=QtWidgets.QColorDialog.ShowAlphaChannel)
+        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()),
+                                                options=QtWidgets.QColorDialog.ShowAlphaChannel)
         if color.isValid():
             self.set_value(color.getRgb())
 
@@ -87,7 +87,7 @@ class PropColorPicker(BaseProperty):
         self._button.setStyleSheet(
             '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
                QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}'''
-            .format(*self._color))
+                .format(*self._color))
         self._button.setToolTip('rgb: {}\nhex: {}'.format(self._color[0:3], hex))
 
     def hex_color(self):
@@ -165,7 +165,6 @@ class PropSlider(BaseProperty):
 
 
 class PropLabel(QtWidgets.QLabel):
-
     value_changed = QtCore.Signal(str, object)
 
     def get_value(self):
@@ -178,7 +177,6 @@ class PropLabel(QtWidgets.QLabel):
 
 
 class PropLineEdit(QtWidgets.QLineEdit):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -199,7 +197,6 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -227,7 +224,6 @@ class PropTextEdit(QtWidgets.QTextEdit):
 
 
 class PropComboBox(QtWidgets.QComboBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -256,7 +252,6 @@ class PropComboBox(QtWidgets.QComboBox):
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -276,7 +271,6 @@ class PropCheckBox(QtWidgets.QCheckBox):
 
 
 class PropSpinBox(QtWidgets.QSpinBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -295,10 +289,7 @@ class PropSpinBox(QtWidgets.QSpinBox):
             self.setValue(value)
 
 
-class PropFilePath(QtWidgets.QWidget):
-
-    value_changed = QtCore.Signal(str, object)
-
+class PropFilePath(BaseProperty):
     def __init__(self, parent=None):
         super(PropFilePath, self).__init__(parent)
         self._ledit = QtWidgets.QLineEdit()
@@ -338,8 +329,76 @@ class PropFilePath(QtWidgets.QWidget):
             self._on_value_change(_value)
 
 
+class _valueEdit(QtWidgets.QLineEdit):
+    valueChanged = QtCore.Signal(object)
+
+    def __init__(self, parent=None):
+        super(_valueEdit, self).__init__(parent)
+        self.mid_state = False
+        self.pre_x = 0
+        self._step = 1
+        self.setValue(0)
+        self._data_type = float
+        self.textChanged.connect(self._on_value_changed)
+        self._last_value = 0
+
+    def _on_value_changed(self, text):
+        self.valueChanged.emit(self.value())
+        self._last_value = text
+
+    def mouseMoveEvent(self, event):
+        if self.mid_state:
+            delta = event.x() - self.pre_x
+            self.setValue(self.value() + delta * self._step)
+            self.pre_x = event.x()
+        super(_valueEdit,self).mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.MiddleButton:
+            self.mid_state = True
+            self.pre_x = event.x()
+        super(_valueEdit,self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        self.mid_state = False
+        super(_valueEdit,self).mouseReleaseEvent(event)
+
+    def set_step(self, step):
+        self._step = step
+
+    def set_data_type(self, dt):
+        if dt is int:
+            self.setValidator(QtGui.QIntValidator())
+        elif dt is float:
+            self.setValidator(QtGui.QDoubleValidator())
+        self._data_type = dt
+
+    def value(self):
+        if self.text().startswith("."):
+            text = "0"+self.text()
+            self.setValue(text)
+
+        return self._data_type(self.text())
+
+    def setValue(self, value):
+        self.setText(str(value))
+
+
+class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
+    def __init__(self, parent=None):
+        super(_doubleSpinBox, self).__init__(parent)
+        self.setButtonSymbols(self.NoButtons)
+        self.setRange(-9999999999999999.0, 9999999999999999.0)
+        self.setDecimals(16)
+        self.setValue(0)
+        self.setStyleSheet("QDoubleSpinBox{border:1px solid}")
+
+    def textFromValue(self, value):
+        return str(value)
+
+
 class PropVector(BaseProperty):
-    def __init__(self, parent=None,dim=3):
+    def __init__(self, parent=None, dim=3):
         super(PropVector, self).__init__(parent)
         hbox = QtWidgets.QHBoxLayout()
         self._value = []
@@ -351,30 +410,26 @@ class PropVector(BaseProperty):
         self._can_emit = True
         self.setLayout(hbox)
 
-    def _add_item(self,index,hbox):
-        _ledit = QtWidgets.QLineEdit()
+    def _add_item(self, index, hbox):
+        _ledit = _valueEdit()
         _ledit.index = index
-        _ledit.setText("0")
-        _ledit.setAlignment(QtCore.Qt.AlignLeft)
-        _ledit.editingFinished.connect(lambda: self._on_value_change(_ledit.text(), _ledit.index))
-        _ledit.setValidator(QtGui.QDoubleValidator())
-        _ledit.setStyleSheet("QLineEdit{border:1px solid}")
+        _ledit.valueChanged.connect(lambda: self._on_value_change(_ledit.value(), _ledit.index))
 
         hbox.addWidget(_ledit)
         self._value.append(0.0)
         self._items.append(_ledit)
 
-    def _on_value_change(self, value=None,index=None):
+    def _on_value_change(self, value=None, index=None):
         if self._can_emit:
             if index is not None:
-                self._value[index] = float(value)
-
+                self._value[index] = value
             self.value_changed.emit(self.toolTip(), self._value)
+        self.value_changed.emit(self.toolTip(), self._value)
 
     def _update_items(self):
-        for index ,value in enumerate(self._value):
-            if float(self._items[index].text()) != value:
-                self._items[index].setText(str(value))
+        for index, value in enumerate(self._value):
+            if self._items[index].value() != value:
+                self._items[index].setValue(value)
 
     def get_value(self):
         return self._value
@@ -389,79 +444,60 @@ class PropVector(BaseProperty):
 
 
 class PropVector2(PropVector):
-    def __init__(self,parent=None):
-        super(PropVector2,self).__init__(parent,2)
+    def __init__(self, parent=None):
+        super(PropVector2, self).__init__(parent, 2)
 
 
 class PropVector3(PropVector):
-    def __init__(self,parent=None):
-        super(PropVector3,self).__init__(parent,3)
+    def __init__(self, parent=None):
+        super(PropVector3, self).__init__(parent, 3)
 
 
 class PropVector4(PropVector):
-    def __init__(self,parent=None):
-        super(PropVector4,self).__init__(parent,4)
+    def __init__(self, parent=None):
+        super(PropVector4, self).__init__(parent, 4)
 
 
-class PropFloat(QtWidgets.QLineEdit):
-
+class PropFloat(_valueEdit):
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
         super(PropFloat, self).__init__(parent)
-        self.setText("0.0")
-        self.setValidator(QtGui.QDoubleValidator())
-        self.editingFinished.connect(self._on_editing_finished)
+        self.valueChanged.connect(self._on_value_changed)
 
-    def _on_editing_finished(self):
-        self.value_changed.emit(self.toolTip(), float(self.text()))
+    def _on_value_changed(self):
+        self.value_changed.emit(self.toolTip(), self.value())
 
     def get_value(self):
-        return float(self.text())
+        return self.value()
 
     def set_value(self, value):
         if value != self.get_value():
-            self.setText(str(value))
+            self.setValue(value)
             self.value_changed.emit(self.toolTip(), value)
 
 
-class PropInt(QtWidgets.QLineEdit):
-
-    value_changed = QtCore.Signal(str, object)
-
+class PropInt(PropFloat):
     def __init__(self, parent=None):
         super(PropInt, self).__init__(parent)
-        self.setText("0")
-        self.setValidator(QtGui.QIntValidator())
-        self.editingFinished.connect(self._on_editing_finished)
-
-    def _on_editing_finished(self):
-        self.value_changed.emit(self.toolTip(), int(self.text()))
-
-    def get_value(self):
-        return int(self.text())
-
-    def set_value(self, value):
-        if value != self.get_value():
-            self.setText(str(value))
-            self.value_changed.emit(self.toolTip(), value)
+        self.set_data_type(int)
 
 
 WIDGET_MAP = {
-    NODE_PROP_QLABEL:       PropLabel,
-    NODE_PROP_QLINEEDIT:    PropLineEdit,
-    NODE_PROP_QTEXTEDIT:    PropTextEdit,
-    NODE_PROP_QCOMBO:       PropComboBox,
-    NODE_PROP_QCHECKBOX:    PropCheckBox,
-    NODE_PROP_QSPINBOX:     PropSpinBox,
-    NODE_PROP_COLORPICKER:  PropColorPicker,
-    NODE_PROP_SLIDER:       PropSlider,
-    NODE_PROP_FILE:         PropFilePath,
-    NODE_PROP_VECTOR2:      PropVector2,
-    NODE_PROP_VECTOR3:      PropVector3,
-    NODE_PROP_VECTOR4:      PropVector4,
-    NODE_PROP_FLOAT:        PropFloat,
-    NODE_PROP_INT:          PropInt,
+    NODE_PROP_QLABEL: PropLabel,
+    NODE_PROP_QLINEEDIT: PropLineEdit,
+    NODE_PROP_QTEXTEDIT: PropTextEdit,
+    NODE_PROP_QCOMBO: PropComboBox,
+    NODE_PROP_QCHECKBOX: PropCheckBox,
+    NODE_PROP_QSPINBOX: PropSpinBox,
+    NODE_PROP_COLORPICKER: PropColorPicker,
+    NODE_PROP_SLIDER: PropSlider,
+    NODE_PROP_FILE: PropFilePath,
+    NODE_PROP_VECTOR2: PropVector2,
+    NODE_PROP_VECTOR3: PropVector3,
+    NODE_PROP_VECTOR4: PropVector4,
+    NODE_PROP_FLOAT: PropFloat,
+    NODE_PROP_INT: PropInt,
 }
 
 
@@ -720,7 +756,6 @@ if __name__ == '__main__':
 
 
     class TestNode(BaseNode):
-
         NODE_NAME = 'test node'
 
         def __init__(self):
@@ -745,11 +780,12 @@ if __name__ == '__main__':
 
 
     def prop_changed(node_id, prop_name, prop_value):
-        print('-'*100)
+        print('-' * 100)
         print(node_id, prop_name, prop_value)
 
+
     def prop_close(node_id):
-        print('='*100)
+        print('=' * 100)
         print(node_id)
 
 

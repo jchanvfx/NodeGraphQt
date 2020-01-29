@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import copy
 
 from NodeGraphQt import QtCore, QtWidgets
 from NodeGraphQt.base.commands import (NodeAddedCmd,
@@ -179,8 +180,13 @@ class NodeGraph(QtCore.QObject):
         node = self.get_node_by_id(node_id)
 
         # prevent signals from causing a infinite loop.
+        _exc = [float, int , str, bool, None]
         if node.get_property(prop_name) != prop_value:
-            node.set_property(prop_name, prop_value)
+            if type(node.get_property(prop_name)) in _exc:
+                value = prop_value
+            else:
+                value = copy.deepcopy(prop_value)
+            node.set_property(prop_name, value)
 
     def _on_node_double_clicked(self, node_id):
         """

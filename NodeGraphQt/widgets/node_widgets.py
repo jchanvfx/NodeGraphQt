@@ -4,7 +4,7 @@ from NodeGraphQt import QtCore, QtWidgets, QtGui
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.widgets.stylesheet import *
 from NodeGraphQt.widgets.file_dialog import file_dialog
-
+from NodeGraphQt.widgets.properties import _valueEdit
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
 
@@ -262,9 +262,9 @@ class NodeLineEdit(NodeBaseWidget):
             self._value_changed()
 
 
-class NodeFloatEdit(NodeLineEdit):
+class NodeFloatEdit(NodeBaseWidget):
     """
-    NodeFloatEdit widget is subclassed from :class:`NodeLineEdit`,
+    NodeFloatEdit widget is subclassed from :class:`NodeBaseWidget`,
     this widget is displayed as a ``QLineEdit`` embedded in a node.
 
     .. note::
@@ -272,63 +272,58 @@ class NodeFloatEdit(NodeLineEdit):
         :meth:`NodeGraphQt.BaseNode.add_float_input`
     """
 
-    def __init__(self, parent=None, name='', label='', value=0.0):
+    def __init__(self, parent=None, name='', label='', value = 0.0):
         super(NodeFloatEdit, self).__init__(parent, name, label)
-        self._ledit.setValidator(QtGui.QDoubleValidator())
-        self.text = str(value)
-        self._ledit.setText(self.text)
+        self._ledit = _valueEdit()
+        self._ledit.setStyleSheet(STYLE_QLINEEDIT)
+        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
+        self._ledit.valueChanged.connect(self._value_changed)
+        self._ledit.clearFocus()
+        self._ledit.setValue(value)
+        group = _NodeGroupBox(label)
+        group.add_node_widget(self._ledit)
+        group.setMaximumWidth(120)
+        self.setWidget(group)
+
+    @property
+    def type_(self):
+        return 'FloatEditNodeWidget'
+
+    @property
+    def widget(self):
+        return self._ledit
 
     @property
     def value(self):
         """
-        Returns the widgets current float value.
+        Returns the widgets current text.
 
         Returns:
-            float: float value.
+            float: current value.
         """
-        value = float(self._ledit.text())
-        return value
+        return self._ledit.value()
 
     @value.setter
-    def value(self, text=0.0):
-        if text != self.value:
-            self._ledit.setText(str(text))
+    def value(self, value):
+        if value != self.value:
+            self._ledit.setValue(value)
             self._value_changed()
 
 
-class NodeIntEdit(NodeLineEdit):
+class NodeIntEdit(NodeFloatEdit):
     """
-    NodeIntEdit widget is subclassed from :class:`NodeLineEdit`,
+    NodeIntEdit widget is subclassed from :class:`NodeFloatEdit`,
     this widget is displayed as a ``QLineEdit`` embedded in a node.
 
     .. note::
         `To embed a ``QLineEdit`` in a node see func:`
-        :meth:`NodeGraphQt.BaseNode.add_float_input`
+        :meth:`NodeGraphQt.BaseNode.add_int_input`
     """
 
-    def __init__(self, parent=None, name='', label='', value=0.0):
+    def __init__(self, parent=None, name='', label='', value=0):
         super(NodeIntEdit, self).__init__(parent, name, label)
-        self._ledit.setValidator(QtGui.QIntValidator())
-        self.text = str(value)
-        self._ledit.setText(self.text)
-
-    @property
-    def value(self):
-        """
-        Returns the widgets current int value.
-
-        Returns:
-            int: int value.
-        """
-        value = int(self._ledit.text())
-        return value
-
-    @value.setter
-    def value(self, text=0.0):
-        if text != self.value:
-            self._ledit.setText(str(text))
-            self._value_changed()
-
+        self._ledit.set_data_type(int)
+        self._ledit.setValue(value)
 
 class NodeCheckBox(NodeBaseWidget):
     """
