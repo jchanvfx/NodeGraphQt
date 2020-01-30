@@ -2,7 +2,6 @@ from .node_base.module_node import (ModuleNode,
                                     get_functions_from_module,
                                     get_functions_from_type)
 
-import math
 import os
 import sys
 import random
@@ -10,19 +9,11 @@ import numpy
 import numpydoc.docscrape
 import inspect
 
-# add basic math functions to math library
-math.add = lambda x, y: x + y
-math.sub = lambda x, y: x - y
-math.mul = lambda x, y: x * y
-math.div = lambda x, y: x / y
-
-
-def get_value(self,index):
-    return self[index]
-
-
-def get_item(self,index):
-    return self.items()[index]
+import example_auto_nodes.wrappers.math as _math
+import example_auto_nodes.wrappers.list as _list
+import example_auto_nodes.wrappers.dict as _dict
+import example_auto_nodes.wrappers.str as _str
+import example_auto_nodes.wrappers.tuple as _tuple
 
 
 class MathModuleNode(ModuleNode):
@@ -36,7 +27,7 @@ class MathModuleNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'math module'
 
-    module_functions = get_functions_from_type(math)
+    module_functions = get_functions_from_type(_math)
 
     def __init__(self):
         super(MathModuleNode, self).__init__(float, float)
@@ -162,8 +153,8 @@ class StringFunctionsNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'String Functions'
 
-    module_functions = get_functions_from_type(str)
-    module_functions["get value"] = get_value
+    module_functions = get_functions_from_type(_str)
+
 
     def __init__(self):
         super(StringFunctionsNode, self).__init__()
@@ -180,8 +171,7 @@ class ListFunctionsNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'List Functions'
 
-    module_functions = get_functions_from_type(list)
-    module_functions["get value"] = get_value
+    module_functions = get_functions_from_type(_list)
 
     def __init__(self):
         super(ListFunctionsNode, self).__init__()
@@ -198,8 +188,7 @@ class DictFunctionsNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'Dict Functions'
 
-    module_functions = get_functions_from_type(list)
-    module_functions["get item"] = get_item
+    module_functions = get_functions_from_type(_dict)
 
     def __init__(self):
         super(DictFunctionsNode, self).__init__()
@@ -216,8 +205,7 @@ class TupleFunctionsNode(ModuleNode):
     # set the initial default node name.
     NODE_NAME = 'Tuple Functions'
 
-    module_functions = get_functions_from_type(tuple)
-    module_functions["get value"] = get_value
+    module_functions = get_functions_from_type(_tuple)
 
     def __init__(self):
         super(TupleFunctionsNode, self).__init__()
