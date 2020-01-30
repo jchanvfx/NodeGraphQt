@@ -66,3 +66,22 @@ class TextFileInputNode(BaseNode):
             else:
                 print('No existe %s' % path)
                 self.set_property('output', '')
+
+
+class BoolInputNode(BaseNode):
+    """
+    Input Bool data.
+    """
+
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Bool'
+
+    def __init__(self):
+        super(BoolInputNode, self).__init__()
+        self.add_output('out')
+        self.create_property('out', None)
+        self.add_combo_menu('combo', 'Bool value', items=['True', 'False'], tab='widgets')
+        self.view.widgets['combo'].value_changed.connect(self.update_streams)
+
+    def run(self):
+        self.set_property('out', eval(self.get_property('combo')))

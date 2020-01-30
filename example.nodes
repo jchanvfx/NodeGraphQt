@@ -1,111 +1,6 @@
 {
   "nodes":{
-    "0x150ad608":{
-      "type_":"Math.MathFunctionsNode",
-      "icon":null,
-      "name":"Math Functions A",
-      "color":[
-        10,
-        30,
-        32
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        254,
-        171,
-        32
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":186.0,
-      "height":103.0,
-      "pos":[
-        -247.0,
-        103.0
-      ],
-      "custom":{
-        "funcs":"mul",
-        "output":8.0,
-        "x":3.2,
-        "y":2.5
-      }
-    },
-    "0x161e21c8":{
-      "type_":"Math.MathFunctionsNode",
-      "icon":null,
-      "name":"Math Functions B",
-      "color":[
-        10,
-        30,
-        32
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        254,
-        171,
-        32
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":185.0,
-      "height":103.0,
-      "pos":[
-        -256.0,
-        -188.0
-      ],
-      "custom":{
-        "funcs":"add",
-        "output":66.1415926535898,
-        "x":63.0,
-        "y":3.141592653589793
-      }
-    },
-    "0x161e2b48":{
-      "type_":"Math.MathFunctionsNode",
-      "icon":null,
-      "name":"Math Functions C",
-      "color":[
-        10,
-        30,
-        32
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        254,
-        171,
-        32
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":186.0,
-      "height":103.0,
-      "pos":[
-        10.0,
-        -56.0
-      ],
-      "custom":{
-        "funcs":"add",
-        "output":74.1415926535898,
-        "x":66.1415926535898,
-        "y":8.0
-      }
-    },
-    "0x161e8508":{
+    "0x1508f548":{
       "type_":"Inputs.DataInputNode",
       "icon":null,
       "name":"Input A",
@@ -132,14 +27,14 @@
       "width":173.0,
       "height":91.0,
       "pos":[
-        -500.0,
-        44.0
+        -417.0,
+        -160.0
       ],
       "custom":{
-        "out":"3.2"
+        "out":"Hola"
       }
     },
-    "0x161e8d48":{
+    "0x160ea048":{
       "type_":"Inputs.DataInputNode",
       "icon":null,
       "name":"Input B",
@@ -166,14 +61,14 @@
       "width":173.0,
       "height":91.0,
       "pos":[
-        -502.0,
-        190.0
+        -390.0,
+        -23.0
       ],
       "custom":{
-        "out":"2.5"
+        "out":"Chau"
       }
     },
-    "0x161ed4c8":{
+    "0x160ea748":{
       "type_":"Viewers.DataViewerNode",
       "icon":null,
       "name":"Output",
@@ -200,14 +95,86 @@
       "width":170,
       "height":91.0,
       "pos":[
-        290.0,
-        -136.0
+        186.0,
+        -231.0
       ],
       "custom":{
-        "data":"74.1415926535898"
+        "data":"Hola"
       }
     },
-    "0x161f41c8":{
+    "0x160f3688":{
+      "type_":"Logics.ifNode",
+      "icon":null,
+      "name":"If",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "width":170,
+      "height":108.0,
+      "pos":[
+        -75.0,
+        -178.0
+      ],
+      "custom":{
+        "condition":0.0,
+        "out":"Hola"
+      }
+    },
+    "0x160fad08":{
+      "type_":"Math.MathFunctionsNode",
+      "icon":null,
+      "name":"Math Functions",
+      "color":[
+        25,
+        58,
+        51,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "width":181.0,
+      "height":103.0,
+      "pos":[
+        -411.0,
+        -319.0
+      ],
+      "custom":{
+        "funcs":"fmod",
+        "output":1.0,
+        "x":219.0,
+        "y":2.0
+      }
+    },
+    "0x17678bc8":{
       "type_":"Inputs.TickTimeNode",
       "icon":null,
       "name":"Tick Time",
@@ -234,21 +201,22 @@
       "width":173.0,
       "height":91.0,
       "pos":[
-        -514.0,
-        -246.0
+        -678.0,
+        -393.0
       ],
       "custom":{
-        "out":"63"
+        "out":"219"
       }
     },
-    "0x1750b048":{
-      "type_":"Math.MathFunctionsNode",
+    "0x1768efc8":{
+      "type_":"Inputs.DataInputNode",
       "icon":null,
-      "name":"Math Functions C 1",
+      "name":"Basic Input",
       "color":[
-        10,
-        30,
-        32
+        13,
+        18,
+        23,
+        255
       ],
       "border_color":[
         74,
@@ -257,95 +225,83 @@
         255
       ],
       "text_color":[
-        254,
-        171,
-        32
+        255,
+        255,
+        255,
+        180
       ],
       "disabled":false,
       "selected":true,
-      "width":185.66666666666669,
-      "height":103.0,
+      "width":173.0,
+      "height":91.0,
       "pos":[
-        -528.8333333333335,
-        -110.5
+        -678.0,
+        -207.0
       ],
       "custom":{
-        "funcs":"pi",
-        "output":3.141592653589793,
-        "x":86.2,
-        "y":5.7
+        "out":"2"
       }
     }
   },
   "connections":[
     {
-      "in":[
-        "0x150ad608",
-        "x"
-      ],
       "out":[
-        "0x161e8508",
+        "0x1508f548",
         "out"
+      ],
+      "in":[
+        "0x160f3688",
+        "then"
       ]
     },
     {
-      "in":[
-        "0x150ad608",
-        "y"
-      ],
       "out":[
-        "0x161e8d48",
+        "0x160ea048",
         "out"
-      ]
-    },
-    {
-      "out":[
-        "0x150ad608",
-        "output"
       ],
       "in":[
-        "0x161e2b48",
-        "y"
+        "0x160f3688",
+        "else"
       ]
     },
     {
       "in":[
-        "0x161e21c8",
-        "x"
-      ],
-      "out":[
-        "0x161f41c8",
-        "out"
-      ]
-    },
-    {
-      "in":[
-        "0x161e21c8",
-        "y"
-      ],
-      "out":[
-        "0x1750b048",
-        "output"
-      ]
-    },
-    {
-      "out":[
-        "0x161e21c8",
-        "output"
-      ],
-      "in":[
-        "0x161e2b48",
-        "x"
-      ]
-    },
-    {
-      "out":[
-        "0x161e2b48",
-        "output"
-      ],
-      "in":[
-        "0x161ed4c8",
+        "0x160ea748",
         "data"
+      ],
+      "out":[
+        "0x160f3688",
+        "out"
+      ]
+    },
+    {
+      "in":[
+        "0x160f3688",
+        "condition"
+      ],
+      "out":[
+        "0x160fad08",
+        "output"
+      ]
+    },
+    {
+      "in":[
+        "0x160fad08",
+        "x"
+      ],
+      "out":[
+        "0x17678bc8",
+        "out"
+      ]
+    },
+    {
+      "in":[
+        "0x160fad08",
+        "y"
+      ],
+      "out":[
+        "0x1768efc8",
+        "out"
       ]
     }
   ]
