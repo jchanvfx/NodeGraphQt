@@ -12,7 +12,6 @@ class ifNode(BaseNode):
     def __init__(self):
         super(ifNode, self).__init__()
         self.condition = self.add_input('condition')
-        self.create_property('condition', None)
         self._then = self.add_input('then')
         self._else = self.add_input('else')
         self.add_output('out')
