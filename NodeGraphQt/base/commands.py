@@ -67,7 +67,6 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
 
     def redo(self):
         do_redo = False
-
         try:
             if self.old_val != self.new_val:
                 do_redo = True

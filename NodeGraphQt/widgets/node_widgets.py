@@ -6,6 +6,7 @@ from NodeGraphQt.widgets.stylesheet import *
 from NodeGraphQt.widgets.file_dialog import file_dialog
 from NodeGraphQt.widgets.properties import _valueEdit
 
+
 class _NodeGroupBox(QtWidgets.QGroupBox):
 
     def __init__(self, label, parent=None):

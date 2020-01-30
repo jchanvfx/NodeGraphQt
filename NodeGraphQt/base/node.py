@@ -7,10 +7,10 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QTEXTEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
-                                   IN_PORT, OUT_PORT,
                                    NODE_PROP_FILE,
                                    NODE_PROP_FLOAT,
-                                   NODE_PROP_INT)
+                                   NODE_PROP_INT,
+                                   IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.node_base import NodeItem
