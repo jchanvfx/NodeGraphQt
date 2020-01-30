@@ -498,8 +498,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
         hbox.addWidget(self._edit)
         hbox.addWidget(self._slider)
         self.setLayout(hbox)
-        # self._slider_press_event = self._slider.mousePressEvent
-        # self._slider.mousePressEvent = self.sliderMousePressEvent
+
         self._mul = 1000.0
         self.set_min(0)
         self.set_max(10)
@@ -646,8 +645,9 @@ class PropFloat(_valueSliderEdit):
         return self.value()
 
     def set_value(self, value):
-        self.setValue(value)
-        self.value_changed.emit(self.toolTip(), value)
+        if value != self.get_value():
+            self.setValue(value)
+            self.value_changed.emit(self.toolTip(), value)
 
 
 class PropInt(PropFloat):
