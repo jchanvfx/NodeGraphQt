@@ -1,19 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import math
+import example_nodes.wrappers.math as math
 import inspect
 from functools import partial
-
-# add basic math functions to math library
-math.add = lambda x, y: x + y
-math.sub = lambda x, y: x - y
-math.mul = lambda x, y: x * y
-math.div = lambda x, y: x / y
-
-# Transform float to functions
-for constant in ['pi', 'e', 'tau', 'inf', 'nan']:
-    setattr(math, constant, partial(lambda x: x, getattr(math, constant)))
-
 from NodeGraphQt import BaseNode
 
 

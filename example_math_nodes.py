@@ -40,37 +40,7 @@ if __name__ == '__main__':
     graph.node_double_clicked.connect(show_nodes_list)
 
     # registered nodes.
-    for n in Nodes:
-        graph.register_node(n)
-
-    mathNodeA = graph.create_node('Math.MathFunctionsNode',
-                                name='Math Functions A',
-                                color='#0a1e20',
-                                text_color='#feab20',
-                                pos=[-250, 70])
-
-    mathNodeB = graph.create_node('Math.MathFunctionsNode',
-                                name='Math Functions B',
-                                color='#0a1e20',
-                                text_color='#feab20',
-                                pos=[-250, -70])
-
-    mathNodeC = graph.create_node('Math.MathFunctionsNode',
-                                  name='Math Functions C',
-                                  color='#0a1e20',
-                                  text_color='#feab20',
-                                  pos=[0, 0])
-
-    inputANode = graph.create_node('Inputs.DataInputNode',
-                                   name='Input A',
-                                   pos=[-500, -50])
-
-    inputBNode = graph.create_node('Inputs.DataInputNode',
-                                   name='Input B',
-                                   pos=[-500, 50])
-
-    outputNode = graph.create_node('Viewers.DataViewerNode',
-                                   name='Output',
-                                   pos=[250, 0])
+    [graph.register_node(n) for n in Nodes] 
+    graph.load_session('example.nodes')
 
     app.exec_()

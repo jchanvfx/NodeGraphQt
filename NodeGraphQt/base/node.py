@@ -853,7 +853,7 @@ class BaseNode(NodeObject):
             for port, nodeList in node.connected_output_nodes().items():
                 nodes.extend(nodeList)
 
-            if not nodes:
+            if not node.connected_output_nodes():
                 try:
                     node.run()
                 except Exception as error:
