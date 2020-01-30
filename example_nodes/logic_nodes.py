@@ -65,7 +65,8 @@ class BooleanNode(BaseNode):
                             'Functions',
                             items=list(self.logics.keys()),
                             tab='widgets')
-        self.func = logics['and']
+
+        self.func = self.logics['and']
         # switch math function type
         self.view.widgets['funcs'].value_changed.connect(self.addFunction)
         self.view.widgets['funcs'].value_changed.connect(self.update_streams)
@@ -74,7 +75,7 @@ class BooleanNode(BaseNode):
         """
         Create inputs based on math functions arguments.
         """
-        self.func = logics[func]
+        self.func = self.logics[func]
         if self.b.visible() and not 'b' in self.func:
             self.b.set_visible(False)
         elif not self.b.visible():
