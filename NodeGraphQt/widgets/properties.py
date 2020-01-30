@@ -329,18 +329,79 @@ class PropFilePath(BaseProperty):
             self._on_value_change(_value)
 
 
+class _valueMenu(QtWidgets.QMenu):
+
+    mouseMove = QtCore.Signal(object)
+    mouseRelease = QtCore.Signal(object)
+
+    def __init__(self, parent=None):
+        super(_valueMenu, self).__init__(parent)
+        self.step = 1
+        self.last_action = None
+        self.steps = []
+
+    def set_steps(self,steps):
+        self.clear()
+        self.steps = steps
+        for step in steps:
+            self._add_action(step)
+
+    def _add_action(self,step):
+        action = QtWidgets.QAction(str(step), self)
+        action.step = step
+        self.addAction(action)
+
+    def mouseMoveEvent(self, event):
+        self.mouseMove.emit(event)
+        super(_valueMenu, self).mouseMoveEvent(event)
+
+        action = self.actionAt(event.pos())
+        if action:
+            self.last_action = action
+            self.step = action.step
+        elif self.last_action:
+            self.setActiveAction(self.last_action)
+
+    def mousePressEvent(self, event):
+        return
+
+    def mouseReleaseEvent(self, event):
+        self.mouseRelease.emit(event)
+        super(_valueMenu, self).mouseReleaseEvent(event)
+
+    def set_data_type(self,dt):
+        if dt is int:
+            new_steps = []
+            for step in self.steps:
+                if "." not in str(step):
+                    new_steps.append(step)
+            self.set_steps(new_steps)
+        elif dt is float:
+            self.set_steps(self.steps)
+
+
 class _valueEdit(QtWidgets.QLineEdit):
     valueChanged = QtCore.Signal(object)
 
     def __init__(self, parent=None):
         super(_valueEdit, self).__init__(parent)
         self.mid_state = False
-        self.pre_x = 0
-        self._step = 1
         self.setValue(0)
         self._data_type = float
-        self.textChanged.connect(self._on_value_changed)
+
+        self.pre_x = 0
+        self._step = 1
         self._last_value = 0
+        self._tmp_value = 0
+        self._speed = 0.1
+
+        self.textChanged.connect(self._on_value_changed)
+
+        self.menu = _valueMenu()
+        self.menu.mouseMove.connect(self.mouseMoveEvent)
+        self.menu.mouseRelease.connect(self.mouseReleaseEvent)
+        steps = [0.001,0.01,0.1,1,10,100,1000]
+        self.menu.set_steps(steps)
 
     def _on_value_changed(self, text):
         self.valueChanged.emit(self.value())
@@ -348,18 +409,28 @@ class _valueEdit(QtWidgets.QLineEdit):
 
     def mouseMoveEvent(self, event):
         if self.mid_state:
-            delta = event.x() - self.pre_x
-            self.setValue(self.value() + delta * self._step)
+            if self.pre_x is None:
+                self.pre_x = event.x()
+            self.set_step(self.menu.step)
+            delta = (event.x() - self.pre_x)
+            self._tmp_value += delta * self._speed * self._step
+            if abs(self._tmp_value) > self._step:
+                value = self.value() + delta * self._step
+                self.setValue(value)
+                self._tmp_value = 0
             self.pre_x = event.x()
         super(_valueEdit,self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MiddleButton:
             self.mid_state = True
-            self.pre_x = event.x()
+            self.pre_x = None
+            self._tmp_value = 0
+            self.menu.exec_(QtGui.QCursor.pos())
         super(_valueEdit,self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
+        self.menu.close()
         self.mid_state = False
         super(_valueEdit,self).mouseReleaseEvent(event)
 
@@ -372,6 +443,7 @@ class _valueEdit(QtWidgets.QLineEdit):
         elif dt is float:
             self.setValidator(QtGui.QDoubleValidator())
         self._data_type = dt
+        self.menu.set_data_type(dt)
 
     def value(self):
         if self.text().startswith("."):

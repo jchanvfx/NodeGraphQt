@@ -296,7 +296,7 @@ class NodeFloatEdit(NodeBaseWidget):
     @property
     def value(self):
         """
-        Returns the widgets current text.
+        Returns the widgets current value.
 
         Returns:
             float: current value.
