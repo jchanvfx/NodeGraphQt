@@ -1,7 +1,8 @@
 from NodeGraphQt import QtCore
 from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
                                    NODE_PROP_VECTOR3,
-                                   NODE_PROP_VECTOR4)
+                                   NODE_PROP_VECTOR4,
+                                   NODE_PROP_SLIDER)
 
 from .node_base.auto_node import AutoNode
 import os
@@ -18,7 +19,7 @@ class FloatInputNode(AutoNode):
     def __init__(self):
         super(FloatInputNode, self).__init__()
         self.output = self.add_output('out', float)
-        self.add_float_input('out', 'Float Value', value=0.0)
+        self.add_float_input('out', 'Float Value', value=0.0,range=(-10,10))
 
 
 class IntInputNode(AutoNode):

@@ -386,26 +386,26 @@ class _valueEdit(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(_valueEdit, self).__init__(parent)
         self.mid_state = False
-        self.setValue(0)
         self._data_type = float
+        self.setText("0")
 
         self.pre_x = 0
         self._step = 1
-        self._last_value = 0
         self._tmp_value = 0
         self._speed = 0.1
 
-        self.textChanged.connect(self._on_value_changed)
+        self.textChanged.connect(self._on_text_changed)
 
         self.menu = _valueMenu()
         self.menu.mouseMove.connect(self.mouseMoveEvent)
         self.menu.mouseRelease.connect(self.mouseReleaseEvent)
-        steps = [0.001,0.01,0.1,1,10,100,1000]
+        steps = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
         self.menu.set_steps(steps)
 
-    def _on_value_changed(self, text):
+        self.set_data_type(float)
+
+    def _on_text_changed(self, value):
         self.valueChanged.emit(self.value())
-        self._last_value = text
 
     def mouseMoveEvent(self, event):
         if self.mid_state:
@@ -445,15 +445,117 @@ class _valueEdit(QtWidgets.QLineEdit):
         self._data_type = dt
         self.menu.set_data_type(dt)
 
+    def _convert_text(self,text):
+        # int("1.0") will return error
+        # so we use int(float("1.0"))
+
+        value = float(text)
+        if self._data_type is int:
+            value = int(value)
+        return value
+
     def value(self):
         if self.text().startswith("."):
             text = "0"+self.text()
-            self.setValue(text)
-
-        return self._data_type(self.text())
+            self.setText(text)
+        return self._convert_text(self.text())
 
     def setValue(self, value):
-        self.setText(str(value))
+        if value != self.value():
+            self.setText(str(self._convert_text(value)))
+
+
+class _slider(QtWidgets.QSlider):
+    def __init__(self, parent = None):
+        super(_slider,self).__init__(parent)
+        self.setOrientation(QtCore.Qt.Horizontal)
+        self.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                   QtWidgets.QSizePolicy.Preferred)
+
+    def _update_value(self,x):
+        value = (self.maximum() - self.minimum()) * x / self.width() + self.minimum()
+        self.setValue(value)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self._update_value(event.pos().x())
+        super(_slider,self).mousePressEvent(event)
+
+
+class _valueSliderEdit(QtWidgets.QWidget):
+    valueChanged = QtCore.Signal(object)
+
+    def __init__(self, parent=None):
+        super(_valueSliderEdit, self).__init__(parent)
+        self._edit = _valueEdit()
+        self._edit.valueChanged.connect(self._on_edit_changed)
+        self._edit.setMaximumWidth(70)
+        self._slider = _slider()
+        self._slider.valueChanged.connect(self._on_slider_changed)
+
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._edit)
+        hbox.addWidget(self._slider)
+        self.setLayout(hbox)
+        # self._slider_press_event = self._slider.mousePressEvent
+        # self._slider.mousePressEvent = self.sliderMousePressEvent
+        self._mul = 1000.0
+        self.set_min(0)
+        self.set_max(10)
+        self.set_data_type(float)
+        self._lock = False
+
+    def _on_edit_changed(self,value):
+        if self._lock:
+            return
+        self._lock = True
+        self._set_slider_value(value)
+        self.valueChanged.emit(self._edit.value())
+        self._lock = False
+
+    def _on_slider_changed(self,value):
+        value = value / float(self._mul)
+        self._edit.setValue(value)
+
+    def _set_slider_value(self,value):
+        value = int(value * self._mul)
+
+        if value == self._slider.value():
+            return
+
+        _min = self._slider.minimum()
+        _max = self._slider.maximum()
+        if _min<=value<=_max:
+            self._slider.setValue(value)
+        elif value < _min and self._slider.value() != _min:
+            self._slider.setValue(_min)
+        elif value > _max and self._slider.value() != _max:
+            self._slider.setValue(_max)
+
+    def set_min(self, value=0):
+        self._slider.setMinimum(int(value*self._mul))
+
+    def set_max(self, value=10):
+        self._slider.setMaximum(int(value*self._mul))
+
+    def set_data_type(self, dt):
+        _min = int(self._slider.minimum()/self._mul)
+        _max = int(self._slider.maximum()/self._mul)
+        if dt is int:
+            self._mul = 1.0
+        elif dt is float:
+            self._mul = 1000.0
+
+        self.set_min(_min)
+        self.set_max(_max)
+        self._edit.set_data_type(dt)
+
+    def value(self):
+        return self._edit.value()
+
+    def setValue(self,value):
+        self._edit.setValue(value)
 
 
 class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
@@ -530,23 +632,22 @@ class PropVector4(PropVector):
         super(PropVector4, self).__init__(parent, 4)
 
 
-class PropFloat(_valueEdit):
+class PropFloat(_valueSliderEdit):
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
         super(PropFloat, self).__init__(parent)
         self.valueChanged.connect(self._on_value_changed)
 
-    def _on_value_changed(self):
-        self.value_changed.emit(self.toolTip(), self.value())
+    def _on_value_changed(self, value):
+        self.value_changed.emit(self.toolTip(), value)
 
     def get_value(self):
         return self.value()
 
     def set_value(self, value):
-        if value != self.get_value():
-            self.setValue(value)
-            self.value_changed.emit(self.toolTip(), value)
+        self.setValue(value)
+        self.value_changed.emit(self.toolTip(), value)
 
 
 class PropInt(PropFloat):

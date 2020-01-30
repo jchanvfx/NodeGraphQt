@@ -563,7 +563,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_float_input(self, name, label='', value=0.0, tab=None):
+    def add_float_input(self, name, label='', value=0.0, range=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -577,15 +577,16 @@ class BaseNode(NodeObject):
             name (str): name for the custom property.
             label (str): label to be displayed.
             value (float): pre filled value.
+            range (tuple): slider range
             tab (str): name of the widget tab to display in.
         """
         self.create_property(
-            name, value, widget_type=NODE_PROP_FLOAT, tab=tab)
+            name, value, widget_type=NODE_PROP_FLOAT, range=range, tab=tab)
         widget = NodeFloatEdit(self.view, name, label, value)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_int_input(self, name, label='', value=0, tab=None):
+    def add_int_input(self, name, label='', value=0, range=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -599,10 +600,11 @@ class BaseNode(NodeObject):
             name (str): name for the custom property.
             label (str): label to be displayed.
             value (int): pre filled value.
+            range (tuple): slider range
             tab (str): name of the widget tab to display in.
         """
         self.create_property(
-            name, value, widget_type=NODE_PROP_INT, tab=tab)
+            name, value, widget_type=NODE_PROP_INT, range=range, tab=tab)
         widget = NodeIntEdit(self.view, name, label, value)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)

@@ -325,6 +325,7 @@ class NodeIntEdit(NodeFloatEdit):
         self._ledit.set_data_type(int)
         self._ledit.setValue(value)
 
+
 class NodeCheckBox(NodeBaseWidget):
     """
     NodeCheckBox widget is subclassed from :class:`NodeBaseWidget`,

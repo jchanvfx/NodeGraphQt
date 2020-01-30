@@ -39,6 +39,7 @@ class BaseMenu(QtWidgets.QMenu):
                     menus.append(menu)
         return menus
 
+
 class GraphAction(QtWidgets.QAction):
 
     executed = QtCore.Signal(object)

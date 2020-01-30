@@ -93,10 +93,7 @@ class AutoNode(BaseNode):
         try:
             self.run()
         except Exception as error:
-            self._autoCook = _tmp
             self.error(error)
-            return
-
         self._autoCook = _tmp
 
         if self.error():
@@ -141,6 +138,7 @@ class AutoNode(BaseNode):
         self.set_port_type(name, type(value))
         if name in self.model.custom_properties.keys():
             self.cook()
+
 
     def set_port_type(self, port, value_type):
         current_port = None

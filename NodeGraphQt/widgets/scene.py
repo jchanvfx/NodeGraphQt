@@ -6,6 +6,7 @@ from NodeGraphQt.constants import (VIEWER_BG_COLOR,
                                    VIEWER_GRID_OVERLAY,
                                    VIEWER_GRID_COLOR)
 
+
 class NodeScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent=None):
