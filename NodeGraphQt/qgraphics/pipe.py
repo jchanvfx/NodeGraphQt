@@ -8,7 +8,8 @@ from NodeGraphQt.constants import (
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
     Z_VAL_NODE_WIDGET,
-    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED)
+    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED,
+    ITEM_CACHE_MODE)
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
@@ -39,6 +40,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(-size, size))
         self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
+        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''

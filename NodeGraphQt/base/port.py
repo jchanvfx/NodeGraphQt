@@ -204,3 +204,19 @@ class Port(object):
         # emit "port_disconnected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
         graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])
+
+    @property
+    def color(self):
+        return self.__view.color
+
+    @color.setter
+    def color(self, color=(0, 0, 0, 255)):
+        self.__view.color = color
+
+    @property
+    def border_color(self):
+        return self.__view.border_color
+
+    @border_color.setter
+    def border_color(self, color=(0, 0, 0, 255)):
+        self.__view.border_color = color

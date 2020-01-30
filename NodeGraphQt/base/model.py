@@ -232,7 +232,19 @@ class NodeModel(object):
             node_dict['outputs'] = outputs
 
         custom_props = node_dict.pop('_custom_prop', {})
+
         if custom_props:
+            # exclude the data which can not be serialized (like numpy array)
+            to_remove = []
+            types = [float, str, int, list, dict, bool, None, complex, tuple]
+            for k, v in custom_props.items():
+                if type(v) not in types:
+                    try:
+                        json.dumps(v)
+                    except:
+                        to_remove.append(k)
+            [custom_props.pop(k) for k in to_remove]
+
             node_dict['custom'] = custom_props
 
         exclude = ['_graph_model',

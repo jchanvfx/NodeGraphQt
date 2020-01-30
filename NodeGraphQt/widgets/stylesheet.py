@@ -23,6 +23,8 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     color: rgba(255, 255, 255, 85);
+    padding: 0px;
+    left:-4px;
 }
 '''
 
@@ -166,5 +168,28 @@ QCheckBox {
 QCheckBox::indicator {
     width: 13px;
     height: 13px;
+}
+'''
+
+STYLE_QPUSHBUTTON = '''
+QPushButton {
+    background: transparent;
+    border-style: outset;
+    border-radius: 1px;  
+    border-width: 1px;
+    border-color: rgb(30,30,30);
+    max-width: 200;
+}
+QPushButton::pressed {
+    border-style: inset;
+}
+QPushButton::hover {
+    background: rgba(255,255,255,30);
+}
+'''
+STYLE_QWIDGET = '''
+QWidget{
+    border: 0px;
+    background-color: transparent;
 }
 '''

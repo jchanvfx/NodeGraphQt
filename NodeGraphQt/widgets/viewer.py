@@ -3,10 +3,9 @@
 import math
 import os
 
-from NodeGraphQt import QtGui, QtCore, QtWidgets
+from NodeGraphQt import QtGui, QtCore, QtWidgets ,QtOpenGL
 from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
-                                   PIPE_LAYOUT_CURVED,
-                                   SCENE_AREA)
+                                   PIPE_LAYOUT_CURVED)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import Pipe, LivePipe
@@ -14,7 +13,8 @@ from NodeGraphQt.qgraphics.port import PortItem
 from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
-from NodeGraphQt.widgets.tab_search import TabSearchWidget
+from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
+from NodeGraphQt.widgets.file_dialog import file_dialog
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -42,15 +42,20 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
 
-        scene_pos = (SCENE_AREA / 2) * -1
         self.setScene(NodeScene(self))
-        self.setSceneRect(scene_pos, scene_pos, SCENE_AREA, SCENE_AREA)
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+        self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
+        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+
         self.setAcceptDrops(True)
         self.resize(850, 800)
+
+        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        self._update_scene()
+        self._last_size = self.size()
 
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None
@@ -73,7 +78,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._search_widget = TabSearchWidget(self)
+        self._search_widget = TabSearchMenuWidget(self)
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         # workaround fix for shortcuts from the non-native menu actions
@@ -81,13 +86,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar = QtWidgets.QMenuBar(self)
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
-        menu_bar.resize(0, 0)
+        menu_bar.setMaximumWidth(0)
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
         menu_bar.addMenu(self._ctx_menu)
         menu_bar.addMenu(self._ctx_node_menu)
-
         self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
@@ -105,7 +109,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- private ---
 
-    def _set_viewer_zoom(self, value, sensitivity=0.0):
+    def _set_viewer_zoom(self, value, sensitivity=None, pos=None):
+        if pos:
+            pos = self.mapToScene(pos)
+        if sensitivity is None:
+            scale = 1.001 ** value
+            self.scale(scale,scale,pos)
+            return
+
         if value == 0.0:
             return
         scale = (0.9 + sensitivity) if value < 0.0 else (1.1 - sensitivity)
@@ -116,13 +127,30 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if ZOOM_MAX <= zoom:
             if scale == 1.1:
                 return
-        self.scale(scale, scale)
+        self.scale(scale, scale, pos)
 
     def _set_viewer_pan(self, pos_x, pos_y):
-        scroll_x = self.horizontalScrollBar()
-        scroll_y = self.verticalScrollBar()
-        scroll_x.setValue(scroll_x.value() - pos_x)
-        scroll_y.setValue(scroll_y.value() - pos_y)
+        speed = self._scene_range.width() * 0.001
+        x = -pos_x * speed
+        y = -pos_y * speed
+        self._scene_range.adjust(x, y, x, y)
+        self._update_scene()
+
+    def scale(self, sx, sy, pos = None):
+        scale = [sx, sx]
+
+        center = pos or self._scene_range.center()
+
+        w = self._scene_range.width() / scale[0]
+        h = self._scene_range.height() / scale[1]
+        self._scene_range = QtCore.QRectF(center.x() - (center.x() - self._scene_range.left()) / scale[0],
+                                   center.y() - (center.y() - self._scene_range.top()) / scale[1], w, h)
+
+        self._update_scene()
+
+    def _update_scene(self):
+        self.setSceneRect(self._scene_range)
+        self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
 
     def _combined_rect(self, nodes):
         group = self.scene().createItemGroup(nodes)
@@ -156,6 +184,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- reimplemented events ---
 
     def resizeEvent(self, event):
+        delta = max(self.size().width()/self._last_size.width(),
+                        self.size().height()/self._last_size.height())
+        self._set_viewer_zoom(delta)
+        self._last_size = self.size()
         super(NodeViewer, self).resizeEvent(event)
 
     def contextMenuEvent(self, event):
@@ -168,7 +200,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
             if nodes:
                 node = nodes[0]
-                ctx_menu = self._ctx_node_menu.get_menu(node.type_)
+                ctx_menu = self._ctx_node_menu.get_menu(node.type_,node.id)
                 if ctx_menu:
                     for action in ctx_menu.actions():
                         if not action.menu():
@@ -201,7 +233,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         map_pos = self.mapToScene(event.pos())
 
         # pipe slicer enabled.
-        if self.ALT_state and self.SHIFT_state:
+        if self.ALT_state and self.SHIFT_state and self.LMB_state:
             self._SLICER_PIPE.draw_path(map_pos, map_pos)
             self._SLICER_PIPE.setVisible(True)
             return
@@ -215,9 +247,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pipes = [i for i in items if isinstance(i, Pipe)]
 
         # toggle extend node selection.
-        if self.SHIFT_state:
-            for node in nodes:
-                node.selected = not node.selected
+        if self.LMB_state:
+            if self.SHIFT_state:
+                for node in nodes:
+                    node.selected = not node.selected
+            elif self.CTRL_state:
+                for node in nodes:
+                    node.selected = False
 
         # update the recorded node positions.
         self._node_positions.update(
@@ -234,8 +270,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._rubber_band.show()
 
         # allow new live pipe with the shift modifier.
-        if not self.SHIFT_state or self.SHIFT_state and pipes:
-            super(NodeViewer, self).mousePressEvent(event)
+        if self.LMB_state:
+            if (not self.SHIFT_state and not self.CTRL_state) or\
+                    (self.SHIFT_state and pipes):
+                super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -244,6 +282,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
+
 
         # hide pipe slicer.
         if self._SLICER_PIPE.isVisible():
@@ -294,7 +333,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if self.MMB_state and self.ALT_state:
             pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
-            self._set_viewer_zoom(zoom, 0.05)
+            self._set_viewer_zoom(zoom, 0.05,pos = event.pos())
         elif self.MMB_state or (self.LMB_state and self.ALT_state):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
@@ -309,11 +348,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
             self.scene().update(map_rect)
 
-            if self.SHIFT_state:
+            if self.SHIFT_state or self.CTRL_state:
+                nodes, pipes = self.selected_items()
+
                 for pipe in self._prev_selection_pipes:
                     pipe.setSelected(True)
                 for node in self._prev_selection_nodes:
                     node.selected = True
+
+                if self.CTRL_state:
+                    for pipe in pipes:
+                        pipe.setSelected(False)
+                    for node in nodes:
+                        node.selected = False
 
         elif self.LMB_state:
             self.COLLIDING_state = False
@@ -341,9 +388,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         except AttributeError:
             # For PyQt5
             delta = event.angleDelta().y()
+            if delta == 0:
+                delta = event.angleDelta().x()
 
-        adjust = (delta / 120) * 0.1
-        self._set_viewer_zoom(adjust)
+        self._set_viewer_zoom(delta, pos = event.pos())
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
@@ -427,6 +475,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # viewer pan mode.
         if self.ALT_state:
             return
+        if self._LIVE_PIPE.isVisible():
+            self.apply_live_connection(event)
+            return
 
         pos = event.scenePos()
         port_items = self._items_near(pos, PortItem, 5, 5)
@@ -476,6 +527,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def sceneMouseReleaseEvent(self, event):
         """
         triggered mouse release event for the scene.
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent):
+                The event handler from the QtWidgets.QGraphicsScene
+        """
+        if event.button() != QtCore.Qt.MiddleButton:
+            self.apply_live_connection(event)
+
+    # --- port connections ---
+
+    def apply_live_connection(self, event):
+        """
+        triggered mouse press/release event for the scene.
          - verify to make a the connection Pipe.
 
         Args:
@@ -513,6 +576,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._detached_port = None
             self.end_live_connection()
             return
+
+        else:
+            if self._start_port is end_port:
+                return
 
         # restore connection check.
         restore_connection = any([
@@ -558,8 +625,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._detached_port = None
         self.end_live_connection()
-
-    # --- port connections ---
 
     def start_live_connection(self, selected_port):
         """
@@ -624,6 +689,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
+        if type(self._search_widget) is TabSearchMenuWidget:
+            return
+
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
         if state:
@@ -653,22 +721,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self, title, text, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
-        current_dir = current_dir or os.path.expanduser('~')
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
-        file_dlg = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Open Session Setup', current_dir, ext_filter)
-        return file_dlg[0] or None
+        file_dlg = file_dialog.getOpenFileName(
+            self, 'Open File', current_dir, ext_filter)
+        file = file_dlg[0] or None
+        return file
 
     def save_dialog(self, current_dir=None, ext=None):
-        current_dir = current_dir or os.path.expanduser('~')
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
-        file_dlg = QtWidgets.QFileDialog.getSaveFileName(
+        file_dlg = file_dialog.getSaveFileName(
             self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
@@ -676,6 +743,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ext = ext_map[file_dlg[1]]
         if ext and not file_path.endswith(ext):
             file_path += ext
+
         return file_path
 
     def all_pipes(self):
@@ -694,17 +762,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return nodes
 
     def selected_nodes(self):
-        nodes = []
-        for item in self.scene().selectedItems():
-            if isinstance(item, AbstractNodeItem):
-                nodes.append(item)
+        nodes = [item for item in self.scene().selectedItems()\
+                 if isinstance(item,AbstractNodeItem)]
         return nodes
 
     def selected_pipes(self):
-        pipes = []
-        for item in self.scene().selectedItems():
-            if isinstance(item, Pipe):
-                pipes.append(item)
+        pipes = [item for item in self.scene().selectedItems()\
+                 if isinstance(item,Pipe)]
         return pipes
 
     def selected_items(self):
@@ -783,9 +847,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
-    def reset_zoom(self):
-        self.scale(1.0, 1.0)
-        self.resetTransform()
+    def reset_zoom(self,cent=None):
+        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        if cent:
+            self._scene_range.translate(cent - self._scene_range.center())
+        self._update_scene()
 
     def get_zoom(self):
         transform = self.transform()
@@ -804,10 +870,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not (ZOOM_MIN <= value <= ZOOM_MAX):
                 return
         value = value - zoom
-        self._set_viewer_zoom(value)
+        self._set_viewer_zoom(value,0.0)
 
     def zoom_to_nodes(self, nodes):
-        rect = self._combined_rect(nodes)
-        self.fitInView(rect, QtCore.Qt.KeepAspectRatio)
+        self._scene_range = self._combined_rect(nodes)
+        self._update_scene()
+
         if self.get_zoom() > 0.1:
-            self.reset_zoom()
+            self.reset_zoom(self._scene_range.center())
+
+    def use_opengl(self):
+        format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
+        format.setSamples(4)
+        self.setViewport(QtOpenGL.QGLWidget(format))

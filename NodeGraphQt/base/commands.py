@@ -51,7 +51,14 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             setattr(view, name, value)
 
     def undo(self):
-        if self.old_val != self.new_val:
+        do_undo = False
+        try:
+            if self.old_val != self.new_val:
+                do_undo = True
+        except:
+            do_undo = True
+
+        if do_undo:
             self.set_node_prop(self.name, self.old_val)
 
             # emit property changed signal.
@@ -59,7 +66,14 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             graph.property_changed.emit(self.node, self.name, self.old_val)
 
     def redo(self):
-        if self.old_val != self.new_val:
+        do_redo = False
+        try:
+            if self.old_val != self.new_val:
+                do_redo = True
+        except:
+            do_redo = True
+
+        if do_redo:
             self.set_node_prop(self.name, self.new_val)
 
             # emit property changed signal.
