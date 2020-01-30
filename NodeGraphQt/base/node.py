@@ -7,6 +7,9 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QTEXTEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
+                                   NODE_PROP_FILE,
+                                   NODE_PROP_FLOAT,
+                                   NODE_PROP_INT,
                                    IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
@@ -14,7 +17,9 @@ from NodeGraphQt.qgraphics.node_base import NodeItem
 from NodeGraphQt.widgets.node_widgets import (NodeComboBox,
                                               NodeLineEdit,
                                               NodeFloatEdit,
-                                              NodeCheckBox)
+                                              NodeIntEdit,
+                                              NodeCheckBox,
+                                              NodeFilePath)
 
 
 class classproperty(object):
@@ -293,8 +298,11 @@ class NodeObject(object):
         """
 
         # prevent signals from causing a infinite loop.
-        if self.get_property(name) == value:
-            return
+        try:
+            if self.get_property(name) == value:
+                return
+        except:
+            pass
 
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
@@ -507,7 +515,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_text_input(self, name, label='', text='', tab=None):
+    def add_text_input(self, name, label='', text='', tab=None, multi_line=False):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -522,14 +530,40 @@ class BaseNode(NodeObject):
             label (str): label to be displayed.
             text (str): pre filled text.
             tab (str): name of the widget tab to display in.
+            multi_line (bool): if create multi line property.
         """
+        wid_type = NODE_PROP_QTEXTEDIT if multi_line else NODE_PROP_QLINEEDIT
+
         self.create_property(
-            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+            name, text, widget_type=wid_type, tab=tab)
         widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_float_input(self, name, label='', value=0.0, tab=None):
+    def add_file_input(self, name, label='', text='', tab=None, ext="*"):
+        """
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+            ext (str): file ext
+        """
+        self.create_property(
+            name, text, widget_type=NODE_PROP_FILE, tab=tab)
+        widget = NodeFilePath(self.view, name, label, text,ext)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
+    def add_float_input(self, name, label='', value=0.0, range=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -543,11 +577,35 @@ class BaseNode(NodeObject):
             name (str): name for the custom property.
             label (str): label to be displayed.
             value (float): pre filled value.
+            range (tuple): slider range
             tab (str): name of the widget tab to display in.
         """
         self.create_property(
-            name, value, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+            name, value, widget_type=NODE_PROP_FLOAT, range=range, tab=tab)
         widget = NodeFloatEdit(self.view, name, label, value)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
+    def add_int_input(self, name, label='', value=0, range=None, tab=None):
+        """
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The embedded widget is wired up to the :meth:`NodeObject.set_property`
+            function use this function to to update the widget.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            value (int): pre filled value.
+            range (tuple): slider range
+            tab (str): name of the widget tab to display in.
+        """
+        self.create_property(
+            name, value, widget_type=NODE_PROP_INT, range=range, tab=tab)
+        widget = NodeIntEdit(self.view, name, label, value)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 

@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import copy
 
 from NodeGraphQt import QtCore, QtWidgets
 from NodeGraphQt.base.commands import (NodeAddedCmd,
@@ -12,7 +13,7 @@ from NodeGraphQt.base.commands import (NodeAddedCmd,
 from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
-from NodeGraphQt.base.node import NodeObject
+from NodeGraphQt.base.node import NodeObject, BaseNode
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (DRAG_DROP_ID,
                                    PIPE_LAYOUT_CURVED,
@@ -88,7 +89,13 @@ class NodeGraph(QtCore.QObject):
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
     :emits: mime data, node graph position
     """
+    session_changed = QtCore.Signal(str)
+    """
+    Signal is triggered when session has been changed.
 
+    :parameters: :str
+    :emits: new session path
+    """
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
@@ -132,6 +139,10 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
 
+        # exclude the BackdropNode
+        if not isinstance(node, BaseNode):
+            return
+
         disconnected = [(pipe.input_port, pipe.output_port)]
         connected = []
 
@@ -140,7 +151,9 @@ class NodeGraph(QtCore.QObject):
                 (pipe.output_port, list(node.inputs().values())[0].view)
             )
         if node.outputs():
-            connected.append((node.output(0).view, pipe.input_port))
+            connected.append(
+                (list(node.outputs().values())[0].view, pipe.input_port)
+            )
 
         self._undo_stack.beginMacro('inserted node')
         self._on_connection_changed(disconnected, connected)
@@ -167,8 +180,13 @@ class NodeGraph(QtCore.QObject):
         node = self.get_node_by_id(node_id)
 
         # prevent signals from causing a infinite loop.
+        _exc = [float, int , str, bool, None]
         if node.get_property(prop_name) != prop_value:
-            node.set_property(prop_name, prop_value)
+            if type(node.get_property(prop_name)) in _exc:
+                value = prop_value
+            else:
+                value = copy.deepcopy(prop_value)
+            node.set_property(prop_name, value)
 
     def _on_node_double_clicked(self, node_id):
         """
@@ -884,6 +902,7 @@ class NodeGraph(QtCore.QObject):
             self._undo_stack.push(NodeRemovedCmd(self, n))
         self._undo_stack.clear()
         self._model.session = None
+        self.session_changed.emit("")
 
     def _serialize(self, nodes):
         """
@@ -1022,6 +1041,9 @@ class NodeGraph(QtCore.QObject):
         with open(file_path, 'w') as file_out:
             json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
 
+        self._model.session = file_path
+        self.session_changed.emit(file_path)
+
     def load_session(self, file_path):
         """
         Load node graph session layout file.
@@ -1048,6 +1070,7 @@ class NodeGraph(QtCore.QObject):
         self._deserialize(layout_data)
         self._undo_stack.clear()
         self._model.session = file_path
+        self.session_changed.emit(file_path)
 
     def copy_nodes(self, nodes=None):
         """
@@ -1198,3 +1221,9 @@ class NodeGraph(QtCore.QObject):
             str: selected file path.
         """
         return self._viewer.save_dialog(current_dir, ext)
+
+    def use_opengl(self):
+        """
+        use opengl to draw the graph
+        """
+        self._viewer.use_opengl()
