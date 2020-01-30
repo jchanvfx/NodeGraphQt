@@ -1,74 +1,6 @@
 {
   "nodes":{
-    "0x1508f548":{
-      "type_":"Inputs.DataInputNode",
-      "icon":null,
-      "name":"Input A",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":173.0,
-      "height":91.0,
-      "pos":[
-        -417.0,
-        -160.0
-      ],
-      "custom":{
-        "out":"Hola"
-      }
-    },
-    "0x160ea048":{
-      "type_":"Inputs.DataInputNode",
-      "icon":null,
-      "name":"Input B",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":173.0,
-      "height":91.0,
-      "pos":[
-        -390.0,
-        -23.0
-      ],
-      "custom":{
-        "out":"Chau"
-      }
-    },
-    "0x160ea748":{
+    "0x15095e08":{
       "type_":"Viewers.DataViewerNode",
       "icon":null,
       "name":"Output",
@@ -95,17 +27,17 @@
       "width":170,
       "height":91.0,
       "pos":[
-        186.0,
-        -231.0
+        149.0,
+        -146.0
       ],
       "custom":{
-        "data":"Hola"
+        "data":""
       }
     },
-    "0x160f3688":{
-      "type_":"Logics.ifNode",
+    "0x15126848":{
+      "type_":"Inputs.BoolInputNode",
       "icon":null,
-      "name":"If",
+      "name":"Bool",
       "color":[
         13,
         18,
@@ -127,57 +59,20 @@
       "disabled":false,
       "selected":true,
       "width":170,
-      "height":108.0,
-      "pos":[
-        -75.0,
-        -178.0
-      ],
-      "custom":{
-        "condition":0.0,
-        "out":"Hola"
-      }
-    },
-    "0x160fad08":{
-      "type_":"Math.MathFunctionsNode",
-      "icon":null,
-      "name":"Math Functions",
-      "color":[
-        25,
-        58,
-        51,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "width":181.0,
       "height":103.0,
       "pos":[
-        -411.0,
-        -319.0
+        -413.0,
+        -212.0
       ],
       "custom":{
-        "funcs":"fmod",
-        "output":1.0,
-        "x":219.0,
-        "y":2.0
+        "out":true,
+        "combo":"True"
       }
     },
-    "0x17678bc8":{
-      "type_":"Inputs.TickTimeNode",
+    "0x15140308":{
+      "type_":"Logics.BooleanNode",
       "icon":null,
-      "name":"Tick Time",
+      "name":"Boolean",
       "color":[
         13,
         18,
@@ -198,20 +93,21 @@
       ],
       "disabled":false,
       "selected":true,
-      "width":173.0,
-      "height":91.0,
+      "width":170,
+      "height":103.0,
       "pos":[
-        -678.0,
-        -393.0
+        -143.0,
+        -149.0
       ],
       "custom":{
-        "out":"219"
+        "out":null,
+        "funcs":"and"
       }
     },
-    "0x1768efc8":{
-      "type_":"Inputs.DataInputNode",
+    "0x1514a4c8":{
+      "type_":"Inputs.BoolInputNode",
       "icon":null,
-      "name":"Basic Input",
+      "name":"Bool 1",
       "color":[
         13,
         18,
@@ -232,75 +128,46 @@
       ],
       "disabled":false,
       "selected":true,
-      "width":173.0,
-      "height":91.0,
+      "width":170,
+      "height":103.0,
       "pos":[
-        -678.0,
-        -207.0
+        -411.25,
+        -61.5
       ],
       "custom":{
-        "out":"2"
+        "out":true,
+        "combo":"True"
       }
     }
   },
   "connections":[
     {
-      "out":[
-        "0x1508f548",
-        "out"
-      ],
       "in":[
-        "0x160f3688",
-        "then"
-      ]
-    },
-    {
-      "out":[
-        "0x160ea048",
-        "out"
-      ],
-      "in":[
-        "0x160f3688",
-        "else"
-      ]
-    },
-    {
-      "in":[
-        "0x160ea748",
+        "0x15095e08",
         "data"
       ],
       "out":[
-        "0x160f3688",
+        "0x15140308",
         "out"
       ]
     },
     {
-      "in":[
-        "0x160f3688",
-        "condition"
-      ],
       "out":[
-        "0x160fad08",
-        "output"
-      ]
-    },
-    {
-      "in":[
-        "0x160fad08",
-        "x"
-      ],
-      "out":[
-        "0x17678bc8",
+        "0x15126848",
         "out"
+      ],
+      "in":[
+        "0x15140308",
+        "a"
       ]
     },
     {
       "in":[
-        "0x160fad08",
-        "y"
+        "0x15140308",
+        "b"
       ],
       "out":[
-        "0x1768efc8",
+        "0x1514a4c8",
         "out"
       ]
     }
