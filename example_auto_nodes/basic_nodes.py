@@ -1,12 +1,13 @@
 from .node_base.auto_node import AutoNode
 
+
 class FooNode(AutoNode):
     """
     A node class with 2 inputs and 2 outputs.
     """
 
     # unique node identifier.
-    __identifier__ = 'com.chantasticvfx'
+    __identifier__ = 'examples'
 
     # initial default node name.
     NODE_NAME = 'foo node'
@@ -21,7 +22,8 @@ class FooNode(AutoNode):
         # create node outputs.
         self.add_output('out A')
         self.add_output('out B')
-        self.set_icon("example_auto_nodes/pear.png")
+        self.set_icon("example_auto_nodes/icons/pear.png")
+
 
 class BarNode(AutoNode):
     """
@@ -30,7 +32,7 @@ class BarNode(AutoNode):
     """
 
     # unique node identifier.
-    __identifier__ = 'com.chantasticvfx'
+    __identifier__ = 'examples'
 
     # initial default node name.
     NODE_NAME = 'bar'

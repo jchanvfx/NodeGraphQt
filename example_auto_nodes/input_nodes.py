@@ -1,8 +1,7 @@
 from NodeGraphQt import QtCore
 from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
                                    NODE_PROP_VECTOR3,
-                                   NODE_PROP_VECTOR4,
-                                   NODE_PROP_SLIDER)
+                                   NODE_PROP_VECTOR4)
 
 from .node_base.auto_node import AutoNode
 import os
@@ -19,7 +18,7 @@ class FloatInputNode(AutoNode):
     def __init__(self):
         super(FloatInputNode, self).__init__()
         self.output = self.add_output('out', float)
-        self.add_float_input('out', 'Float Value', value=0.0,range=(-10,10))
+        self.add_float_input('out', 'Float Value', value=0.0, range=(-10, 10))
 
 
 class IntInputNode(AutoNode):
@@ -44,7 +43,7 @@ class Vector2InputNode(AutoNode):
         super(Vector2InputNode, self).__init__()
         self.output = self.add_output('out', list)
         self.create_property(
-            "out", [0, 0], widget_type=NODE_PROP_VECTOR2)
+            "out", [0.0, 0.0], widget_type=NODE_PROP_VECTOR2)
 
 
 class Vector3InputNode(AutoNode):
@@ -55,7 +54,7 @@ class Vector3InputNode(AutoNode):
         super(Vector3InputNode, self).__init__()
         self.output = self.add_output('out', list)
         self.create_property(
-            "out", [0, 0, 0], widget_type=NODE_PROP_VECTOR3)
+            "out", [0.0, 0.0, 0.0], widget_type=NODE_PROP_VECTOR3)
 
 
 class Vector4InputNode(AutoNode):
@@ -66,7 +65,7 @@ class Vector4InputNode(AutoNode):
         super(Vector4InputNode, self).__init__()
         self.output = self.add_output('out', list)
         self.create_property(
-            "out", [0, 0, 0, 0], widget_type=NODE_PROP_VECTOR4)
+            "out", [0.0, 0.0, 0.0, 0.0], widget_type=NODE_PROP_VECTOR4)
 
 
 class TickTimeNode(AutoNode):
@@ -106,7 +105,6 @@ class TextFileInputNode(AutoNode):
         self.add_output('file content', str)
         self.create_property('file content', "")
         self.add_output('file path', str)
-
         self.add_file_input('file path', 'File Path')
 
     def run(self):
@@ -119,7 +117,7 @@ class TextFileInputNode(AutoNode):
             except Exception as e:
                 self.error(e)
         else:
-            self.error('No existe %s' % path)
+            self.error('No exist %s' % path)
             self.set_property('file content', '')
 
 
@@ -142,3 +140,21 @@ class TextInputNode(AutoNode):
 
         # create QLineEdit text input widget.
         self.add_text_input('out', 'Text Input')
+
+
+class BoolInputNode(AutoNode):
+    """
+    Input Bool data.
+    """
+
+    __identifier__ = 'Inputs'
+    NODE_NAME = 'Bool'
+
+    def __init__(self):
+        super(BoolInputNode, self).__init__()
+        self.add_output('out', bool)
+        self.create_property('out', True)
+        self.add_combo_menu('combo', 'Bool value', items=['True', 'False'])
+
+    def run(self):
+        self.set_property('out', eval(self.get_property('combo')))

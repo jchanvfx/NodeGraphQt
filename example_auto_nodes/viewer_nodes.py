@@ -1,6 +1,5 @@
 from .node_base.auto_node import AutoNode
-from NodeGraphQt.constants import NODE_PROP_QTEXTEDIT
-from NodeGraphQt.widgets.node_widgets import NodeLineEdit
+
 
 class DataViewerNode(AutoNode):
     __identifier__ = 'Viewers'

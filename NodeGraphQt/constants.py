@@ -109,7 +109,7 @@ Z_VAL_NODE_WIDGET = 3
 # === ITEM CACHE MODE ===
 
 # QGraphicsItem.NoCache
-# QGraphicsItem.ItemCoordinateCache
 # QGraphicsItem.DeviceCoordinateCache
+# QGraphicsItem.ItemCoordinateCache
 
-ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.ItemCoordinateCache
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
