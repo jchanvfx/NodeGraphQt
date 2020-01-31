@@ -140,7 +140,7 @@ class NodeGraph(QtCore.QObject):
         node = self.get_node_by_id(node_id)
 
         # exclude the BackdropNode
-        if not isinstance(node,BaseNode):
+        if not isinstance(node, BaseNode):
             return
 
         disconnected = [(pipe.input_port, pipe.output_port)]

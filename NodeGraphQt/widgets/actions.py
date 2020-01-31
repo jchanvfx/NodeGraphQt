@@ -30,7 +30,7 @@ class BaseMenu(QtWidgets.QMenu):
                 if isinstance(node,menu.node_class):
                     return menu
 
-    def get_menus(self,node_class):
+    def get_menus(self, node_class):
         menus = []
         for action in self.actions():
             menu = action.menu()

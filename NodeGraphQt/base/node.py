@@ -7,10 +7,10 @@ from NodeGraphQt.constants import (NODE_PROP,
                                    NODE_PROP_QTEXTEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
-                                   IN_PORT, OUT_PORT,
                                    NODE_PROP_FILE,
                                    NODE_PROP_FLOAT,
-                                   NODE_PROP_INT)
+                                   NODE_PROP_INT,
+                                   IN_PORT, OUT_PORT)
 from NodeGraphQt.errors import PortRegistrationError
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -727,7 +727,7 @@ class BaseNode(NodeObject):
             list[NodeGraphQt.Port]: node output ports.
         """
         return self._outputs
-    
+
     def input(self, index):
         """
         Return the input port with the matching index.
@@ -830,6 +830,38 @@ class BaseNode(NodeObject):
         Args:
             in_port (NodeGraphQt.Port): source input port from this node.
             out_port (NodeGraphQt.Port): output port that was disconnected.
+        """
+        return
+
+    def update_streams(self, *args):
+        """
+        Update all nodes joined by pipes to this.
+        """
+        nodes = []
+        trash = []
+
+        for port, nodeList in self.connected_output_nodes().items():
+            nodes.extend(nodeList)
+
+        while nodes:
+            node = nodes.pop()
+            if node.disabled():
+                continue
+            if node not in trash:
+                trash.append(node)
+
+            for port, nodeList in node.connected_output_nodes().items():
+                nodes.extend(nodeList)
+
+            if not node.connected_output_nodes():
+                try:
+                    node.run()
+                except Exception as error:
+                    print("Error Update Streams: %s" % str(error))
+
+    def run(self):
+        """
+        Node evaluation logics.
         """
         return
 

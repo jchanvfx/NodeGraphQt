@@ -501,7 +501,7 @@ class NodeItem(AbstractNodeItem):
 
         self.set_proxy_mode(width < self._porxy_mode_threshold)
 
-    def set_proxy_mode(self,mode):
+    def set_proxy_mode(self, mode):
         if mode is self._proxy_mode:
             return
 

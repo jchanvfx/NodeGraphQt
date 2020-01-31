@@ -234,7 +234,7 @@ class NodeModel(object):
         custom_props = node_dict.pop('_custom_prop', {})
 
         if custom_props:
-            # exclude the data which can not be serialed (like numpy array)
+            # exclude the data which can not be serialized (like numpy array)
             to_remove = []
             types = [float, str, int, list, dict, bool, None, complex, tuple]
             for k, v in custom_props.items():

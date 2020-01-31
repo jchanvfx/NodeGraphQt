@@ -35,7 +35,7 @@ def setup_context_menu(graph):
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
     file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+s')
-    file_menu.add_command('New', _new_session)
+    file_menu.add_command('New Session', _new_session)
 
     file_menu.add_separator()
 
