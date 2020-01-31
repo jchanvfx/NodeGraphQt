@@ -22,7 +22,7 @@ class FooNode(AutoNode):
         # create node outputs.
         self.add_output('out A')
         self.add_output('out B')
-        self.set_icon("example_auto_nodes/pear.png")
+        self.set_icon("example_auto_nodes/icons/pear.png")
 
 
 class BarNode(AutoNode):

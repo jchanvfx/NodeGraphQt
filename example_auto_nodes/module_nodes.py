@@ -9,11 +9,11 @@ import numpy
 import numpydoc.docscrape
 import inspect
 
-import example_auto_nodes.wrappers.math as _math
-import example_auto_nodes.wrappers.list as _list
-import example_auto_nodes.wrappers.dict as _dict
-import example_auto_nodes.wrappers.str as _str
-import example_auto_nodes.wrappers.tuple as _tuple
+from .wrappers import math as _math
+from .wrappers import list as _list
+from .wrappers import dict as _dict
+from .wrappers import str as _str
+from .wrappers import tuple as _tuple
 
 
 class MathModuleNode(ModuleNode):
@@ -103,6 +103,7 @@ class numpyModuleNode(ModuleNode):
 
     def __init__(self):
         super(numpyModuleNode, self).__init__()
+        self.set_icon("example_auto_nodes/icons/numpy.png")
 
     def is_function(self, obj):
         result = super(numpyModuleNode, self).is_function(obj)

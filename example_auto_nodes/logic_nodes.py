@@ -15,7 +15,7 @@ class IfNode(AutoNode):
         self._then = self.add_input('then')
         self._else = self.add_input('else')
         self.add_output('out')
-        self.create_property('out',  None)
+        self.create_property('out', None)
 
     def run(self):
         if self.getInputData(self.condition):
@@ -42,9 +42,9 @@ class BooleanNode(AutoNode):
 
     def __init__(self):
         super(BooleanNode, self).__init__()
-        self.a = self.add_input('a',bool)
-        self.b = self.add_input('b',bool)
-        self.add_output('out',bool)
+        self.a = self.add_input('a', bool)
+        self.b = self.add_input('b', bool)
+        self.add_output('out', bool)
         self.create_property('out', None)
         self.add_combo_menu('funcs',
                             'Functions',
@@ -75,4 +75,3 @@ class BooleanNode(AutoNode):
             return
 
         self.set_property('out', eval(self.func))
-
