@@ -1,8 +1,10 @@
 from NodeGraphQt.base.node import BaseNode
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NODE_PROP
+from NodeGraphQt import QtCore
 import random
 import copy
+
 
 def rand_color(seed_type):
     seed = id(seed_type)
@@ -15,9 +17,12 @@ def rand_color(seed_type):
     return (r, g, b, 255)
 
 
-class AutoNode(BaseNode):
+class AutoNode(BaseNode,QtCore.QObject):
+    cooked = QtCore.Signal()
+
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(AutoNode, self).__init__()
+        QtCore.QObject.__init__(self)
         self.needCook = True
         self._autoCook = True
         self._error = False
@@ -52,6 +57,11 @@ class AutoNode(BaseNode):
                 n.cook()
 
     def getInputData(self, port):
+        # get input data by input Port,the type of "port" can be :
+        # int : Port index
+        # str : Port name
+        # Port : Port object
+
         if type(port) is int:
             to_port = self.input(port)
         elif type(port) is str:
@@ -99,18 +109,18 @@ class AutoNode(BaseNode):
         if self.error():
             return
 
+        self.cooked.emit()
         self.cookNextNode()
 
     def run(self):
         pass
-        # print("RUN {} Node".format(self.name()))
 
     def on_input_connected(self, to_port, from_port):
         if self.checkPortType(to_port, from_port):
             self.cook()
         else:
             self.needCook = False
-            self.graph._on_connection_changed([(from_port.view, to_port.view)], [])
+            to_port.disconnect_from(from_port)
 
     def on_input_disconnected(self, to_port, from_port):
         if not self.needCook:
@@ -124,6 +134,9 @@ class AutoNode(BaseNode):
             self.cook()
 
     def checkPortType(self, to_port, from_port):
+        # None type port can connect with any other type port
+        # types in self.matchTypes can connect with each other
+
         if hasattr(to_port, "DataType") and hasattr(from_port, "DataType"):
             if to_port.DataType is not from_port.DataType:
                 for types in self.matchTypes:
@@ -138,7 +151,6 @@ class AutoNode(BaseNode):
         self.set_port_type(name, type(value))
         if name in self.model.custom_properties.keys():
             self.cook()
-
 
     def set_port_type(self, port, value_type):
         current_port = None

@@ -13,22 +13,27 @@ class VectorSplit(AutoNode):
 
     def __init__(self):
         super(VectorSplit, self).__init__()
-        self.defaultValue = [0.0, 0.0, 0.0]
 
         self.add_output('x')
-        self.create_property("x", self.defaultValue[0])
+        self.create_property("x", 0.0)
         self.add_output('y')
-        self.create_property("y", self.defaultValue[1])
+        self.create_property("y", 0.0)
         self.add_output('z')
-        self.create_property("z", self.defaultValue[2])
+        self.create_property("z", 0.0)
+        self.add_output('w')
+        self.create_property("w", 0.0)
 
-        self.add_input("in vector",list)
+        self.add_input("in vector", list)
+        self.map = {0: "x", 1: "y", 2: "z", 3: "w"}
 
     def run(self):
         value = self.getInputData(0)
-        self.set_property("x", value[0])
-        self.set_property("y", value[1])
-        self.set_property("z", value[2])
+        if type(value) is not list:
+            self.error("Input data not list")
+        for index, data in enumerate(value):
+            if index > 3:
+                return
+            self.set_property(self.map[index], data)
 
 
 class VectorMaker(AutoNode):
@@ -42,17 +47,22 @@ class VectorMaker(AutoNode):
     def __init__(self):
         super(VectorMaker, self).__init__()
 
-        self.add_output('out')
-        self.create_property("out", [0, 0, 0])
+        self.add_output('out', list)
+        self.create_property("out",None)
 
-        self.add_input("x",float)
-        self.add_input("y",float)
-        self.add_input("z",float)
-
-        self.defaultValue = 0.0
+        self.add_input("x", float)
+        self.add_input("y", float)
+        self.add_input("z", float)
+        self.add_input("w", float)
 
     def run(self):
-        self.set_property("out", [self.getInputData(0), self.getInputData(1), self.getInputData(2)])
+        result = []
+        for i in range(4):
+            data = self.getInputData(i)
+            if data is not None:
+                result.append(data)
+
+        self.set_property("out", result)
 
 
 class DataConvect(AutoNode):
@@ -67,7 +77,7 @@ class DataConvect(AutoNode):
         super(DataConvect, self).__init__()
 
         self.add_output('out')
-        self.create_property("out",None)
+        self.create_property("out", None)
         self.add_input("in data")
 
         items = ["all to int"]

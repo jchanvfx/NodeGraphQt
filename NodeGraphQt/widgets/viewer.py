@@ -130,7 +130,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scale(scale, scale, pos)
 
     def _set_viewer_pan(self, pos_x, pos_y):
-        speed = self._scene_range.width() * 0.001
+        speed = self._scene_range.width() * 0.002
         x = -pos_x * speed
         y = -pos_y * speed
         self._scene_range.adjust(x, y, x, y)

@@ -34,16 +34,18 @@ def GetNodesFromFolder(FolderPath):
     return nodes
 
 
-def cook_node(graph,node):
+def cook_node(graph, node):
     node.cook()
 
 
-def print_functions(graph,node):
+def print_functions(graph, node):
     for func in node.module_functions:
         print(func)
 
-def toggle_auto_cook(graph,node):
+
+def toggle_auto_cook(graph, node):
     node.autoCook = not node.autoCook
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

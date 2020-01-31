@@ -1,12 +1,13 @@
 from .node_base.auto_node import AutoNode
 
+
 class DropdownMenuNode(AutoNode):
     """
     An example node with a embedded added QCombobox menu.
     """
 
     # unique node identifier.
-    __identifier__ = 'com.chantasticvfx'
+    __identifier__ = 'examples'
 
     # initial default node name.
     NODE_NAME = 'menu'
@@ -30,7 +31,7 @@ class CheckboxNode(AutoNode):
     """
 
     # set a unique node identifier.
-    __identifier__ = 'com.chantasticvfx'
+    __identifier__ = 'examples'
 
     # set the initial default node name.
     NODE_NAME = 'checkbox'
