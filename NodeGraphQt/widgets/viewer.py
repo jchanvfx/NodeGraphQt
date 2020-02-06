@@ -246,6 +246,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
         pipes = [i for i in items if isinstance(i, Pipe)]
 
+        if nodes:
+            self.MMB_state = False
+
         # toggle extend node selection.
         if self.LMB_state:
             if self.SHIFT_state:

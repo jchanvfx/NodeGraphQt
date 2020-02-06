@@ -333,6 +333,7 @@ class _valueMenu(QtWidgets.QMenu):
 
     mouseMove = QtCore.Signal(object)
     mouseRelease = QtCore.Signal(object)
+    stepChange = QtCore.Signal()
 
     def __init__(self, parent=None):
         super(_valueMenu, self).__init__(parent)
@@ -357,6 +358,8 @@ class _valueMenu(QtWidgets.QMenu):
 
         action = self.actionAt(event.pos())
         if action:
+            if action is not self.last_action:
+                self.stepChange.emit()
             self.last_action = action
             self.step = action.step
         elif self.last_action:
@@ -389,9 +392,9 @@ class _valueEdit(QtWidgets.QLineEdit):
         self._data_type = float
         self.setText("0")
 
-        self.pre_x = 0
+        self.pre_x = None
+        self.pre_val = None
         self._step = 1
-        self._tmp_value = 0
         self._speed = 0.1
 
         self.textChanged.connect(self._on_text_changed)
@@ -399,6 +402,7 @@ class _valueEdit(QtWidgets.QLineEdit):
         self.menu = _valueMenu()
         self.menu.mouseMove.connect(self.mouseMoveEvent)
         self.menu.mouseRelease.connect(self.mouseReleaseEvent)
+        self.menu.stepChange.connect(self._reset)
         steps = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
         self.menu.set_steps(steps)
 
@@ -407,25 +411,27 @@ class _valueEdit(QtWidgets.QLineEdit):
     def _on_text_changed(self, value):
         self.valueChanged.emit(self.value())
 
+    def _reset(self):
+        self.pre_x = None
+
     def mouseMoveEvent(self, event):
         if self.mid_state:
             if self.pre_x is None:
                 self.pre_x = event.x()
-            self.set_step(self.menu.step)
-            delta = (event.x() - self.pre_x)
-            self._tmp_value += delta * self._speed * self._step
-            if abs(self._tmp_value) > self._step:
-                value = self.value() + delta * self._step
+                self.pre_val = self.value()
+            else:
+                self.set_step(self.menu.step)
+                delta = event.x() - self.pre_x
+                value = self.pre_val + int(delta*self._speed) * self._step
                 self.setValue(value)
-                self._tmp_value = 0
-            self.pre_x = event.x()
+
+
         super(_valueEdit,self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MiddleButton:
             self.mid_state = True
-            self.pre_x = None
-            self._tmp_value = 0
+            self._reset()
             self.menu.exec_(QtGui.QCursor.pos())
         super(_valueEdit,self).mousePressEvent(event)
 
