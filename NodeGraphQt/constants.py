@@ -81,6 +81,8 @@ NODE_PROP_VECTOR4 = 13
 NODE_PROP_FLOAT = 14
 #: Property type represented with int widget in the properties bin.
 NODE_PROP_INT = 15
+#: Property type represented with button widget in the properties bin.
+NODE_PROP_BUTTON = 16
 
 # === NODE VIEWER ===
 

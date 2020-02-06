@@ -15,7 +15,8 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_VECTOR3,
                                    NODE_PROP_VECTOR4,
                                    NODE_PROP_FLOAT,
-                                   NODE_PROP_INT)
+                                   NODE_PROP_INT,
+                                   NODE_PROP_BUTTON)
 from NodeGraphQt.widgets.file_dialog import file_dialog
 
 
@@ -425,7 +426,6 @@ class _valueEdit(QtWidgets.QLineEdit):
                 value = self.pre_val + int(delta*self._speed) * self._step
                 self.setValue(value)
 
-
         super(_valueEdit,self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
@@ -662,6 +662,21 @@ class PropInt(PropFloat):
         self.set_data_type(int)
 
 
+class PropButton(QtWidgets.QPushButton):
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropButton, self).__init__(parent)
+
+    def set_value(self, value):
+        # value: list of functions
+        for func in value:
+            self.clicked.connect(func)
+
+    def get_value(self):
+        return None
+
+
 WIDGET_MAP = {
     NODE_PROP_QLABEL: PropLabel,
     NODE_PROP_QLINEEDIT: PropLineEdit,
@@ -677,6 +692,7 @@ WIDGET_MAP = {
     NODE_PROP_VECTOR4: PropVector4,
     NODE_PROP_FLOAT: PropFloat,
     NODE_PROP_INT: PropInt,
+    NODE_PROP_BUTTON: PropButton
 }
 
 
@@ -716,11 +732,14 @@ class PropWindow(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
+        label = QtWidgets.QLabel(label)
         label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
             label_flags = label_flags | QtCore.Qt.AlignTop
-
-        self.__layout.addWidget(QtWidgets.QLabel(label), row, 0, label_flags)
+        elif widget.__class__.__name__ == 'PropButton':
+            label.setVisible(False)
+            widget.setText(name)
+        self.__layout.addWidget(label, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
 
     def get_widget(self, name):

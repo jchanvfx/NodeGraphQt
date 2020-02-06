@@ -4,7 +4,7 @@ from NodeGraphQt.constants import NODE_PROP
 from NodeGraphQt import QtCore
 import random
 import copy
-
+import time
 
 def rand_color(seed_type):
     seed = id(seed_type)
@@ -35,6 +35,9 @@ class AutoNode(BaseNode,QtCore.QObject):
         self.defaultInputType = defaultInputType
         self.defaultOutputType = defaultOutputType
 
+        self._cookTime = 0.0
+        self._toolTip = self._setup_tool_tip()
+
     @property
     def autoCook(self):
         return self._autoCook
@@ -50,6 +53,15 @@ class AutoNode(BaseNode,QtCore.QObject):
         else:
             self.defaultColor = self.get_property("color")
             self.set_property('color', self.stopCookColor)
+
+    @property
+    def cookTime(self):
+        return self._cookTime
+
+    @autoCook.setter
+    def cookTime(self, time):
+        self._cookTime = time
+        self._update_tool_tip()
 
     def cookNextNode(self):
         for nodeList in self.connected_output_nodes().values():
@@ -80,6 +92,11 @@ class AutoNode(BaseNode,QtCore.QObject):
             data = from_port.node().get_property(from_port.name())
             return copy.deepcopy(data)
 
+    def when_disabled(self):
+        num = len(self.input_ports())
+        for index, out_port in enumerate(self.output_ports()):
+            self.set_property(out_port.name(), self.getInputData(index % num))
+
     def cook(self, forceCook=False):
         if not self._autoCook and forceCook is not True:
             return
@@ -88,17 +105,19 @@ class AutoNode(BaseNode,QtCore.QObject):
         self._autoCook = False
 
         if self.disabled():
-            num = len(self.input_ports())
-            for index, out_port in enumerate(self.output_ports()):
-                self.set_property(out_port.name(), self.getInputData(index % num))
+            self._autoCook = _tmp
+            self.when_disabled()
             self.cookNextNode()
             return
 
         if not self.needCook:
+            self._autoCook = _tmp
             return
 
         if self.error():
             self._close_error()
+
+        _start_time = time.time()
 
         try:
             self.run()
@@ -108,6 +127,8 @@ class AutoNode(BaseNode,QtCore.QObject):
 
         if self.error():
             return
+
+        self.cookTime = time.time() - _start_time
 
         self.cooked.emit()
         self.cookNextNode()
@@ -206,7 +227,7 @@ class AutoNode(BaseNode,QtCore.QObject):
     def _close_error(self):
         self._error = False
         self.set_property('color', self.defaultColor)
-        self._view._tooltip_disable(False)
+        self._update_tool_tip()
 
     def _show_error(self, message):
         if not self._error:
@@ -214,10 +235,22 @@ class AutoNode(BaseNode,QtCore.QObject):
 
         self._error = True
         self.set_property('color', self.errorColor)
-        tooltip = '<b>{}</b>'.format(self.name())
-        tooltip += ' <font color="red"><br>({})</br></font>'.format(message)
-        tooltip += '<br/>{}<br/>'.format(self._view.type_)
-        self._view.setToolTip(tooltip)
+        tooltip = '<font color="red"><br>({})</br></font>'.format(message)
+        self._update_tool_tip(tooltip)
+
+    def _update_tool_tip(self, message = None):
+        if message is None:
+            tooltip = self._toolTip.format(self._cookTime)
+        else:
+            tooltip = '<b>{}</b>'.format(self.name())
+            tooltip += message
+            tooltip += '<br/>{}<br/>'.format(self._view.type_)
+        self.view.setToolTip(tooltip)
+        return tooltip
+
+    def _setup_tool_tip(self):
+        tooltip = '<br> last cook used: {}s</br>'
+        return self._update_tool_tip(tooltip)
 
     def error(self, message=None):
         if message is None:
