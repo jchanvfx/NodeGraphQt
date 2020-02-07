@@ -68,6 +68,10 @@ class AutoNode(BaseNode,QtCore.QObject):
             for n in nodeList:
                 n.cook()
 
+    def getData(self, port):
+        # for custom output data
+        return self.get_property(port.name())
+
     def getInputData(self, port):
         # get input data by input Port,the type of "port" can be :
         # int : Port index
@@ -89,7 +93,7 @@ class AutoNode(BaseNode,QtCore.QObject):
             return copy.deepcopy(self.defaultValue)
 
         for from_port in from_ports:
-            data = from_port.node().get_property(from_port.name())
+            data = from_port.node().getData(from_port)
             return copy.deepcopy(data)
 
     def when_disabled(self):
@@ -101,18 +105,11 @@ class AutoNode(BaseNode,QtCore.QObject):
         if not self._autoCook and forceCook is not True:
             return
 
+        if not self.needCook:
+            return
+
         _tmp = self._autoCook
         self._autoCook = False
-
-        if self.disabled():
-            self._autoCook = _tmp
-            self.when_disabled()
-            self.cookNextNode()
-            return
-
-        if not self.needCook:
-            self._autoCook = _tmp
-            return
 
         if self.error():
             self._close_error()
@@ -123,6 +120,7 @@ class AutoNode(BaseNode,QtCore.QObject):
             self.run()
         except Exception as error:
             self.error(error)
+
         self._autoCook = _tmp
 
         if self.error():
@@ -148,11 +146,6 @@ class AutoNode(BaseNode,QtCore.QObject):
             self.needCook = True
             return
         self.cook()
-
-    def set_disabled(self, mode=False):
-        super(AutoNode, self).set_disabled(mode)
-        if self.input_ports():
-            self.cook()
 
     def checkPortType(self, to_port, from_port):
         # None type port can connect with any other type port
@@ -223,6 +216,16 @@ class AutoNode(BaseNode,QtCore.QObject):
         elif self.defaultOutputType:
             self.set_port_type(new_port, self.defaultOutputType)
         return new_port
+
+    def set_disabled(self, mode=False):
+        super(AutoNode, self).set_disabled(mode)
+        self._autoCook = not mode
+        if mode is True:
+            self.when_disabled()
+            self.cookNextNode()
+        else:
+            self.cook()
+
 
     def _close_error(self):
         self._error = False
