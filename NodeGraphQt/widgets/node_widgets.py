@@ -417,7 +417,7 @@ class NodeFilePath(NodeLineEdit):
         self._ext = ext
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName()
+        file_path = file_dialog.getOpenFileName(ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.value = file
