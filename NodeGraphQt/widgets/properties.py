@@ -454,8 +454,10 @@ class _valueEdit(QtWidgets.QLineEdit):
     def _convert_text(self,text):
         # int("1.0") will return error
         # so we use int(float("1.0"))
-
-        value = float(text)
+        try:
+            value = float(text)
+        except:
+            value = 0.0
         if self._data_type is int:
             value = int(value)
         return value
@@ -512,14 +514,13 @@ class _valueSliderEdit(QtWidgets.QWidget):
         self._lock = False
 
     def _on_edit_changed(self,value):
-        if self._lock:
-            return
-        self._lock = True
         self._set_slider_value(value)
         self.valueChanged.emit(self._edit.value())
-        self._lock = False
 
     def _on_slider_changed(self,value):
+        if self._lock:
+            self._lock = False
+            return
         value = value / float(self._mul)
         self._edit.setValue(value)
 
@@ -528,7 +529,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
 
         if value == self._slider.value():
             return
-
+        self._lock = True
         _min = self._slider.minimum()
         _max = self._slider.maximum()
         if _min<=value<=_max:
@@ -537,6 +538,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
             self._slider.setValue(_min)
         elif value > _max and self._slider.value() != _max:
             self._slider.setValue(_max)
+
 
     def set_min(self, value=0):
         self._slider.setMinimum(int(value*self._mul))
