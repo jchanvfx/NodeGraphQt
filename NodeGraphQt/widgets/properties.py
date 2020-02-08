@@ -310,9 +310,13 @@ class PropFilePath(BaseProperty):
 
         self._ledit.setStyleSheet("QLineEdit{border:1px solid}")
         _button.setStyleSheet("QPushButton{border:1px solid}")
+        self._ext = "*"
+
+    def set_ext(self, ext):
+        self._ext = ext
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName(self)
+        file_path = file_dialog.getOpenFileName(self, ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)
@@ -868,6 +872,8 @@ class NodePropWidget(QtWidgets.QWidget):
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
+                    if 'ext' in common_props[prop_name].keys():
+                        widget.set_ext(common_props[prop_name]['ext'])
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))

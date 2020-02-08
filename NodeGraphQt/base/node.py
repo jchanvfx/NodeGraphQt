@@ -234,7 +234,7 @@ class NodeObject(object):
         self.set_property('selected', selected)
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None):
+                        widget_type=NODE_PROP, tab=None, ext=None):
         """
         Creates a custom property to the node.
 
@@ -247,7 +247,13 @@ class NodeObject(object):
             - :attr:`NodeGraphQt.constants.NODE_PROP_QCHECKBOX`
             - :attr:`NodeGraphQt.constants.NODE_PROP_QSPINBOX`
             - :attr:`NodeGraphQt.constants.NODE_PROP_COLORPICKER`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_SLIDER`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_FILE`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR2`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR3`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR4`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_FLOAT`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_INT`
+            - :attr:`NodeGraphQt.constants.NODE_PROP_BUTTON`
 
         See Also:
             :class:`NodeGraphQt.PropertiesBinWidget`
@@ -259,8 +265,9 @@ class NodeObject(object):
             range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
             widget_type (int): widget flag to display in the ``PropertiesBinWidget``
             tab (str): name of the widget tab to display in the properties bin.
+            ext (str): file ext of ``NODE_PROP_FILE``
         """
-        self.model.add_property(name, value, items, range, widget_type, tab)
+        self.model.add_property(name, value, items, range, widget_type, tab, ext)
 
     def properties(self):
         """
@@ -557,9 +564,12 @@ class BaseNode(NodeObject):
             tab (str): name of the widget tab to display in.
             ext (str): file ext
         """
-        self.create_property(
-            name, text, widget_type=NODE_PROP_FILE, tab=tab)
-        widget = NodeFilePath(self.view, name, label, text,ext)
+        self.model.add_property(name, text, None, None, NODE_PROP_FILE, tab, ext)
+        # use create_property will cause strange error
+        # self.create_property(
+        #     name, text, widget_type=NODE_PROP_FILE, tab=tab, ext=None)
+
+        widget = NodeFilePath(self.view, name, label, text, ext)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 

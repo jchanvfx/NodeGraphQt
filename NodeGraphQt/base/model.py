@@ -92,7 +92,7 @@ class NodeModel(object):
         }
 
     def add_property(self, name, value, items=None, range=None,
-                     widget_type=NODE_PROP, tab='Properties'):
+                     widget_type=NODE_PROP, tab='Properties', ext=None):
         """
         add custom property.
 
@@ -103,6 +103,7 @@ class NodeModel(object):
             range (tuple)): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
             tab (str): widget tab name.
+            ext (str) file ext for NODE_PROP_FILE
         """
         tab = tab or 'Properties'
 
@@ -122,6 +123,8 @@ class NodeModel(object):
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
+            if ext:
+                self._TEMP_property_attrs[name]['ext'] = ext
         else:
             attrs = {self.type_: {name: {
                 'widget_type': widget_type,
@@ -131,6 +134,8 @@ class NodeModel(object):
                 attrs[self.type_][name]['items'] = items
             if range:
                 attrs[self.type_][name]['range'] = range
+            if ext:
+                attrs[self.type_][name]['ext'] = ext
             self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):
