@@ -14,7 +14,7 @@ from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
-from NodeGraphQt.widgets.file_dialog import file_dialog
+from NodeGraphQt.widgets.file_dialog import file_dialog, messageBox
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -714,14 +714,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 'nodes': self._ctx_node_menu}
 
     def question_dialog(self, text, title='Node Graph'):
-        dlg = QtWidgets.QMessageBox.question(
-            self, title, text,
-            QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
     def message_dialog(self, text, title='Node Graph'):
-        QtWidgets.QMessageBox.information(
-            self, title, text, QtWidgets.QMessageBox.Ok)
+        messageBox(text, title, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
         ext = '*{} '.format(ext) if ext else ''

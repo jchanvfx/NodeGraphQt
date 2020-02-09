@@ -193,3 +193,31 @@ QWidget{
     background-color: transparent;
 }
 '''
+
+STYLE_MESSAGEBOX = '''
+QLabel{
+    min-width:500 px; 
+    font-size: 18px;
+    background-color: transparent;
+    color: rgb(200 ,200, 200);
+} 
+QPushButton{ 
+    width:100px; 
+    font-size: 18px; 
+    background-color: transparent;
+    color: rgb(200 ,200, 200);
+    border-width: 1px;
+    border-color: rgb(40,40,40);
+}
+QPushButton::pressed {
+    border-style: inset;
+}
+QPushButton::hover {
+    background-color: rgb(65, 65, 65);
+    border-color: rgb(10,80,230);
+}
+QMessageBox{
+    background-color: rgb(55, 55, 55);
+    color: rgb(200 ,200, 200);
+}
+'''

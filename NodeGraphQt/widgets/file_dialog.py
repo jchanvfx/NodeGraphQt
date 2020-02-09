@@ -1,4 +1,5 @@
 from NodeGraphQt import QtWidgets
+from NodeGraphQt.widgets.stylesheet import STYLE_MESSAGEBOX
 import os
 
 current_dir = os.path.expanduser('~')
@@ -40,3 +41,10 @@ class file_dialog(object):
         return file_dlg
 
 
+def messageBox(text, title , buttons):
+    msg = QtWidgets.QMessageBox()
+    msg.setStyleSheet(STYLE_MESSAGEBOX)
+    msg.setWindowTitle(title)
+    msg.setInformativeText(text)
+    msg.setStandardButtons(buttons)
+    return msg.exec_()
