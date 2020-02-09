@@ -687,8 +687,7 @@ class NodeGraph(QtCore.QObject):
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
-
-            node._graph = self
+            node.set_graph(self)
             node.model._graph_model = self.model
 
             wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')

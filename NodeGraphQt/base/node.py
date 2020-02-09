@@ -125,6 +125,9 @@ class NodeObject(object):
         """
         return self._model
 
+    def set_graph(self, graph):
+        self._graph = graph
+
     def set_model(self, model):
         """
         Set the node model.

@@ -402,7 +402,7 @@ class _valueEdit(QtWidgets.QLineEdit):
         self._step = 1
         self._speed = 0.1
 
-        self.textChanged.connect(self._on_text_changed)
+        self.editingFinished.connect(self._on_text_changed)
 
         self.menu = _valueMenu()
         self.menu.mouseMove.connect(self.mouseMoveEvent)
@@ -413,7 +413,7 @@ class _valueEdit(QtWidgets.QLineEdit):
 
         self.set_data_type(float)
 
-    def _on_text_changed(self, value):
+    def _on_text_changed(self):
         self.valueChanged.emit(self.value())
 
     def _reset(self):
@@ -429,6 +429,7 @@ class _valueEdit(QtWidgets.QLineEdit):
                 delta = event.x() - self.pre_x
                 value = self.pre_val + int(delta*self._speed) * self._step
                 self.setValue(value)
+                self._on_text_changed()
 
         super(_valueEdit,self).mouseMoveEvent(event)
 
@@ -542,7 +543,6 @@ class _valueSliderEdit(QtWidgets.QWidget):
             self._slider.setValue(_min)
         elif value > _max and self._slider.value() != _max:
             self._slider.setValue(_max)
-
 
     def set_min(self, value=0):
         self._slider.setMinimum(int(value*self._mul))
