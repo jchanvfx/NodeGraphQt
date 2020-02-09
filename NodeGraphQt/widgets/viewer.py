@@ -33,6 +33,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
     insert_node = QtCore.Signal(object, str, dict)
+    need_show_tab_search = QtCore.Signal()
 
     # pass through signals
     node_selected = QtCore.Signal(str)
@@ -207,10 +208,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
                             action.node_id = node.id
 
         ctx_menu = ctx_menu or self._ctx_menu
-        if ctx_menu.isEnabled():
-            ctx_menu.exec_(event.globalPos())
+        if len(ctx_menu.actions()) > 0:
+            if ctx_menu.isEnabled():
+                ctx_menu.exec_(event.globalPos())
+            else:
+                return super(NodeViewer, self).contextMenuEvent(event)
         else:
-            return super(NodeViewer, self).contextMenuEvent(event)
+            self.need_show_tab_search.emit()
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -285,7 +289,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
-
 
         # hide pipe slicer.
         if self._SLICER_PIPE.isVisible():
