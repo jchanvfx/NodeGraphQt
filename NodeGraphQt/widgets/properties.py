@@ -518,18 +518,19 @@ class _valueSliderEdit(QtWidgets.QWidget):
         self.set_data_type(float)
         self._lock = False
 
-    def _on_edit_changed(self,value):
+    def _on_edit_changed(self, value):
         self._set_slider_value(value)
         self.valueChanged.emit(self._edit.value())
 
-    def _on_slider_changed(self,value):
+    def _on_slider_changed(self, value):
         if self._lock:
             self._lock = False
             return
         value = value / float(self._mul)
         self._edit.setValue(value)
+        self._on_edit_changed(value)
 
-    def _set_slider_value(self,value):
+    def _set_slider_value(self, value):
         value = int(value * self._mul)
 
         if value == self._slider.value():
@@ -567,6 +568,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
 
     def setValue(self,value):
         self._edit.setValue(value)
+        self._on_edit_changed(value)
 
 
 class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
