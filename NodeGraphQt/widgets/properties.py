@@ -310,9 +310,13 @@ class PropFilePath(BaseProperty):
 
         self._ledit.setStyleSheet("QLineEdit{border:1px solid}")
         _button.setStyleSheet("QPushButton{border:1px solid}")
+        self._ext = "*"
+
+    def set_ext(self, ext):
+        self._ext = ext
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName(self)
+        file_path = file_dialog.getOpenFileName(self, ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)
@@ -398,7 +402,7 @@ class _valueEdit(QtWidgets.QLineEdit):
         self._step = 1
         self._speed = 0.1
 
-        self.textChanged.connect(self._on_text_changed)
+        self.editingFinished.connect(self._on_text_changed)
 
         self.menu = _valueMenu()
         self.menu.mouseMove.connect(self.mouseMoveEvent)
@@ -409,7 +413,7 @@ class _valueEdit(QtWidgets.QLineEdit):
 
         self.set_data_type(float)
 
-    def _on_text_changed(self, value):
+    def _on_text_changed(self):
         self.valueChanged.emit(self.value())
 
     def _reset(self):
@@ -425,6 +429,7 @@ class _valueEdit(QtWidgets.QLineEdit):
                 delta = event.x() - self.pre_x
                 value = self.pre_val + int(delta*self._speed) * self._step
                 self.setValue(value)
+                self._on_text_changed()
 
         super(_valueEdit,self).mouseMoveEvent(event)
 
@@ -513,18 +518,19 @@ class _valueSliderEdit(QtWidgets.QWidget):
         self.set_data_type(float)
         self._lock = False
 
-    def _on_edit_changed(self,value):
+    def _on_edit_changed(self, value):
         self._set_slider_value(value)
         self.valueChanged.emit(self._edit.value())
 
-    def _on_slider_changed(self,value):
+    def _on_slider_changed(self, value):
         if self._lock:
             self._lock = False
             return
         value = value / float(self._mul)
         self._edit.setValue(value)
+        self._on_edit_changed(value)
 
-    def _set_slider_value(self,value):
+    def _set_slider_value(self, value):
         value = int(value * self._mul)
 
         if value == self._slider.value():
@@ -538,7 +544,6 @@ class _valueSliderEdit(QtWidgets.QWidget):
             self._slider.setValue(_min)
         elif value > _max and self._slider.value() != _max:
             self._slider.setValue(_max)
-
 
     def set_min(self, value=0):
         self._slider.setMinimum(int(value*self._mul))
@@ -563,6 +568,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
 
     def setValue(self,value):
         self._edit.setValue(value)
+        self._on_edit_changed(value)
 
 
 class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
@@ -868,6 +874,8 @@ class NodePropWidget(QtWidgets.QWidget):
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
+                    if 'ext' in common_props[prop_name].keys():
+                        widget.set_ext(common_props[prop_name]['ext'])
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))

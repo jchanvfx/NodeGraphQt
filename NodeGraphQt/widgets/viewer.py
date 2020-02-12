@@ -14,7 +14,7 @@ from NodeGraphQt.qgraphics.slicer import SlicerPipe
 from NodeGraphQt.widgets.actions import BaseMenu
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
-from NodeGraphQt.widgets.file_dialog import file_dialog
+from NodeGraphQt.widgets.file_dialog import file_dialog, messageBox
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -33,6 +33,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
     insert_node = QtCore.Signal(object, str, dict)
+    need_show_tab_search = QtCore.Signal()
 
     # pass through signals
     node_selected = QtCore.Signal(str)
@@ -207,10 +208,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
                             action.node_id = node.id
 
         ctx_menu = ctx_menu or self._ctx_menu
-        if ctx_menu.isEnabled():
-            ctx_menu.exec_(event.globalPos())
+        if len(ctx_menu.actions()) > 0:
+            if ctx_menu.isEnabled():
+                ctx_menu.exec_(event.globalPos())
+            else:
+                return super(NodeViewer, self).contextMenuEvent(event)
         else:
-            return super(NodeViewer, self).contextMenuEvent(event)
+            self.need_show_tab_search.emit()
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -285,7 +289,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
-
 
         # hide pipe slicer.
         if self._SLICER_PIPE.isVisible():
@@ -714,14 +717,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 'nodes': self._ctx_node_menu}
 
     def question_dialog(self, text, title='Node Graph'):
-        dlg = QtWidgets.QMessageBox.question(
-            self, title, text,
-            QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
     def message_dialog(self, text, title='Node Graph'):
-        QtWidgets.QMessageBox.information(
-            self, title, text, QtWidgets.QMessageBox.Ok)
+        messageBox(text, title, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
         ext = '*{} '.format(ext) if ext else ''

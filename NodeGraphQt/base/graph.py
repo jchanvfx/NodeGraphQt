@@ -5,7 +5,7 @@ import os
 import re
 import copy
 
-from NodeGraphQt import QtCore, QtWidgets
+from NodeGraphQt import QtCore, QtWidgets, QtGui
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
                                        NodeMovedCmd,
@@ -105,10 +105,9 @@ class NodeGraph(QtCore.QObject):
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
 
-        tab = QtWidgets.QAction('Search Nodes', self)
-        tab.setShortcut('tab')
-        tab.triggered.connect(self._toggle_tab_search)
-        self._viewer.addAction(tab)
+        tab = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
+        tab.activated.connect(self._toggle_tab_search)
+        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
 
         self._wire_signals()
 
@@ -164,8 +163,9 @@ class NodeGraph(QtCore.QObject):
         """
         toggle the tab search widget.
         """
-        self._viewer.tab_search_set_nodes(self._node_factory.names)
-        self._viewer.tab_search_toggle()
+        if self._viewer.underMouse():
+            self._viewer.tab_search_set_nodes(self._node_factory.names)
+            self._viewer.tab_search_toggle()
 
     def _on_property_bin_changed(self, node_id, prop_name, prop_value):
         """
@@ -687,8 +687,7 @@ class NodeGraph(QtCore.QObject):
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
-
-            node._graph = self
+            node.set_graph(self)
             node.model._graph_model = self.model
 
             wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
