@@ -131,7 +131,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scale(scale, scale, pos)
 
     def _set_viewer_pan(self, pos_x, pos_y):
-        speed = self._scene_range.width() * 0.002
+        speed = self._scene_range.width() * 0.0015
         x = -pos_x * speed
         y = -pos_y * speed
         self._scene_range.adjust(x, y, x, y)
@@ -201,7 +201,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
             if nodes:
                 node = nodes[0]
-                ctx_menu = self._ctx_node_menu.get_menu(node.type_,node.id)
+                ctx_menu = self._ctx_node_menu.get_menu(node.type_, node.id)
                 if ctx_menu:
                     for action in ctx_menu.actions():
                         if not action.menu():
@@ -277,10 +277,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._rubber_band.show()
 
         # allow new live pipe with the shift modifier.
-        if self.LMB_state:
-            if (not self.SHIFT_state and not self.CTRL_state) or\
-                    (self.SHIFT_state and pipes):
-                super(NodeViewer, self).mousePressEvent(event)
+        # if self.LMB_state:
+        #     if (not self.SHIFT_state and not self.CTRL_state) or\
+        #             (self.SHIFT_state and pipes):
+        if not self._LIVE_PIPE.isVisible():
+            super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -397,7 +398,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if delta == 0:
                 delta = event.angleDelta().x()
 
-        self._set_viewer_zoom(delta, pos = event.pos())
+        self._set_viewer_zoom(delta, pos=event.pos())
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
