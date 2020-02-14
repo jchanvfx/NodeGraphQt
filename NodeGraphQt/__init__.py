@@ -30,7 +30,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-**NodeGraphQt** is a node graph Framework that can be implemented and re purposed
+**NodeGraphQt** is a node graph framework that can be implemented and re purposed
 into applications that supports **PySide2**.
 
 project: https://github.com/jchanvfx/NodeGraphQt

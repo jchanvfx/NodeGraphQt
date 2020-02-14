@@ -4,7 +4,7 @@ import os
 from .pkg_info import __version__
 from NodeGraphQt import QtWidgets
 
-#: Current version of the NodeGraphQt Framework.
+#: Current version of the NodeGraphQt framework.
 VERSION = __version__
 
 # === PIPE ===
