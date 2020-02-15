@@ -237,7 +237,8 @@ class NodeObject(object):
         self.set_property('selected', selected)
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None, ext=None):
+                        widget_type=NODE_PROP, tab=None, ext=None,
+                        funcs=None):
         """
         Creates a custom property to the node.
 
@@ -269,8 +270,9 @@ class NodeObject(object):
             widget_type (int): widget flag to display in the ``PropertiesBinWidget``
             tab (str): name of the widget tab to display in the properties bin.
             ext (str): file ext of ``NODE_PROP_FILE``
+            funcs (list) list of functions for NODE_PROP_BUTTON
         """
-        self.model.add_property(name, value, items, range, widget_type, tab, ext)
+        self.model.add_property(name, value, items, range, widget_type, tab, ext, funcs)
 
     def properties(self):
         """
@@ -567,11 +569,8 @@ class BaseNode(NodeObject):
             tab (str): name of the widget tab to display in.
             ext (str): file ext
         """
-        self.model.add_property(name, text, None, None, NODE_PROP_FILE, tab, ext)
-        # use create_property will cause strange error
-        # self.create_property(
-        #     name, text, widget_type=NODE_PROP_FILE, tab=tab, ext=None)
-
+        self.create_property(
+            name, text, widget_type=NODE_PROP_FILE, tab=tab, ext=ext)
         widget = NodeFilePath(self.view, name, label, text, ext)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)

@@ -676,10 +676,12 @@ class PropButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
         super(PropButton, self).__init__(parent)
 
-    def set_value(self, value):
+    def set_value(self, value, node=None):
         # value: list of functions
+        if type(value) is not list:
+            return
         for func in value:
-            self.clicked.connect(func)
+            self.clicked.connect(lambda: func(node))
 
     def get_value(self):
         return None
@@ -876,6 +878,8 @@ class NodePropWidget(QtWidgets.QWidget):
                         widget.set_max(prop_range[1])
                     if 'ext' in common_props[prop_name].keys():
                         widget.set_ext(common_props[prop_name]['ext'])
+                    if 'funcs' in common_props[prop_name].keys():
+                        widget.set_value(common_props[prop_name]['funcs'], node)
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))
