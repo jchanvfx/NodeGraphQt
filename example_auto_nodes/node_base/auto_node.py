@@ -1,7 +1,7 @@
 from NodeGraphQt.base.node import BaseNode
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NODE_PROP
-from Qt import QtCore
+from NodeGraphQt import QtCore
 import hashlib
 import copy
 import time
@@ -83,10 +83,12 @@ class AutoNode(BaseNode, QtCore.QObject):
         return self.get_property(port.name())
 
     def getInputData(self, port):
-        # get input data by input Port,the type of "port" can be :
-        # int : Port index
-        # str : Port name
-        # Port : Port object
+        """
+        get input data by input Port,the type of "port" can be :
+        int : Port index
+        str : Port name
+        Port : Port object
+        """
 
         if type(port) is int:
             to_port = self.input(port)
@@ -126,10 +128,10 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         _start_time = time.time()
 
-        #try:
-        self.run()
-        #except Exception as error:
-        #    self.error(error)
+        try:
+            self.run()
+        except Exception as error:
+           self.error(error)
 
         self._autoCook = _tmp
 

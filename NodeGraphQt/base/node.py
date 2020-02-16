@@ -704,6 +704,21 @@ class BaseNode(NodeObject):
         self.model.outputs[port.name()] = port.model
         return port
 
+    def update_combo_menu(self, name, items):
+        if not self.has_property(name):
+            return
+        old_value = self.get_property(name)
+        self.set_property(name, items)
+        _name = '_'+name+"_"
+        if not self.has_property(_name):
+            self.create_property(_name, items)
+        else:
+            self.set_property(_name, items)
+        if old_value in items:
+            self.set_property(name, old_value)
+        else:
+            self.set_property(name, items[0])
+
     def inputs(self):
         """
         Returns all the input ports from the node.

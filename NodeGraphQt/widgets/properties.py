@@ -245,6 +245,9 @@ class PropComboBox(QtWidgets.QComboBox):
         return self.currentText()
 
     def set_value(self, value):
+        if type(value) is list:
+            self.set_items(value)
+            return
         if value != self.get_value():
             idx = self.findText(value, QtCore.Qt.MatchExactly)
             self.setCurrentIndex(idx)
@@ -871,7 +874,11 @@ class NodePropWidget(QtWidgets.QWidget):
                 widget.setMinimumHeight(min_widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
-                        widget.set_items(common_props[prop_name]['items'])
+                        _prop_name = '_' + prop_name + "_"
+                        if node.has_property(_prop_name):
+                            widget.set_items(node.get_property(_prop_name))
+                        else:
+                            widget.set_items(common_props[prop_name]['items'])
                     if 'range' in common_props[prop_name].keys():
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
