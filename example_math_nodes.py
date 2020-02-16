@@ -41,6 +41,6 @@ if __name__ == '__main__':
 
     # registered nodes.
     [graph.register_node(n) for n in Nodes] 
-    graph.load_session('example.nodes')
+    graph.load_session(r'example_nodes\networks\example.nodes')
 
     app.exec_()

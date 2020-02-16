@@ -23,6 +23,29 @@ from NodeGraphQt.constants import (DRAG_DROP_ID,
 from NodeGraphQt.widgets.viewer import NodeViewer
 
 
+class QWidgetDrops(QtWidgets.QWidget):
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+            for url in event.mimeData().urls():
+                self.import_session(url.toLocalFile())
+        else:
+            e.ignore()
+
+
 class NodeGraph(QtCore.QObject):
     """
     The ``NodeGraph`` class is the main controller for managing all nodes.
@@ -110,6 +133,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
 
         self._wire_signals()
+        self.widget.setAcceptDrops(True)
 
     def __repr__(self):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -325,8 +349,10 @@ class NodeGraph(QtCore.QObject):
             PySide2.QtWidgets.QWidget: node graph widget.
         """
         if self._widget is None:
-            self._widget = QtWidgets.QWidget()
-            layout = QtWidgets.QVBoxLayout(self._widget)
+            self._widget = QWidgetDrops()
+            self._widget.import_session = self.import_session
+            
+                        layout = QtWidgets.QVBoxLayout(self._widget)
             layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(self._viewer)
         return self._widget
@@ -1046,15 +1072,24 @@ class NodeGraph(QtCore.QObject):
     def load_session(self, file_path):
         """
         Load node graph session layout file.
-
+        
         Args:
             file_path (str): path to the serialized layout file.
         """
+        self.clear_session()
+        self.import_session(file_path)
+
+    def import_session(self, file_path):
+        """
+        Import node graph session layout file.
+        
+        Args:
+            file_path (str): path to the serialized layout file.
+        """
+        
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist.')
-
-        self.clear_session()
 
         try:
             with open(file_path) as data_file:

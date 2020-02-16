@@ -1,3 +1,4 @@
+import os
 from NodeGraphQt import BaseNode, QtCore
 
 
@@ -64,7 +65,7 @@ class TextFileInputNode(BaseNode):
                     data = fread.read()
                     self.set_property('output', data)
             else:
-                print('No existe %s' % path)
+                print("%s doesn't exist!" % path)
                 self.set_property('output', '')
 
 
