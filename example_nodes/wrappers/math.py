@@ -10,27 +10,22 @@ _nan = nan
 
 
 def pi():
-    print('pi', _pi)
     return _pi
 
 
 def e():
-    print('e', _e)
     return _e
 
 
 def tau():
-    print('tau', _tau)
     return _tau
 
 
 def inf():
-    print('inf', _inf)
     return _inf
 
 
 def nan():
-    print('nan', _nan)
     return _nan
 
 

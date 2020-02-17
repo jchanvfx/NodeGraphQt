@@ -33,6 +33,7 @@ def setup_context_menu(graph):
 
     # create "File" menu.
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
+    file_menu.add_command('Import...', _import_session, QtGui.QKeySequence.Open)
     file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+s')
     file_menu.add_command('New Session', _new_session)
@@ -117,6 +118,20 @@ def _open_session(graph):
     file_path = viewer.load_dialog(current)
     if file_path:
         graph.load_session(file_path)
+
+
+def _import_session(graph):
+    """
+    Prompts a file open dialog to load a session.
+
+    Args:
+        graph (NodeGraphQt.NodeGraph): node graph.
+    """
+    current = graph.current_session()
+    viewer = graph.viewer()
+    file_path = viewer.load_dialog(current)
+    if file_path:
+        graph.import_session(file_path)
 
 
 def _save_session(graph):

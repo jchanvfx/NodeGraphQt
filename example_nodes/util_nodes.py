@@ -23,17 +23,17 @@ class ObjectWrapperNode(BaseNode):
     def buildNode(self):
         obj = self.get_property('self')
         if obj:
-            self.set_name(obj.__class__.__name__.capitalize())
+            self.set_name('Object Wrapper (%s)' % obj.__class__.__name__.capitalize())
         else:
             self.set_name('Object Wrapper (None)')
 
-        # switch math function type
         if 'methods' not in self.view.widgets:
             self.add_combo_menu('methods',
                                 'Methods',
                                 items=dir(obj),
                                 tab='widgets')
 
+            self.funcName = self.view.widgets['methods'].widget.currentText()
             self.view.widgets['methods'].value_changed.connect(
                 self.addFunction)
             self.view.widgets['methods'].value_changed.connect(
@@ -52,8 +52,9 @@ class ObjectWrapperNode(BaseNode):
         self.funcName = func
         obj = self.get_property('self')
         func = getattr(obj, self.funcName)
-        dataFunc = inspect.signature(func)
-
+        
+        if callable(func):
+            dataFunc = inspect.getfullargspec(func)
         for arg in dataFunc.args:
             if not self.has_property(arg):
                 inPort = self.add_input(arg)
@@ -65,6 +66,10 @@ class ObjectWrapperNode(BaseNode):
                     inPort.set_visible(True)
             else:
                 inPort.set_visible(False)
+        else:
+            for inPort in self._inputs:
+                if inPort.name() != 'self':
+                    inPort.set_visible(False)
 
     def getSelf(self):
         for from_port in self.selfPort.connected_ports():
@@ -100,10 +105,10 @@ class ObjectWrapperNode(BaseNode):
 
         try:
             # Execute math function with arguments.
-            data = self.func(*[
-                self.get_property(inport.name()) for inport in self._inputs
-                if inport.visible() and inport.name() != 'self'
-            ])
+            if callable(self.func):
+                data = self.func(*[self.get_property(inport.name()) for inport in self._inputs if inport.visible() and inport.name() != 'self'])
+            else:
+                data = self.func
 
             self.set_property('output', data)
         except KeyError as error:
@@ -128,3 +133,25 @@ class ObjectWrapperNode(BaseNode):
         comboBox = self.view.widgets['methods'].widget
         comboBox.clear()
         self.update_streams()
+
+
+class SelfNode(BaseNode):
+    """
+    A node class with 3 inputs and 3 outputs.
+    The last input and last output can take in multiple pipes.
+    """
+
+    # unique node identifier.
+    __identifier__ = 'Util'
+
+    # initial default node name.
+    NODE_NAME = 'MetaNode'
+
+    def __init__(self):
+        super(SelfNode, self).__init__()
+        self.add_output('self')
+        self.create_property('self', None)
+
+    def run(self):
+        self.set_property('self', self)
+        
