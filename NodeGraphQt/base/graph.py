@@ -774,7 +774,7 @@ class NodeGraph(QtCore.QObject):
                 node_attrs[node.type_][pname].update(pattrs)
             self.model.set_node_common_properties(node_attrs)
 
-        node._graph = self
+        node.set_graph(self)
         node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
         node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
@@ -1006,6 +1006,7 @@ class NodeGraph(QtCore.QObject):
 
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'))
+                node.set_graph(self)
 
         # build the connections.
         for connection in data.get('connections', []):

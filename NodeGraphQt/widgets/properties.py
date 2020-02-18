@@ -245,6 +245,9 @@ class PropComboBox(QtWidgets.QComboBox):
         return self.currentText()
 
     def set_value(self, value):
+        if type(value) is list:
+            self.set_items(value)
+            return
         if value != self.get_value():
             idx = self.findText(value, QtCore.Qt.MatchExactly)
             self.setCurrentIndex(idx)
@@ -676,10 +679,12 @@ class PropButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
         super(PropButton, self).__init__(parent)
 
-    def set_value(self, value):
+    def set_value(self, value, node=None):
         # value: list of functions
+        if type(value) is not list:
+            return
         for func in value:
-            self.clicked.connect(func)
+            self.clicked.connect(lambda: func(node))
 
     def get_value(self):
         return None
@@ -869,13 +874,19 @@ class NodePropWidget(QtWidgets.QWidget):
                 widget.setMinimumHeight(min_widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
-                        widget.set_items(common_props[prop_name]['items'])
+                        _prop_name = '_' + prop_name + "_"
+                        if node.has_property(_prop_name):
+                            widget.set_items(node.get_property(_prop_name))
+                        else:
+                            widget.set_items(common_props[prop_name]['items'])
                     if 'range' in common_props[prop_name].keys():
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
                     if 'ext' in common_props[prop_name].keys():
                         widget.set_ext(common_props[prop_name]['ext'])
+                    if 'funcs' in common_props[prop_name].keys():
+                        widget.set_value(common_props[prop_name]['funcs'], node)
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))

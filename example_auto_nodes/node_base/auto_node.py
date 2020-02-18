@@ -25,7 +25,7 @@ class CryptoColors(object):
         return self.colors[text]
 
 
-class AutoNode(BaseNode,QtCore.QObject):
+class AutoNode(BaseNode, QtCore.QObject):
     cooked = QtCore.Signal()
 
     def __init__(self, defaultInputType=None, defaultOutputType=None):
@@ -75,17 +75,20 @@ class AutoNode(BaseNode,QtCore.QObject):
     def cookNextNode(self):
         for nodeList in self.connected_output_nodes().values():
             for n in nodeList:
-                n.cook()
+                if n is not self:
+                    n.cook()
 
     def getData(self, port):
         # for custom output data
         return self.get_property(port.name())
 
     def getInputData(self, port):
-        # get input data by input Port,the type of "port" can be :
-        # int : Port index
-        # str : Port name
-        # Port : Port object
+        """
+        get input data by input Port,the type of "port" can be :
+        int : Port index
+        str : Port name
+        Port : Port object
+        """
 
         if type(port) is int:
             to_port = self.input(port)
@@ -128,7 +131,7 @@ class AutoNode(BaseNode,QtCore.QObject):
         try:
             self.run()
         except Exception as error:
-            self.error(error)
+           self.error(error)
 
         self._autoCook = _tmp
 
@@ -202,8 +205,8 @@ class AutoNode(BaseNode,QtCore.QObject):
             current_port.view.setToolTip('{}: {} ({}) '.format(current_port.name(), data_type_name, conn_type))
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None):
-        super(AutoNode, self).create_property(name, value, items, range, widget_type, tab)
+                        widget_type=NODE_PROP, tab=None, ext=None, funcs=None):
+        super(AutoNode, self).create_property(name, value, items, range, widget_type, tab, ext, funcs)
 
         if value is not None:
             self.set_port_type(name, type(value))
@@ -235,7 +238,6 @@ class AutoNode(BaseNode,QtCore.QObject):
         else:
             self.cook()
 
-
     def _close_error(self):
         self._error = False
         self.set_property('color', self.defaultColor)
@@ -250,7 +252,7 @@ class AutoNode(BaseNode,QtCore.QObject):
         tooltip = '<font color="red"><br>({})</br></font>'.format(message)
         self._update_tool_tip(tooltip)
 
-    def _update_tool_tip(self, message = None):
+    def _update_tool_tip(self, message=None):
         if message is None:
             tooltip = self._toolTip.format(self._cookTime)
         else:
@@ -269,3 +271,8 @@ class AutoNode(BaseNode,QtCore.QObject):
             return self._error
 
         self._show_error(message)
+
+    def update_model(self):
+        if self.error():
+            self.set_property('color', self.defaultColor)
+        super(AutoNode, self).update_model()

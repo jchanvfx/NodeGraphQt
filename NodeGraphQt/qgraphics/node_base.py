@@ -691,6 +691,9 @@ class NodeItem(AbstractNodeItem):
             return widget
         raise NodeWidgetError('node has no widget "{}"'.format(name))
 
+    def has_widget(self, name):
+        return name in self._widgets.keys()
+
     def delete(self):
         for port, text in self._input_items.items():
             port.delete()

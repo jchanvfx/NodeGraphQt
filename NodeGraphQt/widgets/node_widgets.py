@@ -192,6 +192,10 @@ class NodeComboBox(NodeBaseWidget):
 
     @value.setter
     def value(self, text=''):
+        if type(text) is list:
+            self._combo.clear()
+            self._combo.addItems(text)
+            return
         if text != self.value:
             index = self._combo.findText(text, QtCore.Qt.MatchExactly)
             self._combo.setCurrentIndex(index)
