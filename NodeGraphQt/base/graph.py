@@ -43,7 +43,7 @@ class QWidgetDrops(QtWidgets.QWidget):
             for url in event.mimeData().urls():
                 self.import_session(url.toLocalFile())
         else:
-            e.ignore()
+            event.ignore()
 
 
 class NodeGraph(QtCore.QObject):
@@ -352,7 +352,7 @@ class NodeGraph(QtCore.QObject):
             self._widget = QWidgetDrops()
             self._widget.import_session = self.import_session
             
-                        layout = QtWidgets.QVBoxLayout(self._widget)
+            layout = QtWidgets.QVBoxLayout(self._widget)
             layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(self._viewer)
         return self._widget
