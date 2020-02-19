@@ -970,7 +970,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
-    from Framework.vendor.NodeGraphQt import BaseNode, NodeGraph
+    from .. import BaseNode, NodeGraph
 
 
     class TestNode(BaseNode):
