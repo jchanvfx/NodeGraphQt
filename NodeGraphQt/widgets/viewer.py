@@ -1,20 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import math
-import os
 
-from NodeGraphQt import QtGui, QtCore, QtWidgets ,QtOpenGL
-from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
-                                   PIPE_LAYOUT_CURVED)
-from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
-from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
-from NodeGraphQt.qgraphics.pipe import Pipe, LivePipe
-from NodeGraphQt.qgraphics.port import PortItem
-from NodeGraphQt.qgraphics.slicer import SlicerPipe
-from NodeGraphQt.widgets.actions import BaseMenu
-from NodeGraphQt.widgets.scene import NodeScene
-from NodeGraphQt.widgets.tab_search import TabSearchWidget, TabSearchMenuWidget
-from NodeGraphQt.widgets.file_dialog import file_dialog, messageBox
+from .. import QtGui, QtCore, QtWidgets, QtOpenGL
+from ..constants import (IN_PORT, OUT_PORT,
+                         PIPE_LAYOUT_CURVED)
+from ..qgraphics.node_abstract import AbstractNodeItem
+from ..qgraphics.node_backdrop import BackdropNodeItem
+from ..qgraphics.pipe import Pipe, LivePipe
+from ..qgraphics.port import PortItem
+from ..qgraphics.slicer import SlicerPipe
+from ..base.menu import BaseMenu
+from .scene import NodeScene
+from .tab_search import TabSearchMenuWidget
+from .file_dialog import file_dialog, messageBox
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -115,7 +114,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos = self.mapToScene(pos)
         if sensitivity is None:
             scale = 1.001 ** value
-            self.scale(scale,scale,pos)
+            self.scale(scale, scale, pos)
             return
 
         if value == 0.0:
@@ -137,7 +136,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._scene_range.adjust(x, y, x, y)
         self._update_scene()
 
-    def scale(self, sx, sy, pos = None):
+    def scale(self, sx, sy, pos=None):
         scale = [sx, sx]
 
         center = pos or self._scene_range.center()
@@ -145,7 +144,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         w = self._scene_range.width() / scale[0]
         h = self._scene_range.height() / scale[1]
         self._scene_range = QtCore.QRectF(center.x() - (center.x() - self._scene_range.left()) / scale[0],
-                                   center.y() - (center.y() - self._scene_range.top()) / scale[1], w, h)
+                                          center.y() - (center.y() - self._scene_range.top()) / scale[1], w, h)
 
         self._update_scene()
 
@@ -185,8 +184,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- reimplemented events ---
 
     def resizeEvent(self, event):
-        delta = max(self.size().width()/self._last_size.width(),
-                        self.size().height()/self._last_size.height())
+        delta = max(self.size().width() / self._last_size.width(),
+                    self.size().height() / self._last_size.height())
         self._set_viewer_zoom(delta)
         self._last_size = self.size()
         super(NodeViewer, self).resizeEvent(event)
@@ -227,7 +226,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
         self._prev_selection_nodes, \
-            self._prev_selection_pipes = self.selected_items()
+        self._prev_selection_pipes = self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
@@ -340,7 +339,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if self.MMB_state and self.ALT_state:
             pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
-            self._set_viewer_zoom(zoom, 0.05,pos = event.pos())
+            self._set_viewer_zoom(zoom, 0.05, pos=event.pos())
         elif self.MMB_state or (self.LMB_state and self.ALT_state):
             pos_x = (event.x() - self._previous_pos.x())
             pos_y = (event.y() - self._previous_pos.y())
@@ -718,7 +717,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 'nodes': self._ctx_node_menu}
 
     def question_dialog(self, text, title='Node Graph'):
-        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
     def message_dialog(self, text, title='Node Graph'):
@@ -766,13 +765,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return nodes
 
     def selected_nodes(self):
-        nodes = [item for item in self.scene().selectedItems()\
-                 if isinstance(item,AbstractNodeItem)]
+        nodes = [item for item in self.scene().selectedItems() \
+                 if isinstance(item, AbstractNodeItem)]
         return nodes
 
     def selected_pipes(self):
-        pipes = [item for item in self.scene().selectedItems()\
-                 if isinstance(item,Pipe)]
+        pipes = [item for item in self.scene().selectedItems() \
+                 if isinstance(item, Pipe)]
         return pipes
 
     def selected_items(self):
@@ -851,7 +850,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
-    def reset_zoom(self,cent=None):
+    def reset_zoom(self, cent=None):
         self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
         if cent:
             self._scene_range.translate(cent - self._scene_range.center())
@@ -874,7 +873,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not (ZOOM_MIN <= value <= ZOOM_MAX):
                 return
         value = value - zoom
-        self._set_viewer_zoom(value,0.0)
+        self._set_viewer_zoom(value, 0.0)
 
     def zoom_to_nodes(self, nodes):
         self._scene_range = self._combined_rect(nodes)

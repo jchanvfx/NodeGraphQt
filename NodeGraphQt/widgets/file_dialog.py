@@ -1,5 +1,5 @@
-from NodeGraphQt import QtWidgets
-from NodeGraphQt.widgets.stylesheet import STYLE_MESSAGEBOX
+from .. import QtWidgets
+from .stylesheet import STYLE_MESSAGEBOX
 import os
 
 current_dir = os.path.expanduser('~')

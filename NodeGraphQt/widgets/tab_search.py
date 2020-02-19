@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets,QtGui
+from .. import QtCore, QtWidgets, QtGui
 
-from NodeGraphQt.widgets.stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
+from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):

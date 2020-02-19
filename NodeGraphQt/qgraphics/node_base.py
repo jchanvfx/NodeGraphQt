@@ -1,15 +1,16 @@
 #!/usr/bin/python
 
-from NodeGraphQt import QtGui, QtCore, QtWidgets
-from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
-                                   NODE_WIDTH, NODE_HEIGHT,
-                                   NODE_ICON_SIZE, ICON_NODE_BASE,
-                                   NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                                   PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET,
-                                   ITEM_CACHE_MODE)
-from NodeGraphQt.errors import NodeWidgetError
-from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
-from NodeGraphQt.qgraphics.port import PortItem
+from .. import QtGui, QtCore, QtWidgets
+from ..constants import (IN_PORT, OUT_PORT,
+                         NODE_WIDTH, NODE_HEIGHT,
+                         NODE_ICON_SIZE, ICON_NODE_BASE,
+                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
+                         PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET,
+                         ITEM_CACHE_MODE)
+from ..errors import NodeWidgetError
+from .node_abstract import AbstractNodeItem
+from .port import PortItem
+
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
     """
@@ -493,11 +494,11 @@ class NodeItem(AbstractNodeItem):
     def auto_switch_mode(self):
         if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.ItemCoordinateCache:
             return
-        rect= self.sceneBoundingRect()
+        rect = self.sceneBoundingRect()
         l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
-        r = self.viewer().mapToGlobal(self.viewer().mapFromScene( rect.topRight()))
+        r = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topRight()))
         # with is the node with in screen
-        width = r.x()-l.x()
+        width = r.x() - l.x()
 
         self.set_proxy_mode(width < self._porxy_mode_threshold)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt import QtWidgets
+from .. import QtWidgets
 
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from ..constants import IN_PORT, OUT_PORT
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
