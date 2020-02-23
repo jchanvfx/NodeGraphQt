@@ -44,8 +44,10 @@ class PropertiesList(QtWidgets.QTableWidget):
         self.setShowGrid(False)
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
-        self.horizontalHeader().setResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.verticalHeader().setResizeMode(QtWidgets.QHeaderView.Stretch)
+        QtCompat.QHeaderView.setSectionResizeMode(
+            self.verticalHeader(), QtWidgets.QHeaderView.Stretch)
+        QtCompat.QHeaderView.setSectionResizeMode(
+            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     def wheelEvent(self, event):
