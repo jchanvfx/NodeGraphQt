@@ -1,8 +1,9 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import (Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT,
-                                   ITEM_CACHE_MODE)
+from .. import QtCore, QtWidgets
+
+from ..constants import (Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT,
+                                                    ITEM_CACHE_MODE)
 
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):

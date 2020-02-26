@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import math
 
-from NodeGraphQt import QtCore, QtGui, QtWidgets
-from NodeGraphQt.constants import (
+from .. import QtCore, QtGui, QtWidgets
+from ..constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
@@ -10,7 +10,7 @@ from NodeGraphQt.constants import (
     Z_VAL_NODE_WIDGET,
     PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED,
     ITEM_CACHE_MODE)
-from NodeGraphQt.qgraphics.port import PortItem
+from .port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,

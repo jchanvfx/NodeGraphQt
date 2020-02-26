@@ -1,25 +1,25 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import PropertyChangedCmd
-from NodeGraphQt.base.model import NodeModel
-from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (NODE_PROP,
-                                   NODE_PROP_QLINEEDIT,
-                                   NODE_PROP_QTEXTEDIT,
-                                   NODE_PROP_QCOMBO,
-                                   NODE_PROP_QCHECKBOX,
-                                   NODE_PROP_FILE,
-                                   NODE_PROP_FLOAT,
-                                   NODE_PROP_INT,
-                                   IN_PORT, OUT_PORT)
-from NodeGraphQt.errors import PortRegistrationError
-from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
-from NodeGraphQt.qgraphics.node_base import NodeItem
-from NodeGraphQt.widgets.node_widgets import (NodeComboBox,
-                                              NodeLineEdit,
-                                              NodeFloatEdit,
-                                              NodeIntEdit,
-                                              NodeCheckBox,
-                                              NodeFilePath)
+from .commands import PropertyChangedCmd
+from .model import NodeModel
+from .port import Port
+from ..constants import (NODE_PROP,
+                         NODE_PROP_QLINEEDIT,
+                         NODE_PROP_QTEXTEDIT,
+                         NODE_PROP_QCOMBO,
+                         NODE_PROP_QCHECKBOX,
+                         NODE_PROP_FILE,
+                         NODE_PROP_FLOAT,
+                         NODE_PROP_INT,
+                         IN_PORT, OUT_PORT)
+from ..errors import PortRegistrationError
+from ..qgraphics.node_backdrop import BackdropNodeItem
+from ..qgraphics.node_base import NodeItem
+from ..widgets.node_widgets import (NodeComboBox,
+                                    NodeLineEdit,
+                                    NodeFloatEdit,
+                                    NodeIntEdit,
+                                    NodeCheckBox,
+                                    NodeFilePath)
 
 
 class classproperty(object):
@@ -709,7 +709,7 @@ class BaseNode(NodeObject):
             return
         old_value = self.get_property(name)
         self.set_property(name, items)
-        _name = '_'+name+"_"
+        _name = '_' + name + "_"
         if not self.has_property(_name):
             self.create_property(_name, items)
         else:

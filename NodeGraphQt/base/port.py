@@ -1,11 +1,11 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import (PortConnectedCmd,
-                                       PortDisconnectedCmd,
-                                       PortVisibleCmd,
-                                       NodeInputConnectedCmd,
-                                       NodeInputDisconnectedCmd)
-from NodeGraphQt.base.model import PortModel
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from .commands import (PortConnectedCmd,
+                             PortDisconnectedCmd,
+                             PortVisibleCmd,
+                             NodeInputConnectedCmd,
+                             NodeInputDisconnectedCmd)
+from .model import PortModel
+from ..constants import IN_PORT, OUT_PORT
 
 
 class Port(object):

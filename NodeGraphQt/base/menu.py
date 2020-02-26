@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from NodeGraphQt import QtGui, QtCore
-from NodeGraphQt.errors import NodeMenuError
-from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
+from .. import QtGui, QtCore
+from ..errors import NodeMenuError
+from ..widgets.actions import BaseMenu, GraphAction, NodeAction
 
 
 class NodeGraphMenu(object):

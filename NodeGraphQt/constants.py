@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from .pkg_info import __version__
-from NodeGraphQt import QtWidgets
+from . import QtWidgets
 
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__

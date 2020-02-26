@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from NodeGraphQt import QtWidgets, QtCore
-from NodeGraphQt.constants import DRAG_DROP_ID
+from .. import QtWidgets, QtCore
+from ..constants import DRAG_DROP_ID
 
 
 TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1

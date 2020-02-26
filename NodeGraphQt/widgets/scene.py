@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from NodeGraphQt import QtGui, QtCore, QtWidgets
+from .. import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (VIEWER_BG_COLOR,
-                                   VIEWER_GRID_SIZE,
-                                   VIEWER_GRID_OVERLAY,
-                                   VIEWER_GRID_COLOR)
+from ..constants import (VIEWER_BG_COLOR,
+                                                    VIEWER_GRID_SIZE,
+                                                    VIEWER_GRID_OVERLAY,
+                                                    VIEWER_GRID_COLOR)
 
 
 class NodeScene(QtWidgets.QGraphicsScene):

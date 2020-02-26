@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets, QtGui
+from .. import QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
-from NodeGraphQt.widgets.stylesheet import *
-from NodeGraphQt.widgets.file_dialog import file_dialog
-from NodeGraphQt.widgets.properties import _valueEdit
+from ..constants import Z_VAL_NODE_WIDGET
+from .stylesheet import *
+from .file_dialog import file_dialog
+from .properties import _valueEdit
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):

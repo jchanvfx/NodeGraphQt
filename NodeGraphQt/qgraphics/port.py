@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt import QtGui, QtCore, QtWidgets
+from .. import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (
+from ..constants import (
     IN_PORT, OUT_PORT,
     PORT_DEFAULT_COLOR,
     PORT_DEFAULT_BORDER_COLOR,
