@@ -32,8 +32,8 @@ class NodeScene(QtWidgets.QGraphicsScene):
         first_top = top - (top % grid_size)
 
         lines = []
-        lines.extend([QtCore.QLine(x, top, x, bottom) for x in range(first_left, right, grid_size)])
-        lines.extend([QtCore.QLine(left, y, right, y) for y in range(first_top, bottom, grid_size)])
+        lines.extend([QtCore.QLineF(x, top, x, bottom) for x in range(first_left, right, grid_size)])
+        lines.extend([QtCore.QLineF(left, y, right, y) for y in range(first_top, bottom, grid_size)])
 
         painter.setPen(pen)
         painter.drawLines(lines)
