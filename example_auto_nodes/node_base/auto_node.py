@@ -128,10 +128,10 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         _start_time = time.time()
 
-        try:
-            self.run()
-        except Exception as error:
-           self.error(error)
+        # try:
+        self.run()
+        #except Exception as error:
+        #   self.error(error)
 
         self._autoCook = _tmp
 
@@ -276,3 +276,4 @@ class AutoNode(BaseNode, QtCore.QObject):
         if self.error():
             self.set_property('color', self.defaultColor)
         super(AutoNode, self).update_model()
+

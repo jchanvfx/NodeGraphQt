@@ -1,5 +1,32 @@
 from .node_base.auto_node import AutoNode
+from .node_base.subgraph_node import SubGraphNode, BindInputNode, BindOutputNode
 
+class SubGraph(SubGraphNode):
+    __identifier__ = 'Utility'
+
+    # initial default node name.
+    NODE_NAME = 'Sub Graph'
+
+    def __init__(self):
+        super(SubGraph, self).__init__()
+
+class BindInput(BindInputNode):
+    __identifier__ = 'Utility'
+
+    # initial default node name.
+    NODE_NAME = 'Bind Input'
+
+    def __init__(self):
+        super(BindInput, self).__init__()
+
+class BindOutput(BindOutputNode):
+    __identifier__ = 'Utility'
+
+    # initial default node name.
+    NODE_NAME = 'Bind Output'
+
+    def __init__(self):
+        super(BindOutput, self).__init__()
 
 class FooNode(AutoNode):
     """

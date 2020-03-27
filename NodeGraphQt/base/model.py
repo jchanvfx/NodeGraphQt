@@ -58,6 +58,8 @@ class NodeModel(object):
         self.text_color = (255, 255, 255, 180)
         self.disabled = False
         self.selected = False
+        self.visible = True
+        self.parent_id = None
         self.width = 100.0
         self.height = 80.0
         self.pos = [0.0, 0.0]
@@ -214,10 +216,14 @@ class NodeModel(object):
                     'type': 'com.chantasticvfx.FooNode',
                     'selected': False,
                     'disabled': False,
+                    'visible': True,
+                    'parent_id' : None,
                     'inputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}},
                     'outputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                    'input_ports': [<port_name>, <port_name>],
+                    'output_ports': [<port_name>, <port_name>],
                     'width': 0.0,
                     'height: 0.0,
                     'pos': (0.0, 0.0),
@@ -230,11 +236,15 @@ class NodeModel(object):
 
         inputs = {}
         outputs = {}
+        input_ports = []
+        output_ports = []
         for name, model in node_dict.pop('inputs').items():
+            input_ports.append(name)
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
+            output_ports.append(name)
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 outputs[name] = connected_ports
@@ -242,6 +252,9 @@ class NodeModel(object):
             node_dict['inputs'] = inputs
         if outputs:
             node_dict['outputs'] = outputs
+
+        node_dict['input_ports'] = input_ports
+        node_dict['output_ports'] = output_ports
 
         custom_props = node_dict.pop('_custom_prop', {})
 

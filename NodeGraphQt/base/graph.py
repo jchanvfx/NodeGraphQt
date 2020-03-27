@@ -13,7 +13,7 @@ from .commands import (NodeAddedCmd,
 from .factory import NodeFactory
 from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
-from .node import NodeObject, BaseNode
+from .node import NodeObject, BaseNode, SubGraph
 from .port import Port
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
@@ -128,11 +128,12 @@ class NodeGraph(QtCore.QObject):
         self._viewer = NodeViewer()
         self._node_factory = NodeFactory()
         self._undo_stack = QtWidgets.QUndoStack(self)
+        self._current_node_space = None
 
         tab = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
         tab.activated.connect(self._toggle_tab_search)
         self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
-
+            
         self._wire_signals()
         self.widget.setAcceptDrops(True)
 
@@ -223,6 +224,8 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
         self.node_double_clicked.emit(node)
+        if isinstance(node,SubGraph):
+            node.enter()
 
     def _on_node_selected(self, node_id):
         """
@@ -745,6 +748,9 @@ class NodeGraph(QtCore.QObject):
             if pos:
                 node.model.pos = [float(pos[0]), float(pos[1])]
 
+            # set node parent
+            node.set_parent(self._current_node_space)
+
             node.update()
 
             undo_cmd = NodeAddedCmd(self, node, node.model.pos)
@@ -782,6 +788,24 @@ class NodeGraph(QtCore.QObject):
         node.update()
         self._undo_stack.push(NodeAddedCmd(self, node, pos))
 
+    def set_node_space(self, node):
+        """
+        Set the node space of the node graph.
+
+        Args:
+            node (NodeGraphQt.SubGraph): node object.
+        """
+        self._current_node_space = node
+
+    def get_node_space(self):
+        """
+        Get the node space of the node graph.
+
+        Returns:
+            node (NodeGraphQt.SubGraph): node object or None.
+        """
+        return self._current_node_space
+
     def delete_node(self, node):
         """
         Remove the node from the node graph.
@@ -793,6 +817,8 @@ class NodeGraph(QtCore.QObject):
             'node must be a instance of a NodeObject.'
         self.nodes_deleted.emit([node.id])
         self._undo_stack.push(NodeRemovedCmd(self, node))
+        if isinstance(node,SubGraph):
+            self.delete_nodes(node.children())
 
     def delete_nodes(self, nodes):
         """
@@ -803,6 +829,7 @@ class NodeGraph(QtCore.QObject):
         """
         self.nodes_deleted.emit([n.id for n in nodes])
         self._undo_stack.beginMacro('delete nodes')
+        [self.delete_nodes(n.children()) for n in nodes if isinstance(n,SubGraph)]
         [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
         self._undo_stack.endMacro()
 
@@ -866,7 +893,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.NodeObject: node object.
         """
-        return self._model.nodes.get(node_id)
+        return self._model.nodes.get(node_id, None)
 
     def get_node_by_name(self, name):
         """
@@ -1009,6 +1036,9 @@ class NodeGraph(QtCore.QObject):
                 self.add_node(node, n_data.get('pos'))
                 node.set_graph(self)
 
+        # set node parent
+        [node.set_parent_id(node.parent_id) for node in nodes.values()]
+
         # build the connections.
         for connection in data.get('connections', []):
             nid, pname = connection.get('in', ('', ''))
@@ -1064,6 +1094,10 @@ class NodeGraph(QtCore.QObject):
             file_path (str): path to the saved node layout.
         """
         serliazed_data = self._serialize(self.all_nodes())
+        node_space = self.get_node_space()
+        if node_space is not None:
+            node_space = node_space.id
+        serliazed_data['graph'] = {'node_space':node_space,'pipe_layout':self._viewer.get_pipe_layout()}
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
             json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
@@ -1104,6 +1138,12 @@ class NodeGraph(QtCore.QObject):
             return
 
         self._deserialize(layout_data)
+        node_space_id = layout_data['graph']['node_space']
+        
+        # deserialize graph data
+        self.set_node_space(self.get_node_by_id(node_space_id))
+        self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
+
         self._undo_stack.clear()
         self._model.session = file_path
         self.session_changed.emit(file_path)
@@ -1126,6 +1166,17 @@ class NodeGraph(QtCore.QObject):
             return True
         return False
 
+    def cut_nodes(self, nodes=None):
+        """
+        Cut nodes to the clipboard.
+
+        Args:
+            nodes (list[NodeGraphQt.BaseNode]): list of nodes (default: selected nodes).
+        """
+        nodes = nodes or self.selected_nodes()
+        self.copy_nodes(nodes)
+        self.delete_nodes(nodes)
+
     def paste_nodes(self):
         """
         Pastes nodes copied from the clipboard.
@@ -1140,6 +1191,9 @@ class NodeGraph(QtCore.QObject):
         self.clear_selection()
         nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
+        # set node parent
+        [n.set_parent(self._current_node_space) for n in nodes]
+
         self._undo_stack.endMacro()
 
     def duplicate_nodes(self, nodes):

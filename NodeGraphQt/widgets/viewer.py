@@ -257,9 +257,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self.SHIFT_state:
                 for node in nodes:
                     node.selected = not node.selected
+                return
             elif self.CTRL_state:
                 for node in nodes:
                     node.selected = False
+                return
 
         # update the recorded node positions.
         self._node_positions.update(

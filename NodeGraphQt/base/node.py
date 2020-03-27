@@ -30,7 +30,6 @@ class classproperty(object):
     def __get__(self, instance, owner):
         return self.f(owner)
 
-
 class NodeObject(object):
     """
     The ``NodeGraphQt.NodeObject`` class is the main base class that all
@@ -85,6 +84,26 @@ class NodeObject(object):
         return self.model.id
 
     @property
+    def parent_id(self):
+        """
+        The node parent id.
+
+        Returns:
+            str: unique id string.
+        """
+        return self.model.parent_id
+
+    def set_parent_id(self, parent_id=None):
+        """
+        Set node parent id.
+
+        Args:
+            parent_id (str): unique id string.
+        """
+        self.model.parent_id = None
+        self.set_parent(self.graph.get_node_by_id(parent_id))
+
+    @property
     def graph(self):
         """
         The parent node graph.
@@ -126,6 +145,12 @@ class NodeObject(object):
         return self._model
 
     def set_graph(self, graph):
+        """
+        Set the node graph.
+
+        Args:
+            graph (NodeGraphQt.base.graph.NodeGraph): node graph object.
+        """
         self._graph = graph
 
     def set_model(self, model):
@@ -401,6 +426,71 @@ class NodeObject(object):
 
         return self.model.pos
 
+    def set_parent(self, parent_node):
+        """
+        Set parent node.
+
+        Args:
+            parent_node (SubGraph): parent node.
+        """
+        if self.parent_id is not None:
+            parent = self.parent()
+            if parent is not None:
+                parent.remove_child(self)
+        
+        if parent_node is not None:
+            self.model.parent_id = parent_node.id
+            parent_node.add_child(self)
+        else:
+            self.model.parent_id = None
+
+        if self.graph.get_node_space() is not parent_node:
+            self.hide()
+        else:
+            self.show()
+
+    def parent(self):
+        """
+        Get parent node.
+
+        Returns:
+            SubGraph: parent node or None.
+        """
+        return self.graph.get_node_by_id(self.parent_id)
+
+    def path(self):
+        """
+        Get node path.
+
+        Returns:
+            str: current node path.
+        """
+        if self.parent_id is None:
+            return "/" + self.name()
+
+        return self.parent().path() + "/" + self.name()
+
+    def delete(self):
+        """
+        Delete node view.
+        """
+        self._view.delete()
+        if self.parent_id is not None:
+            self.parent().remove_child(self)
+        # self.set_parent_id(None)
+
+    def hide(self):
+        """
+        Hide node.
+        """
+        self.set_property('visible', False)
+
+    def show(self):
+        """
+        Show node.
+        """
+        self.set_property('visible', True)
+
 
 class BaseNode(NodeObject):
     """
@@ -444,9 +534,28 @@ class BaseNode(NodeObject):
         self._inputs = []
         self._outputs = []
 
+    def hide(self):
+        """
+        Hide node.
+        """
+        self.set_property('visible', False)
+        [pipe.setVisible(False) for port in self._inputs+self._outputs for pipe in port.view.connected_pipes]
+
+        for port in self._inputs+self._outputs:
+            for pipe in port.view.connected_pipes:
+                print(pipe)
+                pipe.setVisible(False)
+
+    def show(self):
+        """
+        Show node.
+        """
+        self.set_property('visible', True)
+        [pipe.setVisible(True) for port in self._inputs+self._outputs for pipe in port.view.connected_pipes]
+
     def update_model(self):
         """
-        update the node model from view.
+        Update the node model from view.
         """
         for name, val in self.view.properties.items():
             if name in ['inputs', 'outputs']:
@@ -705,6 +814,13 @@ class BaseNode(NodeObject):
         return port
 
     def update_combo_menu(self, name, items):
+        """
+        Update combobox menu items.
+
+        Args:
+            name (str): name for combobox menu property name.
+            items (list): new combobox menu items.
+        """
         if not self.has_property(name):
             return
         old_value = self.get_property(name)
@@ -974,3 +1090,28 @@ class BackdropNode(NodeObject):
         self.model.width = self.view.width
         self.model.height = self.view.height
         return self.model.width, self.model.height
+
+
+class SubGraph(object):
+    def __init__(self):
+        self._children = []
+
+    def children(self):
+        return self._children
+
+    def create_from_nodes(self, nodes):
+        [n.set_parent(self) for n in nodes]
+
+    def add_child(self, node):
+        if node not in self._children:
+            self._children.append(node)
+
+    def remove_child(self, node):
+        if node in self._children:
+            self._children.remove(node)
+
+    def enter(self):
+        pass
+
+    def exit(self):
+        pass

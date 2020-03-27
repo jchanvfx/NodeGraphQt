@@ -2,7 +2,10 @@
 from distutils.version import LooseVersion
 
 from .. import QtGui, QtCore
-
+from .node import SubGraph
+from ..constants import (PIPE_LAYOUT_CURVED,
+                         PIPE_LAYOUT_STRAIGHT,
+                         PIPE_LAYOUT_ANGLE)
 
 def setup_context_menu(graph):
     """
@@ -42,7 +45,7 @@ def setup_context_menu(graph):
 
     file_menu.add_command('Zoom In', _zoom_in, '=')
     file_menu.add_command('Zoom Out', _zoom_out, '-')
-    file_menu.add_command('Reset Zoom', _reset_zoom, 'h')
+    file_menu.add_command('Reset Zoom', _reset_zoom, 'H')
 
     # create "Edit" menu.
     undo_actn = graph.undo_stack().createUndoAction(graph.viewer(), '&Undo')
@@ -62,6 +65,7 @@ def setup_context_menu(graph):
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
+    edit_menu.add_command('Cut', _cut_nodes, QtGui.QKeySequence.Cut)
     edit_menu.add_command('Paste', _paste_nodes, QtGui.QKeySequence.Paste)
     edit_menu.add_command('Delete', _delete_items, QtGui.QKeySequence.Delete)
 
@@ -69,13 +73,26 @@ def setup_context_menu(graph):
 
     edit_menu.add_command('Select all', _select_all_nodes, 'Ctrl+A')
     edit_menu.add_command('Deselect all', _clear_node_selection, 'Ctrl+Shift+A')
-    edit_menu.add_command('Enable/Disable', _disable_nodes, 'd')
+    edit_menu.add_command('Enable/Disable', _disable_nodes, 'D')
 
     edit_menu.add_command('Duplicate', _duplicate_nodes, 'Alt+c')
-    edit_menu.add_command('Center Selection', _fit_to_selection, 'f')
+    edit_menu.add_command('Center Selection', _fit_to_selection, 'F')
 
     edit_menu.add_separator()
 
+    edit_menu.add_command('Jump In', _jump_in, 'I')
+    edit_menu.add_command('Jump Out', _jump_out, 'O')
+
+    edit_menu.add_separator()
+
+    pipe_menu = edit_menu.add_menu('&Pipe')
+    pipe_menu.add_command('Curved Pipe', _curved_pipe)
+    pipe_menu.add_command('Straght Pipe', _straght_pipe)
+    pipe_menu.add_command('Angle Pipe', _angle_pipe)
+
+    edit_menu.add_command('Toggle Disable Grid', _toggle_grid)
+
+    edit_menu.add_separator()
 
 # --- menu command functions. ---
 
@@ -193,6 +210,8 @@ def _clear_undo(graph):
 def _copy_nodes(graph):
     graph.copy_nodes()
 
+def _cut_nodes(graph):
+    graph.cut_nodes()
 
 def _paste_nodes(graph):
     graph.paste_nodes()
@@ -221,3 +240,27 @@ def _duplicate_nodes(graph):
 
 def _fit_to_selection(graph):
     graph.fit_to_selection()
+
+def _jump_in(graph):
+    nodes = graph.selected_nodes()
+    if nodes:
+        node = nodes[0]
+        if isinstance(node, SubGraph):
+            node.enter()
+
+def _jump_out(graph):
+    node = graph.get_node_space()
+    if node:
+        node.exit()
+
+def _curved_pipe(graph):
+    graph.set_pipe_style(PIPE_LAYOUT_CURVED)
+
+def _straght_pipe(graph):
+    graph.set_pipe_style(PIPE_LAYOUT_STRAIGHT)
+
+def _angle_pipe(graph):
+    graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
+
+def _toggle_grid(graph):
+    graph.display_grid(not graph.scene().grid)
