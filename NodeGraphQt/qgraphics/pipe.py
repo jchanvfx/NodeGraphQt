@@ -248,7 +248,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
     def highlighted(self):
         return self._highlight
 
-
     def reset(self):
         self._active = False
         self._highlight = False

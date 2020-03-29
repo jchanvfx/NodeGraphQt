@@ -171,13 +171,13 @@ class NodeGraph(QtCore.QObject):
         disconnected = [(pipe.input_port, pipe.output_port)]
         connected = []
 
-        if node.inputs():
+        if node.input_ports():
             connected.append(
-                (pipe.output_port, list(node.inputs().values())[0].view)
+                (pipe.output_port, node.input_ports()[0].view)
             )
-        if node.outputs():
+        if node.output_ports():
             connected.append(
-                (list(node.outputs().values())[0].view, pipe.input_port)
+                (node.output_ports()[0].view, pipe.input_port)
             )
 
         self._undo_stack.beginMacro('inserted node')
@@ -224,8 +224,8 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
         self.node_double_clicked.emit(node)
-        if isinstance(node,SubGraph):
-            node.enter()
+        if isinstance(node, SubGraph):
+            self.set_node_space(node)
 
     def _on_node_selected(self, node_id):
         """
@@ -420,6 +420,7 @@ class NodeGraph(QtCore.QObject):
             b (int): blue value.
         """
         self.scene().background_color = (r, g, b)
+        self._viewer.force_update()
 
     def grid_color(self):
         """
@@ -440,6 +441,7 @@ class NodeGraph(QtCore.QObject):
             b (int): blue value.
         """
         self.scene().grid_color = (r, g, b)
+        self._viewer.force_update()
 
     def display_grid(self, display=True):
         """
@@ -449,6 +451,7 @@ class NodeGraph(QtCore.QObject):
             display: False to not draw the background grid.
         """
         self.scene().grid = display
+        self._viewer.force_update()
 
     def add_properties_bin(self, prop_bin):
         """
@@ -795,7 +798,14 @@ class NodeGraph(QtCore.QObject):
         Args:
             node (NodeGraphQt.SubGraph): node object.
         """
+        if self._current_node_space is not None:
+            [n.hide() for n in self._current_node_space.children()]
+            self._current_node_space.exit()
+
         self._current_node_space = node
+        if node is not None:
+            [n.show() for n in node.children()]
+            node.enter()
 
     def get_node_space(self):
         """
@@ -1097,7 +1107,8 @@ class NodeGraph(QtCore.QObject):
         node_space = self.get_node_space()
         if node_space is not None:
             node_space = node_space.id
-        serliazed_data['graph'] = {'node_space':node_space,'pipe_layout':self._viewer.get_pipe_layout()}
+        serliazed_data['graph'] = {'node_space': node_space, 'pipe_layout': self._viewer.get_pipe_layout()}
+        serliazed_data['graph']['graph_rect'] = self._viewer.scene_rect()
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
             json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
@@ -1143,6 +1154,8 @@ class NodeGraph(QtCore.QObject):
         # deserialize graph data
         self.set_node_space(self.get_node_by_id(node_space_id))
         self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
+
+        self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
 
         self._undo_stack.clear()
         self._model.session = file_path
@@ -1314,6 +1327,24 @@ class NodeGraph(QtCore.QObject):
 
     def use_opengl(self):
         """
-        use opengl to draw the graph
+        Use OpenGL to draw the graph.
         """
         self._viewer.use_opengl()
+
+    def graph_rect(self):
+        """
+        Get the graph viewer range.
+
+        Returns:
+            list: [x, y, width, height].
+        """
+        return self._viewer.scene_rect()
+
+    def set_graph_rect(self, rect):
+        """
+        Set the graph viewer range.
+
+        Args:
+            rect (list): [x, y, width, height].
+        """
+        self._viewer.set_scene_rect(rect)

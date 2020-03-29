@@ -1,34 +1,38 @@
 from .auto_node import AutoNode
 from NodeGraphQt.base.node import SubGraph
 
+
 class SubGraphNode(AutoNode, SubGraph):
     """
-    subgraph node.
+    sub graph node.
     """
 
-    def __init__(self,defaultInputType=None,defaultOutputType=None):
-        super(SubGraphNode, self).__init__(defaultInputType,defaultOutputType)
+    def __init__(self, defaultInputType=None, defaultOutputType=None):
+        super(SubGraphNode, self).__init__(defaultInputType, defaultOutputType)
         SubGraph.__init__(self)
         self.set_property('color', (200, 155, 70, 255))
         self.bind_input_nodes = []
         self.bind_output_nodes = []
         self.add_input('input0')
         self.add_output('output0')
+        self.create_property('graph_rect', None)
 
     def set_graph(self, graph):
         super(SubGraphNode, self).set_graph(graph)
         self.create_from_nodes(graph.selected_nodes())
 
     def enter(self):
-        [n.hide() for n in self.graph.all_nodes() if n.parent() is self.parent()]
-        [n.show() for n in self._children]
-        self.graph.set_node_space(self)
+        self.hide()
+        rect = self.get_property('graph_rect')
+        if rect:
+            self.graph.set_graph_rect(rect)
 
     def exit(self):
-        [n.show() for n in self.graph.all_nodes() if n.parent() is self.parent()]
-        [n.hide() for n in self._children]
-        self.graph.set_node_space(self.parent())
-        self.set_property('selected', True)
+        self.set_property('graph_rect', self.graph.graph_rect())
+
+    def show(self):
+        super().show()
+        self.view.draw_node()
 
     def add_child(self, node):
         if node not in self._children:
@@ -39,14 +43,14 @@ class SubGraphNode(AutoNode, SubGraph):
                 node.set_property('input index', len(self.bind_input_nodes))
                 self.bind_input_nodes.append(node)
                 if len(self.inputs()) < len(self.bind_input_nodes):
-                    self.add_input('input'+str(len(self.bind_input_nodes)-1))
+                    self.add_input('input' + str(len(self.bind_input_nodes) - 1))
 
         if isinstance(node, BindOutputNode):
             if node not in self.bind_output_nodes:
                 node.set_property('output index', len(self.bind_output_nodes))
                 self.bind_output_nodes.append(node)
                 if len(self.outputs()) < len(self.bind_output_nodes):
-                    self.add_output('output'+str(len(self.bind_output_nodes)-1))
+                    self.add_output('output' + str(len(self.bind_output_nodes) - 1))
 
     def remove_child(self, node):
         if node in self._children:
@@ -54,7 +58,7 @@ class SubGraphNode(AutoNode, SubGraph):
 
         if isinstance(node, BindInputNode):
             if node in self.bind_input_nodes:
-            	self.bind_input_nodes.remove(node)
+                self.bind_input_nodes.remove(node)
         if isinstance(node, BindOutputNode):
             if node in self.bind_output_nodes:
                 self.bind_output_nodes.remove(node)
@@ -67,16 +71,19 @@ class SubGraphNode(AutoNode, SubGraph):
         return self.defaultValue
 
     def run(self):
-    	for node in self.bind_input_nodes:
-    		node.cook()
+        for node in self.bind_input_nodes:
+            node.cook()
 
     def delete(self):
         self._view.delete()
         for child in self._children:
             child.model.parent_id = None
-            
+
         if self.parent_id is not None:
             self.parent().remove_child(self)
+
+    def children(self):
+        return self._children
 
 
 class BindInputNode(AutoNode):
@@ -84,8 +91,8 @@ class BindInputNode(AutoNode):
     bind input node.
     """
 
-    def __init__(self,defaultInputType=None,defaultOutputType=None):
-        super(BindInputNode, self).__init__(defaultInputType,defaultOutputType)
+    def __init__(self, defaultInputType=None, defaultOutputType=None):
+        super(BindInputNode, self).__init__(defaultInputType, defaultOutputType)
         self.set_property('color', (200, 155, 100, 255))
         self.add_output('out')
         self.add_int_input('input index', 'input index', value=0)
@@ -94,7 +101,7 @@ class BindInputNode(AutoNode):
         parent = self.parent()
         if parent is not None:
             index = self.get_property('input index')
-            index = min(max(0, index), len(parent.inputs())-1)
+            index = min(max(0, index), len(parent.inputs()) - 1)
             to_port = parent.input(int(index))
             from_ports = to_port.connected_ports()
             if not from_ports:
@@ -114,8 +121,8 @@ class BindOutputNode(AutoNode):
     bind output node.
     """
 
-    def __init__(self,defaultInputType=None,defaultOutputType=None):
-        super(BindOutputNode, self).__init__(defaultInputType,defaultOutputType)
+    def __init__(self, defaultInputType=None, defaultOutputType=None):
+        super(BindOutputNode, self).__init__(defaultInputType, defaultOutputType)
         self.set_property('color', (200, 155, 100, 255))
         self.add_input('in')
         self.add_int_input('output index', 'output index', value=0)

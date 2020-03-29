@@ -14,6 +14,7 @@ from example_auto_nodes.node_base.auto_node import AutoNode
 from example_auto_nodes.node_base.module_node import ModuleNode
 from example_auto_nodes.node_base.subgraph_node import SubGraphNode
 
+
 def get_nodes_from_folder(folder_path):
     path, folder_name = os.path.split(folder_path)
     if path not in sys.path:
@@ -42,19 +43,18 @@ def print_functions(graph, node):
     for func in node.module_functions:
         print(func)
 
+
 def toggle_auto_cook(graph, node):
     node.autoCook = not node.autoCook
 
-def exit_parent(graph, node):
-    p = node.parent()
-    if p is not None:
-        p.exit()
 
 def enter_node(graph, node):
-    node.enter()
+    graph.set_node_space(node)
+
 
 def print_path(graph, node):
     print(node.path())
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
@@ -99,20 +99,20 @@ if __name__ == '__main__':
     node_menu.add_command('Print Functions', print_functions, node_class=ModuleNode)
     node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
     node_menu.add_command('Toggle Auto Cook', toggle_auto_cook, node_class=AutoNode)
-    node_menu.add_command('Exit Parent', exit_parent, node_class=AutoNode)
     node_menu.add_command('Print Path', print_path, node_class=AutoNode)
 
+    graph.create_node('Utility.RootGraph')
     mathNodeA = graph.create_node('Module.MathModuleNode',
-                                name='Math Functions A',
-                                color='#0a1e20',
-                                text_color='#feab20',
-                                pos=[-250, 70])
+                                  name='Math Functions A',
+                                  color='#0a1e20',
+                                  text_color='#feab20',
+                                  pos=[-250, 70])
 
     mathNodeB = graph.create_node('Module.MathModuleNode',
-                                name='Math Functions B',
-                                color='#0a1e20',
-                                text_color='#feab20',
-                                pos=[-250, -70])
+                                  name='Math Functions B',
+                                  color='#0a1e20',
+                                  text_color='#feab20',
+                                  pos=[-250, -70])
 
     mathNodeC = graph.create_node('Module.MathModuleNode',
                                   name='Math Functions C',

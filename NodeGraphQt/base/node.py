@@ -30,6 +30,7 @@ class classproperty(object):
     def __get__(self, instance, owner):
         return self.f(owner)
 
+
 class NodeObject(object):
     """
     The ``NodeGraphQt.NodeObject`` class is the main base class that all
@@ -437,7 +438,7 @@ class NodeObject(object):
             parent = self.parent()
             if parent is not None:
                 parent.remove_child(self)
-        
+
         if parent_node is not None:
             self.model.parent_id = parent_node.id
             parent_node.add_child(self)
@@ -466,30 +467,33 @@ class NodeObject(object):
             str: current node path.
         """
         if self.parent_id is None:
-            return "/" + self.name()
+            return "/"
 
-        return self.parent().path() + "/" + self.name()
+        return self.parent().path() + self.name() + "/"
 
     def delete(self):
         """
         Delete node view.
         """
         self._view.delete()
-        if self.parent_id is not None:
-            self.parent().remove_child(self)
+        parent = self.parent()
+        if parent is not None:
+            parent.remove_child(self)
         # self.set_parent_id(None)
 
     def hide(self):
         """
         Hide node.
         """
-        self.set_property('visible', False)
+        self.view.visible = False
+        self.model.visible = False
 
     def show(self):
         """
         Show node.
         """
-        self.set_property('visible', True)
+        self.view.visible = True
+        self.model.visible = True
 
 
 class BaseNode(NodeObject):
@@ -538,20 +542,15 @@ class BaseNode(NodeObject):
         """
         Hide node.
         """
-        self.set_property('visible', False)
-        [pipe.setVisible(False) for port in self._inputs+self._outputs for pipe in port.view.connected_pipes]
-
-        for port in self._inputs+self._outputs:
-            for pipe in port.view.connected_pipes:
-                print(pipe)
-                pipe.setVisible(False)
+        super(BaseNode, self).hide()
+        [pipe.hide() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
 
     def show(self):
         """
         Show node.
         """
-        self.set_property('visible', True)
-        [pipe.setVisible(True) for port in self._inputs+self._outputs for pipe in port.view.connected_pipes]
+        super(BaseNode, self).show()
+        [pipe.show() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
 
     def update_model(self):
         """
@@ -771,6 +770,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
+
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]

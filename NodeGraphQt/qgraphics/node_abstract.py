@@ -144,7 +144,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def visible(self):
-        return  self._properties['visible']
+        return self._properties['visible']
 
     @visible.setter
     def visible(self, visible=False):

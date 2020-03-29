@@ -170,13 +170,10 @@ class NodeItem(AbstractNodeItem):
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundedRect(rect, radius, radius)
 
-        label_rect = QtCore.QRectF(rect.left() + (radius / 2),
-                                   rect.top() + (radius / 2),
-                                   self._width - (radius / 1.25),
-                                   28)
+        label_rect = QtCore.QRectF(rect.left(), rect.top(), self._width, 28)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(label_rect, radius / 1.5, radius / 1.5)
-        painter.setBrush(QtGui.QColor(0, 0, 0, 50))
+        path.addRoundedRect(label_rect, radius, radius)
+        painter.setBrush(QtGui.QColor(30, 30, 30, 200))
         painter.fillPath(path, painter.brush())
 
         border_width = 0.8
@@ -456,7 +453,6 @@ class NodeItem(AbstractNodeItem):
         Draw the node item in the scene.
         """
         height = self._text_item.boundingRect().height()
-
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.

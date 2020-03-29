@@ -7,6 +7,7 @@ from ..constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE)
 
+
 def setup_context_menu(graph):
     """
     populate the specified graph's context menu with essential menus commands.
@@ -87,12 +88,13 @@ def setup_context_menu(graph):
 
     pipe_menu = edit_menu.add_menu('&Pipe')
     pipe_menu.add_command('Curved Pipe', _curved_pipe)
-    pipe_menu.add_command('Straght Pipe', _straght_pipe)
+    pipe_menu.add_command('Straght Pipe', _straight_pipe)
     pipe_menu.add_command('Angle Pipe', _angle_pipe)
 
     edit_menu.add_command('Toggle Disable Grid', _toggle_grid)
 
     edit_menu.add_separator()
+
 
 # --- menu command functions. ---
 
@@ -210,8 +212,10 @@ def _clear_undo(graph):
 def _copy_nodes(graph):
     graph.copy_nodes()
 
+
 def _cut_nodes(graph):
     graph.cut_nodes()
+
 
 def _paste_nodes(graph):
     graph.paste_nodes()
@@ -241,26 +245,33 @@ def _duplicate_nodes(graph):
 def _fit_to_selection(graph):
     graph.fit_to_selection()
 
+
 def _jump_in(graph):
     nodes = graph.selected_nodes()
     if nodes:
         node = nodes[0]
         if isinstance(node, SubGraph):
-            node.enter()
+            graph.set_node_space(node)
+
 
 def _jump_out(graph):
     node = graph.get_node_space()
     if node:
-        node.exit()
+        if node.parent() is not None:
+            graph.set_node_space(node.parent())
+
 
 def _curved_pipe(graph):
     graph.set_pipe_style(PIPE_LAYOUT_CURVED)
 
-def _straght_pipe(graph):
+
+def _straight_pipe(graph):
     graph.set_pipe_style(PIPE_LAYOUT_STRAIGHT)
+
 
 def _angle_pipe(graph):
     graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
+
 
 def _toggle_grid(graph):
     graph.display_grid(not graph.scene().grid)

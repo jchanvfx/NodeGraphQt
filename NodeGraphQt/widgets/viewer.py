@@ -669,6 +669,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pipe.draw_path(pipe.input_port, pipe.output_port)
         if start_port.node.selected or end_port.node.selected:
             pipe.highlight()
+        if not start_port.node.visible or not end_port.node.visible:
+            pipe.hide()
 
     def acyclic_check(self, start_port, end_port):
         """
@@ -883,6 +885,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         if self.get_zoom() > 0.1:
             self.reset_zoom(self._scene_range.center())
+
+    def force_update(self):
+        self._update_scene()
+
+    def scene_rect(self):
+        return [self._scene_range.x(), self._scene_range.y(), self._scene_range.width(), self._scene_range.height()]
+
+    def set_scene_rect(self, rect):
+        self._scene_range = QtCore.QRectF(*rect)
+        self._update_scene()
 
     def use_opengl(self):
         format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)

@@ -1,6 +1,7 @@
 from .node_base.auto_node import AutoNode
 from .node_base.subgraph_node import SubGraphNode, BindInputNode, BindOutputNode
 
+
 class SubGraph(SubGraphNode):
     __identifier__ = 'Utility'
 
@@ -9,6 +10,28 @@ class SubGraph(SubGraphNode):
 
     def __init__(self):
         super(SubGraph, self).__init__()
+
+    def set_graph(self, graph):
+        super(SubGraph, self).set_graph(graph)
+        input = graph.create_node('Utility.BindInput',  pos=[-400, 0])
+        output = graph.create_node('Utility.BindOutput', pos=[400, 0])
+        input.set_parent(self)
+        output.set_parent(self)
+
+
+class RootGraph(SubGraphNode):
+    __identifier__ = 'Utility'
+
+    # initial default node name.
+    NODE_NAME = 'Root Graph'
+
+    def __init__(self):
+        super(RootGraph, self).__init__()
+
+    def set_graph(self, graph):
+        super(RootGraph, self).set_graph(graph)
+        graph.set_node_space(self)
+
 
 class BindInput(BindInputNode):
     __identifier__ = 'Utility'
@@ -19,6 +42,7 @@ class BindInput(BindInputNode):
     def __init__(self):
         super(BindInput, self).__init__()
 
+
 class BindOutput(BindOutputNode):
     __identifier__ = 'Utility'
 
@@ -27,6 +51,7 @@ class BindOutput(BindOutputNode):
 
     def __init__(self):
         super(BindOutput, self).__init__()
+
 
 class FooNode(AutoNode):
     """

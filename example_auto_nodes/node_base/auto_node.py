@@ -2,6 +2,7 @@ from NodeGraphQt.base.node import BaseNode
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NODE_PROP
 from NodeGraphQt import QtCore
+import traceback
 import hashlib
 import copy
 import time
@@ -20,7 +21,7 @@ class CryptoColors(object):
         r = int(Min + (int("0x" + h[:16], 0) / d) * (Max - Min))
         g = int(Min + (int("0x" + h[16:32], 0) / d) * (Max - Min))
         b = int(Min + (int("0x" + h[32:48], 0) / d) * (Max - Min))
-        a = int(Min + (int("0x" + h[48:], 0) / d) * (Max - Min))
+        # a = int(Min + (int("0x" + h[48:], 0) / d) * (Max - Min))
         self.colors[text] = (r, g, b, 255)
         return self.colors[text]
 
@@ -128,10 +129,10 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         _start_time = time.time()
 
-        # try:
-        self.run()
-        #except Exception as error:
-        #   self.error(error)
+        try:
+            self.run()
+        except:
+            self.error(traceback.format_exc())
 
         self._autoCook = _tmp
 
