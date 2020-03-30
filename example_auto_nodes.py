@@ -56,6 +56,10 @@ def print_path(graph, node):
     print(node.path())
 
 
+def find_node(graph, node):
+    print(graph.get_node_by_path(node.path()))
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
 
@@ -100,8 +104,9 @@ if __name__ == '__main__':
     node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
     node_menu.add_command('Toggle Auto Cook', toggle_auto_cook, node_class=AutoNode)
     node_menu.add_command('Print Path', print_path, node_class=AutoNode)
+    node_menu.add_command('Find Node', find_node, node_class=AutoNode)
 
-    graph.create_node('Utility.RootGraph')
+    graph.create_node('Utility.RootGraph', name='root', selected=False)
     mathNodeA = graph.create_node('Module.MathModuleNode',
                                   name='Math Functions A',
                                   color='#0a1e20',

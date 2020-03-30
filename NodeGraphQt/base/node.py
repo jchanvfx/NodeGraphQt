@@ -467,9 +467,9 @@ class NodeObject(object):
             str: current node path.
         """
         if self.parent_id is None:
-            return "/"
+            return "/" + self.name()
 
-        return self.parent().path() + self.name() + "/"
+        return self.parent().path() + "/" + self.name()
 
     def delete(self):
         """

@@ -21,9 +21,21 @@ from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_ANGLE,
                          IN_PORT, OUT_PORT)
 from ..widgets.viewer import NodeViewer
+from ..widgets.node_space_bar import node_space_bar
 
 
 class QWidgetDrops(QtWidgets.QWidget):
+    def __init__(self):
+        super(QWidgetDrops, self).__init__()
+        self.setAcceptDrops(True)
+        self.setWindowTitle("NodeGraphQt")
+        self.setStyleSheet('''
+        QWidget {
+            background-color: rgb(55,55,55);
+            color: rgb(200,200,200);
+            border-width: 0px;
+            }''')
+
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls:
             event.accept()
@@ -135,7 +147,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
             
         self._wire_signals()
-        self.widget.setAcceptDrops(True)
+        self._node_space_bar = node_space_bar(self)
 
     def __repr__(self):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -358,6 +370,7 @@ class NodeGraph(QtCore.QObject):
 
             layout = QtWidgets.QVBoxLayout(self._widget)
             layout.setContentsMargins(0, 0, 0, 0)
+            layout.addWidget(self._node_space_bar)
             layout.addWidget(self._viewer)
         return self._widget
 
@@ -631,7 +644,12 @@ class NodeGraph(QtCore.QObject):
         Sets the zoom level to fit selected nodes.
         If no nodes are selected then all nodes in the graph will be framed.
         """
-        nodes = self.selected_nodes() or self.all_nodes()
+        if self._current_node_space is None:
+            all_nodes = self.all_nodes()
+        else:
+            all_nodes = self._current_node_space.children()
+
+        nodes = self.selected_nodes() or all_nodes
         if not nodes:
             return
         self._viewer.zoom_to_nodes([n.view for n in nodes])
@@ -720,7 +738,6 @@ class NodeGraph(QtCore.QObject):
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
             node = NodeCls()
-            node.set_graph(self)
             node.model._graph_model = self.model
 
             wid_types = node.model.__dict__.pop('_TEMP_property_widget_types')
@@ -737,6 +754,7 @@ class NodeGraph(QtCore.QObject):
             node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
             node.model.name = node.NODE_NAME
             node.model.selected = selected
+            node.set_graph(self)
 
             def format_color(clr):
                 if isinstance(clr, str):
@@ -758,7 +776,15 @@ class NodeGraph(QtCore.QObject):
 
             undo_cmd = NodeAddedCmd(self, node, node.model.pos)
             undo_cmd.setText('create node: "{}"'.format(node.NODE_NAME))
-            self._undo_stack.push(undo_cmd)
+
+            if isinstance(node, SubGraph):
+                self.begin_undo('create sub graph node')
+                self._undo_stack.push(undo_cmd)
+                if node.get_property('create_from_select'):
+                    node.create_from_nodes(self.selected_nodes())
+                self.end_undo()
+            else:
+                self._undo_stack.push(undo_cmd)
             self.node_created.emit(node)
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
@@ -798,14 +824,15 @@ class NodeGraph(QtCore.QObject):
         Args:
             node (NodeGraphQt.SubGraph): node object.
         """
+        if node is self._current_node_space:
+            return
         if self._current_node_space is not None:
-            [n.hide() for n in self._current_node_space.children()]
             self._current_node_space.exit()
 
         self._current_node_space = node
         if node is not None:
-            [n.show() for n in node.children()]
             node.enter()
+            self._node_space_bar.set_node(node)
 
     def get_node_space(self):
         """
@@ -826,9 +853,13 @@ class NodeGraph(QtCore.QObject):
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
         self.nodes_deleted.emit([node.id])
-        self._undo_stack.push(NodeRemovedCmd(self, node))
-        if isinstance(node,SubGraph):
+        if isinstance(node, SubGraph):
+            self._undo_stack.beginMacro('delete sub graph')
             self.delete_nodes(node.children())
+            self._undo_stack.push(NodeRemovedCmd(self, node))
+            self._undo_stack.endMacro()
+        else:
+            self._undo_stack.push(NodeRemovedCmd(self, node))
 
     def delete_nodes(self, nodes):
         """
@@ -839,7 +870,7 @@ class NodeGraph(QtCore.QObject):
         """
         self.nodes_deleted.emit([n.id for n in nodes])
         self._undo_stack.beginMacro('delete nodes')
-        [self.delete_nodes(n.children()) for n in nodes if isinstance(n,SubGraph)]
+        [self.delete_nodes(n.children()) for n in nodes if isinstance(n, SubGraph)]
         [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
         self._undo_stack.endMacro()
 
@@ -880,8 +911,10 @@ class NodeGraph(QtCore.QObject):
         Select all nodes in the node graph.
         """
         self._undo_stack.beginMacro('select all')
-        for node in self.all_nodes():
-            node.set_selected(True)
+        if self._current_node_space is not None:
+            [node.set_selected(True) for node in self._current_node_space.children()]
+        else:
+            [node.set_selected(True) for node in self.all_nodes()]
         self._undo_stack.endMacro()
 
     def clear_selection(self):
@@ -889,8 +922,7 @@ class NodeGraph(QtCore.QObject):
         Clears the selection in the node graph.
         """
         self._undo_stack.beginMacro('clear selection')
-        for node in self.all_nodes():
-            node.set_selected(False)
+        [node.set_selected(False) for node in self.all_nodes()]
         self._undo_stack.endMacro()
 
     def get_node_by_id(self, node_id=None):
@@ -905,6 +937,41 @@ class NodeGraph(QtCore.QObject):
         """
         return self._model.nodes.get(node_id, None)
 
+    def get_node_by_path(self, node_path):
+        """
+        Returns the node from the node path string.
+
+        Args:
+            node_path (str): node path (:attr:`NodeObject.path()`)
+
+        Returns:
+            NodeGraphQt.NodeObject: node object.
+        """
+        names = [name for name in node_path.split("/") if name]
+        root = names.pop(0)
+        node = self._current_node_space
+        if node is None:
+            node = self.get_node_by_name(root)
+            if node is None:
+                return None
+        else:
+            while True:
+                parent_node = node.parent()
+                if parent_node is None:
+                    break
+                node = parent_node
+
+        for name in names:
+            find = False
+            for n in node.children():
+                if n.name() == name:
+                    node = n
+                    find = True
+                    continue
+            if not find:
+                return None
+        return node
+
     def get_node_by_name(self, name):
         """
         Returns node that matches the name.
@@ -914,9 +981,14 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.NodeObject: node object.
         """
-        for node_id, node in self._model.nodes.items():
+        if self._current_node_space is not None:
+            nodes = self._current_node_space.children()
+        else:
+            nodes = self.all_nodes()
+        for node in nodes:
             if node.name() == name:
                 return node
+        return None
 
     def get_unique_name(self, name):
         """
@@ -929,7 +1001,10 @@ class NodeGraph(QtCore.QObject):
             str: unique node name.
         """
         name = ' '.join(name.split())
-        node_names = [n.name() for n in self.all_nodes()]
+        if self._current_node_space is not None:
+            node_names = [n.name() for n in self._current_node_space.children()]
+        else:
+            node_names = [n.name() for n in self.all_nodes()]
         if name not in node_names:
             return name
 
@@ -1149,13 +1224,15 @@ class NodeGraph(QtCore.QObject):
             return
 
         self._deserialize(layout_data)
-        node_space_id = layout_data['graph']['node_space']
-        
-        # deserialize graph data
-        self.set_node_space(self.get_node_by_id(node_space_id))
-        self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
 
-        self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
+        if 'graph' in layout_data.keys():
+            node_space_id = layout_data['graph']['node_space']
+        
+            # deserialize graph data
+            self.set_node_space(self.get_node_by_id(node_space_id))
+            self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
+
+            self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
 
         self._undo_stack.clear()
         self._model.session = file_path
