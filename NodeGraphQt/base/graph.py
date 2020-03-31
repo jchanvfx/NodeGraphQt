@@ -791,13 +791,14 @@ class NodeGraph(QtCore.QObject):
             return node
         raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
-    def add_node(self, node, pos=None):
+    def add_node(self, node, pos=None, unique_name=True):
         """
         Add a node into the node graph.
 
         Args:
             node (NodeGraphQt.BaseNode): node object.
             pos (list[float]): node x,y position. (optional)
+            unique_name (bool): make node name unique
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
 
@@ -813,7 +814,8 @@ class NodeGraph(QtCore.QObject):
             self.model.set_node_common_properties(node_attrs)
 
         node.set_graph(self)
-        node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
+        if unique_name:
+            node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
         node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
         node.update()
@@ -1009,17 +1011,18 @@ class NodeGraph(QtCore.QObject):
         regex = re.compile('[\w ]+(?: )*(\d+)')
         search = regex.search(name)
         if not search:
-            for x in range(1, len(node_names) + 1):
+            for x in range(1, len(node_names) + 2):
                 new_name = '{} {}'.format(name, x)
                 if new_name not in node_names:
                     return new_name
 
         version = search.group(1)
         name = name[:len(version) * -1].strip()
-        for x in range(1, len(node_names) + 1):
+        for x in range(1, len(node_names) + 2):
             new_name = '{} {}'.format(name, x)
             if new_name not in node_names:
                 return new_name
+        return name + "_"
 
     def current_session(self):
         """
@@ -1063,19 +1066,14 @@ class NodeGraph(QtCore.QObject):
                 continue
             # update the node model.
             n.update_model()
-
-            nodes_data.update(n.model.to_dict)
+            node_dict = n.model.to_dict
 
             if isinstance(n, SubGraph):
-                subgraph_node = n
-                while subgraph_node:
-                    _subgraph_node = None
-                    for _n in subgraph_node.children():
-                        _n.update_model()
-                        nodes_data.update(_n.model.to_dict)
-                        if isinstance(_n, SubGraph):
-                            _subgraph_node = _n
-                    subgraph_node = _subgraph_node
+                children = n.children()
+                if children:
+                    node_dict[n.model.id]['sub_graph'] = self._serialize(children)
+
+            nodes_data.update(node_dict)
 
         for n_id, n_data in nodes_data.items():
             serial_data['nodes'][n_id] = n_data
@@ -1104,7 +1102,7 @@ class NodeGraph(QtCore.QObject):
 
         return serial_data
 
-    def _deserialize(self, data, relative_pos=False, pos=None):
+    def _deserialize(self, data, relative_pos=False, pos=None, set_parent=True):
         """
         deserialize node data.
         (used internally by the node graph)
@@ -1112,12 +1110,12 @@ class NodeGraph(QtCore.QObject):
         Args:
             data (dict): node data.
             relative_pos (bool): position node relative to the cursor.
+            set_parent (bool): set node parent to current node space.
 
         Returns:
             list[NodeGraphQt.Nodes]: list of node instances.
         """
         nodes = {}
-
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
@@ -1125,6 +1123,8 @@ class NodeGraph(QtCore.QObject):
             if NodeCls:
                 node = NodeCls()
                 node.NODE_NAME = n_data.get('name', node.NODE_NAME)
+                if 'parent_id' in n_data.keys():
+                    n_data.pop('parent_id')
                 # set properties.
                 for prop in node.model.properties.keys():
                     if prop in n_data.keys():
@@ -1133,18 +1133,17 @@ class NodeGraph(QtCore.QObject):
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
                 nodes[n_id] = node
-                self.add_node(node, n_data.get('pos'))
+                self.add_node(node, n_data.get('pos'), unique_name=set_parent)
                 node.set_graph(self)
+
+                if isinstance(node, SubGraph):
+                    sub_graph = n_data.get('sub_graph', None)
+                    if sub_graph:
+                        children = self._deserialize(sub_graph, relative_pos, pos, False)
+                        [child.set_parent(node) for child in children]
 
                 if n_data.get('dynamic_port', None):
                     node.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
-                node.model.parent_id = n_data.get('parent_id', None)
-
-        # set node parent
-        all_nodes = {}
-        all_nodes.update(nodes)
-        all_nodes.update(self._model.nodes)
-        [node.set_parent(all_nodes[node.parent_id]) for node in nodes.values() if node.parent_id is not None]
 
         # build the connections.
         for connection in data.get('connections', []):
@@ -1170,6 +1169,9 @@ class NodeGraph(QtCore.QObject):
         elif pos:
             self._viewer.move_nodes([n.view for n in node_objs], pos=pos)
             [setattr(n.model, 'pos', n.view.xy_pos) for n in node_objs]
+
+        if set_parent:
+            [node.set_parent(self._current_node_space) for node in node_objs]
 
         return node_objs
 
@@ -1200,7 +1202,13 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the saved node layout.
         """
-        serialized_data = self._serialize(self.all_nodes())
+        root_node = self.root_node()
+        if root_node is not None:
+            nodes = root_node.children()
+        else:
+            nodes = self.all_nodes()
+        serialized_data = self._serialize(nodes)
+
         node_space = self.get_node_space()
         if node_space is not None:
             node_space = node_space.id
@@ -1306,9 +1314,6 @@ class NodeGraph(QtCore.QObject):
         self.clear_selection()
         nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
-        # set node parent
-        [n.set_parent(self._current_node_space) for n in nodes]
-
         self._undo_stack.endMacro()
 
     def duplicate_nodes(self, nodes):

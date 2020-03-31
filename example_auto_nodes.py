@@ -60,6 +60,11 @@ def find_node(graph, node):
     print(graph.get_node_by_path(node.path()))
 
 
+def print_children(graph, node):
+    children = node.children()
+    print(len(children), children)
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
 
@@ -97,6 +102,7 @@ if __name__ == '__main__':
     # setup node menu
     node_menu = graph.context_nodes_menu()
     node_menu.add_command('Enter Node', enter_node, node_class=SubGraphNode)
+    node_menu.add_command('Print Children', print_children, node_class=SubGraphNode)
     node_menu.add_command('Print Functions', print_functions, node_class=ModuleNode)
     node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
     node_menu.add_command('Toggle Auto Cook', toggle_auto_cook, node_class=AutoNode)
@@ -108,7 +114,7 @@ if __name__ == '__main__':
 
     # create test nodes
     graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')
-    graph.get_node_by_path('/root/Input A').cook()
+    graph.get_node_by_path('/root/Vector1').cook()
 
     # widget used for the node graph.
     graph_widget = graph.widget

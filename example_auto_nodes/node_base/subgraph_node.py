@@ -15,6 +15,8 @@ class SubGraphNode(AutoNode, SubGraph):
         self.sub_graph_input_nodes = []
         self.sub_graph_output_nodes = []
         self.create_property('graph_rect', None)
+        self.add_int_input('input count', 'input count', 1)
+        self.add_int_input('output count', 'output count', 1)
 
     def enter(self):
         self.hide()
@@ -24,11 +26,16 @@ class SubGraphNode(AutoNode, SubGraph):
             self.graph.set_graph_rect(rect)
 
     def exit(self):
-        [n.hide() for n in self.children()]
+        for n in self.children():
+            n.hide()
+            n.set_selected(False)
         self.set_property('graph_rect', self.graph.graph_rect())
 
     def show(self):
         super().show()
+        self.update_port()
+
+    def update_port(self):
         self.view.draw_node()
 
     def add_child(self, node):
@@ -38,19 +45,30 @@ class SubGraphNode(AutoNode, SubGraph):
 
         if self.has_property('root'):
             return
+
         if isinstance(node, SubGraphInputNode):
             if node not in self.sub_graph_input_nodes:
-                node.set_property('input index', len(self.sub_graph_input_nodes))
                 self.sub_graph_input_nodes.append(node)
-                if len(self.inputs()) < len(self.sub_graph_input_nodes):
-                    self.add_input('input' + str(len(self.sub_graph_input_nodes) - 1))
 
         if isinstance(node, SubGraphOutputNode):
             if node not in self.sub_graph_output_nodes:
-                node.set_property('output index', len(self.sub_graph_output_nodes))
                 self.sub_graph_output_nodes.append(node)
-                if len(self.outputs()) < len(self.sub_graph_output_nodes):
-                    self.add_output('output' + str(len(self.sub_graph_output_nodes) - 1))
+
+        # if isinstance(node, SubGraphInputNode):
+        #     if node not in self.sub_graph_input_nodes:
+        #         node.set_property('input index', len(self.sub_graph_input_nodes))
+        #         self.sub_graph_input_nodes.append(node)
+        #         if len(self.input_ports()) < len(self.sub_graph_input_nodes):
+        #             self.set_property('input count', self.get_property('input count') + 1)
+        #             self.update_port()
+        #
+        # if isinstance(node, SubGraphOutputNode):
+        #     if node not in self.sub_graph_output_nodes:
+        #         node.set_property('output index', len(self.sub_graph_output_nodes))
+        #         self.sub_graph_output_nodes.append(node)
+        #         if len(self.output_ports()) < len(self.sub_graph_output_nodes):
+        #             self.set_property('output count', self.get_property('output count') + 1)
+        #             self.update_port()
 
     def remove_child(self, node):
         if node in self._children:
@@ -105,13 +123,12 @@ class SubGraphInputNode(AutoNode):
         if parent is not None:
             from_port = self.get_parent_port(parent)
             if from_port:
-                print(self.name(), from_port.node().getData(from_port))
                 return from_port.node().getData(from_port)
             else:
-                print(self.name(), 'no port')
+                # can not find port
                 return self.defaultValue
         else:
-            print(self.name(), 'no parent')
+            # can not find parent
             return self.defaultValue
 
     def get_parent_port(self, parent=None):
