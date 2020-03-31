@@ -239,7 +239,7 @@ QPushButton {
     font-size:15px;
     padding-left: 0px;
     padding-right: 0px;
-    background-color: rgb(20,100,180);
+    background-color: rgb(60,70,90);
     }
 QPushButton::pressed {
     border-style: inset;

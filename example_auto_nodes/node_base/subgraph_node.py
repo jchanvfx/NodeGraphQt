@@ -10,11 +10,10 @@ class SubGraphNode(AutoNode, SubGraph):
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(SubGraphNode, self).__init__(defaultInputType, defaultOutputType)
         SubGraph.__init__(self)
-        self.set_property('color', (200, 155, 70, 255))
+        self.set_property('color', (127, 54, 93, 255))
+        self.model.dynamic_port = True
         self.sub_graph_input_nodes = []
         self.sub_graph_output_nodes = []
-        self.add_input('input0')
-        self.add_output('output0')
         self.create_property('graph_rect', None)
 
     def enter(self):
@@ -35,6 +34,7 @@ class SubGraphNode(AutoNode, SubGraph):
     def add_child(self, node):
         if node not in self._children:
             self._children.append(node)
+            node.model.parent_id = self.id
 
         if self.has_property('root'):
             return
@@ -74,6 +74,7 @@ class SubGraphNode(AutoNode, SubGraph):
 
     def run(self):
         for node in self.sub_graph_input_nodes:
+            node.model.parent_id = self.id
             node.cook()
 
     def delete(self):
@@ -95,25 +96,25 @@ class SubGraphInputNode(AutoNode):
 
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(SubGraphInputNode, self).__init__(defaultInputType, defaultOutputType)
-        self.set_property('color', (200, 155, 100, 255))
+        self.set_property('color', (40, 50, 66, 255))
         self.add_output('out')
         self.add_int_input('input index', 'input index', value=0)
 
     def getData(self, port):
         parent = self.parent()
         if parent is not None:
-            from_port = self.get_map_port(parent)
+            from_port = self.get_parent_port(parent)
             if from_port:
+                print(self.name(), from_port.node().getData(from_port))
                 return from_port.node().getData(from_port)
             else:
+                print(self.name(), 'no port')
                 return self.defaultValue
         else:
+            print(self.name(), 'no parent')
             return self.defaultValue
 
-    def set_parent(self, parent):
-        super(SubGraphInputNode, self).set_parent(parent)
-
-    def get_map_port(self, parent=None):
+    def get_parent_port(self, parent=None):
         if parent is None:
             parent = self.parent()
         index = self.get_property('input index')
@@ -133,7 +134,7 @@ class SubGraphOutputNode(AutoNode):
 
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(SubGraphOutputNode, self).__init__(defaultInputType, defaultOutputType)
-        self.set_property('color', (200, 155, 100, 255))
+        self.set_property('color', (40, 50, 66, 255))
         self.add_input('in')
         self.add_int_input('output index', 'output index', value=0)
 

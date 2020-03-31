@@ -214,6 +214,15 @@ class Port(object):
         self.__view.color = color
 
     @property
+    def data_type(self):
+        return self.__model.data_type
+
+    @data_type.setter
+    def data_type(self, data_type):
+        self.__model.data_type = data_type
+
+
+    @property
     def border_color(self):
         return self.__view.border_color
 

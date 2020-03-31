@@ -145,7 +145,7 @@ class NodeGraph(QtCore.QObject):
         tab = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
         tab.activated.connect(self._toggle_tab_search)
         self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
-            
+
         self._wire_signals()
         self._node_space_bar = node_space_bar(self)
 
@@ -370,7 +370,9 @@ class NodeGraph(QtCore.QObject):
 
             layout = QtWidgets.QVBoxLayout(self._widget)
             layout.setContentsMargins(0, 0, 0, 0)
-            layout.addWidget(self._node_space_bar)
+            layout.setSpacing(0)
+            if self.root_node() is not None:
+                layout.addWidget(self._node_space_bar)
             layout.addWidget(self._viewer)
         return self._widget
 
@@ -852,6 +854,8 @@ class NodeGraph(QtCore.QObject):
         """
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
+        if node is self.root_node():
+            return
         self.nodes_deleted.emit([node.id])
         if isinstance(node, SubGraph):
             self._undo_stack.beginMacro('delete sub graph')
@@ -868,10 +872,11 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
         """
+        root_node = self.root_node()
         self.nodes_deleted.emit([n.id for n in nodes])
         self._undo_stack.beginMacro('delete nodes')
         [self.delete_nodes(n.children()) for n in nodes if isinstance(n, SubGraph)]
-        [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
+        [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes if n is not root_node]
         self._undo_stack.endMacro()
 
     def delete_pipe(self, pipe):
@@ -948,18 +953,11 @@ class NodeGraph(QtCore.QObject):
             NodeGraphQt.NodeObject: node object.
         """
         names = [name for name in node_path.split("/") if name]
-        root = names.pop(0)
-        node = self._current_node_space
+        names.pop(0)
+
+        node = self.root_node()
         if node is None:
-            node = self.get_node_by_name(root)
-            if node is None:
-                return None
-        else:
-            while True:
-                parent_node = node.parent()
-                if parent_node is None:
-                    break
-                node = parent_node
+            return None
 
         for name in names:
             find = False
@@ -1036,8 +1034,12 @@ class NodeGraph(QtCore.QObject):
         """
         Clears the current node graph session.
         """
+        root_node = self.root_node()
         for n in self.all_nodes():
+            if n is root_node:
+                continue
             self._undo_stack.push(NodeRemovedCmd(self, n))
+        self.set_node_space(root_node)
         self._undo_stack.clear()
         self._model.session = None
         self.session_changed.emit("")
@@ -1055,11 +1057,25 @@ class NodeGraph(QtCore.QObject):
         """
         serial_data = {'nodes': {}, 'connections': []}
         nodes_data = {}
+        root_node = self.root_node()
         for n in nodes:
+            if n is root_node:
+                continue
             # update the node model.
             n.update_model()
 
             nodes_data.update(n.model.to_dict)
+
+            if isinstance(n, SubGraph):
+                subgraph_node = n
+                while subgraph_node:
+                    _subgraph_node = None
+                    for _n in subgraph_node.children():
+                        _n.update_model()
+                        nodes_data.update(_n.model.to_dict)
+                        if isinstance(_n, SubGraph):
+                            _subgraph_node = _n
+                    subgraph_node = _subgraph_node
 
         for n_id, n_data in nodes_data.items():
             serial_data['nodes'][n_id] = n_data
@@ -1116,13 +1132,19 @@ class NodeGraph(QtCore.QObject):
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
-
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'))
                 node.set_graph(self)
 
+                if n_data.get('dynamic_port', None):
+                    node.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
+                node.model.parent_id = n_data.get('parent_id', None)
+
         # set node parent
-        [node.set_parent_id(node.parent_id) for node in nodes.values()]
+        all_nodes = {}
+        all_nodes.update(nodes)
+        all_nodes.update(self._model.nodes)
+        [node.set_parent(all_nodes[node.parent_id]) for node in nodes.values() if node.parent_id is not None]
 
         # build the connections.
         for connection in data.get('connections', []):
@@ -1178,18 +1200,19 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the saved node layout.
         """
-        serliazed_data = self._serialize(self.all_nodes())
+        serialized_data = self._serialize(self.all_nodes())
         node_space = self.get_node_space()
         if node_space is not None:
             node_space = node_space.id
-        serliazed_data['graph'] = {'node_space': node_space, 'pipe_layout': self._viewer.get_pipe_layout()}
-        serliazed_data['graph']['graph_rect'] = self._viewer.scene_rect()
+        serialized_data['graph'] = {'node_space': node_space, 'pipe_layout': self._viewer.get_pipe_layout()}
+        serialized_data['graph']['graph_rect'] = self._viewer.scene_rect()
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
-            json.dump(serliazed_data, file_out, indent=2, separators=(',', ':'))
+            json.dump(serialized_data, file_out, indent=2, separators=(',', ':'))
 
         self._model.session = file_path
         self.session_changed.emit(file_path)
+        self._viewer.clear_key_state()
 
     def load_session(self, file_path):
         """
@@ -1226,14 +1249,16 @@ class NodeGraph(QtCore.QObject):
         self._deserialize(layout_data)
 
         if 'graph' in layout_data.keys():
-            node_space_id = layout_data['graph']['node_space']
-        
+            # node_space_id = layout_data['graph']['node_space']
+
             # deserialize graph data
-            self.set_node_space(self.get_node_by_id(node_space_id))
+            # self.set_node_space(self.get_node_by_id(node_space_id))
+            self.set_node_space(self.root_node())
             self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
 
             self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
 
+        self.set_node_space(self.root_node())
         self._undo_stack.clear()
         self._model.session = file_path
         self.session_changed.emit(file_path)
@@ -1425,3 +1450,12 @@ class NodeGraph(QtCore.QObject):
             rect (list): [x, y, width, height].
         """
         self._viewer.set_scene_rect(rect)
+
+    def root_node(self):
+        """
+        Get the graph root node.
+
+        Returns:
+            node (BaseNode): node object.
+        """
+        return self.get_node_by_id('0' * 13)

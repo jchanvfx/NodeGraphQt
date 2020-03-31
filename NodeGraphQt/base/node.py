@@ -537,6 +537,18 @@ class BaseNode(NodeObject):
         super(BaseNode, self).__init__(NodeItem())
         self._inputs = []
         self._outputs = []
+        self._has_draw = False
+
+    def draw(self, force=True):
+        if force:
+            if not self.model.visible:
+                self._has_draw = False
+            else:
+                self.view.draw_node()
+        else:
+            if not self._has_draw:
+                self.view.draw_node()
+                self._has_draw = True
 
     def hide(self):
         """
@@ -551,6 +563,7 @@ class BaseNode(NodeObject):
         """
         super(BaseNode, self).show()
         [pipe.show() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
+        self.draw(False)
 
     def update_model(self):
         """
@@ -753,7 +766,7 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None):
+                  color=None, data_type='None'):
         """
         Add input :class:`Port` to node.
 
@@ -762,6 +775,7 @@ class BaseNode(NodeObject):
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
+            data_type(str): port data type name.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -779,12 +793,13 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
+        port.model.data_type = data_type
         self._inputs.append(port)
         self.model.inputs[port.name()] = port.model
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None):
+                   color=None, data_type='None'):
         """
         Add output :class:`Port` to node.
 
@@ -793,6 +808,7 @@ class BaseNode(NodeObject):
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
+            data_type(str): port data type name.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -809,6 +825,7 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
+        port.model.data_type = data_type
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
@@ -834,6 +851,95 @@ class BaseNode(NodeObject):
             self.set_property(name, old_value)
         else:
             self.set_property(name, items[0])
+
+    def get_input(self, port):
+        """
+        Get a input port.
+
+        Args:
+            port(str/int/Port): input port name/index/object.
+        Returns:
+            Port object or None
+        """
+        port_object = None
+        if type(port) is int:
+            if port < len(self._inputs):
+                port_object = self._inputs[port]
+        elif type(port) is str:
+            port_object = self.inputs().get(port, None)
+        return port_object
+
+    def get_output(self, port):
+        """
+        Get a output port.
+
+        Args:
+            port(str/int): output port name/index.
+        Returns:
+            Port object or None
+        """
+        port_object = None
+        if type(port) is int:
+            if port < len(self._outputs):
+                port_object = self._outputs[port]
+        elif type(port) is str:
+            port_object = self.outputs().get(port, None)
+        return port_object
+
+    def delete_input(self, port):
+        """
+        Delete input port.
+
+        Args:
+            port(str/int): input port name/index.
+        """
+        if type(port) is not Port:
+            port = self.get_input(port)
+            if port is None:
+                return
+        self._inputs.remove(port)
+        self._model.inputs.pop(port.name())
+        self._view.delete_input(port.view)
+        del port
+        self.draw()
+
+    def delete_output(self, port):
+        """
+        Delete output port.
+
+        Args:
+            port(str/int/PortItem): output port name/index/object.
+        """
+        if type(port) is not Port:
+            port = self.get_output(port)
+            if port is None:
+                return
+        self._outputs.remove(port)
+        self._model.outputs.pop(port.name())
+        self._view.delete_output(port.view)
+        del port
+        self.draw()
+
+    def set_ports(self, port_data):
+        """
+        Set node input and output ports.
+
+        Args:
+            port_data(dict): {'input_ports':['port_name', ...], "output_ports":['port_name', ...]}
+        """
+        [self._view.delete_input(port.view) for port in self._inputs]
+        [self._view.delete_output(port.view) for port in self._outputs]
+        self._inputs = []
+        self._outputs = []
+        self._model.outputs = {}
+        self._model.inputs = {}
+        [self.add_input(name=port['name'], multi_input=port['multi_connection'],
+                        display_name=port['display_name'], data_type=port['data_type'])
+         for port in port_data['input_ports']]
+        [self.add_output(name=port['name'], multi_output=port['multi_connection'],
+                         display_name=port['display_name'], data_type=port['data_type'])
+         for port in port_data['output_ports']]
+        self.draw()
 
     def inputs(self):
         """

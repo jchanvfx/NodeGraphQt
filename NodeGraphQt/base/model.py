@@ -20,6 +20,7 @@ class PortModel(object):
         self.multi_connection = False
         self.visible = True
         self.connected_ports = defaultdict(list)
+        self.data_type = 'None'
 
     def __repr__(self):
         return '<{}(\'{}\') @ {}>'.format(
@@ -60,6 +61,7 @@ class NodeModel(object):
         self.selected = False
         self.visible = True
         self.parent_id = None
+        self.dynamic_port = False
         self.width = 100.0
         self.height = 80.0
         self.pos = [0.0, 0.0]
@@ -239,12 +241,16 @@ class NodeModel(object):
         input_ports = []
         output_ports = []
         for name, model in node_dict.pop('inputs').items():
-            input_ports.append(name)
+            if self.dynamic_port:
+                input_ports.append({'name': name, 'multi_connection': model.multi_connection,
+                                    'display_name': model.display_name, 'data_type': model.data_type})
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
-            output_ports.append(name)
+            if self.dynamic_port:
+                output_ports.append({'name': name, 'multi_connection': model.multi_connection,
+                                     'display_name': model.display_name, 'data_type': model.data_type})
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 outputs[name] = connected_ports
@@ -253,8 +259,9 @@ class NodeModel(object):
         if outputs:
             node_dict['outputs'] = outputs
 
-        node_dict['input_ports'] = input_ports
-        node_dict['output_ports'] = output_ports
+        if self.dynamic_port:
+            node_dict['input_ports'] = input_ports
+            node_dict['output_ports'] = output_ports
 
         custom_props = node_dict.pop('_custom_prop', {})
 

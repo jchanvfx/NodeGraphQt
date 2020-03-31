@@ -70,34 +70,31 @@ if __name__ == '__main__':
     # set up default menu and commands.
     setup_context_menu(graph)
 
-    # widget used for the node graph.
-    graph_widget = graph.widget
-    graph_widget.resize(1100, 800)
-    graph_widget.show()
-
     # show the properties bin when a node is "double clicked" in the graph.
     properties_bin = PropertiesBinWidget(node_graph=graph)
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
 
-    # def show_prop_bin(node):
-    #     if not properties_bin.isVisible():
-    #         properties_bin.show()
-    # graph.node_double_clicked.connect(show_prop_bin)
+    def show_prop_bin(node):
+        if not properties_bin.isVisible():
+            properties_bin.show()
+    graph.node_double_clicked.connect(show_prop_bin)
 
-    # # show the nodes list when a node is "double clicked" in the graph.
-    # node_tree = NodeTreeWidget(node_graph=graph)
+    # show the nodes list when a node is "double clicked" in the graph.
+    node_tree = NodeTreeWidget(node_graph=graph)
 
-    # def show_nodes_list(node):
-    #     if not node_tree.isVisible():
-    #         node_tree.update()
-    #         node_tree.show()
-    # graph.node_double_clicked.connect(show_nodes_list)
+    def show_nodes_list(node):
+        if not node_tree.isVisible():
+            node_tree.update()
+            node_tree.show()
+    graph.node_double_clicked.connect(show_nodes_list)
 
+    # register nodes
     reg_nodes = get_nodes_from_folder(os.getcwd() + "/example_auto_nodes")
     BackdropNode.__identifier__ = 'Utility'
     reg_nodes.append(BackdropNode)
     [graph.register_node(n) for n in reg_nodes]
 
+    # setup node menu
     node_menu = graph.context_nodes_menu()
     node_menu.add_command('Enter Node', enter_node, node_class=SubGraphNode)
     node_menu.add_command('Print Functions', print_functions, node_class=ModuleNode)
@@ -106,35 +103,16 @@ if __name__ == '__main__':
     node_menu.add_command('Print Path', print_path, node_class=AutoNode)
     node_menu.add_command('Find Node', find_node, node_class=AutoNode)
 
+    # create root node
     graph.create_node('Utility.RootGraph', name='root', selected=False)
-    mathNodeA = graph.create_node('Module.MathModuleNode',
-                                  name='Math Functions A',
-                                  color='#0a1e20',
-                                  text_color='#feab20',
-                                  pos=[-250, 70])
 
-    mathNodeB = graph.create_node('Module.MathModuleNode',
-                                  name='Math Functions B',
-                                  color='#0a1e20',
-                                  text_color='#feab20',
-                                  pos=[-250, -70])
+    # create test nodes
+    graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')
+    graph.get_node_by_path('/root/Input A').cook()
 
-    mathNodeC = graph.create_node('Module.MathModuleNode',
-                                  name='Math Functions C',
-                                  color='#0a1e20',
-                                  text_color='#feab20',
-                                  pos=[0, 0])
-
-    inputANode = graph.create_node('Inputs.FloatInputNode',
-                                   name='Input A',
-                                   pos=[-500, -50])
-
-    inputBNode = graph.create_node('Inputs.FloatInputNode',
-                                   name='Input B',
-                                   pos=[-500, 50])
-
-    outputNode = graph.create_node('Viewers.DataViewerNode',
-                                   name='Output',
-                                   pos=[250, 0])
+    # widget used for the node graph.
+    graph_widget = graph.widget
+    graph_widget.resize(1100, 800)
+    graph_widget.show()
 
     sys.exit(app.exec_())

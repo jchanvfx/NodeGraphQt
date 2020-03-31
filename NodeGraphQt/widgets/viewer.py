@@ -896,6 +896,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._scene_range = QtCore.QRectF(*rect)
         self._update_scene()
 
+    def clear_key_state(self):
+        self.CTRL_state = False
+        self.SHIFT_state = False
+        self.ALT_state = False
+
     def use_opengl(self):
         format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
         format.setSamples(4)
