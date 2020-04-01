@@ -90,7 +90,6 @@ class SubGraphNode(AutoNode, SubGraph):
                 for node in self.sub_graph_input_nodes:
                     if node.get_property('input index') == index:
                         node.cook()
-                        break
             self._run_ports = []
         else:
             [node.cook() for node in self.sub_graph_input_nodes]
