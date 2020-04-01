@@ -58,6 +58,7 @@ class NodeObject(object):
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
+        self._parent = None
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -83,26 +84,6 @@ class NodeObject(object):
             str: unique id string.
         """
         return self.model.id
-
-    @property
-    def parent_id(self):
-        """
-        The node parent id.
-
-        Returns:
-            str: unique id string.
-        """
-        return self.model.parent_id
-
-    def set_parent_id(self, parent_id=None):
-        """
-        Set node parent id.
-
-        Args:
-            parent_id (str): unique id string.
-        """
-        self.model.parent_id = None
-        self.set_parent(self.graph.get_node_by_id(parent_id))
 
     @property
     def graph(self):
@@ -434,17 +415,15 @@ class NodeObject(object):
         Args:
             parent_node (SubGraph): parent node.
         """
-        if self.parent_id is not None:
-            parent = self.parent()
-            if parent is not None:
-                parent.remove_child(self)
+        if parent_node is self:
+            parent_node = None
+
+        if self._parent is not None:
+            self._parent.remove_child(self)
 
         if parent_node is not None:
-            self.model.parent_id = parent_node.id
             parent_node.add_child(self)
-        else:
-            self.model.parent_id = None
-
+        self._parent = parent_node
         if self.graph.get_node_space() is not parent_node:
             self.hide()
         else:
@@ -457,7 +436,7 @@ class NodeObject(object):
         Returns:
             SubGraph: parent node or None.
         """
-        return self.graph.get_node_by_id(self.parent_id)
+        return self._parent
 
     def path(self):
         """
@@ -466,20 +445,18 @@ class NodeObject(object):
         Returns:
             str: current node path.
         """
-        if self.parent_id is None:
+        if self._parent is None:
             return "/" + self.name()
-
-        return self.parent().path() + "/" + self.name()
+        return self._parent.path() + "/" + self.name()
 
     def delete(self):
         """
         Delete node view.
         """
         self._view.delete()
-        parent = self.parent()
-        if parent is not None:
-            parent.remove_child(self)
-        # self.set_parent_id(None)
+        if self._parent is not None:
+            self._parent.remove_child(self)
+        # self.set_parent(None)
 
     def hide(self):
         """
@@ -925,7 +902,8 @@ class BaseNode(NodeObject):
         Set node input and output ports.
 
         Args:
-            port_data(dict): {'input_ports':['port_name', ...], "output_ports":['port_name', ...]}
+            port_data(dict): {'input_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...],
+            "                 'output_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...]}
         """
         [self._view.delete_input(port.view) for port in self._inputs]
         [self._view.delete_output(port.view) for port in self._outputs]

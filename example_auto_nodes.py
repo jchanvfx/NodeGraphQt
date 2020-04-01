@@ -56,7 +56,7 @@ def print_path(graph, node):
     print(node.path())
 
 
-def find_node(graph, node):
+def find_node_by_path(graph, node):
     print(graph.get_node_by_path(node.path()))
 
 
@@ -107,14 +107,14 @@ if __name__ == '__main__':
     node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
     node_menu.add_command('Toggle Auto Cook', toggle_auto_cook, node_class=AutoNode)
     node_menu.add_command('Print Path', print_path, node_class=AutoNode)
-    node_menu.add_command('Find Node', find_node, node_class=AutoNode)
+    node_menu.add_command('Find Node By Path', find_node_by_path, node_class=AutoNode)
 
     # create root node
     graph.create_node('Utility.RootGraph', name='root', selected=False)
 
     # create test nodes
     graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')
-    graph.get_node_by_path('/root/Vector1').cook()
+    graph.get_node_by_path('/root/SubGraph::Distance').cook()
 
     # widget used for the node graph.
     graph_widget = graph.widget

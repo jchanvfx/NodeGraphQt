@@ -60,7 +60,6 @@ class NodeModel(object):
         self.disabled = False
         self.selected = False
         self.visible = True
-        self.parent_id = None
         self.dynamic_port = False
         self.width = 100.0
         self.height = 80.0
@@ -219,7 +218,6 @@ class NodeModel(object):
                     'selected': False,
                     'disabled': False,
                     'visible': True,
-                    'parent_id' : None,
                     'inputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}},
                     'outputs': {

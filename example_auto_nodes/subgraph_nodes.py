@@ -1,5 +1,4 @@
 from .node_base.subgraph_node import SubGraphNode, SubGraphInputNode, SubGraphOutputNode
-from .node_base.auto_node import AutoNode
 
 
 class SubGraph(SubGraphNode):
@@ -14,9 +13,9 @@ class SubGraph(SubGraphNode):
 
     def create_input_node(self, update=True):
         input_node = self.graph.create_node('Utility.SubGraphInput', pos=[-400, 200 * len(self.sub_graph_input_nodes)])
-        input_node.set_parent(self)
         input_node.set_property('input index', len(self.sub_graph_input_nodes))
         self.sub_graph_input_nodes.append(input_node)
+        input_node.set_parent(self)
         if update:
             self.set_property('input count', self.get_property('input count') + 1)
             self.update_port()
@@ -25,9 +24,10 @@ class SubGraph(SubGraphNode):
     def create_output_node(self, update=True):
         output_node = self.graph.create_node('Utility.SubGraphOutput',
                                              pos=[400, 200 * len(self.sub_graph_output_nodes)])
-        output_node.set_parent(self)
         output_node.set_property('output index', len(self.sub_graph_output_nodes))
         self.sub_graph_output_nodes.append(output_node)
+        output_node.set_parent(self)
+
         if update:
             self.set_property('output count', self.get_property('output count') + 1)
             self.update_port()
@@ -37,6 +37,9 @@ class SubGraph(SubGraphNode):
         if self in nodes:
             nodes.remove(self)
         [n.set_parent(self) for n in nodes]
+
+        self.set_property('input count', 0)
+        self.set_property('output count', 0)
 
         in_connect = []
         out_connect = []
@@ -51,7 +54,6 @@ class SubGraph(SubGraphNode):
                 for pipe in port.view.connected_pipes:
                     if pipe.input_port.isVisible():
                         out_connect.append((pipe.output_port, pipe.input_port))
-
         in_map = {}
         for idx, ports in enumerate(in_connect):
             if ports[0] in in_map.keys():
@@ -59,7 +61,7 @@ class SubGraph(SubGraphNode):
             else:
                 self.create_input_node()
                 if idx > 0:
-                    in_map[ports[0]] = [[ports[1], len(self.sub_graph_input_nodes) - 1]]
+                    in_map[ports[0]] = [[ports[1], len(self.input_ports()) - 1]]
                 else:
                     in_map[ports[0]] = [[ports[1], 0]]
 
@@ -76,7 +78,7 @@ class SubGraph(SubGraphNode):
             else:
                 self.create_output_node()
                 if idx > 0:
-                    out_map[ports[0]] = [[ports[1], len(self.sub_graph_output_nodes) - 1]]
+                    out_map[ports[0]] = [[ports[1], len(self.output_ports()) - 1]]
                 else:
                     out_map[ports[0]] = [[ports[1], 0]]
 
@@ -108,9 +110,6 @@ class SubGraph(SubGraphNode):
             if input_count > current_input_count:
                 for i in range(input_count - current_input_count):
                     self.add_input('input' + str(len(self.input_ports())))
-                # if input_count > len(self.sub_graph_input_nodes):
-                #     for i in range(input_count - len(self.sub_graph_input_nodes)):
-                #         self.create_input_node(False)
             else:
                 for i in range(current_input_count - input_count):
                     self.delete_input(current_input_count - i - 1)
@@ -120,9 +119,6 @@ class SubGraph(SubGraphNode):
             if output_count > current_output_count:
                 for i in range(output_count - current_output_count):
                     self.add_output('output' + str(len(self.output_ports())))
-                # if output_count > len(self.sub_graph_output_nodes):
-                #     for i in range(output_count - len(self.sub_graph_output_nodes)):
-                #         self.create_output_node(False)
             else:
                 for i in range(current_output_count - output_count):
                     self.delete_output(current_output_count - i - 1)

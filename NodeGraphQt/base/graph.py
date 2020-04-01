@@ -772,7 +772,10 @@ class NodeGraph(QtCore.QObject):
                 node.model.pos = [float(pos[0]), float(pos[1])]
 
             # set node parent
-            node.set_parent(self._current_node_space)
+            if not node.has_property('root'):
+                node.set_parent(self._current_node_space)
+            else:
+                node.set_parent(None)
 
             node.update()
 
@@ -1123,8 +1126,6 @@ class NodeGraph(QtCore.QObject):
             if NodeCls:
                 node = NodeCls()
                 node.NODE_NAME = n_data.get('name', node.NODE_NAME)
-                if 'parent_id' in n_data.keys():
-                    n_data.pop('parent_id')
                 # set properties.
                 for prop in node.model.properties.keys():
                     if prop in n_data.keys():
@@ -1257,13 +1258,8 @@ class NodeGraph(QtCore.QObject):
         self._deserialize(layout_data)
 
         if 'graph' in layout_data.keys():
-            # node_space_id = layout_data['graph']['node_space']
-
-            # deserialize graph data
-            # self.set_node_space(self.get_node_by_id(node_space_id))
             self.set_node_space(self.root_node())
             self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
-
             self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
 
         self.set_node_space(self.root_node())

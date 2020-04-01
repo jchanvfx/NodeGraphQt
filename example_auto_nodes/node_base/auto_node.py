@@ -1,4 +1,4 @@
-from NodeGraphQt.base.node import BaseNode
+from NodeGraphQt.base.node import BaseNode, SubGraph
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NODE_PROP
 from NodeGraphQt import QtCore
@@ -74,10 +74,18 @@ class AutoNode(BaseNode, QtCore.QObject):
         self._update_tool_tip()
 
     def cookNextNode(self):
-        for nodeList in self.connected_output_nodes().values():
-            for n in nodeList:
-                if n is not self:
-                    n.cook()
+        nodes = []
+        for p in self.output_ports():
+            for cp in p.connected_ports():
+                connected_output_node = cp.node()
+                if connected_output_node is self:
+                    continue
+                if isinstance(connected_output_node, SubGraph):
+                    connected_output_node.add_run_ports(cp)
+                if connected_output_node not in nodes:
+                    nodes.append(connected_output_node)
+
+        [node.cook() for node in nodes]
 
     def getData(self, port):
         # for custom output data
