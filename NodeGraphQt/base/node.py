@@ -1177,25 +1177,56 @@ class BackdropNode(NodeObject):
 
 
 class SubGraph(object):
+    """
+    The ``NodeGraphQt.SubGraph`` class is the base class that all
+    Sub Graph Node inherit from.
+    """
+
     def __init__(self):
         self._children = []
 
     def children(self):
+        """
+        Returns the children of the sub graph.
+        """
         return self._children
 
     def create_from_nodes(self, nodes):
+        """
+        Create sub graph from the nodes.
+        Args:
+            nodes(list): nodes to create the sub graph.
+        """
+        if self in nodes:
+            nodes.remove(self)
         [n.set_parent(self) for n in nodes]
 
     def add_child(self, node):
+        """
+        Add a node to the sub graph.
+        Args:
+            node(NodeGraphQt.BaseNode).
+        """
         if node not in self._children:
             self._children.append(node)
 
     def remove_child(self, node):
+        """
+        Remove a node from the sub graph.
+        Args:
+            node(NodeGraphQt.BaseNode).
+        """
         if node in self._children:
             self._children.remove(node)
 
     def enter(self):
+        """
+        Action when enter the sub graph.
+        """
         pass
 
     def exit(self):
+        """
+        Action when exit the sub graph.
+        """
         pass
