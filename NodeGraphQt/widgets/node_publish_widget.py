@@ -16,7 +16,6 @@ class NodePublishWidget(QtWidgets.QDialog):
         self.published = False
 
         layout = QtWidgets.QVBoxLayout(self)
-        self.layout = QtWidgets.QHBoxLayout(self)
         self.node = node
         self.node_name = QtWidgets.QLineEdit(node.name())
         self.node_class_name = QtWidgets.QLineEdit(node.name().replace(" ", "_"))
