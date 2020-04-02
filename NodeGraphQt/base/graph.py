@@ -1139,7 +1139,6 @@ class NodeGraph(QtCore.QObject):
                     node.model.set_property(prop, val)
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'), unique_name=set_parent)
-                # node.set_graph(self)
 
                 if isinstance(node, SubGraph):
                     if n_data.get('custom', None):

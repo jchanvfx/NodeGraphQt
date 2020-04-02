@@ -194,7 +194,6 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
 
     def _on_search_submitted(self):
         action = self.sender()
-        print(action)
         if type(action) is not QtWidgets.QAction:
             if len(self._searched_actions) > 0:
                 action = self._searched_actions[0]

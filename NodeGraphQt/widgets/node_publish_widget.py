@@ -1,7 +1,6 @@
-# from .. import QtWidgets
-from PySide2 import QtWidgets
+from .properties import PropFileSavePath
+from .. import QtWidgets
 import os
-from NodeGraphQt.widgets.properties import PropFileSavePath
 
 
 class _element_widget(QtWidgets.QWidget):
@@ -72,18 +71,3 @@ class NodePublishWidget(QtWidgets.QDialog):
         self.published = True
         self.close()
 
-
-if __name__ == '__main__':
-    import sys
-
-    class node(object):
-        def __init__(self):
-            pass
-
-        def name(self):
-            return 'node name'
-
-    app = QtWidgets.QApplication()
-    wid = NodePublishWidget(None, node())
-    wid.show()
-    sys.exit(app.exec_())
