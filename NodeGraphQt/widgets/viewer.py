@@ -78,7 +78,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._search_widget = TabSearchMenuWidget(self)
+        self._search_widget = TabSearchMenuWidget()
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         # workaround fix for shortcuts from the non-native menu actions
@@ -715,6 +715,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         else:
             self._search_widget.setVisible(state)
             self.clearFocus()
+
+    def rebuild_tab_search(self):
+        if type(self._search_widget) is TabSearchMenuWidget:
+            self._search_widget.rebuild = True
 
     def context_menus(self):
         return {'graph': self._ctx_menu,

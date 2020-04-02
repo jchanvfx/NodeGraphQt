@@ -2,17 +2,14 @@
 # -*- coding: utf-8 -*-
 import example_auto_nodes
 
-from NodeGraphQt import (NodeGraph,
-                         BaseNode,
-                         setup_context_menu)
-from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget, BackdropNode
+from NodeGraphQt import NodeGraph, setup_context_menu
+from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, \
+    NodeTreeWidget, BackdropNode, NodePublishWidget
 import os
 import sys
 import inspect
 import importlib
-from example_auto_nodes.node_base.auto_node import AutoNode
-from example_auto_nodes.node_base.module_node import ModuleNode
-from example_auto_nodes.node_base.subgraph_node import SubGraphNode
+from example_auto_nodes import AutoNode, ModuleNode, SubGraphNode, Publish
 
 
 def get_nodes_from_folder(folder_path):
@@ -30,8 +27,25 @@ def get_nodes_from_folder(folder_path):
 
         for name, obj in inspect.getmembers(importlib.import_module(module_name)):
             if inspect.isclass(obj) and filename in str(obj):
-                if len(inspect.getmembers(obj)) > 0:
+                if len(inspect.getmembers(obj)) > 0 and obj.__identifier__ != '__None':
                     nodes.append(obj)
+    return nodes
+
+
+def get_published_nodes_from_folder(folder_path):
+    path, folder_name = os.path.split(folder_path)
+    if path not in sys.path:
+        sys.path.append(path)
+
+    nodes = []
+    for i in os.listdir(folder_path):
+        if not i.endswith(".node") and not i.endswith(".json"):
+            continue
+        file_name = os.path.join(folder_path, i)
+        node = Publish.create_node_class(file_name)
+        if node is not None:
+            nodes.append(node)
+
     return nodes
 
 
@@ -63,6 +77,11 @@ def find_node_by_path(graph, node):
 def print_children(graph, node):
     children = node.children()
     print(len(children), children)
+
+
+def publish_node(graph, node):
+    wid = NodePublishWidget(node=node)
+    wid.show()
 
 
 if __name__ == '__main__':
@@ -97,11 +116,13 @@ if __name__ == '__main__':
     reg_nodes = get_nodes_from_folder(os.getcwd() + "/example_auto_nodes")
     BackdropNode.__identifier__ = 'Utility'
     reg_nodes.append(BackdropNode)
+    reg_nodes.extend(get_published_nodes_from_folder(os.getcwd() + "/example_auto_nodes/published_nodes"))
     [graph.register_node(n) for n in reg_nodes]
 
     # setup node menu
     node_menu = graph.context_nodes_menu()
     node_menu.add_command('Enter Node', enter_node, node_class=SubGraphNode)
+    node_menu.add_command('Publish Node', publish_node, node_class=SubGraphNode)
     node_menu.add_command('Print Children', print_children, node_class=SubGraphNode)
     node_menu.add_command('Print Functions', print_functions, node_class=ModuleNode)
     node_menu.add_command('Cook Node', cook_node, node_class=AutoNode)
@@ -114,7 +135,9 @@ if __name__ == '__main__':
 
     # create test nodes
     graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')
-    graph.get_node_by_path('/root/SubGraph::Distance').cook()
+    graph.get_node_by_path('/root/Distance').cook()
+    graph.get_node_by_path('/root/Cross Product').cook()
+    graph.get_node_by_path('/root/Dot Product').cook()
 
     # widget used for the node graph.
     graph_widget = graph.widget

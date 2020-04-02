@@ -7,16 +7,21 @@ class SubGraphNode(AutoNode, SubGraph):
     sub graph node.
     """
 
-    def __init__(self, defaultInputType=None, defaultOutputType=None):
+    def __init__(self, defaultInputType=None, defaultOutputType=None, dynamic_port=True):
         super(SubGraphNode, self).__init__(defaultInputType, defaultOutputType)
         SubGraph.__init__(self)
         self.set_property('color', (127, 54, 93, 255))
-        self.model.dynamic_port = True
         self.sub_graph_input_nodes = []
         self.sub_graph_output_nodes = []
         self.create_property('graph_rect', None)
-        self.add_int_input('input count', 'input count', 0)
-        self.add_int_input('output count', 'output count', 0)
+        if dynamic_port:
+            self.model.dynamic_port = True
+            self.add_int_input('input count', 'input count', 0)
+            self.add_int_input('output count', 'output count', 0)
+        else:
+            self.model.dynamic_port = False
+            self.create_property('input count', 'input count', 0)
+            self.create_property('output count', 'output count', 0)
         self._run_ports = []
 
     def add_run_ports(self, port):

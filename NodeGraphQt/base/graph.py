@@ -717,6 +717,7 @@ class NodeGraph(QtCore.QObject):
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
+        self._viewer.rebuild_tab_search()
 
     def create_node(self, node_type, name=None, selected=True, color=None,
                     text_color=None, pos=None):
@@ -815,7 +816,6 @@ class NodeGraph(QtCore.QObject):
             for pname, pattrs in prop_attrs.items():
                 node_attrs[node.type_][pname].update(pattrs)
             self.model.set_node_common_properties(node_attrs)
-
         node.set_graph(self)
         if unique_name:
             node.NODE_NAME = self.get_unique_name(node.NODE_NAME)
@@ -1072,9 +1072,13 @@ class NodeGraph(QtCore.QObject):
             node_dict = n.model.to_dict
 
             if isinstance(n, SubGraph):
-                children = n.children()
-                if children:
-                    node_dict[n.model.id]['sub_graph'] = self._serialize(children)
+                published = n.has_property('published')
+                if published:
+                    published = n.get_property('published')
+                if not published:
+                    children = n.children()
+                    if children:
+                        node_dict[n.model.id]['sub_graph'] = self._serialize(children)
 
             nodes_data.update(node_dict)
 
@@ -1135,13 +1139,18 @@ class NodeGraph(QtCore.QObject):
                     node.model.set_property(prop, val)
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'), unique_name=set_parent)
-                node.set_graph(self)
+                # node.set_graph(self)
 
                 if isinstance(node, SubGraph):
-                    sub_graph = n_data.get('sub_graph', None)
-                    if sub_graph:
-                        children = self._deserialize(sub_graph, relative_pos, pos, False)
-                        [child.set_parent(node) for child in children]
+                    if n_data.get('custom', None):
+                        published = n_data['custom'].get('published', False)
+                    else:
+                        published = False
+                    if not published:
+                        sub_graph = n_data.get('sub_graph', None)
+                        if sub_graph:
+                            children = self._deserialize(sub_graph, relative_pos, pos, False)
+                            [child.set_parent(node) for child in children]
 
                 if n_data.get('dynamic_port', None):
                     node.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
@@ -1203,11 +1212,13 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the saved node layout.
         """
+
         root_node = self.root_node()
         if root_node is not None:
             nodes = root_node.children()
         else:
             nodes = self.all_nodes()
+
         serialized_data = self._serialize(nodes)
 
         node_space = self.get_node_space()
@@ -1215,6 +1226,7 @@ class NodeGraph(QtCore.QObject):
             node_space = node_space.id
         serialized_data['graph'] = {'node_space': node_space, 'pipe_layout': self._viewer.get_pipe_layout()}
         serialized_data['graph']['graph_rect'] = self._viewer.scene_rect()
+
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
             json.dump(serialized_data, file_out, indent=2, separators=(',', ':'))
