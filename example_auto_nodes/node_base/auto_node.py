@@ -1,7 +1,5 @@
-from NodeGraphQt.base.node import BaseNode, SubGraph
-from NodeGraphQt.base.port import Port
+from NodeGraphQt import BaseNode, SubGraph, Port, QtCore
 from NodeGraphQt.constants import NODE_PROP
-from NodeGraphQt import QtCore
 import traceback
 import hashlib
 import copy

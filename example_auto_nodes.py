@@ -9,7 +9,8 @@ import os
 import sys
 import inspect
 import importlib
-from example_auto_nodes import AutoNode, ModuleNode, SubGraphNode, Publish
+from example_auto_nodes import AutoNode, ModuleNode, \
+    SubGraphNode, Publish, RootNode
 
 
 def get_nodes_from_folder(folder_path):
@@ -131,7 +132,7 @@ if __name__ == '__main__':
     node_menu.add_command('Find Node By Path', find_node_by_path, node_class=AutoNode)
 
     # create root node
-    graph.create_node('Utility.RootGraph', name='root', selected=False)
+    graph.add_node(RootNode())
 
     # create test nodes
     graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')

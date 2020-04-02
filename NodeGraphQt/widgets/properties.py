@@ -96,6 +96,7 @@ class PropSlider(BaseProperty):
                                    QtWidgets.QSizePolicy.Preferred)
         self._spnbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
         layout = QtWidgets.QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._spnbox)
         layout.addWidget(self._slider)
         self._spnbox.valueChanged.connect(self._on_spnbox_changed)
@@ -282,6 +283,7 @@ class PropFilePath(BaseProperty):
         _button.setIcon(icon)
 
         hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(self._ledit)
         hbox.addWidget(_button)
         self.setLayout(hbox)
@@ -503,6 +505,7 @@ class _valueSliderEdit(QtWidgets.QWidget):
         self._slider.valueChanged.connect(self._on_slider_changed)
 
         hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(self._edit)
         hbox.addWidget(self._slider)
         self.setLayout(hbox)
@@ -583,6 +586,7 @@ class PropVector(BaseProperty):
     def __init__(self, parent=None, dim=3):
         super(PropVector, self).__init__(parent)
         hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
         self._value = []
         self._items = []
 

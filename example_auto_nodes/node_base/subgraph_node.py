@@ -1,5 +1,6 @@
 from .auto_node import AutoNode
-from NodeGraphQt.base.node import SubGraph
+from NodeGraphQt import SubGraph
+import json
 
 
 class SubGraphNode(AutoNode, SubGraph):
@@ -86,6 +87,8 @@ class SubGraphNode(AutoNode, SubGraph):
         return self.defaultValue
 
     def run(self):
+        self.update_ports()
+
         for node in self.sub_graph_input_nodes:
             node._parent = self
 
@@ -109,6 +112,121 @@ class SubGraphNode(AutoNode, SubGraph):
 
     def children(self):
         return self._children
+
+    def create_input_node(self, update=True):
+        pass
+
+    def create_output_node(self, update=True):
+        pass
+
+    def create_from_nodes(self, nodes):
+        if self in nodes:
+            nodes.remove(self)
+        [n.set_parent(self) for n in nodes]
+
+        self.set_property('input count', 0)
+        self.set_property('output count', 0)
+
+        in_connect = []
+        out_connect = []
+        connected = []
+
+        for node in nodes:
+            for port in node.input_ports():
+                for pipe in port.view.connected_pipes:
+                    if pipe.output_port.isVisible():
+                        in_connect.append((pipe.output_port, pipe.input_port))
+            for port in node.output_ports():
+                for pipe in port.view.connected_pipes:
+                    if pipe.input_port.isVisible():
+                        out_connect.append((pipe.output_port, pipe.input_port))
+        in_map = {}
+        for idx, ports in enumerate(in_connect):
+            if ports[0] in in_map.keys():
+                in_map[ports[0]].append([ports[1], in_map[ports[0]][0][1]])
+            else:
+                self.create_input_node()
+                if idx > 0:
+                    in_map[ports[0]] = [[ports[1], len(self.input_ports()) - 1]]
+                else:
+                    in_map[ports[0]] = [[ports[1], 0]]
+
+        for port0, data in in_map.items():
+            for port_data in data:
+                idx = port_data[1]
+                connected.append((port0, self.input_ports()[idx].view))
+                connected.append((self.sub_graph_input_nodes[idx].output_ports()[0].view, port_data[0]))
+
+        out_map = {}
+        for idx, ports in enumerate(out_connect):
+            if ports[0] in out_map.keys():
+                out_map[ports[0]].append([ports[1], out_map[ports[0]][0][1]])
+            else:
+                self.create_output_node()
+                if idx > 0:
+                    out_map[ports[0]] = [[ports[1], len(self.output_ports()) - 1]]
+                else:
+                    out_map[ports[0]] = [[ports[1], 0]]
+
+        for port0, data in out_map.items():
+            for port_data in data:
+                idx = port_data[1]
+                connected.append((port0, self.sub_graph_output_nodes[idx].input_ports()[0].view))
+                connected.append((self.output_ports()[idx].view, port_data[0]))
+
+        disconnected = in_connect + out_connect
+
+        if disconnected or connected:
+            self.graph._on_connection_changed(disconnected, connected)
+
+        if len(self.input_ports()) == 0:
+            self.create_input_node()
+        if len(self.output_ports()) == 0:
+            self.create_output_node()
+        self.set_property('create_from_select', False)
+
+    def update_ports(self):
+        input_count = self.get_property('input count')
+        output_count = self.get_property('output count')
+        current_input_count = len(self.input_ports())
+        current_output_count = len(self.output_ports())
+
+        update = False
+        if input_count != current_input_count:
+            if input_count > current_input_count:
+                for i in range(input_count - current_input_count):
+                    self.add_input('input' + str(len(self.input_ports())))
+            else:
+                for i in range(current_input_count - input_count):
+                    self.delete_input(current_input_count - i - 1)
+            update = True
+
+        if output_count != current_output_count:
+            if output_count > current_output_count:
+                for i in range(output_count - current_output_count):
+                    self.add_output('output' + str(len(self.output_ports())))
+            else:
+                for i in range(current_output_count - output_count):
+                    self.delete_output(current_output_count - i - 1)
+            update = True
+
+        if update:
+            self.view.draw_node()
+
+    def publish(self, file_path, node_name, node_identifier, node_class_name):
+        if file_path and node_name and node_identifier and node_class_name:
+            serialized_data = self.graph._serialize([self])
+            data = {'node': serialized_data['nodes'][self.id]}
+            data['sub_graph'] = data['node'].pop('sub_graph')
+            data['node']['__identifier__'] = node_identifier
+            data['node']['name'] = node_name
+            data['node']['class_name'] = node_class_name.replace(" ", "_")
+            data['node'].pop('type_')
+            file_path = file_path.strip()
+            with open(file_path, 'w') as file_out:
+                json.dump(data, file_out, indent=2, separators=(',', ':'))
+            return file_path
+        return None
 
 
 class SubGraphInputNode(AutoNode):
@@ -169,3 +287,19 @@ class SubGraphOutputNode(AutoNode):
 
         for from_port in from_ports:
             return from_port.node().getData(from_port)
+
+
+class RootNode(SubGraphNode):
+    __identifier__ = '__None'
+
+    # initial default node name.
+    NODE_NAME = 'root'
+
+    def __init__(self):
+        super(RootNode, self).__init__()
+        self.create_property('root', True)
+        self.model.set_property('id', '0' * 13)
+
+    def set_graph(self, graph):
+        super(RootNode, self).set_graph(graph)
+        graph.set_node_space(self)

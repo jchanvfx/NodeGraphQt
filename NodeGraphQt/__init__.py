@@ -83,7 +83,7 @@ except ImportError as ie:
 
 from .base.graph import NodeGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
-from .base.node import NodeObject, BaseNode, BackdropNode
+from .base.node import NodeObject, BaseNode, BackdropNode, SubGraph
 from .base.port import Port
 from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE
@@ -112,6 +112,7 @@ __all__ = [
     'VERSION',
     'constants',
     'setup_context_menu',
-    'NodePublishWidget'
+    'NodePublishWidget',
+    'SubGraph',
 ]
 
