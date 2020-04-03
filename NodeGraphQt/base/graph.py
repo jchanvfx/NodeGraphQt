@@ -839,8 +839,9 @@ class NodeGraph(QtCore.QObject):
         Args:
             node (NodeGraphQt.SubGraph): node object.
         """
-        if node is self._current_node_space:
+        if node is self._current_node_space or not isinstance(node, SubGraph):
             return
+
         if self._current_node_space is not None:
             self._current_node_space.exit()
 

@@ -2,7 +2,6 @@
 from distutils.version import LooseVersion
 
 from .. import QtGui, QtCore
-from .node import SubGraph
 from ..constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE)
@@ -250,9 +249,7 @@ def _fit_to_selection(graph):
 def _jump_in(graph):
     nodes = graph.selected_nodes()
     if nodes:
-        node = nodes[0]
-        if isinstance(node, SubGraph):
-            graph.set_node_space(node)
+        graph.set_node_space(nodes[0])
 
 
 def _jump_out(graph):
@@ -312,7 +309,7 @@ def _has_output_node(node):
     return False
 
 
-def _build_graph(start_nodes):
+def _build_down_stream_graph(start_nodes):
     graph = {}
     for node in start_nodes:
         output_nodes = get_output_nodes(node)
@@ -325,19 +322,26 @@ def _build_graph(start_nodes):
                     graph[n] = nodes
                     _output_nodes.extend(nodes)
             output_nodes = _output_nodes
-
     return graph
 
 
-def topological_sort(start_nodes=[], all_nodes=[]):
-    if not start_nodes:
-        start_nodes = [n for n in all_nodes if not _has_input_node(n)]
-    if not start_nodes:
-        return []
-    if not [n for n in start_nodes if _has_output_node(n)]:
-        return start_nodes
+def _build_up_stream_graph(start_nodes):
+    graph = {}
+    for node in start_nodes:
+        input_nodes = get_input_nodes(node)
+        graph[node] = input_nodes
+        while input_nodes:
+            _input_nodes = []
+            for n in input_nodes:
+                if n not in graph:
+                    nodes = get_input_nodes(n)
+                    graph[n] = nodes
+                    _input_nodes.extend(nodes)
+            input_nodes = _input_nodes
+    return graph
 
-    graph = _build_graph(start_nodes)
+
+def _sort_nodes(graph, start_nodes, reverse=True):
     if not graph:
         return []
 
@@ -357,6 +361,57 @@ def topological_sort(start_nodes=[], all_nodes=[]):
             visit[start_node] = True
             dfs(graph, start_node)
 
-    sorted_nodes.reverse()
+    if reverse:
+        sorted_nodes.reverse()
 
     return sorted_nodes
+
+
+def topological_sort_by_down(start_nodes=[], all_nodes=[]):
+    if not start_nodes:
+        start_nodes = [n for n in all_nodes if not _has_input_node(n)]
+    if not start_nodes:
+        return []
+    if not [n for n in start_nodes if _has_output_node(n)]:
+        return start_nodes
+
+    graph = _build_down_stream_graph(start_nodes)
+
+    return _sort_nodes(graph, start_nodes, True)
+
+
+def topological_sort_by_up(start_nodes=[], all_nodes=[]):
+    if not start_nodes:
+        start_nodes = [n for n in all_nodes if not _has_output_node(n)]
+    if not start_nodes:
+        return []
+    if not [n for n in start_nodes if _has_input_node(n)]:
+        return start_nodes
+
+    graph = _build_up_stream_graph(start_nodes)
+
+    return _sort_nodes(graph, start_nodes, False)
+
+
+def _update_nodes(nodes):
+    for node in nodes:
+        if node.disabled():
+            node.when_disabled()
+        else:
+            node.run()
+
+
+def update_node_down_stream(node):
+    _update_nodes(topological_sort_by_down(start_nodes=[node]))
+
+
+def update_node_up_stream(node):
+    _update_nodes(topological_sort_by_up(start_nodes=[node]))
+
+
+def update_nodes_by_down(nodes):
+    _update_nodes(topological_sort_by_down(all_nodes=nodes))
+
+
+def update_nodes_by_up(nodes):
+    _update_nodes(topological_sort_by_up(all_nodes=nodes))

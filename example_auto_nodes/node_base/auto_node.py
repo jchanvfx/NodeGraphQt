@@ -1,6 +1,6 @@
 from NodeGraphQt import BaseNode, SubGraph, Port, QtCore
 from NodeGraphQt.constants import NODE_PROP
-from NodeGraphQt.base.utils import topological_sort, get_output_nodes
+from . utils import update_node_down_stream
 import traceback
 import hashlib
 import copy
@@ -72,12 +72,13 @@ class AutoNode(BaseNode, QtCore.QObject):
         self._cookTime = time
         self._update_tool_tip()
 
-    def update_streams(self):
-        nodes = topological_sort(start_nodes=get_output_nodes(self))
-        for node in nodes:
-            node.cook(stream=True)
-            if node.error():
-                break
+    def update_stream(self, forceCook=False):
+        if not forceCook:
+            if not self._autoCook or not self.needCook:
+                return
+            if self.graph is not None and not self.graph.auto_update:
+                return
+        update_node_down_stream(self)
 
     def cookNextNode(self):
         nodes = []
@@ -124,16 +125,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         for index, out_port in enumerate(self.output_ports()):
             self.set_property(out_port.name(), self.getInputData(min(index, num)))
 
-    def cook(self, forceCook=False, stream=False):
-        if self.disabled() and stream:
-            self.when_disabled()
-            return
-        if not forceCook:
-            if not self._autoCook or not self.needCook:
-                return
-            if self.graph is not None and not self.graph.auto_update:
-                return
-
+    def cook(self):
         _tmp = self._autoCook
         self._autoCook = False
 
@@ -141,7 +133,6 @@ class AutoNode(BaseNode, QtCore.QObject):
             self._close_error()
 
         _start_time = time.time()
-
         try:
             self.run()
         except:
@@ -156,15 +147,12 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         self.cooked.emit()
 
-        if not stream:
-            self.update_streams()
-
     def run(self):
         pass
 
     def on_input_connected(self, to_port, from_port):
         if self.checkPortType(to_port, from_port):
-            self.cook()
+            self.update_stream()
         else:
             self.needCook = False
             to_port.disconnect_from(from_port)
@@ -173,7 +161,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         if not self.needCook:
             self.needCook = True
             return
-        self.cook()
+        self.update_stream()
 
     def checkPortType(self, to_port, from_port):
         # None type port can connect with any other type port
@@ -193,7 +181,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         super(AutoNode, self).set_property(name, value)
         self.set_port_type(name, type(value).__name__)
         if name in self.model.custom_properties.keys():
-            self.cook()
+            self.update_stream()
 
     def set_port_type(self, port, data_type: str):
         current_port = None
@@ -253,8 +241,9 @@ class AutoNode(BaseNode, QtCore.QObject):
         if mode:
             self.when_disabled()
             if self.graph is None or self.graph.auto_update:
-                self.update_streams()
-        self.cook()
+                self.update_stream()
+        else:
+            self.update_stream()
 
     def _close_error(self):
         self._error = False

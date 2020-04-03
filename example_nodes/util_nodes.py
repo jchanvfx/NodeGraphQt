@@ -37,7 +37,7 @@ class ObjectWrapperNode(BaseNode):
             self.view.widgets['methods'].value_changed.connect(
                 self.addFunction)
             self.view.widgets['methods'].value_changed.connect(
-                self.update_streams)
+                self.update_stream)
             self.add_output('output')
             self.create_property('output', None)
         else:
@@ -124,7 +124,7 @@ class ObjectWrapperNode(BaseNode):
 
         if to_port.name() == 'self':
             self.buildNode()
-        self.update_streams()
+        self.update_stream()
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
@@ -132,7 +132,7 @@ class ObjectWrapperNode(BaseNode):
         self.set_property('output', None)
         comboBox = self.view.widgets['methods'].widget
         comboBox.clear()
-        self.update_streams()
+        self.update_stream()
 
 
 class SelfNode(BaseNode):
@@ -154,4 +154,3 @@ class SelfNode(BaseNode):
 
     def run(self):
         self.set_property('self', self)
-        

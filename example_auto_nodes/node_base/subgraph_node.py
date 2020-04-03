@@ -1,7 +1,7 @@
 from .auto_node import AutoNode
 from NodeGraphQt import SubGraph
 import json
-from NodeGraphQt.base.utils import topological_sort
+from NodeGraphQt import topological_sort_by_down
 
 
 class SubGraphNode(AutoNode, SubGraph):
@@ -121,12 +121,14 @@ class SubGraphNode(AutoNode, SubGraph):
         else:
             start_nodes = self.sub_graph_input_nodes
 
-        nodes = topological_sort(start_nodes=start_nodes)
+        nodes = topological_sort_by_down(start_nodes=start_nodes)
 
         for node in nodes:
-            node.cook(stream=True)
+            if node.disabled():
+                node.when_disabled()
+            else:
+                node.cook()
             if node.error():
-                self.error(node.view.toolTip())
                 break
 
     def delete(self):

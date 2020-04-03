@@ -5,13 +5,12 @@ import example_auto_nodes
 from NodeGraphQt import NodeGraph, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, \
     NodeTreeWidget, BackdropNode, NodePublishWidget
-from NodeGraphQt.base.utils import topological_sort
 import os
 import sys
 import inspect
 import importlib
 from example_auto_nodes import AutoNode, ModuleNode, \
-    SubGraphNode, Publish, RootNode
+    SubGraphNode, Publish, RootNode, update_nodes
 
 
 def get_nodes_from_folder(folder_path):
@@ -52,7 +51,7 @@ def get_published_nodes_from_folder(folder_path):
 
 
 def cook_node(graph, node):
-    node.cook(forceCook=True)
+    node.update_stream(forceCook=True)
 
 
 def print_functions(graph, node):
@@ -87,11 +86,7 @@ def publish_node(graph, node):
 
 
 def cook_nodes(nodes):
-    nodes = topological_sort(all_nodes=nodes)
-    for node in nodes:
-        node.cook(stream=True)
-        if node.error():
-            break
+    update_nodes(nodes)
 
 
 if __name__ == '__main__':

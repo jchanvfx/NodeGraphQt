@@ -34,7 +34,7 @@ class IfNode(BaseNode):
         """Override node callback method."""
         from_port.node().run()
         self.set_property(to_port.name(), from_port.node().get_property(from_port.name()))
-        self.update_streams()
+        self.update_stream()
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
@@ -69,7 +69,7 @@ class BooleanNode(BaseNode):
         self.func = self.logics['and']
         # switch math function type
         self.view.widgets['funcs'].value_changed.connect(self.addFunction)
-        self.view.widgets['funcs'].value_changed.connect(self.update_streams)
+        self.view.widgets['funcs'].value_changed.connect(self.update_stream)
 
     def addFunction(self, prop, func):
         """
@@ -103,7 +103,7 @@ class BooleanNode(BaseNode):
         from_port.node().run()
         result = from_port.node().get_property(from_port.name())
         self.set_property(to_port.name(), result)
-        self.update_streams()
+        self.update_stream()
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
