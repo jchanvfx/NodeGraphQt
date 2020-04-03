@@ -209,7 +209,7 @@ class NodeObject(object):
 
     def disabled(self):
         """
-        Returns weather the node is enabled or disabled.
+        Returns whether the node is enabled or disabled.
 
         Returns:
             bool: True if the node is disabled.

@@ -26,7 +26,7 @@ class SubGraphNode(AutoNode, SubGraph):
             self.create_property('output count', 'output count', 0)
         self._run_ports = []
 
-    def add_run_ports(self, port):
+    def add_run_port(self, port):
         """
         mark a port to be cooked.
 

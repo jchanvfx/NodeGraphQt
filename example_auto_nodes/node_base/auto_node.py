@@ -7,8 +7,11 @@ import copy
 import time
 
 
-# Generate random color based on strings
 class CryptoColors(object):
+    """
+    Generate random color based on strings
+    """
+
     def __init__(self):
         self.colors = {}
 
@@ -49,10 +52,21 @@ class AutoNode(BaseNode, QtCore.QObject):
 
     @property
     def autoCook(self):
+        """
+        Returns whether the node can update stream automatically.
+        """
+
         return self._autoCook
 
     @autoCook.setter
     def autoCook(self, mode):
+        """
+        Set whether the node can update stream automatically.
+
+        Args:
+            mode(bool).
+        """
+
         if mode is self._autoCook:
             return
 
@@ -65,14 +79,32 @@ class AutoNode(BaseNode, QtCore.QObject):
 
     @property
     def cookTime(self):
+        """
+        Get the last cooked time of the node.
+        """
+
         return self._cookTime
 
     @autoCook.setter
     def cookTime(self, time):
+        """
+        Set the last cooked time of the node.
+
+        Args:
+            time(float).
+        """
+
         self._cookTime = time
         self._update_tool_tip()
 
     def update_stream(self, forceCook=False):
+        """
+        Update all down stream nodes.
+
+        Args:
+            forceCook(bool): if True, it will ignore the autoCook and so on.
+        """
+
         if not forceCook:
             if not self._autoCook or not self.needCook:
                 return
@@ -80,27 +112,23 @@ class AutoNode(BaseNode, QtCore.QObject):
                 return
         update_node_down_stream(self)
 
-    def cookNextNode(self):
-        nodes = []
-        for p in self.output_ports():
-            for cp in p.connected_ports():
-                connected_output_node = cp.node()
-                if connected_output_node is self:
-                    continue
-                if isinstance(connected_output_node, SubGraph):
-                    connected_output_node.add_run_ports(cp)
-                if connected_output_node not in nodes:
-                    nodes.append(connected_output_node)
-
-        [node.cook() for node in nodes]
-
     def getData(self, port):
-        # for custom output data
+        """
+        Get node data by port.
+        Most time it will called by output nodes of the node.
+
+        Args:
+            port(Port).
+
+        Returns:
+            node data.
+        """
+
         return self.get_property(port.name())
 
     def getInputData(self, port):
         """
-        get input data by input port name/index/object.
+        Get input data by input port name/index/object.
 
         Args:
             port(str/int/Port): input port name/index/object.
@@ -121,11 +149,20 @@ class AutoNode(BaseNode, QtCore.QObject):
             return copy.deepcopy(data)
 
     def when_disabled(self):
+        """
+        Node evaluation logic when node has been disabled.
+        """
+
         num = max(0, len(self.input_ports())-1)
         for index, out_port in enumerate(self.output_ports()):
             self.set_property(out_port.name(), self.getInputData(min(index, num)))
 
     def cook(self):
+        """
+        The entry of the node evaluation.
+        Most time we need to call this method instead of AutoNode.run'.
+        """
+
         _tmp = self._autoCook
         self._autoCook = False
 
@@ -148,6 +185,10 @@ class AutoNode(BaseNode, QtCore.QObject):
         self.cooked.emit()
 
     def run(self):
+        """
+        Node evaluation logic.
+        """
+
         pass
 
     def on_input_connected(self, to_port, from_port):
@@ -164,8 +205,16 @@ class AutoNode(BaseNode, QtCore.QObject):
         self.update_stream()
 
     def checkPortType(self, to_port, from_port):
-        # None type port can connect with any other type port
-        # types in self.matchTypes can connect with each other
+        """
+        Check whether the port_type of the to_port and from_type is matched.
+
+        Args:
+            to_port(Port).
+            from_port(Port).
+
+        Returns:
+            bool.
+        """
 
         if to_port.data_type != from_port.data_type:
             if to_port.data_type == 'None' or from_port.data_type == 'None':
@@ -184,6 +233,14 @@ class AutoNode(BaseNode, QtCore.QObject):
             self.update_stream()
 
     def set_port_type(self, port, data_type: str):
+        """
+        Set the data_type of the port.
+
+        Args:
+            port(Port): the port to set the data_type.
+            data_type(str): port new data_type.
+        """
+
         current_port = None
 
         if type(port) is Port:
@@ -246,11 +303,23 @@ class AutoNode(BaseNode, QtCore.QObject):
             self.update_stream()
 
     def _close_error(self):
+        """
+        Close the node error.
+        """
+
         self._error = False
         self.set_property('color', self.defaultColor)
         self._update_tool_tip()
 
     def _show_error(self, message):
+        """
+        Show the node error.
+        It will change the node color and set error describe to the node tooltip.
+
+        Args:
+            message(str): the describe of the error.
+        """
+
         if not self._error:
             self.defaultColor = self.get_property("color")
 
@@ -260,6 +329,13 @@ class AutoNode(BaseNode, QtCore.QObject):
         self._update_tool_tip(tooltip)
 
     def _update_tool_tip(self, message=None):
+        """
+        Update the node tooltip.
+
+        Args:
+            message(str): new node tooltip.
+        """
+
         if message is None:
             tooltip = self._toolTip.format(self._cookTime)
         else:
@@ -270,10 +346,26 @@ class AutoNode(BaseNode, QtCore.QObject):
         return tooltip
 
     def _setup_tool_tip(self):
+        """
+        Setup default node tooltip.
+
+        Returns:
+            str: new node tooltip.
+        """
         tooltip = '<br> last cook used: {}s</br>'
         return self._update_tool_tip(tooltip)
 
     def error(self, message=None):
+        """
+        Update the node tooltip.
+
+        Args:
+            message(str): the describe of the error or None.
+
+        Returns:
+            if message is None, returns whether the node has error.
+        """
+
         if message is None:
             return self._error
 

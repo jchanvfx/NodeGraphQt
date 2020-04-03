@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import example_auto_nodes
-
 from NodeGraphQt import NodeGraph, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, \
     NodeTreeWidget, BackdropNode, NodePublishWidget

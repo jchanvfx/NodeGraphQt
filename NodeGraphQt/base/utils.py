@@ -278,6 +278,15 @@ def _toggle_grid(graph):
 # topological_sort
 
 def get_input_nodes(node):
+    """
+    Get input nodes of a node.
+
+    Args:
+        node (NodeGraphQt.BaseNode).
+    Returns:
+        list[NodeGraphQt.BaseNode].
+    """
+
     nodes = {}
     for p in node.input_ports():
         for cp in p.connected_ports():
@@ -287,15 +296,35 @@ def get_input_nodes(node):
 
 
 def get_output_nodes(node):
+    """
+    Get output nodes of a node.
+
+    Args:
+        node (NodeGraphQt.BaseNode).
+    Returns:
+        list[NodeGraphQt.BaseNode].
+    """
+
     nodes = {}
     for p in node.output_ports():
         for cp in p.connected_ports():
             n = cp.node()
+            if n.has_property('graph_rect'):
+                n.add_run_port(cp)
             nodes[n.id] = n
     return list(nodes.values())
 
 
 def _has_input_node(node):
+    """
+    Returns whether the node has input node.
+
+    Args:
+        node (NodeGraphQt.BaseNode).
+    Returns:
+        bool.
+    """
+
     for p in node.input_ports():
         if p.view.connected_pipes:
             return True
@@ -303,6 +332,15 @@ def _has_input_node(node):
 
 
 def _has_output_node(node):
+    """
+    Returns whether the node has output node.
+
+    Args:
+        node (NodeGraphQt.BaseNode).
+    Returns:
+        bool.
+    """
+
     for p in node.output_ports():
         if p.view.connected_pipes:
             return True
@@ -310,6 +348,15 @@ def _has_output_node(node):
 
 
 def _build_down_stream_graph(start_nodes):
+    """
+    Build a graph by down stream nodes.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode]).
+    Returns:
+        dict {node0: [output nodes of node0], ...}.
+    """
+
     graph = {}
     for node in start_nodes:
         output_nodes = get_output_nodes(node)
@@ -326,6 +373,15 @@ def _build_down_stream_graph(start_nodes):
 
 
 def _build_up_stream_graph(start_nodes):
+    """
+    Build a graph by up stream nodes.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode]).
+    Returns:
+        dict {node0: [input nodes of node0], ...}.
+    """
+
     graph = {}
     for node in start_nodes:
         input_nodes = get_input_nodes(node)
@@ -342,6 +398,17 @@ def _build_up_stream_graph(start_nodes):
 
 
 def _sort_nodes(graph, start_nodes, reverse=True):
+    """
+    Sort nodes by graph.
+
+    Args:
+        graph (dict): generate from '_build_up_stream_graph' or '_build_down_stream_graph'.
+        start_nodes (list[NodeGraphQt.BaseNode]): graph start nodes.
+        reverse (bool): reverse the result.
+    Returns:
+        list[NodeGraphQt.BaseNode]: sorted nodes.
+    """
+
     if not graph:
         return []
 
@@ -368,6 +435,17 @@ def _sort_nodes(graph, start_nodes, reverse=True):
 
 
 def topological_sort_by_down(start_nodes=[], all_nodes=[]):
+    """
+    Topological sort method by down stream direction.
+    'start_nodes' and 'all_nodes' only one needs to be given.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update node of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+    Returns:
+        list[NodeGraphQt.BaseNode]: sorted nodes.
+    """
+
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_input_node(n)]
     if not start_nodes:
@@ -381,6 +459,17 @@ def topological_sort_by_down(start_nodes=[], all_nodes=[]):
 
 
 def topological_sort_by_up(start_nodes=[], all_nodes=[]):
+    """
+    Topological sort method by up stream direction.
+    'start_nodes' and 'all_nodes' only one needs to be given.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end update node of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+    Returns:
+        list[NodeGraphQt.BaseNode]: sorted nodes.
+    """
+
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_output_node(n)]
     if not start_nodes:
@@ -394,6 +483,12 @@ def topological_sort_by_up(start_nodes=[], all_nodes=[]):
 
 
 def _update_nodes(nodes):
+    """
+    Run nodes.
+
+    Args:
+        nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
+    """
     for node in nodes:
         if node.disabled():
             node.when_disabled()
@@ -402,16 +497,46 @@ def _update_nodes(nodes):
 
 
 def update_node_down_stream(node):
+    """
+    Run nodes by node down stream direction.
+
+    Args:
+        node (NodeGraphQt.BaseNode): the start node of the update stream.
+    """
+
     _update_nodes(topological_sort_by_down(start_nodes=[node]))
 
 
 def update_node_up_stream(node):
+    """
+    Run nodes by node up stream direction.
+
+    Args:
+        node (NodeGraphQt.BaseNode): the end node of the update stream.
+    """
+
     _update_nodes(topological_sort_by_up(start_nodes=[node]))
 
 
 def update_nodes_by_down(nodes):
+    """
+    Run nodes by down stream direction.
+
+    Args:
+        nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
+    """
+
     _update_nodes(topological_sort_by_down(all_nodes=nodes))
 
 
 def update_nodes_by_up(nodes):
+    """
+    Run nodes by up stream direction.
+
+    Args:
+        nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
+    """
+
     _update_nodes(topological_sort_by_up(all_nodes=nodes))
+
+# auto layout

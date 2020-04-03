@@ -380,7 +380,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def auto_update(self):
         """
-        Returns weather the graph can run node automatically.
+        Returns whether the graph can run node automatically.
         """
         return self._auto_update
 
