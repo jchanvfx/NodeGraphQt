@@ -5,6 +5,7 @@ import example_auto_nodes
 from NodeGraphQt import NodeGraph, setup_context_menu
 from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, \
     NodeTreeWidget, BackdropNode, NodePublishWidget
+from NodeGraphQt.base.utils import topological_sort
 import os
 import sys
 import inspect
@@ -51,7 +52,7 @@ def get_published_nodes_from_folder(folder_path):
 
 
 def cook_node(graph, node):
-    node.cook()
+    node.cook(forceCook=True)
 
 
 def print_functions(graph, node):
@@ -83,6 +84,14 @@ def print_children(graph, node):
 def publish_node(graph, node):
     wid = NodePublishWidget(node=node)
     wid.show()
+
+
+def cook_nodes(nodes):
+    nodes = topological_sort(all_nodes=nodes)
+    for node in nodes:
+        node.cook(stream=True)
+        if node.error():
+            break
 
 
 if __name__ == '__main__':
@@ -136,9 +145,7 @@ if __name__ == '__main__':
 
     # create test nodes
     graph.load_session(r'example_auto_nodes/networks/example_SubGraph.json')
-    graph.get_node_by_path('/root/Distance').cook()
-    graph.get_node_by_path('/root/Cross Product').cook()
-    graph.get_node_by_path('/root/Dot Product').cook()
+    cook_nodes(graph.root_node().children())
 
     # widget used for the node graph.
     graph_widget = graph.widget

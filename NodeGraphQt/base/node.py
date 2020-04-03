@@ -1183,13 +1183,13 @@ class SubGraph(object):
     """
 
     def __init__(self):
-        self._children = []
+        self._children = set()
 
     def children(self):
         """
         Returns the children of the sub graph.
         """
-        return self._children
+        return list(self._children)
 
     def create_from_nodes(self, nodes):
         """
@@ -1207,8 +1207,7 @@ class SubGraph(object):
         Args:
             node(NodeGraphQt.BaseNode).
         """
-        if node not in self._children:
-            self._children.append(node)
+        self._children.add(node)
 
     def remove_child(self, node):
         """

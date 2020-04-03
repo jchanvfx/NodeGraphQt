@@ -397,7 +397,7 @@
             "0x1e2f3721608":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -737,7 +737,7 @@
             "0x1e2f374ca08":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -1114,7 +1114,7 @@
             "0x1e2f4830cc8":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -1389,7 +1389,7 @@
       "0x1e2f48426c8":{
         "type_":"Utility.SubGraphInput",
         "icon":null,
-        "name":"SubGraphInput",
+        "name":"SubGraphInput 1",
         "color":[
           40,
           50,
@@ -1675,7 +1675,7 @@
             "0x1e2f4856a88":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,

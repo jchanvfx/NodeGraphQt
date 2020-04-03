@@ -1,230 +1,6 @@
 {
   "nodes":{
-    "0x24bfd8fa248":{
-      "type_":"Inputs.Vector3InputNode",
-      "icon":null,
-      "name":"Vector 3",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":170,
-      "height":80,
-      "pos":[
-        456.3976677920282,
-        712.8463768277693
-      ],
-      "custom":{
-        "out":[
-          1.0,
-          0.0,
-          0.0
-        ]
-      }
-    },
-    "0x24bfd8fac08":{
-      "type_":"Inputs.Vector3InputNode",
-      "icon":null,
-      "name":"Vector 4",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":170,
-      "height":80,
-      "pos":[
-        455.8742304029088,
-        881.4349497471972
-      ],
-      "custom":{
-        "out":[
-          0.0,
-          0.0,
-          1.0
-        ]
-      }
-    },
-    "0x24bfd903348":{
-      "type_":"Viewers.DataViewerNode",
-      "icon":null,
-      "name":"Result View",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":222.33333333333331,
-      "height":91.0,
-      "pos":[
-        1163.3987364418397,
-        391.1813579826517
-      ],
-      "custom":{
-        "data":"5.0000000000",
-        "out":5.0
-      }
-    },
-    "0x24bfd903d88":{
-      "type_":"Custom.Cross_Product",
-      "icon":null,
-      "name":"Cross Product",
-      "color":[
-        36,
-        97,
-        100,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":true,
-      "width":190.0,
-      "height":86.0,
-      "pos":[
-        832.890762813199,
-        774.2545926416817
-      ],
-      "input_ports":[
-        {
-          "name":"input0",
-          "multi_connection":false,
-          "display_name":true,
-          "data_type":"None"
-        },
-        {
-          "name":"input1",
-          "multi_connection":false,
-          "display_name":true,
-          "data_type":"None"
-        }
-      ],
-      "output_ports":[
-        {
-          "name":"output0",
-          "multi_connection":true,
-          "display_name":true,
-          "data_type":"None"
-        }
-      ],
-      "custom":{
-        "graph_rect":[
-          -435.67905012250253,
-          -49.5251261608848,
-          1741.228265197031,
-          375.77709769823343
-        ],
-        "input count":2,
-        "output count":1,
-        "create_from_select":false,
-        "published":true
-      }
-    },
-    "0x24bfd91c488":{
-      "type_":"Inputs.Vector3InputNode",
-      "icon":null,
-      "name":"Vector 1",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":170,
-      "height":80,
-      "pos":[
-        453.25455062884396,
-        286.4559843936471
-      ],
-      "custom":{
-        "out":[
-          5.0,
-          2.0,
-          2.0
-        ]
-      }
-    },
-    "0x24bfd91c9c8":{
+    "0x26cb4f31408":{
       "type_":"Inputs.Vector3InputNode",
       "icon":null,
       "name":"Vector 2",
@@ -264,10 +40,50 @@
         ]
       }
     },
-    "0x24bfd91cd48":{
+    "0x26cb4f31688":{
+      "type_":"Inputs.Vector3InputNode",
+      "icon":null,
+      "name":"Vector 1",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":170,
+      "height":80,
+      "pos":[
+        453.25455062884396,
+        286.4559843936471
+      ],
+      "custom":{
+        "out":[
+          5.0,
+          2.0,
+          2.0
+        ]
+      }
+    },
+    "0x26cb4f14148":{
       "type_":"Viewers.DataViewerNode",
       "icon":null,
-      "name":"Result View 1",
+      "name":"Result View",
       "color":[
         13,
         18,
@@ -293,19 +109,15 @@
       "width":222.33333333333331,
       "height":91.0,
       "pos":[
-        1168.9255987050249,
-        775.0158843263519
+        1163.3987364418397,
+        391.1813579826517
       ],
       "custom":{
-        "data":"[0.0, -1.0, 0.0]",
-        "out":[
-          0.0,
-          -1.0,
-          0.0
-        ]
+        "data":"5.0000000000",
+        "out":5.0
       }
     },
-    "0x24bfd91e408":{
+    "0x26cb4f2ae48":{
       "type_":"Inputs.Vector3InputNode",
       "icon":null,
       "name":"Vector 5",
@@ -339,53 +151,13 @@
       ],
       "custom":{
         "out":[
-          1.0,
+          20.0,
           0.0,
           0.0
         ]
       }
     },
-    "0x24bfd919ec8":{
-      "type_":"Inputs.Vector3InputNode",
-      "icon":null,
-      "name":"Vector 5",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":170,
-      "height":80,
-      "pos":[
-        451.2265256729896,
-        1229.2270073169514
-      ],
-      "custom":{
-        "out":[
-          0.0,
-          0.0,
-          1.0
-        ]
-      }
-    },
-    "0x24bfd919a48":{
+    "0x26cb4f28c08":{
       "type_":"Custom.Dot_Product",
       "icon":null,
       "name":"Dot Product",
@@ -441,10 +213,10 @@
       ],
       "custom":{
         "graph_rect":[
-          267.85670937024156,
-          -207.36298023006623,
-          1066.9861577818897,
-          1004.2222661476602
+          69.39519531447361,
+          -119.5483720936271,
+          839.4216965482394,
+          790.0439496924602
         ],
         "input count":2,
         "output count":1,
@@ -452,44 +224,7 @@
         "published":true
       }
     },
-    "0x24bfd987708":{
-      "type_":"Viewers.DataViewerNode",
-      "icon":null,
-      "name":"Result View 2",
-      "color":[
-        13,
-        18,
-        23,
-        255
-      ],
-      "border_color":[
-        74,
-        84,
-        85,
-        255
-      ],
-      "text_color":[
-        255,
-        255,
-        255,
-        180
-      ],
-      "disabled":false,
-      "selected":true,
-      "visible":true,
-      "dynamic_port":false,
-      "width":222.33333333333331,
-      "height":91.0,
-      "pos":[
-        1177.2962257618165,
-        1119.6816415773787
-      ],
-      "custom":{
-        "data":"0.0000000000",
-        "out":0.0
-      }
-    },
-    "0x24bfd912208":{
+    "0x26cb4f211c8":{
       "type_":"Custom.Distance",
       "icon":null,
       "name":"Distance",
@@ -545,106 +280,371 @@
       ],
       "custom":{
         "graph_rect":[
-          124.44323723701683,
-          -60.24013089798626,
-          1542.340175197216,
-          1451.6142825385552
+          161.6403612314872,
+          -114.4185350985033,
+          1368.0150455163832,
+          1287.543572250713
         ],
         "input count":2,
         "output count":1,
         "create_from_select":false,
         "published":true
       }
+    },
+    "0x26cb4f0e9c8":{
+      "type_":"Inputs.Vector3InputNode",
+      "icon":null,
+      "name":"Vector 4",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":170,
+      "height":80,
+      "pos":[
+        455.8742304029088,
+        881.4349497471972
+      ],
+      "custom":{
+        "out":[
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "0x26cb4f0e048":{
+      "type_":"Inputs.Vector3InputNode",
+      "icon":null,
+      "name":"Vector 3",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":170,
+      "height":80,
+      "pos":[
+        456.3976677920282,
+        712.8463768277693
+      ],
+      "custom":{
+        "out":[
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "0x26cb4f6a588":{
+      "type_":"Viewers.DataViewerNode",
+      "icon":null,
+      "name":"Result View 2",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":222.33333333333331,
+      "height":91.0,
+      "pos":[
+        1177.2962257618165,
+        1119.6816415773787
+      ],
+      "custom":{
+        "data":"40.0000000000",
+        "out":40.0
+      }
+    },
+    "0x26cb4f28848":{
+      "type_":"Inputs.Vector3InputNode",
+      "icon":null,
+      "name":"Vector 5",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":170,
+      "height":80,
+      "pos":[
+        451.2265256729896,
+        1229.2270073169514
+      ],
+      "custom":{
+        "out":[
+          2.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "0x26cb4f14c08":{
+      "type_":"Custom.Cross_Product",
+      "icon":null,
+      "name":"Cross Product",
+      "color":[
+        36,
+        97,
+        100,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":true,
+      "width":190.0,
+      "height":86.0,
+      "pos":[
+        832.890762813199,
+        774.2545926416817
+      ],
+      "input_ports":[
+        {
+          "name":"input0",
+          "multi_connection":false,
+          "display_name":true,
+          "data_type":"None"
+        },
+        {
+          "name":"input1",
+          "multi_connection":false,
+          "display_name":true,
+          "data_type":"None"
+        }
+      ],
+      "output_ports":[
+        {
+          "name":"output0",
+          "multi_connection":true,
+          "display_name":true,
+          "data_type":"None"
+        }
+      ],
+      "custom":{
+        "graph_rect":[
+          -373.0992390837627,
+          -57.444288778025005,
+          1544.4235342980376,
+          333.30437193982334
+        ],
+        "input count":2,
+        "output count":1,
+        "create_from_select":false,
+        "published":true
+      }
+    },
+    "0x26cb4f2d308":{
+      "type_":"Viewers.DataViewerNode",
+      "icon":null,
+      "name":"Result View 1",
+      "color":[
+        13,
+        18,
+        23,
+        255
+      ],
+      "border_color":[
+        74,
+        84,
+        85,
+        255
+      ],
+      "text_color":[
+        255,
+        255,
+        255,
+        180
+      ],
+      "disabled":false,
+      "selected":true,
+      "visible":true,
+      "dynamic_port":false,
+      "width":222.33333333333331,
+      "height":91.0,
+      "pos":[
+        1168.9255987050249,
+        775.0158843263519
+      ],
+      "custom":{
+        "data":"[0.0, -1.0, 0.0]",
+        "out":[
+          0.0,
+          -1.0,
+          0.0
+        ]
+      }
     }
   },
   "connections":[
     {
       "out":[
-        "0x24bfd8fa248",
+        "0x26cb4f31408",
         "out"
       ],
       "in":[
-        "0x24bfd903d88",
-        "input0"
-      ]
-    },
-    {
-      "out":[
-        "0x24bfd8fac08",
-        "out"
-      ],
-      "in":[
-        "0x24bfd903d88",
+        "0x26cb4f211c8",
         "input1"
       ]
     },
     {
+      "out":[
+        "0x26cb4f31688",
+        "out"
+      ],
       "in":[
-        "0x24bfd903348",
+        "0x26cb4f211c8",
+        "input0"
+      ]
+    },
+    {
+      "in":[
+        "0x26cb4f14148",
         "in data"
       ],
       "out":[
-        "0x24bfd912208",
+        "0x26cb4f211c8",
         "output0"
       ]
     },
     {
       "out":[
-        "0x24bfd903d88",
+        "0x26cb4f2ae48",
+        "out"
+      ],
+      "in":[
+        "0x26cb4f28c08",
+        "input0"
+      ]
+    },
+    {
+      "in":[
+        "0x26cb4f28c08",
+        "input1"
+      ],
+      "out":[
+        "0x26cb4f28848",
+        "out"
+      ]
+    },
+    {
+      "out":[
+        "0x26cb4f28c08",
         "output0"
       ],
       "in":[
-        "0x24bfd91cd48",
+        "0x26cb4f6a588",
         "in data"
       ]
     },
     {
       "out":[
-        "0x24bfd91c488",
+        "0x26cb4f0e9c8",
         "out"
       ],
       "in":[
-        "0x24bfd912208",
-        "input0"
-      ]
-    },
-    {
-      "out":[
-        "0x24bfd91c9c8",
-        "out"
-      ],
-      "in":[
-        "0x24bfd912208",
+        "0x26cb4f14c08",
         "input1"
       ]
     },
     {
       "out":[
-        "0x24bfd91e408",
+        "0x26cb4f0e048",
         "out"
       ],
       "in":[
-        "0x24bfd919a48",
+        "0x26cb4f14c08",
         "input0"
       ]
     },
     {
       "out":[
-        "0x24bfd919ec8",
-        "out"
-      ],
-      "in":[
-        "0x24bfd919a48",
-        "input1"
-      ]
-    },
-    {
-      "out":[
-        "0x24bfd919a48",
+        "0x26cb4f14c08",
         "output0"
       ],
       "in":[
-        "0x24bfd987708",
+        "0x26cb4f2d308",
         "in data"
       ]
     }
@@ -653,10 +653,10 @@
     "node_space":"0000000000000",
     "pipe_layout":0,
     "graph_rect":[
-      598.2925556025745,
-      541.8416784913026,
-      838.3366308126194,
-      789.0227113530534
+      428.16729492075297,
+      262.51214773537026,
+      1199.8434586284363,
+      1129.2644316502924
     ]
   }
 }

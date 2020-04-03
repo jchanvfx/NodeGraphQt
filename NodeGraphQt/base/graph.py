@@ -148,6 +148,7 @@ class NodeGraph(QtCore.QObject):
 
         self._wire_signals()
         self._node_space_bar = node_space_bar(self)
+        self._auto_update = True
 
     def __repr__(self):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -375,6 +376,15 @@ class NodeGraph(QtCore.QObject):
                 layout.addWidget(self._node_space_bar)
             layout.addWidget(self._viewer)
         return self._widget
+
+    @property
+    def auto_update(self):
+        """
+
+        Returns:
+            if the graph can run node automatically.
+        """
+        return self._auto_update
 
     def show(self):
         """
@@ -1251,7 +1261,8 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the serialized layout file.
         """
-
+        _temp_auto_update = self._auto_update
+        self._auto_update = False
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist.')
@@ -1277,6 +1288,7 @@ class NodeGraph(QtCore.QObject):
         self._undo_stack.clear()
         self._model.session = file_path
         self.session_changed.emit(file_path)
+        self._auto_update = _temp_auto_update
 
     def copy_nodes(self, nodes=None):
         """

@@ -447,7 +447,7 @@
             "0x1e4d39a9148":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput",
               "color":[
                 40,
                 50,
@@ -483,7 +483,7 @@
             "0x1e4d39a9c88":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -555,7 +555,7 @@
             "0x1e4d39af088":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 3",
               "color":[
                 40,
                 50,
@@ -892,7 +892,7 @@
             "0x1e4d3618448":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput",
               "color":[
                 40,
                 50,
@@ -928,7 +928,7 @@
             "0x1e4d3618dc8":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -1000,7 +1000,7 @@
             "0x1e4d3620048":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 3",
               "color":[
                 40,
                 50,
@@ -1337,7 +1337,7 @@
             "0x1e4d3633308":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput",
               "color":[
                 40,
                 50,
@@ -1373,7 +1373,7 @@
             "0x1e4d3633c88":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 1",
               "color":[
                 40,
                 50,
@@ -1445,7 +1445,7 @@
             "0x1e4d3637e48":{
               "type_":"Utility.SubGraphInput",
               "icon":null,
-              "name":"SubGraphInput 2",
+              "name":"SubGraphInput 3",
               "color":[
                 40,
                 50,

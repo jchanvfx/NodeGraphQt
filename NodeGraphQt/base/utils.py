@@ -8,6 +8,7 @@ from ..constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_ANGLE)
 
 
+# menu
 def setup_context_menu(graph):
     """
     populate the specified graph's context menu with essential menus commands.
@@ -275,3 +276,87 @@ def _angle_pipe(graph):
 
 def _toggle_grid(graph):
     graph.display_grid(not graph.scene().grid)
+
+
+# topological_sort
+
+def get_input_nodes(node):
+    nodes = {}
+    for p in node.input_ports():
+        for cp in p.connected_ports():
+            n = cp.node()
+            nodes[n.id] = n
+    return list(nodes.values())
+
+
+def get_output_nodes(node):
+    nodes = {}
+    for p in node.output_ports():
+        for cp in p.connected_ports():
+            n = cp.node()
+            nodes[n.id] = n
+    return list(nodes.values())
+
+
+def _has_input_node(node):
+    for p in node.input_ports():
+        if p.view.connected_pipes:
+            return True
+    return False
+
+
+def _has_output_node(node):
+    for p in node.output_ports():
+        if p.view.connected_pipes:
+            return True
+    return False
+
+
+def _build_graph(start_nodes):
+    graph = {}
+    for node in start_nodes:
+        output_nodes = get_output_nodes(node)
+        graph[node] = output_nodes
+        while output_nodes:
+            _output_nodes = []
+            for n in output_nodes:
+                if n not in graph:
+                    nodes = get_output_nodes(n)
+                    graph[n] = nodes
+                    _output_nodes.extend(nodes)
+            output_nodes = _output_nodes
+
+    return graph
+
+
+def topological_sort(start_nodes=[], all_nodes=[]):
+    if not start_nodes:
+        start_nodes = [n for n in all_nodes if not _has_input_node(n)]
+    if not start_nodes:
+        return []
+    if not [n for n in start_nodes if _has_output_node(n)]:
+        return start_nodes
+
+    graph = _build_graph(start_nodes)
+    if not graph:
+        return []
+
+    visit = dict((node, False) for node in graph.keys())
+
+    sorted_nodes = []
+
+    def dfs(graph, start_node):
+        for end_node in graph[start_node]:
+            if not visit[end_node]:
+                visit[end_node] = True
+                dfs(graph, end_node)
+        sorted_nodes.append(start_node)
+
+    for start_node in start_nodes:
+        if not visit[start_node]:
+            visit[start_node] = True
+            dfs(graph, start_node)
+
+    sorted_nodes.reverse()
+
+    return sorted_nodes

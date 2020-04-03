@@ -1,6 +1,7 @@
 from .auto_node import AutoNode
 from NodeGraphQt import SubGraph
 import json
+from NodeGraphQt.base.utils import topological_sort
 
 
 class SubGraphNode(AutoNode, SubGraph):
@@ -26,6 +27,13 @@ class SubGraphNode(AutoNode, SubGraph):
         self._run_ports = []
 
     def add_run_ports(self, port):
+        """
+        mark a port to be cooked.
+
+        Args:
+            port(Port)
+        """
+
         if port not in self._run_ports and port in self.input_ports():
             self._run_ports.append(port)
 
@@ -40,7 +48,7 @@ class SubGraphNode(AutoNode, SubGraph):
         for n in self.children():
             n.hide()
             n.set_selected(False)
-        self.set_property('graph_rect', self.graph.graph_rect())
+        self.model.set_property('graph_rect', self.graph.graph_rect())
 
     def show(self):
         super().show()
@@ -50,9 +58,8 @@ class SubGraphNode(AutoNode, SubGraph):
         self.view.draw_node()
 
     def add_child(self, node):
-        if node not in self._children:
-            self._children.append(node)
-            node._parent = self
+        self._children.add(node)
+        node._parent = self
 
         if self.has_property('root'):
             return
@@ -86,21 +93,54 @@ class SubGraphNode(AutoNode, SubGraph):
         self.error('can\'t find matched index output node !!!')
         return self.defaultValue
 
+    def _show_error(self, message):
+        if not self._error:
+            self.defaultColor = self.get_property("color")
+
+        self._error = True
+        self.set_property('color', self.errorColor)
+        self._update_tool_tip(message)
+
+    # def run(self):
+    #     self.update_ports()
+    #
+    #     for node in self.sub_graph_input_nodes:
+    #         node._parent = self
+    #
+    #     if self._run_ports:
+    #         for port in self._run_ports:
+    #             index = self.input_ports().index(port)
+    #             for node in self.sub_graph_input_nodes:
+    #                 if node.get_property('input index') == index:
+    #                     node.cook()
+    #         self._run_ports = []
+    #     else:
+    #         [node.cook() for node in self.sub_graph_input_nodes]
+
     def run(self):
         self.update_ports()
 
         for node in self.sub_graph_input_nodes:
             node._parent = self
 
+        start_nodes = []
         if self._run_ports:
             for port in self._run_ports:
                 index = self.input_ports().index(port)
                 for node in self.sub_graph_input_nodes:
                     if node.get_property('input index') == index:
-                        node.cook()
+                        start_nodes.append(node)
             self._run_ports = []
         else:
-            [node.cook() for node in self.sub_graph_input_nodes]
+            start_nodes = self.sub_graph_input_nodes
+
+        nodes = topological_sort(start_nodes=start_nodes)
+
+        for node in nodes:
+            node.cook(stream=True)
+            if node.error():
+                self.error(node.view.toolTip())
+                break
 
     def delete(self):
         self._view.delete()
@@ -111,7 +151,7 @@ class SubGraphNode(AutoNode, SubGraph):
             self._parent.remove_child(self)
 
     def children(self):
-        return self._children
+        return list(self._children)
 
     def create_input_node(self, update=True):
         pass
@@ -303,3 +343,14 @@ class RootNode(SubGraphNode):
     def set_graph(self, graph):
         super(RootNode, self).set_graph(graph)
         graph.set_node_space(self)
+
+    def cook(self):
+        pass
+
+    def run(self):
+        pass
+
+    def error(self, message=None):
+        if message is None:
+            return False
+        self._error = False

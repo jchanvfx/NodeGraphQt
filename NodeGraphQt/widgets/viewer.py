@@ -672,7 +672,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not start_port.node.visible or not end_port.node.visible:
             pipe.hide()
 
-    def acyclic_check(self, start_port, end_port):
+    @staticmethod
+    def acyclic_check(start_port, end_port):
         """
         validate the connection so it doesn't loop itself.
 
@@ -724,11 +725,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return {'graph': self._ctx_menu,
                 'nodes': self._ctx_node_menu}
 
-    def question_dialog(self, text, title='Node Graph'):
+    @staticmethod
+    def question_dialog(text, title='Node Graph'):
         dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
-    def message_dialog(self, text, title='Node Graph'):
+    @staticmethod
+    def message_dialog(text, title='Node Graph'):
         messageBox(text, title, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
@@ -798,7 +801,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(node)
         node.post_init(self, pos)
 
-    def remove_node(self, node):
+    @staticmethod
+    def remove_node(node):
         if isinstance(node, AbstractNodeItem):
             node.delete()
 

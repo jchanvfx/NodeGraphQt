@@ -1,5 +1,6 @@
 from NodeGraphQt import BaseNode, SubGraph, Port, QtCore
 from NodeGraphQt.constants import NODE_PROP
+from NodeGraphQt.base.utils import topological_sort, get_output_nodes
 import traceback
 import hashlib
 import copy
@@ -71,6 +72,13 @@ class AutoNode(BaseNode, QtCore.QObject):
         self._cookTime = time
         self._update_tool_tip()
 
+    def update_streams(self):
+        nodes = topological_sort(start_nodes=get_output_nodes(self))
+        for node in nodes:
+            node.cook(stream=True)
+            if node.error():
+                break
+
     def cookNextNode(self):
         nodes = []
         for p in self.output_ports():
@@ -116,12 +124,12 @@ class AutoNode(BaseNode, QtCore.QObject):
         for index, out_port in enumerate(self.output_ports()):
             self.set_property(out_port.name(), self.getInputData(index % num))
 
-    def cook(self, forceCook=False):
-        if not self._autoCook and forceCook is not True:
-            return
-
-        if not self.needCook:
-            return
+    def cook(self, forceCook=False, stream=False):
+        if not forceCook:
+            if not self._autoCook or not self.needCook:
+                return
+            if self.graph is not None and not self.graph.auto_update:
+                return
 
         _tmp = self._autoCook
         self._autoCook = False
@@ -144,7 +152,9 @@ class AutoNode(BaseNode, QtCore.QObject):
         self.cookTime = time.time() - _start_time
 
         self.cooked.emit()
-        self.cookNextNode()
+
+        if not stream:
+            self.update_streams()
 
     def run(self):
         pass
@@ -239,9 +249,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         self._autoCook = not mode
         if mode is True:
             self.when_disabled()
-            self.cookNextNode()
-        else:
-            self.cook()
+        self.cook()
 
     def _close_error(self):
         self._error = False
