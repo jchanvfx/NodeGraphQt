@@ -380,9 +380,7 @@ class NodeGraph(QtCore.QObject):
     @property
     def auto_update(self):
         """
-
-        Returns:
-            if the graph can run node automatically.
+        Returns weather the graph can run node automatically.
         """
         return self._auto_update
 
@@ -1149,7 +1147,7 @@ class NodeGraph(QtCore.QObject):
                     node.model.set_property(prop, val)
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'), unique_name=set_parent)
-
+                node.set_disabled(n_data.get('disabled', False))
                 if isinstance(node, SubGraph):
                     if n_data.get('custom', None):
                         published = n_data['custom'].get('published', False)

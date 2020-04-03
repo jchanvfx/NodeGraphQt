@@ -120,11 +120,14 @@ class AutoNode(BaseNode, QtCore.QObject):
             return copy.deepcopy(data)
 
     def when_disabled(self):
-        num = len(self.input_ports())
+        num = max(0, len(self.input_ports())-1)
         for index, out_port in enumerate(self.output_ports()):
-            self.set_property(out_port.name(), self.getInputData(index % num))
+            self.set_property(out_port.name(), self.getInputData(min(index, num)))
 
     def cook(self, forceCook=False, stream=False):
+        if self.disabled() and stream:
+            self.when_disabled()
+            return
         if not forceCook:
             if not self._autoCook or not self.needCook:
                 return
@@ -247,8 +250,10 @@ class AutoNode(BaseNode, QtCore.QObject):
     def set_disabled(self, mode=False):
         super(AutoNode, self).set_disabled(mode)
         self._autoCook = not mode
-        if mode is True:
+        if mode:
             self.when_disabled()
+            if self.graph is None or self.graph.auto_update:
+                self.update_streams()
         self.cook()
 
     def _close_error(self):

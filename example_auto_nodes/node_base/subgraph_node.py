@@ -86,6 +86,9 @@ class SubGraphNode(AutoNode, SubGraph):
                 self.sub_graph_output_nodes.remove(node)
 
     def getData(self, port):
+        if self.disabled():
+            return super(SubGraphNode, self).getData(port)
+
         index = int(port.name()[-1])
         for node in self.sub_graph_output_nodes:
             if node.get_property('output index') == index:
@@ -100,22 +103,6 @@ class SubGraphNode(AutoNode, SubGraph):
         self._error = True
         self.set_property('color', self.errorColor)
         self._update_tool_tip(message)
-
-    # def run(self):
-    #     self.update_ports()
-    #
-    #     for node in self.sub_graph_input_nodes:
-    #         node._parent = self
-    #
-    #     if self._run_ports:
-    #         for port in self._run_ports:
-    #             index = self.input_ports().index(port)
-    #             for node in self.sub_graph_input_nodes:
-    #                 if node.get_property('input index') == index:
-    #                     node.cook()
-    #         self._run_ports = []
-    #     else:
-    #         [node.cook() for node in self.sub_graph_input_nodes]
 
     def run(self):
         self.update_ports()
