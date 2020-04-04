@@ -900,6 +900,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def scene_rect(self):
         return [self._scene_range.x(), self._scene_range.y(), self._scene_range.width(), self._scene_range.height()]
 
+    def scene_center(self):
+        cent = self._scene_range.center()
+        return [cent.x(), cent.y()]
+
+    def nodes_rect_center(self, nodes):
+        cent = self._combined_rect(nodes).center()
+        return [cent.x(), cent.y()]
+
     def set_scene_rect(self, rect):
         self._scene_range = QtCore.QRectF(*rect)
         self._update_scene()

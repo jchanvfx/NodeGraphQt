@@ -76,8 +76,13 @@ def setup_context_menu(graph):
     edit_menu.add_command('Deselect all', _clear_node_selection, 'Ctrl+Shift+A')
     edit_menu.add_command('Enable/Disable', _disable_nodes, 'D')
 
-    edit_menu.add_command('Duplicate', _duplicate_nodes, 'Alt+c')
+    edit_menu.add_command('Duplicate', _duplicate_nodes, 'Alt+C')
     edit_menu.add_command('Center Selection', _fit_to_selection, 'F')
+
+    edit_menu.add_separator()
+
+    edit_menu.add_command('Layout Graph Down Stream', _layout_graph_down, 'L')
+    edit_menu.add_command('Layout Graph Up Stream', _layout_graph_up, 'Ctrl+L')
 
     edit_menu.add_separator()
 
@@ -275,11 +280,38 @@ def _toggle_grid(graph):
     graph.display_grid(not graph.scene().grid)
 
 
+def __layout_graph(graph, down_stream=True):
+    node_space = graph.get_node_space()
+    if node_space is not None:
+        nodes = node_space.children()
+    else:
+        nodes = graph.all_nodes()
+    if not nodes:
+        return
+    node_views = [n.view for n in nodes]
+    nodes_center0 = graph.viewer().nodes_rect_center(node_views)
+    if down_stream:
+        auto_layout_down(all_nodes=nodes)
+    else:
+        auto_layout_up(all_nodes=nodes)
+    nodes_center1 = graph.viewer().nodes_rect_center(node_views)
+    dx = nodes_center0[0] - nodes_center1[0]
+    dy = nodes_center0[1] - nodes_center1[1]
+    [n.set_pos(n.x_pos() + dx, n.y_pos()+dy) for n in nodes]
+
+
+def _layout_graph_down(graph):
+    __layout_graph(graph, True)
+
+
+def _layout_graph_up(graph):
+    __layout_graph(graph, False)
+
 # topological_sort
 
 def get_input_nodes(node):
     """
-    Get input nodes of a node.
+    Get input nodes of node.
 
     Args:
         node (NodeGraphQt.BaseNode).
@@ -297,7 +329,7 @@ def get_input_nodes(node):
 
 def get_output_nodes(node):
     """
-    Get output nodes of a node.
+    Get output nodes of node.
 
     Args:
         node (NodeGraphQt.BaseNode).
@@ -399,7 +431,7 @@ def _build_up_stream_graph(start_nodes):
 
 def _sort_nodes(graph, start_nodes, reverse=True):
     """
-    Sort nodes by graph.
+    Sort nodes in graph.
 
     Args:
         graph (dict): generate from '_build_up_stream_graph' or '_build_down_stream_graph'.
@@ -416,17 +448,17 @@ def _sort_nodes(graph, start_nodes, reverse=True):
 
     sorted_nodes = []
 
-    def dfs(graph, start_node):
+    def dfs(start_node):
         for end_node in graph[start_node]:
             if not visit[end_node]:
                 visit[end_node] = True
-                dfs(graph, end_node)
+                dfs(end_node)
         sorted_nodes.append(start_node)
 
     for start_node in start_nodes:
         if not visit[start_node]:
             visit[start_node] = True
-            dfs(graph, start_node)
+            dfs(start_node)
 
     if reverse:
         sorted_nodes.reverse()
@@ -440,7 +472,7 @@ def topological_sort_by_down(start_nodes=[], all_nodes=[]):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update node of the graph.
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
@@ -464,7 +496,7 @@ def topological_sort_by_up(start_nodes=[], all_nodes=[]):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end update node of the graph.
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end update nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
@@ -540,3 +572,139 @@ def update_nodes_by_up(nodes):
     _update_nodes(topological_sort_by_up(all_nodes=nodes))
 
 # auto layout
+
+
+def _update_node_rank_down(node, nodes_rank):
+    rank = nodes_rank[node] + 1
+    for n in get_output_nodes(node):
+        if n in nodes_rank:
+            nodes_rank[n] = max(nodes_rank[n], rank)
+        else:
+            nodes_rank[n] = rank
+        _update_node_rank_down(n, nodes_rank)
+
+
+def _compute_rank_down(start_nodes):
+    """
+    Compute the rank of the down stream nodes.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start nodes of the graph.
+    Returns:
+        dict{NodeGraphQt.BaseNode: node_rank, ...}
+    """
+
+    nodes_rank = {}
+    for node in start_nodes:
+        nodes_rank[node] = 0
+        _update_node_rank_down(node, nodes_rank)
+    return nodes_rank
+
+
+def _update_node_rank_up(node, nodes_rank):
+    rank = nodes_rank[node] + 1
+    for n in get_input_nodes(node):
+        if n in nodes_rank:
+            nodes_rank[n] = max(nodes_rank[n], rank)
+        else:
+            nodes_rank[n] = rank
+        _update_node_rank_up(n, nodes_rank)
+
+
+def _compute_rank_up(start_nodes):
+    """
+    Compute the rank of the up stream nodes.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
+    Returns:
+        dict{NodeGraphQt.BaseNode: node_rank, ...}
+    """
+
+    nodes_rank = {}
+    for node in start_nodes:
+        nodes_rank[node] = 0
+        _update_node_rank_up(node, nodes_rank)
+    return nodes_rank
+
+
+def auto_layout_up(start_nodes=[], all_nodes=[]):
+    """
+    Auto layout the nodes by up stream direction.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+    """
+
+    if not start_nodes:
+        start_nodes = [n for n in all_nodes if not _has_output_node(n)]
+    if not start_nodes:
+        return []
+    if not [n for n in start_nodes if _has_input_node(n)]:
+        return start_nodes
+
+    nodes_rank = _compute_rank_up(start_nodes)
+
+    rank_map = {}
+    for node, rank in nodes_rank.items():
+        if rank in rank_map:
+            rank_map[rank].append(node)
+        else:
+            rank_map[rank] = [node]
+
+    current_x = 0
+    node_height = 50
+    for rank in reversed(range(len(rank_map))):
+        nodes = rank_map[rank]
+        max_width = max([node.view.width for node in nodes])
+        current_x += max_width
+        current_y = 0
+        for idx, node in enumerate(nodes):
+            dy = max(node_height, node.view.height)
+            current_y += 0 if idx == 0 else dy
+            node.set_pos(current_x, current_y)
+            current_y += dy * 0.5 + 10
+
+        current_x += max_width * 0.5 + 100
+
+
+def auto_layout_down(start_nodes=[], all_nodes=[]):
+    """
+    Auto layout the nodes by down stream direction.
+
+    Args:
+        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+    """
+
+    if not start_nodes:
+        start_nodes = [n for n in all_nodes if not _has_input_node(n)]
+    if not start_nodes:
+        return []
+    if not [n for n in start_nodes if _has_output_node(n)]:
+        return start_nodes
+
+    nodes_rank = _compute_rank_down(start_nodes)
+
+    rank_map = {}
+    for node, rank in nodes_rank.items():
+        if rank in rank_map:
+            rank_map[rank].append(node)
+        else:
+            rank_map[rank] = [node]
+
+    current_x = 0
+    node_height = 50
+    for rank in range(len(rank_map)):
+        nodes = rank_map[rank]
+        max_width = max([node.view.width for node in nodes])
+        current_x += max_width
+        current_y = 0
+        for idx, node in enumerate(nodes):
+            dy = max(node_height, node.view.height)
+            current_y += 0 if idx == 0 else dy
+            node.set_pos(current_x, current_y)
+            current_y += dy * 0.5 + 10
+
+        current_x += max_width * 0.5 + 100
