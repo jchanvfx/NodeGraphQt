@@ -215,10 +215,9 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
 
         max_depth = 0
         for node_type in node_types:
-            trees = node_type.split(".")
-            trees.pop(-1)
+            trees = ".".join(node_type.split(".")[:-1]).split("::")
             for depth, menu_name in enumerate(trees):
-                menu_path = ".".join(trees[:depth+1])
+                menu_path = "::".join(trees[:depth+1])
                 if depth in menu_tree.keys():
                     if menu_name not in menu_tree[depth].keys():
                         new_menu = QtWidgets.QMenu(menu_name)
@@ -229,7 +228,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
                     new_menu.setStyleSheet(STYLE_QMENU)
                     menu_tree[depth] = {menu_path: new_menu}
                 if depth > 0:
-                    new_menu.parentPath = ".".join(trees[:depth])
+                    new_menu.parentPath = "::".join(trees[:depth])
 
                 max_depth = max(max_depth,depth)
 

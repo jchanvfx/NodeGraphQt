@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
     # register nodes
     reg_nodes = get_nodes_from_folder(os.getcwd() + "/example_auto_nodes")
-    BackdropNode.__identifier__ = 'Utility'
+    BackdropNode.__identifier__ = 'Utility::Backdrop'
     reg_nodes.append(BackdropNode)
     reg_nodes.extend(get_published_nodes_from_folder(os.getcwd() + "/example_auto_nodes/published_nodes"))
     [graph.register_node(n) for n in reg_nodes]

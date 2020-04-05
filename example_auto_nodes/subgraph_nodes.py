@@ -75,6 +75,10 @@ def read_json(file_path):
 
 
 class Publish(SubGraph):
+    """
+    Read published sub graph file and create corresponding node class.
+    """
+
     __identifier__ = '__None'
     NODE_NAME = '__None'
     NODE_FILE = None
@@ -92,6 +96,10 @@ class Publish(SubGraph):
             self.created = True
 
     def create_from_file(self):
+        """
+        Update node properties and create sub graph nodes by published node file.
+        """
+
         if self.NODE_FILE is None:
             return
         data = read_json(self.NODE_FILE)
@@ -121,6 +129,13 @@ class Publish(SubGraph):
 
     @staticmethod
     def create_node_class(file_path):
+        """
+        Create a new node class by published node file.
+
+        Args:
+            file_path(str): published node file path.
+        """
+
         data = read_json(file_path)
 
         if not data:

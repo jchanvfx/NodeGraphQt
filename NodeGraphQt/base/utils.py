@@ -93,10 +93,13 @@ def setup_context_menu(graph):
 
     pipe_menu = edit_menu.add_menu('&Pipe')
     pipe_menu.add_command('Curved Pipe', _curved_pipe)
-    pipe_menu.add_command('Straght Pipe', _straight_pipe)
+    pipe_menu.add_command('Straight Pipe', _straight_pipe)
     pipe_menu.add_command('Angle Pipe', _angle_pipe)
 
-    edit_menu.add_command('Toggle Disable Grid', _toggle_grid)
+    bg_menu = edit_menu.add_menu('&Grid Mode')
+    bg_menu.add_command('None', _bg_grid_none)
+    bg_menu.add_command('Lines', _bg_grid_lines)
+    bg_menu.add_command('Dots', _bg_grid_dots)
 
     edit_menu.add_separator()
 
@@ -276,8 +279,16 @@ def _angle_pipe(graph):
     graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
 
 
-def _toggle_grid(graph):
-    graph.display_grid(not graph.scene().grid)
+def _bg_grid_none(graph):
+    graph.set_grid_mode(0)
+
+
+def _bg_grid_dots(graph):
+    graph.set_grid_mode(1)
+
+
+def _bg_grid_lines(graph):
+    graph.set_grid_mode(2)
 
 
 def __layout_graph(graph, down_stream=True):
@@ -342,7 +353,7 @@ def get_output_nodes(node):
         for cp in p.connected_ports():
             n = cp.node()
             if n.has_property('graph_rect'):
-                n.add_run_port(cp)
+                n.mark_node_to_be_cooked(cp)
             nodes[n.id] = n
     return list(nodes.values())
 
@@ -522,10 +533,14 @@ def _update_nodes(nodes):
         nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
     """
     for node in nodes:
-        if node.disabled():
-            node.when_disabled()
-        else:
-            node.run()
+        try:
+            if node.disabled():
+                node.when_disabled()
+            else:
+                node.run()
+        except Exception as error:
+            print("Error Update Node : {}\n{}" .format(node, str(error)))
+            break
 
 
 def update_node_down_stream(node):
@@ -570,6 +585,7 @@ def update_nodes_by_up(nodes):
     """
 
     _update_nodes(topological_sort_by_up(all_nodes=nodes))
+
 
 # auto layout
 

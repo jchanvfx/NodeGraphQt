@@ -19,7 +19,8 @@ from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE,
-                         IN_PORT, OUT_PORT)
+                         IN_PORT, OUT_PORT,
+                         VIEWER_GRID_LINES)
 from ..widgets.viewer import NodeViewer
 from ..widgets.node_space_bar import node_space_bar
 
@@ -466,14 +467,14 @@ class NodeGraph(QtCore.QObject):
         self.scene().grid_color = (r, g, b)
         self._viewer.force_update()
 
-    def display_grid(self, display=True):
+    def set_grid_mode(self, mode=VIEWER_GRID_LINES):
         """
-        Display node graph background grid.
+        Set node graph grid mode.
 
         Args:
-            display: False to not draw the background grid.
+            mode: VIEWER_GRID_LINES/VIEWER_GRID_DOTS/VIEWER_GRID_NONE.
         """
-        self.scene().grid = display
+        self.scene().grid_mode = mode
         self._viewer.force_update()
 
     def add_properties_bin(self, prop_bin):
@@ -1234,6 +1235,7 @@ class NodeGraph(QtCore.QObject):
             node_space = node_space.id
         serialized_data['graph'] = {'node_space': node_space, 'pipe_layout': self._viewer.get_pipe_layout()}
         serialized_data['graph']['graph_rect'] = self._viewer.scene_rect()
+        serialized_data['graph']['grid_mode'] = self.scene().grid_mode
 
         file_path = file_path.strip()
         with open(file_path, 'w') as file_out:
@@ -1282,6 +1284,7 @@ class NodeGraph(QtCore.QObject):
             self.set_node_space(self.root_node())
             self._viewer.set_pipe_layout(layout_data['graph']['pipe_layout'])
             self._viewer.set_scene_rect(layout_data['graph']['graph_rect'])
+            self.set_grid_mode(layout_data['graph'].get('grid_mode', VIEWER_GRID_LINES))
 
         self.set_node_space(self.root_node())
         self._undo_stack.clear()
