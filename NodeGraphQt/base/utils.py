@@ -320,6 +320,7 @@ def _layout_graph_up(graph):
 
 # topological_sort
 
+
 def get_input_nodes(node):
     """
     Get input nodes of node.
@@ -477,6 +478,14 @@ def _sort_nodes(graph, start_nodes, reverse=True):
     return sorted_nodes
 
 
+def __remove_BackdropNode(nodes):
+    from .node import BackdropNode
+    for node in nodes[:]:
+        if isinstance(node, BackdropNode):
+            nodes.remove(node)
+    return nodes
+
+
 def topological_sort_by_down(start_nodes=[], all_nodes=[]):
     """
     Topological sort method by down stream direction.
@@ -488,6 +497,10 @@ def topological_sort_by_down(start_nodes=[], all_nodes=[]):
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
+    if start_nodes:
+        start_nodes = __remove_BackdropNode(start_nodes)
+    if all_nodes:
+        all_nodes = __remove_BackdropNode(all_nodes)
 
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_input_node(n)]
@@ -512,6 +525,10 @@ def topological_sort_by_up(start_nodes=[], all_nodes=[]):
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
+    if start_nodes:
+        start_nodes = __remove_BackdropNode(start_nodes)
+    if all_nodes:
+        all_nodes = __remove_BackdropNode(all_nodes)
 
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_output_node(n)]
@@ -652,6 +669,10 @@ def auto_layout_up(start_nodes=[], all_nodes=[]):
         start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     """
+    if start_nodes:
+        start_nodes = __remove_BackdropNode(start_nodes)
+    if all_nodes:
+        all_nodes = __remove_BackdropNode(all_nodes)
 
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_output_node(n)]
@@ -693,6 +714,10 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
         start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     """
+    if start_nodes:
+        start_nodes = __remove_BackdropNode(start_nodes)
+    if all_nodes:
+        all_nodes = __remove_BackdropNode(all_nodes)
 
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_input_node(n)]

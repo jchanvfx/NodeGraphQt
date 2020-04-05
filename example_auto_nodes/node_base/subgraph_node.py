@@ -1,7 +1,7 @@
 from .auto_node import AutoNode
 from NodeGraphQt import SubGraph
 import json
-from NodeGraphQt import topological_sort_by_down
+from NodeGraphQt import topological_sort_by_down, BackdropNode
 
 
 class SubGraphNode(AutoNode, SubGraph):
@@ -220,6 +220,8 @@ class SubGraphNode(AutoNode, SubGraph):
         connected = []
 
         for node in nodes:
+            if isinstance(node, BackdropNode):
+                continue
             for port in node.input_ports():
                 for pipe in port.view.connected_pipes:
                     if pipe.output_port.isVisible():
