@@ -94,8 +94,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar.addMenu(self._ctx_node_menu)
         self._ctx_node_menu.setDisabled(True)
 
-        self._zoom_value = self.get_zoom()
-
         self.acyclic = True
         self.LMB_state = False
         self.RMB_state = False
@@ -400,7 +398,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = event.angleDelta().y()
             if delta == 0:
                 delta = event.angleDelta().x()
-        self._zoom_value += delta
         self._set_viewer_zoom(delta, pos=event.pos())
 
     def dropEvent(self, event):
@@ -919,10 +916,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.SHIFT_state = False
         self.ALT_state = False
 
-    def get_real_zoom(self):
-        return self._zoom_value
-
-    def use_opengl(self):
+    def use_OpenGL(self):
         format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
         format.setSamples(4)
         self.setViewport(QtOpenGL.QGLWidget(format))

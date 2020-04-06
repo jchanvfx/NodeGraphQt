@@ -678,8 +678,6 @@ def auto_layout_up(start_nodes=[], all_nodes=[]):
         start_nodes = [n for n in all_nodes if not _has_output_node(n)]
     if not start_nodes:
         return []
-    if not [n for n in start_nodes if _has_input_node(n)]:
-        return start_nodes
 
     nodes_rank = _compute_rank_up(start_nodes)
 
@@ -723,8 +721,6 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
         start_nodes = [n for n in all_nodes if not _has_input_node(n)]
     if not start_nodes:
         return []
-    if not [n for n in start_nodes if _has_output_node(n)]:
-        return start_nodes
 
     nodes_rank = _compute_rank_down(start_nodes)
 

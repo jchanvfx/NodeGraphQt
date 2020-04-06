@@ -1453,11 +1453,11 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.save_dialog(current_dir, ext)
 
-    def use_opengl(self):
+    def use_OpenGL(self):
         """
         Use OpenGL to draw the graph.
         """
-        self._viewer.use_opengl()
+        self._viewer.use_OpenGL()
 
     def graph_rect(self):
         """

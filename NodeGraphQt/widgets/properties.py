@@ -596,6 +596,9 @@ class PropVector(BaseProperty):
         self._can_emit = True
         self.setLayout(hbox)
 
+    def set_data_type(self, dt):
+        [item.set_data_type(dt) for item in self._items]
+
     def _add_item(self, index, hbox):
         _ledit = _valueEdit()
         _ledit.index = index
