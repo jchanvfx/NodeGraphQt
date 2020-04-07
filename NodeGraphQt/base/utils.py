@@ -339,12 +339,13 @@ def get_input_nodes(node):
     return list(nodes.values())
 
 
-def get_output_nodes(node):
+def get_output_nodes(node, cook=True):
     """
     Get output nodes of node.
 
     Args:
         node (NodeGraphQt.BaseNode).
+        cook (bool): call this function for cook node.
     Returns:
         list[NodeGraphQt.BaseNode].
     """
@@ -353,7 +354,7 @@ def get_output_nodes(node):
     for p in node.output_ports():
         for cp in p.connected_ports():
             n = cp.node()
-            if n.has_property('graph_rect'):
+            if cook and n.has_property('graph_rect'):
                 n.mark_node_to_be_cooked(cp)
             nodes[n.id] = n
     return list(nodes.values())
@@ -609,7 +610,7 @@ def update_nodes_by_up(nodes):
 
 def _update_node_rank_down(node, nodes_rank):
     rank = nodes_rank[node] + 1
-    for n in get_output_nodes(node):
+    for n in get_output_nodes(node, False):
         if n in nodes_rank:
             nodes_rank[n] = max(nodes_rank[n], rank)
         else:

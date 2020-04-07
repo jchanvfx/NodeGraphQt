@@ -10,6 +10,7 @@ from ..constants import (IN_PORT, OUT_PORT,
 from ..errors import NodeWidgetError
 from .node_abstract import AbstractNodeItem
 from .port import PortItem
+from .text_item import text_item
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
@@ -127,7 +128,7 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self._text_item = QtWidgets.QGraphicsTextItem(self.name, self)
+        self.text_item = text_item(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
@@ -262,7 +263,7 @@ class NodeItem(AbstractNodeItem):
             text.setDefaultTextColor(text_color)
         for port, text in self._output_items.items():
             text.setDefaultTextColor(text_color)
-        self._text_item.setDefaultTextColor(text_color)
+        self.text_item.setDefaultTextColor(text_color)
 
     def activate_pipes(self):
         """
@@ -299,8 +300,8 @@ class NodeItem(AbstractNodeItem):
             add_w (float): additional width.
             add_h (float): additional height.
         """
-        width = self._text_item.boundingRect().width()
-        height = self._text_item.boundingRect().height()
+        width = 0
+        height = 0
 
         if self._widgets:
             wid_width = max([
@@ -366,11 +367,11 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        text_rect = self._text_item.boundingRect()
+        text_rect = self.text_item.boundingRect()
         text_x = (self._width / 2) - (text_rect.width() / 2)
         text_x += h_offset
-        text_y = 1.0 + v_offset
-        self._text_item.setPos(text_x, text_y)
+        text_y = v_offset - 25
+        self.text_item.setPos(text_x, text_y)
 
     def arrange_widgets(self, v_offset=0.0):
         """
@@ -444,15 +445,15 @@ class NodeItem(AbstractNodeItem):
             x (float): horizontal x offset
             y (float): vertical y offset
         """
-        icon_x = self._text_item.pos().x() + x
-        icon_y = self._text_item.pos().y() + y
-        self._text_item.setPos(icon_x, icon_y)
+        icon_x = self.text_item.pos().x() + x
+        icon_y = self.text_item.pos().y() + y
+        self.text_item.setPos(icon_x, icon_y)
 
     def draw_node(self):
         """
         Draw the node item in the scene.
         """
-        height = self._text_item.boundingRect().height()
+        height = self.text_item.boundingRect().height()
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.
@@ -520,7 +521,7 @@ class NodeItem(AbstractNodeItem):
             # for pipe in port.connected_pipes:
             #     pipe.setVisible(visible)
 
-        self._text_item.setVisible(visible)
+        self.text_item.setVisible(visible)
         self._icon_item.setVisible(visible)
 
     @property
@@ -571,9 +572,9 @@ class NodeItem(AbstractNodeItem):
     @AbstractNodeItem.name.setter
     def name(self, name=''):
         AbstractNodeItem.name.fset(self, name)
-        self._text_item.setPlainText(name)
+        self.text_item.setPlainText(name)
         if self.scene():
-            self.draw_node()
+            self.arrange_label()
         self.update()
 
     @AbstractNodeItem.color.setter
