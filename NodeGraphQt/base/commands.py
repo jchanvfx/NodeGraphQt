@@ -125,15 +125,17 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.model = graph.model
         self.node = node
         self.pos = pos
+        self.node_parent = node.parent()
 
     def undo(self):
         self.pos = self.pos or self.node.pos()
         self.model.nodes.pop(self.node.id)
-        self.node.view.delete()
+        self.node.delete()
 
     def redo(self):
         self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
+        self.node.set_parent(self.node_parent)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
@@ -153,6 +155,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node = node
         self.inputs = []
         self.outputs = []
+        self.node_parent = node.parent()
 
         if hasattr(self.node, 'inputs'):
             input_ports = self.node.inputs().values()
@@ -164,18 +167,15 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        for port, connected_ports in self.inputs:
-            [port.connect_to(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.connect_to(p) for p in connected_ports]
+        [port.connect_to(p) for port, connected_ports in self.inputs for p in connected_ports]
+        [port.connect_to(p) for port, connected_ports in self.outputs for p in connected_ports]
+        self.node.set_parent(self.node_parent)
 
     def redo(self):
-        for port, connected_ports in self.inputs:
-            [port.disconnect_from(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.disconnect_from(p) for p in connected_ports]
+        [port.disconnect_from(p) for port, connected_ports in self.inputs for p in connected_ports]
+        [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.model.nodes.pop(self.node.id)
-        self.node.view.delete()
+        self.node.delete()
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

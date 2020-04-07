@@ -14,7 +14,7 @@ class DataInputNode(BaseNode):
         super(DataInputNode, self).__init__()
         self.add_output('out')
         self.add_text_input('out', 'Data Output', text='0.4', tab='widgets')
-        self.view.widgets['out'].value_changed.connect(self.update_streams)
+        self.view.widgets['out'].value_changed.connect(self.update_stream)
 
 
 class TickTimeNode(BaseNode):
@@ -29,7 +29,7 @@ class TickTimeNode(BaseNode):
         super(TickTimeNode, self).__init__()
         self.add_output('out')
         self.add_text_input('out', 'Ticks', text='0', tab='widgets')
-        self.view.widgets['out'].value_changed.connect(self.update_streams)
+        self.view.widgets['out'].value_changed.connect(self.update_stream)
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.tick)
@@ -55,7 +55,7 @@ class TextFileInputNode(BaseNode):
         self.add_output('out')
         self.create_property('out', None)
         self.add_text_input('path', 'Text File Path', text='', tab='widgets')
-        self.view.widgets['path'].value_changed.connect(self.update_streams)
+        self.view.widgets['path'].value_changed.connect(self.update_stream)
 
     def run(self):
         if not self.disabled():
@@ -82,7 +82,7 @@ class BoolInputNode(BaseNode):
         self.add_output('out')
         self.create_property('out', None)
         self.add_combo_menu('combo', 'Bool value', items=['True', 'False'], tab='widgets')
-        self.view.widgets['combo'].value_changed.connect(self.update_streams)
+        self.view.widgets['combo'].value_changed.connect(self.update_stream)
 
     def run(self):
         self.set_property('out', eval(self.get_property('combo')))

@@ -27,7 +27,7 @@ class MathFunctionsNode(BaseNode):
 
         # switch math function type
         self.view.widgets['funcs'].value_changed.connect(self.addFunction)
-        self.view.widgets['funcs'].value_changed.connect(self.update_streams)
+        self.view.widgets['funcs'].value_changed.connect(self.update_stream)
         self.add_output('output')
         self.create_property('output', None)
         self.trigger_type = 'no_inPorts'
@@ -85,9 +85,9 @@ class MathFunctionsNode(BaseNode):
     def on_input_connected(self, to_port, from_port):
         """Override node callback method."""
         self.set_property(to_port.name(), from_port.node().run())
-        self.update_streams()
+        self.update_stream()
 
     def on_input_disconnected(self, to_port, from_port):
         """Override node callback method."""
         self.set_property('output', None)
-        self.update_streams()
+        self.update_stream()

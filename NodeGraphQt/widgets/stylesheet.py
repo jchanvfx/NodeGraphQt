@@ -221,3 +221,31 @@ QMessageBox{
     color: rgb(200 ,200, 200);
 }
 '''
+
+STYLE_SLASH_BUTTON = '''
+QPushButton {
+    border-radius: 0px;
+    border-width: 0px;
+    font-size:15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color:transparent;
+}
+'''
+STYLE_NODE_BUTTON = '''
+QPushButton {
+    border-radius: 0px;
+    border-width: 1px;
+    font-size:15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: rgb(60,70,90);
+    }
+QPushButton::pressed {
+    border-style: inset;
+    border-color: rgb(100,100,100);
+    background-color: rgb(30,30,30);
+    }
+QPushButton::hover {
+    background-color: rgb(10,80,150);
+}'''

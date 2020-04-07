@@ -78,7 +78,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(self._SLICER_PIPE)
 
         self._undo_stack = QtWidgets.QUndoStack(self)
-        self._search_widget = TabSearchMenuWidget(self)
+        self._search_widget = TabSearchMenuWidget()
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
         # workaround fix for shortcuts from the non-native menu actions
@@ -257,9 +257,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self.SHIFT_state:
                 for node in nodes:
                     node.selected = not node.selected
+                return
             elif self.CTRL_state:
                 for node in nodes:
                     node.selected = False
+                return
 
         # update the recorded node positions.
         self._node_positions.update(
@@ -396,7 +398,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = event.angleDelta().y()
             if delta == 0:
                 delta = event.angleDelta().x()
-
         self._set_viewer_zoom(delta, pos=event.pos())
 
     def dropEvent(self, event):
@@ -667,8 +668,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pipe.draw_path(pipe.input_port, pipe.output_port)
         if start_port.node.selected or end_port.node.selected:
             pipe.highlight()
+        if not start_port.node.visible or not end_port.node.visible:
+            pipe.hide()
 
-    def acyclic_check(self, start_port, end_port):
+    @staticmethod
+    def acyclic_check(start_port, end_port):
         """
         validate the connection so it doesn't loop itself.
 
@@ -712,15 +716,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._search_widget.setVisible(state)
             self.clearFocus()
 
+    def rebuild_tab_search(self):
+        if type(self._search_widget) is TabSearchMenuWidget:
+            self._search_widget.rebuild = True
+
     def context_menus(self):
         return {'graph': self._ctx_menu,
                 'nodes': self._ctx_node_menu}
 
-    def question_dialog(self, text, title='Node Graph'):
+    @staticmethod
+    def question_dialog(text, title='Node Graph'):
         dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         return dlg == QtWidgets.QMessageBox.Yes
 
-    def message_dialog(self, text, title='Node Graph'):
+    @staticmethod
+    def message_dialog(text, title='Node Graph'):
         messageBox(text, title, QtWidgets.QMessageBox.Ok)
 
     def load_dialog(self, current_dir=None, ext=None):
@@ -790,7 +800,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scene().addItem(node)
         node.post_init(self, pos)
 
-    def remove_node(self, node):
+    @staticmethod
+    def remove_node(node):
         if isinstance(node, AbstractNodeItem):
             node.delete()
 
@@ -882,7 +893,30 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if self.get_zoom() > 0.1:
             self.reset_zoom(self._scene_range.center())
 
-    def use_opengl(self):
+    def force_update(self):
+        self._update_scene()
+
+    def scene_rect(self):
+        return [self._scene_range.x(), self._scene_range.y(), self._scene_range.width(), self._scene_range.height()]
+
+    def scene_center(self):
+        cent = self._scene_range.center()
+        return [cent.x(), cent.y()]
+
+    def nodes_rect_center(self, nodes):
+        cent = self._combined_rect(nodes).center()
+        return [cent.x(), cent.y()]
+
+    def set_scene_rect(self, rect):
+        self._scene_range = QtCore.QRectF(*rect)
+        self._update_scene()
+
+    def clear_key_state(self):
+        self.CTRL_state = False
+        self.SHIFT_state = False
+        self.ALT_state = False
+
+    def use_OpenGL(self):
         format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
         format.setSamples(4)
         self.setViewport(QtOpenGL.QGLWidget(format))

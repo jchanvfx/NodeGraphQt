@@ -1,6 +1,6 @@
 {
   "nodes":{
-    "0x150eccc8":{
+    "0x241d6c38f08":{
       "type_":"Viewers.DataViewerNode",
       "icon":null,
       "name":"Output",
@@ -24,6 +24,9 @@
       ],
       "disabled":false,
       "selected":true,
+      "visible":true,
+      "parent_id":null,
+      "dynamic_port":false,
       "width":170,
       "height":91.0,
       "pos":[
@@ -34,7 +37,7 @@
         "data":""
       }
     },
-    "0x150f5588":{
+    "0x241d6c1e788":{
       "type_":"Inputs.BoolInputNode",
       "icon":null,
       "name":"Bool",
@@ -58,6 +61,9 @@
       ],
       "disabled":false,
       "selected":true,
+      "visible":true,
+      "parent_id":null,
+      "dynamic_port":false,
       "width":170,
       "height":103.0,
       "pos":[
@@ -69,7 +75,7 @@
         "combo":"True"
       }
     },
-    "0x150f5d88":{
+    "0x241d6c3b148":{
       "type_":"Logics.BooleanNode",
       "icon":null,
       "name":"Boolean",
@@ -93,6 +99,9 @@
       ],
       "disabled":false,
       "selected":true,
+      "visible":true,
+      "parent_id":null,
+      "dynamic_port":false,
       "width":170,
       "height":103.0,
       "pos":[
@@ -104,7 +113,7 @@
         "funcs":"and"
       }
     },
-    "0x1510e948":{
+    "0x241d6c3eb88":{
       "type_":"Inputs.BoolInputNode",
       "icon":null,
       "name":"Bool 1",
@@ -128,6 +137,9 @@
       ],
       "disabled":false,
       "selected":true,
+      "visible":true,
+      "parent_id":null,
+      "dynamic_port":false,
       "width":170,
       "height":103.0,
       "pos":[
@@ -143,33 +155,43 @@
   "connections":[
     {
       "in":[
-        "0x150eccc8",
+        "0x241d6c38f08",
         "data"
       ],
       "out":[
-        "0x150f5d88",
+        "0x241d6c3b148",
         "out"
       ]
     },
     {
       "out":[
-        "0x150f5588",
+        "0x241d6c1e788",
         "out"
       ],
       "in":[
-        "0x150f5d88",
+        "0x241d6c3b148",
         "a"
       ]
     },
     {
       "in":[
-        "0x150f5d88",
+        "0x241d6c3b148",
         "b"
       ],
       "out":[
-        "0x1510e948",
+        "0x241d6c3eb88",
         "out"
       ]
     }
-  ]
+  ],
+  "graph":{
+    "node_space":null,
+    "pipe_layout":1,
+    "graph_rect":[
+      -45.291298250921415,
+      -0.7562979520885396,
+      848.9012603807246,
+      798.9658921230349
+    ]
+  }
 }

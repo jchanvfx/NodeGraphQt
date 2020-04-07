@@ -170,13 +170,10 @@ class NodeItem(AbstractNodeItem):
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundedRect(rect, radius, radius)
 
-        label_rect = QtCore.QRectF(rect.left() + (radius / 2),
-                                   rect.top() + (radius / 2),
-                                   self._width - (radius / 1.25),
-                                   28)
+        label_rect = QtCore.QRectF(rect.left(), rect.top(), self._width, 28)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(label_rect, radius / 1.5, radius / 1.5)
-        painter.setBrush(QtGui.QColor(0, 0, 0, 50))
+        path.addRoundedRect(label_rect, radius, radius)
+        painter.setBrush(QtGui.QColor(30, 30, 30, 200))
         painter.fillPath(path, painter.brush())
 
         border_width = 0.8
@@ -456,7 +453,6 @@ class NodeItem(AbstractNodeItem):
         Draw the node item in the scene.
         """
         height = self._text_item.boundingRect().height()
-
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.
@@ -515,14 +511,14 @@ class NodeItem(AbstractNodeItem):
         for port, text in self._input_items.items():
             port.setVisible(visible)
             text.setVisible(visible)
-            for pipe in port.connected_pipes:
-                pipe.setVisible(visible)
+            # for pipe in port.connected_pipes:
+            #     pipe.setVisible(visible)
 
         for port, text in self._output_items.items():
             port.setVisible(visible)
             text.setVisible(visible)
-            for pipe in port.connected_pipes:
-                pipe.setVisible(visible)
+            # for pipe in port.connected_pipes:
+            #     pipe.setVisible(visible)
 
         self._text_item.setVisible(visible)
         self._icon_item.setVisible(visible)
@@ -659,6 +655,34 @@ class NodeItem(AbstractNodeItem):
             self.post_init()
         return port
 
+    def _delete_port(self, port, text):
+        """
+        Args:
+            port (PortItem): port object.
+            text (QGraphicsTextItem): port text object.
+        """
+        port.delete()
+        port.setParentItem(None)
+        text.setParentItem(None)
+        self.scene().removeItem(port)
+        self.scene().removeItem(text)
+        del port
+        del text
+
+    def delete_input(self, port):
+        """
+        Args:
+            port (PortItem): port object.
+        """
+        self._delete_port(port, self._input_items.pop(port))
+
+    def delete_output(self, port):
+        """
+        Args:
+            port (PortItem): port object.
+        """
+        self._delete_port(port, self._output_items.pop(port))
+
     def get_input_text_item(self, port_item):
         """
         Args:
@@ -696,10 +720,8 @@ class NodeItem(AbstractNodeItem):
         return name in self._widgets.keys()
 
     def delete(self):
-        for port, text in self._input_items.items():
-            port.delete()
-        for port, text in self._output_items.items():
-            port.delete()
+        [port.delete() for port, text in self._input_items.items()]
+        [port.delete() for port, text in self._output_items.items()]
         super(NodeItem, self).delete()
 
     def from_dict(self, node_dict):

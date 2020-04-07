@@ -20,6 +20,7 @@ from ..widgets.node_widgets import (NodeComboBox,
                                     NodeIntEdit,
                                     NodeCheckBox,
                                     NodeFilePath)
+from .utils import update_node_down_stream
 
 
 class classproperty(object):
@@ -58,6 +59,7 @@ class NodeObject(object):
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
+        self._parent = None
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -126,6 +128,12 @@ class NodeObject(object):
         return self._model
 
     def set_graph(self, graph):
+        """
+        Set the node graph.
+
+        Args:
+            graph (NodeGraphQt.base.graph.NodeGraph): node graph object.
+        """
         self._graph = graph
 
     def set_model(self, model):
@@ -201,7 +209,7 @@ class NodeObject(object):
 
     def disabled(self):
         """
-        Returns weather the node is enabled or disabled.
+        Returns whether the node is enabled or disabled.
 
         Returns:
             bool: True if the node is disabled.
@@ -401,6 +409,70 @@ class NodeObject(object):
 
         return self.model.pos
 
+    def set_parent(self, parent_node):
+        """
+        Set parent node.
+
+        Args:
+            parent_node (SubGraph): parent node.
+        """
+        if parent_node is self:
+            parent_node = None
+
+        if self._parent is not None:
+            self._parent.remove_child(self)
+
+        if parent_node is not None:
+            parent_node.add_child(self)
+        self._parent = parent_node
+        if self.graph.get_node_space() is not parent_node:
+            self.hide()
+        else:
+            self.show()
+
+    def parent(self):
+        """
+        Get parent node.
+
+        Returns:
+            SubGraph: parent node or None.
+        """
+        return self._parent
+
+    def path(self):
+        """
+        Get node path.
+
+        Returns:
+            str: current node path.
+        """
+        if self._parent is None:
+            return "/" + self.name()
+        return self._parent.path() + "/" + self.name()
+
+    def delete(self):
+        """
+        Delete node view.
+        """
+        self._view.delete()
+        if self._parent is not None:
+            self._parent.remove_child(self)
+        # self.set_parent(None)
+
+    def hide(self):
+        """
+        Hide node.
+        """
+        self.view.visible = False
+        self.model.visible = False
+
+    def show(self):
+        """
+        Show node.
+        """
+        self.view.visible = True
+        self.model.visible = True
+
 
 class BaseNode(NodeObject):
     """
@@ -443,10 +515,37 @@ class BaseNode(NodeObject):
         super(BaseNode, self).__init__(NodeItem())
         self._inputs = []
         self._outputs = []
+        self._has_draw = False
+
+    def draw(self, force=True):
+        if force:
+            if not self.model.visible:
+                self._has_draw = False
+            else:
+                self.view.draw_node()
+        else:
+            if not self._has_draw:
+                self.view.draw_node()
+                self._has_draw = True
+
+    def hide(self):
+        """
+        Hide node.
+        """
+        super(BaseNode, self).hide()
+        [pipe.hide() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
+
+    def show(self):
+        """
+        Show node.
+        """
+        super(BaseNode, self).show()
+        [pipe.show() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
+        self.draw(False)
 
     def update_model(self):
         """
-        update the node model from view.
+        Update the node model from view.
         """
         for name, val in self.view.properties.items():
             if name in ['inputs', 'outputs']:
@@ -645,7 +744,7 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None):
+                  color=None, data_type='None'):
         """
         Add input :class:`Port` to node.
 
@@ -654,6 +753,7 @@ class BaseNode(NodeObject):
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
+            data_type(str): port data type name.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -662,6 +762,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
         view = self.view.add_input(name, multi_input, display_name)
+
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
@@ -670,12 +771,13 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
+        port.model.data_type = data_type
         self._inputs.append(port)
         self.model.inputs[port.name()] = port.model
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None):
+                   color=None, data_type='None'):
         """
         Add output :class:`Port` to node.
 
@@ -684,6 +786,7 @@ class BaseNode(NodeObject):
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
+            data_type(str): port data type name.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -700,11 +803,19 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
+        port.model.data_type = data_type
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
 
     def update_combo_menu(self, name, items):
+        """
+        Update combobox menu items.
+
+        Args:
+            name (str): name for combobox menu property name.
+            items (list): new combobox menu items.
+        """
         if not self.has_property(name):
             return
         old_value = self.get_property(name)
@@ -718,6 +829,96 @@ class BaseNode(NodeObject):
             self.set_property(name, old_value)
         else:
             self.set_property(name, items[0])
+
+    def get_input(self, port):
+        """
+        Get a input port.
+
+        Args:
+            port(str/int/Port): input port name/index/object.
+        Returns:
+            Port object or None
+        """
+        port_object = None
+        if type(port) is int:
+            if port < len(self._inputs):
+                port_object = self._inputs[port]
+        elif type(port) is str:
+            port_object = self.inputs().get(port, None)
+        return port_object
+
+    def get_output(self, port):
+        """
+        Get a output port.
+
+        Args:
+            port(str/int): output port name/index.
+        Returns:
+            Port object or None
+        """
+        port_object = None
+        if type(port) is int:
+            if port < len(self._outputs):
+                port_object = self._outputs[port]
+        elif type(port) is str:
+            port_object = self.outputs().get(port, None)
+        return port_object
+
+    def delete_input(self, port):
+        """
+        Delete input port.
+
+        Args:
+            port(str/int): input port name/index.
+        """
+        if type(port) is not Port:
+            port = self.get_input(port)
+            if port is None:
+                return
+        self._inputs.remove(port)
+        self._model.inputs.pop(port.name())
+        self._view.delete_input(port.view)
+        del port
+        self.draw()
+
+    def delete_output(self, port):
+        """
+        Delete output port.
+
+        Args:
+            port(str/int/PortItem): output port name/index/object.
+        """
+        if type(port) is not Port:
+            port = self.get_output(port)
+            if port is None:
+                return
+        self._outputs.remove(port)
+        self._model.outputs.pop(port.name())
+        self._view.delete_output(port.view)
+        del port
+        self.draw()
+
+    def set_ports(self, port_data):
+        """
+        Set node input and output ports.
+
+        Args:
+            port_data(dict): {'input_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...],
+            "                 'output_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...]}
+        """
+        [self._view.delete_input(port.view) for port in self._inputs]
+        [self._view.delete_output(port.view) for port in self._outputs]
+        self._inputs = []
+        self._outputs = []
+        self._model.outputs = {}
+        self._model.inputs = {}
+        [self.add_input(name=port['name'], multi_input=port['multi_connection'],
+                        display_name=port['display_name'], data_type=port['data_type'])
+         for port in port_data['input_ports']]
+        [self.add_output(name=port['name'], multi_output=port['multi_connection'],
+                         display_name=port['display_name'], data_type=port['data_type'])
+         for port in port_data['output_ports']]
+        self.draw()
 
     def inputs(self):
         """
@@ -860,35 +1061,21 @@ class BaseNode(NodeObject):
         """
         return
 
-    def update_streams(self, *args):
+    def update_stream(self):
         """
-        Update all nodes joined by pipes to this.
+        Update node down stream.
         """
-        nodes = []
-        trash = []
-
-        for port, nodeList in self.connected_output_nodes().items():
-            nodes.extend(nodeList)
-
-        while nodes:
-            node = nodes.pop()
-            if node.disabled():
-                continue
-            if node not in trash:
-                trash.append(node)
-
-            for port, nodeList in node.connected_output_nodes().items():
-                nodes.extend(nodeList)
-
-            if not node.connected_output_nodes():
-                try:
-                    node.run()
-                except Exception as error:
-                    print("Error Update Streams: %s" % str(error))
+        update_node_down_stream(self)
 
     def run(self):
         """
-        Node evaluation logics.
+        Node evaluation logic.
+        """
+        return
+
+    def when_disabled(self):
+        """
+        Node evaluation logic when node has been disabled.
         """
         return
 
@@ -974,3 +1161,58 @@ class BackdropNode(NodeObject):
         self.model.width = self.view.width
         self.model.height = self.view.height
         return self.model.width, self.model.height
+
+
+class SubGraph(object):
+    """
+    The ``NodeGraphQt.SubGraph`` class is the base class that all
+    Sub Graph Node inherit from.
+    """
+
+    def __init__(self):
+        self._children = set()
+
+    def children(self):
+        """
+        Returns the children of the sub graph.
+        """
+        return list(self._children)
+
+    def create_from_nodes(self, nodes):
+        """
+        Create sub graph from the nodes.
+        Args:
+            nodes(list): nodes to create the sub graph.
+        """
+        if self in nodes:
+            nodes.remove(self)
+        [n.set_parent(self) for n in nodes]
+
+    def add_child(self, node):
+        """
+        Add a node to the sub graph.
+        Args:
+            node(NodeGraphQt.BaseNode).
+        """
+        self._children.add(node)
+
+    def remove_child(self, node):
+        """
+        Remove a node from the sub graph.
+        Args:
+            node(NodeGraphQt.BaseNode).
+        """
+        if node in self._children:
+            self._children.remove(node)
+
+    def enter(self):
+        """
+        Action when enter the sub graph.
+        """
+        pass
+
+    def exit(self):
+        """
+        Action when exit the sub graph.
+        """
+        pass
