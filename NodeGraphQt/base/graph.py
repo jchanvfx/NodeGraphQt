@@ -394,6 +394,25 @@ class NodeGraph(QtCore.QObject):
         """
         return self._auto_update
 
+    @property
+    def editable(self):
+        """
+        Returns whether the graph is editable.
+        """
+        return self._editable
+
+    @editable.setter
+    def editable(self, state):
+        """
+        Set whether the graph is editable.
+
+        Args:
+            state(bool).
+        """
+        self._editable = state
+        self._viewer.editable = state
+        self._viewer.scene().editable = state
+
     def show(self):
         """
         Show node graph widget this is just a convenience
@@ -863,10 +882,10 @@ class NodeGraph(QtCore.QObject):
         if node is not None:
             node.enter()
             self._node_space_bar.set_node(node)
-            self._editable = node.is_editable()
+            self.editable = node.is_editable()
         else:
-            self._editable = True
-        self._viewer.scene().set_editable(self._editable)
+            self.editable = True
+
 
     def get_node_space(self):
         """

@@ -16,16 +16,13 @@ class NodeScene(QtWidgets.QGraphicsScene):
         self.background_color = VIEWER_BG_COLOR
         self.grid_color = VIEWER_GRID_COLOR
         self._grid_mode = VIEWER_GRID_LINES
-        self._editable = True
+        self.editable = True
         self.setBackgroundBrush(self._bg_qcolor)
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(self.__module__,
                                       self.__class__.__name__,
                                       self.viewer())
-
-    def set_editable(self, state):
-        self._editable = state
 
     def _draw_text(self, painter):
         font = QtGui.QFont()
@@ -91,7 +88,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
             pen = QtGui.QPen(color, 0.65)
             self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE * 8)
 
-        if not self._editable:
+        if not self.editable:
             self._draw_text(painter)
         painter.restore()
 
