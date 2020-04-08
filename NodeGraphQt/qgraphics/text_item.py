@@ -1,4 +1,4 @@
-from .. import QtWidgets, QtGui, QtCore
+from .. import QtWidgets, QtCore
 
 
 class text_item(QtWidgets.QGraphicsTextItem):
@@ -12,7 +12,7 @@ class text_item(QtWidgets.QGraphicsTextItem):
 
     def _editingFinished(self):
         if self.isEditing:
-            self.setTextInteractionFlags(QtGui.Qt.NoTextInteraction)
+            self.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
             self.isEditing = False
             self.editingFinished.emit(self.toPlainText())
 
@@ -26,6 +26,6 @@ class text_item(QtWidgets.QGraphicsTextItem):
         super(text_item, self).focusOutEvent(event)
 
     def keyPressEvent(self, event):
-        if event.key() is QtGui.Qt.Key_Return:
+        if event.key() is QtCore.Qt.Key_Return:
             self._editingFinished()
         super(text_item, self).keyPressEvent(event)

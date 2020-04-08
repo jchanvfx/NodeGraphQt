@@ -886,7 +886,6 @@ class NodeGraph(QtCore.QObject):
         else:
             self.editable = True
 
-
     def get_node_space(self):
         """
         Get the node space of the node graph.
@@ -1191,10 +1190,7 @@ class NodeGraph(QtCore.QObject):
                 self.add_node(node, n_data.get('pos'), unique_name=set_parent)
                 node.set_disabled(n_data.get('disabled', False))
                 if isinstance(node, SubGraph):
-                    if n_data.get('custom', None):
-                        published = n_data['custom'].get('published', False)
-                    else:
-                        published = False
+                    published = n_data['custom'].get('published', False)
                     if not published:
                         sub_graph = n_data.get('sub_graph', None)
                         if sub_graph:
