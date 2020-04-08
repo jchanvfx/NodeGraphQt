@@ -1187,15 +1187,18 @@ class NodeGraph(QtCore.QObject):
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
                 nodes[n_id] = node
-                self.add_node(node, n_data.get('pos'), unique_name=set_parent)
-                node.set_disabled(n_data.get('disabled', False))
+
                 if isinstance(node, SubGraph):
+                    node.create_by_deserialize = True
+                    self.add_node(node, n_data.get('pos'), unique_name=set_parent)
                     published = n_data['custom'].get('published', False)
                     if not published:
                         sub_graph = n_data.get('sub_graph', None)
                         if sub_graph:
                             children = self._deserialize(sub_graph, relative_pos, pos, False)
                             [child.set_parent(node) for child in children]
+                else:
+                    self.add_node(node, n_data.get('pos'), unique_name=set_parent)
 
                 if n_data.get('dynamic_port', None):
                     node.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
