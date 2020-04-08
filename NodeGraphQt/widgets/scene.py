@@ -16,12 +16,24 @@ class NodeScene(QtWidgets.QGraphicsScene):
         self.background_color = VIEWER_BG_COLOR
         self.grid_color = VIEWER_GRID_COLOR
         self._grid_mode = VIEWER_GRID_LINES
+        self._editable = True
         self.setBackgroundBrush(self._bg_qcolor)
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(self.__module__,
                                       self.__class__.__name__,
                                       self.viewer())
+
+    def set_editable(self, state):
+        self._editable = state
+
+    def _draw_text(self, painter):
+        font = QtGui.QFont()
+        font.setPixelSize(48)
+        painter.setFont(font)
+        parent = self.viewer()
+        pos = QtCore.QPoint(20, parent.height()-20)
+        painter.drawText(parent.mapToScene(pos), 'Not Editable')
 
     def _draw_grid(self, painter, rect, pen, grid_size):
         left = int(rect.left())
@@ -54,9 +66,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         pen.setWidth(grid_size / 10)
         painter.setPen(pen)
 
-        for x in range(first_left, right, grid_size):
-            for y in range(first_top, bottom, grid_size):
-                painter.drawPoint(int(x), int(y))
+        [painter.drawPoint(int(x), int(y)) for x in range(first_left, right, grid_size) for y in range(first_top, bottom, grid_size)]
 
     def drawBackground(self, painter, rect):
         super(NodeScene, self).drawBackground(painter, rect)
@@ -81,6 +91,8 @@ class NodeScene(QtWidgets.QGraphicsScene):
             pen = QtGui.QPen(color, 0.65)
             self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE * 8)
 
+        if not self._editable:
+            self._draw_text(painter)
         painter.restore()
 
     def mousePressEvent(self, event):

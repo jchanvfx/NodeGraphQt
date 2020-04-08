@@ -301,7 +301,7 @@ class NodeItem(AbstractNodeItem):
             add_h (float): additional height.
         """
         width = 0
-        height = 0
+        height = self.text_item.boundingRect().height()
 
         if self._widgets:
             wid_width = max([

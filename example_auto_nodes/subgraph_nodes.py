@@ -86,7 +86,7 @@ class Publish(SubGraph):
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(Publish, self).__init__(defaultInputType, defaultOutputType, dynamic_port=False)
         self.set_property('color', (36, 97, 100, 255))
-        self.create_property('published', True)
+        self.set_property('published', True)
         self.created = False
 
     def set_graph(self, graph):
@@ -100,7 +100,7 @@ class Publish(SubGraph):
         Update node properties and create sub graph nodes by published node file.
         """
 
-        if self.NODE_FILE is None:
+        if self.NODE_FILE is None or not self.get_property('published'):
             return
         data = read_json(self.NODE_FILE)
         if not data:
@@ -125,7 +125,9 @@ class Publish(SubGraph):
         [node.set_parent(self) for node in children]
 
     def publish(self, file_path, node_name, node_identifier, node_class_name):
-        return
+        if self.get_property('published'):
+            return
+        super(Publish, self).publish(file_path, node_name, node_identifier, node_class_name)
 
     @staticmethod
     def create_node_class(file_path):

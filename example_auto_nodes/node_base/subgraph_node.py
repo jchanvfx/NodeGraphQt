@@ -16,6 +16,7 @@ class SubGraphNode(AutoNode, SubGraph):
         self.sub_graph_input_nodes = []
         self.sub_graph_output_nodes = []
         self.create_property('graph_rect', None)
+        self.create_property('published', False)
         if dynamic_port:
             self.model.dynamic_port = True
             self.add_int_input('input count', 'input count', 0)
@@ -36,6 +37,19 @@ class SubGraphNode(AutoNode, SubGraph):
 
         if port not in self._marked_ports and port in self.input_ports():
             self._marked_ports.append(port)
+
+    def is_editable(self):
+        """
+        Returns whether the node is allowed edit.
+        """
+
+        parent = self.parent()
+        if parent is None:
+            return not self.get_property('published')
+
+        if not self.get_property('published') and self.parent().is_editable():
+            return True
+        return False
 
     def enter(self):
         """
@@ -330,6 +344,7 @@ class SubGraphNode(AutoNode, SubGraph):
             data['node']['name'] = node_name
             data['node']['class_name'] = node_class_name.replace(" ", "_")
             data['node'].pop('type_')
+            data['node']['custom']['published'] = True
             file_path = file_path.strip()
             with open(file_path, 'w') as file_out:
                 json.dump(data, file_out, indent=2, separators=(',', ':'))
