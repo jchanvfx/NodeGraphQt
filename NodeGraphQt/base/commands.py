@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from .. import QtWidgets
-
 from ..constants import IN_PORT, OUT_PORT
+from .utils import minimize_node_ref_count
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
@@ -176,6 +176,9 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.model.nodes.pop(self.node.id)
         self.node.delete()
+
+    def __del__(self):
+        minimize_node_ref_count(self.node)
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

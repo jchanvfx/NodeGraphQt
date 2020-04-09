@@ -462,7 +462,7 @@ class NodeObject(object):
         self._view.delete()
         if self._parent is not None:
             self._parent.remove_child(self)
-        # self.set_parent(None)
+            self._parent = None
 
     def hide(self):
         """
@@ -884,7 +884,6 @@ class BaseNode(NodeObject):
         self._inputs.remove(port)
         self._model.inputs.pop(port.name())
         self._view.delete_input(port.view)
-        del port
         self.draw()
 
     def delete_output(self, port):
@@ -901,7 +900,6 @@ class BaseNode(NodeObject):
         self._outputs.remove(port)
         self._model.outputs.pop(port.name())
         self._view.delete_output(port.view)
-        del port
         self.draw()
 
     def set_ports(self, port_data):

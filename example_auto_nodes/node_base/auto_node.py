@@ -365,4 +365,9 @@ class AutoNode(BaseNode, QtCore.QObject):
             return self._error
         self._show_error(message)
 
+    # def __del__(self):
+    #     """
+    #     Check gc.
+    #     """
+    #     print("Delete: ", self.name())
 

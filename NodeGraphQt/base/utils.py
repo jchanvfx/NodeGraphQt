@@ -214,7 +214,7 @@ def _clear_undo(graph):
     viewer = graph.viewer()
     msg = 'Clear all undo history, Are you sure?'
     if viewer.question_dialog('Clear Undo History', msg):
-        graph.undo_stack().clear()
+        graph.clear_undo_stack()
 
 
 def _copy_nodes(graph):
@@ -748,3 +748,36 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
             current_y += dy * 0.5 + 10
 
         current_x += max_width * 0.5 + 100
+
+
+# garbage collect
+
+def minimize_node_ref_count(node):
+    """
+    Minimize node reference count for garbage collect.
+
+    Args:
+        node (NodeGraphQt.NodeObject): node.
+    """
+    if node.graph is None or node.id not in node.graph.model.nodes:
+        if hasattr(node, 'deleted'):
+            del node
+            return
+        from .node import BaseNode, SubGraph
+        node._parent = None
+        if isinstance(node, BaseNode):
+            [wid.deleteLater() for wid in node.view._widgets.values()]
+            node.view._widgets.clear()
+            for port in node._inputs:
+                port.model.node = None
+            for port in node._outputs:
+                port.model.node = None
+
+            if isinstance(node, SubGraph):
+                node._children.clear()
+                node.sub_graph_input_nodes.clear()
+                node.sub_graph_output_nodes.clear()
+            if isinstance(node, QtCore.QObject):
+                node.deleteLater()
+            node.deleted = True
+        del node
