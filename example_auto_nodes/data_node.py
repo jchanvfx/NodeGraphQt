@@ -30,6 +30,7 @@ class VectorSplit(AutoNode):
         value = self.getInputData(0)
         if type(value) is not list:
             self.error("Input data not list")
+            return
         for index, data in enumerate(value):
             if index > 3:
                 return

@@ -292,6 +292,7 @@ def _bg_grid_lines(graph):
 
 
 def __layout_graph(graph, down_stream=True):
+    graph.begin_undo('Auto Layout')
     node_space = graph.get_node_space()
     if node_space is not None:
         nodes = node_space.children()
@@ -309,6 +310,7 @@ def __layout_graph(graph, down_stream=True):
     dx = nodes_center0[0] - nodes_center1[0]
     dy = nodes_center0[1] - nodes_center1[1]
     [n.set_pos(n.x_pos() + dx, n.y_pos()+dy) for n in nodes]
+    graph.end_undo()
 
 
 def _layout_graph_down(graph):

@@ -74,7 +74,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         if mode:
             self.set_property('color', self.get_property('default_color'))
         else:
-            if not self.error():
+            if not self._error:
                 self.model.set_property('default_color', self.get_property('color'))
             self.set_property('color', self.stopCookColor)
 
@@ -86,7 +86,7 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         return self._cookTime
 
-    @autoCook.setter
+    @cookTime.setter
     def cookTime(self, cook_time):
         """
         Set the last cooked time of the node.
@@ -167,7 +167,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         _tmp = self.autoCook
         self.model.set_property('autoCook', False)
 
-        if self.error():
+        if self._error:
             self._close_error()
 
         _start_time = time.time()
@@ -178,7 +178,7 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         self.model.set_property('autoCook', _tmp)
 
-        if self.error():
+        if self._error:
             return
 
         self.cookTime = time.time() - _start_time
@@ -363,7 +363,6 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         if message is None:
             return self._error
-
         self._show_error(message)
 
 

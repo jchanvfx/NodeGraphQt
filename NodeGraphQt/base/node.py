@@ -184,6 +184,9 @@ class NodeObject(object):
         Args:
             name (str): name for the node.
         """
+        if self._graph is not None and not self._graph.editable:
+            self.view.name = self.model.name
+            return
         self.set_property('name', name)
 
     def color(self):

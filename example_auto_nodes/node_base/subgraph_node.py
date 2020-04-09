@@ -23,8 +23,8 @@ class SubGraphNode(AutoNode, SubGraph):
             self.add_int_input('output count', 'output count', 0)
         else:
             self.model.dynamic_port = False
-            self.create_property('input count', 'input count', 0)
-            self.create_property('output count', 'output count', 0)
+            self.create_property('input count', 0)
+            self.create_property('output count', 0)
         self._marked_ports = []
 
     def mark_node_to_be_cooked(self, port):
@@ -169,6 +169,7 @@ class SubGraphNode(AutoNode, SubGraph):
             else:
                 node.cook()
             if node.error():
+                self.error("/"+node.view.toolTip())
                 break
 
     def delete(self):
@@ -300,6 +301,7 @@ class SubGraphNode(AutoNode, SubGraph):
         current_output_count = len(self.output_ports())
 
         update = False
+
         if input_count != current_input_count:
             if input_count > current_input_count:
                 for i in range(input_count - current_input_count):
