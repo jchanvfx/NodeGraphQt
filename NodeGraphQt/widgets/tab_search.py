@@ -179,7 +179,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             self.removeAction(action)
             action.triggered.connect(self._on_search_submitted)
         self._searched_actions.clear()
-        
+
     def _set_menu_visible(self, visible):
         [menu.menuAction().setVisible(visible) for menu in self._menus.values()]
 

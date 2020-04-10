@@ -10,10 +10,13 @@ from ..constants import (NODE_PROP,
                          NODE_PROP_FILE,
                          NODE_PROP_FLOAT,
                          NODE_PROP_INT,
-                         IN_PORT, OUT_PORT)
+                         IN_PORT, OUT_PORT,
+                         NODE_LAYOUT_VERTICAL,
+                         NODE_LAYOUT_HORIZONTAL,
+                         NODE_LAYOUT_DIRECTION)
 from ..errors import PortRegistrationError
 from ..qgraphics.node_backdrop import BackdropNodeItem
-from ..qgraphics.node_base import NodeItem
+from ..qgraphics.node_base import NodeItem, NodeItemVertical
 from ..widgets.node_widgets import (NodeComboBox,
                                     NodeLineEdit,
                                     NodeFloatEdit,
@@ -514,7 +517,12 @@ class BaseNode(NodeObject):
     NODE_NAME = 'Base Node'
 
     def __init__(self):
-        super(BaseNode, self).__init__(NodeItem())
+        view = None
+        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+            view = NodeItemVertical()
+        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+            view = NodeItem()
+        super(BaseNode, self).__init__(view)
         self._inputs = []
         self._outputs = []
         self._has_draw = False
