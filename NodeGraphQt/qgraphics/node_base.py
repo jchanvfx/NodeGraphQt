@@ -489,17 +489,26 @@ class NodeItem(AbstractNodeItem):
             self.xy_pos = pos
 
     def auto_switch_mode(self):
+        """
+        Decide whether to draw the node with proxy mode.
+        """
         if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.ItemCoordinateCache:
             return
         rect = self.sceneBoundingRect()
         l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
         r = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topRight()))
-        # with is the node with in screen
+        # width is the node with in screen
         width = r.x() - l.x()
 
         self.set_proxy_mode(width < self._proxy_mode_threshold)
 
     def set_proxy_mode(self, mode):
+        """
+        Set whether to draw the node with proxy mode.
+
+        Args:
+            mode (bool).
+        """
         if mode is self._proxy_mode:
             return
 
