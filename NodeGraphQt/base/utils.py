@@ -777,7 +777,7 @@ def minimize_node_ref_count(node):
                 node._children.clear()
                 node.sub_graph_input_nodes.clear()
                 node.sub_graph_output_nodes.clear()
-            if isinstance(node, QtCore.QObject):
-                node.deleteLater()
-            node.deleted = True
+            # if isinstance(node, QtCore.QObject):
+            #     node.deleteLater()
+        node.deleted = True
         del node
