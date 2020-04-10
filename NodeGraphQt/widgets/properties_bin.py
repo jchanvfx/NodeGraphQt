@@ -193,11 +193,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         if itm_find:
             if itm_find[0].row() == 0:
+                try:
+                    itm_find[0].setEnabled(node.graph.editable)
+                except:
+                    pass
                 return
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
         prop_widget = NodePropWidget(node=node)
+        prop_widget.setEnabled(node.graph.editable)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         prop_widget.property_closed.connect(self.__on_prop_close)
         self._prop_list.setCellWidget(0, 0, prop_widget)

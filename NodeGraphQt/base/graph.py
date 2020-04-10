@@ -884,6 +884,7 @@ class NodeGraph(QtCore.QObject):
             node.enter()
             self._node_space_bar.set_node(node)
             self.editable = node.is_editable()
+            [n.set_editable(self.editable) for n in node.children() if isinstance(n, BaseNode)]
         else:
             self.editable = True
 
