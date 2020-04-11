@@ -158,10 +158,10 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node_parent = node.parent()
 
         if hasattr(self.node, 'inputs'):
-            input_ports = self.node.inputs().values()
+            input_ports = self.node.input_ports()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
         if hasattr(self.node, 'outputs'):
-            output_ports = self.node.outputs().values()
+            output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
     def undo(self):
