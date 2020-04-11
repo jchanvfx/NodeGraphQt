@@ -10,7 +10,7 @@ from ..constants import (IN_PORT, OUT_PORT,
 from ..errors import NodeWidgetError
 from .node_abstract import AbstractNodeItem
 from .port import PortItem
-from .text_item import text_item
+from .node_text_item import NodeTextItem
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
@@ -128,7 +128,7 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self.text_item = text_item(self.name, self)
+        self.text_item = NodeTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
@@ -497,7 +497,7 @@ class NodeItem(AbstractNodeItem):
         rect = self.sceneBoundingRect()
         l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
         r = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topRight()))
-        # width is the node with in screen
+        # width is the node width in screen
         width = r.x() - l.x()
 
         self.set_proxy_mode(width < self._proxy_mode_threshold)
