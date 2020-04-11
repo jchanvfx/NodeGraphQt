@@ -81,7 +81,7 @@ class AutoNode(BaseNode, QtCore.QObject):
     @property
     def cookTime(self):
         """
-        Get the last cooked time of the node.
+        Returns the last cooked time of the node.
         """
 
         return self._cookTime
@@ -97,6 +97,14 @@ class AutoNode(BaseNode, QtCore.QObject):
 
         self._cookTime = cook_time
         self._update_tool_tip()
+
+    @property
+    def has_error(self):
+        """
+        Returns whether the node has errors.
+        """
+
+        return self._error
 
     def update_stream(self, forceCook=False):
         """
@@ -352,17 +360,11 @@ class AutoNode(BaseNode, QtCore.QObject):
 
     def error(self, message=None):
         """
-        Update the node tooltip.
+        Set error message to node tooltip.
 
         Args:
-            message(str): the describe of the error or None.
-
-        Returns:
-            if message is None, returns whether the node has error.
+            message(str): the describe of the error.
         """
-
-        if message is None:
-            return self._error
         self._show_error(message)
 
     # def __del__(self):

@@ -168,7 +168,7 @@ class SubGraphNode(AutoNode, SubGraph):
                 node.when_disabled()
             else:
                 node.cook()
-            if node.error():
+            if node.has_error:
                 self.error("/"+node.view.toolTip())
                 break
 
