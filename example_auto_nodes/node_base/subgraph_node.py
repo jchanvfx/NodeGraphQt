@@ -125,14 +125,14 @@ class SubGraphNode(AutoNode, SubGraph):
             if node in self.sub_graph_output_nodes:
                 self.sub_graph_output_nodes.remove(node)
 
-    def getData(self, port):
+    def get_data(self, port):
         if self.disabled():
-            return super(SubGraphNode, self).getData(port)
+            return super(SubGraphNode, self).get_data(port)
 
         index = int(port.name()[-1])
         for node in self.sub_graph_output_nodes:
             if node.get_property('output index') == index:
-                return node.getData(None)
+                return node.get_data(None)
         self.error('can\'t find matched index output node !!!')
         return self.defaultValue
 
@@ -365,12 +365,12 @@ class SubGraphInputNode(AutoNode):
         self.add_output('out')
         self.add_int_input('input index', 'input index', value=0)
 
-    def getData(self, port):
+    def get_data(self, port):
         parent = self.parent()
         if parent is not None:
             from_port = self.get_parent_port(parent)
             if from_port:
-                return from_port.node().getData(from_port)
+                return from_port.node().get_data(from_port)
             else:
                 # can not find port
                 return self.defaultValue
@@ -404,14 +404,14 @@ class SubGraphOutputNode(AutoNode):
         self.add_input('in')
         self.add_int_input('output index', 'output index', value=0)
 
-    def getData(self, port=None):
+    def get_data(self, port=None):
         to_port = self.input(0)
         from_ports = to_port.connected_ports()
         if not from_ports:
             return self.defaultValue
 
         for from_port in from_ports:
-            return from_port.node().getData(from_port)
+            return from_port.node().get_data(from_port)
 
 
 class RootNode(SubGraphNode):

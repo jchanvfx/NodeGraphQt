@@ -115,7 +115,7 @@ class ModuleNode(AutoNode):
         for port in self.input_ports():
             if not port.visible():
                 continue
-            data = self.getInputData(port)
+            data = self.get_input_data(port)
             if data is not None:
                 args.append(data)
             elif self.defaultValue is not None:

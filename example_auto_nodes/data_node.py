@@ -27,7 +27,7 @@ class VectorSplit(AutoNode):
         self.map = {0: "x", 1: "y", 2: "z", 3: "w"}
 
     def run(self):
-        value = self.getInputData(0)
+        value = self.get_input_data(0)
         if type(value) is not list:
             self.error("Input data not list")
             return
@@ -59,7 +59,7 @@ class VectorMaker(AutoNode):
     def run(self):
         result = []
         for i in range(4):
-            data = self.getInputData(i)
+            data = self.get_input_data(i)
             if data is not None:
                 result.append(data)
 
@@ -92,15 +92,15 @@ class DataConvect(AutoNode):
         method = self.get_property("method")
         try:
             if method == "all to int":
-                data = int(float(self.getInputData(0)))
+                data = int(float(self.get_input_data(0)))
             elif method == "all to float":
-                data = float(self.getInputData(0))
+                data = float(self.get_input_data(0))
             elif method == "all to string":
-                data = str(self.getInputData(0))
+                data = str(self.get_input_data(0))
             elif method == "eval string":
-                data = eval(self.getInputData(0))
+                data = eval(self.get_input_data(0))
             elif method == "all to list":
-                data = list(self.getInputData(0))
+                data = list(self.get_input_data(0))
             self.set_property("out", data)
         except Exception as error:
             self.error(error)
