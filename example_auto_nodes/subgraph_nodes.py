@@ -86,8 +86,9 @@ class Publish(SubGraph):
     def __init__(self, defaultInputType=None, defaultOutputType=None):
         super(Publish, self).__init__(defaultInputType, defaultOutputType, dynamic_port=False)
         self.set_property('color', (36, 97, 100, 255))
-        self.create_property('published', True)
+        self.set_property('published', True)
         self.created = False
+        self.create_by_deserialize = False
 
     def set_graph(self, graph):
         super(Publish, self).set_graph(graph)
@@ -100,32 +101,35 @@ class Publish(SubGraph):
         Update node properties and create sub graph nodes by published node file.
         """
 
-        if self.NODE_FILE is None:
+        if self.NODE_FILE is None or not self.get_property('published'):
             return
         data = read_json(self.NODE_FILE)
         if not data:
             return
 
         children_data = data.pop('sub_graph')
-        n_data = data.pop('node')
 
-        n_data.pop('name')
-        # set properties.
-        for prop in self.model.properties.keys():
-            if prop in n_data.keys():
-                self.model.set_property(prop, n_data[prop])
-        # set custom properties.
-        for prop, val in n_data.get('custom', {}).items():
-            self.model.set_property(prop, val)
+        if not self.create_by_deserialize:
+            n_data = data.pop('node')
+            n_data.pop('name')
+            # set properties.
+            for prop in self.model.properties.keys():
+                if prop in n_data.keys():
+                    self.model.set_property(prop, n_data[prop])
+            # set custom properties.
+            for prop, val in n_data.get('custom', {}).items():
+                self.model.set_property(prop, val)
 
-        if n_data.get('dynamic_port', None):
-            self.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
+            if n_data.get('dynamic_port', None):
+                self.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
 
         children = self.graph._deserialize(children_data, set_parent=False)
         [node.set_parent(self) for node in children]
 
     def publish(self, file_path, node_name, node_identifier, node_class_name):
-        return
+        if self.get_property('published'):
+            return
+        super(Publish, self).publish(file_path, node_name, node_identifier, node_class_name)
 
     @staticmethod
     def create_node_class(file_path):

@@ -112,7 +112,6 @@ Z_VAL_NODE = 1
 Z_VAL_PORT = 2
 Z_VAL_NODE_WIDGET = 3
 
-
 # === ITEM CACHE MODE ===
 
 # QGraphicsItem.NoCache
@@ -120,3 +119,9 @@ Z_VAL_NODE_WIDGET = 3
 # QGraphicsItem.ItemCoordinateCache
 
 ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
+
+# === NODE LAYOUT DIRECTION ===
+
+NODE_LAYOUT_VERTICAL = 0
+NODE_LAYOUT_HORIZONTAL = 1
+NODE_LAYOUT_DIRECTION = NODE_LAYOUT_HORIZONTAL

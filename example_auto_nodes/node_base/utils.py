@@ -7,7 +7,7 @@ def _update_nodes(nodes):
             node.when_disabled()
         else:
             node.cook()
-        if node.error():
+        if node.has_error:
             break
 
 

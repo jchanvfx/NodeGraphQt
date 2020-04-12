@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from .. import QtWidgets
-
 from ..constants import IN_PORT, OUT_PORT
+from .utils import minimize_node_ref_count
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
@@ -158,10 +158,10 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node_parent = node.parent()
 
         if hasattr(self.node, 'inputs'):
-            input_ports = self.node.inputs().values()
+            input_ports = self.node.input_ports()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
         if hasattr(self.node, 'outputs'):
-            output_ports = self.node.outputs().values()
+            output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
     def undo(self):
@@ -176,6 +176,9 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.model.nodes.pop(self.node.id)
         self.node.delete()
+
+    def __del__(self):
+        minimize_node_ref_count(self.node)
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

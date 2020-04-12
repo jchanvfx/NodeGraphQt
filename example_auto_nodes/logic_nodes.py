@@ -18,10 +18,10 @@ class IfNode(AutoNode):
         self.create_property('out', None)
 
     def run(self):
-        if self.getInputData(self.condition):
-            result = self.getInputData(self._then)
+        if self.get_input_data(self.condition):
+            result = self.get_input_data(self._then)
         else:
-            result = self.getInputData(self._else)
+            result = self.get_input_data(self._else)
 
         self.set_property('out', result)
 
@@ -67,8 +67,8 @@ class BooleanNode(AutoNode):
         self.cook()
 
     def run(self):
-        a = self.getInputData(self.a)
-        b = self.getInputData(self.b)
+        a = self.get_input_data(self.a)
+        b = self.get_input_data(self.b)
 
         if a is None or (b is None and 'b' in self.func):
             self.error("No inputs!")

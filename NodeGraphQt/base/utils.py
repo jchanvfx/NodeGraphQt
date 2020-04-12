@@ -4,7 +4,10 @@ from distutils.version import LooseVersion
 from .. import QtGui, QtCore
 from ..constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
-                         PIPE_LAYOUT_ANGLE)
+                         PIPE_LAYOUT_ANGLE,
+                         NODE_LAYOUT_VERTICAL,
+                         NODE_LAYOUT_HORIZONTAL,
+                         NODE_LAYOUT_DIRECTION)
 
 
 # menu
@@ -37,9 +40,9 @@ def setup_context_menu(graph):
 
     # create "File" menu.
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
-    file_menu.add_command('Import...', _import_session, QtGui.QKeySequence.Open)
+    file_menu.add_command('Import...', _import_session)
     file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
-    file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+s')
+    file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+S')
     file_menu.add_command('New Session', _new_session)
 
     file_menu.add_separator()
@@ -214,7 +217,7 @@ def _clear_undo(graph):
     viewer = graph.viewer()
     msg = 'Clear all undo history, Are you sure?'
     if viewer.question_dialog('Clear Undo History', msg):
-        graph.undo_stack().clear()
+        graph.clear_undo_stack()
 
 
 def _copy_nodes(graph):
@@ -292,6 +295,7 @@ def _bg_grid_lines(graph):
 
 
 def __layout_graph(graph, down_stream=True):
+    graph.begin_undo('Auto Layout')
     node_space = graph.get_node_space()
     if node_space is not None:
         nodes = node_space.children()
@@ -309,6 +313,7 @@ def __layout_graph(graph, down_stream=True):
     dx = nodes_center0[0] - nodes_center1[0]
     dy = nodes_center0[1] - nodes_center1[1]
     [n.set_pos(n.x_pos() + dx, n.y_pos()+dy) for n in nodes]
+    graph.end_undo()
 
 
 def _layout_graph_down(graph):
@@ -339,12 +344,13 @@ def get_input_nodes(node):
     return list(nodes.values())
 
 
-def get_output_nodes(node):
+def get_output_nodes(node, cook=True):
     """
     Get output nodes of node.
 
     Args:
         node (NodeGraphQt.BaseNode).
+        cook (bool): call this function for cook node.
     Returns:
         list[NodeGraphQt.BaseNode].
     """
@@ -353,7 +359,7 @@ def get_output_nodes(node):
     for p in node.output_ports():
         for cp in p.connected_ports():
             n = cp.node()
-            if n.has_property('graph_rect'):
+            if cook and n.has_property('graph_rect'):
                 n.mark_node_to_be_cooked(cp)
             nodes[n.id] = n
     return list(nodes.values())
@@ -486,7 +492,7 @@ def __remove_BackdropNode(nodes):
     return nodes
 
 
-def topological_sort_by_down(start_nodes=[], all_nodes=[]):
+def topological_sort_by_down(start_nodes=None, all_nodes=None):
     """
     Topological sort method by down stream direction.
     'start_nodes' and 'all_nodes' only one needs to be given.
@@ -497,6 +503,8 @@ def topological_sort_by_down(start_nodes=[], all_nodes=[]):
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
+    if not start_nodes and not all_nodes:
+        return []
     if start_nodes:
         start_nodes = __remove_BackdropNode(start_nodes)
     if all_nodes:
@@ -514,7 +522,7 @@ def topological_sort_by_down(start_nodes=[], all_nodes=[]):
     return _sort_nodes(graph, start_nodes, True)
 
 
-def topological_sort_by_up(start_nodes=[], all_nodes=[]):
+def topological_sort_by_up(start_nodes=None, all_nodes=None):
     """
     Topological sort method by up stream direction.
     'start_nodes' and 'all_nodes' only one needs to be given.
@@ -525,6 +533,8 @@ def topological_sort_by_up(start_nodes=[], all_nodes=[]):
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
+    if not start_nodes and not all_nodes:
+        return []
     if start_nodes:
         start_nodes = __remove_BackdropNode(start_nodes)
     if all_nodes:
@@ -609,7 +619,7 @@ def update_nodes_by_up(nodes):
 
 def _update_node_rank_down(node, nodes_rank):
     rank = nodes_rank[node] + 1
-    for n in get_output_nodes(node):
+    for n in get_output_nodes(node, False):
         if n in nodes_rank:
             nodes_rank[n] = max(nodes_rank[n], rank)
         else:
@@ -661,7 +671,7 @@ def _compute_rank_up(start_nodes):
     return nodes_rank
 
 
-def auto_layout_up(start_nodes=[], all_nodes=[]):
+def auto_layout_up(start_nodes=None, all_nodes=None):
     """
     Auto layout the nodes by up stream direction.
 
@@ -669,6 +679,8 @@ def auto_layout_up(start_nodes=[], all_nodes=[]):
         start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     """
+    if not start_nodes and not all_nodes:
+        return
     if start_nodes:
         start_nodes = __remove_BackdropNode(start_nodes)
     if all_nodes:
@@ -677,7 +689,7 @@ def auto_layout_up(start_nodes=[], all_nodes=[]):
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_output_node(n)]
     if not start_nodes:
-        return []
+        return
 
     nodes_rank = _compute_rank_up(start_nodes)
 
@@ -688,23 +700,39 @@ def auto_layout_up(start_nodes=[], all_nodes=[]):
         else:
             rank_map[rank] = [node]
 
-    current_x = 0
-    node_height = 50
-    for rank in reversed(range(len(rank_map))):
-        nodes = rank_map[rank]
-        max_width = max([node.view.width for node in nodes])
-        current_x += max_width
+    if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+        current_x = 0
+        node_height = 80
+        for rank in reversed(range(len(rank_map))):
+            nodes = rank_map[rank]
+            max_width = max([node.view.width for node in nodes])
+            current_x += max_width
+            current_y = 0
+            for idx, node in enumerate(nodes):
+                dy = max(node_height, node.view.height)
+                current_y += 0 if idx == 0 else dy
+                node.set_pos(current_x, current_y)
+                current_y += dy * 0.5 + 10
+
+            current_x += max_width * 0.5 + 100
+    elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
         current_y = 0
-        for idx, node in enumerate(nodes):
-            dy = max(node_height, node.view.height)
-            current_y += 0 if idx == 0 else dy
-            node.set_pos(current_x, current_y)
-            current_y += dy * 0.5 + 10
+        node_width = 250
+        for rank in reversed(range(len(rank_map))):
+            nodes = rank_map[rank]
+            max_height = max([node.view.height for node in nodes])
+            current_y += max_height
+            current_x = 0
+            for idx, node in enumerate(nodes):
+                dx = max(node_width, node.view.width)
+                current_x += 0 if idx == 0 else dx
+                node.set_pos(current_x, current_y)
+                current_x += dx * 0.5 + 10
 
-        current_x += max_width * 0.5 + 100
+            current_y += max_height * 0.5 + 100
 
 
-def auto_layout_down(start_nodes=[], all_nodes=[]):
+def auto_layout_down(start_nodes=None, all_nodes=None):
     """
     Auto layout the nodes by down stream direction.
 
@@ -712,6 +740,8 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
         start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
         all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
     """
+    if not start_nodes and not all_nodes:
+        return
     if start_nodes:
         start_nodes = __remove_BackdropNode(start_nodes)
     if all_nodes:
@@ -720,7 +750,7 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
     if not start_nodes:
         start_nodes = [n for n in all_nodes if not _has_input_node(n)]
     if not start_nodes:
-        return []
+        return
 
     nodes_rank = _compute_rank_down(start_nodes)
 
@@ -731,17 +761,66 @@ def auto_layout_down(start_nodes=[], all_nodes=[]):
         else:
             rank_map[rank] = [node]
 
-    current_x = 0
-    node_height = 50
-    for rank in range(len(rank_map)):
-        nodes = rank_map[rank]
-        max_width = max([node.view.width for node in nodes])
-        current_x += max_width
-        current_y = 0
-        for idx, node in enumerate(nodes):
-            dy = max(node_height, node.view.height)
-            current_y += 0 if idx == 0 else dy
-            node.set_pos(current_x, current_y)
-            current_y += dy * 0.5 + 10
+    if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+        current_x = 0
+        node_height = 120
+        for rank in range(len(rank_map)):
+            nodes = rank_map[rank]
+            max_width = max([node.view.width for node in nodes])
+            current_x += max_width
+            current_y = 0
+            for idx, node in enumerate(nodes):
+                dy = max(node_height, node.view.height)
+                current_y += 0 if idx == 0 else dy
+                node.set_pos(current_x, current_y)
+                current_y += dy * 0.5 + 10
 
-        current_x += max_width * 0.5 + 100
+            current_x += max_width * 0.5 + 100
+    elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+        current_y = 0
+        node_width = 250
+        for rank in range(len(rank_map)):
+            nodes = rank_map[rank]
+            max_height = max([node.view.height for node in nodes])
+            current_y += max_height
+            current_x = 0
+            for idx, node in enumerate(nodes):
+                dx = max(node_width, node.view.width)
+                current_x += 0 if idx == 0 else dx
+                node.set_pos(current_x, current_y)
+                current_x += dx * 0.5 + 10
+
+            current_y += max_height * 0.5 + 100
+
+
+# garbage collect
+
+def minimize_node_ref_count(node):
+    """
+    Minimize node reference count for garbage collect.
+
+    Args:
+        node (NodeGraphQt.NodeObject): node.
+    """
+    if node.graph is None or node.id not in node.graph.model.nodes:
+        if hasattr(node, 'deleted'):
+            del node
+            return
+        from .node import BaseNode, SubGraph
+        node._parent = None
+        if isinstance(node, BaseNode):
+            [wid.deleteLater() for wid in node.view._widgets.values()]
+            node.view._widgets.clear()
+            for port in node._inputs:
+                port.model.node = None
+            for port in node._outputs:
+                port.model.node = None
+
+            if isinstance(node, SubGraph):
+                node._children.clear()
+                node.sub_graph_input_nodes.clear()
+                node.sub_graph_output_nodes.clear()
+            # if isinstance(node, QtCore.QObject):
+            #     node.deleteLater()
+        node.deleted = True
+        del node

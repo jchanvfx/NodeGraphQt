@@ -153,9 +153,14 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         self.line_edit.returnPressed.connect(self._on_search_submitted)
         self.line_edit.textChanged.connect(self._on_text_changed)
         self.rebuild = False
+        self._block_submit = False
 
     def __repr__(self):
         return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
+
+    def keyPressEvent(self, event):
+        super(TabSearchMenuWidget, self).keyPressEvent(event)
+        self.line_edit.keyPressEvent(event)
 
     def _on_text_changed(self, text):
         self._clear_actions()
@@ -175,8 +180,10 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             self.setActiveAction(self._searched_actions[0])
 
     def _clear_actions(self):
-        [self.removeAction(action) for action in self._searched_actions]
-        self._searched_actions = []
+        for action in self._searched_actions:
+            self.removeAction(action)
+            action.triggered.connect(self._on_search_submitted)
+        self._searched_actions.clear()
 
     def _set_menu_visible(self, visible):
         [menu.menuAction().setVisible(visible) for menu in self._menus.values()]
@@ -185,26 +192,29 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         self._set_menu_visible(False)
         self.setVisible(False)
         self.menuAction().setVisible(False)
+        self._block_submit = True
 
     def _show(self):
         self.line_edit.setText("")
         self.line_edit.setFocus()
         self._set_menu_visible(True)
+        self._block_submit = False
         self.exec_(QtGui.QCursor.pos())
 
     def _on_search_submitted(self):
-        action = self.sender()
-        if type(action) is not QtWidgets.QAction:
-            if len(self._searched_actions) > 0:
-                action = self._searched_actions[0]
-            else:
-                self._close()
-                return
+        if not self._block_submit:
+            action = self.sender()
+            if type(action) is not QtWidgets.QAction:
+                if len(self._searched_actions) > 0:
+                    action = self._searched_actions[0]
+                else:
+                    self._close()
+                    return
 
-        text = action.text()
-        node_type = self._node_dict.get(text)
-        if node_type:
-            self.search_submitted.emit(node_type)
+            text = action.text()
+            node_type = self._node_dict.get(text)
+            if node_type:
+                self.search_submitted.emit(node_type)
 
         self._close()
 
@@ -221,6 +231,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
                 if depth in menu_tree.keys():
                     if menu_name not in menu_tree[depth].keys():
                         new_menu = QtWidgets.QMenu(menu_name)
+                        new_menu.keyPressEvent = self.keyPressEvent
                         new_menu.setStyleSheet(STYLE_QMENU)
                         menu_tree[depth][menu_path] = new_menu
                 else:

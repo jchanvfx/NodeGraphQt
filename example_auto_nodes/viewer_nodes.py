@@ -14,7 +14,7 @@ class DataViewerNode(AutoNode):
 
     def run(self):
         """Evaluate input to show it."""
-        value = self.getInputData(0)
+        value = self.get_input_data(0)
         if type(value) == float:
             self.set_property('data', "{:.10f}".format(value))
         else:

@@ -56,6 +56,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
         self._update_scene()
         self._last_size = self.size()
+        self.editable = True
 
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None
@@ -68,6 +69,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._rubber_band = QtWidgets.QRubberBand(
             QtWidgets.QRubberBand.Rectangle, self
         )
+        self._rubber_band.isActive = False
 
         self._LIVE_PIPE = LivePipe()
         self._LIVE_PIPE.setVisible(False)
@@ -257,11 +259,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self.SHIFT_state:
                 for node in nodes:
                     node.selected = not node.selected
-                return
             elif self.CTRL_state:
                 for node in nodes:
                     node.selected = False
-                return
 
         # update the recorded node positions.
         self._node_positions.update(
@@ -275,12 +275,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             map_rect = self.mapToScene(rect).boundingRect()
             self.scene().update(map_rect)
             self._rubber_band.setGeometry(rect)
-            self._rubber_band.show()
+            self._rubber_band.isActive = True
 
-        # allow new live pipe with the shift modifier.
-        # if self.LMB_state:
-        #     if (not self.SHIFT_state and not self.CTRL_state) or\
-        #             (self.SHIFT_state and pipes):
+        if self.LMB_state and (self.SHIFT_state or self.CTRL_state):
+            return
         if not self._LIVE_PIPE.isVisible():
             super(NodeViewer, self).mousePressEvent(event)
 
@@ -300,11 +298,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._SLICER_PIPE.setVisible(False)
 
         # hide selection marquee
-        if self._rubber_band.isVisible():
-            rect = self._rubber_band.rect()
-            map_rect = self.mapToScene(rect).boundingRect()
-            self._rubber_band.hide()
-            self.scene().update(map_rect)
+        if self._rubber_band.isActive:
+            self._rubber_band.isActive = False
+            if self._rubber_band.isVisible():
+                rect = self._rubber_band.rect()
+                map_rect = self.mapToScene(rect).boundingRect()
+                self._rubber_band.hide()
+
+                rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
+                for item in self.scene().items(self.mapToScene(rect).boundingRect()):
+                    if isinstance(item, AbstractNodeItem):
+                        self.node_selected.emit(item.id)
+                        return
+                self.scene().update(map_rect)
 
         # find position changed nodes and emit signal.
         moved_nodes = {
@@ -347,28 +353,32 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos_y = (event.y() - self._previous_pos.y())
             self._set_viewer_pan(pos_x, pos_y)
 
-        if self.LMB_state and self._rubber_band.isVisible():
+        if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
-            map_rect = self.mapToScene(rect).boundingRect()
-            path = QtGui.QPainterPath()
-            path.addRect(map_rect)
-            self._rubber_band.setGeometry(rect)
-            self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
-            self.scene().update(map_rect)
+            # if the rubber band is too small, do not show it.
+            if max(rect.width(), rect.height()) > 5:
+                if not self._rubber_band.isVisible():
+                    self._rubber_band.show()
+                map_rect = self.mapToScene(rect).boundingRect()
+                path = QtGui.QPainterPath()
+                path.addRect(map_rect)
+                self._rubber_band.setGeometry(rect)
+                self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
+                self.scene().update(map_rect)
 
-            if self.SHIFT_state or self.CTRL_state:
-                nodes, pipes = self.selected_items()
+                if self.SHIFT_state or self.CTRL_state:
+                    nodes, pipes = self.selected_items()
 
-                for pipe in self._prev_selection_pipes:
-                    pipe.setSelected(True)
-                for node in self._prev_selection_nodes:
-                    node.selected = True
+                    for pipe in self._prev_selection_pipes:
+                        pipe.setSelected(True)
+                    for node in self._prev_selection_nodes:
+                        node.selected = True
 
-                if self.CTRL_state:
-                    for pipe in pipes:
-                        pipe.setSelected(False)
-                    for node in nodes:
-                        node.selected = False
+                    if self.CTRL_state:
+                        for pipe in pipes:
+                            pipe.setSelected(False)
+                        for node in nodes:
+                            node.selected = False
 
         elif self.LMB_state:
             self.COLLIDING_state = False
@@ -488,7 +498,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         pos = event.scenePos()
         port_items = self._items_near(pos, PortItem, 5, 5)
-        if port_items:
+        if port_items and self.editable:
             port = port_items[0]
             if not port.multi_connection and port.connected_ports:
                 self._detached_port = port.connected_ports[0]
@@ -513,7 +523,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 return
 
         pipe_items = self._items_near(pos, Pipe, 3, 3)
-        if pipe_items:
+        if pipe_items and self.editable:
             if not self.LMB_state:
                 return
             pipe = pipe_items[0]
@@ -662,6 +672,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         establish a new pipe connection.
         (adds a new pipe item to draw between 2 ports)
         """
+        if not self.editable:
+            return
         pipe = Pipe()
         self.scene().addItem(pipe)
         pipe.set_connections(start_port, end_port)

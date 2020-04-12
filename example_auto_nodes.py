@@ -59,11 +59,15 @@ def print_functions(graph, node):
 
 
 def toggle_auto_cook(graph, node):
-    node.autoCook = not node.autoCook
+    node.auto_cook = not node.auto_cook
 
 
 def enter_node(graph, node):
     graph.set_node_space(node)
+
+
+def allow_edit(graph, node):
+    node.set_property('published', False)
 
 
 def print_path(graph, node):
@@ -125,6 +129,7 @@ if __name__ == '__main__':
 
     # setup node menu
     node_menu = graph.context_nodes_menu()
+    node_menu.add_command('Allow Edit', allow_edit, node_class=Publish)
     node_menu.add_command('Enter Node', enter_node, node_class=SubGraphNode)
     node_menu.add_command('Publish Node', publish_node, node_class=SubGraphNode)
     node_menu.add_command('Print Children', print_children, node_class=SubGraphNode)
