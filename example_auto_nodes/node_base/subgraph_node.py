@@ -1,4 +1,5 @@
 from .auto_node import AutoNode
+from .utils import update_node_down_stream
 from NodeGraphQt import SubGraph
 import json
 from NodeGraphQt import topological_sort_by_down, BackdropNode
@@ -18,11 +19,11 @@ class SubGraphNode(AutoNode, SubGraph):
         self.create_property('graph_rect', None)
         self.create_property('published', False)
         if dynamic_port:
-            self.model.dynamic_port = True
+            self.set_dynamic_port(True)
             self.add_int_input('input count', 'input count', 0)
             self.add_int_input('output count', 'output count', 0)
         else:
-            self.model.dynamic_port = False
+            self.set_dynamic_port(False)
             self.create_property('input count', 0)
             self.create_property('output count', 0)
         self._marked_ports = []
@@ -413,6 +414,22 @@ class SubGraphOutputNode(AutoNode):
         for from_port in from_ports:
             return from_port.node().get_data(from_port)
 
+    def run(self):
+        parent = self.parent()
+        if parent is None or not parent.auto_cook:
+            return
+
+        port = parent.get_output(self.get_property('output index'))
+        if not port:
+            return
+
+        to_ports = port.connected_ports()
+        if not to_ports:
+            return
+
+        nodes = [p.node() for p in to_ports]
+        update_node_down_stream(nodes)
+
 
 class RootNode(SubGraphNode):
     """
@@ -439,7 +456,6 @@ class RootNode(SubGraphNode):
     def run(self):
         pass
 
-    def error(self, message=None):
-        if message is None:
-            return False
-        self._error = False
+    @property
+    def has_error(self):
+        return False

@@ -1,4 +1,4 @@
-from .node_base.auto_node import AutoNode
+from .node_base import AutoNode
 
 
 class FooNode(AutoNode):

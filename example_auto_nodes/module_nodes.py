@@ -1,6 +1,6 @@
-from .node_base.module_node import (ModuleNode,
-                                    get_functions_from_module,
-                                    get_functions_from_type)
+from .node_base import (ModuleNode,
+                        get_functions_from_module,
+                        get_functions_from_type)
 
 import os
 import sys
@@ -155,7 +155,6 @@ class StringFunctionsNode(ModuleNode):
     NODE_NAME = 'String Functions'
 
     module_functions = get_functions_from_type(_str)
-
 
     def __init__(self):
         super(StringFunctionsNode, self).__init__()

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from .node_base.auto_node import AutoNode
+from .node_base import AutoNode
 
 
 class VectorSplit(AutoNode):

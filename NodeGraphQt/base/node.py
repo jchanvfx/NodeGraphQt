@@ -1104,6 +1104,16 @@ class BaseNode(NodeObject):
         [wid.setEnabled(state) for wid in self.view._widgets.values()]
         self.view.text_item.setEnabled(state)
 
+    def set_dynamic_port(self, state):
+        """
+        Set whether the node will delete/add port after node has been created.
+
+        Args:
+            state(bool): If True, all port data will be serialized with the node,
+                         when the node is been deserialized, all ports will restore.
+        """
+        self.model.dynamic_port = state
+
 
 class BackdropNode(NodeObject):
     """
