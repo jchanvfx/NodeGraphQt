@@ -1,15 +1,18 @@
 #!/usr/bin/python
 import math
 
-from NodeGraphQt import QtCore, QtGui, QtWidgets
-from NodeGraphQt.constants import (
+from .. import QtCore, QtGui, QtWidgets
+from ..constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
     PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
     Z_VAL_NODE_WIDGET,
-    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED)
-from NodeGraphQt.qgraphics.port import PortItem
+    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED,
+    ITEM_CACHE_MODE,
+    NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
+    NODE_LAYOUT_DIRECTION)
+from .port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
@@ -27,6 +30,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         super(Pipe, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
         self._color = PIPE_DEFAULT_COLOR
         self._style = PIPE_STYLE_DEFAULT
         self._active = False
@@ -38,6 +42,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(-size, size))
         self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
+        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
@@ -55,6 +60,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
                 self.highlight()
             elif self.output_port.node.selected:
                 self.highlight()
+        if self.isSelected():
+            self.highlight()
 
     def paint(self, painter, option, widget):
         """
@@ -131,6 +138,94 @@ class Pipe(QtWidgets.QGraphicsPathItem):
 
         painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
 
+    def __draw_path_vertical(self, start_port, pos1, pos2, path):
+        """
+        Draws the vertical path between ports.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            pos1 (QPointF): start port position.
+            pos2 (QPointF): end port position.
+            path (QPainterPath): path to draw.
+        """
+        if self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
+            ctr_offset_y1, ctr_offset_y2 = pos1.y(), pos2.y()
+            tangent = abs(ctr_offset_y1 - ctr_offset_y2)
+
+            max_height = start_port.node.boundingRect().height()
+            tangent = min(tangent, max_height)
+            if start_port.port_type == IN_PORT:
+                ctr_offset_y1 -= tangent
+                ctr_offset_y2 += tangent
+            else:
+                ctr_offset_y1 += tangent
+                ctr_offset_y2 -= tangent
+
+            ctr_point1 = QtCore.QPointF(pos1.x(), ctr_offset_y1)
+            ctr_point2 = QtCore.QPointF(pos2.x(), ctr_offset_y2)
+            path.cubicTo(ctr_point1, ctr_point2, pos2)
+            self.setPath(path)
+        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
+            ctr_offset_y1, ctr_offset_y2 = pos1.y(), pos2.y()
+            distance = abs(ctr_offset_y1 - ctr_offset_y2)/2
+            if start_port.port_type == IN_PORT:
+                ctr_offset_y1 -= distance
+                ctr_offset_y2 += distance
+            else:
+                ctr_offset_y1 += distance
+                ctr_offset_y2 -= distance
+
+            ctr_point1 = QtCore.QPointF(pos1.x(), ctr_offset_y1)
+            ctr_point2 = QtCore.QPointF(pos2.x(), ctr_offset_y2)
+            path.lineTo(ctr_point1)
+            path.lineTo(ctr_point2)
+            path.lineTo(pos2)
+            self.setPath(path)
+
+    def __draw_path_horizontal(self, start_port, pos1, pos2, path):
+        """
+        Draws the horizontal path between ports.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            pos1 (QPointF): start port position.
+            pos2 (QPointF): end port position.
+            path (QPainterPath): path to draw.
+        """
+        if self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
+            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
+            tangent = abs(ctr_offset_x1 - ctr_offset_x2)
+
+            max_width = start_port.node.boundingRect().width()
+            tangent = min(tangent, max_width)
+            if start_port.port_type == IN_PORT:
+                ctr_offset_x1 -= tangent
+                ctr_offset_x2 += tangent
+            else:
+                ctr_offset_x1 += tangent
+                ctr_offset_x2 -= tangent
+
+            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
+            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
+            path.cubicTo(ctr_point1, ctr_point2, pos2)
+            self.setPath(path)
+        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
+            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
+            distance = abs(ctr_offset_x1 - ctr_offset_x2) / 2
+            if start_port.port_type == IN_PORT:
+                ctr_offset_x1 -= distance
+                ctr_offset_x2 += distance
+            else:
+                ctr_offset_x1 += distance
+                ctr_offset_x2 -= distance
+
+            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
+            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
+            path.lineTo(ctr_point1)
+            path.lineTo(ctr_point2)
+            path.lineTo(pos2)
+            self.setPath(path)
+
     def draw_path(self, start_port, end_port=None, cursor_pos=None):
         """
         Draws the path between ports.
@@ -163,48 +258,18 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             path.lineTo(pos2)
             self.setPath(path)
             return
-        elif self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
-            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
-            tangent = ctr_offset_x1 - ctr_offset_x2
-            tangent = (tangent * -1) if tangent < 0 else tangent
-
-            max_width = start_port.node.boundingRect().width() / 2
-            tangent = max_width if tangent > max_width else tangent
-            if start_port.port_type == IN_PORT:
-                ctr_offset_x1 -= tangent
-                ctr_offset_x2 += tangent
-            else:
-                ctr_offset_x1 += tangent
-                ctr_offset_x2 -= tangent
-
-            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
-            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
-            path.cubicTo(ctr_point1, ctr_point2, pos2)
-            self.setPath(path)
-        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
-            ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
-            distance = ctr_offset_x1 - ctr_offset_x2
-            distance = (distance * -1) if distance < 0 else distance
-            distance /= 2
-            if start_port.port_type == IN_PORT:
-                ctr_offset_x1 -= distance
-                ctr_offset_x2 += distance
-            else:
-                ctr_offset_x1 += distance
-                ctr_offset_x2 -= distance
-
-            ctr_point1 = QtCore.QPointF(ctr_offset_x1, pos1.y())
-            ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
-            path.lineTo(ctr_point1)
-            path.lineTo(ctr_point2)
-            path.lineTo(pos2)
-            self.setPath(path)
+        else:
+            if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+                self.__draw_path_vertical(start_port, pos1, pos2, path)
+            elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+                self.__draw_path_horizontal(start_port, pos1, pos2, path)
 
     def reset_path(self):
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
 
-    def calc_distance(self, p1, p2):
+    @staticmethod
+    def calc_distance(p1, p2):
         x = math.pow((p2.x() - p1.x()), 2)
         y = math.pow((p2.y() - p1.y()), 2)
         return math.sqrt(x + y)
@@ -266,6 +331,13 @@ class Pipe(QtWidgets.QGraphicsPathItem):
         if self.output_port and self.output_port.node.disabled:
             return True
         return False
+
+    def itemChange(self, change, value):
+        if change == self.ItemSelectedChange and self.scene():
+            self.reset()
+            if value:
+                self.highlight()
+        return super(Pipe, self).itemChange(change, value)
 
     @property
     def input_port(self):

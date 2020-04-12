@@ -2,12 +2,12 @@
 import json
 from collections import defaultdict
 
-from NodeGraphQt.constants import (NODE_PROP,
-                                   NODE_PROP_QLABEL,
-                                   NODE_PROP_QLINEEDIT,
-                                   NODE_PROP_QCHECKBOX,
-                                   NODE_PROP_COLORPICKER)
-from NodeGraphQt.errors import NodePropertyError
+from ..constants import (NODE_PROP,
+                        NODE_PROP_QLABEL,
+                        NODE_PROP_QLINEEDIT,
+                        NODE_PROP_QCHECKBOX,
+                        NODE_PROP_COLORPICKER)
+from ..errors import NodePropertyError
 
 
 class PortModel(object):
@@ -20,6 +20,7 @@ class PortModel(object):
         self.multi_connection = False
         self.visible = True
         self.connected_ports = defaultdict(list)
+        self.data_type = 'None'
 
     def __repr__(self):
         return '<{}(\'{}\') @ {}>'.format(
@@ -58,6 +59,8 @@ class NodeModel(object):
         self.text_color = (255, 255, 255, 180)
         self.disabled = False
         self.selected = False
+        self.visible = True
+        self.dynamic_port = False
         self.width = 100.0
         self.height = 80.0
         self.pos = [0.0, 0.0]
@@ -92,7 +95,8 @@ class NodeModel(object):
         }
 
     def add_property(self, name, value, items=None, range=None,
-                     widget_type=NODE_PROP, tab='Properties'):
+                     widget_type=NODE_PROP, tab='Properties',
+                     ext=None, funcs=None):
         """
         add custom property.
 
@@ -103,6 +107,8 @@ class NodeModel(object):
             range (tuple)): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
             tab (str): widget tab name.
+            ext (str) file ext for NODE_PROP_FILE
+            funcs (list) functions for NODE_PROP_BUTTON
         """
         tab = tab or 'Properties'
 
@@ -122,6 +128,10 @@ class NodeModel(object):
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
+            if ext:
+                self._TEMP_property_attrs[name]['ext'] = ext
+            if funcs:
+                self._TEMP_property_attrs[name]['funcs'] = funcs
         else:
             attrs = {self.type_: {name: {
                 'widget_type': widget_type,
@@ -131,6 +141,10 @@ class NodeModel(object):
                 attrs[self.type_][name]['items'] = items
             if range:
                 attrs[self.type_][name]['range'] = range
+            if ext:
+                attrs[self.type_][name]['ext'] = ext
+            if funcs:
+                attrs[self.type_][name]['funcs'] = funcs
             self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):
@@ -139,7 +153,8 @@ class NodeModel(object):
         elif name in self._custom_prop.keys():
             self._custom_prop[name] = value
         else:
-            raise NodePropertyError('No property "{}"'.format(name))
+            self.add_property(name, value)
+            # raise NodePropertyError('No property "{}"'.format(name))
 
     def get_property(self, name):
         if name in self.properties.keys():
@@ -202,10 +217,13 @@ class NodeModel(object):
                     'type': 'com.chantasticvfx.FooNode',
                     'selected': False,
                     'disabled': False,
+                    'visible': True,
                     'inputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}},
                     'outputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                    'input_ports': [<port_name>, <port_name>],
+                    'output_ports': [<port_name>, <port_name>],
                     'width': 0.0,
                     'height: 0.0,
                     'pos': (0.0, 0.0),
@@ -218,11 +236,19 @@ class NodeModel(object):
 
         inputs = {}
         outputs = {}
+        input_ports = []
+        output_ports = []
         for name, model in node_dict.pop('inputs').items():
+            if self.dynamic_port:
+                input_ports.append({'name': name, 'multi_connection': model.multi_connection,
+                                    'display_name': model.display_name, 'data_type': model.data_type})
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
+            if self.dynamic_port:
+                output_ports.append({'name': name, 'multi_connection': model.multi_connection,
+                                     'display_name': model.display_name, 'data_type': model.data_type})
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 outputs[name] = connected_ports
@@ -231,8 +257,25 @@ class NodeModel(object):
         if outputs:
             node_dict['outputs'] = outputs
 
+        if self.dynamic_port:
+            node_dict['input_ports'] = input_ports
+            node_dict['output_ports'] = output_ports
+
         custom_props = node_dict.pop('_custom_prop', {})
+
         if custom_props:
+            # exclude the data which can not be serialized (like numpy array)
+            to_remove = []
+            types = [float, str, int, list, dict, bool, None, complex, tuple]
+            for k, v in custom_props.items():
+                if type(v) not in types:
+                    try:
+                        json.dumps(v)
+                    except:
+                        to_remove.append(k)
+
+            [custom_props.pop(k) for k in to_remove]
+
             node_dict['custom'] = custom_props
 
         exclude = ['_graph_model',

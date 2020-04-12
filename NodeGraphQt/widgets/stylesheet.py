@@ -1,6 +1,6 @@
 import re
 
-from NodeGraphQt.constants import ICON_DOWN_ARROW
+from ..constants import ICON_DOWN_ARROW
 
 # Reformat the icon path on Windows OS.
 match = re.match('(\\w:)', ICON_DOWN_ARROW)
@@ -17,12 +17,14 @@ QGroupBox {
     padding-bottom: 2px;
     padding-left: 1px;
     padding-right: 1px;
-    font-size: 10pt;
+    font-size: 8pt;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     color: rgba(255, 255, 255, 85);
+    padding: 0px;
+    left:-4px;
 }
 '''
 
@@ -158,6 +160,7 @@ QMenu::separator {
 STYLE_QCHECKBOX = '''
 QCheckBox {
     color: rgba(255, 255, 255, 150);
+    background-color: transparent;
     spacing: 8px 2px;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -167,3 +170,82 @@ QCheckBox::indicator {
     height: 13px;
 }
 '''
+
+STYLE_QPUSHBUTTON = '''
+QPushButton {
+    background: transparent;
+    border-style: outset;
+    border-radius: 1px;  
+    border-width: 1px;
+    border-color: rgb(30,30,30);
+    max-width: 200;
+}
+QPushButton::pressed {
+    border-style: inset;
+}
+QPushButton::hover {
+    background: rgba(255,255,255,30);
+}
+'''
+STYLE_QWIDGET = '''
+QWidget{
+    border: 0px;
+    background-color: transparent;
+}
+'''
+
+STYLE_MESSAGEBOX = '''
+QLabel{
+    min-width:500 px; 
+    font-size: 18px;
+    background-color: transparent;
+    color: rgb(200 ,200, 200);
+} 
+QPushButton{ 
+    width:100px; 
+    font-size: 18px; 
+    background-color: transparent;
+    color: rgb(200 ,200, 200);
+    border-width: 1px;
+    border-color: rgb(40,40,40);
+}
+QPushButton::pressed {
+    border-style: inset;
+}
+QPushButton::hover {
+    background-color: rgb(65, 65, 65);
+    border-color: rgb(10,80,230);
+}
+QMessageBox{
+    background-color: rgb(55, 55, 55);
+    color: rgb(200 ,200, 200);
+}
+'''
+
+STYLE_SLASH_BUTTON = '''
+QPushButton {
+    border-radius: 0px;
+    border-width: 0px;
+    font-size:15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color:transparent;
+}
+'''
+STYLE_NODE_BUTTON = '''
+QPushButton {
+    border-radius: 0px;
+    border-width: 1px;
+    font-size:15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: rgb(60,70,90);
+    }
+QPushButton::pressed {
+    border-style: inset;
+    border-color: rgb(100,100,100);
+    background-color: rgb(30,30,30);
+    }
+QPushButton::hover {
+    background-color: rgb(10,80,150);
+}'''

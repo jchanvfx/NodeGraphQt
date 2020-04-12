@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtGui, QtWidgets
-from NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
+from .. import QtCore, QtGui, QtWidgets
+from ..constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
 
 
 class SlicerPipe(QtWidgets.QGraphicsPathItem):

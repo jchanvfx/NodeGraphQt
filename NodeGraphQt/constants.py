@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from .pkg_info import __version__
+from . import QtWidgets
 
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__
@@ -68,15 +69,32 @@ NODE_PROP_QSPINBOX = 7
 NODE_PROP_COLORPICKER = 8
 #: Property type represented with a Slider widget in the properties bin.
 NODE_PROP_SLIDER = 9
+#: Property type represented with a file selector widget in the properties bin.
+NODE_PROP_FILE = 10
+#: Property type represented with a file save widget in the properties bin.
+NODE_PROP_FILE_SAVE = 11
+#: Property type represented with a vector2 widget in the properties bin.
+NODE_PROP_VECTOR2 = 12
+#: Property type represented with vector3 widget in the properties bin.
+NODE_PROP_VECTOR3 = 13
+#: Property type represented with vector4 widget in the properties bin.
+NODE_PROP_VECTOR4 = 14
+#: Property type represented with float widget in the properties bin.
+NODE_PROP_FLOAT = 15
+#: Property type represented with int widget in the properties bin.
+NODE_PROP_INT = 16
+#: Property type represented with button widget in the properties bin.
+NODE_PROP_BUTTON = 17
 
 # === NODE VIEWER ===
 
+VIEWER_GRID_NONE = 0
+VIEWER_GRID_DOTS = 1
+VIEWER_GRID_LINES = 2
+
 VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
-VIEWER_GRID_OVERLAY = True
-VIEWER_GRID_SIZE = 20
-
-SCENE_AREA = 8000.0
+VIEWER_GRID_SIZE = 50
 
 DRAG_DROP_ID = 'n0deGraphQT'
 
@@ -93,3 +111,17 @@ Z_VAL_PIPE = -1
 Z_VAL_NODE = 1
 Z_VAL_PORT = 2
 Z_VAL_NODE_WIDGET = 3
+
+# === ITEM CACHE MODE ===
+
+# QGraphicsItem.NoCache
+# QGraphicsItem.DeviceCoordinateCache
+# QGraphicsItem.ItemCoordinateCache
+
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
+
+# === NODE LAYOUT DIRECTION ===
+
+NODE_LAYOUT_VERTICAL = 0
+NODE_LAYOUT_HORIZONTAL = 1
+NODE_LAYOUT_DIRECTION = NODE_LAYOUT_HORIZONTAL

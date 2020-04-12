@@ -1,7 +1,8 @@
 #!/usr/bin/python
-from NodeGraphQt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT
+from .. import QtCore, QtWidgets
+
+from ..constants import (Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT, ITEM_CACHE_MODE)
 
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):
@@ -22,9 +23,12 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             'type_': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
+            'visible' : False,
         }
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
+
+        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(
@@ -136,6 +140,15 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     @selected.setter
     def selected(self, selected=False):
         self.setSelected(selected)
+
+    @property
+    def visible(self):
+        return self._properties['visible']
+
+    @visible.setter
+    def visible(self, visible=False):
+        self._properties['visible'] = visible
+        self.setVisible(visible)
 
     @property
     def xy_pos(self):

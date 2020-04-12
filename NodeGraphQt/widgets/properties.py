@@ -1,19 +1,27 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from NodeGraphQt import QtWidgets, QtCore, QtGui
-from NodeGraphQt.constants import (NODE_PROP_QLABEL,
-                                   NODE_PROP_QLINEEDIT,
-                                   NODE_PROP_QTEXTEDIT,
-                                   NODE_PROP_QCOMBO,
-                                   NODE_PROP_QCHECKBOX,
-                                   NODE_PROP_QSPINBOX,
-                                   NODE_PROP_COLORPICKER,
-                                   NODE_PROP_SLIDER)
+from .. import QtWidgets, QtCore, QtGui
+from ..constants import (NODE_PROP_QLABEL,
+                         NODE_PROP_QLINEEDIT,
+                         NODE_PROP_QTEXTEDIT,
+                         NODE_PROP_QCOMBO,
+                         NODE_PROP_QCHECKBOX,
+                         NODE_PROP_QSPINBOX,
+                         NODE_PROP_COLORPICKER,
+                         NODE_PROP_SLIDER,
+                         NODE_PROP_FILE,
+                         NODE_PROP_FILE_SAVE,
+                         NODE_PROP_VECTOR2,
+                         NODE_PROP_VECTOR3,
+                         NODE_PROP_VECTOR4,
+                         NODE_PROP_FLOAT,
+                         NODE_PROP_INT,
+                         NODE_PROP_BUTTON)
+from .file_dialog import file_dialog
 
 
 class BaseProperty(QtWidgets.QWidget):
-
     value_changed = QtCore.Signal(str, object)
 
     def set_value(self, value):
@@ -23,75 +31,52 @@ class BaseProperty(QtWidgets.QWidget):
         raise NotImplementedError
 
 
-class _ColorSolid(QtWidgets.QWidget):
-
-    def __init__(self, parent=None, color=None):
-        super(_ColorSolid, self).__init__(parent)
-        self.setMinimumSize(15, 15)
-        self.setMaximumSize(15, 15)
-        self.color = color or (0, 0, 0)
-
-    def paintEvent(self, event):
-        size = self.geometry()
-        rect = QtCore.QRect(1, 1, size.width() - 2, size.height() - 2)
-        painter = QtGui.QPainter(self)
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtGui.QColor(*self._color))
-        painter.drawRoundedRect(rect, 4, 4)
-
-    @property
-    def color(self):
-        return self._color
-
-    @color.setter
-    def color(self, color):
-        self._color = color
-        hex = '#{0:02x}{1:02x}{2:02x}'.format(*self._color)
-        self.setToolTip('rgb: {}\nhex: {}'.format(self._color[0:3], hex))
-        self.update()
-
-
 class PropColorPicker(BaseProperty):
-
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
-        self._solid = _ColorSolid(self)
-        self._solid.setMaximumHeight(15)
-        self._label = QtWidgets.QLabel()
-        self._update_label()
+        self._color = (0, 0, 0)
+        self._button = QtWidgets.QPushButton()
+        self._vector = PropVector3()
+        self._vector.set_value([0, 0, 0])
+        self._update_color()
 
-        button = QtWidgets.QPushButton('select color')
-        button.clicked.connect(self._on_select_color)
+        self._button.clicked.connect(self._on_select_color)
+        self._vector.value_changed.connect(self._on_vector_changed)
         layout = QtWidgets.QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 8, 0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(4)
-        layout.addWidget(self._solid, 0, QtCore.Qt.AlignCenter)
-        layout.addWidget(self._label, 0, QtCore.Qt.AlignCenter)
-        layout.addWidget(button, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
+        layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
+
+    def _on_vector_changed(self, o, value):
+        self._color = tuple(value)
+        self._update_color()
+        self.value_changed.emit(self.toolTip(), value)
+
+    def _update_vector(self):
+        self._vector.set_value(list(self._color))
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(QtGui.QColor(*self.get_value()))
+        color = QtWidgets.QColorDialog.getColor(QtGui.QColor.fromRgbF(*self.get_value()))
         if color.isValid():
             self.set_value(color.getRgb())
 
-    def _update_label(self):
-        self._label.setStyleSheet(
-            'QLabel {{color: rgba({}, {}, {}, 255);}}'
-            .format(*self._solid.color))
-        self._label.setText(self.hex_color())
-        self._label.setAlignment(QtCore.Qt.AlignCenter)
-        self._label.setMinimumWidth(60)
-
-    def hex_color(self):
-        return '#{0:02x}{1:02x}{2:02x}'.format(*self._solid.color)
+    def _update_color(self):
+        c = [int(max(min(i, 255), 0)) for i in self._color]
+        hex_color = '#{0:02x}{1:02x}{2:02x}'.format(*c)
+        self._button.setStyleSheet(
+            '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
+               QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}'''.format(*c))
+        self._button.setToolTip('rgb: {}\nhex: {}'.format(self._color[:3], hex_color))
 
     def get_value(self):
-        return self._solid.color
+        return self._color[:3]
 
     def set_value(self, value):
         if value != self.get_value():
-            self._solid.color = value
-            self._update_label()
+            self._color = value
+            self._update_color()
+            self._update_vector()
             self.value_changed.emit(self.toolTip(), value)
 
 
@@ -111,6 +96,7 @@ class PropSlider(BaseProperty):
                                    QtWidgets.QSizePolicy.Preferred)
         self._spnbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
         layout = QtWidgets.QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._spnbox)
         layout.addWidget(self._slider)
         self._spnbox.valueChanged.connect(self._on_spnbox_changed)
@@ -157,7 +143,6 @@ class PropSlider(BaseProperty):
 
 
 class PropLabel(QtWidgets.QLabel):
-
     value_changed = QtCore.Signal(str, object)
 
     def get_value(self):
@@ -165,44 +150,31 @@ class PropLabel(QtWidgets.QLabel):
 
     def set_value(self, value):
         if value != self.get_value():
-            self.setText(value)
+            self.setText(str(value))
             self.value_changed.emit(self.toolTip(), value)
 
 
 class PropLineEdit(QtWidgets.QLineEdit):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
         super(PropLineEdit, self).__init__(parent)
-        self.__prev_text = ''
-        self.editingFinished.connect(self._on_return_pressed)
+        self.editingFinished.connect(self._on_editing_finished)
 
-    def focusInEvent(self, event):
-        super(PropLineEdit, self).focusInEvent(event)
-        self.__prev_text = self.text()
-
-    def focusOutEvent(self, event):
-        super(PropLineEdit, self).focusOutEvent(event)
-        if self.__prev_text != self.text():
-            self.value_changed.emit(self.toolTip(), self.text())
-        self.__prev_text = ''
-
-    def _on_return_pressed(self):
-        if self.__prev_text != self.text():
-            self.value_changed.emit(self.toolTip(), self.text())
+    def _on_editing_finished(self):
+        self.value_changed.emit(self.toolTip(), self.text())
 
     def get_value(self):
         return self.text()
 
     def set_value(self, value):
-        if value != self.get_value():
-            self.setText(value)
-            self.value_changed.emit(self.toolTip(), value)
+        _value = str(value)
+        if _value != self.get_value():
+            self.setText(_value)
+            self.value_changed.emit(self.toolTip(), _value)
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -219,20 +191,17 @@ class PropTextEdit(QtWidgets.QTextEdit):
             self.value_changed.emit(self.toolTip(), self.toPlainText())
         self.__prev_text = ''
 
-    def _on_return_pressed(self):
-        self.value_changed.emit(self.toolTip(), self.get_value())
-
     def get_value(self):
         return self.toPlainText()
 
     def set_value(self, value):
-        if value != self.get_value():
-            self.setPlainText(value)
-            self.value_changed.emit(self.toolTip(), value)
+        _value = str(value)
+        if _value != self.get_value():
+            self.setPlainText(_value)
+            self.value_changed.emit(self.toolTip(), _value)
 
 
 class PropComboBox(QtWidgets.QComboBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -253,6 +222,9 @@ class PropComboBox(QtWidgets.QComboBox):
         return self.currentText()
 
     def set_value(self, value):
+        if type(value) is list:
+            self.set_items(value)
+            return
         if value != self.get_value():
             idx = self.findText(value, QtCore.Qt.MatchExactly)
             self.setCurrentIndex(idx)
@@ -261,7 +233,6 @@ class PropComboBox(QtWidgets.QComboBox):
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -281,7 +252,6 @@ class PropCheckBox(QtWidgets.QCheckBox):
 
 
 class PropSpinBox(QtWidgets.QSpinBox):
-
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -300,17 +270,450 @@ class PropSpinBox(QtWidgets.QSpinBox):
             self.setValue(value)
 
 
+class PropFilePath(BaseProperty):
+    def __init__(self, parent=None):
+        super(PropFilePath, self).__init__(parent)
+        self._ledit = QtWidgets.QLineEdit()
+        self._ledit.setAlignment(QtCore.Qt.AlignLeft)
+        self._ledit.editingFinished.connect(self._on_value_change)
+        self._ledit.clearFocus()
+
+        icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap(21))
+        _button = QtWidgets.QPushButton()
+        _button.setIcon(icon)
+
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.addWidget(self._ledit)
+        hbox.addWidget(_button)
+        self.setLayout(hbox)
+        _button.clicked.connect(self._on_select_file)
+
+        self._ledit.setStyleSheet("QLineEdit{border:1px solid}")
+        _button.setStyleSheet("QPushButton{border:1px solid}")
+        self._ext = "*"
+        self._file_dir = None
+
+    def set_ext(self, ext):
+        self._ext = ext
+
+    def set_file_dir(self, dir):
+        self._file_dir = dir
+
+    def _on_select_file(self):
+        file_path = file_dialog.getOpenFileName(self, file_dir=self._file_dir, ext_filter=self._ext)
+        file = file_path[0] or None
+        if file:
+            self.set_value(file)
+
+    def _on_value_change(self, value=None):
+        if value is None:
+            value = self._ledit.text()
+        self.value_changed.emit(self.toolTip(), value)
+
+    def get_value(self):
+        return self._ledit.text()
+
+    def set_value(self, value):
+        _value = str(value)
+        if _value != self.get_value():
+            self._ledit.setText(_value)
+            self._on_value_change(_value)
+
+
+class PropFileSavePath(PropFilePath):
+    def __init__(self, parent=None):
+        super(PropFileSavePath, self).__init__(parent)
+
+    def _on_select_file(self):
+        file_path = file_dialog.getSaveFileName(self, file_dir=self._file_dir, ext_filter=self._ext)
+        file = file_path[0] or None
+        if file:
+            self.set_value(file)
+
+
+class _valueMenu(QtWidgets.QMenu):
+    mouseMove = QtCore.Signal(object)
+    mouseRelease = QtCore.Signal(object)
+    stepChange = QtCore.Signal()
+
+    def __init__(self, parent=None):
+        super(_valueMenu, self).__init__(parent)
+        self.step = 1
+        self.last_action = None
+        self.steps = []
+
+    def set_steps(self, steps):
+        self.clear()
+        self.steps = steps
+        for step in steps:
+            self._add_action(step)
+
+    def _add_action(self, step):
+        action = QtWidgets.QAction(str(step), self)
+        action.step = step
+        self.addAction(action)
+
+    def mouseMoveEvent(self, event):
+        self.mouseMove.emit(event)
+        super(_valueMenu, self).mouseMoveEvent(event)
+
+        action = self.actionAt(event.pos())
+        if action:
+            if action is not self.last_action:
+                self.stepChange.emit()
+            self.last_action = action
+            self.step = action.step
+        elif self.last_action:
+            self.setActiveAction(self.last_action)
+
+    def mousePressEvent(self, event):
+        return
+
+    def mouseReleaseEvent(self, event):
+        self.mouseRelease.emit(event)
+        super(_valueMenu, self).mouseReleaseEvent(event)
+
+    def set_data_type(self, dt):
+        if dt is int:
+            new_steps = []
+            for step in self.steps:
+                if "." not in str(step):
+                    new_steps.append(step)
+            self.set_steps(new_steps)
+        elif dt is float:
+            self.set_steps(self.steps)
+
+
+class _valueEdit(QtWidgets.QLineEdit):
+    valueChanged = QtCore.Signal(object)
+
+    def __init__(self, parent=None):
+        super(_valueEdit, self).__init__(parent)
+        self.mid_state = False
+        self._data_type = float
+        self.setText("0")
+
+        self.pre_x = None
+        self.pre_val = None
+        self._step = 1
+        self._speed = 0.1
+
+        self.editingFinished.connect(self._on_text_changed)
+
+        self.menu = _valueMenu()
+        self.menu.mouseMove.connect(self.mouseMoveEvent)
+        self.menu.mouseRelease.connect(self.mouseReleaseEvent)
+        self.menu.stepChange.connect(self._reset)
+        steps = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+        self.menu.set_steps(steps)
+
+        self.set_data_type(float)
+
+    def _on_text_changed(self):
+        self.valueChanged.emit(self.value())
+
+    def _reset(self):
+        self.pre_x = None
+
+    def mouseMoveEvent(self, event):
+        if self.mid_state:
+            if self.pre_x is None:
+                self.pre_x = event.x()
+                self.pre_val = self.value()
+            else:
+                self.set_step(self.menu.step)
+                delta = event.x() - self.pre_x
+                value = self.pre_val + int(delta * self._speed) * self._step
+                self.setValue(value)
+                self._on_text_changed()
+
+        super(_valueEdit, self).mouseMoveEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.MiddleButton:
+            self.mid_state = True
+            self._reset()
+            self.menu.exec_(QtGui.QCursor.pos())
+        super(_valueEdit, self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        self.menu.close()
+        self.mid_state = False
+        super(_valueEdit, self).mouseReleaseEvent(event)
+
+    def set_step(self, step):
+        self._step = step
+
+    def set_data_type(self, dt):
+        if dt is int:
+            self.setValidator(QtGui.QIntValidator())
+        elif dt is float:
+            self.setValidator(QtGui.QDoubleValidator())
+        self._data_type = dt
+        self.menu.set_data_type(dt)
+
+    def _convert_text(self, text):
+        # int("1.0") will return error
+        # so we use int(float("1.0"))
+        try:
+            value = float(text)
+        except:
+            value = 0.0
+        if self._data_type is int:
+            value = int(value)
+        return value
+
+    def value(self):
+        if self.text().startswith("."):
+            text = "0" + self.text()
+            self.setText(text)
+        return self._convert_text(self.text())
+
+    def setValue(self, value):
+        if value != self.value():
+            self.setText(str(self._convert_text(value)))
+
+
+class _slider(QtWidgets.QSlider):
+    def __init__(self, parent=None):
+        super(_slider, self).__init__(parent)
+        self.setOrientation(QtCore.Qt.Horizontal)
+        self.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                           QtWidgets.QSizePolicy.Preferred)
+
+    def _update_value(self, x):
+        value = (self.maximum() - self.minimum()) * x / self.width() + self.minimum()
+        self.setValue(value)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self._update_value(event.pos().x())
+        super(_slider, self).mousePressEvent(event)
+
+
+class _valueSliderEdit(QtWidgets.QWidget):
+    valueChanged = QtCore.Signal(object)
+
+    def __init__(self, parent=None):
+        super(_valueSliderEdit, self).__init__(parent)
+        self._edit = _valueEdit()
+        self._edit.valueChanged.connect(self._on_edit_changed)
+        self._edit.setMaximumWidth(70)
+        self._slider = _slider()
+        self._slider.valueChanged.connect(self._on_slider_changed)
+
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.addWidget(self._edit)
+        hbox.addWidget(self._slider)
+        self.setLayout(hbox)
+
+        self._mul = 1000.0
+        self.set_min(0)
+        self.set_max(10)
+        self.set_data_type(float)
+        self._lock = False
+
+    def _on_edit_changed(self, value):
+        self._set_slider_value(value)
+        self.valueChanged.emit(self._edit.value())
+
+    def _on_slider_changed(self, value):
+        if self._lock:
+            self._lock = False
+            return
+        value = value / float(self._mul)
+        self._edit.setValue(value)
+        self._on_edit_changed(value)
+
+    def _set_slider_value(self, value):
+        value = int(value * self._mul)
+
+        if value == self._slider.value():
+            return
+        self._lock = True
+        _min = self._slider.minimum()
+        _max = self._slider.maximum()
+        if _min <= value <= _max:
+            self._slider.setValue(value)
+        elif value < _min and self._slider.value() != _min:
+            self._slider.setValue(_min)
+        elif value > _max and self._slider.value() != _max:
+            self._slider.setValue(_max)
+
+    def set_min(self, value=0):
+        self._slider.setMinimum(int(value * self._mul))
+
+    def set_max(self, value=10):
+        self._slider.setMaximum(int(value * self._mul))
+
+    def set_data_type(self, dt):
+        _min = int(self._slider.minimum() / self._mul)
+        _max = int(self._slider.maximum() / self._mul)
+        if dt is int:
+            self._mul = 1.0
+        elif dt is float:
+            self._mul = 1000.0
+
+        self.set_min(_min)
+        self.set_max(_max)
+        self._edit.set_data_type(dt)
+
+    def value(self):
+        return self._edit.value()
+
+    def setValue(self, value):
+        self._edit.setValue(value)
+        self._on_edit_changed(value)
+
+
+class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
+    def __init__(self, parent=None):
+        super(_doubleSpinBox, self).__init__(parent)
+        self.setButtonSymbols(self.NoButtons)
+        self.setRange(-9999999999999999.0, 9999999999999999.0)
+        self.setDecimals(16)
+        self.setValue(0)
+        self.setStyleSheet("QDoubleSpinBox{border:1px solid}")
+
+    def textFromValue(self, value):
+        return str(value)
+
+
+class PropVector(BaseProperty):
+    def __init__(self, parent=None, dim=3):
+        super(PropVector, self).__init__(parent)
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(0, 0, 0, 0)
+        self._value = []
+        self._items = []
+
+        for i in range(dim):
+            self._add_item(i, hbox)
+
+        self._can_emit = True
+        self.setLayout(hbox)
+
+    def set_data_type(self, dt):
+        [item.set_data_type(dt) for item in self._items]
+
+    def _add_item(self, index, hbox):
+        _ledit = _valueEdit()
+        _ledit.index = index
+        _ledit.valueChanged.connect(lambda: self._on_value_change(_ledit.value(), _ledit.index))
+
+        hbox.addWidget(_ledit)
+        self._value.append(0.0)
+        self._items.append(_ledit)
+
+    def _on_value_change(self, value=None, index=None):
+        if self._can_emit:
+            if index is not None:
+                self._value[index] = value
+            self.value_changed.emit(self.toolTip(), self._value)
+        self.value_changed.emit(self.toolTip(), self._value)
+
+    def _update_items(self):
+        for index, value in enumerate(self._value):
+            if index < len(self._items) and self._items[index].value() != value:
+                self._items[index].setValue(value)
+
+    def get_value(self):
+        return self._value
+
+    def set_value(self, value):
+        if value != self.get_value():
+            self._value = value.copy()
+            self._can_emit = False
+            self._update_items()
+            self._can_emit = True
+            self._on_value_change()
+
+
+class PropVector2(PropVector):
+    def __init__(self, parent=None):
+        super(PropVector2, self).__init__(parent, 2)
+
+
+class PropVector3(PropVector):
+    def __init__(self, parent=None):
+        super(PropVector3, self).__init__(parent, 3)
+
+
+class PropVector4(PropVector):
+    def __init__(self, parent=None):
+        super(PropVector4, self).__init__(parent, 4)
+
+
+class PropFloat(_valueSliderEdit):
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropFloat, self).__init__(parent)
+        self.valueChanged.connect(self._on_value_changed)
+
+    def _on_value_changed(self, value):
+        self.value_changed.emit(self.toolTip(), value)
+
+    def get_value(self):
+        return self.value()
+
+    def set_value(self, value):
+        if value != self.get_value():
+            self.setValue(value)
+            self.value_changed.emit(self.toolTip(), value)
+
+
+class PropInt(PropFloat):
+    def __init__(self, parent=None):
+        super(PropInt, self).__init__(parent)
+        self.set_data_type(int)
+
+
+class PropButton(QtWidgets.QPushButton):
+    value_changed = QtCore.Signal(str, object)
+
+    def __init__(self, parent=None):
+        super(PropButton, self).__init__(parent)
+
+    def set_value(self, value, node=None):
+        # value: list of functions
+        if type(value) is not list:
+            return
+        for func in value:
+            self.clicked.connect(lambda: func(node))
+
+    def get_value(self):
+        return None
+
+
 WIDGET_MAP = {
-    NODE_PROP_QLABEL:       PropLabel,
-    NODE_PROP_QLINEEDIT:    PropLineEdit,
-    NODE_PROP_QTEXTEDIT:    PropTextEdit,
-    NODE_PROP_QCOMBO:       PropComboBox,
-    NODE_PROP_QCHECKBOX:    PropCheckBox,
-    NODE_PROP_QSPINBOX:     PropSpinBox,
-    NODE_PROP_COLORPICKER:  PropColorPicker,
-    NODE_PROP_SLIDER:       PropSlider,
+    NODE_PROP_QLABEL: PropLabel,
+    NODE_PROP_QLINEEDIT: PropLineEdit,
+    NODE_PROP_QTEXTEDIT: PropTextEdit,
+    NODE_PROP_QCOMBO: PropComboBox,
+    NODE_PROP_QCHECKBOX: PropCheckBox,
+    NODE_PROP_QSPINBOX: PropSpinBox,
+    NODE_PROP_COLORPICKER: PropColorPicker,
+    NODE_PROP_SLIDER: PropSlider,
+    NODE_PROP_FILE: PropFilePath,
+    NODE_PROP_FILE_SAVE: PropFileSavePath,
+    NODE_PROP_VECTOR2: PropVector2,
+    NODE_PROP_VECTOR3: PropVector3,
+    NODE_PROP_VECTOR4: PropVector4,
+    NODE_PROP_FLOAT: PropFloat,
+    NODE_PROP_INT: PropInt,
+    NODE_PROP_BUTTON: PropButton
 }
 
+
+def registerPropType(name, prop_class, override=False):
+    global WIDGET_MAP
+    if name in WIDGET_MAP.keys() and not override:
+        raise Exception("Prop type {} has already exists, u can use override=True to override)".format(name))
+    WIDGET_MAP[name] = prop_class
 
 # main property widgets.
 
@@ -348,11 +751,14 @@ class PropWindow(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
+        label = QtWidgets.QLabel(label)
         label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
             label_flags = label_flags | QtCore.Qt.AlignTop
-
-        self.__layout.addWidget(QtWidgets.QLabel(label), row, 0, label_flags)
+        elif widget.__class__.__name__ == 'PropButton':
+            label.setVisible(False)
+            widget.setText(name)
+        self.__layout.addWidget(label, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
 
     def get_widget(self, name):
@@ -460,6 +866,7 @@ class NodePropWidget(QtWidgets.QWidget):
             if tab != 'Node':
                 self.add_tab(tab)
 
+        min_widget_height = 25
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
             prop_window = self.__tab_windows[tab]
@@ -470,13 +877,22 @@ class NodePropWidget(QtWidgets.QWidget):
 
                 WidClass = WIDGET_MAP.get(wid_type)
                 widget = WidClass()
+                widget.setMinimumHeight(min_widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
-                        widget.set_items(common_props[prop_name]['items'])
+                        _prop_name = '_' + prop_name + "_"
+                        if node.has_property(_prop_name):
+                            widget.set_items(node.get_property(_prop_name))
+                        else:
+                            widget.set_items(common_props[prop_name]['items'])
                     if 'range' in common_props[prop_name].keys():
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
+                    if 'ext' in common_props[prop_name].keys():
+                        widget.set_ext(common_props[prop_name]['ext'])
+                    if 'funcs' in common_props[prop_name].keys():
+                        widget.set_value(common_props[prop_name]['funcs'], node)
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))
@@ -491,6 +907,7 @@ class NodePropWidget(QtWidgets.QWidget):
             WidClass = WIDGET_MAP.get(wid_type)
 
             widget = WidClass()
+            widget.setMinimumHeight(min_widget_height)
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name),
@@ -560,11 +977,10 @@ class NodePropWidget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
-    from NodeGraphQt import BaseNode, NodeGraph
+    from .. import BaseNode, NodeGraph
 
 
     class TestNode(BaseNode):
-
         NODE_NAME = 'test node'
 
         def __init__(self):
@@ -589,11 +1005,12 @@ if __name__ == '__main__':
 
 
     def prop_changed(node_id, prop_name, prop_value):
-        print('-'*100)
+        print('-' * 100)
         print(node_id, prop_name, prop_value)
 
+
     def prop_close(node_id):
-        print('='*100)
+        print('=' * 100)
         print(node_id)
 
 

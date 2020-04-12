@@ -1,11 +1,11 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import (PortConnectedCmd,
-                                       PortDisconnectedCmd,
-                                       PortVisibleCmd,
-                                       NodeInputConnectedCmd,
-                                       NodeInputDisconnectedCmd)
-from NodeGraphQt.base.model import PortModel
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from .commands import (PortConnectedCmd,
+                             PortDisconnectedCmd,
+                             PortVisibleCmd,
+                             NodeInputConnectedCmd,
+                             NodeInputDisconnectedCmd)
+from .model import PortModel
+from ..constants import IN_PORT, OUT_PORT
 
 
 class Port(object):
@@ -104,14 +104,13 @@ class Port(object):
         Args:
             visible (bool): true if visible.
         """
+        self.model.visible = visible
         label = 'show' if visible else 'hide'
         undo_stack = self.node().graph.undo_stack()
         undo_stack.beginMacro('{} port {}'.format(label, self.name()))
 
-        connected_ports = self.connected_ports()
-        if connected_ports:
-            for port in connected_ports:
-                undo_stack.push(PortDisconnectedCmd(self, port))
+        for port in self.connected_ports():
+            undo_stack.push(PortDisconnectedCmd(self, port))
 
         undo_stack.push(PortVisibleCmd(self))
         undo_stack.endMacro()
@@ -205,3 +204,28 @@ class Port(object):
         # emit "port_disconnected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
         graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])
+
+    @property
+    def color(self):
+        return self.__view.color
+
+    @color.setter
+    def color(self, color=(0, 0, 0, 255)):
+        self.__view.color = color
+
+    @property
+    def data_type(self):
+        return self.__model.data_type
+
+    @data_type.setter
+    def data_type(self, data_type):
+        self.__model.data_type = data_type
+
+
+    @property
+    def border_color(self):
+        return self.__view.border_color
+
+    @border_color.setter
+    def border_color(self, color=(0, 0, 0, 255)):
+        self.__view.border_color = color

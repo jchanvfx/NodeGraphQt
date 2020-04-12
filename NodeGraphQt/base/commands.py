@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt import QtWidgets
-
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from .. import QtWidgets
+from ..constants import IN_PORT, OUT_PORT
+from .utils import minimize_node_ref_count
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
@@ -51,7 +51,14 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             setattr(view, name, value)
 
     def undo(self):
-        if self.old_val != self.new_val:
+        do_undo = False
+        try:
+            if self.old_val != self.new_val:
+                do_undo = True
+        except:
+            do_undo = True
+
+        if do_undo:
             self.set_node_prop(self.name, self.old_val)
 
             # emit property changed signal.
@@ -59,7 +66,14 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             graph.property_changed.emit(self.node, self.name, self.old_val)
 
     def redo(self):
-        if self.old_val != self.new_val:
+        do_redo = False
+        try:
+            if self.old_val != self.new_val:
+                do_redo = True
+        except:
+            do_redo = True
+
+        if do_redo:
             self.set_node_prop(self.name, self.new_val)
 
             # emit property changed signal.
@@ -111,15 +125,17 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.model = graph.model
         self.node = node
         self.pos = pos
+        self.node_parent = node.parent()
 
     def undo(self):
         self.pos = self.pos or self.node.pos()
         self.model.nodes.pop(self.node.id)
-        self.node.view.delete()
+        self.node.delete()
 
     def redo(self):
         self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
+        self.node.set_parent(self.node_parent)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
@@ -139,28 +155,30 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node = node
         self.inputs = []
         self.outputs = []
+        self.node_parent = node.parent()
+
         if hasattr(self.node, 'inputs'):
-            input_ports = self.node.inputs().values()
+            input_ports = self.node.input_ports()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
         if hasattr(self.node, 'outputs'):
-            output_ports = self.node.outputs().values()
+            output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        for port, connected_ports in self.inputs:
-            [port.connect_to(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.connect_to(p) for p in connected_ports]
+        [port.connect_to(p) for port, connected_ports in self.inputs for p in connected_ports]
+        [port.connect_to(p) for port, connected_ports in self.outputs for p in connected_ports]
+        self.node.set_parent(self.node_parent)
 
     def redo(self):
-        for port, connected_ports in self.inputs:
-            [port.disconnect_from(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.disconnect_from(p) for p in connected_ports]
+        [port.disconnect_from(p) for port, connected_ports in self.inputs for p in connected_ports]
+        [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.model.nodes.pop(self.node.id)
-        self.node.view.delete()
+        self.node.delete()
+
+    def __del__(self):
+        minimize_node_ref_count(self.node)
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):
@@ -336,7 +354,7 @@ class PortVisibleCmd(QtWidgets.QUndoCommand):
         node_view.post_init()
 
     def undo(self):
-        self.set_visible(self.visible)
-
-    def redo(self):
         self.set_visible(not self.visible)
+        
+    def redo(self):
+        self.set_visible(self.visible)
