@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>BaseNode &#8212; NodeGraphQt 0.0.17 documentation</title>
+    <title>BaseNode &#8212; NodeGraphQt 0.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/ngqt.css" type="text/css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" accesskey="U">Nodes</a> &#187;</li> 
       </ul>
     </div>  
@@ -96,7 +96,7 @@ port connections from one node to another.</p>
 <dt id="NodeGraphQt.BaseNode.add_checkbox">
 <code class="descname">add_checkbox</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
-function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QCheckBox.html#PySide2.QtWidgets.QCheckBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code></a> widget
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QCheckBox.html#PySide2.QtWidgets.QCheckBox" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code></a> widget
 into the node.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -120,7 +120,7 @@ function use this function to to update the widget.</p>
 <dt id="NodeGraphQt.BaseNode.add_combo_menu">
 <code class="descname">add_combo_menu</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>items=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
-function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QComboBox.html#PySide2.QtWidgets.QComboBox" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code></a> widget
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QComboBox.html#PySide2.QtWidgets.QComboBox" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code></a> widget
 into the node.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -140,54 +140,10 @@ function use this function to to update the widget.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="NodeGraphQt.BaseNode.add_input">
-<code class="descname">add_input</code><span class="sig-paren">(</span><em>name='input'</em>, <em>multi_input=False</em>, <em>display_name=True</em>, <em>color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – name for the input port.</p></li>
-<li><p><strong>multi_input</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
-<li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
-<li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the created port object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="NodeGraphQt.BaseNode.add_output">
-<code class="descname">add_output</code><span class="sig-paren">(</span><em>name='output'</em>, <em>multi_output=True</em>, <em>display_name=True</em>, <em>color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – name for the output port.</p></li>
-<li><p><strong>multi_output</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
-<li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
-<li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the created port object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="NodeGraphQt.BaseNode.add_text_input">
-<code class="descname">add_text_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
+<dt id="NodeGraphQt.BaseNode.add_file_input">
+<code class="descname">add_file_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em>, <em>ext='*'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_file_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
-function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
 into the node.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -201,6 +157,125 @@ function use this function to to update the widget.</p>
 <li><p><strong>label</strong> (<em>str</em>) – label to be displayed.</p></li>
 <li><p><strong>text</strong> (<em>str</em>) – pre filled text.</p></li>
 <li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in.</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – file ext</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.add_float_input">
+<code class="descname">add_float_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>value=0.0</em>, <em>range=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_float_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for the custom property.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to be displayed.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – pre filled value.</p></li>
+<li><p><strong>range</strong> (<em>tuple</em>) – slider range</p></li>
+<li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.add_input">
+<code class="descname">add_input</code><span class="sig-paren">(</span><em>name='input'</em>, <em>multi_input=False</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for the input port.</p></li>
+<li><p><strong>multi_input</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
+<li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
+<li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
+<li><p><strong>data_type</strong> (<em>str</em>) – port data type name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the created port object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.add_int_input">
+<code class="descname">add_int_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>value=0</em>, <em>range=None</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_int_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for the custom property.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to be displayed.</p></li>
+<li><p><strong>value</strong> (<em>int</em>) – pre filled value.</p></li>
+<li><p><strong>range</strong> (<em>tuple</em>) – slider range</p></li>
+<li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.add_output">
+<code class="descname">add_output</code><span class="sig-paren">(</span><em>name='output'</em>, <em>multi_output=True</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for the output port.</p></li>
+<li><p><strong>multi_output</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
+<li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
+<li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
+<li><p><strong>data_type</strong> (<em>str</em>) – port data type name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the created port object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.add_text_input">
+<code class="descname">add_text_input</code><span class="sig-paren">(</span><em>name</em>, <em>label=''</em>, <em>text=''</em>, <em>tab=None</em>, <em>multi_line=False</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
+function and embeds a <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLineEdit.html#PySide2.QtWidgets.QLineEdit" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code></a> widget
+into the node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The embedded widget is wired up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_property()</span></code></a>
+function use this function to to update the widget.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for the custom property.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to be displayed.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – pre filled text.</p></li>
+<li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in.</p></li>
+<li><p><strong>multi_line</strong> (<em>bool</em>) – if create multi line property.</p></li>
 </ul>
 </dd>
 </dl>
@@ -235,6 +310,56 @@ function use this function to to update the widget.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.BaseNode.delete_input">
+<code class="descname">delete_input</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete input port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>str/int</em>) – input port name/index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.delete_output">
+<code class="descname">delete_output</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete output port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>str/int/PortItem</em>) – output port name/index/object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a input port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>str/int/Port</em>) – input port name/index/object.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Port object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a output port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>port</strong> (<em>str/int</em>) – output port name/index.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Port object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.BaseNode.get_widget">
 <code class="descname">get_widget</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_widget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the embedded widget associated with the property name.</p>
@@ -255,6 +380,12 @@ function use this function to to update the widget.</p>
 <dd class="field-odd"><p><a class="reference internal" href="../node_widgets.html#NodeGraphQt.widgets.node_widgets.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget">NodeBaseWidget</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide node.</p>
 </dd></dl>
 
 <dl class="method">
@@ -405,6 +536,23 @@ logic to run for this event.</em></p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.BaseNode.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node evaluation logic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.set_editable">
+<code class="descname">set_editable</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the node view widgets is editable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>bool</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.BaseNode.set_icon">
 <code class="descname">set_icon</code><span class="sig-paren">(</span><em>icon=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_icon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the node icon.</p>
@@ -441,6 +589,52 @@ logic to run for this event.</em></p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.set_ports">
+<code class="descname">set_ports</code><span class="sig-paren">(</span><em>port_data</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node input and output ports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port_data</strong> (<em>dict</em>) – {‘input_ports’:[{‘name’:…,’multi_connection’:…,’display_name’:…,’data_type’:…}, …],</p></li>
+<li><p><strong>'output_ports'</strong> (<em>&quot;</em>) – [{‘name’:…,’multi_connection’:…,’display_name’:…,’data_type’:…}, …]}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.update_combo_menu">
+<code class="descname">update_combo_menu</code><span class="sig-paren">(</span><em>name</em>, <em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.update_combo_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update combobox menu items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name for combobox menu property name.</p></li>
+<li><p><strong>items</strong> (<em>list</em>) – new combobox menu items.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.update_stream">
+<code class="descname">update_stream</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.update_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node down stream.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.when_disabled">
+<code class="descname">when_disabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.when_disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node evaluation logic when node has been disabled.</p>
 </dd></dl>
 
 <dl class="method">
@@ -536,7 +730,7 @@ logic to run for this event.</em></p>
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" >Nodes</a> &#187;</li> 
       </ul>
     </div>

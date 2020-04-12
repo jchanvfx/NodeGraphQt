@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>NodeObject &#8212; NodeGraphQt 0.0.17 documentation</title>
+    <title>NodeObject &#8212; NodeGraphQt 0.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/ngqt.css" type="text/css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../nodes.html" title="Nodes"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" accesskey="U">Nodes</a> &#187;</li> 
       </ul>
     </div>  
@@ -180,7 +180,7 @@ nodes inherit from.</p>
 
 <dl class="method">
 <dt id="NodeGraphQt.NodeObject.create_property">
-<code class="descname">create_property</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>items=None</em>, <em>range=None</em>, <em>widget_type=0</em>, <em>tab=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_property</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>items=None</em>, <em>range=None</em>, <em>widget_type=0</em>, <em>tab=None</em>, <em>ext=None</em>, <em>funcs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a custom property to the node.</p>
 <dl class="simple">
 <dt>Widget Types:</dt><dd><ul class="simple">
@@ -192,7 +192,13 @@ nodes inherit from.</p>
 <li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_QCHECKBOX" title="NodeGraphQt.constants.NODE_PROP_QCHECKBOX"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_QCHECKBOX</span></code></a></p></li>
 <li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_QSPINBOX" title="NodeGraphQt.constants.NODE_PROP_QSPINBOX"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_QSPINBOX</span></code></a></p></li>
 <li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_COLORPICKER" title="NodeGraphQt.constants.NODE_PROP_COLORPICKER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_COLORPICKER</span></code></a></p></li>
-<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_SLIDER" title="NodeGraphQt.constants.NODE_PROP_SLIDER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_SLIDER</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_FILE" title="NodeGraphQt.constants.NODE_PROP_FILE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_FILE</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_VECTOR2" title="NodeGraphQt.constants.NODE_PROP_VECTOR2"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_VECTOR2</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_VECTOR3" title="NodeGraphQt.constants.NODE_PROP_VECTOR3"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_VECTOR3</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_VECTOR4" title="NodeGraphQt.constants.NODE_PROP_VECTOR4"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_VECTOR4</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_FLOAT" title="NodeGraphQt.constants.NODE_PROP_FLOAT"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_FLOAT</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_INT" title="NodeGraphQt.constants.NODE_PROP_INT"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_INT</span></code></a></p></li>
+<li><p><a class="reference internal" href="../constants.html#NodeGraphQt.constants.NODE_PROP_BUTTON" title="NodeGraphQt.constants.NODE_PROP_BUTTON"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NODE_PROP_BUTTON</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -209,15 +215,23 @@ nodes inherit from.</p>
 <li><p><strong>range</strong> (<em>tuple</em><em>)</em>) – <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code> values used by <code class="docutils literal notranslate"><span class="pre">NODE_PROP_SLIDER</span></code></p></li>
 <li><p><strong>widget_type</strong> (<em>int</em>) – widget flag to display in the <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code></p></li>
 <li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in the properties bin.</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – file ext of <code class="docutils literal notranslate"><span class="pre">NODE_PROP_FILE</span></code></p></li>
+<li><p><strong>funcs</strong> (<em>list</em>) – </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.NodeObject.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete node view.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.NodeObject.disabled">
 <code class="descname">disabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.disabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns weather the node is enabled or disabled.</p>
+<dd><p>Returns whether the node is enabled or disabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if the node is disabled.</p>
@@ -263,12 +277,46 @@ nodes inherit from.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.NodeObject.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide node.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.NodeObject.name">
 <code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>name of the node.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.NodeObject.parent">
+<code class="descname">parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parent node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>parent node or None.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>SubGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.NodeObject.path">
+<code class="descname">path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get node path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current node path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>str</p>
@@ -345,6 +393,17 @@ nodes inherit from.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.NodeObject.set_graph">
+<code class="descname">set_graph</code><span class="sig-paren">(</span><em>graph</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>NodeGraphQt.base.graph.NodeGraph</em>) – node graph object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.NodeObject.set_model">
 <code class="descname">set_model</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the node model.</p>
@@ -362,6 +421,17 @@ nodes inherit from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name for the node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.NodeObject.set_parent">
+<code class="descname">set_parent</code><span class="sig-paren">(</span><em>parent_node</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set parent node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent_node</strong> (<em>SubGraph</em>) – parent node.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -436,6 +506,12 @@ nodes inherit from.</p>
 <dd class="field-odd"><p><strong>y</strong> (<em>float</em><em> or </em><em>int</em>) – node Y position.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.NodeObject.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show node.</p>
 </dd></dl>
 
 <dl class="method">
@@ -553,7 +629,7 @@ nodes inherit from.</p>
         <li class="right" >
           <a href="../nodes.html" title="Nodes"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.0.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" >Nodes</a> &#187;</li> 
       </ul>
     </div>
