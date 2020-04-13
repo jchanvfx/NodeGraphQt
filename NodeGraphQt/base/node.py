@@ -1088,12 +1088,6 @@ class BaseNode(NodeObject):
         """
         return
 
-    def when_disabled(self):
-        """
-        Node evaluation logic when node has been disabled.
-        """
-        return
-
     def set_editable(self, state):
         """
         Returns whether the node view widgets is editable.

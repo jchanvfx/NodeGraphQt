@@ -166,9 +166,8 @@ class SubGraphNode(AutoNode, SubGraph):
 
         for node in nodes:
             if node.disabled():
-                node.when_disabled()
-            else:
-                node.cook()
+                continue
+            node.cook()
             if node.has_error:
                 self.error("/"+node.view.toolTip())
                 break

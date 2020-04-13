@@ -6,9 +6,8 @@ from NodeGraphQt import topological_sort_by_down, NodePublishWidget
 def _update_nodes(nodes):
     for node in nodes:
         if node.disabled():
-            node.when_disabled()
-        else:
-            node.cook()
+            continue
+        node.cook()
         if node.has_error:
             break
 
