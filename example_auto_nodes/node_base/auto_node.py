@@ -131,6 +131,12 @@ class AutoNode(BaseNode, QtCore.QObject):
         Returns:
             node data.
         """
+        if self.disabled() and self.input_ports():
+            out_ports = self.output_ports()
+            if port in out_ports:
+                idx = out_ports.index(port)
+                max_idx = max(0, len(self.input_ports()) - 1)
+                return self.get_input_data(min(idx, max_idx))
 
         return self.get_property(port.name())
 
@@ -155,15 +161,6 @@ class AutoNode(BaseNode, QtCore.QObject):
         for from_port in from_ports:
             data = from_port.node().get_data(from_port)
             return copy.deepcopy(data)
-
-    def when_disabled(self):
-        """
-        Node evaluation logic when node has been disabled.
-        """
-
-        num = max(0, len(self.input_ports())-1)
-        for index, out_port in enumerate(self.output_ports()):
-            self.model.set_property(out_port.name(), self.get_input_data(min(index, num)))
 
     def cook(self):
         """

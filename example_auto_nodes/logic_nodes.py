@@ -1,4 +1,4 @@
-from .basic_nodes import AutoNode
+from .node_base import AutoNode
 
 
 class IfNode(AutoNode):

@@ -1,6 +1,6 @@
-from .node_base.module_node import (ModuleNode,
-                                    get_functions_from_module,
-                                    get_functions_from_type)
+from .node_base import (ModuleNode,
+                        get_functions_from_module,
+                        get_functions_from_type)
 
 import os
 import sys
@@ -113,7 +113,8 @@ class numpyModuleNode(ModuleNode):
             return True
         return False
 
-    def get_numpy_args(self, func):
+    @staticmethod
+    def get_numpy_args(func):
         args = []
         info = numpydoc.docscrape.FunctionDoc(func)
         for i in info["Parameters"]:
@@ -122,7 +123,7 @@ class numpyModuleNode(ModuleNode):
                 args.append(param.split("'")[1])
         return args
 
-    def addFunction(self, prop, func):
+    def add_function(self, prop, func):
         """
         Create inputs based on functions arguments.
         """
@@ -155,7 +156,6 @@ class StringFunctionsNode(ModuleNode):
     NODE_NAME = 'String Functions'
 
     module_functions = get_functions_from_type(_str)
-
 
     def __init__(self):
         super(StringFunctionsNode, self).__init__()

@@ -66,6 +66,7 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
+    edit_menu.add_command('Show Undo View', _show_undo_view)
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
@@ -268,6 +269,10 @@ def _jump_out(graph):
     if node:
         if node.parent() is not None:
             graph.set_node_space(node.parent())
+
+
+def _show_undo_view(graph):
+    graph.undo_view.show()
 
 
 def _curved_pipe(graph):
@@ -560,11 +565,10 @@ def _update_nodes(nodes):
         nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
     """
     for node in nodes:
+        if node.disabled():
+            continue
         try:
-            if node.disabled():
-                node.when_disabled()
-            else:
-                node.run()
+            node.run()
         except Exception as error:
             print("Error Update Node : {}\n{}" .format(node, str(error)))
             break
