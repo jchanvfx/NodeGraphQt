@@ -113,7 +113,8 @@ class numpyModuleNode(ModuleNode):
             return True
         return False
 
-    def get_numpy_args(self, func):
+    @staticmethod
+    def get_numpy_args(func):
         args = []
         info = numpydoc.docscrape.FunctionDoc(func)
         for i in info["Parameters"]:
@@ -122,7 +123,7 @@ class numpyModuleNode(ModuleNode):
                 args.append(param.split("'")[1])
         return args
 
-    def addFunction(self, prop, func):
+    def add_function(self, prop, func):
         """
         Create inputs based on functions arguments.
         """

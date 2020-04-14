@@ -394,7 +394,7 @@ class NodeGraph(QtCore.QObject):
         Returns node graph undo view.
 
         Returns:
-            PySide2.QtWidgets.QUndoView: node graph  undo view.
+            PySide2.QtWidgets.QUndoView: node graph undo view.
         """
         if self._undo_view is None:
             self._undo_view = QtWidgets.QUndoView(self._undo_stack)

@@ -9,7 +9,7 @@ def _get_functions_from_module(module, function_dict, max_depth=1, module_name=N
         module_name = module.__name__
 
     for func in funcs:
-        if func in ["sys","os"]:
+        if func in ["sys", "os"]:
             continue
 
         new_module_name = module_name + "." + func
@@ -44,27 +44,28 @@ class ModuleNode(AutoNode):
 
     module_functions = {}
 
-    def __init__(self,defaultInputType=None,defaultOutputType=None):
-        super(ModuleNode, self).__init__(defaultInputType,defaultOutputType)
+    def __init__(self, defaultInputType=None, defaultOutputType=None):
+        super(ModuleNode, self).__init__(defaultInputType, defaultOutputType)
         self.add_combo_menu('funcs', 'Functions', items=list(self.module_functions.keys()))
+        self.set_dynamic_port(True)
 
         # switch math function type
-        self.view.widgets['funcs'].value_changed.connect(self.addFunction)
+        self.view.widgets['funcs'].value_changed.connect(self.add_function)
         self.add_output('output')
         self.create_property('output', None)
 
         self.view.widgets['funcs'].widget.setCurrentIndex(0)
-        self.addFunction(None, self.view.widgets['funcs'].widget.currentText())
+        self.add_function(None, self.view.widgets['funcs'].widget.currentText())
 
-    def is_function(self,obj):
+    def is_function(self, obj):
         if inspect.isfunction(self.func) or inspect.isbuiltin(self.func):
             return True
-        elif "method" in type(obj).__name__  or "function" in type(obj).__name__:
+        elif "method" in type(obj).__name__ or "function" in type(obj).__name__:
             return True
 
         return False
 
-    def addFunction(self, prop, func):
+    def add_function(self, prop, func):
         """
         Create inputs based on functions arguments.
         """
@@ -80,17 +81,14 @@ class ModuleNode(AutoNode):
 
         self.process_args(args)
 
-    def process_args(self,in_args, out_args = None):
+    def process_args(self, in_args, out_args=None):
         for arg in in_args:
             if arg not in self.inputs().keys():
                 self.add_input(arg)
 
         for inPort in self.input_ports():
-            if inPort.name() in in_args:
-                if not inPort.visible():
-                    inPort.set_visible(True)
-            else:
-                inPort.set_visible(False)
+            if inPort.name() not in in_args:
+                self.delete_input(inPort)
 
         if out_args is None:
             return
@@ -100,11 +98,8 @@ class ModuleNode(AutoNode):
                 self.add_output(arg)
 
         for outPort in self.output_ports():
-            if outPort.name() in out_args:
-                if not outPort.visible():
-                    outPort.set_visible(True)
-            else:
-                outPort.set_visible(False)
+            if outPort.name() not in out_args:
+                self.delete_output(outPort)
 
     def run(self):
         """
