@@ -1,6 +1,7 @@
-from .. import QtWidgets
-from .stylesheet import STYLE_MESSAGEBOX
 import os
+
+from .stylesheet import STYLE_MESSAGEBOX
+from .. import QtWidgets
 
 current_dir = os.path.expanduser('~')
 

@@ -22,6 +22,7 @@ from .file_dialog import file_dialog
 
 
 class BaseProperty(QtWidgets.QWidget):
+
     value_changed = QtCore.Signal(str, object)
 
     def set_value(self, value):
@@ -32,6 +33,7 @@ class BaseProperty(QtWidgets.QWidget):
 
 
 class PropColorPicker(BaseProperty):
+
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
         self._color = (0, 0, 0)
@@ -44,7 +46,6 @@ class PropColorPicker(BaseProperty):
         self._vector.value_changed.connect(self._on_vector_changed)
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(4)
         layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
         layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
 
@@ -57,7 +58,9 @@ class PropColorPicker(BaseProperty):
         self._vector.set_value(list(self._color))
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(QtGui.QColor.fromRgbF(*self.get_value()))
+        color = QtWidgets.QColorDialog.getColor(
+            QtGui.QColor.fromRgbF(*self.get_value())
+        )
         if color.isValid():
             self.set_value(color.getRgb())
 
@@ -67,7 +70,8 @@ class PropColorPicker(BaseProperty):
         self._button.setStyleSheet(
             '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
                QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}'''.format(*c))
-        self._button.setToolTip('rgb: {}\nhex: {}'.format(self._color[:3], hex_color))
+        self._button.setToolTip('rgb: {}\nhex: {}'
+                                .format(self._color[:3], hex_color))
 
     def get_value(self):
         return self._color[:3]
@@ -143,6 +147,7 @@ class PropSlider(BaseProperty):
 
 
 class PropLabel(QtWidgets.QLabel):
+
     value_changed = QtCore.Signal(str, object)
 
     def get_value(self):
@@ -155,6 +160,7 @@ class PropLabel(QtWidgets.QLabel):
 
 
 class PropLineEdit(QtWidgets.QLineEdit):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -175,6 +181,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -202,6 +209,7 @@ class PropTextEdit(QtWidgets.QTextEdit):
 
 
 class PropComboBox(QtWidgets.QComboBox):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -233,6 +241,7 @@ class PropComboBox(QtWidgets.QComboBox):
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -252,6 +261,7 @@ class PropCheckBox(QtWidgets.QCheckBox):
 
 
 class PropSpinBox(QtWidgets.QSpinBox):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -271,6 +281,7 @@ class PropSpinBox(QtWidgets.QSpinBox):
 
 
 class PropFilePath(BaseProperty):
+
     def __init__(self, parent=None):
         super(PropFilePath, self).__init__(parent)
         self._ledit = QtWidgets.QLineEdit()
@@ -301,7 +312,9 @@ class PropFilePath(BaseProperty):
         self._file_dir = dir
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName(self, file_dir=self._file_dir, ext_filter=self._ext)
+        file_path = file_dialog.getOpenFileName(self,
+                                                file_dir=self._file_dir,
+                                                ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)
@@ -322,23 +335,24 @@ class PropFilePath(BaseProperty):
 
 
 class PropFileSavePath(PropFilePath):
-    def __init__(self, parent=None):
-        super(PropFileSavePath, self).__init__(parent)
 
     def _on_select_file(self):
-        file_path = file_dialog.getSaveFileName(self, file_dir=self._file_dir, ext_filter=self._ext)
+        file_path = file_dialog.getSaveFileName(self,
+                                                file_dir=self._file_dir,
+                                                ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)
 
 
-class _valueMenu(QtWidgets.QMenu):
+class _ValueMenu(QtWidgets.QMenu):
+
     mouseMove = QtCore.Signal(object)
     mouseRelease = QtCore.Signal(object)
     stepChange = QtCore.Signal()
 
     def __init__(self, parent=None):
-        super(_valueMenu, self).__init__(parent)
+        super(_ValueMenu, self).__init__(parent)
         self.step = 1
         self.last_action = None
         self.steps = []
@@ -356,7 +370,7 @@ class _valueMenu(QtWidgets.QMenu):
 
     def mouseMoveEvent(self, event):
         self.mouseMove.emit(event)
-        super(_valueMenu, self).mouseMoveEvent(event)
+        super(_ValueMenu, self).mouseMoveEvent(event)
 
         action = self.actionAt(event.pos())
         if action:
@@ -372,24 +386,25 @@ class _valueMenu(QtWidgets.QMenu):
 
     def mouseReleaseEvent(self, event):
         self.mouseRelease.emit(event)
-        super(_valueMenu, self).mouseReleaseEvent(event)
+        super(_ValueMenu, self).mouseReleaseEvent(event)
 
     def set_data_type(self, dt):
         if dt is int:
             new_steps = []
             for step in self.steps:
-                if "." not in str(step):
+                if '.' not in str(step):
                     new_steps.append(step)
             self.set_steps(new_steps)
         elif dt is float:
             self.set_steps(self.steps)
 
 
-class _valueEdit(QtWidgets.QLineEdit):
+class _ValueEdit(QtWidgets.QLineEdit):
+
     valueChanged = QtCore.Signal(object)
 
     def __init__(self, parent=None):
-        super(_valueEdit, self).__init__(parent)
+        super(_ValueEdit, self).__init__(parent)
         self.mid_state = False
         self._data_type = float
         self.setText("0")
@@ -401,7 +416,7 @@ class _valueEdit(QtWidgets.QLineEdit):
 
         self.editingFinished.connect(self._on_text_changed)
 
-        self.menu = _valueMenu()
+        self.menu = _ValueMenu()
         self.menu.mouseMove.connect(self.mouseMoveEvent)
         self.menu.mouseRelease.connect(self.mouseReleaseEvent)
         self.menu.stepChange.connect(self._reset)
@@ -428,19 +443,19 @@ class _valueEdit(QtWidgets.QLineEdit):
                 self.setValue(value)
                 self._on_text_changed()
 
-        super(_valueEdit, self).mouseMoveEvent(event)
+        super(_ValueEdit, self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MiddleButton:
             self.mid_state = True
             self._reset()
             self.menu.exec_(QtGui.QCursor.pos())
-        super(_valueEdit, self).mousePressEvent(event)
+        super(_ValueEdit, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         self.menu.close()
         self.mid_state = False
-        super(_valueEdit, self).mouseReleaseEvent(event)
+        super(_ValueEdit, self).mouseReleaseEvent(event)
 
     def set_step(self, step):
         self._step = step
@@ -475,9 +490,10 @@ class _valueEdit(QtWidgets.QLineEdit):
             self.setText(str(self._convert_text(value)))
 
 
-class _slider(QtWidgets.QSlider):
+class _Slider(QtWidgets.QSlider):
+
     def __init__(self, parent=None):
-        super(_slider, self).__init__(parent)
+        super(_Slider, self).__init__(parent)
         self.setOrientation(QtCore.Qt.Horizontal)
         self.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
@@ -490,18 +506,19 @@ class _slider(QtWidgets.QSlider):
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self._update_value(event.pos().x())
-        super(_slider, self).mousePressEvent(event)
+        super(_Slider, self).mousePressEvent(event)
 
 
-class _valueSliderEdit(QtWidgets.QWidget):
+class _ValueSliderEdit(QtWidgets.QWidget):
+
     valueChanged = QtCore.Signal(object)
 
     def __init__(self, parent=None):
-        super(_valueSliderEdit, self).__init__(parent)
-        self._edit = _valueEdit()
+        super(_ValueSliderEdit, self).__init__(parent)
+        self._edit = _ValueEdit()
         self._edit.valueChanged.connect(self._on_edit_changed)
         self._edit.setMaximumWidth(70)
-        self._slider = _slider()
+        self._slider = _Slider()
         self._slider.valueChanged.connect(self._on_slider_changed)
 
         hbox = QtWidgets.QHBoxLayout()
@@ -569,40 +586,43 @@ class _valueSliderEdit(QtWidgets.QWidget):
         self._on_edit_changed(value)
 
 
-class _doubleSpinBox(QtWidgets.QDoubleSpinBox):
+class _DoubleSpinBox(QtWidgets.QDoubleSpinBox):
+
     def __init__(self, parent=None):
-        super(_doubleSpinBox, self).__init__(parent)
+        super(_DoubleSpinBox, self).__init__(parent)
         self.setButtonSymbols(self.NoButtons)
         self.setRange(-9999999999999999.0, 9999999999999999.0)
         self.setDecimals(16)
         self.setValue(0)
-        self.setStyleSheet("QDoubleSpinBox{border:1px solid}")
+        self.setStyleSheet('QDoubleSpinBox{ border:1px solid }')
 
     def textFromValue(self, value):
         return str(value)
 
 
 class PropVector(BaseProperty):
+
     def __init__(self, parent=None, dim=3):
         super(PropVector, self).__init__(parent)
-        hbox = QtWidgets.QHBoxLayout()
-        hbox.setContentsMargins(0, 0, 0, 0)
         self._value = []
         self._items = []
+        self._can_emit = True
 
+        hbox = QtWidgets.QHBoxLayout(self)
+        hbox.setSpacing(2)
+        hbox.setContentsMargins(0, 0, 0, 0)
         for i in range(dim):
             self._add_item(i, hbox)
-
-        self._can_emit = True
-        self.setLayout(hbox)
 
     def set_data_type(self, dt):
         [item.set_data_type(dt) for item in self._items]
 
     def _add_item(self, index, hbox):
-        _ledit = _valueEdit()
+        _ledit = _ValueEdit()
         _ledit.index = index
-        _ledit.valueChanged.connect(lambda: self._on_value_change(_ledit.value(), _ledit.index))
+        _ledit.valueChanged.connect(
+            lambda: self._on_value_change(_ledit.value(), _ledit.index)
+        )
 
         hbox.addWidget(_ledit)
         self._value.append(0.0)
@@ -633,21 +653,25 @@ class PropVector(BaseProperty):
 
 
 class PropVector2(PropVector):
+
     def __init__(self, parent=None):
         super(PropVector2, self).__init__(parent, 2)
 
 
 class PropVector3(PropVector):
+
     def __init__(self, parent=None):
         super(PropVector3, self).__init__(parent, 3)
 
 
 class PropVector4(PropVector):
+
     def __init__(self, parent=None):
         super(PropVector4, self).__init__(parent, 4)
 
 
-class PropFloat(_valueSliderEdit):
+class PropFloat(_ValueSliderEdit):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -667,12 +691,14 @@ class PropFloat(_valueSliderEdit):
 
 
 class PropInt(PropFloat):
+
     def __init__(self, parent=None):
         super(PropInt, self).__init__(parent)
         self.set_data_type(int)
 
 
 class PropButton(QtWidgets.QPushButton):
+
     value_changed = QtCore.Signal(str, object)
 
     def __init__(self, parent=None):
@@ -712,7 +738,11 @@ WIDGET_MAP = {
 def registerPropType(name, prop_class, override=False):
     global WIDGET_MAP
     if name in WIDGET_MAP.keys() and not override:
-        raise Exception("Prop type {} has already exists, u can use override=True to override)".format(name))
+        raise Exception(
+            'Prop type {} has already exists, '
+            'u can use override=True to override)'
+            .format(name)
+        )
     WIDGET_MAP[name] = prop_class
 
 # main property widgets.

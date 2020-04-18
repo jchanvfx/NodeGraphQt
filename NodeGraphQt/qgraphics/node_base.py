@@ -9,7 +9,7 @@ from ..constants import (IN_PORT, OUT_PORT,
                          ITEM_CACHE_MODE)
 from ..errors import NodeWidgetError
 from .node_abstract import AbstractNodeItem
-from .port import PortItem
+from .port import PortItem, CustomPortItem
 from .node_text_item import NodeTextItem
 
 
@@ -229,6 +229,12 @@ class NodeItem(AbstractNodeItem):
         return super(NodeItem, self).itemChange(change, value)
 
     def _tooltip_disable(self, state):
+        """
+        updates the node tooltip when the node is enabled/disabled.
+
+        Args:
+            state (bool): node disable state.
+        """
         tooltip = '<b>{}</b>'.format(self.name)
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
@@ -296,6 +302,7 @@ class NodeItem(AbstractNodeItem):
         """
         calculate minimum node size.
 
+
         Args:
             add_w (float): additional width.
             add_h (float): additional height.
@@ -347,9 +354,9 @@ class NodeItem(AbstractNodeItem):
 
         return width, height
 
-    def arrange_icon(self, h_offset=0.0, v_offset=0.0):
+    def align_icon(self, h_offset=0.0, v_offset=0.0):
         """
-        Arrange node icon to the default top left of the node.
+        Align node icon to the default top left of the node.
 
         Args:
             v_offset (float): vertical offset.
@@ -359,9 +366,9 @@ class NodeItem(AbstractNodeItem):
         y = 2.0 + v_offset
         self._icon_item.setPos(x, y)
 
-    def arrange_label(self, h_offset=0.0, v_offset=0.0):
+    def align_label(self, h_offset=0.0, v_offset=0.0):
         """
-        Arrange node label to the default top center of the node.
+        Center node label text to the top of the node.
 
         Args:
             v_offset (float): vertical offset.
@@ -369,13 +376,14 @@ class NodeItem(AbstractNodeItem):
         """
         text_rect = self.text_item.boundingRect()
         text_x = (self._width / 2) - (text_rect.width() / 2)
+        text_y = text_rect.height() * -1
         text_x += h_offset
-        text_y = v_offset - 25
+        text_y += v_offset
         self.text_item.setPos(text_x, text_y)
 
-    def arrange_widgets(self, v_offset=0.0):
+    def align_widgets(self, v_offset=0.0):
         """
-        Arrange node widgets to the default center of the node.
+        Align node widgets to the default center of the node.
 
         Args:
             v_offset (float): vertical offset.
@@ -393,9 +401,9 @@ class NodeItem(AbstractNodeItem):
             widget.setPos(pos_x, pos_y)
             pos_y += rect.height()
 
-    def arrange_ports(self, v_offset=0.0):
+    def align_ports(self, v_offset=0.0):
         """
-        Arrange input, output ports in the node layout.
+        Align input, output ports in the node layout.
 
         Args:
             v_offset (float): port vertical offset.
@@ -451,7 +459,8 @@ class NodeItem(AbstractNodeItem):
 
     def draw_node(self):
         """
-        Draw the node item in the scene.
+        Re-draw the node item in the scene.
+        (re-implemented for vertical layout design)
         """
         height = self.text_item.boundingRect().height()
         # setup initial base size.
@@ -461,16 +470,18 @@ class NodeItem(AbstractNodeItem):
         # set the tooltip
         self._tooltip_disable(self.disabled)
 
-        # --- setup node layout ---
+        # --- set the initial node layout ---
+        # (do all the graphic item layout offsets here)
 
-        # arrange label text
-        self.arrange_label(h_offset=0.0, v_offset=0.0)
+        # align label text
+        self.align_label(h_offset=0.0, v_offset=0.0)
         # arrange icon
-        self.arrange_icon(h_offset=0.0, v_offset=0.0)
+        self.align_icon(h_offset=0.0, v_offset=0.0)
         # arrange input and output ports.
-        self.arrange_ports(v_offset=height + (height / 2))
+        self.align_ports(v_offset=height + (height / 2))
         # arrange node widgets
-        self.arrange_widgets(v_offset=height / 2)
+        self.align_widgets(v_offset=height / 2)
+
         self.update()
 
     def post_init(self, viewer=None, pos=None):
@@ -581,7 +592,7 @@ class NodeItem(AbstractNodeItem):
         AbstractNodeItem.name.fset(self, name)
         self.text_item.setPlainText(name)
         if self.scene():
-            self.arrange_label()
+            self.align_label()
         self.update()
 
     @AbstractNodeItem.color.setter
@@ -613,57 +624,71 @@ class NodeItem(AbstractNodeItem):
         """
         return list(self._output_items.keys())
 
-    def add_input(self, name='input', multi_port=False, display_name=True):
+    def _add_port(self, port):
         """
         Args:
-            name (str): name for the port.
-            multi_port (bool): allow multiple connections.
-            display_name (bool): display the port name.
+            port (PortItem): port item.
 
         Returns:
             PortItem: input item widget
         """
-        port = PortItem(self)
-        port.name = name
-        port.port_type = IN_PORT
-        port.multi_connection = multi_port
-        port.display_name = display_name
         text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
         text.setFont(text.font())
-        text.setVisible(display_name)
-        text.visible_ = display_name
+        text.setVisible(port.display_name)
+        text.visible_ = port.display_name
         text.setCacheMode(ITEM_CACHE_MODE)
-        self._input_items[port] = text
+        if port.port_type == IN_PORT:
+            self._input_items[port] = text
+        elif port.port_type == OUT_PORT:
+            self._output_items[port] = text
         if self.scene():
             self.post_init()
         return port
 
-    def add_output(self, name='output', multi_port=False, display_name=True):
+    def add_input(self, name='input', multi_port=False, display_name=True,
+                  painter_func=None):
         """
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
             display_name (bool): display the port name.
+            painter_func (function): custom paint function.
+
+        Returns:
+            PortItem: input item widget
+        """
+        if painter_func:
+            port = CustomPortItem(self, painter_func)
+        else:
+            port = PortItem(self)
+        port.name = name
+        port.port_type = IN_PORT
+        port.multi_connection = multi_port
+        port.display_name = display_name
+        return self._add_port(port)
+
+    def add_output(self, name='output', multi_port=False, display_name=True,
+                   painter_func=None):
+        """
+        Args:
+            name (str): name for the port.
+            multi_port (bool): allow multiple connections.
+            display_name (bool): display the port name.
+            painter_func (function): custom paint function.
 
         Returns:
             PortItem: output item widget
         """
-        port = PortItem(self)
+        if painter_func:
+            port = CustomPortItem(self, painter_func)
+        else:
+            port = PortItem(self)
         port.name = name
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
-        text = QtWidgets.QGraphicsTextItem(port.name, self)
-        text.font().setPointSize(8)
-        text.setFont(text.font())
-        text.setVisible(display_name)
-        text.visible_ = display_name
-        text.setCacheMode(ITEM_CACHE_MODE)
-        self._output_items[port] = text
-        if self.scene():
-            self.post_init()
-        return port
+        return self._add_port(port)
 
     def _delete_port(self, port, text):
         """
@@ -743,6 +768,14 @@ class NodeItem(AbstractNodeItem):
 
 
 class NodeItemVertical(NodeItem):
+    """
+    Vertical Node item.
+
+    Args:
+        name (str): name displayed on the node.
+        parent (QtWidgets.QGraphicsItem): parent item.
+    """
+
     def __init__(self, name='node', parent=None):
         super(NodeItemVertical, self).__init__(name, parent)
         font = QtGui.QFont()
@@ -814,9 +847,9 @@ class NodeItemVertical(NodeItem):
 
         painter.restore()
 
-    def arrange_icon(self, h_offset=0.0, v_offset=0.0):
+    def align_icon(self, h_offset=0.0, v_offset=0.0):
         """
-        Arrange node icon to the default top left of the node.
+        Align node icon to the default top left of the node.
 
         Args:
             v_offset (float): vertical offset.
@@ -829,9 +862,9 @@ class NodeItemVertical(NodeItem):
         y = 17.0 + v_offset
         self._icon_item.setPos(x, y)
 
-    def arrange_label(self, h_offset=0.0, v_offset=0.0):
+    def align_label(self, h_offset=0.0, v_offset=0.0):
         """
-        Arrange node label to the default top center of the node.
+        Align node label to the default top center of the node.
 
         Args:
             v_offset (float): vertical offset.
@@ -842,9 +875,9 @@ class NodeItemVertical(NodeItem):
         text_y = self._height / 2 - (text_rect.height() / 2)
         self.text_item.setPos(text_x, text_y)
 
-    def arrange_ports(self, v_offset=0.0):
+    def align_ports(self, v_offset=0.0):
         """
-        Arrange input, output ports in the node layout.
+        Align input, output ports in the node layout.
         """
         # adjust input position
         inputs = [p for p in self.inputs if p.isVisible()]
@@ -874,7 +907,7 @@ class NodeItemVertical(NodeItem):
 
     def draw_node(self):
         """
-        Draw the node item in the scene.
+        Re-draw the node item in the scene.
         """
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=0.0)
@@ -884,15 +917,16 @@ class NodeItemVertical(NodeItem):
         self._tooltip_disable(self.disabled)
 
         # --- setup node layout ---
+        # (do all the graphic item layout offsets here)
 
         # arrange label text
-        self.arrange_label(h_offset=0.0, v_offset=0.0)
+        self.align_label(h_offset=0.0, v_offset=0.0)
         # arrange icon
-        self.arrange_icon(h_offset=0.0, v_offset=0.0)
+        self.align_icon(h_offset=0.0, v_offset=0.0)
         # arrange input and output ports.
-        self.arrange_ports()
+        self.align_ports()
         # arrange node widgets
-        self.arrange_widgets(v_offset=0.0)
+        self.align_widgets(v_offset=0.0)
         self.update()
 
     def calc_size(self, add_w=0.0, add_h=0.0):
@@ -939,8 +973,32 @@ class NodeItemVertical(NodeItem):
 
         return width, height
 
-    def add_input(self, name='input', multi_port=False, display_name=False):
-        return super(NodeItemVertical, self).add_input(name, multi_port, False)
+    def add_input(self, name='input', multi_port=False, display_name=True,
+                  painter_func=None):
+        """
+        Args:
+            name (str): name for the port.
+            multi_port (bool): allow multiple connections.
+            display_name (bool): (not used)
+            painter_func (function): custom paint function.
 
-    def add_output(self, name='output', multi_port=False, display_name=False):
-        return super(NodeItemVertical, self).add_output(name, multi_port, False)
+        Returns:
+            PortItem: output item widget
+        """
+        return super(NodeItemVertical, self).add_input(
+            name, multi_port, False, painter_func)
+
+    def add_output(self, name='output', multi_port=False, display_name=False,
+                   painter_func=None):
+        """
+        Args:
+            name (str): name for the port.
+            multi_port (bool): allow multiple connections.
+            display_name (bool): (not used)
+            painter_func (function): custom paint function.
+
+        Returns:
+            PortItem: output item widget
+        """
+        return super(NodeItemVertical, self).add_output(
+            name, multi_port, False, painter_func)

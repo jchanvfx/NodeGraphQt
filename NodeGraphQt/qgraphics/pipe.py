@@ -422,13 +422,22 @@ class LivePipe(Pipe):
         cen_y = self.path().pointAtPercent(0.5).y()
         loc_pt = self.path().pointAtPercent(0.9)
         tgt_pt = self.path().pointAtPercent(1.0)
+        start_pt = self.path().pointAtPercent(0.0)
 
         dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
         if dist < 0.05:
             painter.restore()
             return
 
-        # draw circle
+        # draw start circle
+        size = 5.0
+        rect = QtCore.QRectF(start_pt.x() - (size / 2),
+                             start_pt.y() - (size / 2),
+                             size, size)
+        painter.setBrush(color)
+        painter.drawEllipse(rect)
+
+        # draw middle circle
         size = 10.0
         if dist < 50.0:
             size *= (dist / 50.0)
