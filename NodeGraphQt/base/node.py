@@ -774,7 +774,7 @@ class BaseNode(NodeObject):
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type (str): port data type name.
             painter_func (function): custom function to override the drawing
-                of the port shape see example:
+                of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -814,7 +814,7 @@ class BaseNode(NodeObject):
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type(str): port data type name.
             painter_func (function): custom function to override the drawing
-                of the port shape see example:
+                of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:
             NodeGraphQt.Port: the created port object.

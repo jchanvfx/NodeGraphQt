@@ -27,8 +27,7 @@ Here's an example function for drawing a triangle shaped port.
 
         Args:
             painter (QtGui.QPainter): painter object.
-            rect (QtCore.QRectF): port rect used to describe parameters
-                                  needed to draw.
+            rect (QtCore.QRectF): port rect used to describe parameters needed to draw.
             info (dict): information describing the ports current state.
                 {
                     'port_type': 'in',
@@ -100,8 +99,7 @@ Here's simpler example function for drawing a Square shaped port.
 
         Args:
             painter (QtGui.QPainter): painter object.
-            rect (QtCore.QRectF): port rect used to describe parameters
-                                  needed to draw.
+            rect (QtCore.QRectF): port rect used to describe parameters needed to draw.
             info (dict): information describing the ports current state.
                 {
                     'port_type': 'in',
