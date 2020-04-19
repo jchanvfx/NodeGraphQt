@@ -784,7 +784,7 @@ class BaseNode(NodeObject):
                 'port name "{}" already registered.'.format(name))
 
         port_args = [name, multi_input, display_name]
-        if painter_func and not callable(painter_func):
+        if painter_func and callable(painter_func):
             port_args.append(painter_func)
         view = self.view.add_input(*port_args)
 
