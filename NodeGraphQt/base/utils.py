@@ -498,11 +498,11 @@ def topological_sort_by_down(start_nodes=None, all_nodes=None):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional):
-            the start update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional):
-            if 'start_nodes' is None the function can calculate start nodes
-            from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the start update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
 
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
@@ -532,11 +532,11 @@ def topological_sort_by_up(start_nodes=None, all_nodes=None):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional):
-            the end update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional):
-            if 'start_nodes' is None the function can calculate start nodes
-            from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the end update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
@@ -639,8 +639,8 @@ def _compute_rank_down(start_nodes):
     Compute the rank of the down stream nodes.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional):
-            the start nodes of the graph.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the start nodes of the graph.
 
     Returns:
         dict{NodeGraphQt.BaseNode: node_rank, ...}
