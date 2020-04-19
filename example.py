@@ -60,6 +60,8 @@ def draw_triangle_port(painter, rect, info):
         border_color = QtGui.QColor(*info['border_color'])
 
     pen = QtGui.QPen(border_color, 1.8)
+    pen.setJoinStyle(QtCore.Qt.MiterJoin)
+
     painter.setPen(pen)
     painter.setBrush(color)
     painter.drawPolygon(port_poly)
@@ -101,6 +103,8 @@ def draw_square_port(painter, rect, info):
         border_color = QtGui.QColor(*info['border_color'])
 
     pen = QtGui.QPen(border_color, 1.8)
+    pen.setJoinStyle(QtCore.Qt.MiterJoin)
+
     painter.setPen(pen)
     painter.setBrush(color)
     painter.drawRect(rect)
@@ -125,7 +129,7 @@ class MyNode(BaseNode):
 
         # create input and output port.
         self.add_input('in port', color=(200, 10, 0))
-        self.add_output('out port', painter_func=draw_square_port)
+        self.add_output('default port')
         self.add_output('square port', painter_func=draw_square_port)
         self.add_output('triangle port', painter_func=draw_triangle_port)
 

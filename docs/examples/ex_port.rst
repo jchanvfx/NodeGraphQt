@@ -10,6 +10,9 @@ To have custom port shapes the :meth:`NodeGraphQt.BaseNode.add_input` and
 :meth:`NodeGraphQt.BaseNode.add_output` functions now have a ``painter_func``
 argument where you specify you custom port painter function.
 
+.. image:: ../_images/custom_ports.png
+        :width: 178px
+
 Example Triangle Port
 *********************
 
@@ -62,6 +65,8 @@ Here's an example function for drawing a triangle shaped port.
             border_color = QtGui.QColor(*info['border_color'])
 
         pen = QtGui.QPen(border_color, 1.8)
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+
         painter.setPen(pen)
         painter.setBrush(color)
         painter.drawPolygon(port_poly)
@@ -123,6 +128,8 @@ Here's simpler example function for drawing a Square shaped port.
             border_color = QtGui.QColor(*info['border_color'])
 
         pen = QtGui.QPen(border_color, 1.8)
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+
         painter.setPen(pen)
         painter.setBrush(color)
         painter.drawRect(rect)
