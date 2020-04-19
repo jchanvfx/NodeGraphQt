@@ -529,6 +529,12 @@ class BaseNode(NodeObject):
         self._view.text_item.editingFinished.connect(self.set_name)
 
     def draw(self, force=True):
+        """
+        Redraws the node in the scene.
+
+        Args:
+            force (bool): force redraw if not visible.
+        """
         if force:
             if not self.model.visible:
                 self._has_draw = False
@@ -544,14 +550,16 @@ class BaseNode(NodeObject):
         Hide node.
         """
         super(BaseNode, self).hide()
-        [pipe.hide() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
+        [pipe.hide() for port in self._inputs + self._outputs
+         for pipe in port.view.connected_pipes]
 
     def show(self):
         """
         Show node.
         """
         super(BaseNode, self).show()
-        [pipe.show() for port in self._inputs + self._outputs for pipe in port.view.connected_pipes]
+        [pipe.show() for port in self._inputs + self._outputs
+         for pipe in port.view.connected_pipes]
         self.draw(False)
 
     def update_model(self):
@@ -755,7 +763,7 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, data_type='None'):
+                  color=None, data_type='None', painter_func=None):
         """
         Add input :class:`Port` to node.
 
@@ -764,7 +772,9 @@ class BaseNode(NodeObject):
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
-            data_type(str): port data type name.
+            data_type (str): port data type name.
+            painter_func (function): custom function to override the drawing
+                of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -772,11 +782,16 @@ class BaseNode(NodeObject):
         if name in self.inputs().keys():
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
-        view = self.view.add_input(name, multi_input, display_name)
+
+        port_args = [name, multi_input, display_name]
+        if painter_func and callable(painter_func):
+            port_args.append(painter_func)
+        view = self.view.add_input(*port_args)
 
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
+
         port = Port(self, view)
         port.model.type_ = IN_PORT
         port.model.name = name
@@ -788,7 +803,7 @@ class BaseNode(NodeObject):
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, data_type='None'):
+                   color=None, data_type='None', painter_func=None):
         """
         Add output :class:`Port` to node.
 
@@ -798,6 +813,8 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type(str): port data type name.
+            painter_func (function): custom function to override the drawing
+                of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -805,7 +822,12 @@ class BaseNode(NodeObject):
         if name in self.outputs().keys():
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
-        view = self.view.add_output(name, multi_output, display_name)
+
+        port_args = [name, multi_output, display_name]
+        if painter_func and callable(painter_func):
+            port_args.append(painter_func)
+        view = self.view.add_output(*port_args)
+
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
@@ -914,9 +936,25 @@ class BaseNode(NodeObject):
         Set node input and output ports.
 
         Args:
-            port_data(dict): {'input_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...],
-            "                 'output_ports':[{'name':...,'multi_connection':...,'display_name':...,'data_type':...}, ...]}
+            port_data(dict): port data.
         """
+
+        # port data eg.
+        # {
+        #     'input_ports':
+        #         [{'name': ...,
+        #           'multi_connection': ...,
+        #           'display_name': ...,
+        #           'data_type': ...
+        #           }, ...],
+        #     'output_ports':
+        #         [{'name': ...,
+        #           'multi_connection': ...,
+        #           'display_name': ...,
+        #           'data_type': ...
+        #           }, ...]
+        # }
+
         for port in self._inputs:
             self._view.delete_input(port.view)
             port.model.node = None
@@ -927,11 +965,15 @@ class BaseNode(NodeObject):
         self._outputs = []
         self._model.outputs = {}
         self._model.inputs = {}
-        [self.add_input(name=port['name'], multi_input=port['multi_connection'],
-                        display_name=port['display_name'], data_type=port['data_type'])
+        [self.add_input(name=port['name'],
+                        multi_input=port['multi_connection'],
+                        display_name=port['display_name'],
+                        data_type=port['data_type'])
          for port in port_data['input_ports']]
-        [self.add_output(name=port['name'], multi_output=port['multi_connection'],
-                         display_name=port['display_name'], data_type=port['data_type'])
+        [self.add_output(name=port['name'],
+                         multi_output=port['multi_connection'],
+                         display_name=port['display_name'],
+                         data_type=port['data_type'])
          for port in port_data['output_ports']]
         self.draw()
 
@@ -1088,12 +1130,6 @@ class BaseNode(NodeObject):
         """
         return
 
-    def when_disabled(self):
-        """
-        Node evaluation logic when node has been disabled.
-        """
-        return
-
     def set_editable(self, state):
         """
         Returns whether the node view widgets is editable.
@@ -1103,6 +1139,16 @@ class BaseNode(NodeObject):
         """
         [wid.setEnabled(state) for wid in self.view._widgets.values()]
         self.view.text_item.setEnabled(state)
+
+    def set_dynamic_port(self, state):
+        """
+        Set whether the node will delete/add port after node has been created.
+
+        Args:
+            state(bool): If True, all port data will be serialized with the node,
+                         when the node is been deserialized, all ports will restore.
+        """
+        self.model.dynamic_port = state
 
 
 class BackdropNode(NodeObject):
@@ -1192,6 +1238,12 @@ class SubGraph(object):
     """
     The ``NodeGraphQt.SubGraph`` class is the base class that all
     Sub Graph Node inherit from.
+
+    *Implemented on NodeGraphQt: * ``v0.1.0``
+
+    .. image:: _images/example_subgraph.gif
+        :width: 80%
+
     """
 
     def __init__(self):
@@ -1206,8 +1258,9 @@ class SubGraph(object):
     def create_from_nodes(self, nodes):
         """
         Create sub graph from the nodes.
+
         Args:
-            nodes(list): nodes to create the sub graph.
+            nodes (list[NodeGraphQt.NodeObject]): nodes to create the sub graph.
         """
         if self in nodes:
             nodes.remove(self)
@@ -1216,16 +1269,18 @@ class SubGraph(object):
     def add_child(self, node):
         """
         Add a node to the sub graph.
+
         Args:
-            node(NodeGraphQt.BaseNode).
+            node (NodeGraphQt.BaseNode): node object.
         """
         self._children.add(node)
 
     def remove_child(self, node):
         """
         Remove a node from the sub graph.
+
         Args:
-            node(NodeGraphQt.BaseNode).
+            node (NodeGraphQt.BaseNode): node object.
         """
         if node in self._children:
             self._children.remove(node)

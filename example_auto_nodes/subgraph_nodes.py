@@ -1,4 +1,4 @@
-from .node_base.subgraph_node import SubGraphNode, SubGraphInputNode, SubGraphOutputNode
+from .node_base import SubGraphNode, SubGraphInputNode, SubGraphOutputNode
 import json
 import os
 

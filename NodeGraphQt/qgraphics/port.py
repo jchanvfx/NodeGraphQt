@@ -131,11 +131,11 @@ class PortItem(QtWidgets.QGraphicsItem):
         super(PortItem, self).mouseReleaseEvent(event)
 
     def hoverEnterEvent(self, event):
-        self._hovered = True
+        self.hovered = True
         super(PortItem, self).hoverEnterEvent(event)
         
     def hoverLeaveEvent(self, event):
-        self._hovered = False
+        self.hovered = False
         super(PortItem, self).hoverLeaveEvent(event)
 
     def viewer_start_connection(self):
@@ -259,3 +259,50 @@ class PortItem(QtWidgets.QGraphicsItem):
             if connected_port == port:
                 pipe.delete()
                 break
+
+
+class CustomPortItem(PortItem):
+    """
+    Custom port item for drawing custom shape port.
+    """
+
+    def __init__(self, parent=None, paint_func=None):
+        super(CustomPortItem, self).__init__(parent)
+        self._port_painter = paint_func
+
+    def set_painter(self, func=None):
+        """
+        Set custom paint function for drawing.
+
+        Args:
+            func (function): paint function.
+        """
+        self._port_painter = func
+
+    def paint(self, painter, option, widget):
+        """
+        Draws the port item.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
+        if self._port_painter:
+            rect_w = self._width / 1.8
+            rect_h = self._height / 1.8
+            rect_x = self.boundingRect().center().x() - (rect_w / 2)
+            rect_y = self.boundingRect().center().y() - (rect_h / 2)
+            port_rect = QtCore.QRectF(rect_x, rect_y, rect_w, rect_h)
+            port_info = {
+                'port_type': self.port_type,
+                'color': self.color,
+                'border_color': self.border_color,
+                'multi_connection': self.multi_connection,
+                'connected': bool(self.connected_pipes),
+                'hovered': self.hovered,
+            }
+            self._port_painter(painter, port_rect, port_info)
+        else:
+            super(CustomPortItem, self).paint(painter, option, widget)

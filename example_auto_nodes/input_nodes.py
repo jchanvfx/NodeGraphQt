@@ -3,7 +3,7 @@ from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
                                    NODE_PROP_VECTOR3,
                                    NODE_PROP_VECTOR4)
 
-from .node_base.auto_node import AutoNode
+from .node_base import AutoNode
 import os
 
 

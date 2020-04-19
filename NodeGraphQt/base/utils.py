@@ -66,6 +66,7 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
+    edit_menu.add_command('Show Undo View', _show_undo_view)
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
@@ -268,6 +269,10 @@ def _jump_out(graph):
     if node:
         if node.parent() is not None:
             graph.set_node_space(node.parent())
+
+
+def _show_undo_view(graph):
+    graph.undo_view.show()
 
 
 def _curved_pipe(graph):
@@ -498,8 +503,12 @@ def topological_sort_by_down(start_nodes=None, all_nodes=None):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the start update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
+
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
@@ -528,8 +537,11 @@ def topological_sort_by_up(start_nodes=None, all_nodes=None):
     'start_nodes' and 'all_nodes' only one needs to be given.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the end update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
     Returns:
         list[NodeGraphQt.BaseNode]: sorted nodes.
     """
@@ -560,11 +572,10 @@ def _update_nodes(nodes):
         nodes (list[NodeGraphQt.BaseNode]): nodes to be run.
     """
     for node in nodes:
+        if node.disabled():
+            continue
         try:
-            if node.disabled():
-                node.when_disabled()
-            else:
-                node.run()
+            node.run()
         except Exception as error:
             print("Error Update Node : {}\n{}" .format(node, str(error)))
             break
@@ -632,11 +643,12 @@ def _compute_rank_down(start_nodes):
     Compute the rank of the down stream nodes.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start nodes of the graph.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the start nodes of the graph.
+
     Returns:
         dict{NodeGraphQt.BaseNode: node_rank, ...}
     """
-
     nodes_rank = {}
     for node in start_nodes:
         nodes_rank[node] = 0
@@ -659,7 +671,9 @@ def _compute_rank_up(start_nodes):
     Compute the rank of the up stream nodes.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the end nodes of the graph.
+
     Returns:
         dict{NodeGraphQt.BaseNode: node_rank, ...}
     """
@@ -676,8 +690,11 @@ def auto_layout_up(start_nodes=None, all_nodes=None):
     Auto layout the nodes by up stream direction.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the end nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the end nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
     """
     if not start_nodes and not all_nodes:
         return
@@ -737,8 +754,11 @@ def auto_layout_down(start_nodes=None, all_nodes=None):
     Auto layout the nodes by down stream direction.
 
     Args:
-        start_nodes (list[NodeGraphQt.BaseNode])(Optional): the start update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode])(Optional): if 'start_nodes' is None the function can calculate start nodes from 'all_nodes'.
+        start_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) the start update nodes of the graph.
+        all_nodes (list[NodeGraphQt.BaseNode]):
+            (Optional) if 'start_nodes' is None the function can calculate
+            start nodes from 'all_nodes'.
     """
     if not start_nodes and not all_nodes:
         return

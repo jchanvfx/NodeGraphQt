@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from .commands import (PortConnectedCmd,
-                             PortDisconnectedCmd,
-                             PortVisibleCmd,
-                             NodeInputConnectedCmd,
-                             NodeInputDisconnectedCmd)
+                       PortDisconnectedCmd,
+                       PortVisibleCmd,
+                       NodeInputConnectedCmd,
+                       NodeInputDisconnectedCmd)
 from .model import PortModel
 from ..constants import IN_PORT, OUT_PORT
 
@@ -220,7 +220,6 @@ class Port(object):
     @data_type.setter
     def data_type(self, data_type):
         self.__model.data_type = data_type
-
 
     @property
     def border_color(self):
