@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>NodeGraph &#8212; NodeGraphQt 0.1.0 documentation</title>
+    <title>Graphs &#8212; NodeGraphQt 0.1.1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/ngqt.css" type="text/css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="constants.html" title="Constants"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,8 +44,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="nodegraph">
-<h1>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="graphs">
+<h1>Graphs<a class="headerlink" href="#graphs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="nodegraph">
+<h2>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this headline">¶</a></h2>
 <p><cite>See</cite> <a class="reference internal" href="examples/ex_overview.html#basic-example"><span class="std std-ref">Basic Example</span></a> <cite>from the NodeGraph overview.</cite></p>
 <hr class="docutils" />
 <dl class="class">
@@ -511,7 +513,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dd class="field-odd"><p>node object or None.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>node (NodeGraphQt.SubGraph)</p>
+<dd class="field-even"><p>node (<a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">NodeGraphQt.SubGraph</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -882,7 +884,7 @@ the node graph.</p>
 <dd><p>Set the node space of the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>node</strong> (<em>NodeGraphQt.SubGraph</em>) – node object.</p>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph"><em>NodeGraphQt.SubGraph</em></a>) – node object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1113,8 +1115,86 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 </dl>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.undo_view">
+<code class="descname">undo_view</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.undo_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns node graph undo view.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph undo view.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QUndoView.html#PySide2.QtWidgets.QUndoView" title="(in PySide v5.14.2)">PySide2.QtWidgets.QUndoView</a></p>
+</dd>
+</dl>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="subgraph">
+<h2>SubGraph<a class="headerlink" href="#subgraph" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NodeGraphQt.SubGraph">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">SubGraph</code><a class="headerlink" href="#NodeGraphQt.SubGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code> class is the base class that all
+Sub Graph Node inherit from.</p>
+<p><a href="#id1"><span class="problematic" id="id2">*</span></a>Implemented on NodeGraphQt: * <code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code></p>
+<img alt="_images/example_subgraph.gif" src="_images/example_subgraph.gif" style="width: 80%;" />
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.add_child">
+<code class="descname">add_child</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.add_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a node to the sub graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.children">
+<code class="descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the children of the sub graph.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.create_from_nodes">
+<code class="descname">create_from_nodes</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.create_from_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create sub graph from the nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a><em>]</em>) – nodes to create the sub graph.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.enter">
+<code class="descname">enter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action when enter the sub graph.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.exit">
+<code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action when exit the sub graph.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.SubGraph.remove_child">
+<code class="descname">remove_child</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.remove_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a node from the sub graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -1127,7 +1207,11 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 <p class="caption"><span class="caption-text">Module Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">NodeGraph</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nodegraph">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subgraph">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
@@ -1137,6 +1221,7 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a></li>
 </ul>
 
@@ -1182,7 +1267,7 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
         <li class="right" >
           <a href="constants.html" title="Constants"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">NodeGraphQt 0.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

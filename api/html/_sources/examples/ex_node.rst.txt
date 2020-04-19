@@ -41,7 +41,7 @@ Creating Nodes
 Embedding Widgets
 *****************
 
-The :meth:`NodeGraphQt.BaseNode` class allows you to embed widgets inside a node here's a
+The :class:`NodeGraphQt.BaseNode` class allows you to embed widgets inside a node here's a
 example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNode``.
 
 .. code-block:: python

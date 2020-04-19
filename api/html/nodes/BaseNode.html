@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>BaseNode &#8212; NodeGraphQt 0.1.0 documentation</title>
+    <title>BaseNode &#8212; NodeGraphQt 0.1.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/ngqt.css" type="text/css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" accesskey="U">Nodes</a> &#187;</li> 
       </ul>
     </div>  
@@ -189,7 +189,7 @@ function use this function to to update the widget.</p>
 
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_input">
-<code class="descname">add_input</code><span class="sig-paren">(</span><em>name='input'</em>, <em>multi_input=False</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_input</code><span class="sig-paren">(</span><em>name='input'</em>, <em>multi_input=False</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em>, <em>painter_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -199,6 +199,8 @@ function use this function to to update the widget.</p>
 <li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
 <li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
 <li><p><strong>data_type</strong> (<em>str</em>) – port data type name.</p></li>
+<li><p><strong>painter_func</strong> (<em>function</em>) – custom function to override the drawing
+of the port shape see example: <a class="reference internal" href="../examples/ex_port.html#creating-custom-shapes"><span class="std std-ref">Creating Custom Shapes</span></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -236,7 +238,7 @@ function use this function to to update the widget.</p>
 
 <dl class="method">
 <dt id="NodeGraphQt.BaseNode.add_output">
-<code class="descname">add_output</code><span class="sig-paren">(</span><em>name='output'</em>, <em>multi_output=True</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_output</code><span class="sig-paren">(</span><em>name='output'</em>, <em>multi_output=True</em>, <em>display_name=True</em>, <em>color=None</em>, <em>data_type='None'</em>, <em>painter_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -246,6 +248,8 @@ function use this function to to update the widget.</p>
 <li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
 <li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
 <li><p><strong>data_type</strong> (<em>str</em>) – port data type name.</p></li>
+<li><p><strong>painter_func</strong> (<em>function</em>) – custom function to override the drawing
+of the port shape see example: <a class="reference internal" href="../examples/ex_port.html#creating-custom-shapes"><span class="std std-ref">Creating Custom Shapes</span></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -327,6 +331,17 @@ function use this function to to update the widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>port</strong> (<em>str/int/PortItem</em>) – output port name/index/object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="NodeGraphQt.BaseNode.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>force=True</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redraws the node in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force</strong> (<em>bool</em>) – force redraw if not visible.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -542,6 +557,18 @@ logic to run for this event.</em></p>
 </dd></dl>
 
 <dl class="method">
+<dt id="NodeGraphQt.BaseNode.set_dynamic_port">
+<code class="descname">set_dynamic_port</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_dynamic_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the node will delete/add port after node has been created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>bool</em>) – If True, all port data will be serialized with the node,
+when the node is been deserialized, all ports will restore.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="NodeGraphQt.BaseNode.set_editable">
 <code class="descname">set_editable</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_editable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the node view widgets is editable.</p>
@@ -597,10 +624,7 @@ logic to run for this event.</em></p>
 <dd><p>Set node input and output ports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>port_data</strong> (<em>dict</em>) – {‘input_ports’:[{‘name’:…,’multi_connection’:…,’display_name’:…,’data_type’:…}, …],</p></li>
-<li><p><strong>'output_ports'</strong> (<em>&quot;</em>) – [{‘name’:…,’multi_connection’:…,’display_name’:…,’data_type’:…}, …]}</p></li>
-</ul>
+<dd class="field-odd"><p><strong>port_data</strong> (<em>dict</em>) – port data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -629,12 +653,6 @@ logic to run for this event.</em></p>
 <dt id="NodeGraphQt.BaseNode.update_stream">
 <code class="descname">update_stream</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.update_stream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update node down stream.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="NodeGraphQt.BaseNode.when_disabled">
-<code class="descname">when_disabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.when_disabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Node evaluation logic when node has been disabled.</p>
 </dd></dl>
 
 <dl class="method">
@@ -669,7 +687,7 @@ logic to run for this event.</em></p>
 <p class="caption"><span class="caption-text">Module Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../graph.html">NodeGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../nodes.html">Nodes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BaseNode</a></li>
@@ -685,6 +703,7 @@ logic to run for this event.</em></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_overview.html">NodeGraph Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_node.html">Node Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex_port.html">Port Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_menu.html">Menu Examples</a></li>
 </ul>
 
@@ -730,7 +749,7 @@ logic to run for this event.</em></p>
         <li class="right" >
           <a href="NodeObject.html" title="NodeObject"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NodeGraphQt 0.1.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../nodes.html" >Nodes</a> &#187;</li> 
       </ul>
     </div>
