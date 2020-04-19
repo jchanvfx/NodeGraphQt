@@ -936,22 +936,25 @@ class BaseNode(NodeObject):
         Set node input and output ports.
 
         Args:
-            port_data(dict):
-                {
-                'input_ports':
-                    [{'name':...,
-                      'multi_connection':...,
-                      'display_name':...,
-                      'data_type':...
-                    }, ...],
-                'output_ports':
-                    [{'name':...,
-                      'multi_connection':...,
-                      'display_name':...,
-                      'data_type':...
-                    }, ...]
-                }
+            port_data(dict): port data.
         """
+
+        # port data eg.
+        # {
+        #     'input_ports':
+        #         [{'name': ...,
+        #           'multi_connection': ...,
+        #           'display_name': ...,
+        #           'data_type': ...
+        #           }, ...],
+        #     'output_ports':
+        #         [{'name': ...,
+        #           'multi_connection': ...,
+        #           'display_name': ...,
+        #           'data_type': ...
+        #           }, ...]
+        # }
+
         for port in self._inputs:
             self._view.delete_input(port.view)
             port.model.node = None
@@ -1231,6 +1234,12 @@ class SubGraph(object):
     """
     The ``NodeGraphQt.SubGraph`` class is the base class that all
     Sub Graph Node inherit from.
+
+    *Implemented on NodeGraphQt: * ``v0.1.0``
+
+    .. image:: _images/example_subgraph.gif
+        :width: 80%
+
     """
 
     def __init__(self):
@@ -1245,8 +1254,9 @@ class SubGraph(object):
     def create_from_nodes(self, nodes):
         """
         Create sub graph from the nodes.
+
         Args:
-            nodes(list): nodes to create the sub graph.
+            nodes (list[NodeGraphQt.NodeObject]): nodes to create the sub graph.
         """
         if self in nodes:
             nodes.remove(self)
@@ -1257,7 +1267,7 @@ class SubGraph(object):
         Add a node to the sub graph.
 
         Args:
-            node(NodeGraphQt.BaseNode).
+            node (NodeGraphQt.BaseNode): node object.
         """
         self._children.add(node)
 
@@ -1266,7 +1276,7 @@ class SubGraph(object):
         Remove a node from the sub graph.
 
         Args:
-            node(NodeGraphQt.BaseNode).
+            node (NodeGraphQt.BaseNode): node object.
         """
         if node in self._children:
             self._children.remove(node)

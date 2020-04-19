@@ -18,59 +18,6 @@ from example_nodes import basic_nodes, widget_nodes
 
 def draw_triangle_port(painter, rect, info):
     """
-    Custom paint function for drawing a Square shaped port.
-
-    Args:
-        painter (QtGui.QPainter): painter object.
-        rect (QtCore.QRectF): port rect used to describe parameters
-                              needed to draw.
-        info (dict): information describing the ports current state.
-            {
-                'port_type': 'in',
-                'color': (0, 0, 0),
-                'border_color': (255, 255, 255),
-                'multi_connection': False,
-                'connected': False,
-                'hovered': False,
-            }
-    """
-    # example for drawing a square port.
-    painter.save()
-
-    size = int(rect.height() / 2)
-    triangle = QtGui.QPolygonF()
-    triangle.append(QtCore.QPointF(-size, size))
-    triangle.append(QtCore.QPointF(0.0, -size))
-    triangle.append(QtCore.QPointF(size, size))
-
-    transform = QtGui.QTransform()
-    transform.translate(rect.center().x(), rect.center().y())
-
-    port_poly = transform.map(triangle)
-
-    if info['hovered']:
-        # mouse over port color.
-        color = QtGui.QColor(14, 45, 59)
-        border_color = QtGui.QColor(136, 255, 35)
-    elif info['connected']:
-        # port connected color.
-        color = QtGui.QColor(195, 60, 60)
-        border_color = QtGui.QColor(200, 130, 70)
-    else:
-        # default port color
-        color = QtGui.QColor(*info['color'])
-        border_color = QtGui.QColor(*info['border_color'])
-
-    pen = QtGui.QPen(border_color, 1.8)
-    painter.setPen(pen)
-    painter.setBrush(color)
-    painter.drawPolygon(port_poly)
-
-    painter.restore()
-
-
-def draw_square_port(painter, rect, info):
-    """
     Custom paint function for drawing a Triangle shaped port.
 
     Args:
@@ -87,19 +34,69 @@ def draw_square_port(painter, rect, info):
                 'hovered': False,
             }
     """
-    # example for drawing a square port.
     painter.save()
 
+    size = int(rect.height() / 2)
+    triangle = QtGui.QPolygonF()
+    triangle.append(QtCore.QPointF(-size, size))
+    triangle.append(QtCore.QPointF(0.0, -size))
+    triangle.append(QtCore.QPointF(size, size))
+
+    transform = QtGui.QTransform()
+    transform.translate(rect.center().x(), rect.center().y())
+    port_poly = transform.map(triangle)
+
+    # mouse over port color.
     if info['hovered']:
-        # mouse over port color.
         color = QtGui.QColor(14, 45, 59)
-        border_color = QtGui.QColor(136, 255, 35, 255)
+        border_color = QtGui.QColor(136, 255, 35)
+    # port connected color.
     elif info['connected']:
-        # port connected color.
         color = QtGui.QColor(195, 60, 60)
         border_color = QtGui.QColor(200, 130, 70)
+    # default port color
     else:
-        # default port color
+        color = QtGui.QColor(*info['color'])
+        border_color = QtGui.QColor(*info['border_color'])
+
+    pen = QtGui.QPen(border_color, 1.8)
+    painter.setPen(pen)
+    painter.setBrush(color)
+    painter.drawPolygon(port_poly)
+
+    painter.restore()
+
+
+def draw_square_port(painter, rect, info):
+    """
+    Custom paint function for drawing a Square shaped port.
+
+    Args:
+        painter (QtGui.QPainter): painter object.
+        rect (QtCore.QRectF): port rect used to describe parameters
+                              needed to draw.
+        info (dict): information describing the ports current state.
+            {
+                'port_type': 'in',
+                'color': (0, 0, 0),
+                'border_color': (255, 255, 255),
+                'multi_connection': False,
+                'connected': False,
+                'hovered': False,
+            }
+    """
+    painter.save()
+
+    # mouse over port color.
+    if info['hovered']:
+        color = QtGui.QColor(14, 45, 59)
+        border_color = QtGui.QColor(136, 255, 35, 255)
+    # port connected color.
+    elif info['connected']:
+        color = QtGui.QColor(195, 60, 60)
+        border_color = QtGui.QColor(200, 130, 70)
+    # default port color
+    else:
         color = QtGui.QColor(*info['color'])
         border_color = QtGui.QColor(*info['border_color'])
 
