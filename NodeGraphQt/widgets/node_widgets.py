@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from .. import QtCore, QtWidgets
-
-from ..constants import Z_VAL_NODE_WIDGET
-from .stylesheet import *
 from .file_dialog import file_dialog
-from .properties import _valueEdit
+from .properties import _ValueEdit
+from .stylesheet import *
+
+from .. import QtCore, QtWidgets
+from ..constants import Z_VAL_NODE_WIDGET
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
@@ -279,7 +279,7 @@ class NodeFloatEdit(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', value = 0.0):
         super(NodeFloatEdit, self).__init__(parent, name, label)
-        self._ledit = _valueEdit()
+        self._ledit = _ValueEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
         self._ledit.setAlignment(QtCore.Qt.AlignCenter)
         self._ledit.valueChanged.connect(self._value_changed)

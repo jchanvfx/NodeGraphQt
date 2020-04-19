@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from .commands import (PortConnectedCmd,
-                             PortDisconnectedCmd,
-                             PortVisibleCmd,
-                             NodeInputConnectedCmd,
-                             NodeInputDisconnectedCmd)
+                       PortDisconnectedCmd,
+                       PortVisibleCmd,
+                       NodeInputConnectedCmd,
+                       NodeInputDisconnectedCmd)
 from .model import PortModel
 from ..constants import IN_PORT, OUT_PORT
 

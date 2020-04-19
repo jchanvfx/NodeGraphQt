@@ -140,14 +140,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def scale(self, sx, sy, pos=None):
         scale = [sx, sx]
-
         center = pos or self._scene_range.center()
-
         w = self._scene_range.width() / scale[0]
         h = self._scene_range.height() / scale[1]
-        self._scene_range = QtCore.QRectF(center.x() - (center.x() - self._scene_range.left()) / scale[0],
-                                          center.y() - (center.y() - self._scene_range.top()) / scale[1], w, h)
-
+        self._scene_range = QtCore.QRectF(
+            center.x() - (center.x() - self._scene_range.left()) / scale[0],
+            center.y() - (center.y() - self._scene_range.top()) / scale[1],
+            w, h
+        )
         self._update_scene()
 
     def _update_scene(self):
