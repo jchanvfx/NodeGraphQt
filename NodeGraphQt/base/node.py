@@ -419,7 +419,7 @@ class NodeObject(object):
         Set parent node.
 
         Args:
-            parent_node (SubGraph): parent node.
+            parent_node (NodeGraphQt.SubGraph): parent node.
         """
         if parent_node is self:
             parent_node = None
@@ -440,7 +440,7 @@ class NodeObject(object):
         Get parent node.
 
         Returns:
-            SubGraph: parent node or None.
+            NodeGraphQt.SubGraph: parent node or None.
         """
         return self._parent
 
@@ -1232,67 +1232,3 @@ class BackdropNode(NodeObject):
         self.model.width = self.view.width
         self.model.height = self.view.height
         return self.model.width, self.model.height
-
-
-class SubGraph(object):
-    """
-    The ``NodeGraphQt.SubGraph`` class is the base class that all
-    Sub Graph Node inherit from.
-
-    *Implemented on NodeGraphQt: * ``v0.1.0``
-
-    .. image:: _images/example_subgraph.gif
-        :width: 80%
-
-    """
-
-    def __init__(self):
-        self._children = set()
-
-    def children(self):
-        """
-        Returns the children of the sub graph.
-        """
-        return list(self._children)
-
-    def create_from_nodes(self, nodes):
-        """
-        Create sub graph from the nodes.
-
-        Args:
-            nodes (list[NodeGraphQt.NodeObject]): nodes to create the sub graph.
-        """
-        if self in nodes:
-            nodes.remove(self)
-        [n.set_parent(self) for n in nodes]
-
-    def add_child(self, node):
-        """
-        Add a node to the sub graph.
-
-        Args:
-            node (NodeGraphQt.BaseNode): node object.
-        """
-        self._children.add(node)
-
-    def remove_child(self, node):
-        """
-        Remove a node from the sub graph.
-
-        Args:
-            node (NodeGraphQt.BaseNode): node object.
-        """
-        if node in self._children:
-            self._children.remove(node)
-
-    def enter(self):
-        """
-        Action when enter the sub graph.
-        """
-        pass
-
-    def exit(self):
-        """
-        Action when exit the sub graph.
-        """
-        pass

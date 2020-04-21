@@ -81,9 +81,9 @@ except ImportError as ie:
     print('Cannot import "Qt.py" module falling back on '
           '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
-from .base.graph import NodeGraph
+from .base.graph import NodeGraph, SubGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
-from .base.node import NodeObject, BaseNode, BackdropNode, SubGraph
+from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
 from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE

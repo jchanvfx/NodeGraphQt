@@ -4,7 +4,7 @@ Port Examples
 Creating Custom Shapes
 **********************
 
-*(Implemented on NodeGraphQt* ``v0.1.1`` *or above)*
+(*Implemented on* ``v0.1.1``)
 
 To have custom port shapes the :meth:`NodeGraphQt.BaseNode.add_input` and
 :meth:`NodeGraphQt.BaseNode.add_output` functions now have a ``painter_func``
@@ -16,7 +16,7 @@ argument where you specify you custom port painter function.
 Example Triangle Port
 *********************
 
-Here's an example function for drawing a triangle shaped port.
+Here's an example function for drawing a triangle port.
 
 .. code-block:: python
     :linenos:
@@ -40,12 +40,14 @@ Here's an example function for drawing a triangle shaped port.
         """
         painter.save()
 
+        # create triangle polygon.
         size = int(rect.height() / 2)
         triangle = QtGui.QPolygonF()
         triangle.append(QtCore.QPointF(-size, size))
         triangle.append(QtCore.QPointF(0.0, -size))
         triangle.append(QtCore.QPointF(size, size))
 
+        # map polygon to port position.
         transform = QtGui.QTransform()
         transform.translate(rect.center().x(), rect.center().y())
         port_poly = transform.map(triangle)
@@ -76,6 +78,7 @@ The ``draw_triangle_port`` painter function can then be passed to the ``painter_
 
 .. code-block:: python
     :linenos:
+    :emphasize-lines: 8
 
     from NodeGraphQt import BaseNode
 
@@ -83,12 +86,13 @@ The ``draw_triangle_port`` painter function can then be passed to the ``painter_
 
         def __init__(self):
             super(MyListNode, self).__init__()
+            # create a input port with custom painter function.
             self.add_input('triangle', painter_func=draw_triangle_port)
 
 Example Square Port
 *******************
 
-Here's simpler example function for drawing a Square shaped port.
+And here's another example function for drawing a Square port.
 
 .. code-block:: python
     :linenos:

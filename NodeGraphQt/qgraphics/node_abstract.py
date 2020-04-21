@@ -23,7 +23,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             'type_': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
-            'visible' : False,
+            'visible': False,
         }
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
@@ -135,7 +135,9 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
 
     @property
     def selected(self):
-        return self.isSelected()
+        if self._properties['selected'] != self.isSelected():
+            self._properties['selected'] = self.isSelected()
+        return self._properties['selected']
 
     @selected.setter
     def selected(self, selected=False):
