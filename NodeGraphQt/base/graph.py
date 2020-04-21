@@ -90,6 +90,14 @@ class NodeGraph(QtCore.QObject):
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: selected node
     """
+    node_selection_changed = QtCore.Signal(list, list)
+    """
+    Signal triggered when the node selection has changed.
+
+    :parameters: list[:class:`NodeGraphQt.NodeObject`], 
+                 list[:class:`NodeGraphQt.NodeObject`]
+    :emits: previous node selection, new selection.
+    """
     node_double_clicked = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is double clicked and emits the node.
@@ -167,6 +175,8 @@ class NodeGraph(QtCore.QObject):
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
+        self._viewer.node_selection_changed.connect(
+            self._on_node_selection_changed)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
     def _insert_node(self, pipe, node_id, prev_node_pos):
@@ -259,6 +269,19 @@ class NodeGraph(QtCore.QObject):
         """
         node = self.get_node_by_id(node_id)
         self.node_selected.emit(node)
+
+    def _on_node_selection_changed(self, prev_ids, node_ids):
+        """
+        called when the node selection changes in the viewer.
+        (emits node objects <un-selected nodes>, <selected nodes>)
+
+        Args:
+            prev_ids (list[str]): previous selection.
+            node_ids (list[str]): current selection.
+        """
+        prev_nodes = [self.get_node_by_id(nid) for nid in prev_ids]
+        new_nodes = [self.get_node_by_id(nid) for nid in node_ids]
+        self.node_selection_changed.emit(prev_nodes, new_nodes)
 
     def _on_node_data_dropped(self, data, pos):
         """

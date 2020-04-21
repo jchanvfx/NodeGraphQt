@@ -36,6 +36,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # pass through signals
     node_selected = QtCore.Signal(str)
+    node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
@@ -306,11 +307,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self._rubber_band.hide()
 
                 rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
-                for item in self.scene().items(self.mapToScene(rect).boundingRect()):
+                rect_items = self.scene().items(
+                    self.mapToScene(rect).boundingRect()
+                )
+                node_ids = []
+                for item in rect_items:
                     if isinstance(item, AbstractNodeItem):
-                        self.node_selected.emit(item.id)
-                        return
+                        node_ids.append(item.id)
+
+                # emit the node selection signals.
+                if node_ids:
+                    prev_ids = [
+                        n.id for n in self._prev_selection_nodes
+                        if not n.selected
+                    ]
+                    self.node_selected.emit(node_ids[0])
+                    self.node_selection_changed.emit(prev_ids, node_ids)
+
                 self.scene().update(map_rect)
+                return
 
         # find position changed nodes and emit signal.
         moved_nodes = {
@@ -326,10 +341,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # emit signal if selected node collides with pipe.
         # Note: if collide state is true then only 1 node is selected.
+        nodes, pipes = self.selected_items()
         if self.COLLIDING_state:
-            nodes, pipes = self.selected_items()
             if nodes and pipes:
                 self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
+
+        # emit node selection changed signal.
+        prev_ids = [n.id for n in self._prev_selection_nodes if not n.selected]
+        node_ids = [n.id for n in nodes if n not in self._prev_selection_nodes]
+        self.node_selection_changed.emit(prev_ids, node_ids)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
@@ -544,6 +564,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def sceneMouseReleaseEvent(self, event):
         """
         triggered mouse release event for the scene.
+
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
@@ -556,7 +577,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def apply_live_connection(self, event):
         """
         triggered mouse press/release event for the scene.
-         - verify to make a the connection Pipe.
+        - verifies the live connection pipe.
+        - makes a connection pipe if valid.
+        - emits the "connection changed" signal.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):

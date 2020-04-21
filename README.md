@@ -37,6 +37,9 @@ applications that supports PySide2.
 #### Properties Bin
 <img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
 
+#### Vertical Layout
+<img src="/docs/_images/vertical_layout.png" width="600" title="Vertical Layout">
+
 #### Example
 
 ```python
