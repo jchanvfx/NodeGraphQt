@@ -48,7 +48,7 @@
 <h1>Port Examples<a class="headerlink" href="#port-examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="creating-custom-shapes">
 <h2>Creating Custom Shapes<a class="headerlink" href="#creating-custom-shapes" title="Permalink to this headline">¶</a></h2>
-<p><em>(Implemented on NodeGraphQt</em> <code class="docutils literal notranslate"><span class="pre">v0.1.1</span></code> <em>or above)</em></p>
+<p>(<em>Implemented on</em> <code class="docutils literal notranslate"><span class="pre">v0.1.1</span></code>)</p>
 <p>To have custom port shapes the <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_input()</span></code></a> and
 <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_output()</span></code></a> functions now have a <code class="docutils literal notranslate"><span class="pre">painter_func</span></code>
 argument where you specify you custom port painter function.</p>
@@ -56,7 +56,7 @@ argument where you specify you custom port painter function.</p>
 </div>
 <div class="section" id="example-triangle-port">
 <h2>Example Triangle Port<a class="headerlink" href="#example-triangle-port" title="Permalink to this headline">¶</a></h2>
-<p>Here’s an example function for drawing a triangle shaped port.</p>
+<p>Here’s an example function for drawing a triangle port.</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -106,7 +106,9 @@ argument where you specify you custom port painter function.</p>
 47
 48
 49
-50</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">draw_triangle_port</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+50
+51
+52</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">draw_triangle_port</span><span class="p">(</span><span class="n">painter</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom paint function for drawing a Triangle shaped port.</span>
 
@@ -125,12 +127,14 @@ argument where you specify you custom port painter function.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">painter</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
+    <span class="c1"># create triangle polygon.</span>
     <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">triangle</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QPolygonF</span><span class="p">()</span>
     <span class="n">triangle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPointF</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
     <span class="n">triangle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPointF</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">size</span><span class="p">))</span>
     <span class="n">triangle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPointF</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
 
+    <span class="c1"># map polygon to port position.</span>
     <span class="n">transform</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTransform</span><span class="p">()</span>
     <span class="n">transform</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
     <span class="n">port_poly</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">triangle</span><span class="p">)</span>
@@ -165,19 +169,21 @@ argument where you specify you custom port painter function.</p>
 4
 5
 6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
 
 <span class="k">class</span> <span class="nc">MyListNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MyListNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;triangle&#39;</span><span class="p">,</span> <span class="n">painter_func</span><span class="o">=</span><span class="n">draw_triangle_port</span><span class="p">)</span>
-</pre></div>
+        <span class="c1"># create a input port with custom painter function.</span>
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;triangle&#39;</span><span class="p">,</span> <span class="n">painter_func</span><span class="o">=</span><span class="n">draw_triangle_port</span><span class="p">)</span>
+</span></pre></div>
 </td></tr></table></div>
 </div>
 <div class="section" id="example-square-port">
 <h2>Example Square Port<a class="headerlink" href="#example-square-port" title="Permalink to this headline">¶</a></h2>
-<p>Here’s simpler example function for drawing a Square shaped port.</p>
+<p>And here’s another example function for drawing a Square port.</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
