@@ -54,7 +54,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setAcceptDrops(True)
         self.resize(850, 800)
 
-        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        self._scene_range = QtCore.QRectF(
+            0, 0, self.size().width(), self.size().height())
         self._update_scene()
         self._last_size = self.size()
         self.editable = True
@@ -932,7 +933,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
 
     def scene_rect(self):
-        return [self._scene_range.x(), self._scene_range.y(), self._scene_range.width(), self._scene_range.height()]
+        return [self._scene_range.x(), self._scene_range.y(),
+                self._scene_range.width(), self._scene_range.height()]
 
     def scene_center(self):
         cent = self._scene_range.center()
