@@ -145,7 +145,7 @@ class Publish(SubGraph):
         if not data:
             return None
         try:
-            class_name =data['node']['class_name']
+            class_name = data['node']['class_name']
             new_node_class = type(class_name, (Publish,), {'NODE_FILE': file_path})
             new_node_class.__identifier__ = data['node']['__identifier__']
             new_node_class.NODE_NAME = data['node']['name']

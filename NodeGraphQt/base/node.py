@@ -763,7 +763,7 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, data_type='None', painter_func=None):
+                  color=None, data_type='NoneType', painter_func=None):
         """
         Add input :class:`Port` to node.
 
@@ -803,7 +803,7 @@ class BaseNode(NodeObject):
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, data_type='None', painter_func=None):
+                   color=None, data_type='NoneType', painter_func=None):
         """
         Add output :class:`Port` to node.
 

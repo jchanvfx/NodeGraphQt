@@ -251,7 +251,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         items = self._items_near(map_pos, None, 20, 20)
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        pipes = [i for i in items if isinstance(i, Pipe)]
 
         if nodes:
             self.MMB_state = False
@@ -735,7 +734,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
-        if type(self._search_widget) is TabSearchMenuWidget:
+        if isinstance(self._search_widget, TabSearchMenuWidget):
             return
 
         pos = self._previous_pos
@@ -753,7 +752,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.clearFocus()
 
     def rebuild_tab_search(self):
-        if type(self._search_widget) is TabSearchMenuWidget:
+        if isinstance(self._search_widget, TabSearchMenuWidget):
             self._search_widget.rebuild = True
 
     def context_menus(self):

@@ -1,4 +1,5 @@
 from NodeGraphQt import topological_sort_by_down, NodePublishWidget
+import hashlib
 
 # node stream update
 
@@ -22,7 +23,40 @@ def update_nodes(nodes):
     _update_nodes(topological_sort_by_down(all_nodes=nodes))
 
 
+# auto node
+
+def get_data_type(data_type):
+    if not isinstance(data_type, str):
+        if hasattr(data_type, '__name__'):
+            data_type = data_type.__name__
+        else:
+            data_type = type(data_type).__name__
+    return data_type
+
+
+class CryptoColors(object):
+    """
+    Generate random color based on strings
+    """
+
+    colors = {}
+
+    @staticmethod
+    def get(text, Min=50, Max=200):
+        if text in CryptoColors.colors:
+            return CryptoColors.colors[text]
+        h = hashlib.sha256(text.encode('utf-8')).hexdigest()
+        d = int('0xFFFFFFFFFFFFFFFF', 0)
+        r = int(Min + (int("0x" + h[:16], 0) / d) * (Max - Min))
+        g = int(Min + (int("0x" + h[16:32], 0) / d) * (Max - Min))
+        b = int(Min + (int("0x" + h[32:48], 0) / d) * (Max - Min))
+        # a = int(Min + (int("0x" + h[48:], 0) / d) * (Max - Min))
+        CryptoColors.colors[text] = (r, g, b, 255)
+        return CryptoColors.colors[text]
+
+
 # node menu
+
 
 def setup_node_menu(graph, published_node_class):
     from .auto_node import AutoNode
