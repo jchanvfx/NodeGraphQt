@@ -96,7 +96,7 @@ class NodeGraph(QtCore.QObject):
 
     :parameters: list[:class:`NodeGraphQt.NodeObject`], 
                  list[:class:`NodeGraphQt.NodeObject`]
-    :emits: previous node selection, new selection.
+    :emits: selected node, deselected nodes.
     """
     node_double_clicked = QtCore.Signal(NodeObject)
     """
@@ -270,18 +270,18 @@ class NodeGraph(QtCore.QObject):
         node = self.get_node_by_id(node_id)
         self.node_selected.emit(node)
 
-    def _on_node_selection_changed(self, prev_ids, node_ids):
+    def _on_node_selection_changed(self, sel_ids, desel_ids):
         """
         called when the node selection changes in the viewer.
-        (emits node objects <un-selected nodes>, <selected nodes>)
+        (emits node objects <selected nodes>, <deselected nodes>)
 
         Args:
-            prev_ids (list[str]): previous selection.
-            node_ids (list[str]): current selection.
+            sel_ids (list[str]): new selected node ids.
+            desel_ids (list[str]): deselected node ids.
         """
-        prev_nodes = [self.get_node_by_id(nid) for nid in prev_ids]
-        new_nodes = [self.get_node_by_id(nid) for nid in node_ids]
-        self.node_selection_changed.emit(prev_nodes, new_nodes)
+        sel_nodes = [self.get_node_by_id(nid) for nid in sel_ids]
+        unsel_nodes = [self.get_node_by_id(nid) for nid in desel_ids]
+        self.node_selection_changed.emit(sel_nodes, unsel_nodes)
 
     def _on_node_data_dropped(self, data, pos):
         """
