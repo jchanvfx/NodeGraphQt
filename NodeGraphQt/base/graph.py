@@ -273,7 +273,7 @@ class NodeGraph(QtCore.QObject):
     def _on_node_selection_changed(self, sel_ids, desel_ids):
         """
         called when the node selection changes in the viewer.
-        (emits node objects <deselected nodes>, <selected nodes>)
+        (emits node objects <selected nodes>, <deselected nodes>)
 
         Args:
             sel_ids (list[str]): new selected node ids.
