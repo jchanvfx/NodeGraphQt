@@ -322,7 +322,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                         if not n.selected
                     ]
                     self.node_selected.emit(node_ids[0])
-                    self.node_selection_changed.emit(prev_ids, node_ids)
+                    self.node_selection_changed.emit(node_ids, prev_ids)
 
                 self.scene().update(map_rect)
                 return
@@ -349,7 +349,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # emit node selection changed signal.
         prev_ids = [n.id for n in self._prev_selection_nodes if not n.selected]
         node_ids = [n.id for n in nodes if n not in self._prev_selection_nodes]
-        self.node_selection_changed.emit(prev_ids, node_ids)
+        self.node_selection_changed.emit(node_ids, prev_ids)
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
