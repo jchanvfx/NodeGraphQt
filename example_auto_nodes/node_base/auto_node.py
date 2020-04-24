@@ -1,30 +1,8 @@
-from NodeGraphQt import BaseNode, Port, QtCore
-from . utils import update_node_down_stream
+from NodeGraphQt import BaseNode, Port, QtCore, QtWidgets, QtGui
+from . utils import update_node_down_stream, get_data_type, CryptoColors
 import traceback
-import hashlib
 import copy
 import time
-
-
-class CryptoColors(object):
-    """
-    Generate random color based on strings
-    """
-
-    def __init__(self):
-        self.colors = {}
-
-    def get(self, text, Min=50, Max=200):
-        if text in self.colors:
-            return self.colors[text]
-        h = hashlib.sha256(text.encode('utf-8')).hexdigest()
-        d = int('0xFFFFFFFFFFFFFFFF', 0)
-        r = int(Min + (int("0x" + h[:16], 0) / d) * (Max - Min))
-        g = int(Min + (int("0x" + h[16:32], 0) / d) * (Max - Min))
-        b = int(Min + (int("0x" + h[32:48], 0) / d) * (Max - Min))
-        # a = int(Min + (int("0x" + h[48:], 0) / d) * (Max - Min))
-        self.colors[text] = (r, g, b, 255)
-        return self.colors[text]
 
 
 class AutoNode(BaseNode, QtCore.QObject):
@@ -38,16 +16,20 @@ class AutoNode(BaseNode, QtCore.QObject):
         self.matchTypes = [['float', 'int']]
         self.errorColor = (200, 50, 50)
         self.stopCookColor = (200, 200, 200)
-        self._cryptoColors = CryptoColors()
 
         self.create_property('auto_cook', True)
-        self.create_property('default_color', self.get_property('color'))
         self.defaultValue = None
         self.defaultInputType = defaultInputType
         self.defaultOutputType = defaultOutputType
 
         self._cook_time = 0.0
         self._toolTip = self._setup_tool_tip()
+
+        # effect
+        self.color_effect = QtWidgets.QGraphicsColorizeEffect()
+        self.color_effect.setStrength(0.7)
+        self.color_effect.setEnabled(False)
+        self.view.setGraphicsEffect(self.color_effect)
 
     @property
     def auto_cook(self):
@@ -70,12 +52,9 @@ class AutoNode(BaseNode, QtCore.QObject):
             return
 
         self.model.set_property('auto_cook', mode)
-        if mode:
-            self.set_property('color', self.get_property('default_color'))
-        else:
-            if not self._error:
-                self.model.set_property('default_color', self.get_property('color'))
-            self.set_property('color', self.stopCookColor)
+        self.color_effect.setEnabled(not mode)
+        if not mode:
+            self.color_effect.setColor(QtGui.QColor(*self.stopCookColor))
 
     @property
     def cook_time(self):
@@ -114,7 +93,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         """
 
         if not forceCook:
-            if not self.auto_cook or not self.get_input_data:
+            if not self.auto_cook or not self._need_cook:
                 return
             if self.graph is not None and not self.graph.auto_update:
                 return
@@ -200,12 +179,12 @@ class AutoNode(BaseNode, QtCore.QObject):
         if self.check_port_type(to_port, from_port):
             self.update_stream()
         else:
-            self.get_input_data = False
+            self._need_cook = False
             to_port.disconnect_from(from_port)
 
     def on_input_disconnected(self, to_port, from_port):
-        if not self.get_input_data:
-            self.get_input_data = True
+        if not self._need_cook:
+            self._need_cook = True
             return
         self.update_stream()
 
@@ -222,7 +201,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         """
 
         if to_port.data_type != from_port.data_type:
-            if to_port.data_type == 'None' or from_port.data_type == 'None':
+            if to_port.data_type == 'NoneType' or from_port.data_type == 'NoneType':
                 return True
             for types in self.matchTypes:
                 if to_port.data_type in types and from_port.data_type in types:
@@ -264,30 +243,26 @@ class AutoNode(BaseNode, QtCore.QObject):
             else:
                 current_port.data_type = data_type
 
-            current_port.border_color = current_port.color = self._cryptoColors.get(data_type)
+            current_port.border_color = current_port.color = CryptoColors.get(data_type)
             conn_type = 'multi' if current_port.multi_connection() else 'single'
             current_port.view.setToolTip('{}: {} ({}) '.format(current_port.name(), data_type, conn_type))
 
-    def add_input(self, name='input', data_type='None', multi_input=False, display_name=True,
-                  color=None):
-        new_port = super(AutoNode, self).add_input(name, multi_input, display_name, color)
-        if data_type == 'None' and self.defaultInputType is not None:
+    def add_input(self, name='input', data_type='', multi_input=False, display_name=True,
+                  color=None, painter_func=None):
+        new_port = super(AutoNode, self).add_input(name, multi_input, display_name,
+                                                   color, data_type, painter_func)
+        if data_type == '':
             data_type = self.defaultInputType
-        if type(data_type) is not str:
-            data_type = data_type.__name__
-        self.set_port_type(new_port, data_type)
-
+        self.set_port_type(new_port, get_data_type(data_type))
         return new_port
 
-    def add_output(self, name='output', data_type='None', multi_output=True, display_name=True,
-                   color=None):
-        new_port = super(AutoNode, self).add_output(name, multi_output, display_name, color)
-        if data_type == 'None' and self.defaultOutputType is not None:
+    def add_output(self, name='output', data_type='', multi_output=True, display_name=True,
+                   color=None, painter_func=None):
+        new_port = super(AutoNode, self).add_output(name, multi_output, display_name,
+                                                    color, data_type, painter_func)
+        if data_type == '':
             data_type = self.defaultOutputType
-        if type(data_type) is not str:
-            data_type = data_type.__name__
-        self.set_port_type(new_port, data_type)
-
+        self.set_port_type(new_port, get_data_type(data_type))
         return new_port
 
     def set_disabled(self, mode=False):
@@ -300,7 +275,7 @@ class AutoNode(BaseNode, QtCore.QObject):
         """
 
         self._error = False
-        self.set_property('color', self.get_property('default_color'))
+        self.color_effect.setEnabled(False)
         self._update_tool_tip()
 
     def _update_tool_tip(self, message=None):
@@ -338,11 +313,9 @@ class AutoNode(BaseNode, QtCore.QObject):
             message(str): the describe of the error.
         """
 
-        if not self._error:
-            self.model.set_property('default_color', self.get_property('color'))
-
         self._error = True
-        self.set_property('color', self.errorColor)
+        self.color_effect.setEnabled(True)
+        self.color_effect.setColor(QtGui.QColor(*self.errorColor))
         tooltip = '<font color="red"><br>({})</br></font>'.format(message)
         self._update_tool_tip(tooltip)
 

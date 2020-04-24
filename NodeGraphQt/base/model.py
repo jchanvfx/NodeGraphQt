@@ -20,7 +20,7 @@ class PortModel(object):
         self.multi_connection = False
         self.visible = True
         self.connected_ports = defaultdict(list)
-        self.data_type = 'None'
+        self.data_type = 'NoneType'
 
     def __repr__(self):
         return '<{}(\'{}\') @ {}>'.format(

@@ -8,6 +8,7 @@ from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
 
 
 if __name__ == '__main__':
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication([])
 
     # create node graph.

@@ -85,8 +85,8 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
-    edit_menu.add_command('Layout Graph Down Stream', _layout_graph_down, 'L')
-    edit_menu.add_command('Layout Graph Up Stream', _layout_graph_up, 'Ctrl+L')
+    edit_menu.add_command('Layout Graph Up Stream', _layout_graph_up, 'L')
+    edit_menu.add_command('Layout Graph Down Stream', _layout_graph_down, 'Ctrl+L')
 
     edit_menu.add_separator()
 
@@ -826,10 +826,14 @@ def minimize_node_ref_count(node):
         if hasattr(node, 'deleted'):
             del node
             return
-        from .node import BaseNode, SubGraph
+        from .node import BaseNode
+        from .graph import SubGraph
         node._parent = None
         if isinstance(node, BaseNode):
-            [wid.deleteLater() for wid in node.view._widgets.values()]
+            try:
+                [wid.deleteLater() for wid in node.view._widgets.values()]
+            except:
+                pass
             node.view._widgets.clear()
             for port in node._inputs:
                 port.model.node = None

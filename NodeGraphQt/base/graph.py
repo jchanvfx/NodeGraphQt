@@ -1210,6 +1210,10 @@ class NodeGraph(QtCore.QObject):
         """
         if not self._editable:
             return
+
+        _temp_auto_update = self._auto_update
+        self._auto_update = False
+
         nodes = {}
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
@@ -1269,6 +1273,7 @@ class NodeGraph(QtCore.QObject):
 
         if set_parent:
             [node.set_parent(self._current_node_space) for node in node_objs]
+        self._auto_update = _temp_auto_update
 
         return node_objs
 
@@ -1340,8 +1345,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the serialized layout file.
         """
-        _temp_auto_update = self._auto_update
-        self._auto_update = False
+
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist.')
@@ -1368,7 +1372,6 @@ class NodeGraph(QtCore.QObject):
         self.clear_undo_stack()
         self._model.session = file_path
         self.session_changed.emit(file_path)
-        self._auto_update = _temp_auto_update
 
     def copy_nodes(self, nodes=None):
         """

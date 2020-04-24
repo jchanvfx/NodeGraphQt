@@ -384,8 +384,6 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.output_port.remove_pipe(self)
         if self.scene():
             self.scene().removeItem(self)
-        # TODO: not sure if we need this...?
-        del self
 
 
 class LivePipe(Pipe):
