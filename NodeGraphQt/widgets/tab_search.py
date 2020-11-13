@@ -141,7 +141,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         if self._node_dict:
             self._generate_items_from_node_dict()
 
-        searchWidget = QtWidgets.QWidgetAction(self.line_edit)
+        searchWidget = QtWidgets.QWidgetAction(self)
         searchWidget.setDefaultWidget(self.line_edit)
         self.addAction(searchWidget)
         self.setStyleSheet(STYLE_QMENU)
