@@ -72,7 +72,7 @@ class NodeGraph(QtCore.QObject):
     node_created = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is created in the node graph.
-    
+
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: created node
     """
@@ -86,7 +86,7 @@ class NodeGraph(QtCore.QObject):
     node_selected = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is clicked with the LMB.
-    
+
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: selected node
     """
@@ -94,7 +94,7 @@ class NodeGraph(QtCore.QObject):
     """
     Signal triggered when the node selection has changed.
 
-    :parameters: list[:class:`NodeGraphQt.NodeObject`], 
+    :parameters: list[:class:`NodeGraphQt.NodeObject`],
                  list[:class:`NodeGraphQt.NodeObject`]
     :emits: selected node, deselected nodes.
     """
@@ -109,19 +109,19 @@ class NodeGraph(QtCore.QObject):
     """
     Signal triggered when a node port has been connected.
 
-    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
     port_disconnected = QtCore.Signal(Port, Port)
     """
     Signal triggered when a node port has been disconnected.
 
-    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
     property_changed = QtCore.Signal(NodeObject, str, object)
     """
-    Signal is triggered when a property has changed on a node.  
+    Signal is triggered when a property has changed on a node.
 
     :parameters: :class:`NodeGraphQt.BaseNode`, str, object
     :emits: triggered node, property name, property value
@@ -129,7 +129,7 @@ class NodeGraph(QtCore.QObject):
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
     """
     Signal is triggered when data has been dropped to the graph.
-    
+
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
     :emits: mime data, node graph position
     """
@@ -473,7 +473,7 @@ class NodeGraph(QtCore.QObject):
             by ``NodeGraphQt`` components.
 
         See Also:
-            :attr:`NodeGraph.widget` for adding the node graph into a 
+            :attr:`NodeGraph.widget` for adding the node graph into a
             :class:`PySide2.QtWidgets.QLayout`.
 
         Returns:
@@ -567,9 +567,9 @@ class NodeGraph(QtCore.QObject):
     def clear_undo_stack(self):
         """
         Clears the undo stack.
-        
+
         Note:
-            Convenience function to 
+            Convenience function to
             :meth:`NodeGraph.undo_stack().clear()`
 
         See Also:
@@ -1331,7 +1331,7 @@ class NodeGraph(QtCore.QObject):
     def load_session(self, file_path):
         """
         Load node graph session layout file.
-        
+
         Args:
             file_path (str): path to the serialized layout file.
         """
@@ -1341,7 +1341,7 @@ class NodeGraph(QtCore.QObject):
     def import_session(self, file_path):
         """
         Import node graph session layout file.
-        
+
         Args:
             file_path (str): path to the serialized layout file.
         """
