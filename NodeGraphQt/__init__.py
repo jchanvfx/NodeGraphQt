@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# (c) 2017, Johnny Chan
-# https://github.com/jchanvfx/NodeGraphQt
+# (c) 2017, Johnny Chan and some awesome contributors (^_^)  
+# https://github.com/jchanvfx/NodeGraphQt/graphs/contributors
 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -34,13 +34,13 @@
 into applications that supports **PySide2**.
 
 project: https://github.com/jchanvfx/NodeGraphQt
+documantation: https://jchanvfx.github.io/NodeGraphQt/api/html/index.html
 
 example code:
 
 .. code-block:: python
     :linenos:
 
-    import sys
     from NodeGraphQt import QtWidgets, NodeGraph, BaseNode
 
 
@@ -55,7 +55,7 @@ example code:
             self.add_output('bar')
 
     if __name__ == '__main__':
-        app = QtWidgets.QApplication(sys.argv)
+        app = QtWidgets.QApplication([])
         graph = NodeGraph()
 
         graph.register_node(BaseNode)
@@ -78,7 +78,7 @@ try:
 except ImportError as ie:
     from .vendor.Qt import __version__ as qtpy_ver
     from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat ,QtOpenGL
-    print('Cannot import "Qt.py" module falling back on '
+    print('NodeGraphQt: Can\'t import "Qt.py" module falling back on '
           '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
 
 from .base.graph import NodeGraph, SubGraph
