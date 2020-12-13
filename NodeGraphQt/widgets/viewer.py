@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 import math
 
+from .dialogs import BaseDialog, FileDialog
+from .scene import NodeScene
+from .tab_search import TabSearchMenuWidget
 from .. import QtGui, QtCore, QtWidgets, QtOpenGL
+from ..base.menu import BaseMenu
 from ..constants import (IN_PORT, OUT_PORT,
                          PIPE_LAYOUT_CURVED)
 from ..qgraphics.node_abstract import AbstractNodeItem
@@ -10,10 +14,6 @@ from ..qgraphics.node_backdrop import BackdropNodeItem
 from ..qgraphics.pipe import Pipe, LivePipe
 from ..qgraphics.port import PortItem
 from ..qgraphics.slicer import SlicerPipe
-from ..base.menu import BaseMenu
-from .scene import NodeScene
-from .tab_search import TabSearchMenuWidget
-from .file_dialog import file_dialog, messageBox
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -741,8 +741,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         state = not self._search_widget.isVisible()
         if state:
             rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
-                                    pos.y() - rect.height() / 2)
+            new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
+                                    int(pos.y() - rect.height() / 2))
             self._search_widget.move(new_pos)
             self._search_widget.setVisible(state)
             rect = self.mapToScene(rect).boundingRect()
@@ -761,19 +761,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     @staticmethod
     def question_dialog(text, title='Node Graph'):
-        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        return dlg == QtWidgets.QMessageBox.Yes
+        return BaseDialog.question_dialog(text, title)
 
     @staticmethod
     def message_dialog(text, title='Node Graph'):
-        messageBox(text, title, QtWidgets.QMessageBox.Ok)
+        BaseDialog.message_dialog(text, title)
 
     def load_dialog(self, current_dir=None, ext=None):
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
-        file_dlg = file_dialog.getOpenFileName(
+        file_dlg = FileDialog.getOpenFileName(
             self, 'Open File', current_dir, ext_filter)
         file = file_dlg[0] or None
         return file
@@ -783,7 +782,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
-        file_dlg = file_dialog.getSaveFileName(
+        file_dlg = FileDialog.getSaveFileName(
             self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:

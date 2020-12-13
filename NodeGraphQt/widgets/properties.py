@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
+from .dialogs import FileDialog
 from .. import QtWidgets, QtCore, QtGui
 from ..constants import (NODE_PROP_QLABEL,
                          NODE_PROP_QLINEEDIT,
@@ -18,7 +19,6 @@ from ..constants import (NODE_PROP_QLABEL,
                          NODE_PROP_FLOAT,
                          NODE_PROP_INT,
                          NODE_PROP_BUTTON)
-from .file_dialog import file_dialog
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -312,9 +312,9 @@ class PropFilePath(BaseProperty):
         self._file_dir = dir
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName(self,
-                                                file_dir=self._file_dir,
-                                                ext_filter=self._ext)
+        file_path = FileDialog.getOpenFileName(self,
+                                               file_dir=self._file_dir,
+                                               ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)
@@ -337,9 +337,9 @@ class PropFilePath(BaseProperty):
 class PropFileSavePath(PropFilePath):
 
     def _on_select_file(self):
-        file_path = file_dialog.getSaveFileName(self,
-                                                file_dir=self._file_dir,
-                                                ext_filter=self._ext)
+        file_path = FileDialog.getSaveFileName(self,
+                                               file_dir=self._file_dir,
+                                               ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.set_value(file)

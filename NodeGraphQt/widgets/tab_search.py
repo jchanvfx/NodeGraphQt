@@ -1,8 +1,9 @@
 #!/usr/bin/python
-from .. import QtCore, QtWidgets, QtGui
-from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
-from collections import OrderedDict
 import re
+from collections import OrderedDict
+
+from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
+from .. import QtCore, QtWidgets, QtGui
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
@@ -113,19 +114,8 @@ class TabSearchWidget(QtWidgets.QLineEdit):
         self._completer.setModel(self._model)
 
 
-def fuzzyFinder(key, collection):
-    suggestions = []
-    pattern = '.*?'.join(key.lower())
-    regex = re.compile(pattern)
-    for item in collection:
-        match = regex.search(item.lower())
-        if match:
-            suggestions.append((len(match.group()), match.start(), item))
-
-    return [x for _, _, x in sorted(suggestions)]
-
-
 class TabSearchMenuWidget(QtWidgets.QMenu):
+
     search_submitted = QtCore.Signal(str)
 
     def __init__(self, node_dict=None):
@@ -141,19 +131,20 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         if self._node_dict:
             self._generate_items_from_node_dict()
 
-        searchWidget = QtWidgets.QWidgetAction(self)
-        searchWidget.setDefaultWidget(self.line_edit)
-        self.addAction(searchWidget)
+        search_widget = QtWidgets.QWidgetAction(self)
+        search_widget.setDefaultWidget(self.line_edit)
+        self.addAction(search_widget)
         self.setStyleSheet(STYLE_QMENU)
 
         self._actions = {}
         self._menus = {}
         self._searched_actions = []
 
-        self.line_edit.returnPressed.connect(self._on_search_submitted)
-        self.line_edit.textChanged.connect(self._on_text_changed)
-        self.rebuild = False
         self._block_submit = False
+
+        self.rebuild = False
+
+        self._wire_signals()
 
     def __repr__(self):
         return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
@@ -161,6 +152,22 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
     def keyPressEvent(self, event):
         super(TabSearchMenuWidget, self).keyPressEvent(event)
         self.line_edit.keyPressEvent(event)
+
+    @staticmethod
+    def _fuzzy_finder(key, collection):
+        suggestions = []
+        pattern = '.*?'.join(key.lower())
+        regex = re.compile(pattern)
+        for item in collection:
+            match = regex.search(item.lower())
+            if match:
+                suggestions.append((len(match.group()), match.start(), item))
+
+        return [x for _, _, x in sorted(suggestions)]
+
+    def _wire_signals(self):
+        self.line_edit.returnPressed.connect(self._on_search_submitted)
+        self.line_edit.textChanged.connect(self._on_text_changed)
 
     def _on_text_changed(self, text):
         self._clear_actions()
@@ -171,7 +178,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
 
         self._set_menu_visible(False)
 
-        action_names = fuzzyFinder(text, self._actions.keys())
+        action_names = self._fuzzy_finder(text, self._actions.keys())
 
         self._searched_actions = [self._actions[name] for name in action_names]
         self.addActions(self._searched_actions)

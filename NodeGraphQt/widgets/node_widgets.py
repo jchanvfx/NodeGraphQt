@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .file_dialog import file_dialog
+from .dialogs import FileDialog
 from .properties import _ValueEdit
 from .stylesheet import *
 
@@ -421,7 +421,7 @@ class NodeFilePath(NodeLineEdit):
         self._ext = ext
 
     def _on_select_file(self):
-        file_path = file_dialog.getOpenFileName(ext_filter=self._ext)
+        file_path = FileDialog.getOpenFileName(ext_filter=self._ext)
         file = file_path[0] or None
         if file:
             self.value = file

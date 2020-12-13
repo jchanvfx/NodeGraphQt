@@ -16,13 +16,12 @@ class NodeScene(QtWidgets.QGraphicsScene):
         self.background_color = VIEWER_BG_COLOR
         self.grid_color = VIEWER_GRID_COLOR
         self._grid_mode = VIEWER_GRID_LINES
-        self.setBackgroundBrush(self._bg_qcolor)
         self.editable = True
 
     def __repr__(self):
-        return '{}.{}(\'{}\')'.format(self.__module__,
-                                      self.__class__.__name__,
-                                      self.viewer())
+        cls_name = str(self.__class__.__name__)
+        return '<{}("{}") object at {}>'.format(
+            cls_name, self.viewer(), hex(id(self)))
 
     def _draw_text(self, painter, pen):
         font = QtGui.QFont()
@@ -34,6 +33,15 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.drawText(parent.mapToScene(pos), 'Not Editable')
 
     def _draw_grid(self, painter, rect, pen, grid_size):
+        """
+        draws the grid lines in the scene.
+
+        Args:
+            painter (QtGui.QPainter): painter object.
+            rect (QtCore.QRectF): rect object.
+            pen (QtGui.QPen): pen object.
+            grid_size (int): grid size.
+        """
         left = int(rect.left())
         right = int(rect.right())
         top = int(rect.top())
@@ -56,6 +64,15 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.drawLines(lines)
 
     def _draw_dots(self, painter, rect, pen, grid_size):
+        """
+        draws the grid dots in the scene.
+
+        Args:
+            painter (QtGui.QPainter): painter object.
+            rect (QtCore.QRectF): rect object.
+            pen (QtGui.QPen): pen object.
+            grid_size (int): grid size.
+        """
         zoom = self.viewer().get_zoom()
         if zoom < 0:
             grid_size = int(abs(zoom) / 0.3 + 1) * grid_size
@@ -71,7 +88,8 @@ class NodeScene(QtWidgets.QGraphicsScene):
         pen.setWidth(grid_size / 10)
         painter.setPen(pen)
 
-        [painter.drawPoint(int(x), int(y)) for x in range(first_left, right, grid_size)
+        [painter.drawPoint(int(x), int(y))
+         for x in range(first_left, right, grid_size)
          for y in range(first_top, bottom, grid_size)]
 
     def drawBackground(self, painter, rect):
@@ -91,7 +109,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
                 pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
                 self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE)
 
-            color = self._bg_qcolor.darker(150)
+            color = QtGui.QColor(*self._bg_color).darker(150)
             if zoom < -0.0:
                 color = color.darker(100 - int(zoom * 110))
             pen = QtGui.QPen(color, 0.65)
@@ -153,4 +171,4 @@ class NodeScene(QtWidgets.QGraphicsScene):
     @background_color.setter
     def background_color(self, color=(0, 0, 0)):
         self._bg_color = color
-        self._bg_qcolor = QtGui.QColor(*self._bg_color)
+        self.setBackgroundBrush(QtGui.QColor(*self._bg_color))
