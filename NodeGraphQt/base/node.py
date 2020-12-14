@@ -281,9 +281,11 @@ class NodeObject(object):
             widget_type (int): widget flag to display in the ``PropertiesBinWidget``
             tab (str): name of the widget tab to display in the properties bin.
             ext (str): file ext of ``NODE_PROP_FILE``
-            funcs (list) list of functions for NODE_PROP_BUTTON
+            funcs (list[function]) list of functions for NODE_PROP_BUTTON
         """
-        self.model.add_property(name, value, items, range, widget_type, tab, ext, funcs)
+        self.model.add_property(
+            name, value, items, range, widget_type, tab, ext, funcs
+        )
 
     def properties(self):
         """
@@ -317,7 +319,7 @@ class NodeObject(object):
 
         Args:
             name (str): name of the property.
-            value (object): property data.
+            value (object): property data (python built in types).
         """
 
         # prevent signals from causing a infinite loop.

@@ -38,6 +38,12 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(0.0, 0.0, self._width, self._height)
 
     def mousePressEvent(self, event):
+        """
+        Re-implemented to update "self._properties['selected']" attribute.
+
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        """
         self._properties['selected'] = True
         super(AbstractNodeItem, self).mousePressEvent(event)
 

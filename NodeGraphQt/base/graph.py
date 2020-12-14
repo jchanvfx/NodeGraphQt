@@ -26,6 +26,7 @@ from ..widgets.node_space_bar import node_space_bar
 
 
 class QWidgetDrops(QtWidgets.QWidget):
+
     def __init__(self):
         super(QWidgetDrops, self).__init__()
         self.setAcceptDrops(True)
@@ -61,7 +62,8 @@ class QWidgetDrops(QtWidgets.QWidget):
 
 class NodeGraph(QtCore.QObject):
     """
-    The ``NodeGraph`` class is the main controller for managing all nodes.
+    The ``NodeGraph`` class is the main controller for managing all nodes
+    and the node graph.
 
     Inherited from: :class:`PySide2.QtCore.QObject`
 
@@ -153,18 +155,24 @@ class NodeGraph(QtCore.QObject):
         self._current_node_space = None
         self._editable = True
 
-        tab = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
-        tab.activated.connect(self._toggle_tab_search)
-        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
-
         self._wire_signals()
         self._node_space_bar = node_space_bar(self)
         self._auto_update = True
 
     def __repr__(self):
-        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self)))
 
     def _wire_signals(self):
+        """
+        Connect up all the signals and slots here.
+        """
+        # hard coded tab search.
+        tab = QtWidgets.QShortcut(
+            QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
+        tab.activated.connect(self._toggle_tab_search)
+        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
+
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_sliced.connect(self._on_connection_sliced)
@@ -231,7 +239,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             node_id (str): node id.
             prop_name (str): node property name.
-            prop_value (object): python object.
+            prop_value (object): python built in types.
         """
         if not self._editable:
             return
@@ -390,6 +398,16 @@ class NodeGraph(QtCore.QObject):
             NodeGraphQt.base.model.NodeGraphModel: node graph model.
         """
         return self._model
+
+    @property
+    def node_factory(self):
+        """
+        Return the node factory object used by the node graph.
+
+        Returns:
+            NodeFactory: node factory.
+        """
+        return self._node_factory
 
     @property
     def widget(self):

@@ -26,7 +26,8 @@ class Port(object):
 
     def __repr__(self):
         port = str(self.__class__.__name__)
-        return '<{}("{}") object at {}>'.format(port, self.name(), hex(id(self)))
+        return '<{}("{}") object at {}>'.format(
+            port, self.name(), hex(id(self)))
 
     @property
     def view(self):

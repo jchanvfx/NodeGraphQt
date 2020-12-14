@@ -197,12 +197,23 @@ class NodeItem(AbstractNodeItem):
         painter.restore()
 
     def mousePressEvent(self, event):
+        """
+        Re-implemented to ignore event if LMB is over port collision area.
+
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        """
         if event.button() == QtCore.Qt.LeftButton:
-            start = PortItem().boundingRect().width() - PORT_FALLOFF
-            end = self.boundingRect().width() - start
-            x_pos = event.pos().x()
-            if not start <= x_pos <= end:
-                event.ignore()
+            for p in self._input_items.keys():
+                if p.hovered:
+                    event.ignore()
+                    super(NodeItem, self).mousePressEvent(event)
+                    return
+            for p in self._output_items.keys():
+                if p.hovered:
+                    event.ignore()
+                    super(NodeItem, self).mousePressEvent(event)
+                    return
         super(NodeItem, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
