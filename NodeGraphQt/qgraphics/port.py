@@ -61,11 +61,13 @@ class PortItem(QtWidgets.QGraphicsItem):
         """
         painter.save()
 
-        ### display the falloff colision ###
+        #  display falloff collision for debugging
+        # ----------------------------------------------------------------------
         # pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 80), 0.8)
         # pen.setStyle(QtCore.Qt.DotLine)
         # painter.setPen(pen)
         # painter.drawRect(self.boundingRect())
+        # ----------------------------------------------------------------------
 
         rect_w = self._width / 1.8
         rect_h = self._height / 1.8
@@ -123,8 +125,6 @@ class PortItem(QtWidgets.QGraphicsItem):
         return super(PortItem, self).itemChange(change, value)
 
     def mousePressEvent(self, event):
-        # if event.modifiers() != QtCore.Qt.AltModifier:
-        #     self.viewer_start_connection()
         super(PortItem, self).mousePressEvent(event)
         
     def mouseReleaseEvent(self, event):
