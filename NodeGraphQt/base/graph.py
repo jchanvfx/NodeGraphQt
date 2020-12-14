@@ -239,7 +239,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             node_id (str): node id.
             prop_name (str): node property name.
-            prop_value (object): python object.
+            prop_value (object): python built in types.
         """
         if not self._editable:
             return

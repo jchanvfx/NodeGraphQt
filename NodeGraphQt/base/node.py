@@ -319,7 +319,7 @@ class NodeObject(object):
 
         Args:
             name (str): name of the property.
-            value (object): property data.
+            value (object): property data (python built in types).
         """
 
         # prevent signals from causing a infinite loop.
