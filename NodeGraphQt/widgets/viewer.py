@@ -157,6 +157,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
 
     def _update_scene(self):
+        """
+        Redraw the scene.
+        """
         self.setSceneRect(self._scene_range)
         self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
 
@@ -1048,10 +1051,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self._scene_range.width(), self._scene_range.height()]
 
     def scene_center(self):
+        """
+        Get the center x,y pos from the scene.
+
+        Returns:
+            list[float]: x, y position.
+        """
         cent = self._scene_range.center()
         return [cent.x(), cent.y()]
 
     def nodes_rect_center(self, nodes):
+        """
+        Get the center x,y pos from the specified nodes.
+
+        Args:
+            nodes (list[AbstractNodeItem]): list of node qgrphics items.
+
+        Returns:
+            list[float]: x, y position.
+        """
         cent = self._combined_rect(nodes).center()
         return [cent.x(), cent.y()]
 
