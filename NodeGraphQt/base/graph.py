@@ -1613,7 +1613,7 @@ class SubGraph(object):
     The ``NodeGraphQt.SubGraph`` class is the base class that all
     Sub Graph Node inherit from.
 
-    *Implemented on NodeGraphQt: * ``v0.1.0``
+    *Implemented on NodeGraphQt:* ``v0.1.0``
 
     .. image:: _images/example_subgraph.gif
         :width: 80%
