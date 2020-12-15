@@ -27,14 +27,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
     class:`NodeGraphQt.NodeGraph` class.
     """
 
+    # node viewer signals.
+    # (some of these signals are called by port & node items and connected
+    # to the node graph slot functions)
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
     insert_node = QtCore.Signal(object, str, dict)
     need_show_tab_search = QtCore.Signal()
+    node_name_changed = QtCore.Signal(str, str)
 
-    # pass through signals
+    # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
@@ -229,8 +233,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
-        self._prev_selection_nodes, \
-        self._prev_selection_pipes = self.selected_items()
+        self._prev_selection_nodes, self._prev_selection_pipes = \
+            self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
