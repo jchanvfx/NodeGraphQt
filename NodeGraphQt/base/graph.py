@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import gc
 import json
 import os
 import re
+
 import copy
-import gc
-from .. import QtCore, QtWidgets, QtGui
+
 from .commands import (NodeAddedCmd,
                        NodeRemovedCmd,
                        NodeMovedCmd,
@@ -15,14 +16,15 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode
 from .port import Port
+from .. import QtCore, QtWidgets, QtGui
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE,
                          IN_PORT, OUT_PORT,
                          VIEWER_GRID_LINES)
-from ..widgets.viewer import NodeViewer
 from ..widgets.node_space_bar import node_space_bar
+from ..widgets.viewer import NodeViewer
 
 
 class QWidgetDrops(QtWidgets.QWidget):
@@ -179,9 +181,10 @@ class NodeGraph(QtCore.QObject):
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
+        self._viewer.node_name_changed.connect(self._on_node_name_changed)
         self._viewer.insert_node.connect(self._insert_node)
 
-        # pass through signals.
+        # pass through translated signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.node_selection_changed.connect(
             self._on_node_selection_changed)
@@ -253,6 +256,21 @@ class NodeGraph(QtCore.QObject):
             else:
                 value = copy.deepcopy(prop_value)
             node.set_property(prop_name, value)
+
+    def _on_node_name_changed(self, node_id, name):
+        """
+        called when a node text qgraphics item in the viewer is edited.
+        (sets the name through the node object so undo commands are registered.)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+            name (str): new node name.
+        """
+        node = self.get_node_by_id(node_id)
+        node.set_name(name)
+
+        # TODO: not sure about redrawing the node here.
+        node.view.draw_node()
 
     def _on_node_double_clicked(self, node_id):
         """

@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+from .node_abstract import AbstractNodeItem
+from .node_text_item import NodeTextItem
+from .port import PortItem, CustomPortItem
 from .. import QtGui, QtCore, QtWidgets
 from ..constants import (IN_PORT, OUT_PORT,
                          NODE_WIDTH, NODE_HEIGHT,
@@ -8,9 +11,6 @@ from ..constants import (IN_PORT, OUT_PORT,
                          PORT_FALLOFF, Z_VAL_NODE, Z_VAL_NODE_WIDGET,
                          ITEM_CACHE_MODE)
 from ..errors import NodeWidgetError
-from .node_abstract import AbstractNodeItem
-from .port import PortItem, CustomPortItem
-from .node_text_item import NodeTextItem
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):
@@ -128,7 +128,7 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self.text_item = NodeTextItem(self.name, self)
+        self._text_item = NodeTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = {}
         self._output_items = {}
@@ -207,12 +207,10 @@ class NodeItem(AbstractNodeItem):
             for p in self._input_items.keys():
                 if p.hovered:
                     event.ignore()
-                    super(NodeItem, self).mousePressEvent(event)
                     return
             for p in self._output_items.keys():
                 if p.hovered:
                     event.ignore()
-                    super(NodeItem, self).mousePressEvent(event)
                     return
         super(NodeItem, self).mousePressEvent(event)
 
@@ -223,9 +221,25 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        viewer = self.viewer()
-        if viewer:
-            viewer.node_double_clicked.emit(self.id)
+        """
+        Re-implemented to emit "node_double_clicked" signal.
+
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        """
+        if event.button() == QtCore.Qt.LeftButton:
+
+            # enable text item edit mode.
+            items = self.scene().items(event.scenePos())
+            if self._text_item in items:
+                self._text_item.set_editable(True)
+                self._text_item.setFocus()
+                event.ignore()
+                return
+
+            viewer = self.viewer()
+            if viewer:
+                viewer.node_double_clicked.emit(self.id)
         super(NodeItem, self).mouseDoubleClickEvent(event)
 
     def itemChange(self, change, value):
@@ -280,7 +294,7 @@ class NodeItem(AbstractNodeItem):
             text.setDefaultTextColor(text_color)
         for port, text in self._output_items.items():
             text.setDefaultTextColor(text_color)
-        self.text_item.setDefaultTextColor(text_color)
+        self._text_item.setDefaultTextColor(text_color)
 
     def activate_pipes(self):
         """
@@ -302,7 +316,7 @@ class NodeItem(AbstractNodeItem):
 
     def reset_pipes(self):
         """
-        reset the pipe color.
+        Reset all the pipe colors.
         """
         ports = self.inputs + self.outputs
         for port in ports:
@@ -311,15 +325,17 @@ class NodeItem(AbstractNodeItem):
 
     def calc_size(self, add_w=0.0, add_h=0.0):
         """
-        calculate minimum node size.
-
+        Calculates the minimum node size.
 
         Args:
             add_w (float): additional width.
             add_h (float): additional height.
+
+        Returns:
+            tuple(float, float): width, height.
         """
         width = 0
-        height = self.text_item.boundingRect().height()
+        height = self._text_item.boundingRect().height()
 
         if self._widgets:
             wid_width = max([
@@ -330,6 +346,7 @@ class NodeItem(AbstractNodeItem):
 
         port_height = 0.0
         if self._input_items:
+            port = None
             input_widths = []
             for port, text in self._input_items.items():
                 input_width = port.boundingRect().width() - PORT_FALLOFF
@@ -337,9 +354,11 @@ class NodeItem(AbstractNodeItem):
                     input_width += text.boundingRect().width() / 1.5
                 input_widths.append(input_width)
             width += max(input_widths)
-            port_height = port.boundingRect().height()
+            if port:
+                port_height = port.boundingRect().height()
 
         if self._output_items:
+            port = None
             output_widths = []
             for port, text in self._output_items.items():
                 output_width = port.boundingRect().width()
@@ -347,7 +366,8 @@ class NodeItem(AbstractNodeItem):
                     output_width += text.boundingRect().width() / 1.5
                 output_widths.append(output_width)
             width += max(output_widths)
-            port_height = port.boundingRect().height()
+            if port:
+                port_height = port.boundingRect().height()
 
         in_count = len([p for p in self.inputs if p.isVisible()])
         out_count = len([p for p in self.outputs if p.isVisible()])
@@ -385,12 +405,12 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        text_rect = self.text_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
         text_x = (self._width / 2) - (text_rect.width() / 2)
-        text_y = text_rect.height() * -1
+        text_y = 2.0
         text_x += h_offset
         text_y += v_offset
-        self.text_item.setPos(text_x, text_y)
+        self._text_item.setPos(text_x, text_y)
 
     def align_widgets(self, v_offset=0.0):
         """
@@ -464,16 +484,16 @@ class NodeItem(AbstractNodeItem):
             x (float): horizontal x offset
             y (float): vertical y offset
         """
-        icon_x = self.text_item.pos().x() + x
-        icon_y = self.text_item.pos().y() + y
-        self.text_item.setPos(icon_x, icon_y)
+        icon_x = self._text_item.pos().x() + x
+        icon_y = self._text_item.pos().y() + y
+        self._text_item.setPos(icon_x, icon_y)
 
     def draw_node(self):
         """
         Re-draw the node item in the scene.
         (re-implemented for vertical layout design)
         """
-        height = self.text_item.boundingRect().height()
+        height = self._text_item.boundingRect().height()
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.
@@ -550,7 +570,7 @@ class NodeItem(AbstractNodeItem):
             if text.visible_:
                 text.setVisible(visible)
 
-        self.text_item.setVisible(visible)
+        self._text_item.setVisible(visible)
         self._icon_item.setVisible(visible)
 
     @property
@@ -601,7 +621,9 @@ class NodeItem(AbstractNodeItem):
     @AbstractNodeItem.name.setter
     def name(self, name=''):
         AbstractNodeItem.name.fset(self, name)
-        self.text_item.setPlainText(name)
+        if name == self._text_item.toPlainText():
+            return
+        self._text_item.setPlainText(name)
         if self.scene():
             self.align_label()
         self.update()
@@ -618,6 +640,16 @@ class NodeItem(AbstractNodeItem):
         AbstractNodeItem.text_color.fset(self, color)
         self._set_text_color(color)
         self.update()
+
+    @property
+    def text_item(self):
+        """
+        Get the node name text qgraphics item.
+
+        Returns:
+            NodeTextItem: node text object.
+        """
+        return self._text_item
 
     @property
     def inputs(self):
@@ -637,11 +669,13 @@ class NodeItem(AbstractNodeItem):
 
     def _add_port(self, port):
         """
+        Adds a port qgraphics item into the node.
+
         Args:
             port (PortItem): port item.
 
         Returns:
-            PortItem: input item widget
+            PortItem: port qgraphics item.
         """
         text = QtWidgets.QGraphicsTextItem(port.name, self)
         text.font().setPointSize(8)
@@ -660,6 +694,9 @@ class NodeItem(AbstractNodeItem):
     def add_input(self, name='input', multi_port=False, display_name=True,
                   painter_func=None):
         """
+        Adds a port qgraphics item into the node with the "port_type" set as
+        IN_PORT.
+
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
@@ -667,7 +704,7 @@ class NodeItem(AbstractNodeItem):
             painter_func (function): custom paint function.
 
         Returns:
-            PortItem: input item widget
+            PortItem: input port qgraphics item.
         """
         if painter_func:
             port = CustomPortItem(self, painter_func)
@@ -682,6 +719,9 @@ class NodeItem(AbstractNodeItem):
     def add_output(self, name='output', multi_port=False, display_name=True,
                    painter_func=None):
         """
+        Adds a port qgraphics item into the node with the "port_type" set as
+        OUT_PORT.
+
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
@@ -689,7 +729,7 @@ class NodeItem(AbstractNodeItem):
             painter_func (function): custom paint function.
 
         Returns:
-            PortItem: output item widget
+            PortItem: output port qgraphics item.
         """
         if painter_func:
             port = CustomPortItem(self, painter_func)
@@ -703,9 +743,11 @@ class NodeItem(AbstractNodeItem):
 
     def _delete_port(self, port, text):
         """
+        Removes port item and port text from node.
+
         Args:
             port (PortItem): port object.
-            text (QGraphicsTextItem): port text object.
+            text (QtWidgets.QGraphicsTextItem): port text object.
         """
         port.delete()
         port.setParentItem(None)
@@ -717,6 +759,8 @@ class NodeItem(AbstractNodeItem):
 
     def delete_input(self, port):
         """
+        Remove input port from node.
+
         Args:
             port (PortItem): port object.
         """
@@ -724,6 +768,8 @@ class NodeItem(AbstractNodeItem):
 
     def delete_output(self, port):
         """
+        Remove output port from node.
+
         Args:
             port (PortItem): port object.
         """
@@ -938,11 +984,12 @@ class NodeItemVertical(NodeItem):
         self.align_ports()
         # arrange node widgets
         self.align_widgets(v_offset=0.0)
+
         self.update()
 
     def calc_size(self, add_w=0.0, add_h=0.0):
         """
-        calculate minimum node size.
+        Calculate minimum node size.
 
         Args:
             add_w (float): additional width.
@@ -987,6 +1034,9 @@ class NodeItemVertical(NodeItem):
     def add_input(self, name='input', multi_port=False, display_name=True,
                   painter_func=None):
         """
+        Adds a port qgraphics item into the node with the "port_type" set as
+        IN_PORT
+
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
@@ -994,7 +1044,7 @@ class NodeItemVertical(NodeItem):
             painter_func (function): custom paint function.
 
         Returns:
-            PortItem: output item widget
+            PortItem: port qgraphics item.
         """
         return super(NodeItemVertical, self).add_input(
             name, multi_port, False, painter_func)
@@ -1002,6 +1052,9 @@ class NodeItemVertical(NodeItem):
     def add_output(self, name='output', multi_port=False, display_name=False,
                    painter_func=None):
         """
+        Adds a port qgraphics item into the node with the "port_type" set as
+        OUT_PORT
+
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
@@ -1009,7 +1062,7 @@ class NodeItemVertical(NodeItem):
             painter_func (function): custom paint function.
 
         Returns:
-            PortItem: output item widget
+            PortItem: port qgraphics item.
         """
         return super(NodeItemVertical, self).add_output(
             name, multi_port, False, painter_func)

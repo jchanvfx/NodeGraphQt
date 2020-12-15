@@ -1,7 +1,7 @@
 #!/usr/bin/python
+from .utils import minimize_node_ref_count
 from .. import QtWidgets
 from ..constants import IN_PORT, OUT_PORT
-from .utils import minimize_node_ref_count
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):

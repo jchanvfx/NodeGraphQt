@@ -162,7 +162,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     def xy_pos(self):
         """
         return the item scene postion.
-        ("node.pos" conflicted with "QGraphicsItem.pos()" so it was refactored to "xy_pos".)
+        ("node.pos" conflicted with "QGraphicsItem.pos()"
+        so it was refactored to "xy_pos".)
 
         Returns:
             list[float]: x, y scene position.
@@ -173,7 +174,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     def xy_pos(self, pos=None):
         """
         set the item scene postion.
-        ("node.pos" conflicted with "QGraphicsItem.pos()" so it was refactored to "xy_pos".)
+        ("node.pos" conflicted with "QGraphicsItem.pos()"
+        so it was refactored to "xy_pos".)
 
         Args:
             pos (list[float]): x, y scene position.
@@ -231,7 +233,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         node_attrs = list(self._properties.keys()) + ['width', 'height', 'pos']
         for name, value in node_dict.items():
             if name in node_attrs:
-                # "node.pos" conflicted with "QGraphicsItem.pos()" so it's refactored to "xy_pos".
+                # "node.pos" conflicted with "QGraphicsItem.pos()"
+                # so it's refactored to "xy_pos".
                 if name == 'pos':
                     name = 'xy_pos'
                 setattr(self, name, value)
