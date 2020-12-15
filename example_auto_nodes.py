@@ -47,6 +47,7 @@ def get_published_nodes_from_folder(folder_path):
 
 
 if __name__ == '__main__':
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication()
 
     # create node graph.

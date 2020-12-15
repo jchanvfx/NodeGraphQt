@@ -3,6 +3,7 @@ from . stylesheet import STYLE_SLASH_BUTTON, STYLE_NODE_BUTTON
 
 
 class node_space_bar(QtWidgets.QWidget):
+
     def __init__(self, graph):
         super(node_space_bar, self).__init__()
         self.setMaximumHeight(20)

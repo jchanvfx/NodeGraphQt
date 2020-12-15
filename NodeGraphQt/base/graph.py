@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import gc
 import json
 import os
 import re
+
 import copy
-import gc
-from .. import QtCore, QtWidgets, QtGui
+
 from .commands import (NodeAddedCmd,
                        NodeRemovedCmd,
                        NodeMovedCmd,
@@ -15,17 +16,19 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode
 from .port import Port
+from .. import QtCore, QtWidgets, QtGui
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE,
                          IN_PORT, OUT_PORT,
                          VIEWER_GRID_LINES)
-from ..widgets.viewer import NodeViewer
 from ..widgets.node_space_bar import node_space_bar
+from ..widgets.viewer import NodeViewer
 
 
 class QWidgetDrops(QtWidgets.QWidget):
+
     def __init__(self):
         super(QWidgetDrops, self).__init__()
         self.setAcceptDrops(True)
@@ -61,7 +64,8 @@ class QWidgetDrops(QtWidgets.QWidget):
 
 class NodeGraph(QtCore.QObject):
     """
-    The ``NodeGraph`` class is the main controller for managing all nodes.
+    The ``NodeGraph`` class is the main controller for managing all nodes
+    and the node graph.
 
     Inherited from: :class:`PySide2.QtCore.QObject`
 
@@ -72,7 +76,7 @@ class NodeGraph(QtCore.QObject):
     node_created = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is created in the node graph.
-    
+
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: created node
     """
@@ -86,7 +90,7 @@ class NodeGraph(QtCore.QObject):
     node_selected = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is clicked with the LMB.
-    
+
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: selected node
     """
@@ -94,7 +98,7 @@ class NodeGraph(QtCore.QObject):
     """
     Signal triggered when the node selection has changed.
 
-    :parameters: list[:class:`NodeGraphQt.NodeObject`], 
+    :parameters: list[:class:`NodeGraphQt.NodeObject`],
                  list[:class:`NodeGraphQt.NodeObject`]
     :emits: selected node, deselected nodes.
     """
@@ -109,19 +113,19 @@ class NodeGraph(QtCore.QObject):
     """
     Signal triggered when a node port has been connected.
 
-    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
     port_disconnected = QtCore.Signal(Port, Port)
     """
     Signal triggered when a node port has been disconnected.
 
-    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port` 
+    :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
     property_changed = QtCore.Signal(NodeObject, str, object)
     """
-    Signal is triggered when a property has changed on a node.  
+    Signal is triggered when a property has changed on a node.
 
     :parameters: :class:`NodeGraphQt.BaseNode`, str, object
     :emits: triggered node, property name, property value
@@ -129,7 +133,7 @@ class NodeGraph(QtCore.QObject):
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
     """
     Signal is triggered when data has been dropped to the graph.
-    
+
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
     :emits: mime data, node graph position
     """
@@ -153,27 +157,34 @@ class NodeGraph(QtCore.QObject):
         self._current_node_space = None
         self._editable = True
 
-        tab = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
-        tab.activated.connect(self._toggle_tab_search)
-        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
-
         self._wire_signals()
         self._node_space_bar = node_space_bar(self)
         self._auto_update = True
 
     def __repr__(self):
-        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self)))
 
     def _wire_signals(self):
+        """
+        Connect up all the signals and slots here.
+        """
+        # hard coded tab search.
+        tab = QtWidgets.QShortcut(
+            QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
+        tab.activated.connect(self._toggle_tab_search)
+        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
+
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
         self._viewer.connection_sliced.connect(self._on_connection_sliced)
         self._viewer.connection_changed.connect(self._on_connection_changed)
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
+        self._viewer.node_name_changed.connect(self._on_node_name_changed)
         self._viewer.insert_node.connect(self._insert_node)
 
-        # pass through signals.
+        # pass through translated signals.
         self._viewer.node_selected.connect(self._on_node_selected)
         self._viewer.node_selection_changed.connect(
             self._on_node_selection_changed)
@@ -231,7 +242,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             node_id (str): node id.
             prop_name (str): node property name.
-            prop_value (object): python object.
+            prop_value (object): python built in types.
         """
         if not self._editable:
             return
@@ -245,6 +256,21 @@ class NodeGraph(QtCore.QObject):
             else:
                 value = copy.deepcopy(prop_value)
             node.set_property(prop_name, value)
+
+    def _on_node_name_changed(self, node_id, name):
+        """
+        called when a node text qgraphics item in the viewer is edited.
+        (sets the name through the node object so undo commands are registered.)
+
+        Args:
+            node_id (str): node id emitted by the viewer.
+            name (str): new node name.
+        """
+        node = self.get_node_by_id(node_id)
+        node.set_name(name)
+
+        # TODO: not sure about redrawing the node here.
+        node.view.draw_node()
 
     def _on_node_double_clicked(self, node_id):
         """
@@ -392,6 +418,16 @@ class NodeGraph(QtCore.QObject):
         return self._model
 
     @property
+    def node_factory(self):
+        """
+        Return the node factory object used by the node graph.
+
+        Returns:
+            NodeFactory: node factory.
+        """
+        return self._node_factory
+
+    @property
     def widget(self):
         """
         The node graph widget for adding into a layout.
@@ -473,7 +509,7 @@ class NodeGraph(QtCore.QObject):
             by ``NodeGraphQt`` components.
 
         See Also:
-            :attr:`NodeGraph.widget` for adding the node graph into a 
+            :attr:`NodeGraph.widget` for adding the node graph into a
             :class:`PySide2.QtWidgets.QLayout`.
 
         Returns:
@@ -567,9 +603,9 @@ class NodeGraph(QtCore.QObject):
     def clear_undo_stack(self):
         """
         Clears the undo stack.
-        
+
         Note:
-            Convenience function to 
+            Convenience function to
             :meth:`NodeGraph.undo_stack().clear()`
 
         See Also:
@@ -1210,6 +1246,10 @@ class NodeGraph(QtCore.QObject):
         """
         if not self._editable:
             return
+
+        _temp_auto_update = self._auto_update
+        self._auto_update = False
+
         nodes = {}
         # build the nodes.
         for n_id, n_data in data.get('nodes', {}).items():
@@ -1269,6 +1309,7 @@ class NodeGraph(QtCore.QObject):
 
         if set_parent:
             [node.set_parent(self._current_node_space) for node in node_objs]
+        self._auto_update = _temp_auto_update
 
         return node_objs
 
@@ -1326,7 +1367,7 @@ class NodeGraph(QtCore.QObject):
     def load_session(self, file_path):
         """
         Load node graph session layout file.
-        
+
         Args:
             file_path (str): path to the serialized layout file.
         """
@@ -1336,12 +1377,11 @@ class NodeGraph(QtCore.QObject):
     def import_session(self, file_path):
         """
         Import node graph session layout file.
-        
+
         Args:
             file_path (str): path to the serialized layout file.
         """
-        _temp_auto_update = self._auto_update
-        self._auto_update = False
+
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist.')
@@ -1368,7 +1408,6 @@ class NodeGraph(QtCore.QObject):
         self.clear_undo_stack()
         self._model.session = file_path
         self.session_changed.emit(file_path)
-        self._auto_update = _temp_auto_update
 
     def copy_nodes(self, nodes=None):
         """

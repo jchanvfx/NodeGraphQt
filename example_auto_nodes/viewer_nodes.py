@@ -8,9 +8,9 @@ class DataViewerNode(AutoNode):
     def __init__(self):
         super(DataViewerNode, self).__init__()
         self.add_input('in data')
-        self.add_text_input('data', 'Data Viewer',multi_line=True)
+        self.add_text_input('data', 'Data Viewer', multi_line=True)
         self.add_output("out")
-        self.create_property("out",None)
+        self.create_property("out", None)
 
     def run(self):
         """Evaluate input to show it."""

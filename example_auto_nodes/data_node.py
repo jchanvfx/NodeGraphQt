@@ -5,7 +5,7 @@ from .node_base import AutoNode
 
 class VectorSplit(AutoNode):
     """
-    Splict a vector to x,y,z
+    Split a vector to x,y,z
     """
 
     __identifier__ = 'Data'
@@ -49,7 +49,7 @@ class VectorMaker(AutoNode):
         super(VectorMaker, self).__init__()
 
         self.add_output('out', list)
-        self.create_property("out",None)
+        self.create_property("out", None)
 
         self.add_input("x", float)
         self.add_input("y", float)

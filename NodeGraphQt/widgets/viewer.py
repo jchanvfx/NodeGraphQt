@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 import math
 
+from .dialogs import BaseDialog, FileDialog
+from .scene import NodeScene
+from .tab_search import TabSearchMenuWidget
 from .. import QtGui, QtCore, QtWidgets, QtOpenGL
+from ..base.menu import BaseMenu
 from ..constants import (IN_PORT, OUT_PORT,
                          PIPE_LAYOUT_CURVED)
 from ..qgraphics.node_abstract import AbstractNodeItem
@@ -10,10 +14,6 @@ from ..qgraphics.node_backdrop import BackdropNodeItem
 from ..qgraphics.pipe import Pipe, LivePipe
 from ..qgraphics.port import PortItem
 from ..qgraphics.slicer import SlicerPipe
-from ..base.menu import BaseMenu
-from .scene import NodeScene
-from .tab_search import TabSearchMenuWidget
-from .file_dialog import file_dialog, messageBox
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -27,14 +27,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
     class:`NodeGraphQt.NodeGraph` class.
     """
 
+    # node viewer signals.
+    # (some of these signals are called by port & node items and connected
+    # to the node graph slot functions)
     moved_nodes = QtCore.Signal(dict)
     search_triggered = QtCore.Signal(str, tuple)
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
     insert_node = QtCore.Signal(object, str, dict)
     need_show_tab_search = QtCore.Signal()
+    node_name_changed = QtCore.Signal(str, str)
 
-    # pass through signals
+    # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
@@ -229,8 +233,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
-        self._prev_selection_nodes, \
-        self._prev_selection_pipes = self.selected_items()
+        self._prev_selection_nodes, self._prev_selection_pipes = \
+            self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
@@ -251,7 +255,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         items = self._items_near(map_pos, None, 20, 20)
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        pipes = [i for i in items if isinstance(i, Pipe)]
 
         if nodes:
             self.MMB_state = False
@@ -453,6 +456,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         event.ignore()
 
     def keyPressEvent(self, event):
+        """
+        Key press event re-implemented to update the states for attributes:
+        - ALT_state
+        - CTRL_state
+        - SHIFT_state
+
+        Args:
+            event (QtGui.QKeyEvent): key event.
+        """
         self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
         self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
         self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
@@ -465,6 +477,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
+        """
+        Key release event re-implemented to update the states for attributes:
+        - ALT_state
+        - CTRL_state
+        - SHIFT_state
+
+        Args:
+            event (QtGui.QKeyEvent): key event.
+        """
         self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
         self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
         self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
@@ -710,7 +731,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
     @staticmethod
     def acyclic_check(start_port, end_port):
         """
-        validate the connection so it doesn't loop itself.
+        Validate the node connections so it doesn't loop itself.
+
+        Args:
+            start_port (PortItem): port item.
+            end_port (PortItem): port item.
 
         Returns:
             bool: True if port connection is valid.
@@ -735,15 +760,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
-        if type(self._search_widget) is TabSearchMenuWidget:
+        if isinstance(self._search_widget, TabSearchMenuWidget):
             return
 
         pos = self._previous_pos
         state = not self._search_widget.isVisible()
         if state:
             rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
-                                    pos.y() - rect.height() / 2)
+            new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
+                                    int(pos.y() - rect.height() / 2))
             self._search_widget.move(new_pos)
             self._search_widget.setVisible(state)
             rect = self.mapToScene(rect).boundingRect()
@@ -753,7 +778,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.clearFocus()
 
     def rebuild_tab_search(self):
-        if type(self._search_widget) is TabSearchMenuWidget:
+        if isinstance(self._search_widget, TabSearchMenuWidget):
             self._search_widget.rebuild = True
 
     def context_menus(self):
@@ -762,19 +787,35 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     @staticmethod
     def question_dialog(text, title='Node Graph'):
-        dlg = messageBox(text, title, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        return dlg == QtWidgets.QMessageBox.Yes
+        """
+        Prompt node viewer question dialog widget with "yes", "no" buttons.
+
+        Args:
+            text (str): dialog text.
+            title (str): dialog window title.
+
+        Returns:
+            bool: true if user click yes.
+        """
+        return BaseDialog.question_dialog(text, title)
 
     @staticmethod
     def message_dialog(text, title='Node Graph'):
-        messageBox(text, title, QtWidgets.QMessageBox.Ok)
+        """
+        Prompt node viewer message dialog widget with "ok" button.
+
+        Args:
+            text (str): dialog text.
+            title (str): dialog window title.
+        """
+        BaseDialog.message_dialog(text, title)
 
     def load_dialog(self, current_dir=None, ext=None):
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
-        file_dlg = file_dialog.getOpenFileName(
+        file_dlg = FileDialog.getOpenFileName(
             self, 'Open File', current_dir, ext_filter)
         file = file_dlg[0] or None
         return file
@@ -784,7 +825,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
-        file_dlg = file_dialog.getSaveFileName(
+        file_dlg = FileDialog.getSaveFileName(
             self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
@@ -796,31 +837,56 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return file_path
 
     def all_pipes(self):
-        pipes = []
+        """
+        Returns all pipe qgraphic items.
+
+        Returns:
+            list[Pipe]: instances of pipe items.
+        """
         excl = [self._LIVE_PIPE, self._SLICER_PIPE]
-        for item in self.scene().items():
-            if isinstance(item, Pipe) and item not in excl:
-                pipes.append(item)
-        return pipes
+        return [i for i in self.scene().items()
+                if isinstance(i, Pipe) and i not in excl]
 
     def all_nodes(self):
-        nodes = []
-        for item in self.scene().items():
-            if isinstance(item, AbstractNodeItem):
-                nodes.append(item)
-        return nodes
+        """
+        Returns all node qgraphic items.
+
+        Returns:
+            list[AbstractNodeItem]: instances of node items.
+        """
+        return [i for i in self.scene().items()
+                if isinstance(i, AbstractNodeItem)]
 
     def selected_nodes(self):
-        nodes = [item for item in self.scene().selectedItems() \
+        """
+        Returns selected node qgraphic items.
+
+        Returns:
+            list[AbstractNodeItem]: instances of node items.
+        """
+        nodes = [item for item in self.scene().selectedItems()
                  if isinstance(item, AbstractNodeItem)]
         return nodes
 
     def selected_pipes(self):
-        pipes = [item for item in self.scene().selectedItems() \
+        """
+        Returns selected pipe qgraphic items.
+
+        Returns:
+            list[Pipe]: pipe items.
+        """
+        pipes = [item for item in self.scene().selectedItems()
                  if isinstance(item, Pipe)]
         return pipes
 
     def selected_items(self):
+        """
+        Return selected graphic items in the scene.
+
+        Returns:
+            tuple(list[AbstractNodeItem], list[Pipe]):
+                selected (node items, pipe items).
+        """
         nodes = []
         pipes = []
         for item in self.scene().selectedItems():
@@ -831,6 +897,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return nodes, pipes
 
     def add_node(self, node, pos=None):
+        """
+        Add node item into the scene.
+
+        Args:
+            node (AbstractNodeItem): node item instance.
+            pos (tuple or list): node scene position.
+        """
         pos = pos or (self._previous_pos.x(), self._previous_pos.y())
         node.pre_init(self, pos)
         self.scene().addItem(node)
@@ -838,6 +911,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     @staticmethod
     def remove_node(node):
+        """
+        Remove node item from the scene.
+
+        Args:
+            node (AbstractNodeItem): node item instance.
+        """
         if isinstance(node, AbstractNodeItem):
             node.delete()
 
@@ -890,25 +969,57 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.centerOn(rect.center().x(), rect.center().y())
 
     def get_pipe_layout(self):
+        """
+        Returns the pipe layout mode.
+
+        Returns:
+            int: pipe layout mode.
+        """
         return self._pipe_layout
 
     def set_pipe_layout(self, layout):
+        """
+        Sets the pipe layout mode and redraw all pipe items in the scene.
+
+        Args:
+            layout (int): pipe layout mode. (see the contants module)
+        """
         self._pipe_layout = layout
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
 
     def reset_zoom(self, cent=None):
-        self._scene_range = QtCore.QRectF(0, 0, self.size().width(), self.size().height())
+        """
+        Reset the viewer zoom level.
+
+        Args:
+            cent (QtCore.QPoint): specified center.
+        """
+        self._scene_range = QtCore.QRectF(0, 0,
+                                          self.size().width(),
+                                          self.size().height())
         if cent:
             self._scene_range.translate(cent - self._scene_range.center())
         self._update_scene()
 
     def get_zoom(self):
+        """
+        Returns the viewer zoom level.
+
+        Returns:
+            float: zoom level.
+        """
         transform = self.transform()
         cur_scale = (transform.m11(), transform.m22())
         return float('{:0.2f}'.format(cur_scale[0] - 1.0))
 
     def set_zoom(self, value=0.0):
+        """
+        Set the viewer zoom level.
+
+        Args:
+            value (float): zoom level
+        """
         if value == 0.0:
             self.reset_zoom()
             return

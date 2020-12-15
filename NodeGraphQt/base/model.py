@@ -3,10 +3,10 @@ import json
 from collections import defaultdict
 
 from ..constants import (NODE_PROP,
-                        NODE_PROP_QLABEL,
-                        NODE_PROP_QLINEEDIT,
-                        NODE_PROP_QCHECKBOX,
-                        NODE_PROP_COLORPICKER)
+                         NODE_PROP_QLABEL,
+                         NODE_PROP_QLINEEDIT,
+                         NODE_PROP_QCHECKBOX,
+                         NODE_PROP_COLORPICKER)
 from ..errors import NodePropertyError
 
 
@@ -20,10 +20,10 @@ class PortModel(object):
         self.multi_connection = False
         self.visible = True
         self.connected_ports = defaultdict(list)
-        self.data_type = 'None'
+        self.data_type = 'NoneType'
 
     def __repr__(self):
-        return '<{}(\'{}\') @ {}>'.format(
+        return '<{}(\'{}\') object at {}>'.format(
             self.__class__.__name__, self.name, hex(id(self)))
 
     @property
@@ -93,6 +93,10 @@ class NodeModel(object):
             'inputs': NODE_PROP,
             'outputs': NODE_PROP,
         }
+
+    def __repr__(self):
+        return '<{}(\'{}\') object at {}>'.format(
+            self.__class__.__name__, self.name, self.id)
 
     def add_property(self, name, value, items=None, range=None,
                      widget_type=NODE_PROP, tab='Properties',
@@ -240,15 +244,23 @@ class NodeModel(object):
         output_ports = []
         for name, model in node_dict.pop('inputs').items():
             if self.dynamic_port:
-                input_ports.append({'name': name, 'multi_connection': model.multi_connection,
-                                    'display_name': model.display_name, 'data_type': model.data_type})
+                input_ports.append({
+                    'name': name,
+                    'multi_connection': model.multi_connection,
+                    'display_name': model.display_name,
+                    'data_type': model.data_type
+                })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
             if self.dynamic_port:
-                output_ports.append({'name': name, 'multi_connection': model.multi_connection,
-                                     'display_name': model.display_name, 'data_type': model.data_type})
+                output_ports.append({
+                    'name': name,
+                    'multi_connection': model.multi_connection,
+                    'display_name': model.display_name,
+                    'data_type': model.data_type
+                })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
                 outputs[name] = connected_ports
