@@ -53,8 +53,9 @@
 <dl class="class">
 <dt id="NodeGraphQt.NodeGraph">
 <em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">NodeGraph</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes.</p>
-<p>Inherited from: <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QObject.html#PySide2.QtCore.QObject" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></a></p>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes
+and the node graph.</p>
+<p>Inherited from: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QObject</span></code></p>
 <img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" />
 <dl class="attribute">
 <dt id="NodeGraphQt.NodeGraph.widget">
@@ -65,7 +66,7 @@
 <dd class="field-odd"><p>node graph widget.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.QWidget" title="(in PySide v5.14.2)">PySide2.QtWidgets.QWidget</a></p>
+<dd class="field-even"><p>PySide2.QtWidgets.QWidget</p>
 </dd>
 </dl>
 </dd></dl>
@@ -965,7 +966,7 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a> for adding the node graph into a
-<a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLayout.html#PySide2.QtWidgets.QLayout" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLayout</span></code></a>.</p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLayout</span></code>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -989,7 +990,7 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 <dd><p>Signal is triggered when data has been dropped to the graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QMimeData.html#PySide2.QtCore.QMimeData" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QMimeData</span></code></a>, <a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtCore/QPoint.html#PySide2.QtCore.QPoint" title="(in PySide v5.14.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QPoint</span></code></a></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QMimeData</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QPoint</span></code></p>
 </dd>
 <dt class="field-even">Emits</dt>
 <dd class="field-even"><p>mime data, node graph position</p>
@@ -1027,6 +1028,20 @@ by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</spa
 </dd>
 <dt class="field-even">Emits</dt>
 <dd class="field-even"><p>selected node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NodeGraphQt.NodeGraph.node_factory">
+<code class="descname">node_factory</code><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node factory object used by the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node factory.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>NodeFactory</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1139,7 +1154,7 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <dd class="field-odd"><p>node graph undo view.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QUndoView.html#PySide2.QtWidgets.QUndoView" title="(in PySide v5.14.2)">PySide2.QtWidgets.QUndoView</a></p>
+<dd class="field-even"><p>PySide2.QtWidgets.QUndoView</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1154,7 +1169,7 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <em class="property">class </em><code class="descclassname">NodeGraphQt.</code><code class="descname">SubGraph</code><a class="headerlink" href="#NodeGraphQt.SubGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code> class is the base class that all
 Sub Graph Node inherit from.</p>
-<p><a href="#id1"><span class="problematic" id="id2">*</span></a>Implemented on NodeGraphQt: * <code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code></p>
+<p><em>Implemented on NodeGraphQt:</em> <code class="docutils literal notranslate"><span class="pre">v0.1.0</span></code></p>
 <img alt="_images/example_subgraph.gif" src="_images/example_subgraph.gif" style="width: 80%;" />
 <dl class="method">
 <dt id="NodeGraphQt.SubGraph.add_child">
