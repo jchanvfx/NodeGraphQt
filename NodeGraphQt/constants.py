@@ -88,8 +88,11 @@ NODE_PROP_BUTTON = 17
 
 # === NODE VIEWER ===
 
+#: Style to render the node graph background with nothing.
 VIEWER_GRID_NONE = 0
+#: Style to render the node graph background with dots.
 VIEWER_GRID_DOTS = 1
+#: Style to render the node graph background with grid lines.
 VIEWER_GRID_LINES = 2
 
 VIEWER_BG_COLOR = (35, 35, 35)

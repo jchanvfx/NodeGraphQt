@@ -30,4 +30,5 @@ GitHub Project: https://github.com/jchanvfx/NodeGraphQt
     examples/ex_overview
     examples/ex_node
     examples/ex_port
+    examples/ex_pipe
     examples/ex_menu
