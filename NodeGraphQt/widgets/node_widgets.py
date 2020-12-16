@@ -124,7 +124,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         Returns:
             NodeItem: parent node.
         """
-        self.parentItem()
+        return self.parentItem()
 
     @property
     def name(self):
@@ -138,7 +138,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     def get_icon(self, name):
         """
-        Returns the qt default icon.
+        Returns the Qt default icon.
 
         Returns:
             str: icon name.
