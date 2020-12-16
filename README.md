@@ -40,6 +40,10 @@ applications that supports PySide2.
 #### Vertical Layout
 <img src="/docs/_images/vertical_layout.png" width="600" title="Vertical Layout">
 
+#### Pipe Layout
+
+<img src="/docs/_images/pipe_layout_types.gif" width="600" title="Vertical Layout">
+
 #### Example
 
 ```python
