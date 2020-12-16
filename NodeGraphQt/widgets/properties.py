@@ -407,7 +407,7 @@ class _ValueEdit(QtWidgets.QLineEdit):
         super(_ValueEdit, self).__init__(parent)
         self.mid_state = False
         self._data_type = float
-        self.setText("0")
+        self.setText('0')
 
         self.pre_x = None
         self.pre_val = None
@@ -480,8 +480,8 @@ class _ValueEdit(QtWidgets.QLineEdit):
         return value
 
     def value(self):
-        if self.text().startswith("."):
-            text = "0" + self.text()
+        if self.text().startswith('.'):
+            text = '0' + self.text()
             self.setText(text)
         return self._convert_text(self.text())
 

@@ -124,7 +124,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         Returns:
             NodeItem: parent node.
         """
-        self.parentItem()
+        return self.parentItem()
 
     @property
     def name(self):
@@ -138,7 +138,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
     def get_icon(self, name):
         """
-        Returns the qt default icon.
+        Returns the Qt default icon.
 
         Returns:
             str: icon name.
@@ -393,7 +393,7 @@ class NodeFilePath(NodeLineEdit):
         :meth:`NodeGraphQt.BaseNode.add_float_input`
     """
 
-    def __init__(self, parent=None, name='', label='', text='', ext="*"):
+    def __init__(self, parent=None, name='', label='', text='', ext='*'):
         super(NodeLineEdit, self).__init__(parent, name, label)
         self._ledit = QtWidgets.QLineEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)

@@ -62,3 +62,15 @@ example
 .. autoclass:: NodeGraphQt.NodeTreeWidget
     :members:
     :exclude-members: mimeData, set_node_factory, property_changed
+
+
+Node Publish Widget
+*******************
+
+.. image:: _images/node_publish_dialog.png
+    :width: 411px
+
+----
+
+.. autoclass:: NodeGraphQt.NodePublishWidget
+    :members:
