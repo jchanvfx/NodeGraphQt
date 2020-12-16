@@ -502,7 +502,7 @@ class NodeGraph(QtCore.QObject):
 
     def viewer(self):
         """
-        Returns the view interface used by the node graph.
+        Returns the internal view interface used by the node graph.
 
         Warnings:
             Methods in the ``NodeViewer`` are used internally
@@ -572,8 +572,17 @@ class NodeGraph(QtCore.QObject):
         """
         Set node graph grid mode.
 
+        Note:
+            By default grid mode is set to "VIEWER_GRID_LINES".
+
+            Node graph background types:
+
+            * :attr:`NodeGraphQt.constants.VIEWER_GRID_NONE`
+            * :attr:`NodeGraphQt.constants.VIEWER_GRID_DOTS`
+            * :attr:`NodeGraphQt.constants.VIEWER_GRID_LINES`
+
         Args:
-            mode: VIEWER_GRID_LINES/VIEWER_GRID_DOTS/VIEWER_GRID_NONE.
+            mode (int): background styles.
         """
         self.scene().grid_mode = mode
         self._viewer.force_update()
@@ -734,8 +743,11 @@ class NodeGraph(QtCore.QObject):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
 
+        .. image:: _images/pipe_layout_types.gif
+            :width: 80%
+
         Note:
-            By default all pipes are set curved.
+            By default pipe layout is set to "PIPE_LAYOUT_CURVED".
 
             Pipe Layout Styles:
 
@@ -1239,6 +1251,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             data (dict): node data.
             relative_pos (bool): position node relative to the cursor.
+            pos (tuple or list): custom x, y position.
             set_parent (bool): set node parent to current node space.
 
         Returns:
@@ -1280,7 +1293,10 @@ class NodeGraph(QtCore.QObject):
                     self.add_node(node, n_data.get('pos'), unique_name=set_parent)
 
                 if n_data.get('dynamic_port', None):
-                    node.set_ports({'input_ports': n_data['input_ports'], 'output_ports': n_data['output_ports']})
+                    node.set_ports({
+                        'input_ports': n_data['input_ports'],
+                        'output_ports': n_data['output_ports']
+                    })
 
         # build the connections.
         for connection in data.get('connections', []):
@@ -1613,7 +1629,7 @@ class SubGraph(object):
     The ``NodeGraphQt.SubGraph`` class is the base class that all
     Sub Graph Node inherit from.
 
-    *Implemented on NodeGraphQt: * ``v0.1.0``
+    *Implemented on NodeGraphQt:* ``v0.1.0``
 
     .. image:: _images/example_subgraph.gif
         :width: 80%

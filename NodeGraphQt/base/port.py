@@ -145,6 +145,9 @@ class Port(object):
         if not port:
             return
 
+        if self in port.connected_ports():
+            return
+
         graph = self.node().graph
         viewer = graph.viewer()
 

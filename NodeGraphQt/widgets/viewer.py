@@ -23,7 +23,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     """
     The widget interface used for displaying the scene and nodes.
 
-    functions in this class are called by the
+    functions in this class should mainly be called by the
     class:`NodeGraphQt.NodeGraph` class.
     """
 
@@ -157,6 +157,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
 
     def _update_scene(self):
+        """
+        Redraw the scene.
+        """
         self.setSceneRect(self._scene_range)
         self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
 
@@ -662,6 +665,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.end_live_connection()
             return
 
+        # end connection if starting port is already connected.
+        if self._start_port.multi_connection and \
+                self._start_port in end_port.connected_ports:
+            self._detached_port = None
+            self.end_live_connection()
+            return
+
         # register as disconnected if not acyclic.
         if self.acyclic and not self.acyclic_check(self._start_port, end_port):
             if self._detached_port:
@@ -811,6 +821,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         BaseDialog.message_dialog(text, title)
 
     def load_dialog(self, current_dir=None, ext=None):
+        """
+        Prompt node viewer file load dialog widget.
+
+        Args:
+            current_dir (str): directory path starting point. (optional)
+            ext (str): custom file extension filter type. (optional)
+
+        Returns:
+            str: selected file path.
+        """
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
@@ -821,6 +841,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return file
 
     def save_dialog(self, current_dir=None, ext=None):
+        """
+        Prompt node viewer file save dialog widget.
+
+        Args:
+            current_dir (str): directory path starting point. (optional)
+            ext (str): custom file extension filter type. (optional)
+
+        Returns:
+            str: selected file path.
+        """
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
@@ -921,6 +951,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             node.delete()
 
     def move_nodes(self, nodes, pos=None, offset=None):
+        """
+        Globally move specified nodes.
+
+        Args:
+            nodes (list[AbstractNodeItem]): node items.
+            pos (tuple or list): custom x, y position.
+            offset (tuple or list): x, y position offset.
+        """
         group = self.scene().createItemGroup(nodes)
         group_rect = group.boundingRect()
         if pos:
@@ -1048,10 +1086,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self._scene_range.width(), self._scene_range.height()]
 
     def scene_center(self):
+        """
+        Get the center x,y pos from the scene.
+
+        Returns:
+            list[float]: x, y position.
+        """
         cent = self._scene_range.center()
         return [cent.x(), cent.y()]
 
     def nodes_rect_center(self, nodes):
+        """
+        Get the center x,y pos from the specified nodes.
+
+        Args:
+            nodes (list[AbstractNodeItem]): list of node qgrphics items.
+
+        Returns:
+            list[float]: x, y position.
+        """
         cent = self._combined_rect(nodes).center()
         return [cent.x(), cent.y()]
 
