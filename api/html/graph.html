@@ -872,9 +872,19 @@ the node graph.</p>
 <dt id="NodeGraphQt.NodeGraph.set_grid_mode">
 <code class="descname">set_grid_mode</code><span class="sig-paren">(</span><em>mode=2</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_grid_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set node graph grid mode.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default grid mode is set to “VIEWER_GRID_LINES”.</p>
+<p>Node graph background types:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_NONE" title="NodeGraphQt.constants.VIEWER_GRID_NONE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_NONE</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_DOTS" title="NodeGraphQt.constants.VIEWER_GRID_DOTS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_DOTS</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_LINES" title="NodeGraphQt.constants.VIEWER_GRID_LINES"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_LINES</span></code></a></p></li>
+</ul>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>mode</strong> – VIEWER_GRID_LINES/VIEWER_GRID_DOTS/VIEWER_GRID_NONE.</p>
+<dd class="field-odd"><p><strong>mode</strong> (<em>int</em>) – background styles.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -894,9 +904,10 @@ the node graph.</p>
 <dt id="NodeGraphQt.NodeGraph.set_pipe_style">
 <code class="descname">set_pipe_style</code><span class="sig-paren">(</span><em>style=1</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_pipe_style" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set node graph pipes to be drawn as straight, curved or angled.</p>
+<img alt="_images/pipe_layout_types1.gif" src="_images/pipe_layout_types1.gif" style="width: 80%;" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>By default all pipes are set curved.</p>
+<p>By default pipe layout is set to “PIPE_LAYOUT_CURVED”.</p>
 <p>Pipe Layout Styles:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_CURVED" title="NodeGraphQt.constants.PIPE_LAYOUT_CURVED"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_CURVED</span></code></a></p></li>
@@ -957,7 +968,7 @@ function to <code class="xref py py-meth docutils literal notranslate"><span cla
 <dl class="method">
 <dt id="NodeGraphQt.NodeGraph.viewer">
 <code class="descname">viewer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.viewer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the view interface used by the node graph.</p>
+<dd><p>Returns the internal view interface used by the node graph.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Methods in the <code class="docutils literal notranslate"><span class="pre">NodeViewer</span></code> are used internally
@@ -1252,6 +1263,7 @@ Sub Graph Node inherit from.</p>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a></li>
 </ul>
 

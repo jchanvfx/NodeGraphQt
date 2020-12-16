@@ -114,6 +114,35 @@ embedded in a <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQ
 </dd></dl>
 
 </div>
+<div class="section" id="nodecheckbox">
+<h2>NodeCheckBox<a class="headerlink" href="#nodecheckbox" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NodeGraphQt.widgets.node_widgets.NodeCheckBox">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_widgets.</code><code class="descname">NodeCheckBox</code><span class="sig-paren">(</span><em>parent=None</em>, <em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>NodeCheckBox widget is subclassed from <a class="reference internal" href="#NodeGraphQt.widgets.node_widgets.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a>,
+this widget is displayed as a <code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code> embedded in a node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a ``QCheckBox`</cite> in a node see func:`
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_checkbox()</span></code></a></p>
+</div>
+<dl class="attribute">
+<dt id="NodeGraphQt.widgets.node_widgets.NodeCheckBox.value">
+<code class="descname">value</code><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widget checked state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>checked state.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="nodecombobox">
 <h2>NodeComboBox<a class="headerlink" href="#nodecombobox" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -172,32 +201,62 @@ this widget is displayed as a <code class="docutils literal notranslate"><span c
 </dd></dl>
 
 </div>
-<div class="section" id="nodecheckbox">
-<h2>NodeCheckBox<a class="headerlink" href="#nodecheckbox" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nodefilepath">
+<h2>NodeFilePath<a class="headerlink" href="#nodefilepath" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="NodeGraphQt.widgets.node_widgets.NodeCheckBox">
-<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_widgets.</code><code class="descname">NodeCheckBox</code><span class="sig-paren">(</span><em>parent=None</em>, <em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>state=False</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox" title="Permalink to this definition">¶</a></dt>
-<dd><p>NodeCheckBox widget is subclassed from <a class="reference internal" href="#NodeGraphQt.widgets.node_widgets.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a>,
-this widget is displayed as a <code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code> embedded in a node.</p>
+<dt id="NodeGraphQt.widgets.node_widgets.NodeFilePath">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_widgets.</code><code class="descname">NodeFilePath</code><span class="sig-paren">(</span><em>parent=None</em>, <em>name=''</em>, <em>label=''</em>, <em>text=''</em>, <em>ext='*'</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeFilePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>NodeFilePath widget is subclassed from <a class="reference internal" href="#NodeGraphQt.widgets.node_widgets.NodeLineEdit" title="NodeGraphQt.widgets.node_widgets.NodeLineEdit"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeLineEdit</span></code></a>,
+this widget is displayed as a <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> embedded in a node.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><cite>To embed a ``QCheckBox`</cite> in a node see func:`
-<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_checkbox()</span></code></a></p>
+<p><cite>To embed a ``QLineEdit`</cite> in a node see func:`
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_float_input" title="NodeGraphQt.BaseNode.add_float_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_float_input()</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="nodefloatedit">
+<h2>NodeFloatEdit<a class="headerlink" href="#nodefloatedit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NodeGraphQt.widgets.node_widgets.NodeFloatEdit">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_widgets.</code><code class="descname">NodeFloatEdit</code><span class="sig-paren">(</span><em>parent=None</em>, <em>name=''</em>, <em>label=''</em>, <em>value=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeFloatEdit" title="Permalink to this definition">¶</a></dt>
+<dd><p>NodeFloatEdit widget is subclassed from <a class="reference internal" href="#NodeGraphQt.widgets.node_widgets.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a>,
+this widget is displayed as a <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> embedded in a node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a ``QLineEdit`</cite> in a node see func:`
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_float_input" title="NodeGraphQt.BaseNode.add_float_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_float_input()</span></code></a></p>
 </div>
 <dl class="attribute">
-<dt id="NodeGraphQt.widgets.node_widgets.NodeCheckBox.value">
-<code class="descname">value</code><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox.value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the widget checked state.</p>
+<dt id="NodeGraphQt.widgets.node_widgets.NodeFloatEdit.value">
+<code class="descname">value</code><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeFloatEdit.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widgets current value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>checked state.</p>
+<dd class="field-odd"><p>current value.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="nodeintedit">
+<h2>NodeIntEdit<a class="headerlink" href="#nodeintedit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NodeGraphQt.widgets.node_widgets.NodeIntEdit">
+<em class="property">class </em><code class="descclassname">NodeGraphQt.widgets.node_widgets.</code><code class="descname">NodeIntEdit</code><span class="sig-paren">(</span><em>parent=None</em>, <em>name=''</em>, <em>label=''</em>, <em>value=0</em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeIntEdit" title="Permalink to this definition">¶</a></dt>
+<dd><p>NodeIntEdit widget is subclassed from <a class="reference internal" href="#NodeGraphQt.widgets.node_widgets.NodeFloatEdit" title="NodeGraphQt.widgets.node_widgets.NodeFloatEdit"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFloatEdit</span></code></a>,
+this widget is displayed as a <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> embedded in a node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a ``QLineEdit`</cite> in a node see func:`
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_int_input" title="NodeGraphQt.BaseNode.add_int_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_int_input()</span></code></a></p>
+</div>
 </dd></dl>
 
 </div>
@@ -219,9 +278,12 @@ this widget is displayed as a <code class="docutils literal notranslate"><span c
 <li class="toctree-l1"><a class="reference internal" href="widgets.html">Widgets</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Node Widgets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#nodebasewidget">NodeBaseWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodecheckbox">NodeCheckBox</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nodecombobox">NodeComboBox</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nodelineedit">NodeLineEdit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#nodecheckbox">NodeCheckBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodefilepath">NodeFilePath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodefloatedit">NodeFloatEdit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodeintedit">NodeIntEdit</a></li>
 </ul>
 </li>
 </ul>
@@ -230,6 +292,7 @@ this widget is displayed as a <code class="docutils literal notranslate"><span c
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">NodeGraph Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Examples</a></li>
 </ul>
 
