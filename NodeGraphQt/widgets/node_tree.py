@@ -30,10 +30,11 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
     def __init__(self, parent=None, node_graph=None):
         super(NodeTreeWidget, self).__init__(parent)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragOnly)
+        self.setWindowTitle('Node Tree')
         self.setHeaderHidden(True)
         self._factory = None
         self._custom_labels = {}
-        self._set_node_factory(node_graph._node_factory)
+        self._set_node_factory(node_graph.node_factory)
 
     def __repr__(self):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))

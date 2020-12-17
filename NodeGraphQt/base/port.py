@@ -26,7 +26,8 @@ class Port(object):
 
     def __repr__(self):
         port = str(self.__class__.__name__)
-        return '<{}("{}") object at {}>'.format(port, self.name(), hex(id(self)))
+        return '<{}("{}") object at {}>'.format(
+            port, self.name(), hex(id(self)))
 
     @property
     def view(self):
@@ -142,6 +143,9 @@ class Port(object):
             port (NodeGraphQt.Port): port object.
         """
         if not port:
+            return
+
+        if self in port.connected_ports():
             return
 
         graph = self.node().graph

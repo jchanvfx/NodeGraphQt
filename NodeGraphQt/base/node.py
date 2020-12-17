@@ -2,6 +2,7 @@
 from .commands import PropertyChangedCmd
 from .model import NodeModel
 from .port import Port
+from .utils import update_node_down_stream
 from ..constants import (NODE_PROP,
                          NODE_PROP_QLINEEDIT,
                          NODE_PROP_QTEXTEDIT,
@@ -23,7 +24,6 @@ from ..widgets.node_widgets import (NodeComboBox,
                                     NodeIntEdit,
                                     NodeCheckBox,
                                     NodeFilePath)
-from .utils import update_node_down_stream
 
 
 class classproperty(object):
@@ -281,9 +281,11 @@ class NodeObject(object):
             widget_type (int): widget flag to display in the ``PropertiesBinWidget``
             tab (str): name of the widget tab to display in the properties bin.
             ext (str): file ext of ``NODE_PROP_FILE``
-            funcs (list) list of functions for NODE_PROP_BUTTON
+            funcs (list[function]) list of functions for NODE_PROP_BUTTON
         """
-        self.model.add_property(name, value, items, range, widget_type, tab, ext, funcs)
+        self.model.add_property(
+            name, value, items, range, widget_type, tab, ext, funcs
+        )
 
     def properties(self):
         """
@@ -317,7 +319,7 @@ class NodeObject(object):
 
         Args:
             name (str): name of the property.
-            value (object): property data.
+            value (object): property data (python built in types).
         """
 
         # prevent signals from causing a infinite loop.
@@ -526,7 +528,6 @@ class BaseNode(NodeObject):
         self._inputs = []
         self._outputs = []
         self._has_draw = False
-        self._view.text_item.editingFinished.connect(self.set_name)
 
     def draw(self, force=True):
         """

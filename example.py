@@ -219,4 +219,6 @@ if __name__ == '__main__':
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
 
+    graph.fit_to_selection()
+
     app.exec_()
