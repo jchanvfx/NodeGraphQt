@@ -29,9 +29,9 @@ author = NodeGraphQt.pkg_info.__author__
 copyright = '{}, {}'.format(datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
-release = NodeGraphQt.VERSION
+release = 'v{}'.format(NodeGraphQt.VERSION)
 # The short X.Y version
-version = '{0}.{1}'.format(*release.split('.'))
+version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 
 
 # -- General configuration ---------------------------------------------------
@@ -99,16 +99,34 @@ pygments_style = 'monokai'
 # It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
 # pixels large. Default: None.
 html_favicon = '_images/favicon.png'
+html_logo = '_images/logo.png'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = ['_themes']
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {}
+html_theme_options = {
+    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
+    # 'analytics_anonymize_ip': False,
+    # 'logo_only': False,
+    # 'display_version': True,
+    # 'prev_next_buttons_location': 'both',
+    # 'style_external_links': False,
+    # 'vcs_pageview_mode': '',
+    # 'style_nav_header_background': 'white',
+
+    ### Toc options ###
+    # 'collapse_navigation': True,
+    # 'sticky_navigation': True,
+    # 'navigation_depth': 4,
+    # 'includehidden': True,
+    # 'titles_only': False
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
