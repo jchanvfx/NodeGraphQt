@@ -628,7 +628,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QComboBox` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 
@@ -652,7 +652,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 
@@ -677,7 +677,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 
@@ -700,7 +700,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 
@@ -723,7 +723,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 
@@ -746,7 +746,7 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QCheckBox` widget
         into the node.
 
-        Note:
+        Important:
             The embedded widget is wired up to the :meth:`NodeObject.set_property`
             function use this function to to update the widget.
 

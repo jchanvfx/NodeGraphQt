@@ -112,8 +112,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.COLLIDING_state = False
 
     def __repr__(self):
-        return '{}.{}()'.format(
-            self.__module__, self.__class__.__name__)
+        return '<{}() object at {}>'.format(
+            self.__class__.__name__, hex(id(self)))
 
     # --- private ---
 

@@ -823,7 +823,7 @@ class NodeGraph(QtCore.QObject):
         """
         Return a list of all node types that have been registered.
 
-        See Also:
+        Hint:
             To register a node :meth:`NodeGraph.register_node`
 
         Returns:
