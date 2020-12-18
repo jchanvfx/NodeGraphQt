@@ -3341,14 +3341,14 @@ input[type=checkbox][disabled],input[type=radio][disabled]{
     font-size:80%
 }
 .rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,.wy-table-backed,.wy-table-odd td,.wy-table-striped tr:nth-child(2n-1) td{
-    background-color: #4f545b;
+    background-color: #313842;
 }
 .rst-content table.docutils,.wy-table-bordered-all{
     border: 1px solid #222528;
 }
 .rst-content table.docutils td,.wy-table-bordered-all td{
-    border-bottom: 1px solid #131619;
-    border-left: 1px solid #131619;
+    border-bottom: 1px solid #26292d;
+    border-left: 1px solid #26292d;
 }
 .rst-content table.docutils tbody>tr:last-child td,.wy-table-bordered-all tbody>tr:last-child td{
     border-bottom-width:0
@@ -3827,14 +3827,16 @@ html{
 }
 .wy-side-nav-search .wy-dropdown>a,.wy-side-nav-search>a{
     color:#fcfcfc;
+    border-radius: 6px;
     font-size:100%;
     font-weight:700;
     display:inline-block;
     padding:4px 6px;
     margin-bottom:.809em
+    transition: background .3s;
 }
 .wy-side-nav-search .wy-dropdown>a:hover,.wy-side-nav-search>a:hover{
-    background:hsla(0,0%,100%,.1)
+    background:rgb(255 255 255 / 0.03);
 }
 .wy-side-nav-search .wy-dropdown>a img.logo,.wy-side-nav-search>a img.logo{
     display:block;
@@ -4728,6 +4730,10 @@ span[id*=MathJax-Span]{
 /* header tweaks */
 h1 {color: #eec524;}
 h2, h3, h4, h5 {color: #6dcfd9;}
+h2 {
+    border-bottom: 1px solid #1e2023;
+    padding-bottom: 6px;
+}
 
 /* kwargs tweaks */
 .field-list.simple {

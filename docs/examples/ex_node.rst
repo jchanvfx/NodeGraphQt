@@ -9,6 +9,7 @@ Creating Nodes
 
 .. code-block:: python
     :linenos:
+    :emphasize-lines: 22
 
     from NodeGraphQt import BaseNode, NodeGraph, QtWidgets
 

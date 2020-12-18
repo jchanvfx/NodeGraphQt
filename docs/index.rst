@@ -11,7 +11,7 @@ GitHub Project: https://github.com/jchanvfx/NodeGraphQt
 ----
 
 .. toctree::
-    :caption: Module Contents
+    :caption: API Reference
     :name: moduletoc
     :maxdepth: 2
 
@@ -19,11 +19,17 @@ GitHub Project: https://github.com/jchanvfx/NodeGraphQt
     graph
     nodes
     menu
-    widgets
     node_widgets
 
 .. toctree::
-    :caption: Module Examples
+    :caption: Module Widgets
+    :name: customwdgtstoc
+    :maxdepth: 2
+
+    custom_widgets
+
+.. toctree::
+    :caption: Examples
     :name: examplestoc
     :maxdepth: 3
 

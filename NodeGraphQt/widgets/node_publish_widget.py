@@ -84,7 +84,8 @@ class NodePublishWidget(QtWidgets.QDialog):
         node_name = self.node_name.text()
         node_identifier = self.node_identifier.text()
         node_class_name = self.node_class_name.text()
-        self.node.publish(file_path, node_name, node_identifier, node_class_name)
+        self.node.publish(
+            file_path, node_name, node_identifier, node_class_name)
         self.published = True
         self.close()
 

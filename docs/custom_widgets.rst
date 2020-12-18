@@ -1,7 +1,7 @@
-Widgets
-#######
+Custom Widgets
+##############
 
-Custom widgets included in the NodeGraphQt module.
+Here's a few custom widgets that included with the ``NodeGraphQt`` module.
 
 
 Properties Bin
@@ -64,8 +64,11 @@ example
     :exclude-members: mimeData, set_node_factory, property_changed
 
 
-Node Publish Widget
-*******************
+Publish Node
+************
+
+The :class:`NodeGraphQt.NodePublishWidget` is a simple widget for publishing
+nodes to a serialized json formatted file.
 
 .. image:: _images/node_publish_dialog.png
     :width: 411px
