@@ -3384,7 +3384,7 @@ a{
     color:#20fde8;
     text-decoration:none;
     cursor:pointer
-    transition: all .3s;
+    transition: color .3s;
 }
 a:hover{
     color:#ffc824;
@@ -3661,7 +3661,7 @@ html{
     padding:.4045em 2.427em
 }
 .wy-menu-vertical li.current a:hover{
-    background:#d6d6d6
+    background: #485c6f;
 }
 .rst-content .wy-menu-vertical li tt,.wy-menu-vertical li .rst-content tt,.wy-menu-vertical li code{
     border:none;
@@ -3687,7 +3687,7 @@ html{
     padding:.4045em 1.618em
 }
 .wy-menu-vertical li.current>a:hover,.wy-menu-vertical li.on a:hover{
-    background:#5e5e5e;
+    background: #336f82;
 }
 .wy-menu-vertical li.current>a:hover span.toctree-expand,.wy-menu-vertical li.on a:hover span.toctree-expand{
     color:grey
@@ -3767,12 +3767,12 @@ html{
 }
 .wy-menu-vertical li ul{
     margin-bottom:0;
-    display:none
+    display:none;
 }
 .wy-menu-vertical li ul li a{
     margin-bottom:0;
     color:#d9d9d9;
-    font-weight:400
+    font-weight:400;
 }
 .wy-menu-vertical a{
     line-height:18px;
@@ -3780,11 +3780,12 @@ html{
     display:block;
     position:relative;
     font-size:90%;
-    color:#d9d9d9
+    color:#d9d9d9;
+    transition: all .3s;
 }
 .wy-menu-vertical a:hover{
-    background-color:#4e4a4a;
-    cursor:pointer
+    background-color:#385773;
+    cursor:pointer;
 }
 .wy-menu-vertical a:hover span.toctree-expand{
     color:#d9d9d9
@@ -3851,7 +3852,7 @@ html{
     margin-top:-.4045em;
     margin-bottom:.809em;
     font-weight:400;
-    color:#acacac;
+    color: #3d444a;
 }
 .wy-nav .wy-menu-vertical header{
     color:#2980b9
@@ -4239,7 +4240,7 @@ footer p{
     overflow:auto
 }
 .rst-content div[class^=highlight],.rst-content pre.literal-block{
-    border:1px solid #292e33;
+    border:1px solid #26292d;
     overflow-x:auto;
     margin:1px 0 24px
 }
@@ -4574,6 +4575,7 @@ html.writer-html4 .rst-content dl:not(.docutils)>dt,html.writer-html5 .rst-conte
     background: #2d3948;
     color: #9adeff;
     border-top: 2px solid #2aaaff;
+    border-radius: 0px 0px 3px 3px;
     padding: 8px 12px;
     position: relative;
 }
@@ -4585,10 +4587,11 @@ html.writer-html4 .rst-content dl:not(.docutils)>dt .headerlink,html.writer-html
     font-size:100%!important
 }
 html.writer-html4 .rst-content dl:not(.docutils) dl:not(.field-list)>dt,html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dl:not(.field-list)>dt{
+    margin-top: 4px;
     margin-bottom:6px;
     border:none;
     border-left: 2px solid #fdb917;
-    border-radius: 0px 6px 6px 0px;
+    border-radius: 0px 3px 3px 0px;
     background: #131a1c;
     color: #e3e3e3;
     padding: 6px 10px;
@@ -4721,7 +4724,23 @@ span[id*=MathJax-Span]{
 /* custom overrides */
 /* ------------------------------------------------------------------------- */
 
+
+/* header tweaks */
 h1 {color: #eec524;}
 h2, h3, h4, h5 {color: #6dcfd9;}
 
+/* kwargs tweaks */
+.field-list.simple {
+    background: #32363c;
+    padding-top: 10px;
+    margin-top: 6px;
+}
 .simple dt {color: #748e97;}
+
+/* note block tweaks */
+.admonition {margin-top: 10px;}
+
+/* func tweaks */
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) code.descname {
+    margin-right: 2px;
+}

@@ -29,7 +29,7 @@ author = NodeGraphQt.pkg_info.__author__
 copyright = '{}, {}'.format(datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
-release = 'v{}'.format(NodeGraphQt.VERSION)
+release = 'release : v{}'.format(NodeGraphQt.VERSION)
 # The short X.Y version
 version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 
@@ -106,6 +106,16 @@ html_logo = '_images/logo.png'
 #
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = ['_themes']
+html_show_sourcelink = False
+html_show_sphinx = False
+html_context = {
+    'display_github': True,
+    'github_user': 'jchanvfx',
+    'github_repo': 'NodeGraphQt',
+    'github_version': "master",
+    'conf_py_path': '/docs/',
+    'source_suffix': '.rst',
+}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
