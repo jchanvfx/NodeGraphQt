@@ -29,7 +29,7 @@ author = NodeGraphQt.pkg_info.__author__
 copyright = '{}, {}'.format(datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
-release = 'release : v{}'.format(NodeGraphQt.VERSION)
+release = '{}'.format(NodeGraphQt.VERSION)
 # The short X.Y version
 version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 
@@ -37,7 +37,6 @@ version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
 # needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -57,11 +56,18 @@ intersphinx_mapping = {
     'PySide2': ('https://doc.qt.io/qtforpython/', None),
 }
 
+# order of members.
+autodoc_member_order = 'groupwise'
+
 # autosummary generate stubs.
 autosummary_generate = True
 
 # autosummary overwrite generated stubs files.
 autosummary_generate_option = True
+
+rst_prolog = '''
+.. |version_str| replace:: v{0}
+'''.format(release)
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']

@@ -30,8 +30,13 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
 
 class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
-    NodeBaseWidget is the main base class for all node widgets that is
-    embedded in a :class:`NodeGraphQt.BaseNode` object.
+    This is the main wrapper class that allows a widget to be
+    added in a :class:`NodeGraphQt.BaseNode`.
+
+    If you want to add your own custom widget into a node you'll need
+    to subclass ``NodeBaseWidget`` for an example have a look at the source
+    code for the ``NodeComboBox``
+    `here <https://github.com/jchanvfx/NodeGraphQt/blob/master/NodeGraphQt/widgets/node_widgets.py#L149>`_.
     """
 
     value_changed = QtCore.Signal(str, object)
@@ -61,6 +66,10 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         """
         Returns the embedded QWidget used in the node.
 
+        Note:
+            To add your own custom widget in a :class:`NodeGraphQt.BaseNode`
+            you must re-implement this function.
+
         Returns:
             QtWidgets.QWidget: nested QWidget
         """
@@ -71,6 +80,10 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         """
         Returns the widgets current value.
 
+        Note:
+            You must re-implement this function to get the value from your
+            custom widget.
+
         Returns:
             str: current property value.
         """
@@ -80,6 +93,9 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     def value(self, text):
         """
         Sets the widgets current value.
+
+        Note:
+            You must re-implement this function to update your custom widget.
 
         Args:
             text (str): new text value.
@@ -148,11 +164,12 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
 
 class NodeComboBox(NodeBaseWidget):
     """
-    NodeComboBox widget is subclassed from :class:`NodeBaseWidget`,
-    this widget is displayed as a ``QComboBox`` embedded in a node.
+    Displays as a ``QComboBox`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QComboBox`` in a node see func:`
+        `To embed a` ``QComboBox`` `in a node see func:`
         :meth:`NodeGraphQt.BaseNode.add_combo_menu`
     """
 
@@ -221,11 +238,12 @@ class NodeComboBox(NodeBaseWidget):
 
 class NodeLineEdit(NodeBaseWidget):
     """
-    NodeLineEdit widget is subclassed from :class:`NodeBaseWidget`,
-    this widget is displayed as a ``QLineEdit`` embedded in a node.
+    Displays as a ``QLineEdit`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QLineEdit`` in a node see func:`
+        `To embed a` ``QLineEdit`` `in a node see func:`
         :meth:`NodeGraphQt.BaseNode.add_text_input`
     """
 
@@ -269,15 +287,16 @@ class NodeLineEdit(NodeBaseWidget):
 
 class NodeFloatEdit(NodeBaseWidget):
     """
-    NodeFloatEdit widget is subclassed from :class:`NodeBaseWidget`,
-    this widget is displayed as a ``QLineEdit`` embedded in a node.
+    Displays as a ``QLineEdit`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QLineEdit`` in a node see func:`
+        `To embed a` ``QLineEdit`` `in a node see func:`
         :meth:`NodeGraphQt.BaseNode.add_float_input`
     """
 
-    def __init__(self, parent=None, name='', label='', value = 0.0):
+    def __init__(self, parent=None, name='', label='', value=0.0):
         super(NodeFloatEdit, self).__init__(parent, name, label)
         self._ledit = _ValueEdit()
         self._ledit.setStyleSheet(STYLE_QLINEEDIT)
@@ -317,11 +336,12 @@ class NodeFloatEdit(NodeBaseWidget):
 
 class NodeIntEdit(NodeFloatEdit):
     """
-    NodeIntEdit widget is subclassed from :class:`NodeFloatEdit`,
-    this widget is displayed as a ``QLineEdit`` embedded in a node.
+    Displays as a ``QLineEdit`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QLineEdit`` in a node see func:`
+        `To embed a` ``QLineEdit`` `in a node see func:`
         :meth:`NodeGraphQt.BaseNode.add_int_input`
     """
 
@@ -333,11 +353,12 @@ class NodeIntEdit(NodeFloatEdit):
 
 class NodeCheckBox(NodeBaseWidget):
     """
-    NodeCheckBox widget is subclassed from :class:`NodeBaseWidget`,
-    this widget is displayed as a ``QCheckBox`` embedded in a node.
+    Displays as a ``QCheckBox`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QCheckBox`` in a node see func:`
+        `To embed a` ``QCheckBox`` `in a node see func:`
         :meth:`NodeGraphQt.BaseNode.add_checkbox`
     """
 
@@ -385,12 +406,13 @@ class NodeCheckBox(NodeBaseWidget):
 
 class NodeFilePath(NodeLineEdit):
     """
-    NodeFilePath widget is subclassed from :class:`NodeLineEdit`,
-    this widget is displayed as a ``QLineEdit`` embedded in a node.
+    Displays as a ``QLineEdit`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
 
     .. note::
-        `To embed a ``QLineEdit`` in a node see func:`
-        :meth:`NodeGraphQt.BaseNode.add_float_input`
+        To embed a ``QLineEdit`` in a node see:
+        :meth:`NodeGraphQt.BaseNode.add_file_input`
     """
 
     def __init__(self, parent=None, name='', label='', text='', ext='*'):

@@ -1,36 +1,36 @@
-NodeGraphQt API
-###############
+NodeGraphQt |version_str|
+#########################
 
-Welcome to the NodeGraphQt documentation.
+https://github.com/jchanvfx/NodeGraphQt
 
 .. image:: _images/screenshot.png
     :width: 95%
 
-GitHub Project: https://github.com/jchanvfx/NodeGraphQt
+NodeGraphQt documentation.
 
 ----
 
 .. toctree::
     :caption: API Reference
-    :name: moduletoc
+    :name: apitoc
     :maxdepth: 2
 
     constants
     graph
     nodes
     menu
-    node_widgets
 
 .. toctree::
     :caption: Module Widgets
-    :name: customwdgtstoc
+    :name: wdgtstoc
     :maxdepth: 2
 
     custom_widgets
+    node_widgets
 
 .. toctree::
     :caption: Examples
-    :name: examplestoc
+    :name: exmplstoc
     :maxdepth: 3
 
     examples/ex_overview

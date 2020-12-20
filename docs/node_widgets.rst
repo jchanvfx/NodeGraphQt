@@ -1,8 +1,8 @@
 Node Widgets
 ############
 
-Node widgets are widgets that are embedded in a :class:`NodeGraphQt.BaseNode`
-object displayed in the node graph.
+Here are widgets that can be added to a :class:`NodeGraphQt.BaseNode` and
+displayed in the node graph.
 
 NodeBaseWidget
 **************

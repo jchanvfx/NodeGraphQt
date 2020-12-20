@@ -253,7 +253,14 @@ class NodeObject(object):
         """
         Creates a custom property to the node.
 
-        Widget Types:
+        See Also:
+            Custom node properties bin widget
+            :class:`NodeGraphQt.PropertiesBinWidget`
+
+        Hint:
+            Here are some constants variables used to define the node
+            widget type in the ``PropertiesBinWidget``.
+
             - :attr:`NodeGraphQt.constants.NODE_PROP`
             - :attr:`NodeGraphQt.constants.NODE_PROP_QLABEL`
             - :attr:`NodeGraphQt.constants.NODE_PROP_QLINEEDIT`
@@ -270,15 +277,13 @@ class NodeObject(object):
             - :attr:`NodeGraphQt.constants.NODE_PROP_INT`
             - :attr:`NodeGraphQt.constants.NODE_PROP_BUTTON`
 
-        See Also:
-            :class:`NodeGraphQt.PropertiesBinWidget`
-
         Args:
             name (str): name of the property.
             value (object): data.
             items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
             range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
-            widget_type (int): widget flag to display in the ``PropertiesBinWidget``
+            widget_type (int): widget flag to display in the
+                :class:`NodeGraphQt.PropertiesBinWidget`
             tab (str): name of the widget tab to display in the properties bin.
             ext (str): file ext of ``NODE_PROP_FILE``
             funcs (list[function]) list of functions for NODE_PROP_BUTTON

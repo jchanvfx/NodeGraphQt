@@ -15,6 +15,10 @@ class Port(object):
     .. image:: ../_images/port.png
         :width: 50%
 
+    See Also:
+        For adding a ports into a node see:
+        :meth:`BaseNode.add_input`, :meth:`BaseNode.add_output`
+
     Args:
         node (NodeGraphQt.NodeObject): parent node.
         port (PortItem): graphic item used for drawing.
