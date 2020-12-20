@@ -15,10 +15,11 @@ from ..constants import (NODE_PROP,
                          NODE_LAYOUT_VERTICAL,
                          NODE_LAYOUT_HORIZONTAL,
                          NODE_LAYOUT_DIRECTION)
-from ..errors import PortRegistrationError
+from ..errors import PortRegistrationError,NodeWidgetError
 from ..qgraphics.node_backdrop import BackdropNodeItem
 from ..qgraphics.node_base import NodeItem, NodeItemVertical
-from ..widgets.node_widgets import (NodeComboBox,
+from ..widgets.node_widgets import (NodeBaseWidget,
+                                    NodeComboBox,
                                     NodeLineEdit,
                                     NodeFloatEdit,
                                     NodeIntEdit,
@@ -627,15 +628,39 @@ class BaseNode(NodeObject):
         """
         return self.view.widgets.get(name)
 
+    def add_custom_widget(self, name, widget=None, widget_type=NODE_PROP,
+                          tab=None):
+        """
+        Add a custom node widget into the node.
+
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
+
+        Args:
+            name (str): name for the custom property.
+            widget (NodeBaseWidget): custom node widget.
+            widget_type: widget flag to display in the
+                :class:`NodeGraphQt.PropertiesBinWidget`.
+            tab (str): name of the widget tab to display in.
+        """
+        if not isinstance(widget, NodeBaseWidget):
+            raise NodeWidgetError(
+                '\'widget\' must be an instance of a NodeBaseWidget')
+        self.create_property(
+            name, widget.value, widget_type=widget_type, tab=tab)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
     def add_combo_menu(self, name, label='', items=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QComboBox` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -657,9 +682,9 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -682,9 +707,9 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -705,9 +730,9 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -728,9 +753,9 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -751,9 +776,9 @@ class BaseNode(NodeObject):
         function and embeds a :class:`PySide2.QtWidgets.QCheckBox` widget
         into the node.
 
-        Important:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
