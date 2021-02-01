@@ -8,9 +8,10 @@ class NodeFactory(object):
     Node factory that stores all the node types.
     """
 
-    __aliases = {}
-    __names = {}
-    __nodes = {}
+    def __init__(self):
+        self.__aliases = {}
+        self.__names = {}
+        self.__nodes = {}
 
     @property
     def names(self):
