@@ -98,6 +98,7 @@ from .base.utils import setup_context_menu, \
 from .widgets.node_tree import NodeTreeWidget
 from .widgets.properties_bin import PropertiesBinWidget
 from .widgets.node_publish_widget import NodePublishWidget
+from .widgets.node_widgets import NodeBaseWidget
 
 
 __version__ = VERSION
@@ -105,6 +106,7 @@ __all__ = [
     'BackdropNode',
     'BaseNode',
     'LICENSE',
+    'NodeBaseWidget',
     'NodeGraph',
     'NodeGraphCommand',
     'NodeGraphMenu',

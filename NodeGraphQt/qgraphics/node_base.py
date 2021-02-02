@@ -608,7 +608,7 @@ class NodeItem(AbstractNodeItem):
     def disabled(self, state=False):
         AbstractNodeItem.disabled.fset(self, state)
         for n, w in self._widgets.items():
-            w.widget.setDisabled(state)
+            w.get_custom_widget().setDisabled(state)
         self._tooltip_disable(state)
         self._x_item.setVisible(state)
 
@@ -800,7 +800,7 @@ class NodeItem(AbstractNodeItem):
         return self._widgets.copy()
 
     def add_widget(self, widget):
-        self._widgets[widget.name] = widget
+        self._widgets[widget.get_name()] = widget
 
     def get_widget(self, name):
         widget = self._widgets.get(name)

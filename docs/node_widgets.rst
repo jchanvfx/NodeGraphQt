@@ -7,7 +7,7 @@ displayed in the node graph.
 NodeBaseWidget
 **************
 
-.. autoclass:: NodeGraphQt.widgets.node_widgets.NodeBaseWidget
+.. autoclass:: NodeGraphQt.NodeBaseWidget
     :members:
     :exclude-members: node, setToolTip, type_, value, widget
 
