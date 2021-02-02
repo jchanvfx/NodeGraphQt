@@ -82,11 +82,12 @@ Embedding Custom Widgets
 ************************
 
 Here's an example to embed a custom widget using the
-:meth:`NodeGraphQt.BaseNode.add_custom_widget` function
-and :class:`NodeGraphQt.NodeBaseWidget` class.
+:meth:`NodeGraphQt.BaseNode.add_custom_widget` function and
+:class:`NodeGraphQt.NodeBaseWidget` class.
 
 .. code-block:: python
     :linenos:
+    :emphasize-lines: 38, 96, 97
 
     from NodeGraphQt import QtCore, QtWidgets, BaseNode, NodeBaseWidget
 
@@ -112,8 +113,7 @@ and :class:`NodeGraphQt.NodeBaseWidget` class.
 
     class NodeWidgetWrapper(NodeBaseWidget):
         """
-        Wrapper that allows a custom ``QWidget`` to be added in a
-        :class:`NodeGraphQt.BaseNode` object.
+        Wrapper that allows the widget to be added in a node object.
         """
 
         def __init__(self, parent=None):
@@ -132,18 +132,16 @@ and :class:`NodeGraphQt.NodeBaseWidget` class.
             self.wire_signals()
 
         def wire_signals(self):
-            """
-            Connect up the custom widget comboboxes and "Go" button.
-            """
             widget = self.get_custom_widget()
+
+            # wire up the combo boxes.
             widget.combo_1.currentIndexChanged.connect(self.on_value_changed)
             widget.combo_2.currentIndexChanged.connect(self.on_value_changed)
+
+            # wire up the button.
             widget.btn_go.clicked.connect(self.on_btn_go_clicked)
 
         def on_btn_go_clicked(self):
-            """
-            Slot function triggered by the "Go" button.
-            """
             print('Clicked on node: "{}"'.format(self.node.name()))
 
         def get_value(self):
@@ -161,15 +159,15 @@ and :class:`NodeGraphQt.NodeBaseWidget` class.
             widget = self.get_custom_widget()
 
             cb1_index = widget.combo_1.findText(combo1_val, QtCore.Qt.MatchExactly)
-            widget.combo_1.setCurrentIndex(cb1_index)
-
             cb2_index = widget.combo_1.findText(combo2_val, QtCore.Qt.MatchExactly)
+
+            widget.combo_1.setCurrentIndex(cb1_index)
             widget.combo_2.setCurrentIndex(cb2_index)
 
 
     class MyNode(BaseNode):
         """
-        example test node.
+        Example node.
         """
 
         # set a unique node identifier.
