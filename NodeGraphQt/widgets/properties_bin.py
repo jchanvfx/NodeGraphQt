@@ -52,7 +52,9 @@ class PropertiesList(QtWidgets.QTableWidget):
 
     def wheelEvent(self, event):
         delta = event.delta() * 0.2
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta)
+        self.verticalScrollBar().setValue(
+            self.verticalScrollBar().value() - delta
+        )
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
@@ -135,8 +137,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         Args:
             node (NodeGraphQt.NodeObject):
-            prop_name (str):
-            prop_value (object):
+            prop_name (str): node property name.
+            prop_value (object): node property value.
         """
         properties_widget = self.prop_widget(node)
         if not properties_widget:
@@ -154,9 +156,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Slot function triggered when a property widget value has changed.
 
         Args:
-            node_id (str):
-            prop_name (str):
-            prop_value (object):
+            node_id (str): node id.
+            prop_name (str): node property name.
+            prop_value (object): node property value.
         """
         if not self._block_signal:
             self.property_changed.emit(node_id, prop_name, prop_value)
@@ -195,7 +197,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             if itm_find[0].row() == 0:
                 try:
                     itm_find[0].setEnabled(node.graph.editable)
-                except:
+                except Exception as e:
                     pass
                 return
             self._prop_list.removeRow(itm_find[0].row())

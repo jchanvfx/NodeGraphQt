@@ -4,6 +4,7 @@ from .model import NodeModel
 from .port import Port
 from .utils import update_node_down_stream
 from ..constants import (NODE_PROP,
+                         NODE_PROP_QLABEL,
                          NODE_PROP_QLINEEDIT,
                          NODE_PROP_QTEXTEDIT,
                          NODE_PROP_QCOMBO,
@@ -15,7 +16,7 @@ from ..constants import (NODE_PROP,
                          NODE_LAYOUT_VERTICAL,
                          NODE_LAYOUT_HORIZONTAL,
                          NODE_LAYOUT_DIRECTION)
-from ..errors import PortRegistrationError,NodeWidgetError
+from ..errors import PortRegistrationError, NodeWidgetError
 from ..qgraphics.node_backdrop import BackdropNodeItem
 from ..qgraphics.node_base import NodeItem, NodeItemVertical
 from ..widgets.node_widgets import (NodeBaseWidget,
@@ -628,28 +629,31 @@ class BaseNode(NodeObject):
         """
         return self.view.widgets.get(name)
 
-    def add_custom_widget(self, name, widget=None, widget_type=NODE_PROP,
-                          tab=None):
+    def add_custom_widget(self, widget, widget_type=NODE_PROP_QLABEL, tab=None):
         """
         Add a custom node widget into the node.
+
+        see example :ref:`Embedding Custom Widgets`.
 
         Note:
             The ``value_changed`` signal from the added node widget is wired
             up to the :meth:`NodeObject.set_property` function.
 
         Args:
-            name (str): name for the custom property.
-            widget (NodeBaseWidget): custom node widget.
+            widget_cls (NodeBaseWidget): node widget class object.
             widget_type: widget flag to display in the
-                :class:`NodeGraphQt.PropertiesBinWidget`.
+                :class:`NodeGraphQt.PropertiesBinWidget` (default: QLabel).
             tab (str): name of the widget tab to display in.
         """
         if not isinstance(widget, NodeBaseWidget):
             raise NodeWidgetError(
                 '\'widget\' must be an instance of a NodeBaseWidget')
-        self.create_property(
-            name, widget.value, widget_type=widget_type, tab=tab)
+        self.create_property(widget.get_name(),
+                             widget.get_value(),
+                             widget_type=widget_type,
+                             tab=tab)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        widget._node = self
         self.view.add_widget(widget)
 
     def add_combo_menu(self, name, label='', items=None, tab=None):
