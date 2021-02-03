@@ -26,7 +26,7 @@ setuptools.setup(
     name=pkg_info.__module_name__,
     version=pkg_info.__version__,
     author=pkg_info.__author__,
-    author_email=pkg_info.__email__,
+    author_email='',
     description=description,
     long_description=long_description,
     long_description_content_type='text/markdown',
