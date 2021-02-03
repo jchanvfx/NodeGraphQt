@@ -36,11 +36,16 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
 
 class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
-    This is the main wrapper class that allows a custom ``QWidget`` to be
+    This is the main wrapper class that allows a ``QtWidgets.QWidget`` to be
     added in a :class:`NodeGraphQt.BaseNode` object.
 
-    If you want to add your own custom widget into a node you'll need
-    to subclass ``NodeBaseWidget`` for an example see :ref:`Embedding Custom Widgets`
+    See :ref:`Embedding Custom Widgets` example to adding your own widget
+    into a node.
+
+    Args:
+        parent (NodeGraphQt.BaseNode.view): parent node view.
+        name (str): property name for the parent node.
+        label (str): label text above the embedded widget.
     """
 
     value_changed = QtCore.Signal(str, object)
@@ -55,12 +60,6 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     """
 
     def __init__(self, parent=None, name=None, label=''):
-        """
-        Args:
-            parent (NodeItem): parent node view. see :meth: `BaseNode.view`
-            name (str): property name for the parent node.
-            label (str): label text above the embedded widget.
-        """
         super(NodeBaseWidget, self).__init__(parent)
         self.setZValue(Z_VAL_NODE_WIDGET)
         self._name = name

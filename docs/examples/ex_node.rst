@@ -81,9 +81,9 @@ See: :ref:`Node Widgets` for more node widget types.
 Embedding Custom Widgets
 ************************
 
-Here's an example to embed a custom widget using the
-:meth:`NodeGraphQt.BaseNode.add_custom_widget` function and
-:class:`NodeGraphQt.NodeBaseWidget` class.
+Here's an example to embed a custom widget where we subclass the
+:class:`NodeGraphQt.NodeBaseWidget` and then add to the node with the
+:meth:`NodeGraphQt.BaseNode.add_custom_widget` function.
 
 .. code-block:: python
     :linenos:
