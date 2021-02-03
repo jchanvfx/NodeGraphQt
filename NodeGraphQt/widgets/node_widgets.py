@@ -39,9 +39,6 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     This is the main wrapper class that allows a ``QtWidgets.QWidget`` to be
     added in a :class:`NodeGraphQt.BaseNode` object.
 
-    See :ref:`Embedding Custom Widgets` example to adding your own widget
-    into a node.
-
     Args:
         parent (NodeGraphQt.BaseNode.view): parent node view.
         name (str): property name for the parent node.

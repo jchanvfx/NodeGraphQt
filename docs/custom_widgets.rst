@@ -1,5 +1,5 @@
-Custom Widgets
-##############
+Builtin Widgets
+###############
 
 Here's a few custom widgets that included with the ``NodeGraphQt`` framework.
 
