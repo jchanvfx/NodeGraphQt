@@ -798,7 +798,8 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, data_type='NoneType', painter_func=None):
+                  color=None, data_type='NoneType', locked=False,
+                  painter_func=None):
         """
         Add input :class:`Port` to node.
 
@@ -808,6 +809,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type (str): port data type name.
+            locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
@@ -818,7 +820,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
 
-        port_args = [name, multi_input, display_name]
+        port_args = [name, multi_input, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
         view = self.view.add_input(*port_args)
@@ -833,12 +835,14 @@ class BaseNode(NodeObject):
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
         port.model.data_type = data_type
+        port.model.locked = locked
         self._inputs.append(port)
         self.model.inputs[port.name()] = port.model
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, data_type='NoneType', painter_func=None):
+                   color=None, data_type='NoneType', locked=False,
+                   painter_func=None):
         """
         Add output :class:`Port` to node.
 
@@ -848,6 +852,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type(str): port data type name.
+            locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
@@ -858,7 +863,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
 
-        port_args = [name, multi_output, display_name]
+        port_args = [name, multi_output, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
         view = self.view.add_output(*port_args)
@@ -872,6 +877,7 @@ class BaseNode(NodeObject):
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
         port.model.data_type = data_type
+        port.model.locked = locked
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port

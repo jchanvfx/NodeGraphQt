@@ -692,7 +692,7 @@ class NodeItem(AbstractNodeItem):
         return port
 
     def add_input(self, name='input', multi_port=False, display_name=True,
-                  painter_func=None):
+                  locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         IN_PORT.
@@ -701,6 +701,7 @@ class NodeItem(AbstractNodeItem):
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
             display_name (bool): display the port name.
+            locked (bool): locked state.
             painter_func (function): custom paint function.
 
         Returns:
@@ -714,10 +715,11 @@ class NodeItem(AbstractNodeItem):
         port.port_type = IN_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
+        port.locked = locked
         return self._add_port(port)
 
     def add_output(self, name='output', multi_port=False, display_name=True,
-                   painter_func=None):
+                   locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         OUT_PORT.
@@ -726,6 +728,7 @@ class NodeItem(AbstractNodeItem):
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
             display_name (bool): display the port name.
+            locked (bool): locked state.
             painter_func (function): custom paint function.
 
         Returns:
@@ -739,6 +742,7 @@ class NodeItem(AbstractNodeItem):
         port.port_type = OUT_PORT
         port.multi_connection = multi_port
         port.display_name = display_name
+        port.locked = locked
         return self._add_port(port)
 
     def _delete_port(self, port, text):

@@ -37,6 +37,7 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._border_size = 1
         self._port_type = None
         self._multi_connection = False
+        self._locked = False
 
         self.setCacheMode(ITEM_CACHE_MODE)
 
@@ -221,6 +222,19 @@ class PortItem(QtWidgets.QGraphicsItem):
     @border_size.setter
     def border_size(self, size=2):
         self._border_size = size
+
+    @property
+    def locked(self):
+        return self._locked
+
+    @locked.setter
+    def locked(self, value=False):
+        self._locked = value
+        conn_type = 'multi' if self.multi_connection else 'single'
+        tooltip = '{}: ({})'.format(self.name, conn_type)
+        if value:
+            tooltip += ' (L)'
+        self.setToolTip(tooltip)
 
     @property
     def multi_connection(self):
