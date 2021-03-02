@@ -19,6 +19,7 @@ class PortModel(object):
         self.display_name = True
         self.multi_connection = False
         self.visible = True
+        self.locked = False
         self.connected_ports = defaultdict(list)
         self.data_type = 'NoneType'
 

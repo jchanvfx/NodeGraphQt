@@ -186,11 +186,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
     def _on_pipes_sliced(self, path):
-        self.connection_sliced.emit([
-            [i.input_port, i.output_port]
-            for i in self.scene().items(path)
-            if isinstance(i, Pipe) and i != self._LIVE_PIPE
-        ])
+        ports = []
+        for i in self.scene().items(path):
+            if isinstance(i, Pipe) and i != self._LIVE_PIPE:
+                if any([i.input_port.locked, i.output_port.locked]):
+                    continue
+                ports.append([i.input_port, i.output_port])
+        self.connection_sliced.emit(ports)
 
     # --- reimplemented events ---
 
@@ -534,9 +536,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # pipe slicer enabled.
         if self.ALT_state and self.SHIFT_state:
             return
+
         # viewer pan mode.
         if self.ALT_state:
             return
+
         if self._LIVE_PIPE.isVisible():
             self.apply_live_connection(event)
             return
@@ -545,6 +549,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         port_items = self._items_near(pos, PortItem, 5, 5)
         if port_items and self.editable:
             port = port_items[0]
+
+            if port.locked:
+                return
+
             if not port.multi_connection and port.connected_ports:
                 self._detached_port = port.connected_ports[0]
             self.start_live_connection(port)
@@ -573,6 +581,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 return
             pipe = pipe_items[0]
             from_port = pipe.port_from_pos(pos, True)
+
+            if from_port.locked:
+                return
+
             from_port.hovered = True
 
             attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
@@ -648,6 +660,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # restore connection check.
         restore_connection = any([
+            # if the end port is locked.
+            end_port.locked,
             # if same port type.
             end_port.port_type == self._start_port.port_type,
             # if connection to itself.

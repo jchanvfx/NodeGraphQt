@@ -102,6 +102,15 @@ class Port(object):
         """
         return self.model.visible
 
+    def locked(self):
+        """
+        Port locked state.
+
+        Returns:
+            bool: true if visible.
+        """
+        return self.model.locked
+
     def set_visible(self, visible=True):
         """
         Sets weather the port should be visible or not.
@@ -119,6 +128,21 @@ class Port(object):
 
         undo_stack.push(PortVisibleCmd(self))
         undo_stack.endMacro()
+
+    def set_locked(self, locked=False):
+        """
+        Sets the port locked state when locked new pipe connections can't be
+        connected or disconnected from the node graph gui.
+
+        Note:
+            pipes can still be connected/disconnected to locked ports through
+            the api.
+
+        Args:
+            locked (Bool): true if locked.
+        """
+        self.model.locked = locked
+        self.__view.locked = locked
 
     def connected_ports(self):
         """
