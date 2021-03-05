@@ -39,6 +39,8 @@ class PortModel(object):
                     'name': 'port',
                     'display_name': True,
                     'multi_connection': False,
+                    'visible': True,
+                    'locked': False,
                     'connected_ports': {<node_id>: [<port_name>, <port_name>]}
                 }
         """

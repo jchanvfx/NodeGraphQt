@@ -6,6 +6,7 @@ from .commands import (PortConnectedCmd,
                        NodeInputDisconnectedCmd)
 from .model import PortModel
 from ..constants import IN_PORT, OUT_PORT
+from ..errors import PortError
 
 
 class Port(object):
@@ -102,15 +103,6 @@ class Port(object):
         """
         return self.model.visible
 
-    def locked(self):
-        """
-        Port locked state.
-
-        Returns:
-            bool: true if visible.
-        """
-        return self.model.locked
-
     def set_visible(self, visible=True):
         """
         Sets weather the port should be visible or not.
@@ -129,14 +121,42 @@ class Port(object):
         undo_stack.push(PortVisibleCmd(self))
         undo_stack.endMacro()
 
+    def locked(self):
+        """
+        Returns the locked state.
+
+        If ports are locked then new pipe connections can't be connected
+        and current connected pipes can't be disconnected.
+
+        Returns:
+            bool: true if locked.
+        """
+        return self.model.locked
+
+    def lock(self):
+        """
+        Lock the port so new pipe connections can't be connected and
+        current connected pipes can't be disconnected.
+
+        This is the same as calling :meth:`Port.set_locked` with the arg
+        set to ``True``
+        """
+        self.set_locked(True)
+
+    def unlock(self):
+        """
+        Unlock the port so new pipe connections can be connected and
+        existing connected pipes can be disconnected.
+
+        This is the same as calling :meth:`Port.set_locked` with the arg
+        set to ``False``
+        """
+        self.set_locked(False)
+
     def set_locked(self, locked=False):
         """
-        Sets the port locked state when locked new pipe connections can't be
-        connected or disconnected from the node graph gui.
-
-        Note:
-            pipes can still be connected/disconnected to locked ports through
-            the api.
+        Sets the port locked state. When locked pipe connections can't be
+        connected or disconnected from this port.
 
         Args:
             locked (Bool): true if locked.
@@ -175,6 +195,11 @@ class Port(object):
 
         if self in port.connected_ports():
             return
+
+        if self.locked() or port.locked():
+            name = [p.name() for p in [self, port] if p.locked()][0]
+            raise PortError(
+                'Can\'t connect port because "{}" is locked.'.format(name))
 
         graph = self.node().graph
         viewer = graph.viewer()
@@ -227,6 +252,12 @@ class Port(object):
         """
         if not port:
             return
+
+        if self.locked() or port.locked():
+            name = [p.name() for p in [self, port] if p.locked()][0]
+            raise PortError(
+                'Can\'t disconnect port because "{}" is locked.'.format(name))
+
         graph = self.node().graph
         graph.undo_stack().beginMacro('disconnect port')
         graph.undo_stack().push(PortDisconnectedCmd(self, port))
