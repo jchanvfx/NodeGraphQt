@@ -560,7 +560,7 @@ class NodeItem(AbstractNodeItem):
         visible = not mode
 
         for w in self._widgets.values():
-            w.widget.setVisible(visible)
+            w.widget().setVisible(visible)
         for port, text in self._input_items.items():
             port.setVisible(visible)
             if text.visible_:
