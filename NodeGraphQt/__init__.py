@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# (c) 2017, Johnny Chan and some awesome contributors (^_^)  
+# (c) 2017, Johnny Chan and some awesome contributors (^_^)
 # https://github.com/jchanvfx/NodeGraphQt/graphs/contributors
 
 # Redistribution and use in source and binary forms, with or without
@@ -76,10 +76,10 @@ example code:
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat, QtOpenGL
 except ImportError as ie:
-    from .vendor.Qt import __version__ as qtpy_ver
-    from .vendor.Qt import QtWidgets, QtGui, QtCore, QtCompat ,QtOpenGL
+    from Qt import __version__ as qtpy_ver
+    from Qt import QtWidgets, QtGui, QtCore, QtCompat ,QtOpenGL
     print('NodeGraphQt: Can\'t import "Qt.py" module falling back on '
-          '"NodeGraphQt.vendor.Qt ({})"'.format(qtpy_ver))
+          '"Qt ({})"'.format(qtpy_ver))
 
 from .base.graph import NodeGraph, SubGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
@@ -127,4 +127,3 @@ __all__ = [
     'update_nodes_by_up',
     'update_nodes_by_down',
 ]
-
