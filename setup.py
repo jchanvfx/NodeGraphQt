@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import setuptools
+import sys
+import os
 
-import NodeGraphQt.pkg_info as pkg_info
+sys.path.append( os.path.join(os.path.dirname(__file__), "NodeGraphQt"))
+
+import pkg_info
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
