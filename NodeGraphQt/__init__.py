@@ -76,10 +76,9 @@ example code:
 try:
     from Qt import QtWidgets, QtGui, QtCore, QtCompat, QtOpenGL
 except ImportError as ie:
-    from Qt import __version__ as qtpy_ver
-    from Qt import QtWidgets, QtGui, QtCore, QtCompat ,QtOpenGL
-    print('NodeGraphQt: Can\'t import "Qt.py" module falling back on '
-          '"Qt ({})"'.format(qtpy_ver))
+    print('NodeGraphQt: Can\'t import Qt module please install "Qt.py"\n'
+          'pip install Qt.py')
+    raise ImportError(ie)
 
 from .base.graph import NodeGraph, SubGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
