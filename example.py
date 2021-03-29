@@ -214,10 +214,14 @@ if __name__ == '__main__':
     bar_node.set_name('icon node')
     bar_node.set_pos(-70, 10)
 
-    # connect the nodes
+    # connect the nodes.
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
+
+    # wrap a backdrop node.
+    backdrop_node = graph.create_node('nodeGraphQt.nodes.BackdropNode')
+    backdrop_node.wrap_nodes([my_node, menu_node])
 
     graph.fit_to_selection()
 
