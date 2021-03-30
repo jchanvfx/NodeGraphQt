@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from collections import OrderedDict
 from .node_abstract import AbstractNodeItem
 from .node_text_item import NodeTextItem
 from .port import PortItem, CustomPortItem
@@ -130,8 +131,8 @@ class NodeItem(AbstractNodeItem):
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
         self._text_item = NodeTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
-        self._input_items = {}
-        self._output_items = {}
+        self._input_items = OrderedDict()
+        self._output_items = OrderedDict()
         self._widgets = {}
         self._proxy_mode = False
         self._proxy_mode_threshold = 70
@@ -559,7 +560,7 @@ class NodeItem(AbstractNodeItem):
         visible = not mode
 
         for w in self._widgets.values():
-            w.widget.setVisible(visible)
+            w.widget().setVisible(visible)
         for port, text in self._input_items.items():
             port.setVisible(visible)
             if text.visible_:

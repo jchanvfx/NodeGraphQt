@@ -357,7 +357,7 @@ class NodeFloatEdit(NodeBaseWidget):
         """
         return self.get_custom_widget().value()
 
-    def value(self, value):
+    def set_value(self, value):
         if value != self.get_value():
             self.get_custom_widget().setValue(value)
             self.on_value_changed()
