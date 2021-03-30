@@ -1,7 +1,9 @@
 #!/usr/bin/python
 import math
 
-from .. import QtCore, QtGui, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
+
+from .port import PortItem
 from ..constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
@@ -12,7 +14,6 @@ from ..constants import (
     ITEM_CACHE_MODE,
     NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
     NODE_LAYOUT_DIRECTION)
-from .port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
