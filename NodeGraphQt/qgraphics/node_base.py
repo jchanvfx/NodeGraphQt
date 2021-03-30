@@ -1,10 +1,11 @@
 #!/usr/bin/python
-
 from collections import OrderedDict
+
+from Qt import QtGui, QtCore, QtWidgets
+
 from .node_abstract import AbstractNodeItem
 from .node_text_item import NodeTextItem
 from .port import PortItem, CustomPortItem
-from .. import QtGui, QtCore, QtWidgets
 from ..constants import (IN_PORT, OUT_PORT,
                          NODE_WIDTH, NODE_HEIGHT,
                          NODE_ICON_SIZE, ICON_NODE_BASE,
@@ -609,7 +610,7 @@ class NodeItem(AbstractNodeItem):
     def disabled(self, state=False):
         AbstractNodeItem.disabled.fset(self, state)
         for n, w in self._widgets.items():
-            w.get_custom_widget().setDisabled(state)
+            w.widget().setDisabled(state)
         self._tooltip_disable(state)
         self._x_item.setVisible(state)
 
@@ -1037,7 +1038,7 @@ class NodeItemVertical(NodeItem):
         return width, height
 
     def add_input(self, name='input', multi_port=False, display_name=True,
-                  painter_func=None):
+                  locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         IN_PORT
@@ -1045,17 +1046,18 @@ class NodeItemVertical(NodeItem):
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
-            display_name (bool): (not used)
+            display_name (bool): (not used).
+            locked (bool): locked state.
             painter_func (function): custom paint function.
 
         Returns:
             PortItem: port qgraphics item.
         """
         return super(NodeItemVertical, self).add_input(
-            name, multi_port, False, painter_func)
+            name, multi_port, False, locked, painter_func)
 
-    def add_output(self, name='output', multi_port=False, display_name=False,
-                   painter_func=None):
+    def add_output(self, name='output', multi_port=False, display_name=True,
+                  locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         OUT_PORT
@@ -1063,11 +1065,12 @@ class NodeItemVertical(NodeItem):
         Args:
             name (str): name for the port.
             multi_port (bool): allow multiple connections.
-            display_name (bool): (not used)
+            display_name (bool): (not used).
+            locked (bool): locked state.
             painter_func (function): custom paint function.
 
         Returns:
             PortItem: port qgraphics item.
         """
         return super(NodeItemVertical, self).add_output(
-            name, multi_port, False, painter_func)
+            name, multi_port, False, locked, painter_func)
