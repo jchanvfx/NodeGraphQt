@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 from Qt import QtGui, QtCore, QtWidgets
 
 from .node_abstract import AbstractNodeItem
