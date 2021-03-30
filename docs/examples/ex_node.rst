@@ -239,8 +239,8 @@ Here's an example where we subclass the ``NodeGraph`` and connect it up to a
 .. code-block:: python
     :linenos:
 
-from Qt import QtCore, QtWidgets
-from NodeGraphQt import BaseNode, NodeGraph, PropertiesBinWidget
+    from Qt import QtCore, QtWidgets
+    from NodeGraphQt import BaseNode, NodeGraph, PropertiesBinWidget
 
 
     class MyNode(BaseNode):
