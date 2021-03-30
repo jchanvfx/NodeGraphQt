@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import copy
 import gc
 import json
 import os
 import re
 
-import copy
+from Qt import QtCore, QtWidgets, QtGui
 
 from .commands import (NodeAddedCmd,
                        NodeRemovedCmd,
@@ -16,7 +17,6 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode
 from .port import Port
-from .. import QtCore, QtWidgets, QtGui
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,

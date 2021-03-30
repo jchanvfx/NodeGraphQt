@@ -1,5 +1,7 @@
-from NodeGraphQt import topological_sort_by_down, NodePublishWidget
 import hashlib
+
+from NodeGraphQt import topological_sort_by_down, NodePublishWidget
+
 
 # node stream update
 

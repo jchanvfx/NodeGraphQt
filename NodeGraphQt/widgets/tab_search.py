@@ -2,8 +2,9 @@
 import re
 from collections import OrderedDict
 
+from Qt import QtCore, QtWidgets, QtGui
+
 from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
-from .. import QtCore, QtWidgets, QtGui
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):

@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 import os
 
+from Qt import QtCore, QtGui, QtWidgets
+
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
-                         setup_context_menu)
-from NodeGraphQt import (QtCore,
-                         QtGui,
-                         QtWidgets,
                          PropertiesBinWidget,
-                         NodeTreeWidget)
+                         NodeTreeWidget,
+                         setup_context_menu)
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes

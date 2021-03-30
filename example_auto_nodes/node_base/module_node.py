@@ -1,4 +1,5 @@
 import inspect
+
 from .auto_node import AutoNode
 
 

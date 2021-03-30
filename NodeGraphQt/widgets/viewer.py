@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import math
 
+from Qt import QtGui, QtCore, QtWidgets, QtOpenGL
+
 from .dialogs import BaseDialog, FileDialog
 from .scene import NodeScene
 from .tab_search import TabSearchMenuWidget
-from .. import QtGui, QtCore, QtWidgets, QtOpenGL
 from ..base.menu import BaseMenu
 from ..constants import (IN_PORT, OUT_PORT,
                          PIPE_LAYOUT_CURVED)

@@ -89,7 +89,7 @@ Here's an example to embed a custom widget where we subclass the
     :linenos:
     :emphasize-lines: 38, 96, 97
 
-    from NodeGraphQt import QtCore, QtWidgets, BaseNode, NodeBaseWidget
+    from Qt import QtCore, QtWidgets, BaseNode, NodeBaseWidget
 
     class MyCustomWidget(QtWidgets.QWidget):
         """

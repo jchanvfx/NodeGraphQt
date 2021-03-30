@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from .. import QtWidgets, QtCore
-from ..constants import DRAG_DROP_ID
+from Qt import QtWidgets, QtCore
 
+from ..constants import DRAG_DROP_ID
 
 TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2

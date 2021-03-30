@@ -1,4 +1,4 @@
-from .. import QtWidgets, QtCore, QtGui
+from Qt import QtWidgets, QtCore, QtGui
 
 
 class NodeTextItem(QtWidgets.QGraphicsTextItem):
