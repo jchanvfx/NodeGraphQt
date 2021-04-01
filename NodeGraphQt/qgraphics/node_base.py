@@ -38,7 +38,7 @@ class NodeItem(AbstractNodeItem):
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = OrderedDict()
         self._output_items = OrderedDict()
-        self._widgets = {}
+        self._widgets = OrderedDict()
         self._proxy_mode = False
         self._proxy_mode_threshold = 70
 
@@ -439,12 +439,16 @@ class NodeItem(AbstractNodeItem):
     def auto_switch_mode(self):
         """
         Decide whether to draw the node with proxy mode.
+        (this is called at the start in the "self.paint()" function.)
         """
         if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.ItemCoordinateCache:
             return
+
         rect = self.sceneBoundingRect()
-        l = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topLeft()))
-        r = self.viewer().mapToGlobal(self.viewer().mapFromScene(rect.topRight()))
+        l = self.viewer().mapToGlobal(
+            self.viewer().mapFromScene(rect.topLeft()))
+        r = self.viewer().mapToGlobal(
+            self.viewer().mapFromScene(rect.topRight()))
         # width is the node width in screen
         width = r.x() - l.x()
 
@@ -453,27 +457,29 @@ class NodeItem(AbstractNodeItem):
     def set_proxy_mode(self, mode):
         """
         Set whether to draw the node with proxy mode.
+        (proxy mode toggles visibility for some qgraphic items in the node.)
 
         Args:
-            mode (bool).
+            mode (bool): true to enable proxy mode.
         """
         if mode is self._proxy_mode:
             return
-
         self._proxy_mode = mode
 
         visible = not mode
 
+        # node widget visibility
         for w in self._widgets.values():
             w.widget().setVisible(visible)
+
+        # input port text visibility.
         for port, text in self._input_items.items():
-            port.setVisible(visible)
-            if text.visible_:
+            if port.display_name:
                 text.setVisible(visible)
 
+        # output port text visibility.
         for port, text in self._output_items.items():
-            port.setVisible(visible)
-            if text.visible_:
+            if port.display_name:
                 text.setVisible(visible)
 
         self._text_item.setVisible(visible)
@@ -587,7 +593,6 @@ class NodeItem(AbstractNodeItem):
         text.font().setPointSize(8)
         text.setFont(text.font())
         text.setVisible(port.display_name)
-        text.visible_ = port.display_name
         text.setCacheMode(ITEM_CACHE_MODE)
         if port.port_type == IN_PORT:
             self._input_items[port] = text
