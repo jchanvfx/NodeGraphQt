@@ -128,6 +128,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         if value == 0.0:
             return
+
         scale = (0.9 + sensitivity) if value < 0.0 else (1.1 - sensitivity)
         zoom = self.get_zoom()
         if ZOOM_MIN >= zoom:
@@ -198,8 +199,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- reimplemented events ---
 
     def resizeEvent(self, event):
-        delta = max(self.size().width() / self._last_size.width(),
-                    self.size().height() / self._last_size.height())
+        w, h = self.size().width(), self.size().height()
+        if 0 in [w, h]:
+            self.resize(self._last_size)
+        delta = max(w / self._last_size.width(), h / self._last_size.height())
         self._set_viewer_zoom(delta)
         self._last_size = self.size()
         super(NodeViewer, self).resizeEvent(event)
