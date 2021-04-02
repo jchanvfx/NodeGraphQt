@@ -32,7 +32,7 @@ class MathFunctionsNode(BaseNode):
         self.create_property('output', None)
         self.trigger_type = 'no_inPorts'
 
-        self.view.widgets['funcs'].widget.setCurrentIndex(2)
+        self.view.widgets['funcs'].get_custom_widget().setCurrentIndex(2)
 
     def addFunction(self, prop, func):
         """

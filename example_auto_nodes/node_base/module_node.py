@@ -54,8 +54,9 @@ class ModuleNode(AutoNode):
         self.add_output('output')
         self.create_property('output', None)
 
-        self.view.widgets['funcs'].widget.setCurrentIndex(0)
-        self.add_function(None, self.view.widgets['funcs'].widget.currentText())
+        self.view.widgets['funcs'].get_custom_widget().setCurrentIndex(0)
+        self.add_function(
+            None, self.view.widgets['funcs'].get_custom_widget().currentText())
 
     def is_function(self, obj):
         if inspect.isfunction(self.func) or inspect.isbuiltin(self.func):
