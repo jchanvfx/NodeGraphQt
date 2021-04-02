@@ -1,12 +1,12 @@
 #!/usr/bin/python
+from Qt import QtGui, QtCore, QtWidgets
 
-from .. import QtGui, QtCore, QtWidgets
-from ..constants import (Z_VAL_PIPE,
-                         NODE_SEL_COLOR,
-                         NODE_SEL_BORDER_COLOR)
 from .node_abstract import AbstractNodeItem
 from .pipe import Pipe
 from .port import PortItem
+from ..constants import (Z_VAL_PIPE,
+                         NODE_SEL_COLOR,
+                         NODE_SEL_BORDER_COLOR)
 
 
 class BackdropSizer(QtWidgets.QGraphicsItem):

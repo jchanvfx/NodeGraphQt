@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import copy
 import gc
 import json
 import os
 import re
 
-import copy
+from Qt import QtCore, QtWidgets, QtGui
 
 from .commands import (NodeAddedCmd,
                        NodeRemovedCmd,
@@ -16,7 +17,6 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode
 from .port import Port
-from .. import QtCore, QtWidgets, QtGui
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
@@ -648,7 +648,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             This is a convenience function to
-            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            :meth:`NodeGraph.get_context_menu`
             with the arg ``menu="graph"``
 
         Returns:
@@ -662,7 +662,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             This is a convenience function to
-            :meth:`NodeGraphQt.NodeGraph.get_context_menu`
+            :meth:`NodeGraph.get_context_menu`
             with the arg ``menu="nodes"``
 
         Returns:
@@ -719,7 +719,7 @@ class NodeGraph(QtCore.QObject):
         Returns true if the current node graph is acyclic.
 
         See Also:
-            :meth:`NodeGraphQt.NodeGraph.set_acyclic`
+            :meth:`NodeGraph.set_acyclic`
 
         Returns:
             bool: true if acyclic (default: ``True``).
@@ -731,7 +731,7 @@ class NodeGraph(QtCore.QObject):
         Enable the node graph to be a acyclic graph. (default: ``False``)
 
         See Also:
-            :meth:`NodeGraphQt.NodeGraph.acyclic`
+            :meth:`NodeGraph.acyclic`
 
         Args:
             mode (bool): true to enable acyclic.
@@ -1333,6 +1333,11 @@ class NodeGraph(QtCore.QObject):
         """
         Serializes the current node graph layout to a dictionary.
 
+        See Also:
+            :meth:`NodeGraph.deserialize_session`,
+            :meth:`NodeGraph.save_session`,
+            :meth:`NodeGraph.load_session`
+
         Returns:
             dict: serialized session of the current node layout.
         """
@@ -1341,6 +1346,11 @@ class NodeGraph(QtCore.QObject):
     def deserialize_session(self, layout_data):
         """
         Load node graph session from a dictionary object.
+
+        See Also:
+            :meth:`NodeGraph.serialize_session`,
+            :meth:`NodeGraph.load_session`,
+            :meth:`NodeGraph.save_session`
 
         Args:
             layout_data (dict): dictionary object containing a node session.
@@ -1352,6 +1362,11 @@ class NodeGraph(QtCore.QObject):
     def save_session(self, file_path):
         """
         Saves the current node graph session layout to a `JSON` formatted file.
+
+        See Also:
+            :meth:`NodeGraph.serialize_session`,
+            :meth:`NodeGraph.deserialize_session`,
+            :meth:`NodeGraph.load_session`,
 
         Args:
             file_path (str): path to the saved node layout.
@@ -1383,6 +1398,11 @@ class NodeGraph(QtCore.QObject):
     def load_session(self, file_path):
         """
         Load node graph session layout file.
+
+        See Also:
+            :meth:`NodeGraph.deserialize_session`,
+            :meth:`NodeGraph.serialize_session`,
+            :meth:`NodeGraph.save_session`
 
         Args:
             file_path (str): path to the serialized layout file.
@@ -1429,8 +1449,12 @@ class NodeGraph(QtCore.QObject):
         """
         Copy nodes to the clipboard.
 
+        See Also:
+            :meth:`NodeGraph.cut_nodes`
+
         Args:
-            nodes (list[NodeGraphQt.BaseNode]): list of nodes (default: selected nodes).
+            nodes (list[NodeGraphQt.BaseNode]):
+                list of nodes (default: selected nodes).
         """
         nodes = nodes or self.selected_nodes()
         if not nodes:
@@ -1447,8 +1471,12 @@ class NodeGraph(QtCore.QObject):
         """
         Cut nodes to the clipboard.
 
+        See Also:
+            :meth:`NodeGraph.copy_nodes`
+
         Args:
-            nodes (list[NodeGraphQt.BaseNode]): list of nodes (default: selected nodes).
+            nodes (list[NodeGraphQt.BaseNode]):
+                list of nodes (default: selected nodes).
         """
         self._undo_stack.beginMacro('cut nodes')
         nodes = nodes or self.selected_nodes()
@@ -1531,7 +1559,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             Convenience function to
-            :meth:`NodeGraphQt.NodeGraph.viewer().question_dialog`
+            :meth:`NodeGraph.viewer().question_dialog`
 
         Args:
             text (str): question text.
@@ -1548,7 +1576,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             Convenience function to
-            :meth:`NodeGraphQt.NodeGraph.viewer().message_dialog`
+            :meth:`NodeGraph.viewer().message_dialog`
 
         Args:
             text (str): message text.
@@ -1562,7 +1590,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             Convenience function to
-            :meth:`NodeGraphQt.NodeGraph.viewer().load_dialog`
+            :meth:`NodeGraph.viewer().load_dialog`
 
         Args:
             current_dir (str): path to a directory.
@@ -1579,7 +1607,7 @@ class NodeGraph(QtCore.QObject):
 
         Note:
             Convenience function to
-            :meth:`NodeGraphQt.NodeGraph.viewer().save_dialog`
+            :meth:`NodeGraph.viewer().save_dialog`
 
         Args:
             current_dir (str): path to a directory.

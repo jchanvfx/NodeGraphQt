@@ -1,8 +1,11 @@
-from NodeGraphQt import BaseNode, Port, QtCore, QtWidgets, QtGui
-from . utils import update_node_down_stream, get_data_type, CryptoColors
-import traceback
 import copy
 import time
+import traceback
+
+from Qt import QtCore, QtWidgets, QtGui
+
+from NodeGraphQt import BaseNode, Port
+from .utils import update_node_down_stream, get_data_type, CryptoColors
 
 
 class AutoNode(BaseNode, QtCore.QObject):

@@ -1,8 +1,9 @@
+import json
+
+from NodeGraphQt import SubGraph
+from NodeGraphQt import topological_sort_by_down, BackdropNode
 from .auto_node import AutoNode
 from .utils import update_node_down_stream
-from NodeGraphQt import SubGraph
-import json
-from NodeGraphQt import topological_sort_by_down, BackdropNode
 
 
 class SubGraphNode(AutoNode, SubGraph):

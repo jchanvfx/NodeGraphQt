@@ -1218,6 +1218,15 @@ class BackdropNode(NodeObject):
         """
         self.view.auto_resize()
 
+    def wrap_nodes(self, nodes):
+        """
+        Wrap backdrop size to fit around specified nodes.
+
+        Args:
+            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+        """
+        self.view.auto_resize([n.view for n in nodes])
+
     def nodes(self):
         """
         Returns nodes wrapped within the backdrop node.

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtWidgets, QtCore, QtGui, QtCompat
+from Qt import QtWidgets, QtCore, QtGui, QtCompat
 
 from .properties import NodePropWidget
 

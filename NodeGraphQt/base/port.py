@@ -141,7 +141,7 @@ class Port(object):
         This is the same as calling :meth:`Port.set_locked` with the arg
         set to ``True``
         """
-        self.set_locked(True)
+        self.set_locked(True, connected_ports=True)
 
     def unlock(self):
         """
@@ -151,18 +151,22 @@ class Port(object):
         This is the same as calling :meth:`Port.set_locked` with the arg
         set to ``False``
         """
-        self.set_locked(False)
+        self.set_locked(False, connected_ports=True)
 
-    def set_locked(self, locked=False):
+    def set_locked(self, state=False, connected_ports=True):
         """
         Sets the port locked state. When locked pipe connections can't be
         connected or disconnected from this port.
 
         Args:
-            locked (Bool): true if locked.
+            state (Bool): port lock state.
+            connected_ports (Bool): apply to lock state to connected ports.
         """
-        self.model.locked = locked
-        self.__view.locked = locked
+        self.model.locked = state
+        self.__view.locked = state
+        if connected_ports:
+            for port in self.connected_ports():
+                port.set_locked(state, connected_ports=False)
 
     def connected_ports(self):
         """

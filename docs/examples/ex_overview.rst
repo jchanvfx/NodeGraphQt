@@ -64,7 +64,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
 
     import sys
 
-    from NodeGraphQt import QtWidgets
+    from Qt import QtWidgets
     from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
 
 

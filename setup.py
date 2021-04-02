@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import setuptools
-import sys
 import os
+import sys
 
-sys.path.append( os.path.join(os.path.dirname(__file__), "NodeGraphQt"))
+import setuptools
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "NodeGraphQt"))
 
 import pkg_info
 
