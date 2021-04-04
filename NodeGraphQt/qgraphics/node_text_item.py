@@ -9,7 +9,7 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
     def __init__(self, text, parent=None):
         super(NodeTextItem, self).__init__(text, parent)
         self.setFlags(QtWidgets.QGraphicsItem.ItemIsFocusable)
-        self.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.setCursor(QtCore.Qt.IBeamCursor)
         self.setToolTip('double-click to edit node name.')
         self.set_editable(False)
 

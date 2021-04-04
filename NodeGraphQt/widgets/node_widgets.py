@@ -225,13 +225,13 @@ class NodeComboBox(NodeBaseWidget):
         combo = QtWidgets.QComboBox()
         combo.setStyleSheet(STYLE_QCOMBOBOX)
         combo.setMinimumHeight(24)
-        combo.currentIndexChanged.connect(self.on_value_changed)
         list_view = QtWidgets.QListView(combo)
         list_view.setStyleSheet(STYLE_QLISTVIEW)
         combo.setView(list_view)
+        combo.addItems(items or [])
+        combo.currentIndexChanged.connect(self.on_value_changed)
         combo.clearFocus()
         self.set_custom_widget(combo)
-        self.add_items(items)
 
     @property
     def type_(self):
