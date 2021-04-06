@@ -86,8 +86,10 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
-    edit_menu.add_command('Layout Graph Up Stream', _layout_graph_up, 'L')
-    edit_menu.add_command('Layout Graph Down Stream', _layout_graph_down, 'Ctrl+L')
+    edit_menu.add_command(
+        'Layout Nodes Up Stream', _layout_graph_up, 'L')
+    edit_menu.add_command(
+        'Layout Nodes Down Stream', _layout_graph_down, 'Ctrl+L')
 
     edit_menu.add_separator()
 
@@ -300,34 +302,15 @@ def _bg_grid_lines(graph):
     graph.set_grid_mode(2)
 
 
-def __layout_graph(graph, down_stream=True):
-    graph.begin_undo('Auto Layout')
-    node_space = graph.get_node_space()
-    if node_space is not None:
-        nodes = node_space.children()
-    else:
-        nodes = graph.all_nodes()
-    if not nodes:
-        return
-    node_views = [n.view for n in nodes]
-    nodes_center0 = graph.viewer().nodes_rect_center(node_views)
-    if down_stream:
-        auto_layout_down(all_nodes=nodes)
-    else:
-        auto_layout_up(all_nodes=nodes)
-    nodes_center1 = graph.viewer().nodes_rect_center(node_views)
-    dx = nodes_center0[0] - nodes_center1[0]
-    dy = nodes_center0[1] - nodes_center1[1]
-    [n.set_pos(n.x_pos() + dx, n.y_pos()+dy) for n in nodes]
-    graph.end_undo()
-
-
 def _layout_graph_down(graph):
-    __layout_graph(graph, True)
+    nodes = graph.selected_nodes() or graph.all_nodes()
+    graph.auto_layout_nodes(nodes=nodes, down_stream=True)
 
 
 def _layout_graph_up(graph):
-    __layout_graph(graph, False)
+    nodes = graph.selected_nodes() or graph.all_nodes()
+    graph.auto_layout_nodes(nodes-nodes, down_stream=False)
+
 
 # topological_sort
 
@@ -624,194 +607,6 @@ def update_nodes_by_up(nodes):
     """
 
     _update_nodes(topological_sort_by_up(all_nodes=nodes))
-
-
-# auto layout
-
-
-def _update_node_rank_down(node, nodes_rank):
-    rank = nodes_rank[node] + 1
-    for n in get_output_nodes(node, False):
-        if n in nodes_rank:
-            nodes_rank[n] = max(nodes_rank[n], rank)
-        else:
-            nodes_rank[n] = rank
-        _update_node_rank_down(n, nodes_rank)
-
-
-def _compute_rank_down(start_nodes):
-    """
-    Compute the rank of the down stream nodes.
-
-    Args:
-        start_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) the start nodes of the graph.
-
-    Returns:
-        dict{NodeGraphQt.BaseNode: node_rank, ...}
-    """
-    nodes_rank = {}
-    for node in start_nodes:
-        nodes_rank[node] = 0
-        _update_node_rank_down(node, nodes_rank)
-    return nodes_rank
-
-
-def _update_node_rank_up(node, nodes_rank):
-    rank = nodes_rank[node] + 1
-    for n in get_input_nodes(node):
-        if n in nodes_rank:
-            nodes_rank[n] = max(nodes_rank[n], rank)
-        else:
-            nodes_rank[n] = rank
-        _update_node_rank_up(n, nodes_rank)
-
-
-def _compute_rank_up(start_nodes):
-    """
-    Compute the rank of the up stream nodes.
-
-    Args:
-        start_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) the end nodes of the graph.
-
-    Returns:
-        dict{NodeGraphQt.BaseNode: node_rank, ...}
-    """
-
-    nodes_rank = {}
-    for node in start_nodes:
-        nodes_rank[node] = 0
-        _update_node_rank_up(node, nodes_rank)
-    return nodes_rank
-
-
-def auto_layout_up(start_nodes=None, all_nodes=None):
-    """
-    Auto layout the nodes by up stream direction.
-
-    Args:
-        start_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) the end nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) if 'start_nodes' is None the function can calculate
-            start nodes from 'all_nodes'.
-    """
-    if not start_nodes and not all_nodes:
-        return
-    if start_nodes:
-        start_nodes = __remove_BackdropNode(start_nodes)
-    if all_nodes:
-        all_nodes = __remove_BackdropNode(all_nodes)
-
-    if not start_nodes:
-        start_nodes = [n for n in all_nodes if not _has_output_node(n)]
-    if not start_nodes:
-        return
-
-    nodes_rank = _compute_rank_up(start_nodes)
-
-    rank_map = {}
-    for node, rank in nodes_rank.items():
-        if rank in rank_map:
-            rank_map[rank].append(node)
-        else:
-            rank_map[rank] = [node]
-
-    if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
-        current_x = 0
-        node_height = 80
-        for rank in reversed(range(len(rank_map))):
-            nodes = rank_map[rank]
-            max_width = max([node.view.width for node in nodes])
-            current_x += max_width
-            current_y = 0
-            for idx, node in enumerate(nodes):
-                dy = max(node_height, node.view.height)
-                current_y += 0 if idx == 0 else dy
-                node.set_pos(current_x, current_y)
-                current_y += dy * 0.5 + 10
-
-            current_x += max_width * 0.5 + 100
-    elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
-        current_y = 0
-        node_width = 250
-        for rank in reversed(range(len(rank_map))):
-            nodes = rank_map[rank]
-            max_height = max([node.view.height for node in nodes])
-            current_y += max_height
-            current_x = 0
-            for idx, node in enumerate(nodes):
-                dx = max(node_width, node.view.width)
-                current_x += 0 if idx == 0 else dx
-                node.set_pos(current_x, current_y)
-                current_x += dx * 0.5 + 10
-
-            current_y += max_height * 0.5 + 100
-
-
-def auto_layout_down(start_nodes=None, all_nodes=None):
-    """
-    Auto layout the nodes by down stream direction.
-
-    Args:
-        start_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) the start update nodes of the graph.
-        all_nodes (list[NodeGraphQt.BaseNode]):
-            (Optional) if 'start_nodes' is None the function can calculate
-            start nodes from 'all_nodes'.
-    """
-    if not start_nodes and not all_nodes:
-        return
-    if start_nodes:
-        start_nodes = __remove_BackdropNode(start_nodes)
-    if all_nodes:
-        all_nodes = __remove_BackdropNode(all_nodes)
-
-    if not start_nodes:
-        start_nodes = [n for n in all_nodes if not _has_input_node(n)]
-    if not start_nodes:
-        return
-
-    nodes_rank = _compute_rank_down(start_nodes)
-
-    rank_map = {}
-    for node, rank in nodes_rank.items():
-        if rank in rank_map:
-            rank_map[rank].append(node)
-        else:
-            rank_map[rank] = [node]
-
-    if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
-        current_x = 0
-        node_height = 120
-        for rank in range(len(rank_map)):
-            nodes = rank_map[rank]
-            max_width = max([node.view.width for node in nodes])
-            current_x += max_width
-            current_y = 0
-            for idx, node in enumerate(nodes):
-                dy = max(node_height, node.view.height)
-                current_y += 0 if idx == 0 else dy
-                node.set_pos(current_x, current_y)
-                current_y += dy * 0.5 + 10
-
-            current_x += max_width * 0.5 + 100
-    elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
-        current_y = 0
-        node_width = 250
-        for rank in range(len(rank_map)):
-            nodes = rank_map[rank]
-            max_height = max([node.view.height for node in nodes])
-            current_y += max_height
-            current_x = 0
-            for idx, node in enumerate(nodes):
-                dx = max(node_width, node.view.width)
-                current_x += 0 if idx == 0 else dx
-                node.set_pos(current_x, current_y)
-                current_x += dx * 0.5 + 10
-
-            current_y += max_height * 0.5 + 100
 
 
 # garbage collect

@@ -1257,7 +1257,7 @@ class BackdropNode(NodeObject):
         if not nodes:
             return
         self.graph.begin_undo('"{}" wrap nodes'.format(self.name()))
-        size = self.view.calc_backdrop_size()
+        size = self.view.calc_backdrop_size([n.view for n in nodes])
         self.set_property('width', size['width'])
         self.set_property('height', size['height'])
         self.set_pos(*size['pos'])
