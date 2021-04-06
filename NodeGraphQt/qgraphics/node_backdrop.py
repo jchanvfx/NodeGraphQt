@@ -61,7 +61,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
     def mouseReleaseEvent(self, event):
         current_xy = (self.pos().x(), self.pos().y())
-        if current_xy != self._prev_xy:
+        if current_xy != self.__prev_xy:
             item = self.parentItem()
             item.on_sizer_pos_mouse_release()
         del self.__prev_xy
