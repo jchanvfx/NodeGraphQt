@@ -195,8 +195,7 @@ QWidget{
 '''
 
 STYLE_MESSAGEBOX = '''
-QLabel{
-    min-width:500 px; 
+QLabel{ 
     font-size: 18px;
     background-color: transparent;
     color: rgb(200 ,200, 200);

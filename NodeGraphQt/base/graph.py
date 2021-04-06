@@ -15,7 +15,7 @@ from .commands import (NodeAddedCmd,
 from .factory import NodeFactory
 from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
-from .node import NodeObject, BaseNode
+from .node import NodeObject, BaseNode, BackdropNode
 from .port import Port
 from ..constants import (DRAG_DROP_ID,
                          PIPE_LAYOUT_CURVED,
@@ -182,7 +182,9 @@ class NodeGraph(QtCore.QObject):
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
         self._viewer.node_name_changed.connect(self._on_node_name_changed)
-        self._viewer.insert_node.connect(self._insert_node)
+        self._viewer.node_backdrop_updated.connect(
+            self._on_node_backdrop_updated)
+        self._viewer.insert_node.connect(self._on_insert_node)
 
         # pass through translated signals.
         self._viewer.node_selected.connect(self._on_node_selected)
@@ -190,7 +192,7 @@ class NodeGraph(QtCore.QObject):
             self._on_node_selection_changed)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
 
-    def _insert_node(self, pipe, node_id, prev_node_pos):
+    def _on_insert_node(self, pipe, node_id, prev_node_pos):
         """
         Slot function triggered when a selected node has collided with a pipe.
 
@@ -343,6 +345,18 @@ class NodeGraph(QtCore.QObject):
             node = self._model.nodes[node_view.id]
             self._undo_stack.push(NodeMovedCmd(node, node.pos(), prev_pos))
         self._undo_stack.endMacro()
+
+    def _on_node_backdrop_updated(self, node_id, update_property, value):
+        """
+        called when a BackdropNode is updated.
+
+        Args:
+            node_id (str): backdrop node id.
+            value (str): update type.
+        """
+        backdrop = self.get_node_by_id(node_id)
+        if backdrop and isinstance(backdrop, BackdropNode):
+            backdrop.on_backdrop_updated(update_property, value)
 
     def _on_search_triggered(self, node_type, pos):
         """
@@ -859,7 +873,7 @@ class NodeGraph(QtCore.QObject):
             pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
 
         Returns:
-            NodeGraphQt.BaseNode: the created instance of the node.
+            NodeGraphQt.NodeObject: the created instance of the node.
         """
         if not self._editable:
             return
@@ -903,6 +917,7 @@ class NodeGraph(QtCore.QObject):
             else:
                 node.set_parent(None)
 
+            # update the node view from model.
             node.update()
 
             undo_cmd = NodeAddedCmd(self, node, node.model.pos)

@@ -86,8 +86,10 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
-    edit_menu.add_command('Layout Graph Up Stream', _layout_graph_up, 'L')
-    edit_menu.add_command('Layout Graph Down Stream', _layout_graph_down, 'Ctrl+L')
+    edit_menu.add_command(
+        'Layout Nodes Up Stream', _layout_graph_up, 'L')
+    edit_menu.add_command(
+        'Layout Nodes Down Stream', _layout_graph_down, 'Ctrl+L')
 
     edit_menu.add_separator()
 

@@ -64,5 +64,5 @@ class BaseDialog(object):
         dlg.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
         )
-        dlg.exec_()
-        return bool(dlg == QtWidgets.QMessageBox.Yes)
+        result = dlg.exec_()
+        return bool(result == QtWidgets.QMessageBox.Yes)

@@ -38,6 +38,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     insert_node = QtCore.Signal(object, str, dict)
     need_show_tab_search = QtCore.Signal()
     node_name_changed = QtCore.Signal(str, str)
+    node_backdrop_updated = QtCore.Signal(str, str, object)
 
     # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
