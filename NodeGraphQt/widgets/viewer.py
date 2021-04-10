@@ -425,8 +425,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     if isinstance(item, Pipe) and item.isVisible():
                         if not item.input_port:
                             continue
-                        if not item.input_port.node is node and \
-                                not item.output_port.node is node:
+                        port_node_check = all([
+                            not item.input_port.node is node,
+                            not item.output_port.node is node
+                        ])
+                        if port_node_check:
                             item.setSelected(True)
                             self.COLLIDING_state = True
                             break
@@ -446,18 +449,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
-        event.setDropAction(QtCore.Qt.MoveAction)
+        event.setDropAction(QtCore.Qt.CopyAction)
         self.data_dropped.emit(
             event.mimeData(), QtCore.QPoint(pos.x(), pos.y()))
 
     def dragEnterEvent(self, event):
-        if event.mimeData().hasFormat('text/plain'):
+        if event.mimeData().hasFormat('text/uri-list'):
             event.accept()
         else:
             event.ignore()
 
     def dragMoveEvent(self, event):
-        if event.mimeData().hasFormat('text/plain'):
+        if event.mimeData().hasFormat('text/uri-list'):
             event.accept()
         else:
             event.ignore()

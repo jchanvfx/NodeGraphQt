@@ -976,27 +976,31 @@ class BaseNode(NodeObject):
 
     def set_ports(self, port_data):
         """
-        Set node input and output ports.
+        Set node input and output ports from specified port data.
+
+        example port data:
+            {
+                'input_ports':
+                    [{
+                        'name': 'input',
+                        'multi_connection': True,
+                        'display_name': 'Input',
+                        'data_type': 'NoneType',
+                        'locked': False
+                    }],
+                'output_ports':
+                    [{
+                        'name': 'output',
+                        'multi_connection': True,
+                        'display_name': 'Output',
+                        'data_type': 'NoneType',
+                        'locked': False
+                    }]
+            }
 
         Args:
             port_data(dict): port data.
         """
-
-        # port data eg.
-        # {
-        #     'input_ports':
-        #         [{'name': ...,
-        #           'multi_connection': ...,
-        #           'display_name': ...,
-        #           'data_type': ...
-        #           }, ...],
-        #     'output_ports':
-        #         [{'name': ...,
-        #           'multi_connection': ...,
-        #           'display_name': ...,
-        #           'data_type': ...
-        #           }, ...]
-        # }
 
         for port in self._inputs:
             self._view.delete_input(port.view)

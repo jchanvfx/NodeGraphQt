@@ -99,7 +99,8 @@ VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_SIZE = 50
 
-DRAG_DROP_ID = 'n0deGraphQT'
+URI_SCHEME = 'ngqt://'
+URN_SCHEME = 'ngqt::'
 
 # === PATHS ===
 
