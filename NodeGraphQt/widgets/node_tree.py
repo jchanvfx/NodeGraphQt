@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from Qt import QtWidgets, QtCore
 
-from ..constants import DRAG_DROP_ID
+from ..constants import URN_SCHEME
 
 TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
@@ -40,9 +40,10 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
 
     def mimeData(self, items):
-        node_ids = ','.join(i.toolTip(0) for i in items)
+        node_ids = ['node:{}'.format(i.toolTip(0)) for i in items]
+        node_urn = URN_SCHEME + ';'.join(node_ids)
         mime_data = super(NodeTreeWidget, self).mimeData(items)
-        mime_data.setText('<${}>:{}'.format(DRAG_DROP_ID, node_ids))
+        mime_data.setUrls([node_urn])
         return mime_data
 
     def _build_tree(self):
