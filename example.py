@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
 
     # registered nodes.
-    reg_nodes = [
+    nodes_to_reg = [
         BackdropNode, MyNode,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
@@ -176,8 +176,7 @@ if __name__ == '__main__':
         widget_nodes.TextInputNode,
         widget_nodes.CheckboxNode
     ]
-    for n in reg_nodes:
-        graph.register_node(n)
+    graph.register_nodes(nodes_to_reg)
 
     my_node = graph.create_node(
         'com.chantasticvfx.MyNode',

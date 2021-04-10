@@ -17,50 +17,14 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode, BackdropNode
 from .port import Port
-from ..constants import (
-    DRAG_DROP_ID,
-    NODE_LAYOUT_DIRECTION, NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
-    PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT, PIPE_LAYOUT_ANGLE,
-    IN_PORT, OUT_PORT,
-    VIEWER_GRID_LINES
-)
+from ..constants import (URI_SCHEME, URN_SCHEME,
+                         PIPE_LAYOUT_CURVED,
+                         PIPE_LAYOUT_STRAIGHT,
+                         PIPE_LAYOUT_ANGLE,
+                         IN_PORT, OUT_PORT,
+                         VIEWER_GRID_LINES)
 from ..widgets.node_space_bar import node_space_bar
 from ..widgets.viewer import NodeViewer
-
-
-class QWidgetDrops(QtWidgets.QWidget):
-
-    def __init__(self):
-        super(QWidgetDrops, self).__init__()
-        self.setAcceptDrops(True)
-        self.setWindowTitle("NodeGraphQt")
-        self.setStyleSheet('''
-        QWidget {
-            background-color: rgb(55,55,55);
-            color: rgb(200,200,200);
-            border-width: 0px;
-            }''')
-
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
-
-    def dragMoveEvent(self, event):
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
-
-    def dropEvent(self, event):
-        if event.mimeData().hasUrls:
-            event.setDropAction(QtCore.Qt.CopyAction)
-            event.accept()
-            for url in event.mimeData().urls():
-                self.import_session(url.toLocalFile())
-        else:
-            event.ignore()
 
 
 class NodeGraph(QtCore.QObject):
@@ -316,23 +280,41 @@ class NodeGraph(QtCore.QObject):
         """
         called when data has been dropped on the viewer.
 
+        Example Identifiers:
+            URI = ngqt://path/to/node/session.graph
+            URN = ngqt::node:com.nodes.MyNode1;node:com.nodes.MyNode2
+
         Args:
             data (QtCore.QMimeData): mime data.
             pos (QtCore.QPoint): scene position relative to the drop.
         """
+        uri_regex = re.compile('{}(?:/*)([\w/]+)(\\.\w+)'.format(URI_SCHEME))
+        urn_regex = re.compile('{}([\w\\.:;]+)'.format(URN_SCHEME))
+        if data.hasFormat('text/uri-list'):
+            for url in data.urls():
+                local_file = url.toLocalFile()
+                if local_file:
+                    try:
+                        self.import_session(local_file)
+                        continue
+                    except Exception as e:
+                        pass
 
-        # don't emit signal for internal widget drops.
-        if data.hasFormat('text/plain'):
-            if data.text().startswith('<${}>:'.format(DRAG_DROP_ID)):
-                node_ids = data.text()[len('<${}>:'.format(DRAG_DROP_ID)):]
-                x, y = pos.x(), pos.y()
-                for node_id in node_ids.split(','):
-                    self.create_node(node_id, pos=[x, y])
-                x += 20
-                y += 20
-                return
-
-        self.data_dropped.emit(data, pos)
+                url_str = url.toString()
+                uri_search = uri_regex.search(url_str)
+                urn_search = urn_regex.search(url_str)
+                if uri_search:
+                    path = uri_search.group(1)
+                    ext = uri_search.group(2)
+                    self.import_session('{}{}'.format(path, ext))
+                elif urn_search:
+                    search_str = urn_search.group(1)
+                    node_ids = sorted(re.findall('node:([\w\\.]+)', search_str))
+                    for node_id in node_ids:
+                        x, y = pos.x(), pos.y()
+                        self.create_node(node_id, pos=[x, y])
+                        x += 20
+                        y += 20
 
     def _on_nodes_moved(self, node_data):
         """
@@ -451,9 +433,7 @@ class NodeGraph(QtCore.QObject):
             PySide2.QtWidgets.QWidget: node graph widget.
         """
         if self._widget is None:
-            self._widget = QWidgetDrops()
-            self._widget.import_session = self.import_session
-
+            self._widget = QtWidgets.QWidget()
             layout = QtWidgets.QVBoxLayout(self._widget)
             layout.setContentsMargins(0, 0, 0, 0)
             layout.setSpacing(0)
@@ -848,13 +828,23 @@ class NodeGraph(QtCore.QObject):
 
     def register_node(self, node, alias=None):
         """
-        Register the node to the node graph vendor.
+        Register the node to the :meth:`NodeGraph.node_factory
 
         Args:
             node (NodeGraphQt.NodeObject): node.
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
+        self._viewer.rebuild_tab_search()
+
+    def register_nodes(self, nodes):
+        """
+        Register the nodes to the :meth:`NodeGraph.node_factory
+
+        Args:
+            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+        """
+        [self._node_factory.register_node(n) for n in nodes]
         self._viewer.rebuild_tab_search()
 
     def create_node(self, node_type, name=None, selected=True, color=None,
@@ -1436,7 +1426,7 @@ class NodeGraph(QtCore.QObject):
 
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
-            raise IOError('file does not exist.')
+            raise IOError('file does not exist: {}'.format(file_path))
 
         try:
             with open(file_path) as data_file:

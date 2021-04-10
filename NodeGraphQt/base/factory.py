@@ -67,7 +67,7 @@ class NodeFactory(object):
         register the node.
 
         Args:
-            node (Node): node item
+            node (NodeGraphQt.NodeObject): node object.
             alias (str): custom alias for the node identifier (optional).
         """
         if node is None:
