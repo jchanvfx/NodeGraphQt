@@ -40,7 +40,10 @@ setuptools.setup(
     classifiers=classifiers,
     install_requires=requirements,
     include_package_data=True,
-    python_requires='>=3.6'
+    python_requires='>=3.6',
+    extras_require={
+        'PySide2': ['PySide2>=5.12']
+    }
 )
 
 
