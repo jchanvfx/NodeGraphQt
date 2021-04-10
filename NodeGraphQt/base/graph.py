@@ -828,13 +828,23 @@ class NodeGraph(QtCore.QObject):
 
     def register_node(self, node, alias=None):
         """
-        Register the node to the node graph vendor.
+        Register the node to the :meth:`NodeGraph.node_factory
 
         Args:
             node (NodeGraphQt.NodeObject): node.
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
+        self._viewer.rebuild_tab_search()
+
+    def register_nodes(self, nodes):
+        """
+        Register the nodes to the :meth:`NodeGraph.node_factory
+
+        Args:
+            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+        """
+        [self._node_factory.register_node(n) for n in nodes]
         self._viewer.rebuild_tab_search()
 
     def create_node(self, node_type, name=None, selected=True, color=None,
