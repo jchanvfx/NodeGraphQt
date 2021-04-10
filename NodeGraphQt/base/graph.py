@@ -282,7 +282,7 @@ class NodeGraph(QtCore.QObject):
 
         Example Identifiers:
             URI = ngqt://path/to/node/session.graph
-            URN = ngqt::node:com.chantasticvfx.MyNode
+            URN = ngqt::node:com.nodes.MyNode1;node:com.nodes.MyNode2
 
         Args:
             data (QtCore.QMimeData): mime data.
