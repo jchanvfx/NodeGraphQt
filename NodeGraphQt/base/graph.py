@@ -17,12 +17,13 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BaseNode, BackdropNode
 from .port import Port
-from ..constants import (URI_SCHEME, URN_SCHEME,
-                         PIPE_LAYOUT_CURVED,
-                         PIPE_LAYOUT_STRAIGHT,
-                         PIPE_LAYOUT_ANGLE,
-                         IN_PORT, OUT_PORT,
-                         VIEWER_GRID_LINES)
+from ..constants import (
+    URI_SCHEME, URN_SCHEME,
+    NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
+    PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT, PIPE_LAYOUT_ANGLE,
+    IN_PORT, OUT_PORT,
+    VIEWER_GRID_LINES
+)
 from ..widgets.node_space_bar import node_space_bar
 from ..widgets.viewer import NodeViewer
 
