@@ -18,7 +18,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.setPen(QtCore.Qt.NoPen)
 
         # draw background.
-        bg_clr = option.palette.midlight().color()
+        bg_clr = option.palette.base().color()
         painter.setBrush(QtGui.QBrush(bg_clr))
         painter.drawRect(option.rect)
 
@@ -26,7 +26,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         border_width = 1
         if option.state & QtWidgets.QStyle.State_Selected:
             bdr_clr = option.palette.highlight().color()
-            painter.setPen(QtGui.QPen(bdr_clr, 1.5))
+            painter.setPen(QtGui.QPen(bdr_clr, 2))
         else:
             bdr_clr = QtGui.QColor(100, 100, 100)
             painter.setPen(QtGui.QPen(bdr_clr, 1))
