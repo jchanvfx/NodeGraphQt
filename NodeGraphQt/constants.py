@@ -7,7 +7,8 @@ from Qt import QtWidgets
 from .pkg_info import __version__
 
 __doc__ = """
-The module contains variables used throughout the whole ``NodeGraphQt`` library.
+The ``NodeGraphQt.constants`` namespace contains variables used throughout 
+the whole ``NodeGraphQt`` library.
 """
 
 #: Current version of the NodeGraphQt framework.
