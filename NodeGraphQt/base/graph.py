@@ -1762,7 +1762,7 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.save_dialog(current_dir, ext)
 
-    # hmmm... refactor functions below for "GroupNode" not "SubGraph".
+    ### ---
 
     def use_OpenGL(self):
         """
