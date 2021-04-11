@@ -89,7 +89,10 @@ if __name__ == '__main__':
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
     
     # connect node a input to node b output.
-    node_a.set_input(0, node_b.output(0))    
+    node_a.set_input(0, node_b.output(0)) 
+
+    # auto layout nodes.
+    graph.auto_layout_nodes()
 
     # get the widget and show.
     graph_widget = graph.widget
