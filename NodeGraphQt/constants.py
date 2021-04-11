@@ -1,8 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+
+from Qt import QtWidgets
+
 from .pkg_info import __version__
-from . import QtWidgets
+
+__doc__ = """
+The module contains variables used throughout the whole ``NodeGraphQt`` library.
+"""
 
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__

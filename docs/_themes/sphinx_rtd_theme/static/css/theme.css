@@ -3378,7 +3378,8 @@ input[type=checkbox][disabled],input[type=radio][disabled]{
     margin-bottom:0!important
 }
 .wy-table-responsive table td,.wy-table-responsive table th{
-    white-space:nowrap
+    /*white-space:nowrap;*/
+    white-space:break-word;
 }
 a{
     color: #20fde8;

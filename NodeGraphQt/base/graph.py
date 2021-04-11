@@ -829,7 +829,7 @@ class NodeGraph(QtCore.QObject):
 
     def register_node(self, node, alias=None):
         """
-        Register the node to the :meth:`NodeGraph.node_factory
+        Register the node to the :meth:`NodeGraph.node_factory`
 
         Args:
             node (NodeGraphQt.NodeObject): node.
@@ -840,7 +840,7 @@ class NodeGraph(QtCore.QObject):
 
     def register_nodes(self, nodes):
         """
-        Register the nodes to the :meth:`NodeGraph.node_factory
+        Register the nodes to the :meth:`NodeGraph.node_factory`
 
         Args:
             nodes (list[NodeGraphQt.NodeObject]): list of nodes.
