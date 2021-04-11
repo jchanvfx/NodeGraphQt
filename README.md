@@ -14,9 +14,9 @@ applications that supports PySide2.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
-#### Documentation
+#### API Documentation
 
-<a href="https://jchanvfx.github.io/NodeGraphQt">NodeGraphQt Documentation</a>
+https://jchanvfx.github.io/NodeGraphQt
 
 #### Navigation
 
@@ -84,17 +84,20 @@ if __name__ == '__main__':
     graph.register_node(MyNode)
    
     # create nodes.
-    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
+    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
     
-    # connect node a input to node b output.
+    # wrap "backdrop" node around "node_a" and "node_b"
+    backdrop.wrap_nodes([node_a, node_b])
+
+    # connect "node_a" input to "node_b" output.
     node_a.set_input(0, node_b.output(0)) 
 
     # auto layout nodes.
     graph.auto_layout_nodes()
 
-    # get the widget and show.
+    # show the node graph widget.
     graph_widget = graph.widget
     graph_widget.show()
 
