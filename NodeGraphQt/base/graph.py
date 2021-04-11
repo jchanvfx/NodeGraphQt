@@ -1606,14 +1606,20 @@ class NodeGraph(QtCore.QObject):
             NodeGraph._update_node_rank(node, nodes_rank, down_stream)
         return nodes_rank
 
-    def auto_layout_nodes(self, nodes=None, down_stream=True):
+    def auto_layout_nodes(self, nodes=None, down_stream=True, start_nodes=None):
         """
         Auto layout the nodes in the node graph.
+
+        Note:
+            If the node graph is acyclic then the ``start_nodes`` will need
+            to be specified.
 
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of nodes to auto layout
                 if nodes is None then all nodes is layed out.
             down_stream (bool): false to layout up stream.
+            start_nodes (list[NodeGraphQt.BaseNode]):
+                list of nodes to start the auto layout from (Optional).
         """
         self.begin_undo('Auto Layout Nodes')
 
@@ -1625,7 +1631,7 @@ class NodeGraph(QtCore.QObject):
         }
         filtered_nodes = [n for n in nodes if not isinstance(n, BackdropNode)]
 
-        start_nodes = []
+        start_nodes = start_nodes or []
         if down_stream:
             start_nodes += [
                 n for n in filtered_nodes
