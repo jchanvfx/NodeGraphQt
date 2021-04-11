@@ -17,9 +17,13 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
 
-        painter.setBrush(QtCore.Qt.NoBrush)
+        # draw background.
+        bg_clr = option.palette.midlight().color()
+        painter.setBrush(QtGui.QBrush(bg_clr))
         painter.drawRect(option.rect)
 
+        # draw border.
+        border_width = 1
         if option.state & QtWidgets.QStyle.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
@@ -28,10 +32,12 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
-        painter.drawRect(QtCore.QRect(option.rect.x() + 1,
-                                      option.rect.y() + 1,
-                                      option.rect.width() - 2,
-                                      option.rect.height() - 2))
+        painter.drawRect(QtCore.QRect(
+            option.rect.x() + border_width,
+            option.rect.y() + border_width,
+            option.rect.width() - (border_width * 2),
+            option.rect.height() - (border_width * 2))
+        )
         painter.restore()
 
 
