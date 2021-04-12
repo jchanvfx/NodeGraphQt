@@ -11,6 +11,9 @@ from ..errors import NodePropertyError
 
 
 class PortModel(object):
+    """
+    Data dump for a port object.
+    """
 
     def __init__(self, node):
         self.node = node
@@ -51,6 +54,9 @@ class PortModel(object):
 
 
 class NodeModel(object):
+    """
+    Data dump for a node object.
+    """
 
     def __init__(self):
         self.type_ = None

@@ -158,28 +158,36 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.outputs = []
         self.node_parent = node.parent()
 
-        if hasattr(self.node, 'inputs'):
+        if hasattr(self.node, 'input_ports'):
             input_ports = self.node.input_ports()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
-        if hasattr(self.node, 'outputs'):
+        if hasattr(self.node, 'output_ports'):
             output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
+
+    def __del__(self):
+        minimize_node_ref_count(self.node)
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        [port.connect_to(p) for port, connected_ports in self.inputs for p in connected_ports]
-        [port.connect_to(p) for port, connected_ports in self.outputs for p in connected_ports]
+        for port, connected_ports in self.inputs:
+            for p in connected_ports:
+                port.connect_to(p)
+        for port, connected_ports in self.outputs:
+            for p in connected_ports:
+                port.connect_to(p)
         self.node.set_parent(self.node_parent)
 
     def redo(self):
-        [port.disconnect_from(p) for port, connected_ports in self.inputs for p in connected_ports]
-        [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
+        for port, connected_ports in self.inputs:
+            for p in connected_ports:
+                port.disconnect_from(p)
+        for port, connected_ports in self.outputs:
+            for p in connected_ports:
+                port.disconnect_from(p)
         self.model.nodes.pop(self.node.id)
         self.node.delete()
-
-    def __del__(self):
-        minimize_node_ref_count(self.node)
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

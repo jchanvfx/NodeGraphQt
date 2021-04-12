@@ -30,7 +30,7 @@ from ..widgets.node_widgets import (NodeBaseWidget,
                                     NodeFilePath)
 
 
-class classproperty(object):
+class _ClassProperty(object):
 
     def __init__(self, f):
         self.f = f
@@ -72,7 +72,7 @@ class NodeObject(object):
         return '<{}("{}") object at {}>'.format(
             self.__class__.__name__, self.NODE_NAME, hex(id(self)))
 
-    @classproperty
+    @_ClassProperty
     def type_(cls):
         """
         Node type identifier followed by the class name.

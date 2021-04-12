@@ -36,9 +36,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
     insert_node = QtCore.Signal(object, str, dict)
-    need_show_tab_search = QtCore.Signal()
     node_name_changed = QtCore.Signal(str, str)
     node_backdrop_updated = QtCore.Signal(str, str, object)
+    show_tab_search = QtCore.Signal()
 
     # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
@@ -55,7 +55,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
         self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
-        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+        self.setOptimizationFlag(
+            QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
@@ -231,7 +232,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
         else:
-            self.need_show_tab_search.emit()
+            self.show_tab_search.emit()
+        return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
