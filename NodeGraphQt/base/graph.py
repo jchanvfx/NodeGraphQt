@@ -139,7 +139,7 @@ class NodeGraph(QtCore.QObject):
         tab = QtWidgets.QShortcut(
             QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
         tab.activated.connect(self._toggle_tab_search)
-        self._viewer.need_show_tab_search.connect(self._toggle_tab_search)
+        self._viewer.show_tab_search.connect(self._toggle_tab_search)
 
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
