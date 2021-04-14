@@ -73,12 +73,6 @@ example code:
         app.exec_()
 """
 
-try:
-    from Qt import QtWidgets, QtGui, QtCore, QtCompat, QtOpenGL
-except ImportError as ie:
-    print('NodeGraphQt: Please install "Qt.py" : pip install Qt.py')
-    raise ImportError(ie)
-
 from .base.graph import NodeGraph, SubGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
 from .base.node import NodeObject, BaseNode, BackdropNode
