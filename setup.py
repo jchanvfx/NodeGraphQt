@@ -5,7 +5,7 @@ import sys
 
 import setuptools
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "NodeGraphQt"))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NodeGraphQt'))
 
 import pkg_info
 

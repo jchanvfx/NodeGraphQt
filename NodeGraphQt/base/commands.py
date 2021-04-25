@@ -52,14 +52,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             setattr(view, name, value)
 
     def undo(self):
-        do_undo = False
-        try:
-            if self.old_val != self.new_val:
-                do_undo = True
-        except:
-            do_undo = True
-
-        if do_undo:
+        if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.old_val)
 
             # emit property changed signal.
@@ -67,14 +60,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             graph.property_changed.emit(self.node, self.name, self.old_val)
 
     def redo(self):
-        do_redo = False
-        try:
-            if self.old_val != self.new_val:
-                do_redo = True
-        except:
-            do_redo = True
-
-        if do_redo:
+        if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.new_val)
 
             # emit property changed signal.
@@ -126,17 +112,15 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.model = graph.model
         self.node = node
         self.pos = pos
-        self.node_parent = node.parent()
 
     def undo(self):
         self.pos = self.pos or self.node.pos()
         self.model.nodes.pop(self.node.id)
-        self.node.delete()
+        self.node.view.delete()
 
     def redo(self):
         self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
-        self.node.set_parent(self.node_parent)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
@@ -145,7 +129,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
-        node (NodeGraphQt.NodeObject): node.
+        node (NodeGraphQt.BaseNode or NodeGraphQt.NodeObject): node.
     """
 
     def __init__(self, graph, node):
@@ -156,12 +140,10 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.node = node
         self.inputs = []
         self.outputs = []
-        self.node_parent = node.parent()
-
-        if hasattr(self.node, 'input_ports'):
+        if hasattr(self.node, 'inputs'):
             input_ports = self.node.input_ports()
             self.inputs = [(p, p.connected_ports()) for p in input_ports]
-        if hasattr(self.node, 'output_ports'):
+        if hasattr(self.node, 'outputs'):
             output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
@@ -172,22 +154,17 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
         for port, connected_ports in self.inputs:
-            for p in connected_ports:
-                port.connect_to(p)
+            [port.connect_to(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
-            for p in connected_ports:
-                port.connect_to(p)
-        self.node.set_parent(self.node_parent)
+            [port.connect_to(p) for p in connected_ports]
 
     def redo(self):
         for port, connected_ports in self.inputs:
-            for p in connected_ports:
-                port.disconnect_from(p)
+            [port.disconnect_from(p) for p in connected_ports]
         for port, connected_ports in self.outputs:
-            for p in connected_ports:
-                port.disconnect_from(p)
+            [port.disconnect_from(p) for p in connected_ports]
         self.model.nodes.pop(self.node.id)
-        self.node.delete()
+        self.node.view.delete()
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

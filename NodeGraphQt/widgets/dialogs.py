@@ -1,6 +1,5 @@
 import os
 
-from .stylesheet import STYLE_MESSAGEBOX
 from Qt import QtWidgets
 
 current_dir = os.path.expanduser('~')
@@ -49,7 +48,6 @@ class BaseDialog(object):
     @staticmethod
     def message_dialog(text, title):
         dlg = QtWidgets.QMessageBox()
-        dlg.setStyleSheet(STYLE_MESSAGEBOX)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -58,7 +56,6 @@ class BaseDialog(object):
     @staticmethod
     def question_dialog(text, title):
         dlg = QtWidgets.QMessageBox()
-        dlg.setStyleSheet(STYLE_MESSAGEBOX)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(

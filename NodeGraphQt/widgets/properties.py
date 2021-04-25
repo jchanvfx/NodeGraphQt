@@ -231,9 +231,6 @@ class PropComboBox(QtWidgets.QComboBox):
         return self.currentText()
 
     def set_value(self, value):
-        if type(value) is list:
-            self.set_items(value)
-            return
         if value != self.get_value():
             idx = self.findText(value, QtCore.Qt.MatchExactly)
             self.setCurrentIndex(idx)
@@ -782,14 +779,11 @@ class PropWindow(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
-        label = QtWidgets.QLabel(label)
         label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
             label_flags = label_flags | QtCore.Qt.AlignTop
-        elif widget.__class__.__name__ == 'PropButton':
-            label.setVisible(False)
-            widget.setText(name)
-        self.__layout.addWidget(label, row, 0, label_flags)
+
+        self.__layout.addWidget(QtWidgets.QLabel(label), row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
 
     def get_widget(self, name):
@@ -897,7 +891,6 @@ class NodePropWidget(QtWidgets.QWidget):
             if tab != 'Node':
                 self.add_tab(tab)
 
-        min_widget_height = 25
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
             prop_window = self.__tab_windows[tab]
@@ -908,22 +901,13 @@ class NodePropWidget(QtWidgets.QWidget):
 
                 WidClass = WIDGET_MAP.get(wid_type)
                 widget = WidClass()
-                widget.setMinimumHeight(min_widget_height)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
-                        _prop_name = '_' + prop_name + "_"
-                        if node.has_property(_prop_name):
-                            widget.set_items(node.get_property(_prop_name))
-                        else:
-                            widget.set_items(common_props[prop_name]['items'])
+                        widget.set_items(common_props[prop_name]['items'])
                     if 'range' in common_props[prop_name].keys():
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
-                    if 'ext' in common_props[prop_name].keys():
-                        widget.set_ext(common_props[prop_name]['ext'])
-                    if 'funcs' in common_props[prop_name].keys():
-                        widget.set_value(common_props[prop_name]['funcs'], node)
 
                 prop_window.add_widget(prop_name, widget, value,
                                        prop_name.replace('_', ' '))
@@ -938,7 +922,6 @@ class NodePropWidget(QtWidgets.QWidget):
             WidClass = WIDGET_MAP.get(wid_type)
 
             widget = WidClass()
-            widget.setMinimumHeight(min_widget_height)
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name),

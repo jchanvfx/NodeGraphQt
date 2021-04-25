@@ -72,8 +72,7 @@ example code:
 
         app.exec_()
 """
-
-from .base.graph import NodeGraph, SubGraph
+from .base.graph import NodeGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
 from .base.node import NodeObject, BaseNode, BackdropNode
 from .base.port import Port
@@ -81,16 +80,11 @@ from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE
 
 # functions
-from .base.utils import setup_context_menu, \
-    topological_sort_by_up, topological_sort_by_down, \
-    update_node_down_stream, update_node_up_stream,\
-    update_nodes_by_up, update_nodes_by_down
+from .base.utils import setup_context_menu
 
 # widgets
-from .widgets.nodes_tree import NodeTreeWidget
-from .widgets.nodes_palette import NodesPaletteWidget
+from .widgets.node_tree import NodeTreeWidget
 from .widgets.properties_bin import PropertiesBinWidget
-from .widgets.node_publish_widget import NodePublishWidget
 from .widgets.node_widgets import NodeBaseWidget
 
 
@@ -104,20 +98,11 @@ __all__ = [
     'NodeGraphCommand',
     'NodeGraphMenu',
     'NodeObject',
-    'NodesPaletteWidget',
     'NodeTreeWidget',
     'NodesMenu',
     'Port',
     'PropertiesBinWidget',
     'VERSION',
     'constants',
-    'setup_context_menu',
-    'NodePublishWidget',
-    'SubGraph',
-    'topological_sort_by_up',
-    'topological_sort_by_down',
-    'update_node_up_stream',
-    'update_node_down_stream',
-    'update_nodes_by_up',
-    'update_nodes_by_down',
+    'setup_context_menu'
 ]

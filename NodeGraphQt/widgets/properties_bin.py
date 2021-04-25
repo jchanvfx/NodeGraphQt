@@ -50,6 +50,7 @@ class PropertiesList(QtWidgets.QTableWidget):
         self.setShowGrid(False)
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
+
         QtCompat.QHeaderView.setSectionResizeMode(
             self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
         QtCompat.QHeaderView.setSectionResizeMode(
@@ -197,20 +198,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if self.limit() == 0 or self._lock:
             return
 
-        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        rows = self._prop_list.rowCount()
+        if rows >= self.limit():
+            self._prop_list.removeRow(rows - 1)
 
+        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
         if itm_find:
-            if itm_find[0].row() == 0:
-                try:
-                    itm_find[0].setEnabled(node.graph.editable)
-                except Exception as e:
-                    pass
-                return
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
         prop_widget = NodePropWidget(node=node)
-        prop_widget.setEnabled(node.graph.editable)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         prop_widget.property_closed.connect(self.__on_prop_close)
         self._prop_list.setCellWidget(0, 0, prop_widget)
@@ -218,10 +215,6 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         item = QtWidgets.QTableWidgetItem(node.id)
         self._prop_list.setItem(0, 0, item)
         self._prop_list.selectRow(0)
-
-        rows = self._prop_list.rowCount()
-        if rows > self.limit():
-            self._prop_list.removeRow(rows - 1)
 
     def remove_node(self, node):
         """

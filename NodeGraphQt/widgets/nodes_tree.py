@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Qt import QtWidgets, QtCore, QtGui
+from Qt import QtWidgets, QtCore
 
 from ..constants import URN_SCHEME
 
@@ -30,18 +30,14 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
     def __init__(self, parent=None, node_graph=None):
         super(NodeTreeWidget, self).__init__(parent)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragOnly)
-        self.setSelectionMode(self.ExtendedSelection)
+        self.setWindowTitle('Nodes Tree')
         self.setHeaderHidden(True)
-        self.setWindowTitle('Nodes')
-
-        self._factory = node_graph.node_factory if node_graph else None
+        self._factory = None
         self._custom_labels = {}
-        self._category_items = {}
+        self._set_node_factory(node_graph.node_factory)
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
-            self.__class__.__name__, hex(id(self))
-        )
+        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
 
     def mimeData(self, items):
         node_ids = ['node:{}'.format(i.toolTip(0)) for i in items]
@@ -55,7 +51,6 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
         Populate the node tree.
         """
         self.clear()
-        palette = QtGui.QPalette()
         categories = set()
         node_types = {}
         for name, node_ids in self._factory.names.items():
@@ -63,28 +58,25 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
                 categories.add('.'.join(nid.split('.')[:-1]))
                 node_types[nid] = name
 
-        self._category_items = {}
+        category_items = {}
         for category in sorted(categories):
             if category in self._custom_labels.keys():
                 label = self._custom_labels[category]
             else:
-                label = '{}'.format(category)
+                label = '- {}'.format(category)
             cat_item = BaseNodeTreeItem(self, [label], type=TYPE_CATEGORY)
             cat_item.setFirstColumnSpanned(True)
             cat_item.setFlags(QtCore.Qt.ItemIsEnabled)
-            cat_item.setBackground(0, QtGui.QBrush(palette.midlight().color()))
-            cat_item.setSizeHint(0, QtCore.QSize(100, 26))
             self.addTopLevelItem(cat_item)
             cat_item.setExpanded(True)
-            self._category_items[category] = cat_item
+            category_items[category] = cat_item
 
         for node_id, node_name in node_types.items():
             category = '.'.join(node_id.split('.')[:-1])
-            category_item = self._category_items[category]
+            category_item = category_items[category]
 
             item = BaseNodeTreeItem(category_item, [node_name], type=TYPE_NODE)
             item.setToolTip(0, node_id)
-            item.setSizeHint(0, QtCore.QSize(100, 26))
 
             category_item.addChild(item)
 
@@ -99,19 +91,13 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
 
     def set_category_label(self, category, label):
         """
-        Override the label for a node category root item.
-
-        .. image:: _images/nodes_tree_category_label.png
-            :width: 70%
+        Set custom display label for a node category.
 
         Args:
-            category (str): node identifier category eg. ``"nodes.widgets"``
-            label (str): custom display label. eg. ``"Node Widgets"``
+            category (str): node identifier category eg. "nodeGraphQt.nodes"
+            label (str): custom display label.
         """
         self._custom_labels[category] = label
-        if category in self._category_items:
-            item = self._category_items[category]
-            item.setText(0, label)
 
     def update(self):
         """

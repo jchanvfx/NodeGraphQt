@@ -55,46 +55,45 @@ class NodeItem(AbstractNodeItem):
         self.auto_switch_mode()
 
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        bg_border = 1.0
+        rect = QtCore.QRectF(0.5 - (bg_border / 2),
+                             0.5 - (bg_border / 2),
+                             self._width + bg_border,
+                             self._height + bg_border)
+        radius = 2
+        border_color = QtGui.QColor(*self.border_color)
 
-        # base background.
-        margin = 1.0
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(rect, radius, radius)
+
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
 
-        radius = 4.0
-        painter.setBrush(QtGui.QColor(*self.color))
+        bg_color = QtGui.QColor(*self.color)
+        painter.setBrush(bg_color)
+        painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
 
-        # light overlay on background when selected.
-        if self.selected:
+        if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundedRect(rect, radius, radius)
 
-        # node name background.
-        padding = 3.0, 2.0
-        text_rect = self._text_item.boundingRect()
-        text_rect = QtCore.QRectF(text_rect.x() + padding[0],
-                                  rect.y() + padding[1],
-                                  rect.width() - padding[0] - margin,
-                                  text_rect.height() - (padding[1] * 2))
+        label_rect = QtCore.QRectF(rect.left() + (radius / 2),
+                                   rect.top() + (radius / 2),
+                                   self._width - (radius / 1.25),
+                                   28)
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(label_rect, radius / 1.5, radius / 1.5)
         painter.setBrush(QtGui.QColor(0, 0, 0, 50))
-        if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-        painter.drawRoundedRect(text_rect, 3.0, 3.0)
+        painter.fillPath(path, painter.brush())
 
-        # node border
         border_width = 0.8
-        border_color = QtGui.QColor(*self.border_color)
-        if self.selected:
+        if self.selected and NODE_SEL_BORDER_COLOR:
             border_width = 1.2
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
-        border_rect = QtCore.QRectF(rect.left(), rect.top(),
-                                    rect.width(), rect.height())
+        border_rect = QtCore.QRectF(rect.left() - (border_width / 2),
+                                    rect.top() - (border_width / 2),
+                                    rect.width() + border_width,
+                                    rect.height() + border_width)
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
@@ -197,9 +196,13 @@ class NodeItem(AbstractNodeItem):
             add_w (float): additional width.
             add_h (float): additional height.
         """
+        self._width = NODE_WIDTH
+        self._height = NODE_HEIGHT
         width, height = self.calc_size(add_w, add_h)
-        self._width = width if width > NODE_WIDTH else NODE_WIDTH
-        self._height = height if height > NODE_HEIGHT else NODE_HEIGHT
+        if width > self._width:
+            self._width = width
+        if height > self._height:
+            self._height = height
 
     def _set_text_color(self, color):
         """
@@ -301,6 +304,7 @@ class NodeItem(AbstractNodeItem):
 
         width += add_w
         height += add_h
+
         return width, height
 
     def align_icon(self, h_offset=0.0, v_offset=0.0):
@@ -312,7 +316,7 @@ class NodeItem(AbstractNodeItem):
             h_offset (float): horizontal offset.
         """
         x = 2.0 + h_offset
-        y = 1.0 + v_offset
+        y = 2.0 + v_offset
         self._icon_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
@@ -323,11 +327,12 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
-        x = rect.center().x() - (text_rect.width() / 2)
-        y = 0.0
-        self._text_item.setPos(x + h_offset, y + v_offset)
+        text_x = (self._width / 2) - (text_rect.width() / 2)
+        text_y = 2.0
+        text_x += h_offset
+        text_y += v_offset
+        self._text_item.setPos(text_x, text_y)
 
     def align_widgets(self, v_offset=0.0):
         """
@@ -423,9 +428,9 @@ class NodeItem(AbstractNodeItem):
         # (do all the graphic item layout offsets here)
 
         # align label text
-        self.align_label()
+        self.align_label(h_offset=0.0, v_offset=0.0)
         # arrange icon
-        self.align_icon()
+        self.align_icon(h_offset=0.0, v_offset=0.0)
         # arrange input and output ports.
         self.align_ports(v_offset=height + (height / 2))
         # arrange node widgets
@@ -738,6 +743,11 @@ class NodeItem(AbstractNodeItem):
     def has_widget(self, name):
         return name in self._widgets.keys()
 
+    def delete(self):
+        [port.delete() for port, text in self._input_items.items()]
+        [port.delete() for port, text in self._output_items.items()]
+        super(NodeItem, self).delete()
+
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
         widgets = node_dict.pop('widgets', {})
@@ -774,45 +784,47 @@ class NodeItemVertical(NodeItem):
         self.auto_switch_mode()
 
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        bg_border = 1.0
+        rect = QtCore.QRectF(0.5 - (bg_border / 2),
+                             0.5 - (bg_border / 2),
+                             self._width + bg_border,
+                             self._height + bg_border)
+        radius = 2
+        border_color = QtGui.QColor(*self.border_color)
 
-        # base background.
-        margin = 1.0
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(rect, radius, radius)
+
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
 
-        radius = 4.0
-        painter.setBrush(QtGui.QColor(*self.color))
+        bg_color = QtGui.QColor(*self.color)
+        painter.setBrush(bg_color)
+        painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
 
-        # light overlay on background when selected.
-        if self.selected:
+        if self.selected and NODE_SEL_COLOR:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundedRect(rect, radius, radius)
 
-        # top & bottom edge background.
-        padding = 2.0
-        height = 10
-        painter.setBrush(QtGui.QColor(0, 0, 0, 50))
-        if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
-        for y in [rect.y() + padding, rect.height() - height - 1]:
-            top_rect = QtCore.QRectF(rect.x() + padding, y,
-                                     rect.width() - (padding * 2), height)
-            painter.drawRoundedRect(top_rect, 3.0, 3.0)
+        label_rect = QtCore.QRectF(rect.left(), rect.top(), self._width, 15)
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(label_rect, radius, radius)
+        painter.setBrush(QtGui.QColor(30, 30, 30, 200))
+        painter.fillPath(path, painter.brush())
 
-        # node border
+        label_rect = QtCore.QRectF(rect.left(), rect.bottom()-15, self._width, 15)
+        path = QtGui.QPainterPath()
+        path.addRoundedRect(label_rect, radius, radius)
+        painter.fillPath(path, painter.brush())
+
         border_width = 0.8
-        border_color = QtGui.QColor(*self.border_color)
-        if self.selected:
+        if self.selected and NODE_SEL_BORDER_COLOR:
             border_width = 1.2
             border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
-        border_rect = QtCore.QRectF(rect.left(), rect.top(),
-                                    rect.width(), rect.height())
+        border_rect = QtCore.QRectF(rect.left() - (border_width / 2),
+                                    rect.top() - (border_width / 2),
+                                    rect.width() + border_width,
+                                    rect.height() + border_width)
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
@@ -826,27 +838,31 @@ class NodeItemVertical(NodeItem):
 
     def align_icon(self, h_offset=0.0, v_offset=0.0):
         """
-        Align node icon to the right side of the node.
+        Align node icon to the default top left of the node.
 
         Args:
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        y = self._height / 2
-        y -= self._icon_item.boundingRect().height()
-        self._icon_item.setPos(self._width + h_offset, y + v_offset)
+        # icon_rect = self._icon_item.boundingRect()
+        # x = self._width / 2 - (icon_rect.width() / 2) + h_offset
+        # y = self._height / 2 - (icon_rect.height() / 2) + v_offset
+        x = 2.0 + h_offset
+        y = 17.0 + v_offset
+        self._icon_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
         """
-        Align node label to the right side of the node.
+        Align node label to the default top center of the node.
 
         Args:
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        y = self._height / 2
-        y -= self.text_item.boundingRect().height() / 2
-        self.text_item.setPos(self._width + h_offset, y + v_offset)
+        text_rect = self.text_item.boundingRect()
+        text_x = self._width + 10 + h_offset
+        text_y = self._height / 2 - (text_rect.height() / 2)
+        self.text_item.setPos(text_x, text_y)
 
     def align_ports(self, v_offset=0.0):
         """
@@ -893,13 +909,13 @@ class NodeItemVertical(NodeItem):
         # (do all the graphic item layout offsets here)
 
         # arrange label text
-        self.align_label(h_offset=8)
+        self.align_label(h_offset=0.0, v_offset=0.0)
         # arrange icon
-        self.align_icon(h_offset=6, v_offset=-4)
+        self.align_icon(h_offset=0.0, v_offset=0.0)
         # arrange input and output ports.
         self.align_ports()
         # arrange node widgets
-        self.align_widgets()
+        self.align_widgets(v_offset=0.0)
 
         self.update()
 
@@ -923,10 +939,12 @@ class NodeItemVertical(NodeItem):
         port_width = 0.0
         if self._input_items:
             port = list(self._input_items.keys())[0]
+            height += port.boundingRect().height()
             port_width = port.boundingRect().width()
 
         if self._output_items:
             port = list(self._output_items.keys())[0]
+            height += port.boundingRect().height()
             port_width = port.boundingRect().width()
 
         in_count = len([p for p in self.inputs if p.isVisible()])
@@ -937,10 +955,12 @@ class NodeItemVertical(NodeItem):
             for w in self._widgets.values():
                 wid_height += w.boundingRect().height()
             wid_height += wid_height / len(self._widgets.values())
-            height = wid_height
+            if wid_height > height:
+                height = wid_height
 
         width += add_w
-        height += add_h
+        height += add_h + 15
+
         return width, height
 
     def add_input(self, name='input', multi_port=False, display_name=True,
@@ -963,7 +983,7 @@ class NodeItemVertical(NodeItem):
             name, multi_port, False, locked, painter_func)
 
     def add_output(self, name='output', multi_port=False, display_name=True,
-                   locked=False, painter_func=None):
+                  locked=False, painter_func=None):
         """
         Adds a port qgraphics item into the node with the "port_type" set as
         OUT_PORT

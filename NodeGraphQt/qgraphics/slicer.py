@@ -1,6 +1,4 @@
 #!/usr/bin/python
-import math
-
 from Qt import QtCore, QtGui, QtWidgets
 
 from ..constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
@@ -30,7 +28,6 @@ class SlicerPipe(QtWidgets.QGraphicsPathItem):
         p2 = self.path().pointAtPercent(1)
         size = 6.0
         offset = size / 2
-        arrow_size = 4.0
 
         painter.save()
         painter.setRenderHint(painter.Antialiasing, True)
@@ -38,7 +35,7 @@ class SlicerPipe(QtWidgets.QGraphicsPathItem):
         font = painter.font()
         font.setPointSize(12)
         painter.setFont(font)
-        text = 'slice'
+        text = 'slice pipes'
         text_x = painter.fontMetrics().width(text) / 2
         text_y = painter.fontMetrics().height() / 1.5
         text_pos = QtCore.QPointF(p1.x() - text_x, p1.y() - text_y)
@@ -47,31 +44,17 @@ class SlicerPipe(QtWidgets.QGraphicsPathItem):
         painter.setPen(QtGui.QPen(text_color, 1.5, QtCore.Qt.SolidLine))
         painter.drawText(text_pos, text)
 
-        painter.setPen(QtGui.QPen(color, 1.5, QtCore.Qt.DashDotLine))
+        painter.setPen(QtGui.QPen(color, 1.5, QtCore.Qt.DashLine))
         painter.drawPath(self.path())
 
-        pen = QtGui.QPen(color, 1.5, QtCore.Qt.SolidLine)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        painter.setPen(pen)
+        painter.setPen(QtGui.QPen(color, 1.5, QtCore.Qt.SolidLine))
         painter.setBrush(color)
 
         rect = QtCore.QRectF(p1.x() - offset, p1.y() - offset, size, size)
         painter.drawEllipse(rect)
 
-        arrow = QtGui.QPolygonF()
-        arrow.append(QtCore.QPointF(-arrow_size, arrow_size))
-        arrow.append(QtCore.QPointF(0.0, -arrow_size * 0.9))
-        arrow.append(QtCore.QPointF(arrow_size, arrow_size))
-
-        transform = QtGui.QTransform()
-        transform.translate(p2.x(), p2.y())
-        radians = math.atan2(p2.y() - p1.y(),
-                             p2.x() - p1.x())
-        degrees = math.degrees(radians) - 90
-        transform.rotate(degrees)
-
-        painter.drawPolygon(transform.map(arrow))
+        rect = QtCore.QRectF(p2.x() - offset, p2.y() - offset, size, size)
+        painter.drawEllipse(rect)
         painter.restore()
 
     def draw_path(self, p1, p2):

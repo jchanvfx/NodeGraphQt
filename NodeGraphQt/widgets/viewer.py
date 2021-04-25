@@ -2,14 +2,7 @@
 # -*- coding: utf-8 -*-
 import math
 
-import Qt
-from Qt import QtGui, QtCore, QtWidgets
-
-# use QOpenGLWidget instead of the deprecated QGLWidget to avoid probelms with Wayland
-if Qt.IsPySide2:
-    from PySide2.QtWidgets import QOpenGLWidget
-elif Qt.IsPyQt5:
-    from PyQt5.QtWidgets import QOpenGLWidget
+from Qt import QtGui, QtCore, QtWidgets, QtOpenGL
 
 from .dialogs import BaseDialog, FileDialog
 from .scene import NodeScene
@@ -72,7 +65,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
             0, 0, self.size().width(), self.size().height())
         self._update_scene()
         self._last_size = self.size()
-        self.editable = True
 
         self._pipe_layout = PIPE_LAYOUT_CURVED
         self._detached_port = None
@@ -116,8 +108,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
-        self.pipe_collision = False
-
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -295,6 +285,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         items = self._items_near(map_pos, None, 20, 20)
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
+        pipes = [i for i in items if isinstance(i, Pipe)]
 
         if nodes:
             self.MMB_state = False
@@ -387,8 +378,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # emit signal if selected node collides with pipe.
         # Note: if collide state is true then only 1 node is selected.
         nodes, pipes = self.selected_items()
-        if self.COLLIDING_state and nodes and pipes:
-            self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
+        if self.COLLIDING_state:
+            if nodes and pipes:
+                self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
 
         # emit node selection changed signal.
         prev_ids = [n.id for n in self._prev_selection_nodes if not n.selected]
@@ -448,25 +440,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         elif self.LMB_state:
             self.COLLIDING_state = False
-            nodes, pipes = self.selected_items()
+            nodes = self.selected_nodes()
             if len(nodes) == 1:
                 node = nodes[0]
-                [p.setSelected(False) for p in pipes]
-
-                if self.pipe_collision:
-                    colliding_pipes = [
-                        i for i in node.collidingItems()
-                        if isinstance(i, Pipe) and i.isVisible()
-                    ]
-                    for pipe in colliding_pipes:
-                        if not pipe.input_port:
+                for pipe in self.selected_pipes():
+                    pipe.setSelected(False)
+                for item in node.collidingItems():
+                    if isinstance(item, Pipe) and item.isVisible():
+                        if not item.input_port:
                             continue
                         port_node_check = all([
-                            not pipe.input_port.node is node,
-                            not pipe.output_port.node is node
+                            not item.input_port.node is node,
+                            not item.output_port.node is node
                         ])
                         if port_node_check:
-                            pipe.setSelected(True)
+                            item.setSelected(True)
                             self.COLLIDING_state = True
                             break
 
@@ -590,22 +578,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         pos = event.scenePos()
-        items = self._items_near(pos, None, 5, 5)
+        port_items = self._items_near(pos, PortItem, 5, 5)
+        if port_items:
+            port = port_items[0]
 
-        # filter from the selection stack in the following order
-        # "node, port, pipe" this is to avoid selecting items under items.
-        node, port, pipe = None, None, None
-        for item in items:
-            if isinstance(item, AbstractNodeItem):
-                node = item
-            elif isinstance(item, PortItem):
-                port = item
-            elif isinstance(item, Pipe):
-                pipe = item
-            if any([node, port, pipe]):
-                break
-
-        if port:
             if port.locked:
                 return
 
@@ -616,8 +592,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 [p.delete() for p in port.connected_pipes]
             return
 
-        if node:
-            node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
+        node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
+        if node_items:
+            node = node_items[0]
 
             # record the node positions at selection time.
             for n in node_items:
@@ -630,10 +607,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not isinstance(node, BackdropNodeItem):
                 return
 
-        if pipe:
+        pipe_items = self._items_near(pos, Pipe, 3, 3)
+        if pipe_items:
             if not self.LMB_state:
                 return
-
+            pipe = pipe_items[0]
             from_port = pipe.port_from_pos(pos, True)
 
             if from_port.locked:
@@ -795,8 +773,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         establish a new pipe connection.
         (adds a new pipe item to draw between 2 ports)
         """
-        if not self.editable:
-            return
         pipe = Pipe()
         self.scene().addItem(pipe)
         pipe.set_connections(start_port, end_port)
@@ -962,9 +938,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             list[AbstractNodeItem]: instances of node items.
         """
-        nodes = [item for item in self.scene().selectedItems()
-                 if isinstance(item, AbstractNodeItem)]
-        return nodes
+        return [i for i in self.scene().selectedItems()
+                if isinstance(i, AbstractNodeItem)]
 
     def selected_pipes(self):
         """
@@ -973,8 +948,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             list[Pipe]: pipe items.
         """
-        pipes = [item for item in self.scene().selectedItems()
-                 if isinstance(item, Pipe)]
+        pipes = [i for i in self.scene().selectedItems()
+                 if isinstance(i, Pipe)]
         return pipes
 
     def selected_items(self):
@@ -1186,4 +1161,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
 
     def use_OpenGL(self):
-        self.setViewport(QOpenGLWidget())
+        format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
+        format.setSamples(4)
+        self.setViewport(QtOpenGL.QGLWidget(format))
