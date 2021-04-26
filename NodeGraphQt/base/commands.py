@@ -1,7 +1,6 @@
 #!/usr/bin/python
 from Qt import QtWidgets
 
-from .utils import minimize_node_ref_count
 from ..constants import IN_PORT, OUT_PORT
 
 
@@ -146,9 +145,6 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         if hasattr(self.node, 'outputs'):
             output_ports = self.node.output_ports()
             self.outputs = [(p, p.connected_ports()) for p in output_ports]
-
-    def __del__(self):
-        minimize_node_ref_count(self.node)
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
