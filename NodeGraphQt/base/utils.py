@@ -67,7 +67,7 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
-    edit_menu.add_command('Show Undo History', _show_undo_view)
+    edit_menu.add_command('Show Undo View', _show_undo_view)
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
@@ -143,7 +143,8 @@ def _open_session(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    file_path = graph.load_dialog(current)
+    viewer = graph.viewer()
+    file_path = viewer.load_dialog(current)
     if file_path:
         graph.load_session(file_path)
 
@@ -156,7 +157,8 @@ def _import_session(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    file_path = graph.load_dialog(current)
+    viewer = graph.viewer()
+    file_path = viewer.load_dialog(current)
     if file_path:
         graph.import_session(file_path)
 
@@ -186,7 +188,8 @@ def _save_session_as(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    file_path = graph.save_dialog(current)
+    viewer = graph.viewer()
+    file_path = viewer.save_dialog(current)
     if file_path:
         graph.save_session(file_path)
 
@@ -198,7 +201,8 @@ def _new_session(graph):
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
     """
-    if graph.question_dialog('Clear Current Session?', 'Clear Session'):
+    viewer = graph.viewer()
+    if viewer.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
 
 
@@ -286,41 +290,4 @@ def _layout_graph_down(graph):
 
 def _layout_graph_up(graph):
     nodes = graph.selected_nodes() or graph.all_nodes()
-    graph.auto_layout_nodes(nodes=nodes, down_stream=False)
-
-
-# garbage collect
-
-def minimize_node_ref_count(node):
-    """
-    Minimize node reference count for garbage collect.
-
-    Args:
-        node (NodeGraphQt.NodeObject): node.
-    """
-    if node.graph is None or node.id not in node.graph.model.nodes:
-        if hasattr(node, 'deleted'):
-            del node
-            return
-        from .node import BaseNode
-        from .graph import SubGraph
-        node._parent = None
-        if isinstance(node, BaseNode):
-            try:
-                [wid.deleteLater() for wid in node.view._widgets.values()]
-            except:
-                pass
-            node.view._widgets.clear()
-            for port in node._inputs:
-                port.model.node = None
-            for port in node._outputs:
-                port.model.node = None
-
-            if isinstance(node, SubGraph):
-                node._children.clear()
-                node.sub_graph_input_nodes.clear()
-                node.sub_graph_output_nodes.clear()
-            # if isinstance(node, QtCore.QObject):
-            #     node.deleteLater()
-        node.deleted = True
-        del node
+    graph.auto_layout_nodes(nodes-nodes, down_stream=False)
