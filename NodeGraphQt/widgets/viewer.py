@@ -554,10 +554,22 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         pos = event.scenePos()
-        port_items = self._items_near(pos, PortItem, 5, 5)
-        if port_items and self.editable:
-            port = port_items[0]
+        items = self._items_near(pos, None, 5, 5)
 
+        # filter from the selection stack in the following order
+        # "node, port, pipe" this is to avoid selecting items under items.
+        node, port, pipe = None, None, None
+        for item in items:
+            if isinstance(item, AbstractNodeItem):
+                node = item
+            elif isinstance(item, PortItem):
+                port = item
+            elif isinstance(item, Pipe):
+                pipe = item
+            if any([node, port, pipe]):
+                break
+
+        if port:
             if port.locked:
                 return
 
@@ -568,9 +580,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 [p.delete() for p in port.connected_pipes]
             return
 
-        node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
-        if node_items:
-            node = node_items[0]
+        if node:
+            node_items = self._items_near(pos, AbstractNodeItem, 3, 3)
 
             # record the node positions at selection time.
             for n in node_items:
@@ -583,11 +594,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not isinstance(node, BackdropNodeItem):
                 return
 
-        pipe_items = self._items_near(pos, Pipe, 3, 3)
-        if pipe_items and self.editable:
+        if pipe:
             if not self.LMB_state:
                 return
-            pipe = pipe_items[0]
+
             from_port = pipe.port_from_pos(pos, True)
 
             if from_port.locked:
