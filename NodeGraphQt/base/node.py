@@ -1013,7 +1013,8 @@ class BackdropNode(NodeObject):
         # override base default color.
         self.model.color = (5, 129, 138, 255)
         self.create_property('backdrop_text', '',
-                             widget_type=NODE_PROP_QTEXTEDIT, tab='Backdrop')
+                             widget_type=NODE_PROP_QTEXTEDIT,
+                             tab='Backdrop')
 
     def on_backdrop_updated(self, update_prop, value=None):
         """

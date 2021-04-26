@@ -12,7 +12,7 @@ from NodeGraphQt import (NodeGraph,
                          setup_context_menu)
 
 # import example nodes from the "example_nodes" package
-from example_nodes import basic_nodes, widget_nodes
+from examples.custom_nodes import basic_nodes, widget_nodes
 
 
 def draw_triangle_port(painter, rect, info):
@@ -169,7 +169,7 @@ if __name__ == '__main__':
 
     # registered nodes.
     nodes_to_reg = [
-        BackdropNode, MyNode,
+        MyNode,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
         widget_nodes.DropdownMenuNode,
@@ -177,6 +177,9 @@ if __name__ == '__main__':
         widget_nodes.CheckboxNode
     ]
     graph.register_nodes(nodes_to_reg)
+
+    # register backdrop node with "Backdrop" alias.
+    graph.register_node(BackdropNode, 'Backdrop')
 
     my_node = graph.create_node(
         'com.chantasticvfx.MyNode',
@@ -186,29 +189,29 @@ if __name__ == '__main__':
     )
 
     foo_node = graph.create_node(
-        'com.chantasticvfx.FooNode',
+        'nodes.basic.FooNode',
         name='node')
     foo_node.set_disabled(True)
 
     # create example "TextInputNode".
     text_node = graph.create_node(
-        'com.chantasticvfx.TextInputNode',
+        'nodes.widget.TextInputNode',
         name='text node')
 
     # create example "TextInputNode".
     checkbox_node = graph.create_node(
-        'com.chantasticvfx.CheckboxNode',
+        'nodes.widget.CheckboxNode',
         name='checkbox node')
 
     # create node with a combo box menu.
     menu_node = graph.create_node(
-        'com.chantasticvfx.DropdownMenuNode',
+        'nodes.widget.DropdownMenuNode',
         name='menu node')
 
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example_nodes', 'pear.png')
-    bar_node = graph.create_node('com.chantasticvfx.BarNode')
+    bar_node = graph.create_node('nodes.basic.BarNode')
     bar_node.set_icon(icon)
     bar_node.set_name('icon node')
 
@@ -221,7 +224,7 @@ if __name__ == '__main__':
     graph.auto_layout_nodes()
 
     # wrap a backdrop node.
-    backdrop_node = graph.create_node('nodeGraphQt.nodes.BackdropNode')
+    backdrop_node = graph.create_node('Backdrop')
     backdrop_node.wrap_nodes([text_node, checkbox_node])
 
     graph.fit_to_selection()

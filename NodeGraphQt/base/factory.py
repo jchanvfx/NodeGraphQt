@@ -42,19 +42,18 @@ class NodeFactory(object):
         """
         return self.__nodes
 
-    def create_node_instance(self, node_type=None, alias=None):
+    def create_node_instance(self, node_type=None):
         """
-        create node class by the node type identifier or alias.
+        create node object by the node type identifier or alias.
 
         Args:
-            node_type (str): node type.
-            alias (str): alias name (optional).
+            node_type (str): node type or optional alias name.
 
         Returns:
             NodeGraphQt.BaseNode: new node class object.
         """
-        if alias and self.aliases.get(alias):
-            node_type = self.aliases[alias]
+        if node_type in self.aliases:
+            node_type = self.aliases[node_type]
 
         NodeClass = self.__nodes.get(node_type)
         if not NodeClass:
