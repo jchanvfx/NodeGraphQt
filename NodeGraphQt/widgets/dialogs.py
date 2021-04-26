@@ -1,7 +1,6 @@
 import os
 
-from .stylesheet import STYLE_MESSAGEBOX
-from .. import QtWidgets
+from Qt import QtWidgets
 
 current_dir = os.path.expanduser('~')
 
@@ -17,8 +16,8 @@ def set_dir(file):
 class FileDialog(object):
 
     @staticmethod
-    def getSaveFileName(parent=None, title="Save File", file_dir=None,
-                        ext_filter="*"):
+    def getSaveFileName(parent=None, title='Save File', file_dir=None,
+                        ext_filter='*'):
         if not file_dir:
             file_dir = current_dir
         file_dlg = QtWidgets.QFileDialog.getSaveFileName(
@@ -29,8 +28,8 @@ class FileDialog(object):
         return file_dlg
 
     @staticmethod
-    def getOpenFileName(parent=None, title="Open File", file_dir=None,
-                        ext_filter="*"):
+    def getOpenFileName(parent=None, title='Open File', file_dir=None,
+                        ext_filter='*'):
         if not file_dir:
             file_dir = current_dir
 
@@ -49,7 +48,6 @@ class BaseDialog(object):
     @staticmethod
     def message_dialog(text, title):
         dlg = QtWidgets.QMessageBox()
-        dlg.setStyleSheet(STYLE_MESSAGEBOX)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -58,7 +56,6 @@ class BaseDialog(object):
     @staticmethod
     def question_dialog(text, title):
         dlg = QtWidgets.QMessageBox()
-        dlg.setStyleSheet(STYLE_MESSAGEBOX)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(

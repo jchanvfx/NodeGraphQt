@@ -4,7 +4,6 @@ from collections import OrderedDict
 from .commands import PropertyChangedCmd
 from .model import NodeModel
 from .port import Port
-from .utils import update_node_down_stream
 from ..constants import (NODE_PROP,
                          NODE_PROP_QLABEL,
                          NODE_PROP_QLINEEDIT,
@@ -24,10 +23,7 @@ from ..qgraphics.node_base import NodeItem, NodeItemVertical
 from ..widgets.node_widgets import (NodeBaseWidget,
                                     NodeComboBox,
                                     NodeLineEdit,
-                                    NodeFloatEdit,
-                                    NodeIntEdit,
-                                    NodeCheckBox,
-                                    NodeFilePath)
+                                    NodeCheckBox)
 
 
 class _ClassProperty(object):
@@ -66,7 +62,6 @@ class NodeObject(object):
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
-        self._parent = None
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -133,15 +128,6 @@ class NodeObject(object):
             NodeGraphQt.base.model.NodeModel: node model object.
         """
         return self._model
-
-    def set_graph(self, graph):
-        """
-        Set the node graph.
-
-        Args:
-            graph (NodeGraphQt.base.graph.NodeGraph): node graph object.
-        """
-        self._graph = graph
 
     def set_model(self, model):
         """
@@ -252,8 +238,7 @@ class NodeObject(object):
         self.set_property('selected', selected)
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None, ext=None,
-                        funcs=None):
+                        widget_type=NODE_PROP, tab=None):
         """
         Creates a custom property to the node.
 
@@ -289,12 +274,8 @@ class NodeObject(object):
             widget_type (int): widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget`
             tab (str): name of the widget tab to display in the properties bin.
-            ext (str): file ext of ``NODE_PROP_FILE``
-            funcs (list[function]) list of functions for NODE_PROP_BUTTON
         """
-        self.model.add_property(
-            name, value, items, range, widget_type, tab, ext, funcs
-        )
+        self.model.add_property(name, value, items, range, widget_type, tab)
 
     def properties(self):
         """
@@ -332,15 +313,10 @@ class NodeObject(object):
         """
 
         # prevent signals from causing a infinite loop.
-        try:
-            if self.get_property(name) == value:
-                return
-        except:
-            pass
+        if self.get_property(name) == value:
+            return
 
         if self.graph and name == 'name':
-            if len(value) == 0:
-                value = '_'
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
 
@@ -424,56 +400,6 @@ class NodeObject(object):
             self.model.pos = self.view.xy_pos
 
         return self.model.pos
-
-    def set_parent(self, parent_node):
-        """
-        Set parent node.
-
-        Args:
-            parent_node (NodeGraphQt.SubGraph): parent node.
-        """
-        if parent_node is self:
-            parent_node = None
-
-        if self._parent is not None:
-            self._parent.remove_child(self)
-
-        if parent_node is not None:
-            parent_node.add_child(self)
-        self._parent = parent_node
-        if self.graph.get_node_space() is not parent_node:
-            self.hide()
-        else:
-            self.show()
-
-    def parent(self):
-        """
-        Get parent node.
-
-        Returns:
-            NodeGraphQt.SubGraph: parent node or None.
-        """
-        return self._parent
-
-    def path(self):
-        """
-        Get node path.
-
-        Returns:
-            str: current node path.
-        """
-        if self._parent is None:
-            return "/" + self.name()
-        return self._parent.path() + "/" + self.name()
-
-    def delete(self):
-        """
-        Delete node view.
-        """
-        self._view.delete()
-        if self._parent is not None:
-            self._parent.remove_child(self)
-            self._parent = None
 
     def hide(self):
         """
@@ -682,7 +608,7 @@ class BaseNode(NodeObject):
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
-    def add_text_input(self, name, label='', text='', tab=None, multi_line=False):
+    def add_text_input(self, name, label='', text='', tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -697,82 +623,10 @@ class BaseNode(NodeObject):
             label (str): label to be displayed.
             text (str): pre filled text.
             tab (str): name of the widget tab to display in.
-            multi_line (bool): if create multi line property.
         """
-        wid_type = NODE_PROP_QTEXTEDIT if multi_line else NODE_PROP_QLINEEDIT
-
         self.create_property(
-            name, text, widget_type=wid_type, tab=tab)
+            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
         widget = NodeLineEdit(self.view, name, label, text)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-        self.view.add_widget(widget)
-
-    def add_file_input(self, name, label='', text='', tab=None, ext="*"):
-        """
-        Creates a custom property with the :meth:`NodeObject.create_property`
-        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
-        into the node.
-
-        Note:
-            The ``value_changed`` signal from the added node widget is wired
-            up to the :meth:`NodeObject.set_property` function.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            text (str): pre filled text.
-            tab (str): name of the widget tab to display in.
-            ext (str): file ext
-        """
-        self.create_property(
-            name, text, widget_type=NODE_PROP_FILE, tab=tab, ext=ext)
-        widget = NodeFilePath(self.view, name, label, text, ext)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-        self.view.add_widget(widget)
-
-    def add_float_input(self, name, label='', value=0.0, range=None, tab=None):
-        """
-        Creates a custom property with the :meth:`NodeObject.create_property`
-        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
-        into the node.
-
-        Note:
-            The ``value_changed`` signal from the added node widget is wired
-            up to the :meth:`NodeObject.set_property` function.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            value (float): pre filled value.
-            range (tuple): slider range
-            tab (str): name of the widget tab to display in.
-        """
-        self.create_property(
-            name, value, widget_type=NODE_PROP_FLOAT, range=range, tab=tab)
-        widget = NodeFloatEdit(self.view, name, label, value)
-        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
-        self.view.add_widget(widget)
-
-    def add_int_input(self, name, label='', value=0, range=None, tab=None):
-        """
-        Creates a custom property with the :meth:`NodeObject.create_property`
-        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
-        into the node.
-
-        Note:
-            The ``value_changed`` signal from the added node widget is wired
-            up to the :meth:`NodeObject.set_property` function.
-
-        Args:
-            name (str): name for the custom property.
-            label (str): label to be displayed.
-            value (int): pre filled value.
-            range (tuple): slider range
-            tab (str): name of the widget tab to display in.
-        """
-        self.create_property(
-            name, value, widget_type=NODE_PROP_INT, range=range, tab=tab)
-        widget = NodeIntEdit(self.view, name, label, value)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
@@ -800,8 +654,7 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, data_type='NoneType', locked=False,
-                  painter_func=None):
+                  color=None, locked=False, painter_func=None):
         """
         Add input :class:`Port` to node.
 
@@ -810,7 +663,6 @@ class BaseNode(NodeObject):
             multi_input (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
-            data_type (str): port data type name.
             locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
@@ -836,15 +688,13 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
-        port.model.data_type = data_type
         port.model.locked = locked
         self._inputs.append(port)
         self.model.inputs[port.name()] = port.model
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, data_type='NoneType', locked=False,
-                   painter_func=None):
+                   color=None, locked=False, painter_func=None):
         """
         Add output :class:`Port` to node.
 
@@ -853,7 +703,6 @@ class BaseNode(NodeObject):
             multi_output (bool): allow port to have more than one connection.
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
-            data_type(str): port data type name.
             locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
@@ -878,76 +727,51 @@ class BaseNode(NodeObject):
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
-        port.model.data_type = data_type
         port.model.locked = locked
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
 
-    def update_combo_menu(self, name, items):
-        """
-        Update combobox menu items.
-
-        Args:
-            name (str): name for combobox menu property name.
-            items (list): new combobox menu items.
-        """
-        if not self.has_property(name):
-            return
-        old_value = self.get_property(name)
-        self.set_property(name, items)
-        _name = '_' + name + "_"
-        if not self.has_property(_name):
-            self.create_property(_name, items)
-        else:
-            self.set_property(_name, items)
-        if old_value in items:
-            self.set_property(name, old_value)
-        else:
-            self.set_property(name, items[0])
-
     def get_input(self, port):
         """
-        Get a input port.
+        Get input port by the name or index.
 
         Args:
-            port(str/int/Port): input port name/index/object.
+            port (str or int): port name or index.
+
         Returns:
-            Port object or None
+            NodeGraphQt.Port: node port.
         """
-        port_object = None
         if type(port) is int:
             if port < len(self._inputs):
-                port_object = self._inputs[port]
+                return self._inputs[port]
         elif type(port) is str:
-            port_object = self.inputs().get(port, None)
-        return port_object
+            return self.inputs().get(port, None)
 
     def get_output(self, port):
         """
-        Get a output port.
+        Get output port by the name or index.
 
         Args:
-            port(str/int): output port name/index.
+            port (str or int): port name or index.
+
         Returns:
-            Port object or None
+            NodeGraphQt.Port: node port.
         """
-        port_object = None
         if type(port) is int:
             if port < len(self._outputs):
-                port_object = self._outputs[port]
+                return self._outputs[port]
         elif type(port) is str:
-            port_object = self.outputs().get(port, None)
-        return port_object
+            return self.outputs().get(port, None)
 
     def delete_input(self, port):
         """
         Delete input port.
 
         Args:
-            port(str/int): input port name/index.
+            port (str or int): port name or index.
         """
-        if type(port) is not Port:
+        if type(port) in [int, str]:
             port = self.get_input(port)
             if port is None:
                 return
@@ -962,9 +786,9 @@ class BaseNode(NodeObject):
         Delete output port.
 
         Args:
-            port(str/int/PortItem): output port name/index/object.
+            port (str or int): port name or index.
         """
-        if type(port) is not Port:
+        if type(port) in [int, str]:
             port = self.get_output(port)
             if port is None:
                 return
@@ -1169,38 +993,6 @@ class BaseNode(NodeObject):
             out_port (NodeGraphQt.Port): output port that was disconnected.
         """
         return
-
-    def update_stream(self):
-        """
-        Update node down stream.
-        """
-        update_node_down_stream(self)
-
-    def run(self):
-        """
-        Node evaluation logic.
-        """
-        return
-
-    def set_editable(self, state):
-        """
-        Returns whether the node view widgets is editable.
-
-        Args:
-            state(bool).
-        """
-        [wid.setEnabled(state) for wid in self.view._widgets.values()]
-        self.view.text_item.setEnabled(state)
-
-    def set_dynamic_port(self, state):
-        """
-        Set whether the node will delete/add port after node has been created.
-
-        Args:
-            state(bool): If True, all port data will be serialized with the node,
-                         when the node is been deserialized, all ports will restore.
-        """
-        self.model.dynamic_port = state
 
 
 class BackdropNode(NodeObject):

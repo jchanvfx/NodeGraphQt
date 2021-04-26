@@ -77,10 +77,13 @@ class NodeItem(AbstractNodeItem):
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
             painter.drawRoundedRect(rect, radius, radius)
 
-        label_rect = QtCore.QRectF(rect.left(), rect.top(), self._width, 28)
+        label_rect = QtCore.QRectF(rect.left() + (radius / 2),
+                                   rect.top() + (radius / 2),
+                                   self._width - (radius / 1.25),
+                                   28)
         path = QtGui.QPainterPath()
-        path.addRoundedRect(label_rect, radius, radius)
-        painter.setBrush(QtGui.QColor(30, 30, 30, 200))
+        path.addRoundedRect(label_rect, radius / 1.5, radius / 1.5)
+        painter.setBrush(QtGui.QColor(0, 0, 0, 50))
         painter.fillPath(path, painter.brush())
 
         border_width = 0.8
@@ -121,6 +124,12 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
+        """
+        Re-implemented to ignore event if Alt modifier is pressed.
+
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        """
         if event.modifiers() == QtCore.Qt.AltModifier:
             event.ignore()
             return
@@ -149,6 +158,13 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).mouseDoubleClickEvent(event)
 
     def itemChange(self, change, value):
+        """
+        Re-implemented to update pipes on selection changed.
+
+        Args:
+            change:
+            value:
+        """
         if change == self.ItemSelectedChange and self.scene():
             self.reset_pipes()
             if value:
@@ -161,7 +177,7 @@ class NodeItem(AbstractNodeItem):
 
     def _tooltip_disable(self, state):
         """
-        updates the node tooltip when the node is enabled/disabled.
+        Updates the node tooltip when the node is enabled/disabled.
 
         Args:
             state (bool): node disable state.
@@ -213,7 +229,7 @@ class NodeItem(AbstractNodeItem):
 
     def highlight_pipes(self):
         """
-        highlight pipe color.
+        Highlight pipe color.
         """
         ports = self.inputs + self.outputs
         for port in ports:
@@ -240,7 +256,7 @@ class NodeItem(AbstractNodeItem):
         Returns:
             tuple(float, float): width, height.
         """
-        width = 0
+        width = self._text_item.boundingRect().width()
         height = self._text_item.boundingRect().height()
 
         if self._widgets:
@@ -400,6 +416,7 @@ class NodeItem(AbstractNodeItem):
         (re-implemented for vertical layout design)
         """
         height = self._text_item.boundingRect().height()
+
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.

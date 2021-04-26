@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtCore, QtWidgets
+from Qt import QtCore, QtWidgets
 from .stylesheet import STYLE_QMENU
 
 

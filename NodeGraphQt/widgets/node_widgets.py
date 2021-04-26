@@ -1,9 +1,7 @@
 #!/usr/bin/python
-from .dialogs import FileDialog
-from .properties import _ValueEdit
-from .stylesheet import *
+from Qt import QtCore, QtWidgets
 
-from .. import QtCore, QtWidgets
+from .stylesheet import STYLE_QGROUPBOX, STYLE_QLINEEDIT
 from ..constants import Z_VAL_NODE_WIDGET
 from ..errors import NodeWidgetError
 
@@ -223,11 +221,7 @@ class NodeComboBox(NodeBaseWidget):
         super(NodeComboBox, self).__init__(parent, name, label)
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
         combo = QtWidgets.QComboBox()
-        combo.setStyleSheet(STYLE_QCOMBOBOX)
         combo.setMinimumHeight(24)
-        list_view = QtWidgets.QListView(combo)
-        list_view.setStyleSheet(STYLE_QLISTVIEW)
-        combo.setView(list_view)
         combo.addItems(items or [])
         combo.currentIndexChanged.connect(self.on_value_changed)
         combo.clearFocus()
@@ -270,8 +264,8 @@ class NodeComboBox(NodeBaseWidget):
         combo_widget = self.get_custom_widget()
         return [combo_widget.itemText(i) for i in range(combo_widget.count())]
 
-    def sort_items(self):
-        items = sorted(self.all_items())
+    def sort_items(self, reversed=False):
+        items = sorted(self.all_items(), reverse=reversed)
         combo_widget = self.get_custom_widget()
         combo_widget.clear()
         combo_widget.addItems(items)
@@ -317,71 +311,14 @@ class NodeLineEdit(NodeBaseWidget):
         return str(self.get_custom_widget().text())
 
     def set_value(self, text=''):
+        """
+
+        Args:
+            text (str): new text.
+        """
         if text != self.get_value():
             self.get_custom_widget().setText(text)
             self.on_value_changed()
-
-
-class NodeFloatEdit(NodeBaseWidget):
-    """
-    Displays as a ``QLineEdit`` in a node.
-
-    **Inherited from:** :class:`NodeBaseWidget`
-
-    .. note::
-        `To embed a` ``QLineEdit`` `in a node see func:`
-        :meth:`NodeGraphQt.BaseNode.add_float_input`
-    """
-
-    def __init__(self, parent=None, name='', label='', value=0.0):
-        super(NodeFloatEdit, self).__init__(parent, name, label)
-        val_ledit = _ValueEdit()
-        val_ledit.setStyleSheet(STYLE_QLINEEDIT)
-        val_ledit.setAlignment(QtCore.Qt.AlignCenter)
-        val_ledit.valueChanged.connect(self.on_value_changed)
-        val_ledit.setValue(value)
-        val_ledit.clearFocus()
-        self.set_custom_widget(val_ledit)
-        self.widget().setMaximumWidth(140)
-
-    @property
-    def type_(self):
-        return 'FloatEditNodeWidget'
-
-    def get_value(self):
-        """
-        Returns the widgets current value.
-
-        Returns:
-            float: current value.
-        """
-        return self.get_custom_widget().value()
-
-    def set_value(self, value):
-        if value != self.get_value():
-            self.get_custom_widget().setValue(value)
-            self.on_value_changed()
-
-
-class NodeIntEdit(NodeFloatEdit):
-    """
-    Displays as a ``QLineEdit`` in a node.
-
-    **Inherited from:** :class:`NodeBaseWidget`
-
-    .. note::
-        `To embed a` ``QLineEdit`` `in a node see func:`
-        :meth:`NodeGraphQt.BaseNode.add_int_input`
-    """
-
-    def __init__(self, parent=None, name='', label='', value=0):
-        super(NodeIntEdit, self).__init__(parent, name, label)
-        self.get_custom_widget().set_data_type(int)
-        self.get_custom_widget().setValue(value)
-
-    @property
-    def type_(self):
-        return 'IntEditNodeWidget'
 
 
 class NodeCheckBox(NodeBaseWidget):
@@ -400,7 +337,6 @@ class NodeCheckBox(NodeBaseWidget):
         _cbox = QtWidgets.QCheckBox(text)
         _cbox.setChecked(state)
         _cbox.setMinimumWidth(80)
-        _cbox.setStyleSheet(STYLE_QCHECKBOX)
 
         font = _cbox.font()
         font.setPointSize(11)
@@ -423,47 +359,10 @@ class NodeCheckBox(NodeBaseWidget):
         return self.get_custom_widget().isChecked()
 
     def set_value(self, state=False):
+        """
+
+        Args:
+            state (bool): check state.
+        """
         if state != self.get_value():
             self.get_custom_widget().setChecked(state)
-
-
-class NodeFilePath(NodeLineEdit):
-    """
-    Displays as a ``QLineEdit`` in a node.
-
-    **Inherited from:** :class:`NodeBaseWidget`
-
-    .. note::
-        To embed a ``QLineEdit`` in a node see:
-        :meth:`NodeGraphQt.BaseNode.add_file_input`
-    """
-
-    def __init__(self, parent=None, name='', label='', text='', ext='*'):
-        super(NodeLineEdit, self).__init__(parent, name, label)
-        _ledit = QtWidgets.QLineEdit()
-        _ledit.setStyleSheet(STYLE_QLINEEDIT)
-        _ledit.setAlignment(QtCore.Qt.AlignCenter)
-        _ledit.editingFinished.connect(self.on_value_changed)
-        _ledit.clearFocus()
-
-        _button = QtWidgets.QPushButton()
-        _button.setStyleSheet(STYLE_QPUSHBUTTON)
-        _button.setIcon(self.get_icon(21))
-        _button.clicked.connect(self._on_select_file)
-
-        widget = QtWidgets.QWidget()
-        hbox = QtWidgets.QHBoxLayout()
-        hbox.addWidget(_ledit)
-        hbox.addWidget(_button)
-        widget.setLayout(hbox)
-        widget.setStyleSheet(STYLE_QWIDGET)
-
-        self._ext = ext
-        self.set_custom_widget(widget)
-        self.widget().setMaximumWidth(140)
-
-    def _on_select_file(self):
-        file_path = FileDialog.getOpenFileName(ext_filter=self._ext)
-        file = file_path[0] or None
-        if file:
-            self.value = file

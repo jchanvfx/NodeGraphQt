@@ -177,6 +177,7 @@ class NodesMenu(NodeGraphMenu):
         """
         if not node_type and not node_class:
             raise NodeMenuError('Node type or Node class not specified!')
+
         if node_class:
             node_type = node_class.__name__
 

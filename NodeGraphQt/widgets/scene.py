@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from ..constants import (VIEWER_BG_COLOR,
                          VIEWER_GRID_SIZE,
@@ -13,24 +13,24 @@ class NodeScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent=None):
         super(NodeScene, self).__init__(parent)
-        self.background_color = VIEWER_BG_COLOR
-        self.grid_color = VIEWER_GRID_COLOR
         self._grid_mode = VIEWER_GRID_LINES
-        self.editable = True
+        self._grid_color = VIEWER_GRID_COLOR
+        self._bg_color = VIEWER_BG_COLOR
+        self.setBackgroundBrush(QtGui.QColor(*self._bg_color))
 
     def __repr__(self):
         cls_name = str(self.__class__.__name__)
         return '<{}("{}") object at {}>'.format(
             cls_name, self.viewer(), hex(id(self)))
 
-    def _draw_text(self, painter, pen):
-        font = QtGui.QFont()
-        font.setPixelSize(48)
-        painter.setFont(font)
-        parent = self.viewer()
-        pos = QtCore.QPoint(20, parent.height()-20)
-        painter.setPen(pen)
-        painter.drawText(parent.mapToScene(pos), 'Not Editable')
+    # def _draw_text(self, painter, pen):
+    #     font = QtGui.QFont()
+    #     font.setPixelSize(48)
+    #     painter.setFont(font)
+    #     parent = self.viewer()
+    #     pos = QtCore.QPoint(20, parent.height()-20)
+    #     painter.setPen(pen)
+    #     painter.drawText(parent.mapToScene(pos), 'Not Editable')
 
     def _draw_grid(self, painter, rect, pen, grid_size):
         """
@@ -96,13 +96,13 @@ class NodeScene(QtWidgets.QGraphicsScene):
         super(NodeScene, self).drawBackground(painter, rect)
 
         painter.save()
-
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setBrush(self.backgroundBrush())
 
         if self._grid_mode is VIEWER_GRID_DOTS:
             pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
             self._draw_dots(painter, rect, pen, VIEWER_GRID_SIZE)
+
         elif self._grid_mode is VIEWER_GRID_LINES:
             zoom = self.viewer().get_zoom()
             if zoom > -0.5:
@@ -114,10 +114,6 @@ class NodeScene(QtWidgets.QGraphicsScene):
                 color = color.darker(100 - int(zoom * 110))
             pen = QtGui.QPen(color, 0.65)
             self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE * 8)
-
-        if not self.editable:
-            pen = QtGui.QPen(QtGui.QColor(*(90, 90, 90)))
-            self._draw_text(painter, pen)
 
         painter.restore()
 
