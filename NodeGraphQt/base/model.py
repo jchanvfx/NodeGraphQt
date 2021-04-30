@@ -219,9 +219,11 @@ class NodeModel(object):
                     'disabled': False,
                     'visible': True,
                     'inputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'outputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'input_ports': [<port_name>, <port_name>],
                     'output_ports': [<port_name>, <port_name>],
                     'width': 0.0,
@@ -244,7 +246,6 @@ class NodeModel(object):
                     'name': name,
                     'multi_connection': model.multi_connection,
                     'display_name': model.display_name,
-                    'data_type': model.data_type
                 })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
@@ -255,7 +256,6 @@ class NodeModel(object):
                     'name': name,
                     'multi_connection': model.multi_connection,
                     'display_name': model.display_name,
-                    'data_type': model.data_type
                 })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
