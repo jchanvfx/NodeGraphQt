@@ -161,6 +161,44 @@ class NodeObject(object):
 
         self.view.from_dict(settings)
 
+    def serialize(self):
+        """
+        Serialize node model to a dictionary.
+
+        example:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            {'0x106cf75a8': {
+                'name': 'foo node',
+                'color': (48, 58, 69, 255),
+                'border_color': (85, 100, 100, 255),
+                'text_color': (255, 255, 255, 180),
+                'type': 'com.chantasticvfx.MyNode',
+                'selected': False,
+                'disabled': False,
+                'visible': True,
+                'inputs': {
+                    <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                },
+                'outputs': {
+                    <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                },
+                'input_ports': [<port_name>, <port_name>],
+                'output_ports': [<port_name>, <port_name>],
+                'width': 0.0,
+                'height: 0.0,
+                'pos': (0.0, 0.0),
+                'custom': {},
+                }
+            }
+
+        Returns:
+            dict: serialized node
+        """
+        return self.model.to_dict
+
     def name(self):
         """
         Name of the node.
@@ -843,13 +881,11 @@ class BaseNode(NodeObject):
         self._model.inputs = {}
         [self.add_input(name=port['name'],
                         multi_input=port['multi_connection'],
-                        display_name=port['display_name'],
-                        data_type=port['data_type'])
+                        display_name=port['display_name'])
          for port in port_data['input_ports']]
         [self.add_output(name=port['name'],
                          multi_output=port['multi_connection'],
-                         display_name=port['display_name'],
-                         data_type=port['data_type'])
+                         display_name=port['display_name'])
          for port in port_data['output_ports']]
         self.draw()
 

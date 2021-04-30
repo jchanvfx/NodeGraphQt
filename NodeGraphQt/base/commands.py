@@ -137,28 +137,63 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.scene = graph.scene()
         self.model = graph.model
         self.node = node
-        self.inputs = []
-        self.outputs = []
+        self.node_widgets = {}
+
+        # attributes for the "BaseNode" object.
+        self.inputs = {}
+        self.outputs = {}
         if hasattr(self.node, 'inputs'):
-            input_ports = self.node.input_ports()
-            self.inputs = [(p, p.connected_ports()) for p in input_ports]
+            for p in self.node.input_ports():
+                self.inputs[p] = (p.connected_ports(), p.locked())
         if hasattr(self.node, 'outputs'):
-            output_ports = self.node.output_ports()
-            self.outputs = [(p, p.connected_ports()) for p in output_ports]
+            for p in self.node.output_ports():
+                self.outputs[p] = (p.connected_ports(), p.locked())
+
+    def connect_to(self, src_port, connected_ports, locked_state):
+        if not connected_ports:
+            return
+        locked_ports = [p for p in connected_ports if p.locked()]
+        for p in locked_ports:
+            p.set_locked(False, connected_ports=False)
+        src_port.set_locked(False, connected_ports=False)
+        [src_port.connect_to(p) for p in connected_ports]
+        for p in locked_ports:
+            p.set_locked(True, connected_ports=False)
+        src_port.set_locked(locked_state, connected_ports=False)
+
+    def disconnect_from(self, src_port, connected_ports, locked_state):
+        if not connected_ports:
+            return
+        locked_ports = [p for p in connected_ports if p.locked()]
+        for p in locked_ports:
+            p.set_locked(False, connected_ports=False)
+        src_port.set_locked(False, connected_ports=False)
+        [src_port.disconnect_from(p) for p in connected_ports]
+        for p in locked_ports:
+            p.set_locked(True, connected_ports=False)
+        src_port.set_locked(locked_state, connected_ports=False)
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        for port, connected_ports in self.inputs:
-            [port.connect_to(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.connect_to(p) for p in connected_ports]
+        for port, port_data in self.inputs.items():
+            connected_ports = port_data[0]
+            locked_state = port_data[1]
+            self.connect_to(port, connected_ports, locked_state)
+        for port, port_data in self.outputs.items():
+            connected_ports = port_data[0]
+            locked_state = port_data[1]
+            self.connect_to(port, connected_ports, locked_state)
 
     def redo(self):
-        for port, connected_ports in self.inputs:
-            [port.disconnect_from(p) for p in connected_ports]
-        for port, connected_ports in self.outputs:
-            [port.disconnect_from(p) for p in connected_ports]
+        for port, port_data in self.inputs.items():
+            connected_ports = port_data[0]
+            locked_state = port_data[1]
+            self.disconnect_from(port, connected_ports, locked_state)
+        for port, port_data in self.outputs.items():
+            connected_ports = port_data[0]
+            locked_state = port_data[1]
+            self.disconnect_from(port, connected_ports, locked_state)
         self.model.nodes.pop(self.node.id)
         self.node.view.delete()
 

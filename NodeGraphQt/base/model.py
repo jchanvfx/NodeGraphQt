@@ -246,7 +246,6 @@ class NodeModel(object):
                     'name': name,
                     'multi_connection': model.multi_connection,
                     'display_name': model.display_name,
-                    'data_type': model.data_type
                 })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:
@@ -257,7 +256,6 @@ class NodeModel(object):
                     'name': name,
                     'multi_connection': model.multi_connection,
                     'display_name': model.display_name,
-                    'data_type': model.data_type
                 })
             connected_ports = model.to_dict['connected_ports']
             if connected_ports:

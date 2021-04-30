@@ -20,7 +20,7 @@ QGroupBox::title {
 
 STYLE_QLINEEDIT = '''
 QLineEdit {
-    border: 1px solid rgba(90, 90, 90);
+    border: 1px solid rgb(90, 90, 90);
     border-radius: 0px;
     color: rgba(255, 255, 255, 150);
     background: rgba(0, 0, 0, 80);
