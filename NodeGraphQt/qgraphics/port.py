@@ -254,7 +254,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._port_type = port_type
 
     def delete(self):
-        [pipe.delete() for pipe in self.connected_pipes]
+        for pipe in self.connected_pipes:
+            pipe.delete()
 
     def connect_to(self, port):
         if not port:

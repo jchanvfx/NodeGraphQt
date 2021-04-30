@@ -568,7 +568,7 @@ class BaseNode(NodeObject):
             up to the :meth:`NodeObject.set_property` function.
 
         Args:
-            widget_cls (NodeBaseWidget): node widget class object.
+            widget (NodeBaseWidget): node widget class object.
             widget_type: widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget` (default: QLabel).
             tab (str): name of the widget tab to display in.
@@ -843,13 +843,11 @@ class BaseNode(NodeObject):
         self._model.inputs = {}
         [self.add_input(name=port['name'],
                         multi_input=port['multi_connection'],
-                        display_name=port['display_name'],
-                        data_type=port['data_type'])
+                        display_name=port['display_name'])
          for port in port_data['input_ports']]
         [self.add_output(name=port['name'],
                          multi_output=port['multi_connection'],
-                         display_name=port['display_name'],
-                         data_type=port['data_type'])
+                         display_name=port['display_name'])
          for port in port_data['output_ports']]
         self.draw()
 

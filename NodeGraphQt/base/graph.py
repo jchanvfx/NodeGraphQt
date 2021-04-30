@@ -786,7 +786,7 @@ class NodeGraph(QtCore.QObject):
         Register the nodes to the :meth:`NodeGraph.node_factory`
 
         Args:
-            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+            nodes (list): list of nodes.
         """
         [self._node_factory.register_node(n) for n in nodes]
         self._viewer.rebuild_tab_search()
