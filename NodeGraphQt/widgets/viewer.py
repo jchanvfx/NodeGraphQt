@@ -2,7 +2,12 @@
 # -*- coding: utf-8 -*-
 import math
 
-from Qt import QtGui, QtCore, QtWidgets, QtOpenGL
+from Qt import QtGui, QtCore, QtWidgets
+
+try:
+    from PySide2.QtWidgets import QOpenGLWidget
+except Exception:
+    from PyQt5.QtWidgets import QOpenGLWidget
 
 from .dialogs import BaseDialog, FileDialog
 from .scene import NodeScene
@@ -1150,6 +1155,4 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
 
     def use_OpenGL(self):
-        format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
-        format.setSamples(4)
-        self.setViewport(QtOpenGL.QGLWidget(format))
+        self.setViewport(QOpenGLWidget())
