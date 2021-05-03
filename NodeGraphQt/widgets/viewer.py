@@ -5,7 +5,7 @@ import math
 import Qt
 from Qt import QtGui, QtCore, QtWidgets
 
-# use QOpenGLWidget instead of the deprecated QGLWdiegt to avoid probelms with Wayland
+# use QOpenGLWidget instead of the deprecated QGLWidget to avoid probelms with Wayland
 if Qt.IsPySide2:
     from PySide2.QtWidgets import QOpenGLWidget
 elif Qt.IsPyQt5:
