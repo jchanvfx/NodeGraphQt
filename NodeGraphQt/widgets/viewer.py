@@ -2,7 +2,14 @@
 # -*- coding: utf-8 -*-
 import math
 
-from Qt import QtGui, QtCore, QtWidgets, QtOpenGL
+import Qt
+from Qt import QtGui, QtCore, QtWidgets
+
+# use QOpenGLWidget instead of the deprecated QGLWidget to avoid probelms with Wayland
+if Qt.IsPySide2:
+    from PySide2.QtWidgets import QOpenGLWidget
+elif Qt.IsPyQt5:
+    from PyQt5.QtWidgets import QOpenGLWidget
 
 from .dialogs import BaseDialog, FileDialog
 from .scene import NodeScene
@@ -1150,6 +1157,4 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
 
     def use_OpenGL(self):
-        format = QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)
-        format.setSamples(4)
-        self.setViewport(QtOpenGL.QGLWidget(format))
+        self.setViewport(QOpenGLWidget())
