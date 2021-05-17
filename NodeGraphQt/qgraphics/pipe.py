@@ -93,9 +93,9 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             pen_width += 0.2
             pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
 
-        pen = QtGui.QPen(color, pen_width)
-        pen.setStyle(pen_style)
+        pen = QtGui.QPen(color, pen_width, pen_style)
         pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
 
         painter.save()
         painter.setPen(pen)
@@ -125,7 +125,11 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             pen_width = 0.6
             if dist < 1.0:
                 pen_width *= (1.0 + dist)
-            painter.setPen(QtGui.QPen(color, pen_width))
+
+            pen = QtGui.QPen(color, pen_width)
+            pen.setCapStyle(QtCore.Qt.RoundCap)
+            pen.setJoinStyle(QtCore.Qt.MiterJoin)
+            painter.setPen(pen)
 
             transform = QtGui.QTransform()
             transform.translate(cen_x, cen_y)

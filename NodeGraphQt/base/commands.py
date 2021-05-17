@@ -145,7 +145,7 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
-        node (NodeGraphQt.NodeObject): node.
+        node (NodeGraphQt.BaseNode or NodeGraphQt.NodeObject): node.
     """
 
     def __init__(self, graph, node):

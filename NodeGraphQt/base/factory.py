@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 from ..errors import NodeRegistrationError
 
 
@@ -45,7 +44,7 @@ class NodeFactory(object):
 
     def create_node_instance(self, node_type=None, alias=None):
         """
-        create node class by the node type identifier or alias.
+        create node object by the node type identifier or alias.
 
         Args:
             node_type (str): node type.

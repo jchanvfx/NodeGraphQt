@@ -30,7 +30,7 @@ from ..widgets.node_widgets import (NodeBaseWidget,
                                     NodeFilePath)
 
 
-class classproperty(object):
+class _ClassProperty(object):
 
     def __init__(self, f):
         self.f = f
@@ -72,7 +72,7 @@ class NodeObject(object):
         return '<{}("{}") object at {}>'.format(
             self.__class__.__name__, self.NODE_NAME, hex(id(self)))
 
-    @classproperty
+    @_ClassProperty
     def type_(cls):
         """
         Node type identifier followed by the class name.
@@ -642,7 +642,7 @@ class BaseNode(NodeObject):
             up to the :meth:`NodeObject.set_property` function.
 
         Args:
-            widget_cls (NodeBaseWidget): node widget class object.
+            widget (NodeBaseWidget): node widget class object.
             widget_type: widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget` (default: QLabel).
             tab (str): name of the widget tab to display in.
@@ -1221,7 +1221,8 @@ class BackdropNode(NodeObject):
         # override base default color.
         self.model.color = (5, 129, 138, 255)
         self.create_property('backdrop_text', '',
-                             widget_type=NODE_PROP_QTEXTEDIT, tab='Backdrop')
+                             widget_type=NODE_PROP_QTEXTEDIT,
+                             tab='Backdrop')
 
     def on_backdrop_updated(self, update_prop, value=None):
         """

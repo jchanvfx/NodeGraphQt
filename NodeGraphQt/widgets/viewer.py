@@ -55,7 +55,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
         self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
-        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+        self.setOptimizationFlag(
+            QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
@@ -96,12 +97,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         menu_bar = QtWidgets.QMenuBar(self)
         menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
-        menu_bar.setMaximumWidth(0)
+        menu_bar.setMaximumSize(0, 0)
 
         self._ctx_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
         menu_bar.addMenu(self._ctx_menu)
         menu_bar.addMenu(self._ctx_node_menu)
+
+        # note: context node menu will be enabled when a action
+        #       is added through the "NodesMenu" interface.
         self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
@@ -120,6 +124,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # --- private ---
 
     def _set_viewer_zoom(self, value, sensitivity=None, pos=None):
+        """
+        Sets the zoom level.
+
+        Args:
+            value (float): zoom factor.
+            sensitivity (float): zoom sensitivity.
+            pos (QtCore.QPoint): mapped position.
+        """
         if pos:
             pos = self.mapToScene(pos)
         if sensitivity is None:
@@ -141,6 +153,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.scale(scale, scale, pos)
 
     def _set_viewer_pan(self, pos_x, pos_y):
+        """
+        Set the viewer in panning mode.
+
+        Args:
+            pos_x (float): x pos.
+            pos_y (float): y pos.
+        """
         speed = self._scene_range.width() * 0.0015
         x = -pos_x * speed
         y = -pos_y * speed
@@ -231,7 +250,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
         else:
-            self.need_show_tab_search.emit()
+            self.show_tab_search.emit()
+        return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -243,8 +263,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self._origin_pos = event.pos()
         self._previous_pos = event.pos()
-        self._prev_selection_nodes, self._prev_selection_pipes = \
-            self.selected_items()
+        (self._prev_selection_nodes,
+         self._prev_selection_pipes) = self.selected_items()
 
         # close tab search
         if self._search_widget.isVisible():
@@ -254,7 +274,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         map_pos = self.mapToScene(event.pos())
 
         # pipe slicer enabled.
-        if self.ALT_state and self.SHIFT_state and self.LMB_state:
+        slicer_mode = all([self.ALT_state, self.SHIFT_state, self.LMB_state])
+        if slicer_mode:
             self._SLICER_PIPE.draw_path(map_pos, map_pos)
             self._SLICER_PIPE.setVisible(True)
             return
@@ -294,6 +315,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         if self.LMB_state and (self.SHIFT_state or self.CTRL_state):
             return
+
         if not self._LIVE_PIPE.isVisible():
             super(NodeViewer, self).mousePressEvent(event)
 
@@ -397,7 +419,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path = QtGui.QPainterPath()
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
-                self.scene().setSelectionArea(path, QtCore.Qt.IntersectsItemShape)
+                self.scene().setSelectionArea(
+                    path, QtCore.Qt.IntersectsItemShape
+                )
                 self.scene().update(map_rect)
 
                 if self.SHIFT_state or self.CTRL_state:

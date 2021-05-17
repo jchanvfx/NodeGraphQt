@@ -11,6 +11,9 @@ from ..errors import NodePropertyError
 
 
 class PortModel(object):
+    """
+    Data dump for a port object.
+    """
 
     def __init__(self, node):
         self.node = node
@@ -51,6 +54,9 @@ class PortModel(object):
 
 
 class NodeModel(object):
+    """
+    Data dump for a node object.
+    """
 
     def __init__(self):
         self.type_ = None
@@ -225,9 +231,11 @@ class NodeModel(object):
                     'disabled': False,
                     'visible': True,
                     'inputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'outputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'input_ports': [<port_name>, <port_name>],
                     'output_ports': [<port_name>, <port_name>],
                     'width': 0.0,
