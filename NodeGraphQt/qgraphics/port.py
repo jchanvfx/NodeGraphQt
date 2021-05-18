@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from ..constants import (
     IN_PORT, OUT_PORT,
@@ -23,6 +23,7 @@ class PortItem(QtWidgets.QGraphicsItem):
     def __init__(self, parent=None):
         super(PortItem, self).__init__(parent)
         self.setAcceptHoverEvents(True)
+        self.setCacheMode(ITEM_CACHE_MODE)
         self.setFlag(self.ItemIsSelectable, False)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
@@ -38,8 +39,6 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._port_type = None
         self._multi_connection = False
         self._locked = False
-
-        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __str__(self):
         return '{}.PortItem("{}")'.format(self.__module__, self.name)

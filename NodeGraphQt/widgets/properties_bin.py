@@ -18,7 +18,7 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.setPen(QtCore.Qt.NoPen)
 
         # draw background.
-        bg_clr = option.palette.base().color()
+        bg_clr = option.palette.midlight().color()
         painter.setBrush(QtGui.QBrush(bg_clr))
         painter.drawRect(option.rect)
 
@@ -26,9 +26,9 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         border_width = 1
         if option.state & QtWidgets.QStyle.State_Selected:
             bdr_clr = option.palette.highlight().color()
-            painter.setPen(QtGui.QPen(bdr_clr, 2))
+            painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = QtGui.QColor(100, 100, 100)
+            bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
@@ -51,7 +51,7 @@ class PropertiesList(QtWidgets.QTableWidget):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
         QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.Stretch)
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
         QtCompat.QHeaderView.setSectionResizeMode(
             self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)

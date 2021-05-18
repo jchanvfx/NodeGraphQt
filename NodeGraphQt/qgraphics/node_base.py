@@ -121,6 +121,12 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
+        """
+        Re-implemented to ignore event if Alt modifier is pressed.
+
+        Args:
+            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        """
         if event.modifiers() == QtCore.Qt.AltModifier:
             event.ignore()
             return
@@ -149,6 +155,13 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).mouseDoubleClickEvent(event)
 
     def itemChange(self, change, value):
+        """
+        Re-implemented to update pipes on selection changed.
+
+        Args:
+            change:
+            value:
+        """
         if change == self.ItemSelectedChange and self.scene():
             self.reset_pipes()
             if value:
@@ -161,7 +174,7 @@ class NodeItem(AbstractNodeItem):
 
     def _tooltip_disable(self, state):
         """
-        updates the node tooltip when the node is enabled/disabled.
+        Updates the node tooltip when the node is enabled/disabled.
 
         Args:
             state (bool): node disable state.
@@ -213,7 +226,7 @@ class NodeItem(AbstractNodeItem):
 
     def highlight_pipes(self):
         """
-        highlight pipe color.
+        Highlight pipe color.
         """
         ports = self.inputs + self.outputs
         for port in ports:
@@ -400,6 +413,7 @@ class NodeItem(AbstractNodeItem):
         (re-implemented for vertical layout design)
         """
         height = self._text_item.boundingRect().height()
+
         # setup initial base size.
         self._set_base_size(add_w=0.0, add_h=height)
         # set text color when node is initialized.

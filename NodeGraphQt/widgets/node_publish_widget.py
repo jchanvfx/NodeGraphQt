@@ -1,7 +1,7 @@
 import os
 
 from .properties import PropFileSavePath
-from .. import QtWidgets
+from Qt import QtWidgets
 
 
 class _element_widget(QtWidgets.QWidget):

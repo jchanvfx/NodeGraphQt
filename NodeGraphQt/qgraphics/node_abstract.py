@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 from Qt import QtCore, QtWidgets
 
 from ..constants import (Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT, ITEM_CACHE_MODE)
@@ -13,6 +12,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     def __init__(self, name='node', parent=None):
         super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(self.ItemIsSelectable | self.ItemIsMovable)
+        self.setCacheMode(ITEM_CACHE_MODE)
         self.setZValue(Z_VAL_NODE)
         self._properties = {
             'id': None,
@@ -27,8 +27,6 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         }
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
-
-        self.setCacheMode(ITEM_CACHE_MODE)
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from ..constants import (VIEWER_BG_COLOR,
                          VIEWER_GRID_SIZE,
@@ -96,13 +96,13 @@ class NodeScene(QtWidgets.QGraphicsScene):
         super(NodeScene, self).drawBackground(painter, rect)
 
         painter.save()
-
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setBrush(self.backgroundBrush())
 
         if self._grid_mode is VIEWER_GRID_DOTS:
             pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
             self._draw_dots(painter, rect, pen, VIEWER_GRID_SIZE)
+
         elif self._grid_mode is VIEWER_GRID_LINES:
             zoom = self.viewer().get_zoom()
             if zoom > -0.5:

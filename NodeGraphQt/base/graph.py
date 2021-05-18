@@ -172,7 +172,7 @@ class NodeGraph(QtCore.QObject):
         node = self.get_node_by_id(node_id)
 
         # exclude the BackdropNode
-        if not isinstance(node, BaseNode):
+        if isinstance(node, BackdropNode):
             return
 
         disconnected = [(pipe.input_port, pipe.output_port)]
@@ -348,7 +348,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             node_type (str): node identifier.
-            pos (tuple): x,y position for the node.
+            pos (tuple or list): x, y position for the node.
         """
         self.create_node(node_type, pos=pos)
 
@@ -578,7 +578,7 @@ class NodeGraph(QtCore.QObject):
             * :attr:`NodeGraphQt.constants.VIEWER_GRID_LINES`
 
         Args:
-            mode (int): background styles.
+            mode (int): background style.
         """
         self.scene().grid_mode = mode
         self._viewer.force_update()
@@ -819,7 +819,7 @@ class NodeGraph(QtCore.QObject):
         """
         Return a list of all node types that have been registered.
 
-        Hint:
+        See Also:
             To register a node :meth:`NodeGraph.register_node`
 
         Returns:
@@ -843,7 +843,7 @@ class NodeGraph(QtCore.QObject):
         Register the nodes to the :meth:`NodeGraph.node_factory`
 
         Args:
-            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+            nodes (list): list of nodes.
         """
         [self._node_factory.register_node(n) for n in nodes]
         self._viewer.rebuild_tab_search()
@@ -865,7 +865,7 @@ class NodeGraph(QtCore.QObject):
             pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
 
         Returns:
-            NodeGraphQt.NodeObject: the created instance of the node.
+            BaseNode or NodeObject: the created instance of the node.
         """
         if not self._editable:
             return
@@ -1285,6 +1285,7 @@ class NodeGraph(QtCore.QObject):
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
+
                 nodes[n_id] = node
 
                 if isinstance(node, SubGraph):

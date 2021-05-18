@@ -3,7 +3,7 @@ from .dialogs import FileDialog
 from .properties import _ValueEdit
 from .stylesheet import *
 
-from .. import QtCore, QtWidgets
+from Qt import QtCore, QtWidgets
 from ..constants import Z_VAL_NODE_WIDGET
 from ..errors import NodeWidgetError
 
@@ -270,8 +270,8 @@ class NodeComboBox(NodeBaseWidget):
         combo_widget = self.get_custom_widget()
         return [combo_widget.itemText(i) for i in range(combo_widget.count())]
 
-    def sort_items(self):
-        items = sorted(self.all_items())
+    def sort_items(self, reversed=False):
+        items = sorted(self.all_items(), reverse=reversed)
         combo_widget = self.get_custom_widget()
         combo_widget.clear()
         combo_widget.addItems(items)
