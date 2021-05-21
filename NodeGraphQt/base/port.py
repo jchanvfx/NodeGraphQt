@@ -280,8 +280,13 @@ class Port(object):
 
     def clear_connections(self):
         """
-        Disconnect from all pipe connections and emit the
+        Disconnect from all port connections and emit the
         :attr:`NodeGraph.port_disconnected` signals from the node graph.
+
+        See Also:
+            :meth:`Port.disconnect_from`,
+            :meth:`Port.connect_to`,
+            :meth:`Port.connected_ports`
         """
         if self.locked():
             err = 'Can\'t clear connections because port "{}" is locked.'
