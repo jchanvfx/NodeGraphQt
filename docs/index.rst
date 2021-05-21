@@ -11,7 +11,7 @@ NodeGraphQt documentation.
 ----
 
 .. toctree::
-    :caption: API Reference
+    :caption: API
     :name: apitoc
     :maxdepth: 2
 

@@ -1,6 +1,8 @@
 .linenos,
 td.lineos {
     background: #2e3133;
+    margin: 0px 10px;
+    padding: 1px 8px;
 }
 .linenos pre {
     background-color: transparent;
@@ -9,9 +11,9 @@ td.lineos {
     -moz-box-shadow: none;
 }
 .hll { background-color: #233150 }
-.code{ background: #232629; !important }
-.highlight pre  { background: #232629; !important }
-.highlight pre  {
+.code { background: #232629; !important }
+.highlight pre { background: #1a1c1f; !important }
+.highlight pre {
     color: #f8f8f2; 
     border: 0px; 
     border-radius: 0px;

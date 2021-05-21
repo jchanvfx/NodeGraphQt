@@ -3,4 +3,4 @@ Port
 
 .. autoclass:: NodeGraphQt.Port
     :members:
-    :exclude-members: model
+    :exclude-members: model, view

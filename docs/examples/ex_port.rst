@@ -6,8 +6,8 @@ Creating Custom Shapes
 
 (*Implemented on* ``v0.1.1``)
 
-To have custom port shapes the :meth:`NodeGraphQt.BaseNode.add_input` and
-:meth:`NodeGraphQt.BaseNode.add_output` functions now have a ``painter_func``
+To have custom port shapes the :meth:`BaseNode.add_input` and
+:meth:`BaseNode.add_output` functions now have a ``painter_func``
 argument where you specify you custom port painter function.
 
 .. image:: ../_images/custom_ports.png

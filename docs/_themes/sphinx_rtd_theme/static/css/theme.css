@@ -3465,7 +3465,7 @@ a.wy-text-neutral:hover{
 p{
     line-height:24px;
     font-size:16px;
-    margin:0 0 24px
+    margin:0 0 2px
 }
 h1{
     font-size:175%
@@ -4266,7 +4266,7 @@ footer p{
 .rst-content div[class^=highlight] pre{
     white-space:pre;
     margin:0;
-    padding:12px;
+    padding:4px;
     display:block;
     overflow:auto
 }
@@ -4734,6 +4734,7 @@ h2, h3, h4, h5 {color: #6dcfd9;}
 h2 {
     border-bottom: 1px solid #1e2023;
     padding-bottom: 6px;
+    padding-top: 6px;
 }
 
 /* kwargs tweaks */

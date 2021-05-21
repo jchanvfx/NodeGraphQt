@@ -39,7 +39,7 @@ class Port(object):
     @property
     def view(self):
         """
-        returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
+        Returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
             NodeGraphQt.qgraphics.port.PortItem: port item.
@@ -49,7 +49,7 @@ class Port(object):
     @property
     def model(self):
         """
-        returns the port model.
+        Returns the port model.
 
         Returns:
             NodeGraphQt.base.model.PortModel: port model.

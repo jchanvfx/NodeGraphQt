@@ -4,12 +4,12 @@ Node Examples
 Creating Nodes
 **************
 
-| Creating a node is done by calling the :func:`NodeGraphQt.NodeGraph.create_node` function.
-| (`see example below` ``line: 22``)
+| Creating a node is done by calling the :func:`NodeGraph.create_node` function.
+| (`see example below` ``line: 23``)
 
 .. code-block:: python
     :linenos:
-    :emphasize-lines: 22
+    :emphasize-lines: 23
 
     from Qt import QtWidgets
     from NodeGraphQt import BaseNode, NodeGraph
@@ -34,8 +34,11 @@ Creating Nodes
         node_graph.widget.show()
 
         # here we create a couple nodes in the node graph.
-        node_a = node_graph.create_node('com.chantasticvfx.MyNode', name='node a')
-        node_b = node_graph.create_node('com.chantasticvfx.MyNode', name='node b', pos=[300, 100])
+        node_a = node_graph.create_node('com.chantasticvfx.MyNode',
+                                        name='node a')
+        node_b = node_graph.create_node('com.chantasticvfx.MyNode',
+                                        name='node b',
+                                        pos=[300, 100])
 
         app.exec_()
 
