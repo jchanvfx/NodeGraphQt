@@ -137,63 +137,12 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.scene = graph.scene()
         self.model = graph.model
         self.node = node
-        self.node_widgets = {}
-
-        # attributes for the "BaseNode" object.
-        self.inputs = {}
-        self.outputs = {}
-        if hasattr(self.node, 'inputs'):
-            for p in self.node.input_ports():
-                self.inputs[p] = (p.connected_ports(), p.locked())
-        if hasattr(self.node, 'outputs'):
-            for p in self.node.output_ports():
-                self.outputs[p] = (p.connected_ports(), p.locked())
-
-    def connect_to(self, src_port, connected_ports, locked_state):
-        if not connected_ports:
-            return
-        locked_ports = [p for p in connected_ports if p.locked()]
-        for p in locked_ports:
-            p.set_locked(False, connected_ports=False)
-        src_port.set_locked(False, connected_ports=False)
-        [src_port.connect_to(p) for p in connected_ports]
-        for p in locked_ports:
-            p.set_locked(True, connected_ports=False)
-        src_port.set_locked(locked_state, connected_ports=False)
-
-    def disconnect_from(self, src_port, connected_ports, locked_state):
-        if not connected_ports:
-            return
-        locked_ports = [p for p in connected_ports if p.locked()]
-        for p in locked_ports:
-            p.set_locked(False, connected_ports=False)
-        src_port.set_locked(False, connected_ports=False)
-        [src_port.disconnect_from(p) for p in connected_ports]
-        for p in locked_ports:
-            p.set_locked(True, connected_ports=False)
-        src_port.set_locked(locked_state, connected_ports=False)
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        for port, port_data in self.inputs.items():
-            connected_ports = port_data[0]
-            locked_state = port_data[1]
-            self.connect_to(port, connected_ports, locked_state)
-        for port, port_data in self.outputs.items():
-            connected_ports = port_data[0]
-            locked_state = port_data[1]
-            self.connect_to(port, connected_ports, locked_state)
 
     def redo(self):
-        for port, port_data in self.inputs.items():
-            connected_ports = port_data[0]
-            locked_state = port_data[1]
-            self.disconnect_from(port, connected_ports, locked_state)
-        for port, port_data in self.outputs.items():
-            connected_ports = port_data[0]
-            locked_state = port_data[1]
-            self.disconnect_from(port, connected_ports, locked_state)
         self.model.nodes.pop(self.node.id)
         self.node.view.delete()
 
@@ -342,6 +291,49 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
             port_names.remove(self.source.name())
 
         self.source.view.disconnect_from(self.target.view)
+
+
+class PortLockedCmd(QtWidgets.QUndoCommand):
+    """
+    Port locked command.
+
+    Args:
+        port (NodeGraphQt.Port): node port.
+    """
+    def __init__(self, port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('lock port "{}"'.format(port.name()))
+        self.port = port
+
+    def undo(self):
+        self.port.model.locked = False
+        self.port.view.locked = False
+
+    def redo(self):
+        self.port.model.locked = True
+        self.port.view.locked = True
+
+
+class PortUnlockedCmd(QtWidgets.QUndoCommand):
+    """
+    Port unlocked command.
+
+    Args:
+        port (NodeGraphQt.Port): node port.
+    """
+
+    def __init__(self, port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('unlock port "{}"'.format(port.name()))
+        self.port = port
+
+    def undo(self):
+        self.port.model.locked = True
+        self.port.view.locked = True
+
+    def redo(self):
+        self.port.model.locked = False
+        self.port.view.locked = False
 
 
 class PortVisibleCmd(QtWidgets.QUndoCommand):
