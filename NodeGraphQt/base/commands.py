@@ -154,27 +154,14 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.scene = graph.scene()
         self.model = graph.model
         self.node = node
-        self.inputs = []
-        self.outputs = []
         self.node_parent = node.parent()
-
-        if hasattr(self.node, 'inputs'):
-            input_ports = self.node.input_ports()
-            self.inputs = [(p, p.connected_ports()) for p in input_ports]
-        if hasattr(self.node, 'outputs'):
-            output_ports = self.node.output_ports()
-            self.outputs = [(p, p.connected_ports()) for p in output_ports]
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        [port.connect_to(p) for port, connected_ports in self.inputs for p in connected_ports]
-        [port.connect_to(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.node.set_parent(self.node_parent)
 
     def redo(self):
-        [port.disconnect_from(p) for port, connected_ports in self.inputs for p in connected_ports]
-        [port.disconnect_from(p) for port, connected_ports in self.outputs for p in connected_ports]
         self.model.nodes.pop(self.node.id)
         self.node.delete()
 
@@ -326,6 +313,49 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
             port_names.remove(self.source.name())
 
         self.source.view.disconnect_from(self.target.view)
+
+
+class PortLockedCmd(QtWidgets.QUndoCommand):
+    """
+    Port locked command.
+
+    Args:
+        port (NodeGraphQt.Port): node port.
+    """
+    def __init__(self, port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('lock port "{}"'.format(port.name()))
+        self.port = port
+
+    def undo(self):
+        self.port.model.locked = False
+        self.port.view.locked = False
+
+    def redo(self):
+        self.port.model.locked = True
+        self.port.view.locked = True
+
+
+class PortUnlockedCmd(QtWidgets.QUndoCommand):
+    """
+    Port unlocked command.
+
+    Args:
+        port (NodeGraphQt.Port): node port.
+    """
+
+    def __init__(self, port):
+        QtWidgets.QUndoCommand.__init__(self)
+        self.setText('unlock port "{}"'.format(port.name()))
+        self.port = port
+
+    def undo(self):
+        self.port.model.locked = True
+        self.port.view.locked = True
+
+    def redo(self):
+        self.port.model.locked = False
+        self.port.view.locked = False
 
 
 class PortVisibleCmd(QtWidgets.QUndoCommand):
