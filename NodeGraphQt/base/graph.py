@@ -13,7 +13,7 @@ from .commands import (NodeAddedCmd,
 from .factory import NodeFactory
 from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
-from .node import NodeObject, BackdropNode
+from .node import NodeObject, BackdropNode, BaseNode
 from .port import Port
 from ..constants import (
     URI_SCHEME, URN_SCHEME,
@@ -891,8 +891,20 @@ class NodeGraph(QtCore.QObject):
         """
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
-        self.nodes_deleted.emit([node.id])
+        node_id = node.id
+        self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+        if isinstance(node, BaseNode):
+            for p in node.input_ports():
+                if p.locked():
+                    p.set_locked(False, connected_ports=False)
+                p.clear_connections()
+            for p in node.output_ports():
+                if p.locked():
+                    p.set_locked(False, connected_ports=False)
+                p.clear_connections()
         self._undo_stack.push(NodeRemovedCmd(self, node))
+        self._undo_stack.endMacro()
+        self.nodes_deleted.emit([node_id])
 
     def delete_nodes(self, nodes):
         """
@@ -901,10 +913,26 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
         """
-        self.nodes_deleted.emit([n.id for n in nodes])
-        self._undo_stack.beginMacro('delete nodes')
-        [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
+        if not nodes:
+            return
+        if len(nodes) == 1:
+            self.delete_node(nodes[0])
+            return
+        node_ids = [n.id for n in nodes]
+        self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
+        for node in nodes:
+            if isinstance(node, BaseNode):
+                for p in node.input_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
+                for p in node.output_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
+            self._undo_stack.push(NodeRemovedCmd(self, node))
         self._undo_stack.endMacro()
+        self.nodes_deleted.emit(node_ids)
 
     def all_nodes(self):
         """

@@ -131,11 +131,11 @@ class PortItem(QtWidgets.QGraphicsItem):
         super(PortItem, self).mouseReleaseEvent(event)
 
     def hoverEnterEvent(self, event):
-        self.hovered = True
+        self._hovered = True
         super(PortItem, self).hoverEnterEvent(event)
         
     def hoverLeaveEvent(self, event):
-        self.hovered = False
+        self._hovered = False
         super(PortItem, self).hoverLeaveEvent(event)
 
     def viewer_start_connection(self):
@@ -252,10 +252,6 @@ class PortItem(QtWidgets.QGraphicsItem):
     @port_type.setter
     def port_type(self, port_type):
         self._port_type = port_type
-
-    def delete(self):
-        for pipe in self.connected_pipes:
-            pipe.delete()
 
     def connect_to(self, port):
         if not port:

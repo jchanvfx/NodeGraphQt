@@ -743,11 +743,6 @@ class NodeItem(AbstractNodeItem):
     def has_widget(self, name):
         return name in self._widgets.keys()
 
-    def delete(self):
-        [port.delete() for port, text in self._input_items.items()]
-        [port.delete() for port, text in self._output_items.items()]
-        super(NodeItem, self).delete()
-
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
         widgets = node_dict.pop('widgets', {})
