@@ -1,6 +1,8 @@
 #!/usr/bin/python
 from .commands import (PortConnectedCmd,
                        PortDisconnectedCmd,
+                       PortLockedCmd,
+                       PortUnlockedCmd,
                        PortVisibleCmd,
                        NodeInputConnectedCmd,
                        NodeInputDisconnectedCmd)
@@ -162,8 +164,12 @@ class Port(object):
             state (Bool): port lock state.
             connected_ports (Bool): apply to lock state to connected ports.
         """
-        self.model.locked = state
-        self.__view.locked = state
+        graph = self.node().graph
+        undo_stack = graph.undo_stack()
+        if state:
+            undo_stack.push(PortLockedCmd(self))
+        else:
+            undo_stack.push(PortUnlockedCmd(self))
         if connected_ports:
             for port in self.connected_ports():
                 port.set_locked(state, connected_ports=False)
@@ -271,6 +277,25 @@ class Port(object):
         # emit "port_disconnected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
         graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])
+
+    def clear_connections(self):
+        """
+        Disconnect from all pipe connections and emit the
+        :attr:`NodeGraph.port_disconnected` signals from the node graph.
+        """
+        if self.locked():
+            err = 'Can\'t clear connections because port "{}" is locked.'
+            raise PortError(err.format(self.name()))
+
+        if not self.connected_ports():
+            return
+
+        graph = self.node().graph
+        undo_stack = graph.undo_stack()
+        undo_stack.beginMacro('"{}" clear connections')
+        for cp in self.connected_ports():
+            self.disconnect_from(cp)
+        undo_stack.endMacro()
 
     @property
     def color(self):
