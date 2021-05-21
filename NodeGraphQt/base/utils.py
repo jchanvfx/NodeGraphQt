@@ -67,7 +67,7 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
-    edit_menu.add_command('Show Undo View', _show_undo_view)
+    edit_menu.add_command('Show Undo History', _show_undo_view)
     edit_menu.add_separator()
 
     edit_menu.add_command('Copy', _copy_nodes, QtGui.QKeySequence.Copy)
