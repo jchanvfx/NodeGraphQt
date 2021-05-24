@@ -106,8 +106,8 @@ VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_SIZE = 50
 
-URI_SCHEME = 'ngqt://'
-URN_SCHEME = 'ngqt::'
+URI_SCHEME = 'NodeGraphQt://'
+URN_SCHEME = 'NodeGraphQt::'
 
 # === PATHS ===
 

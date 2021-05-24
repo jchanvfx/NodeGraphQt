@@ -171,8 +171,8 @@ class NodeGraph(QtCore.QObject):
             return
         node = self.get_node_by_id(node_id)
 
-        # exclude the BackdropNode
-        if isinstance(node, BackdropNode):
+        # exclude if not a BaseNode
+        if not isinstance(node, BaseNode):
             return
 
         disconnected = [(pipe.input_port, pipe.output_port)]
@@ -735,6 +735,35 @@ class NodeGraph(QtCore.QObject):
         self._model.acyclic = mode
         self._viewer.acyclic = mode
 
+    def pipe_collision(self):
+        """
+        Returns if pipe collision is enabled.
+
+        See Also:
+            To enable/disable pipe collision
+            :meth:`NodeGraph.set_pipe_collision_enabled`
+
+        Returns:
+            bool: True if pipe collision is enabled.
+        """
+        return self._model.pipe_collision
+
+    def set_pipe_collision(self, mode=True):
+        """
+        Enable/Disable pipe collision.
+
+        When enabled dragging a node over a pipe will allow the node to be
+        inserted as a new connection between the pipe.
+
+        See Also:
+            :meth:`NodeGraph.pipe_collision`
+
+        Args:
+            mode (bool): False to disable pipe collision.
+        """
+        self._model.pipe_collision = mode
+        self._viewer.pipe_collision = mode
+
     def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
@@ -930,6 +959,8 @@ class NodeGraph(QtCore.QObject):
     def add_node(self, node, pos=None, unique_name=True):
         """
         Add a node into the node graph.
+        unlike the :meth:`NodeGraph.create_node` function this will not
+        trigger the :attr:`NodeGraph.node_created` signal.
 
         Args:
             node (NodeGraphQt.BaseNode): node object.
@@ -956,7 +987,11 @@ class NodeGraph(QtCore.QObject):
         node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
         node.update()
+
+        self._undo_stack.beginMacro('add node: "{}"'.format(node.name()))
         self._undo_stack.push(NodeAddedCmd(self, node, pos))
+        node.set_selected(True)
+        self._undo_stack.endMacro()
 
     def set_node_space(self, node):
         """
@@ -1214,11 +1249,20 @@ class NodeGraph(QtCore.QObject):
         for n in self.all_nodes():
             if n is root_node:
                 continue
+            if isinstance(n, BaseNode):
+                for p in n.input_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
+                for p in n.output_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
             self._undo_stack.push(NodeRemovedCmd(self, n))
         self.set_node_space(root_node)
         self.clear_undo_stack()
-        self._model.session = None
-        self.session_changed.emit("")
+        self._model.session = ''
+        self.session_changed.emit('')
 
     def _serialize(self, nodes):
         """
@@ -1231,14 +1275,21 @@ class NodeGraph(QtCore.QObject):
         Returns:
             dict: serialized data.
         """
-        serial_data = {'nodes': {}, 'connections': []}
+        serial_data = {'graph': {}, 'nodes': {}, 'connections': []}
         nodes_data = {}
+
+        # serialize graph session.
+        serial_data['graph']['acyclic'] = self.acyclic()
+        serial_data['graph']['pipe_collision'] = self.pipe_collision()
+
+        # serialize nodes.
         root_node = self.root_node()
         for n in nodes:
             if n is root_node:
                 continue
             # update the node model.
             n.update_model()
+
             node_dict = n.model.to_dict
 
             if isinstance(n, SubGraph):
@@ -1253,6 +1304,7 @@ class NodeGraph(QtCore.QObject):
         for n_id, n_data in nodes_data.items():
             serial_data['nodes'][n_id] = n_data
 
+            # serialize connections
             inputs = n_data.pop('inputs') if n_data.get('inputs') else {}
             outputs = n_data.pop('outputs') if n_data.get('outputs') else {}
 
@@ -1293,6 +1345,13 @@ class NodeGraph(QtCore.QObject):
         """
         if not self._editable:
             return
+
+        # update node graph properties.
+        for attr_name, attr_value in data.get('graph', {}).items():
+            if attr_name == 'acyclic':
+                self.set_acyclic(attr_value)
+            elif attr_name == 'pipe_collision':
+                self.set_pipe_collision(attr_value)
 
         _temp_auto_update = self._auto_update
         self._auto_update = False
@@ -1452,7 +1511,6 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the serialized layout file.
         """
-
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist: {}'.format(file_path))
@@ -1746,7 +1804,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             bool: true if user clicked yes.
         """
-        self._viewer.question_dialog(text, title)
+        return self._viewer.question_dialog(text, title)
 
     def message_dialog(self, text, title='Node Graph'):
         """

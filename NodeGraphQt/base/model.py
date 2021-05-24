@@ -320,25 +320,46 @@ class NodeModel(object):
 
 
 class NodeGraphModel(object):
+    """
+    Data dump for a node graph.
+    """
 
     def __init__(self):
+        self.__common_node_props = {}
+
         self.nodes = {}
         self.session = ''
         self.acyclic = True
-        self.__common_node_props = {}
+        self.pipe_collision = False
 
     def common_properties(self):
+        """
+        Return all common node properties.
+
+        Returns:
+            dict: common node properties.
+                eg.
+                    {'nodeGraphQt.nodes.FooNode': {
+                        'my_property': {
+                            'widget_type': 0,
+                            'tab': 'Properties',
+                            'items': ['foo', 'bar', 'test'],
+                            'range': (0, 100)
+                            }
+                        }
+                    }
+        """
         return self.__common_node_props
 
     def set_node_common_properties(self, attrs):
         """
-        store common node properties.
+        Store common node properties.
 
         Args:
             attrs (dict): common node properties.
                 eg.
-                     {'nodeGraphQt.nodes.FooNode': {
-                        'my_property':{
+                    {'nodeGraphQt.nodes.FooNode': {
+                        'my_property': {
                             'widget_type': 0,
                             'tab': 'Properties',
                             'items': ['foo', 'bar', 'test'],
@@ -363,6 +384,8 @@ class NodeGraphModel(object):
 
     def get_node_common_properties(self, node_type):
         """
+        Return all the common properties for a registered node.
+
         Args:
             node_type (str): node type.
 

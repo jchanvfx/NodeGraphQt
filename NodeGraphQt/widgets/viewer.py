@@ -116,6 +116,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._ctx_node_menu.setDisabled(True)
 
         self.acyclic = True
+        self.pipe_collision = False
+
         self.LMB_state = False
         self.RMB_state = False
         self.MMB_state = False
@@ -385,9 +387,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # emit signal if selected node collides with pipe.
         # Note: if collide state is true then only 1 node is selected.
         nodes, pipes = self.selected_items()
-        if self.COLLIDING_state:
-            if nodes and pipes:
-                self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
+        if self.COLLIDING_state and nodes and pipes:
+            self.insert_node.emit(pipes[0], nodes[0].id, moved_nodes)
 
         # emit node selection changed signal.
         prev_ids = [n.id for n in self._prev_selection_nodes if not n.selected]
@@ -447,21 +448,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         elif self.LMB_state:
             self.COLLIDING_state = False
-            nodes = self.selected_nodes()
+            nodes, pipes = self.selected_items()
             if len(nodes) == 1:
                 node = nodes[0]
-                for pipe in self.selected_pipes():
-                    pipe.setSelected(False)
-                for item in node.collidingItems():
-                    if isinstance(item, Pipe) and item.isVisible():
-                        if not item.input_port:
+                [p.setSelected(False) for p in pipes]
+
+                if self.pipe_collision:
+                    colliding_pipes = [
+                        i for i in node.collidingItems()
+                        if isinstance(i, Pipe) and i.isVisible()
+                    ]
+                    for pipe in colliding_pipes:
+                        if not pipe.input_port:
                             continue
                         port_node_check = all([
-                            not item.input_port.node is node,
-                            not item.output_port.node is node
+                            not pipe.input_port.node is node,
+                            not pipe.output_port.node is node
                         ])
                         if port_node_check:
-                            item.setSelected(True)
+                            pipe.setSelected(True)
                             self.COLLIDING_state = True
                             break
 
