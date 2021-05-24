@@ -421,14 +421,14 @@ class NodeGraph(QtCore.QObject):
     @property
     def undo_view(self):
         """
-        Returns node graph undo view.
+        Returns node graph undo history list widget.
 
         Returns:
             PySide2.QtWidgets.QUndoView: node graph undo view.
         """
         if self._undo_view is None:
             self._undo_view = QtWidgets.QUndoView(self._undo_stack)
-            self._undo_view.setWindowTitle('Undo View')
+            self._undo_view.setWindowTitle('Undo History')
         return self._undo_view
 
     def show(self):
