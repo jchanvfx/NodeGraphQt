@@ -886,6 +886,8 @@ class NodeGraph(QtCore.QObject):
     def add_node(self, node, pos=None):
         """
         Add a node into the node graph.
+        unlike the :meth:`NodeGraph.create_node` function this will not
+        trigger the :attr:`NodeGraph.node_created` signal.
 
         Args:
             node (NodeGraphQt.BaseNode): node object.
@@ -909,7 +911,11 @@ class NodeGraph(QtCore.QObject):
         node.model._graph_model = self.model
         node.model.name = node.NODE_NAME
         node.update()
+
+        self._undo_stack.beginMacro('add node: "{}"'.format(node.name()))
         self._undo_stack.push(NodeAddedCmd(self, node, pos))
+        node.set_selected(True)
+        self._undo_stack.endMacro()
 
     def delete_node(self, node):
         """
@@ -1070,9 +1076,18 @@ class NodeGraph(QtCore.QObject):
         Clears the current node graph session.
         """
         for n in self.all_nodes():
+            if isinstance(n, BaseNode):
+                for p in n.input_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
+                for p in n.output_ports():
+                    if p.locked():
+                        p.set_locked(False, connected_ports=False)
+                    p.clear_connections()
             self._undo_stack.push(NodeRemovedCmd(self, n))
         self._undo_stack.clear()
-        self._model.session = None
+        self._model.session = ''
 
     def _serialize(self, nodes):
         """
@@ -1278,7 +1293,6 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the serialized layout file.
         """
-
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
             raise IOError('file does not exist: {}'.format(file_path))
@@ -1563,7 +1577,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             bool: true if user clicked yes.
         """
-        self._viewer.question_dialog(text, title)
+        return self._viewer.question_dialog(text, title)
 
     def message_dialog(self, text, title='Node Graph'):
         """
