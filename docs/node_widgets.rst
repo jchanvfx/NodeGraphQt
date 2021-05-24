@@ -37,24 +37,3 @@ NodeLineEdit
 .. autoclass:: NodeGraphQt.widgets.node_widgets.NodeLineEdit
     :members:
     :exclude-members: widget, type_
-
-NodeFilePath
-************
-
-.. autoclass:: NodeGraphQt.widgets.node_widgets.NodeFilePath
-    :members:
-    :exclude-members: widget, type_
-
-NodeFloatEdit
-*************
-
-.. autoclass:: NodeGraphQt.widgets.node_widgets.NodeFloatEdit
-    :members:
-    :exclude-members: widget, type_
-
-NodeIntEdit
-***********
-
-.. autoclass:: NodeGraphQt.widgets.node_widgets.NodeIntEdit
-    :members:
-    :exclude-members: widget, type_

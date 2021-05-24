@@ -28,7 +28,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
     #     font.setPixelSize(48)
     #     painter.setFont(font)
     #     parent = self.viewer()
-    #     pos = QtCore.QPoint(20, parent.height()-20)
+    #     pos = QtCore.QPoint(20, parent.height() - 20)
     #     painter.setPen(pen)
     #     painter.drawText(parent.mapToScene(pos), 'Not Editable')
 
