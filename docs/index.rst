@@ -21,7 +21,7 @@ NodeGraphQt documentation.
     menu
 
 .. toctree::
-    :caption: Module Widgets
+    :caption: Widgets
     :name: wdgtstoc
     :maxdepth: 2
 

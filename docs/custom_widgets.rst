@@ -1,5 +1,5 @@
-Builtin Widgets
-###############
+Custom Widgets
+##############
 
 Here's a few custom widgets that included with the ``NodeGraphQt`` framework.
 
@@ -62,18 +62,3 @@ example
 .. autoclass:: NodeGraphQt.NodeTreeWidget
     :members:
     :exclude-members: mimeData, set_node_factory, property_changed
-
-
-Publish Node
-************
-
-The :class:`NodeGraphQt.NodePublishWidget` is a simple widget for publishing
-nodes to a serialized json formatted file.
-
-.. image:: _images/node_publish_dialog.png
-    :width: 411px
-
-----
-
-.. autoclass:: NodeGraphQt.NodePublishWidget
-    :members:

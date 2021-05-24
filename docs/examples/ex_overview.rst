@@ -1,5 +1,5 @@
-NodeGraph Overview
-##################
+Basic Overview
+##############
 
 User interface overview for the node graph.
 
@@ -54,8 +54,8 @@ Connection pipes can be disconnected easily with the built in slice tool.
 +---------------------+----------------------------+
 
 
-Basic Example
-*************
+Simple Example
+**************
 
 Here's a basic example snippet for creating two nodes and connecting them together.
 

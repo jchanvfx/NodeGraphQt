@@ -1,10 +1,10 @@
-Graphs
-######
+Graph
+#####
 
 NodeGraph
 *********
 
-`See` :ref:`Basic Example` `from the NodeGraph overview.`
+`See` :ref:`Simple Example` `from the NodeGraph overview.`
 
 ----
 
@@ -14,10 +14,3 @@ NodeGraph
 
     .. autoattribute:: NodeGraphQt.NodeGraph.widget
     .. autoattribute:: NodeGraphQt.NodeGraph.model
-
-
-SubGraph
-********
-
-.. autoclass:: NodeGraphQt.SubGraph
-    :members:
