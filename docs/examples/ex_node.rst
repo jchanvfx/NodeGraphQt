@@ -5,7 +5,7 @@ Creating Nodes
 **************
 
 | Creating a node is done by calling the :func:`NodeGraph.create_node` function.
-| (`see example below` ``line: 23``)
+| (`see example below from line` ``line: 23``)
 
 .. code-block:: python
     :linenos:
@@ -80,7 +80,7 @@ To you update the widget you can call the :meth:`NodeGraphQt.NodeObject.set_prop
  - ``QCheckBox``: :meth:`NodeGraphQt.BaseNode.add_checkbox`
  - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
 
-See: :ref:`Node Widgets` for more node widget types.
+See: :ref:`Node Embedded Widgets` for more node widget types.
 
 Embedding Custom Widgets
 ************************

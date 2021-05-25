@@ -11,7 +11,7 @@ NodeGraphQt documentation.
 ----
 
 .. toctree::
-    :caption: API
+    :caption: API Reference
     :name: apitoc
     :maxdepth: 2
 
@@ -21,7 +21,7 @@ NodeGraphQt documentation.
     menu
 
 .. toctree::
-    :caption: Module Widgets
+    :caption: Widgets
     :name: wdgtstoc
     :maxdepth: 2
 
