@@ -4752,3 +4752,8 @@ h2 {
 html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) code.descname {
     margin-right: 2px;
 }
+
+/* image mergins */
+.rst-content img {
+    margin: 8px 0px;
+}
