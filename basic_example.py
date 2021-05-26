@@ -160,6 +160,7 @@ if __name__ == '__main__':
 
     # show the nodes list when a node is "double clicked" in the graph.
     node_tree = NodeTreeWidget(node_graph=graph)
+    node_tree.set_category_label('nodes.widget', 'Widget Nodes')
     def show_nodes_list(node):
         if not node_tree.isVisible():
             node_tree.update()

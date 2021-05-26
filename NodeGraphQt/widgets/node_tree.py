@@ -95,11 +95,14 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
 
     def set_category_label(self, category, label):
         """
-        Set custom display label for a node category.
+        Set custom label for a node category root item.
+
+        .. image:: _images/nodes_tree_category_label.png
+            :width: 70%
 
         Args:
-            category (str): node identifier category eg. "nodeGraphQt.nodes"
-            label (str): custom display label.
+            category (str): node identifier category eg. ``"nodes.widgets"``
+            label (str): custom display label. eg. ``"Node Widgets"``
         """
         self._custom_labels[category] = label
 
