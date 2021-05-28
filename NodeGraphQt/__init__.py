@@ -34,7 +34,7 @@
 into applications that supports **PySide2**.
 
 project: https://github.com/jchanvfx/NodeGraphQt
-documantation: https://jchanvfx.github.io/NodeGraphQt/api/html/index.html
+documentation: https://jchanvfx.github.io/NodeGraphQt/api/html/index.html
 
 example code:
 
@@ -87,7 +87,8 @@ from .base.utils import setup_context_menu, \
     update_nodes_by_up, update_nodes_by_down
 
 # widgets
-from .widgets.node_tree import NodeTreeWidget
+from .widgets.nodes_tree import NodeTreeWidget
+from .widgets.nodes_palette import NodesPaletteWidget
 from .widgets.properties_bin import PropertiesBinWidget
 from .widgets.node_publish_widget import NodePublishWidget
 from .widgets.node_widgets import NodeBaseWidget
@@ -103,6 +104,7 @@ __all__ = [
     'NodeGraphCommand',
     'NodeGraphMenu',
     'NodeObject',
+    'NodesPaletteWidget',
     'NodeTreeWidget',
     'NodesMenu',
     'Port',
