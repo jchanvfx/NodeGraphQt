@@ -34,15 +34,17 @@ https://jchanvfx.github.io/NodeGraphQt
 | ----------------- |:------------------------:|
 | Slice Connections | `Shift + Alt + LMB Drag` |
 
-#### Properties Bin
-<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
-
 #### Vertical Layout
 <img src="/docs/_images/vertical_layout.png" width="400" title="Vertical Layout">
 
 #### Pipe Layout
 
 <img src="/docs/_images/pipe_layout_types.gif" width="600" title="Pipe Layout">
+
+#### Widgets
+<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
+<img src="/docs/_images/nodes_palette.png" width="350" title="Nodes Paletten">
+<img src="/docs/_images/nodes_tree.png" width="250" title="Nodes Tree">
 
 #### Example
 
