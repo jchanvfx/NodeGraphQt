@@ -40,6 +40,8 @@ The :class:`NodeGraphQt.NodesPaletteWidget` is a widget for displaying all
 registered nodes from the node graph in a grid layout with this widget a user
 can create nodes by dragging and dropping.
 
+*Implemented on NodeGraphQt:* ``v0.1.7``
+
 .. image:: _images/nodes_palette.png
     :width: 400px
 
