@@ -33,6 +33,36 @@ example
     :members:
     :exclude-members: property_changed
 
+Nodes Palette
+*************
+
+The :class:`NodeGraphQt.NodesPaletteWidget` is a widget for displaying all
+registered nodes from the node graph in a grid layout with this widget a user
+can create nodes by dragging and dropping.
+
+.. image:: _images/nodes_palette.png
+    :width: 300px
+
+example
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import NodeGraph, NodesPaletteWidget
+
+    # create node graph.
+    graph = NodeGraph()
+
+    # create nodes palette widget.
+    nodes_palette = NodesPaletteWidget(parent=None, node_graph=graph)
+    nodes_palette.show()
+
+----
+
+.. autoclass:: NodeGraphQt.NodesPaletteWidget
+    :members:
+    :exclude-members: mimeData,
+
 Nodes Tree
 **********
 
@@ -61,4 +91,4 @@ example
 
 .. autoclass:: NodeGraphQt.NodeTreeWidget
     :members:
-    :exclude-members: mimeData, set_node_factory, property_changed
+    :exclude-members: mimeData

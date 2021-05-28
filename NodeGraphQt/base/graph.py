@@ -291,11 +291,11 @@ class NodeGraph(QtCore.QObject):
                 elif urn_search:
                     search_str = urn_search.group(1)
                     node_ids = sorted(re.findall('node:([\w\\.]+)', search_str))
+                    x, y = pos.x(), pos.y()
                     for node_id in node_ids:
-                        x, y = pos.x(), pos.y()
                         self.create_node(node_id, pos=[x, y])
-                        x += 20
-                        y += 20
+                        x += 80
+                        y += 80
 
     def _on_nodes_moved(self, node_data):
         """
