@@ -41,7 +41,7 @@ registered nodes from the node graph in a grid layout with this widget a user
 can create nodes by dragging and dropping.
 
 .. image:: _images/nodes_palette.png
-    :width: 300px
+    :width: 400px
 
 example
 
