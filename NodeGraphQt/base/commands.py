@@ -300,6 +300,7 @@ class PortLockedCmd(QtWidgets.QUndoCommand):
     Args:
         port (NodeGraphQt.Port): node port.
     """
+
     def __init__(self, port):
         QtWidgets.QUndoCommand.__init__(self)
         self.setText('lock port "{}"'.format(port.name()))
