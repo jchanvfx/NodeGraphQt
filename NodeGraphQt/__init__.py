@@ -72,12 +72,18 @@ example code:
 
         app.exec_()
 """
-from .base.graph import NodeGraph
-from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
-from .base.node import NodeObject, BaseNode, BackdropNode
-from .base.port import Port
 from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE
+
+# node graph
+from .base.graph import NodeGraph
+from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
+
+# nodes & ports
+from .base.port import Port
+from .base.node import NodeObject
+from .nodes.base_node import BaseNode
+from .nodes.backdrop_node import BackdropNode
 
 # functions
 from .base.utils import setup_context_menu
@@ -99,7 +105,7 @@ __all__ = [
     'NodeGraphCommand',
     'NodeGraphMenu',
     'NodeObject',
-    'NodesPaletteWidget,'
+    'NodesPaletteWidget',
     'NodeTreeWidget',
     'NodesMenu',
     'Port',

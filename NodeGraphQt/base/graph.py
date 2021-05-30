@@ -6,6 +6,9 @@ import re
 
 from Qt import QtCore, QtWidgets, QtGui
 
+from NodeGraphQt.nodes.backdrop_node import BackdropNode
+from NodeGraphQt.nodes.base_node import BaseNode
+
 from .commands import (NodeAddedCmd,
                        NodeRemovedCmd,
                        NodeMovedCmd,
@@ -13,7 +16,7 @@ from .commands import (NodeAddedCmd,
 from .factory import NodeFactory
 from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
-from .node import NodeObject, BackdropNode, BaseNode
+from .node import NodeObject
 from .port import Port
 from ..constants import (
     URI_SCHEME, URN_SCHEME,
