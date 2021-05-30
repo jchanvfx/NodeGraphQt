@@ -66,7 +66,23 @@ class PropertiesList(QtWidgets.QTableWidget):
 
 class PropertiesBinWidget(QtWidgets.QWidget):
     """
-    Node properties bin for displaying properties.
+    The :class:`NodeGraphQt.PropertiesBinWidget` is a list widget for displaying
+    and editing a nodes properties.
+
+    .. image:: _images/prop_bin.png
+        :width: 950px
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import NodeGraph, PropertiesBinWidget
+
+        # create node graph.
+        graph = NodeGraph()
+
+        # create properties bin widget.
+        properties_bin = PropertiesBinWidget(parent=None, node_graph=graph)
+        properties_bin.show()
 
     Args:
         parent (QtWidgets.QWidget): parent of the new widget.

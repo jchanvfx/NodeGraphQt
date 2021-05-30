@@ -20,7 +20,24 @@ class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
 
 class NodesTreeWidget(QtWidgets.QTreeWidget):
     """
-    Node tree for displaying node types.
+    The :class:`NodeGraphQt.NodesTreeWidget` is a widget for displaying all
+    registered nodes from the node graph with this widget a user can create
+    nodes by dragging and dropping.
+
+    .. image:: _images/nodes_tree.png
+        :width: 300px
+
+    .. code-block:: python
+        :linenos:
+
+        from NodeGraphQt import NodeGraph, NodesTreeWidget
+
+        # create node graph.
+        graph = NodeGraph()
+
+        # create node tree widget.
+        nodes_tree = NodesTreeWidget(parent=None, node_graph=graph)
+        nodes_tree.show()
 
     Args:
         parent (QtWidgets.QWidget): parent of the new widget.
