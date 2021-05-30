@@ -8,7 +8,7 @@ from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
                          PropertiesBinWidget,
-                         NodeTreeWidget,
+                         NodesTreeWidget,
                          setup_context_menu)
 
 # import example nodes from the "example_nodes" package
@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
 
     # show the nodes list when a node is "double clicked" in the graph.
-    node_tree = NodeTreeWidget(node_graph=graph)
+    node_tree = NodesTreeWidget(node_graph=graph)
     node_tree.set_category_label('nodes.widget', 'Widget Nodes')
     def show_nodes_list(node):
         if not node_tree.isVisible():

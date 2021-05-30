@@ -3,23 +3,23 @@ from collections import defaultdict
 
 from Qt import QtWidgets, QtCore, QtGui
 
-from .dialogs import FileDialog
-from ..constants import (NODE_PROP_QLABEL,
-                         NODE_PROP_QLINEEDIT,
-                         NODE_PROP_QTEXTEDIT,
-                         NODE_PROP_QCOMBO,
-                         NODE_PROP_QCHECKBOX,
-                         NODE_PROP_QSPINBOX,
-                         NODE_PROP_COLORPICKER,
-                         NODE_PROP_SLIDER,
-                         NODE_PROP_FILE,
-                         NODE_PROP_FILE_SAVE,
-                         NODE_PROP_VECTOR2,
-                         NODE_PROP_VECTOR3,
-                         NODE_PROP_VECTOR4,
-                         NODE_PROP_FLOAT,
-                         NODE_PROP_INT,
-                         NODE_PROP_BUTTON)
+from NodeGraphQt.constants import (NODE_PROP_QLABEL,
+                                   NODE_PROP_QLINEEDIT,
+                                   NODE_PROP_QTEXTEDIT,
+                                   NODE_PROP_QCOMBO,
+                                   NODE_PROP_QCHECKBOX,
+                                   NODE_PROP_QSPINBOX,
+                                   NODE_PROP_COLORPICKER,
+                                   NODE_PROP_SLIDER,
+                                   NODE_PROP_FILE,
+                                   NODE_PROP_FILE_SAVE,
+                                   NODE_PROP_VECTOR2,
+                                   NODE_PROP_VECTOR3,
+                                   NODE_PROP_VECTOR4,
+                                   NODE_PROP_FLOAT,
+                                   NODE_PROP_INT,
+                                   NODE_PROP_BUTTON)
+from NodeGraphQt.widgets.dialogs import FileDialog
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -991,7 +991,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     import sys
-    from .. import BaseNode, NodeGraph
+    from NodeGraphQt import BaseNode, NodeGraph
 
 
     class TestNode(BaseNode):

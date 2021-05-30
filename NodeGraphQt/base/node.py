@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from .commands import PropertyChangedCmd
-from .model import NodeModel
-from ..constants import NODE_PROP
+from NodeGraphQt.base.commands import PropertyChangedCmd
+from NodeGraphQt.base.model import NodeModel
+from NodeGraphQt.constants import NODE_PROP
 
 
 class _ClassProperty(object):

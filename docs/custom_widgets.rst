@@ -66,7 +66,7 @@ example
 Nodes Tree
 **********
 
-The :class:`NodeGraphQt.NodeTreeWidget` is a widget for displaying all
+The :class:`NodeGraphQt.NodesTreeWidget` is a widget for displaying all
 registered nodes from the node graph with this widget a user can create nodes
 by dragging and dropping.
 
@@ -78,17 +78,17 @@ example
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph, NodeTreeWidget
+    from NodeGraphQt import NodeGraph, NodesTreeWidget
 
     # create node graph.
     graph = NodeGraph()
 
     # create node tree widget.
-    nodes_tree = NodeTreeWidget(parent=None, node_graph=graph)
+    nodes_tree = NodesTreeWidget(parent=None, node_graph=graph)
     nodes_tree.show()
 
 ----
 
-.. autoclass:: NodeGraphQt.NodeTreeWidget
+.. autoclass:: NodeGraphQt.NodesTreeWidget
     :members:
     :exclude-members: mimeData

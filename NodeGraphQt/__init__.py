@@ -89,10 +89,10 @@ from .nodes.backdrop_node import BackdropNode
 from .base.utils import setup_context_menu
 
 # widgets
-from .widgets.nodes_tree import NodeTreeWidget
-from .widgets.nodes_palette import NodesPaletteWidget
-from .widgets.properties_bin import PropertiesBinWidget
 from .widgets.node_widgets import NodeBaseWidget
+from .custom_widgets.nodes_tree import NodesTreeWidget
+from .custom_widgets.nodes_palette import NodesPaletteWidget
+from .custom_widgets.properties_bin import PropertiesBinWidget
 
 
 __version__ = VERSION
@@ -106,11 +106,12 @@ __all__ = [
     'NodeGraphMenu',
     'NodeObject',
     'NodesPaletteWidget',
-    'NodeTreeWidget',
+    'NodesTreeWidget',
     'NodesMenu',
     'Port',
     'PropertiesBinWidget',
     'VERSION',
     'constants',
-    'setup_context_menu'
+    'setup_context_menu',
+    'custom_widgets'
 ]

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from Qt import QtWidgets, QtCore, QtGui
 
-from ..constants import URN_SCHEME
+from NodeGraphQt.constants import URN_SCHEME
 
 TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
@@ -18,7 +18,7 @@ class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
         return id(self) == id(other)
 
 
-class NodeTreeWidget(QtWidgets.QTreeWidget):
+class NodesTreeWidget(QtWidgets.QTreeWidget):
     """
     Node tree for displaying node types.
 
@@ -28,7 +28,7 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
     """
 
     def __init__(self, parent=None, node_graph=None):
-        super(NodeTreeWidget, self).__init__(parent)
+        super(NodesTreeWidget, self).__init__(parent)
         self.setDragDropMode(QtWidgets.QAbstractItemView.DragOnly)
         self.setSelectionMode(self.ExtendedSelection)
         self.setHeaderHidden(True)
@@ -46,7 +46,7 @@ class NodeTreeWidget(QtWidgets.QTreeWidget):
     def mimeData(self, items):
         node_ids = ['node:{}'.format(i.toolTip(0)) for i in items]
         node_urn = URN_SCHEME + ';'.join(node_ids)
-        mime_data = super(NodeTreeWidget, self).mimeData(items)
+        mime_data = super(NodesTreeWidget, self).mimeData(items)
         mime_data.setUrls([node_urn])
         return mime_data
 
