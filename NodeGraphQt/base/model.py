@@ -2,12 +2,14 @@
 import json
 from collections import defaultdict
 
-from ..constants import (NODE_PROP,
-                         NODE_PROP_QLABEL,
-                         NODE_PROP_QLINEEDIT,
-                         NODE_PROP_QCHECKBOX,
-                         NODE_PROP_COLORPICKER)
-from ..errors import NodePropertyError
+from NodeGraphQt.constants import (
+    NODE_PROP,
+    NODE_PROP_QLABEL,
+    NODE_PROP_QLINEEDIT,
+    NODE_PROP_QCHECKBOX,
+    NODE_PROP_COLORPICKER
+)
+from NodeGraphQt.errors import NodePropertyError
 
 
 class PortModel(object):

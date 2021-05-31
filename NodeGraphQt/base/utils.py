@@ -3,7 +3,7 @@ from distutils.version import LooseVersion
 
 from Qt import QtGui, QtCore
 
-from ..constants import (PIPE_LAYOUT_CURVED,
+from NodeGraphQt.constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
                          PIPE_LAYOUT_ANGLE,
                          NODE_LAYOUT_VERTICAL,

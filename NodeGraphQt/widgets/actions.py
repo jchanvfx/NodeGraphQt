@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
-from .stylesheet import STYLE_QMENU
+
+from NodeGraphQt.widgets.stylesheet import STYLE_QMENU
 
 
 class BaseMenu(QtWidgets.QMenu):

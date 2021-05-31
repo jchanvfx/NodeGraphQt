@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from ..base.node import NodeObject
-from ..constants import (NODE_PROP_QTEXTEDIT)
-from ..qgraphics.node_backdrop import BackdropNodeItem
+from NodeGraphQt.base.node import NodeObject
+from NodeGraphQt.constants import (NODE_PROP_QTEXTEDIT)
+from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 
 
 class BackdropNode(NodeObject):

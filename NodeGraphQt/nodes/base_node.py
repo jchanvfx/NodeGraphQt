@@ -1,22 +1,24 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from ..base.node import NodeObject
-from ..base.port import Port
-from ..constants import (NODE_PROP_QLABEL,
-                         NODE_PROP_QLINEEDIT,
-                         NODE_PROP_QCOMBO,
-                         NODE_PROP_QCHECKBOX,
-                         IN_PORT, OUT_PORT,
-                         NODE_LAYOUT_VERTICAL,
-                         NODE_LAYOUT_HORIZONTAL,
-                         NODE_LAYOUT_DIRECTION)
-from ..errors import PortError, PortRegistrationError, NodeWidgetError
-from ..qgraphics.node_base import NodeItem, NodeItemVertical
-from ..widgets.node_widgets import (NodeBaseWidget,
-                                    NodeComboBox,
-                                    NodeLineEdit,
-                                    NodeCheckBox)
+from NodeGraphQt.base.node import NodeObject
+from NodeGraphQt.base.port import Port
+from NodeGraphQt.constants import (NODE_PROP_QLABEL,
+                                   NODE_PROP_QLINEEDIT,
+                                   NODE_PROP_QCOMBO,
+                                   NODE_PROP_QCHECKBOX,
+                                   IN_PORT, OUT_PORT,
+                                   NODE_LAYOUT_VERTICAL,
+                                   NODE_LAYOUT_HORIZONTAL,
+                                   NODE_LAYOUT_DIRECTION)
+from NodeGraphQt.errors import (PortError,
+                                PortRegistrationError,
+                                NodeWidgetError)
+from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
+from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
+                                              NodeComboBox,
+                                              NodeLineEdit,
+                                              NodeCheckBox)
 
 
 class BaseNode(NodeObject):

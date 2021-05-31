@@ -3,8 +3,7 @@ import math
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from .port import PortItem
-from ..constants import (
+from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
@@ -14,6 +13,7 @@ from ..constants import (
     ITEM_CACHE_MODE,
     NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
     NODE_LAYOUT_DIRECTION)
+from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,

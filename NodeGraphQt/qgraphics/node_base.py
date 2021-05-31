@@ -3,17 +3,17 @@ from collections import OrderedDict
 
 from Qt import QtGui, QtCore, QtWidgets
 
-from .node_abstract import AbstractNodeItem
-from .node_overlay_disabled import XDisabledItem
-from .node_text_item import NodeTextItem
-from .port import PortItem, CustomPortItem
-from ..constants import (IN_PORT, OUT_PORT,
-                         NODE_WIDTH, NODE_HEIGHT,
-                         NODE_ICON_SIZE, ICON_NODE_BASE,
-                         NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                         PORT_FALLOFF, Z_VAL_NODE,
-                         ITEM_CACHE_MODE)
-from ..errors import NodeWidgetError
+from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
+                                   NODE_WIDTH, NODE_HEIGHT,
+                                   NODE_ICON_SIZE, ICON_NODE_BASE,
+                                   NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
+                                   PORT_FALLOFF, Z_VAL_NODE,
+                                   ITEM_CACHE_MODE)
+from NodeGraphQt.errors import NodeWidgetError
+from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
+from NodeGraphQt.qgraphics.node_text_item import NodeTextItem
+from NodeGraphQt.qgraphics.port import PortItem, CustomPortItem
 
 
 class NodeItem(AbstractNodeItem):

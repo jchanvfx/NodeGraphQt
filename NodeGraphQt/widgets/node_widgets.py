@@ -1,9 +1,9 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from .stylesheet import STYLE_QGROUPBOX, STYLE_QLINEEDIT
-from ..constants import Z_VAL_NODE_WIDGET
-from ..errors import NodeWidgetError
+from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
+from NodeGraphQt.errors import NodeWidgetError
+from NodeGraphQt.widgets.stylesheet import STYLE_QGROUPBOX, STYLE_QLINEEDIT
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):

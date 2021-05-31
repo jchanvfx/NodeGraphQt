@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from ..constants import Z_VAL_NODE_WIDGET
+from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 
 
 class XDisabledItem(QtWidgets.QGraphicsItem):

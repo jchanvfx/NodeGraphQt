@@ -18,7 +18,9 @@ class NodeObject(object):
     The ``NodeGraphQt.NodeObject`` class is the main base class that all
     nodes inherit from.
 
-    **Inherited by:** :class:`NodeGraphQt.BaseNode`, :class:`NodeGraphQt.BackdropNode`
+    **Inherited by:**
+        :class:`NodeGraphQt.BaseNode`,
+        :class:`NodeGraphQt.BackdropNode`
 
     Args:
         qgraphics_item (AbstractNodeItem): graphic item used for drawing.

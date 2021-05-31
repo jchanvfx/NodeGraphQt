@@ -3,7 +3,7 @@ import math
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from ..constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
+from NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
 
 
 class SlicerPipeItem(QtWidgets.QGraphicsPathItem):

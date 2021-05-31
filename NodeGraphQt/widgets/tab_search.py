@@ -4,7 +4,9 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
+from NodeGraphQt.widgets.stylesheet import (STYLE_TABSEARCH,
+                                            STYLE_TABSEARCH_LIST,
+                                            STYLE_QMENU)
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
