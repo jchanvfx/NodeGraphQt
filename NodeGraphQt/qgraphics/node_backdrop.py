@@ -2,7 +2,7 @@
 from Qt import QtGui, QtCore, QtWidgets
 
 from .node_abstract import AbstractNodeItem
-from .pipe import Pipe
+from .pipe import PipeItem
 from .port import PortItem
 from ..constants import (Z_VAL_PIPE,
                          NODE_SEL_COLOR,
@@ -134,7 +134,7 @@ class BackdropNodeItem(AbstractNodeItem):
             rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]
 
-            if isinstance(item, (PortItem, Pipe)):
+            if isinstance(item, (PortItem, PipeItem)):
                 self.setFlag(self.ItemIsMovable, False)
                 return
             if self.selected:
