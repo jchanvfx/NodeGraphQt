@@ -416,17 +416,3 @@ class NodeObject(object):
             self.model.pos = self.view.xy_pos
 
         return self.model.pos
-
-    def hide(self):
-        """
-        Hide node.
-        """
-        self.view.visible = False
-        self.model.visible = False
-
-    def show(self):
-        """
-        Show node.
-        """
-        self.view.visible = True
-        self.model.visible = True

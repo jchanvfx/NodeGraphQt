@@ -68,12 +68,13 @@ class NodeModel(object):
         self.disabled = False
         self.selected = False
         self.visible = True
-        self.dynamic_port = False
         self.width = 100.0
         self.height = 80.0
         self.pos = [0.0, 0.0]
         self.inputs = {}
         self.outputs = {}
+        self.ports_removable = False
+
         self._custom_prop = {}
 
         # node graph model set at node added time.
@@ -241,7 +242,7 @@ class NodeModel(object):
         input_ports = []
         output_ports = []
         for name, model in node_dict.pop('inputs').items():
-            if self.dynamic_port:
+            if self.ports_removable:
                 input_ports.append({
                     'name': name,
                     'multi_connection': model.multi_connection,
@@ -251,7 +252,7 @@ class NodeModel(object):
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
-            if self.dynamic_port:
+            if self.ports_removable:
                 output_ports.append({
                     'name': name,
                     'multi_connection': model.multi_connection,
@@ -265,7 +266,7 @@ class NodeModel(object):
         if outputs:
             node_dict['outputs'] = outputs
 
-        if self.dynamic_port:
+        if self.ports_removable:
             node_dict['input_ports'] = input_ports
             node_dict['output_ports'] = output_ports
 

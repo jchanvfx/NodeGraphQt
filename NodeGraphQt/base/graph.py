@@ -1185,7 +1185,7 @@ class NodeGraph(QtCore.QObject):
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'))
 
-                if n_data.get('dynamic_port', None):
+                if n_data.get('ports_removable', None):
                     node.set_ports({
                         'input_ports': n_data['input_ports'],
                         'output_ports': n_data['output_ports']

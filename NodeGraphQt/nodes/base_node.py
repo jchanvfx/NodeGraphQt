@@ -11,7 +11,7 @@ from ..constants import (NODE_PROP_QLABEL,
                          NODE_LAYOUT_VERTICAL,
                          NODE_LAYOUT_HORIZONTAL,
                          NODE_LAYOUT_DIRECTION)
-from ..errors import PortRegistrationError, NodeWidgetError
+from ..errors import PortError, PortRegistrationError, NodeWidgetError
 from ..qgraphics.node_base import NodeItem, NodeItemVertical
 from ..widgets.node_widgets import (NodeBaseWidget,
                                     NodeComboBox,
@@ -65,41 +65,12 @@ class BaseNode(NodeObject):
         super(BaseNode, self).__init__(view)
         self._inputs = []
         self._outputs = []
-        self._has_draw = False
 
-    def draw(self, force=True):
+    def draw(self):
         """
         Redraws the node in the scene.
-
-        Args:
-            force (bool): force redraw if not visible.
         """
-        if force:
-            if not self.model.visible:
-                self._has_draw = False
-            else:
-                self.view.draw_node()
-        else:
-            if not self._has_draw:
-                self.view.draw_node()
-                self._has_draw = True
-
-    def hide(self):
-        """
-        Hide node.
-        """
-        super(BaseNode, self).hide()
-        [pipe.hide() for port in self._inputs + self._outputs
-         for pipe in port.view.connected_pipes]
-
-    def show(self):
-        """
-        Show node.
-        """
-        super(BaseNode, self).show()
-        [pipe.show() for port in self._inputs + self._outputs
-         for pipe in port.view.connected_pipes]
-        self.draw(False)
+        self.view.draw_node()
 
     def update_model(self):
         """
@@ -371,6 +342,10 @@ class BaseNode(NodeObject):
         """
         Delete input port.
 
+        Warnings:
+            You can only delete ports if the node has "ports_removable"
+            enabled see :meth:`BaseNode.set_ports_removable`.
+
         Args:
             port (str or int): port name or index.
         """
@@ -378,6 +353,12 @@ class BaseNode(NodeObject):
             port = self.get_input(port)
             if port is None:
                 return
+        if not self.ports_removable():
+            raise PortError(
+                'Port "{}" can\'t be deleted on this node because '
+                '"ports_removable" is not enabled.'.format(port.name()))
+        if port.locked():
+            raise PortError('Error: Can\'t delete a port that is locked!')
         self._inputs.remove(port)
         self._model.inputs.pop(port.name())
         self._view.delete_input(port.view)
@@ -388,6 +369,10 @@ class BaseNode(NodeObject):
         """
         Delete output port.
 
+        Warnings:
+            You can only delete ports if the node has "ports_removable"
+            enabled see :meth:`BaseNode.set_ports_removable`.
+
         Args:
             port (str or int): port name or index.
         """
@@ -395,15 +380,49 @@ class BaseNode(NodeObject):
             port = self.get_output(port)
             if port is None:
                 return
+        if not self.ports_removable():
+            raise PortError(
+                'Port "{}" can\'t be deleted on this node because '
+                '"ports_removable" is not enabled.'.format(port.name()))
+        if port.locked():
+            raise PortError('Error: Can\'t delete a port that is locked!')
         self._outputs.remove(port)
         self._model.outputs.pop(port.name())
         self._view.delete_output(port.view)
         port.model.node = None
         self.draw()
 
+    def set_ports_removable(self, mode=False):
+        """
+        Allow ports to be removable on this node.
+
+        See Also:
+            :meth:`BaseNode.ports_removable`
+
+        Args:
+            mode (bool): true to allow.
+        """
+        self.model.ports_removable = mode
+
+    def ports_removable(self):
+        """
+        Return true if ports can be deleted on this node.
+
+        See Also:
+            :meth:`BaseNode.set_ports_removable`
+
+        Returns:
+            bool: true if ports can be deleted.
+        """
+        return self.model.ports_removable
+
     def set_ports(self, port_data):
         """
-        Create node input and output ports from specified port data.
+        Create node input and output ports from serialized port data.
+
+        Warnings:
+            You can only use this function if the node has
+            "ports_removable" enabled see :meth:`BaseNode.set_ports_removable`
 
         Hint:
             example snippet of port data.
@@ -433,6 +452,10 @@ class BaseNode(NodeObject):
         Args:
             port_data(dict): port data.
         """
+        if not self.ports_removable():
+            raise PortError(
+                'Ports cannot be set on this node because '
+                '"ports_removable" is not enabled on this node.')
 
         for port in self._inputs:
             self._view.delete_input(port.view)
@@ -444,6 +467,7 @@ class BaseNode(NodeObject):
         self._outputs = []
         self._model.outputs = {}
         self._model.inputs = {}
+
         [self.add_input(name=port['name'],
                         multi_input=port['multi_connection'],
                         display_name=port['display_name'])
