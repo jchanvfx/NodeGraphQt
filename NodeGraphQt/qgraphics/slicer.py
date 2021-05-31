@@ -6,13 +6,13 @@ from Qt import QtCore, QtGui, QtWidgets
 from ..constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
 
 
-class SlicerPipe(QtWidgets.QGraphicsPathItem):
+class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
     """
     Base item used for drawing the pipe connection slicer.
     """
 
     def __init__(self):
-        super(SlicerPipe, self).__init__()
+        super(SlicerPipeItem, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 2)
 
     def paint(self, painter, option, widget):

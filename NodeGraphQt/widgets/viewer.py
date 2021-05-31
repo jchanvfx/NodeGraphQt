@@ -20,9 +20,9 @@ from ..constants import (IN_PORT, OUT_PORT,
                          PIPE_LAYOUT_CURVED)
 from ..qgraphics.node_abstract import AbstractNodeItem
 from ..qgraphics.node_backdrop import BackdropNodeItem
-from ..qgraphics.pipe import Pipe, LivePipe
+from ..qgraphics.pipe import PipeItem, LivePipeItem
 from ..qgraphics.port import PortItem
-from ..qgraphics.slicer import SlicerPipe
+from ..qgraphics.slicer import SlicerPipeItem
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -87,11 +87,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         )
         self._rubber_band.isActive = False
 
-        self._LIVE_PIPE = LivePipe()
+        self._LIVE_PIPE = LivePipeItem()
         self._LIVE_PIPE.setVisible(False)
         self.scene().addItem(self._LIVE_PIPE)
 
-        self._SLICER_PIPE = SlicerPipe()
+        self._SLICER_PIPE = SlicerPipeItem()
         self._SLICER_PIPE.setVisible(False)
         self.scene().addItem(self._SLICER_PIPE)
 
@@ -219,7 +219,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def _on_pipes_sliced(self, path):
         ports = []
         for i in self.scene().items(path):
-            if isinstance(i, Pipe) and i != self._LIVE_PIPE:
+            if isinstance(i, PipeItem) and i != self._LIVE_PIPE:
                 if any([i.input_port.locked, i.output_port.locked]):
                     continue
                 ports.append([i.input_port, i.output_port])
@@ -295,7 +295,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         items = self._items_near(map_pos, None, 20, 20)
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        pipes = [i for i in items if isinstance(i, Pipe)]
+        pipes = [i for i in items if isinstance(i, PipeItem)]
 
         if nodes:
             self.MMB_state = False
@@ -455,7 +455,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 if self.pipe_collision:
                     colliding_pipes = [
                         i for i in node.collidingItems()
-                        if isinstance(i, Pipe) and i.isVisible()
+                        if isinstance(i, PipeItem) and i.isVisible()
                     ]
                     for pipe in colliding_pipes:
                         if not pipe.input_port:
@@ -599,7 +599,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 node = item
             elif isinstance(item, PortItem):
                 port = item
-            elif isinstance(item, Pipe):
+            elif isinstance(item, PipeItem):
                 pipe = item
             if any([node, port, pipe]):
                 break
@@ -794,7 +794,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         establish a new pipe connection.
         (adds a new pipe item to draw between 2 ports)
         """
-        pipe = Pipe()
+        pipe = PipeItem()
         self.scene().addItem(pipe)
         pipe.set_connections(start_port, end_port)
         pipe.draw_path(pipe.input_port, pipe.output_port)
@@ -940,7 +940,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         excl = [self._LIVE_PIPE, self._SLICER_PIPE]
         return [i for i in self.scene().items()
-                if isinstance(i, Pipe) and i not in excl]
+                if isinstance(i, PipeItem) and i not in excl]
 
     def all_nodes(self):
         """
@@ -970,7 +970,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             list[Pipe]: pipe items.
         """
         pipes = [i for i in self.scene().selectedItems()
-                 if isinstance(i, Pipe)]
+                 if isinstance(i, PipeItem)]
         return pipes
 
     def selected_items(self):
@@ -986,7 +986,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         for item in self.scene().selectedItems():
             if isinstance(item, AbstractNodeItem):
                 nodes.append(item)
-            elif isinstance(item, Pipe):
+            elif isinstance(item, PipeItem):
                 pipes.append(item)
         return nodes, pipes
 
