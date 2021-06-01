@@ -816,11 +816,9 @@ class NodeItemVertical(NodeItem):
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
-        path = QtGui.QPainterPath()
-        path.addRoundedRect(border_rect, radius, radius)
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(pen)
-        painter.drawPath(path)
+        painter.drawRoundedRect(border_rect, radius, radius)
 
         painter.restore()
 
@@ -893,9 +891,9 @@ class NodeItemVertical(NodeItem):
         # (do all the graphic item layout offsets here)
 
         # arrange label text
-        self.align_label(h_offset=8)
+        self.align_label(h_offset=6, v_offset=6)
         # arrange icon
-        self.align_icon(h_offset=6, v_offset=-4)
+        self.align_icon(h_offset=4, v_offset=-2)
         # arrange input and output ports.
         self.align_ports()
         # arrange node widgets
