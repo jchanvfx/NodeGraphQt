@@ -203,9 +203,12 @@ class BackdropNodeItem(AbstractNodeItem):
         painter.drawRoundedRect(rect, radius, radius)
 
         top_rect = QtCore.QRectF(rect.x(), rect.y(), rect.width(), 26.0)
-        painter.setBrush(QtGui.QColor(*self.color))
+        painter.setBrush(QtGui.QBrush(QtGui.QColor(*self.color)))
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(top_rect, radius, radius)
+        for pos in [top_rect.left(), top_rect.right() - 5.0]:
+            painter.drawRect(
+                QtCore.QRectF(pos, top_rect.bottom() - 5.0, 5.0, 5.0))
 
         if self.backdrop_text:
             painter.setPen(QtGui.QColor(*self.text_color))
