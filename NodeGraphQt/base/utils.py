@@ -148,8 +148,7 @@ def _open_session(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    viewer = graph.viewer()
-    file_path = viewer.load_dialog(current)
+    file_path = graph.load_dialog(current)
     if file_path:
         graph.load_session(file_path)
 
@@ -162,8 +161,7 @@ def _import_session(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    viewer = graph.viewer()
-    file_path = viewer.load_dialog(current)
+    file_path = graph.load_dialog(current)
     if file_path:
         graph.import_session(file_path)
 
@@ -193,8 +191,7 @@ def _save_session_as(graph):
         graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
-    viewer = graph.viewer()
-    file_path = viewer.save_dialog(current)
+    file_path = graph.save_dialog(current)
     if file_path:
         graph.save_session(file_path)
 
@@ -206,8 +203,7 @@ def _new_session(graph):
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
     """
-    viewer = graph.viewer()
-    if viewer.question_dialog('Clear Current Session?', 'Clear Session'):
+    if graph.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
 
 
