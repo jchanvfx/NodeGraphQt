@@ -17,6 +17,7 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
         super(XDisabledItem, self).__init__(parent)
         self.setZValue(Z_VAL_NODE_WIDGET + 2)
         self.setVisible(False)
+        self.proxy_mode = False
         self.color = (0, 0, 0, 255)
         self.text = text
 
@@ -41,11 +42,12 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                                  rect.top() - (margin / 2),
                                  rect.width() + margin,
                                  rect.height() + margin)
-        pen = QtGui.QPen(QtGui.QColor(*self.color), 8)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-        painter.setPen(pen)
-        painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
-        painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
+        if not self.proxy_mode:
+            pen = QtGui.QPen(QtGui.QColor(*self.color), 8)
+            pen.setCapStyle(QtCore.Qt.RoundCap)
+            painter.setPen(pen)
+            painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
+            painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
 
         bg_color = QtGui.QColor(*self.color)
         bg_color.setAlpha(100)
@@ -58,12 +60,17 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
         painter.setBrush(bg_color)
         painter.drawRoundedRect(bg_rect, 5, 5)
 
-        pen = QtGui.QPen(QtGui.QColor(155, 0, 0, 255), 0.7)
+        if not self.proxy_mode:
+            point_size = 4.0
+            pen = QtGui.QPen(QtGui.QColor(155, 0, 0, 255), 0.7)
+        else:
+            point_size = 8.0
+            pen = QtGui.QPen(QtGui.QColor(155, 0, 0, 255), 4.0)
+
         painter.setPen(pen)
         painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
         painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
 
-        point_size = 4.0
         point_pos = (dis_rect.topLeft(), dis_rect.topRight(),
                      dis_rect.bottomLeft(), dis_rect.bottomRight())
         painter.setBrush(QtGui.QColor(255, 0, 0, 255))
@@ -74,7 +81,7 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                 p, QtCore.QSizeF(point_size, point_size))
             painter.drawEllipse(point_rect)
 
-        if self.text:
+        if self.text and not self.proxy_mode:
             font = painter.font()
             font.setPointSize(10)
 

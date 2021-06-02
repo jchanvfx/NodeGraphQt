@@ -50,15 +50,15 @@ class NodeFactory(object):
             node_type (str): node type or optional alias name.
 
         Returns:
-            NodeGraphQt.BaseNode: new node class object.
+            NodeGraphQt.NodeObject: new node class object.
         """
         if node_type in self.aliases:
             node_type = self.aliases[node_type]
 
-        NodeClass = self.__nodes.get(node_type)
-        if not NodeClass:
+        _NodeClass = self.__nodes.get(node_type)
+        if not _NodeClass:
             print('can\'t find node type {}'.format(node_type))
-        return NodeClass
+        return _NodeClass
 
     def register_node(self, node, alias=None):
         """
@@ -76,9 +76,9 @@ class NodeFactory(object):
 
         if self.__nodes.get(node_type):
             raise NodeRegistrationError(
-                'id "{}" already registered! '
+                'node type "{}" already registered to "{}"! '
                 'Please specify a new plugin class name or __identifier__.'
-                .format(node_type))
+                .format(node_type, self.__nodes[node_type]))
         self.__nodes[node_type] = node
 
         if self.__names.get(name):

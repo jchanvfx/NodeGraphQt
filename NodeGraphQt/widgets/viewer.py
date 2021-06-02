@@ -194,12 +194,34 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
 
     def _combined_rect(self, nodes):
+        """
+        Returns a QRectF with the combined size of the provided node items.
+
+        Args:
+            nodes (list[AbstractNodeItem]): list of node gqgraphics items.
+
+        Returns:
+            QtCore.QRectF: combined rect
+        """
         group = self.scene().createItemGroup(nodes)
         rect = group.boundingRect()
         self.scene().destroyItemGroup(group)
         return rect
 
     def _items_near(self, pos, item_type=None, width=20, height=20):
+        """
+        Filter node graph items from the specified position, width and
+        height area.
+
+        Args:
+            pos (QtCore.QPoint): scene pos.
+            item_type: filter item type. (optional)
+            width (int): width area.
+            height (int): height area.
+
+        Returns:
+            list: qgraphics items from the scene.
+        """
         x, y = pos.x() - width, pos.y() - height
         rect = QtCore.QRectF(x, y, width, height)
         items = []
@@ -212,10 +234,26 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return items
 
     def _on_search_submitted(self, node_type):
+        """
+        Slot function triggered when the ``TabSearchMenuWidget`` has
+        submitted a search.
+
+        This will emit the "search_triggered" signal and tell the parent node
+        graph to create a new node object.
+
+        Args:
+            node_type (str): node type identifier.
+        """
         pos = self.mapToScene(self._previous_pos)
         self.search_triggered.emit(node_type, (pos.x(), pos.y()))
 
     def _on_pipes_sliced(self, path):
+        """
+        Triggered when the slicer pipe is active
+
+        Args:
+            path (QtGui.QPainterPath): slicer path.
+        """
         ports = []
         for i in self.scene().items(path):
             if isinstance(i, PipeItem) and i != self._LIVE_PIPE:
@@ -1058,6 +1096,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return pipes
 
     def center_selection(self, nodes=None):
+        """
+        Center on the given nodes or all nodes by default.
+
+        Args:
+            nodes (list[AbstractNodeItem]): a list of node items.
+        """
         if not nodes:
             if self.selected_nodes():
                 nodes = self.selected_nodes()
@@ -1142,11 +1186,30 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.reset_zoom(self._scene_range.center())
 
     def force_update(self):
+        """
+        Redraw the current node graph scene.
+        """
         self._update_scene()
 
     def scene_rect(self):
+        """
+        Returns the scene rect size.
+
+        Returns:
+            list[float]: x, y, width, height
+        """
         return [self._scene_range.x(), self._scene_range.y(),
                 self._scene_range.width(), self._scene_range.height()]
+
+    def set_scene_rect(self, rect):
+        """
+        Sets the scene rect and redraws the scene.
+
+        Args:
+            rect (list[float]): x, y, width, height
+        """
+        self._scene_range = QtCore.QRectF(*rect)
+        self._update_scene()
 
     def scene_center(self):
         """
@@ -1171,11 +1234,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         cent = self._combined_rect(nodes).center()
         return [cent.x(), cent.y()]
 
-    def set_scene_rect(self, rect):
-        self._scene_range = QtCore.QRectF(*rect)
-        self._update_scene()
-
     def clear_key_state(self):
+        """
+        Resets the Ctrl, Shift, Alt modifiers key states.
+        """
         self.CTRL_state = False
         self.SHIFT_state = False
         self.ALT_state = False

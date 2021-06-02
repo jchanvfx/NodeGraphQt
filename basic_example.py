@@ -7,6 +7,7 @@ from Qt import QtCore, QtGui, QtWidgets
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
+                         GroupNode,
                          PropertiesBinWidget,
                          NodesTreeWidget,
                          setup_context_menu)
@@ -133,6 +134,26 @@ class MyNode(BaseNode):
         self.add_output('triangle port', painter_func=draw_triangle_port)
 
 
+class MyGroup(GroupNode):
+    """
+    example test group node.
+    """
+
+    # set a unique node identifier.
+    __identifier__ = 'com.chantasticvfx'
+
+    # set the initial default node name.
+    NODE_NAME = 'group node'
+
+    def __init__(self):
+        super(MyGroup, self).__init__()
+        self.set_color(50, 8, 25)
+
+        # create input and output port.
+        self.add_input('in')
+        self.add_output('out')
+
+
 if __name__ == '__main__':
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication([])
@@ -170,7 +191,7 @@ if __name__ == '__main__':
 
     # registered nodes.
     nodes_to_reg = [
-        MyNode,
+        MyNode, MyGroup,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
         widget_nodes.DropdownMenuNode,
@@ -212,21 +233,27 @@ if __name__ == '__main__':
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(this_path, 'example_nodes', 'pear.png')
-    bar_node = graph.create_node('nodes.basic.BarNode')
-    bar_node.set_icon(icon)
-    bar_node.set_name('icon node')
+    icon_node = graph.create_node('nodes.basic.BarNode')
+    icon_node.set_icon(icon)
+    icon_node.set_name('icon node')
+
+    # create the group node
+    group_node = graph.create_node('com.chantasticvfx.MyGroup')
 
     # connect the nodes.
-    foo_node.set_output(0, bar_node.input(2))
-    menu_node.set_input(0, bar_node.output(1))
-    bar_node.set_input(0, text_node.output(0))
+    foo_node.set_output(0, icon_node.input(2))
+    foo_node.set_output(1, checkbox_node.input(0))
+    text_node.set_output(0, checkbox_node.input(0))
+    text_node.set_output(0, group_node.input(0))
+    menu_node.set_input(0, icon_node.output(1))
+    icon_node.set_input(0, text_node.output(0))
 
     # auto layout nodes.
     graph.auto_layout_nodes()
 
     # wrap a backdrop node.
     backdrop_node = graph.create_node('Backdrop')
-    backdrop_node.wrap_nodes([text_node, checkbox_node])
+    backdrop_node.wrap_nodes([icon_node, menu_node])
 
     graph.fit_to_selection()
 

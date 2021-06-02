@@ -1,7 +1,10 @@
 #!/usr/bin/python
 from NodeGraphQt.base.commands import PropertyChangedCmd
 from NodeGraphQt.base.model import NodeModel
-from NodeGraphQt.constants import NODE_PROP
+from NodeGraphQt.constants import (NODE_PROP,
+                                   NODE_LAYOUT_DIRECTION,
+                                   NODE_LAYOUT_VERTICAL,
+                                   NODE_LAYOUT_HORIZONTAL)
 
 
 class _ClassProperty(object):
@@ -23,7 +26,15 @@ class NodeObject(object):
         :class:`NodeGraphQt.BackdropNode`
 
     Args:
-        qgraphics_item (AbstractNodeItem): graphic item used for drawing.
+        qgraphics_views (dict):
+             dictionary of qgraphics items with the node layout type as the key.
+             (the qgraphics items must be a subclass of ``AbstractNodeItem``)
+            eg.
+                .. code-block:: python
+                    {
+                        NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL: ``<qgraphics item>``
+                        NodeGraphQt.constants.NODE_LAYOUT_VERTICAL: ``<qgraphics item>``
+                    }
     """
 
     # Unique node identifier domain. `eg.` ``"com.chantacticvfx"``
@@ -32,13 +43,25 @@ class NodeObject(object):
     # Base node name.
     NODE_NAME = None
 
-    def __init__(self, qgraphics_item=None):
-        assert qgraphics_item, 'qgraphics_item item cannot be None.'
+    def __init__(self, qgraphics_views=None):
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
-        self._view = qgraphics_item
+
+        _NodeItem = None
+        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+            _NodeItem = qgraphics_views.get(NODE_LAYOUT_VERTICAL)
+        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+            _NodeItem = qgraphics_views.get(NODE_LAYOUT_HORIZONTAL)
+        if _NodeItem is None:
+            raise ValueError(
+                'qgraphics item for the {} node layout can\'t be None!'.format({
+                    NODE_LAYOUT_VERTICAL: 'vertical',
+                    NODE_LAYOUT_HORIZONTAL: 'horizontal'
+                }[NODE_LAYOUT_DIRECTION]))
+
+        self._view = _NodeItem()
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
@@ -90,14 +113,25 @@ class NodeObject(object):
 
     def set_view(self, item):
         """
-        Sets the qgraphics item to use for the scene.
+        Set a new ``QGraphicsItem`` item to be used as the view.
+        (the provided qgraphics item must be subclassed from the
+        ``AbstractNodeItem`` object.)
 
         Args:
             item (NodeGraphQt.qgraphics.node_abstract.AbstractNodeItem): node item.
         """
-        self._view = item
-        self._view.id = self.model.id
+        if self._view:
+            old_view = self._view
+            scene = self._view.scene()
+            scene.removeItem(old_view)
+            self._view = item
+            scene.addItem(self._view)
+        else:
+            self._view = item
         self.NODE_NAME = self._view.name
+
+        # update the view.
+        self.update()
 
     @property
     def model(self):
@@ -111,7 +145,8 @@ class NodeObject(object):
 
     def set_model(self, model):
         """
-        Set the node model.
+        Set a new model to the node model.
+        (Setting a new node model will also update the views qgraphics item.)
 
         Args:
             model (NodeGraphQt.base.model.NodeModel): node model object.
@@ -119,6 +154,9 @@ class NodeObject(object):
         self._model = model
         self._model.type_ = self.type_
         self._model.id = self.view.id
+
+        # update the view.
+        self.update()
 
     def update_model(self):
         """

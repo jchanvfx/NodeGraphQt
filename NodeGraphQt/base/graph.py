@@ -780,7 +780,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.BaseNode]): a list of nodes.
         """
-        self._viewer.center_selection(nodes)
+        self._viewer.center_selection([n.view for n in nodes])
 
     def center_selection(self):
         """
@@ -806,7 +806,7 @@ class NodeGraph(QtCore.QObject):
         Register the node to the :meth:`NodeGraph.node_factory`
 
         Args:
-            node (NodeGraphQt.NodeObject): node.
+            node (_NodeGraphQt.NodeObject): node object.
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
@@ -839,11 +839,11 @@ class NodeGraph(QtCore.QObject):
             pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
 
         Returns:
-            BaseNode or NodeObject: the created instance of the node.
+            _NodeObject: the created instance of the node.
         """
-        NodeCls = self._node_factory.create_node_instance(node_type)
-        if NodeCls:
-            node = NodeCls()
+        _NodeCls = self._node_factory.create_node_instance(node_type)
+        if _NodeCls:
+            node = _NodeCls()
 
             node._graph = self
             node.model._graph_model = self.model
@@ -1639,18 +1639,18 @@ class NodeGraph(QtCore.QObject):
 
     def graph_rect(self):
         """
-        Get the graph viewer range.
+        Get the graph viewer range (scene size).
 
         Returns:
-            list: [x, y, width, height].
+            list[float]: [x, y, width, height].
         """
         return self._viewer.scene_rect()
 
     def set_graph_rect(self, rect):
         """
-        Set the graph viewer range.
+        Set the graph viewer range (scene size).
 
         Args:
-            rect (list): [x, y, width, height].
+            rect (list[float]): [x, y, width, height].
         """
         self._viewer.set_scene_rect(rect)

@@ -84,6 +84,7 @@ from .base.port import Port
 from .base.node import NodeObject
 from .nodes.base_node import BaseNode
 from .nodes.backdrop_node import BackdropNode
+from .nodes.group_node import GroupNode
 
 # functions
 from .base.utils import setup_context_menu
@@ -99,6 +100,7 @@ __version__ = VERSION
 __all__ = [
     'BackdropNode',
     'BaseNode',
+    'GroupNode',
     'LICENSE',
     'NodeBaseWidget',
     'NodeGraph',

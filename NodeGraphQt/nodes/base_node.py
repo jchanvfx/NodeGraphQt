@@ -9,8 +9,7 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QCHECKBOX,
                                    IN_PORT, OUT_PORT,
                                    NODE_LAYOUT_VERTICAL,
-                                   NODE_LAYOUT_HORIZONTAL,
-                                   NODE_LAYOUT_DIRECTION)
+                                   NODE_LAYOUT_HORIZONTAL)
 from NodeGraphQt.errors import (PortError,
                                 PortRegistrationError,
                                 NodeWidgetError)
@@ -56,15 +55,14 @@ class BaseNode(NodeObject):
                 self.add_output('out')
     """
 
-    NODE_NAME = 'Base Node'
+    NODE_NAME = 'Node'
 
-    def __init__(self):
-        view = None
-        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
-            view = NodeItemVertical()
-        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
-            view = NodeItem()
-        super(BaseNode, self).__init__(view)
+    def __init__(self, qgraphics_views=None):
+        qgraphics_views = qgraphics_views or {
+            NODE_LAYOUT_HORIZONTAL: NodeItem,
+            NODE_LAYOUT_VERTICAL: NodeItemVertical
+        }
+        super(BaseNode, self).__init__(qgraphics_views)
         self._inputs = []
         self._outputs = []
 
