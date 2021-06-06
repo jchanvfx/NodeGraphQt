@@ -51,9 +51,10 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
                               int(base_rect.height()/radius),
                               int(base_rect.width()/radius))
 
-        pen_color = option.palette.midlight().color().darker(130)
         if option.state & QtWidgets.QStyle.State_Selected:
             pen_color = option.palette.highlight().color()
+        else:
+            pen_color = option.palette.midlight().color().darker(130)
         pen = QtGui.QPen(pen_color, 1.0)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
@@ -101,7 +102,7 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
 
         font = painter.font()
         font_metrics = QtGui.QFontMetrics(font)
-        font_width = font_metrics.width(item.text().replace(' ', '_'))
+        font_width = font_metrics.horizontalAdvance(item.text().replace(' ', '_'))
         font_height = font_metrics.height()
         text_rect = QtCore.QRectF(
             sub_rect.center().x() - (font_width / 2),
