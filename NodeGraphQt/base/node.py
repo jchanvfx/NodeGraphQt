@@ -26,15 +26,23 @@ class NodeObject(object):
         :class:`NodeGraphQt.BackdropNode`
 
     Args:
-        qgraphics_views (dict):
-             dictionary of qgraphics items with the node layout type as the key.
-             (the qgraphics items must be a subclass of ``AbstractNodeItem``)
-            eg.
-                .. code-block:: python
-                    {
-                        NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL: ``<qgraphics item>``
-                        NodeGraphQt.constants.NODE_LAYOUT_VERTICAL: ``<qgraphics item>``
-                    }
+        qgraphics_views (dict): Dictionary with the node layout type as the key
+            and a custom graphics item subclassed from the ``AbstractNodeItem``
+            as the value.
+
+            .. code-block:: python
+
+                # snippet taken from the NodeGraphQt.BaseNode class.
+
+                class BaseNode(NodeObject):
+
+                    def __init__(self, qgraphics_views=None):
+                        qgraphics_views = qgraphics_views or {
+                            NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL: NodeItem,
+                            NodeGraphQt.constants.NODE_LAYOUT_VERTICAL: NodeItemVertical
+                        }
+                        super(BaseNode, self).__init__(qgraphics_views)
+
     """
 
     # Unique node identifier domain. `eg.` ``"com.chantacticvfx"``
