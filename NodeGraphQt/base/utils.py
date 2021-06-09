@@ -286,4 +286,4 @@ def _layout_graph_down(graph):
 
 def _layout_graph_up(graph):
     nodes = graph.selected_nodes() or graph.all_nodes()
-    graph.auto_layout_nodes(nodes-nodes, down_stream=False)
+    graph.auto_layout_nodes(nodes=nodes, down_stream=False)
