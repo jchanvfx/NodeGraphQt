@@ -112,7 +112,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         if index.row() == 0:
             rows = [r for r in rows if r > 0]
         else:
-            rows = [r for r in rows if index.row() <= r]
+            rows = [r for r in rows if index.row() < r]
         rm_node_ids = [self.model().item(r, 0).toolTip() for r in rows]
         node_id = self.model().item(index.row(), 0).toolTip()
         [self.model().removeRow(r) for r in rows]
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 
     widget = NodeNavigationWidget()
     widget.add_label_item('Root', 'root')
-    for i in range(1, 4):
+    for i in range(1, 6):
         widget.add_label_item('group node {}'.format(i),
                               'node_id{}'.format(i))
     widget.show()
