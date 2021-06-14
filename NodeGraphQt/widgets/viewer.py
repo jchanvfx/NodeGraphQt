@@ -4,14 +4,6 @@ import math
 
 from Qt import QtGui, QtCore, QtWidgets
 
-# use QOpenGLWidget instead of the deprecated QGLWidget to avoid
-# problems with Wayland.
-import Qt
-if Qt.IsPySide2:
-    from PySide2.QtWidgets import QOpenGLWidget
-elif Qt.IsPyQt5:
-    from PyQt5.QtWidgets import QOpenGLWidget
-
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT_CURVED
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -22,6 +14,7 @@ from NodeGraphQt.qgraphics.slicer import SlicerPipeItem
 from NodeGraphQt.widgets.dialogs import BaseDialog, FileDialog
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.tab_search import TabSearchMenuWidget
+from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -1243,4 +1236,47 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.ALT_state = False
 
     def use_OpenGL(self):
+        """
+        Use QOpenGLWidget as the viewer.
+        """
+        # use QOpenGLWidget instead of the deprecated QGLWidget to avoid
+        # problems with Wayland.
+        import Qt
+        if Qt.IsPySide2:
+            from PySide2.QtWidgets import QOpenGLWidget
+        elif Qt.IsPyQt5:
+            from PyQt5.QtWidgets import QOpenGLWidget
         self.setViewport(QOpenGLWidget())
+
+
+class NodeNavigationViewer(QtWidgets.QWidget):
+
+    # node viewer signals.
+    navigation_changed = QtCore.Signal()
+
+    def __init__(self, parent=None):
+        super(NodeNavigationViewer, self).__init__(parent)
+        self._navigator = NodeNavigationWidget()
+        self._viewer = NodeViewer()
+        self._layout = QtWidgets.QVBoxLayout(self)
+        self._layout.addWidget(self._nav_widget)
+        self._layout.addWidget(self._viewer_widget)
+
+        self._current_view = None
+        self._sub_views = {}
+
+        # wire up navigation
+        self._navigator.navigation_changed.connect(self._on_navigation_changed)
+
+    def _on_navigation_changed(self, node_id, remove_ids):
+
+        self.navigation_changed.emit(node_id, remove_ids)
+
+    def _exit_subview(self, node_id):
+        return
+
+    def add_subview(self, node_id, view):
+        return
+
+    def remove_subview(self, node_id):
+        return

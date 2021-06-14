@@ -73,10 +73,16 @@ class NodeModel(object):
         self.width = 100.0
         self.height = 80.0
         self.pos = [0.0, 0.0]
+
+        # BaseNode attrs.
         self.inputs = {}
         self.outputs = {}
-        self.ports_removable = False
+        self.port_deletion_allowed = False
 
+        # GroupNode attrs.
+        self.subgraph_session = None
+
+        # Custom
         self._custom_prop = {}
 
         # node graph model set at node added time.
@@ -221,6 +227,10 @@ class NodeModel(object):
                     'selected': False,
                     'disabled': False,
                     'visible': True,
+                    'width': 0.0,
+                    'height: 0.0,
+                    'pos': (0.0, 0.0),
+                    'custom': {},
                     'inputs': {
                         <port_name>: {<node_id>: [<port_name>, <port_name>]}
                     },
@@ -229,11 +239,8 @@ class NodeModel(object):
                     },
                     'input_ports': [<port_name>, <port_name>],
                     'output_ports': [<port_name>, <port_name>],
-                    'width': 0.0,
-                    'height: 0.0,
-                    'pos': (0.0, 0.0),
-                    'custom': {},
-                    }
+                    },
+                    subgraph_session: <sub graph session data>
                 }
         """
         node_dict = self.__dict__.copy()
@@ -244,7 +251,7 @@ class NodeModel(object):
         input_ports = []
         output_ports = []
         for name, model in node_dict.pop('inputs').items():
-            if self.ports_removable:
+            if self.port_deletion_allowed:
                 input_ports.append({
                     'name': name,
                     'multi_connection': model.multi_connection,
@@ -254,7 +261,7 @@ class NodeModel(object):
             if connected_ports:
                 inputs[name] = connected_ports
         for name, model in node_dict.pop('outputs').items():
-            if self.ports_removable:
+            if self.port_deletion_allowed:
                 output_ports.append({
                     'name': name,
                     'multi_connection': model.multi_connection,
@@ -268,9 +275,12 @@ class NodeModel(object):
         if outputs:
             node_dict['outputs'] = outputs
 
-        if self.ports_removable:
+        if self.port_deletion_allowed:
             node_dict['input_ports'] = input_ports
             node_dict['output_ports'] = output_ports
+
+        if self.subgraph_session:
+            node_dict['subgraph_session'] = self.subgraph_session
 
         custom_props = node_dict.pop('_custom_prop', {})
         if custom_props:

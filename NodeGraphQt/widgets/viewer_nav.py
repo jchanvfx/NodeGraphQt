@@ -43,17 +43,19 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         painter.drawRoundedRect(rect, roundness, roundness)
 
         if index.row() != 0:
-            m = 2.0
+            txt_offset = 8.0
+            m = 2.8
             h = rect.height()
             x, y = rect.left() + 2.0, rect.top()
             painter.setBrush(itm_color)
-            for count in range(2):
+            for count in range(3):
                 x += 2.8
                 y += m
                 h -= m * 2
                 itm_rect = QtCore.QRectF(x, y, 1.3, h)
                 painter.drawRoundedRect(itm_rect, 1.0, 1.0)
         else:
+            txt_offset = 5.0
             x = rect.left() + 2.0
             size = 10.0
             for clr in [QtGui.QColor(0, 0, 0, 80), itm_color]:
@@ -77,7 +79,7 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         )
         font_height = font_metrics.height()
         text_rect = QtCore.QRectF(
-            rect.center().x() - (font_width / 2) + 4.0,
+            rect.center().x() - (font_width / 2) + txt_offset,
             rect.center().y() - (font_height / 2),
             font_width, font_height)
         painter.drawText(text_rect, item.text())
@@ -86,7 +88,7 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
 
 class NodeNavigationWidget(QtWidgets.QListView):
 
-    node_item_selected = QtCore.Signal(str, list)
+    navigation_changed = QtCore.Signal(str, list)
 
     def __init__(self, parent=None):
         super(NodeNavigationWidget, self).__init__(parent)
@@ -116,7 +118,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         rm_node_ids = [self.model().item(r, 0).toolTip() for r in rows]
         node_id = self.model().item(index.row(), 0).toolTip()
         [self.model().removeRow(r) for r in rows]
-        self.node_item_selected.emit(node_id, rm_node_ids)
+        self.navigation_changed.emit(node_id, rm_node_ids)
 
     def clear(self):
         self.model().sourceMode().clear()
@@ -136,9 +138,14 @@ class NodeNavigationWidget(QtWidgets.QListView):
 if __name__ == '__main__':
     import sys
 
+    def on_nav_changed(selected_id, remove_ids):
+        print(selected_id, remove_ids)
+
     app = QtWidgets.QApplication(sys.argv)
 
     widget = NodeNavigationWidget()
+    widget.navigation_changed.connect(on_nav_changed)
+
     widget.add_label_item('Root', 'root')
     for i in range(1, 6):
         widget.add_label_item('group node {}'.format(i),

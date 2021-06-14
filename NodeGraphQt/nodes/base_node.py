@@ -353,7 +353,7 @@ class BaseNode(NodeObject):
             port = self.get_input(port)
             if port is None:
                 return
-        if not self.ports_removable():
+        if not self.port_deletion_allowed():
             raise PortError(
                 'Port "{}" can\'t be deleted on this node because '
                 '"ports_removable" is not enabled.'.format(port.name()))
@@ -380,7 +380,7 @@ class BaseNode(NodeObject):
             port = self.get_output(port)
             if port is None:
                 return
-        if not self.ports_removable():
+        if not self.port_deletion_allowed():
             raise PortError(
                 'Port "{}" can\'t be deleted on this node because '
                 '"ports_removable" is not enabled.'.format(port.name()))
@@ -392,7 +392,7 @@ class BaseNode(NodeObject):
         port.model.node = None
         self.draw()
 
-    def set_ports_removable(self, mode=False):
+    def set_port_deletion_allowed(self, mode=False):
         """
         Allow ports to be removable on this node.
 
@@ -402,9 +402,9 @@ class BaseNode(NodeObject):
         Args:
             mode (bool): true to allow.
         """
-        self.model.ports_removable = mode
+        self.model.port_deletion_allowed = mode
 
-    def ports_removable(self):
+    def port_deletion_allowed(self):
         """
         Return true if ports can be deleted on this node.
 
@@ -414,7 +414,7 @@ class BaseNode(NodeObject):
         Returns:
             bool: true if ports can be deleted.
         """
-        return self.model.ports_removable
+        return self.model.port_deletion_allowed
 
     def set_ports(self, port_data):
         """
@@ -452,7 +452,7 @@ class BaseNode(NodeObject):
         Args:
             port_data(dict): port data.
         """
-        if not self.ports_removable():
+        if not self.port_deletion_allowed():
             raise PortError(
                 'Ports cannot be set on this node because '
                 '"ports_removable" is not enabled on this node.')

@@ -1169,9 +1169,9 @@ class NodeGraph(QtCore.QObject):
         nodes = {}
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
-            NodeCls = self._node_factory.create_node_instance(identifier)
-            if NodeCls:
-                node = NodeCls()
+            _NodeCls = self._node_factory.create_node_instance(identifier)
+            if _NodeCls:
+                node = _NodeCls()
                 node.NODE_NAME = n_data.get('name', node.NODE_NAME)
                 # set properties.
                 for prop in node.model.properties.keys():
@@ -1184,7 +1184,7 @@ class NodeGraph(QtCore.QObject):
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'))
 
-                if n_data.get('ports_removable', None):
+                if n_data.get('port_deletion_allowed', None):
                     node.set_ports({
                         'input_ports': n_data['input_ports'],
                         'output_ports': n_data['output_ports']
@@ -1561,7 +1561,7 @@ class NodeGraph(QtCore.QObject):
 
         self.end_undo()
 
-    # prompt dialog functions.
+    # convenience dialog functions.
 
     def question_dialog(self, text, title='Node Graph'):
         """
@@ -1629,6 +1629,16 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.save_dialog(current_dir, ext)
 
+    # group node & sub graph functions.
+
+    def expand_group_node(self, group_node=None):
+
+        return
+
+    def collapse_group_node(self, group_node=None):
+        return
+
+
     ### ---
 
     def use_OpenGL(self):
@@ -1654,3 +1664,24 @@ class NodeGraph(QtCore.QObject):
             rect (list[float]): [x, y, width, height].
         """
         self._viewer.set_scene_rect(rect)
+
+
+class SubGraph(NodeGraph):
+
+    subgraph_exited = QtCore.Signal()
+
+    def __init__(self, parent=None, node=None):
+        super(SubGraph, self).__init__(parent)
+        self._node = node
+
+    @property
+    def node(self):
+        return self._node
+
+    @property
+    def widget(self):
+        if self._widget is None:
+            self._widget = QtWidgets.QWidget()
+            layout = QtWidgets.QVBoxLayout(self._widget)
+            layout.addWidget(self._viewer)
+        return self._widget
