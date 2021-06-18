@@ -9,8 +9,8 @@
 
 ---
 
-NodeGraphQt is a node graph framework that can be implemented and re purposed into 
-applications that supports PySide2.
+NodeGraphQt is a node graph framework for PySide2 that can be implemented and re-purposed into 
+applications.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
