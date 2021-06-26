@@ -1,69 +1,28 @@
 #!/usr/bin/python
-from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore
-
-from NodeGraphQt.constants import (PIPE_LAYOUT_CURVED,
-                         PIPE_LAYOUT_STRAIGHT,
-                         PIPE_LAYOUT_ANGLE,
-                         NODE_LAYOUT_VERTICAL,
-                         NODE_LAYOUT_HORIZONTAL,
-                         NODE_LAYOUT_DIRECTION)
-
-
-# menu
-def setup_context_menu(graph):
+def build_context_menu(graph):
     """
-    populate the specified graph's context menu with essential menus commands.
-
-    example code:
-
-    .. code-block:: python
-        :linenos:
-
-        from NodeGraphQt import NodeGraph, setup_context_menu
-
-        graph = NodeGraph()
-        setup_context_menu(graph)
-
-    result:
-
-    .. image:: _images/menu_hotkeys.png
-        :width: 300px
+    populate the node graph's context menu with essential menus commands.
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
     """
-    root_menu = graph.get_context_menu('graph')
+    from Qt import QtGui
+    graph_menu = graph.get_context_menu('graph')
 
-    file_menu = root_menu.add_menu('&File')
-    edit_menu = root_menu.add_menu('&Edit')
+    # "File" menu.
+    # --------------------------------------------------------------------------
+    file_menu = graph_menu.add_menu('&File')
 
-    # create "File" menu.
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
     file_menu.add_command('Import...', _import_session)
     file_menu.add_command('Save...', _save_session, QtGui.QKeySequence.Save)
     file_menu.add_command('Save As...', _save_session_as, 'Ctrl+Shift+S')
     file_menu.add_command('New Session', _new_session)
 
-    file_menu.add_separator()
-
-    file_menu.add_command('Zoom In', _zoom_in, '=')
-    file_menu.add_command('Zoom Out', _zoom_out, '-')
-    file_menu.add_command('Reset Zoom', _reset_zoom, 'H')
-
-    # create "Edit" menu.
-    undo_actn = graph.undo_stack().createUndoAction(graph.viewer(), '&Undo')
-    if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-        undo_actn.setShortcutVisibleInContextMenu(True)
-    undo_actn.setShortcuts(QtGui.QKeySequence.Undo)
-    edit_menu.qmenu.addAction(undo_actn)
-
-    redo_actn = graph.undo_stack().createRedoAction(graph.viewer(), '&Redo')
-    if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-        redo_actn.setShortcutVisibleInContextMenu(True)
-    redo_actn.setShortcuts(QtGui.QKeySequence.Redo)
-    edit_menu.qmenu.addAction(redo_actn)
+    # "Edit" menu.
+    # --------------------------------------------------------------------------
+    edit_menu = graph_menu.add_menu('&Edit')
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
@@ -93,11 +52,21 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
+    edit_menu.add_command('Zoom In', _zoom_in, '=')
+    edit_menu.add_command('Zoom Out', _zoom_out, '-')
+    edit_menu.add_command('Reset Zoom', _reset_zoom, 'H')
+
+    edit_menu.add_separator()
+
+    # "Pipe" submenu.
+    # --------------------------------------------------------------------------
     pipe_menu = edit_menu.add_menu('&Pipe')
     pipe_menu.add_command('Curved Pipe', _curved_pipe)
     pipe_menu.add_command('Straight Pipe', _straight_pipe)
     pipe_menu.add_command('Angle Pipe', _angle_pipe)
 
+    # "Grid Mode" submenu.
+    # --------------------------------------------------------------------------
     bg_menu = edit_menu.add_menu('&Grid Mode')
     bg_menu.add_command('None', _bg_grid_none)
     bg_menu.add_command('Lines', _bg_grid_lines)
@@ -105,16 +74,14 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
-
+# ------------------------------------------------------------------------------
 # --- menu command functions. ---
+# ------------------------------------------------------------------------------
 
 
 def _zoom_in(graph):
     """
     Set the node graph to zoom in by 0.1
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     zoom = graph.get_zoom() + 0.1
     graph.set_zoom(zoom)
@@ -123,24 +90,21 @@ def _zoom_in(graph):
 def _zoom_out(graph):
     """
     Set the node graph to zoom in by 0.1
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     zoom = graph.get_zoom() - 0.2
     graph.set_zoom(zoom)
 
 
 def _reset_zoom(graph):
+    """
+    Reset zoom level.
+    """
     graph.reset_zoom()
 
 
 def _open_session(graph):
     """
     Prompts a file open dialog to load a session.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
     file_path = graph.load_dialog(current)
@@ -151,9 +115,6 @@ def _open_session(graph):
 def _import_session(graph):
     """
     Prompts a file open dialog to load a session.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
     file_path = graph.load_dialog(current)
@@ -164,9 +125,6 @@ def _import_session(graph):
 def _save_session(graph):
     """
     Prompts a file save dialog to serialize a session if required.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
     if current:
@@ -181,9 +139,6 @@ def _save_session(graph):
 def _save_session_as(graph):
     """
     Prompts a file save dialog to serialize a session.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     current = graph.current_session()
     file_path = graph.save_dialog(current)
@@ -194,9 +149,6 @@ def _save_session_as(graph):
 def _new_session(graph):
     """
     Prompts a warning dialog to new a node graph session.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     if graph.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
@@ -205,9 +157,6 @@ def _new_session(graph):
 def _clear_undo(graph):
     """
     Prompts a warning dialog to clear undo.
-
-    Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
     """
     viewer = graph.viewer()
     msg = 'Clear all undo history, Are you sure?'
@@ -216,74 +165,134 @@ def _clear_undo(graph):
 
 
 def _copy_nodes(graph):
+    """
+    Copy nodes to the clipboard.
+    """
     graph.copy_nodes()
 
 
 def _cut_nodes(graph):
+    """
+    Cut nodes to the clip board.
+    """
     graph.cut_nodes()
 
 
 def _paste_nodes(graph):
+    """
+    Pastes nodes copied from the clipboard.
+    """
     graph.paste_nodes()
 
 
 def _delete_nodes(graph):
+    """
+    Delete selected node.
+    """
     graph.delete_nodes(graph.selected_nodes())
 
 
 def _select_all_nodes(graph):
+    """
+    Select all nodes.
+    """
     graph.select_all()
 
 
 def _clear_node_selection(graph):
+    """
+    Clear node selection.
+    """
     graph.clear_selection()
 
 
 def _disable_nodes(graph):
+    """
+    Toggle disable on selected nodes.
+    """
     graph.disable_nodes(graph.selected_nodes())
 
 
 def _duplicate_nodes(graph):
+    """
+    Duplicated selected nodes.
+    """
     graph.duplicate_nodes(graph.selected_nodes())
 
 
 def _fit_to_selection(graph):
+    """
+    Sets the zoom level to fit selected nodes.
+    """
     graph.fit_to_selection()
 
 
 def _show_undo_view(graph):
+    """
+    Show the undo list widget.
+    """
     graph.undo_view.show()
 
 
 def _curved_pipe(graph):
+    """
+    Set node graph pipes layout as curved.
+    """
+    from NodeGraphQt.constants import PIPE_LAYOUT_CURVED
     graph.set_pipe_style(PIPE_LAYOUT_CURVED)
 
 
 def _straight_pipe(graph):
+    """
+    Set node graph pipes layout as straight.
+    """
+    from NodeGraphQt.constants import PIPE_LAYOUT_STRAIGHT
     graph.set_pipe_style(PIPE_LAYOUT_STRAIGHT)
 
 
 def _angle_pipe(graph):
+    """
+    Set node graph pipes layout as angled.
+    """
+    from NodeGraphQt.constants import PIPE_LAYOUT_ANGLE
     graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
 
 
 def _bg_grid_none(graph):
-    graph.set_grid_mode(0)
+    """
+    Turn off the background patterns.
+    """
+    from NodeGraphQt.constants import VIEWER_GRID_NONE
+    graph.set_grid_mode(VIEWER_GRID_NONE)
 
 
 def _bg_grid_dots(graph):
-    graph.set_grid_mode(1)
+    """
+    Set background node graph background with grid dots.
+    """
+    from NodeGraphQt.constants import VIEWER_GRID_DOTS
+    graph.set_grid_mode(VIEWER_GRID_DOTS)
 
 
 def _bg_grid_lines(graph):
-    graph.set_grid_mode(2)
+    """
+    Set background node graph background with grid lines.
+    """
+    from NodeGraphQt.constants import VIEWER_GRID_LINES
+    graph.set_grid_mode(VIEWER_GRID_LINES)
 
 
 def _layout_graph_down(graph):
+    """
+    Auto layout the nodes down stream.
+    """
     nodes = graph.selected_nodes() or graph.all_nodes()
     graph.auto_layout_nodes(nodes=nodes, down_stream=True)
 
 
 def _layout_graph_up(graph):
+    """
+    Auto layout the nodes up stream.
+    """
     nodes = graph.selected_nodes() or graph.all_nodes()
     graph.auto_layout_nodes(nodes=nodes, down_stream=False)

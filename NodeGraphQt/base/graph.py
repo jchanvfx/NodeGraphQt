@@ -24,7 +24,8 @@ from NodeGraphQt.constants import (
 )
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.widgets.viewer import NodeViewer
+from NodeGraphQt.nodes.group_node import GroupNode
+from NodeGraphQt.widgets.viewer import NodeViewer, RootNodeViewer
 
 
 class NodeGraph(QtCore.QObject):
@@ -113,18 +114,37 @@ class NodeGraph(QtCore.QObject):
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
         self.setObjectName('NodeGraphQt')
-        self._widget = None
-        self._undo_view = None
         self._model = NodeGraphModel()
-        self._viewer = NodeViewer()
         self._node_factory = NodeFactory()
-        self._undo_stack = QtWidgets.QUndoStack(self)
 
+        self._undo_stack = QtWidgets.QUndoStack(self)
+        self._undo_view = None
+        self._widget = None
+
+        if isinstance(parent, NodeGraph):
+            self._parent_graph = None
+            self._root_viewer = RootNodeViewer(undo_stack=self._undo_stack)
+            self._viewer = self._root_viewer.viewer()
+        else:
+            self._parent_graph = parent
+            self._root_viewer = None
+            self._viewer = NodeViewer(undo_stack=self._undo_stack)
+
+        self._sub_graphs = {}
+
+        self._build_context_menu()
         self._wire_signals()
 
     def __repr__(self):
         return '<{} object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
+
+    def _build_context_menu(self):
+        """
+        build the essential menus commands for the graph context menu.
+        """
+        from NodeGraphQt.base.graph_actions import build_context_menu
+        build_context_menu(self)
 
     def _wire_signals(self):
         """
@@ -1629,13 +1649,35 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.save_dialog(current_dir, ext)
 
-    # group node & sub graph functions.
+    # group node functions.
 
-    def expand_group_node(self, group_node=None):
+    def expand_group_node(self, node=None):
+        """
+        Args:
+            node (NodeGraphQt.GroupNode): group node.
+
+        Returns:
+            SubGraph: sub node graph used to manage the group node session.
+        """
+        assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
+        if node.id in self._sub_graphs:
+            return self._sub_graphs[node.id]
+        sub_graph = SubGraph(self, node)
+        self._sub_graphs[node.id] = sub_graph
 
         return
 
-    def collapse_group_node(self, group_node=None):
+    def collapse_group_node(self, node=None):
+        """
+        Args:
+            node (NodeGraphQt.GroupNode): group node.
+
+        Returns:
+
+        """
+        assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
+        sub_graph = self._sub_graphs[node.id]
+
         return
 
 

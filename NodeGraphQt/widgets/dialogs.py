@@ -32,14 +32,11 @@ class FileDialog(object):
                         ext_filter='*'):
         if not file_dir:
             file_dir = current_dir
-
         file_dlg = QtWidgets.QFileDialog.getOpenFileName(
             parent, title, file_dir, ext_filter)
-
         file = file_dlg[0] or None
         if file:
             set_dir(file)
-
         return file_dlg
 
 

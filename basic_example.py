@@ -9,8 +9,7 @@ from NodeGraphQt import (NodeGraph,
                          BackdropNode,
                          GroupNode,
                          PropertiesBinWidget,
-                         NodesTreeWidget,
-                         setup_context_menu)
+                         NodesTreeWidget)
 
 # import example nodes from the "example_nodes" package
 from examples.custom_nodes import basic_nodes, widget_nodes
@@ -160,9 +159,6 @@ if __name__ == '__main__':
 
     # create node graph.
     graph = NodeGraph()
-
-    # set up default menu and commands.
-    setup_context_menu(graph)
 
     # widget used for the node graph.
     graph_widget = graph.widget

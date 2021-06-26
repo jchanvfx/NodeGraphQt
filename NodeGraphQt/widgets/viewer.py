@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import math
+from distutils.version import LooseVersion
 
 from Qt import QtGui, QtCore, QtWidgets
 
@@ -46,7 +47,13 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, undo_stack=None):
+        """
+        Args:
+            parent:
+            undo_stack (QtWidgets.QUndoStack): undo stack from the parent
+                                               graph controller.
+        """
         super(NodeViewer, self).__init__(parent)
 
         self.setScene(NodeScene(self))
@@ -87,25 +94,29 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._SLICER_PIPE.setVisible(False)
         self.scene().addItem(self._SLICER_PIPE)
 
-        self._undo_stack = QtWidgets.QUndoStack(self)
         self._search_widget = TabSearchMenuWidget()
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
-        # workaround fix for shortcuts from the non-native menu actions
-        # don't seem to trigger so we create a hidden menu bar.
-        menu_bar = QtWidgets.QMenuBar(self)
-        menu_bar.setNativeMenuBar(False)
+        # workaround fix for shortcuts from the non-native menu.
+        # actions don't seem to trigger so we create a hidden menu bar.
+        self._ctx_menu_bar = QtWidgets.QMenuBar(self)
+        self._ctx_menu_bar.setNativeMenuBar(False)
         # shortcuts don't work with "setVisibility(False)".
-        menu_bar.setMaximumSize(0, 0)
+        self._ctx_menu_bar.setMaximumSize(0, 0)
 
-        self._ctx_menu = BaseMenu('NodeGraph', self)
+        # context menus.
+        self._ctx_graph_menu = BaseMenu('NodeGraph', self)
         self._ctx_node_menu = BaseMenu('Nodes', self)
-        menu_bar.addMenu(self._ctx_menu)
-        menu_bar.addMenu(self._ctx_node_menu)
 
-        # note: context node menu will be enabled when a action
-        #       is added through the "NodesMenu" interface.
-        self._ctx_node_menu.setDisabled(True)
+        self._undo_action = undo_stack.createUndoAction(self, '&Undo')
+        self._undo_action.setShortcuts(QtGui.QKeySequence.Undo)
+        self._redo_action = undo_stack.createRedoAction(self, '&Redo')
+        self._redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
+            self._undo_action.setShortcutVisibleInContextMenu(True)
+            self._redo_action.setShortcutVisibleInContextMenu(True)
+
+        self._build_context_menus()
 
         self.acyclic = True
         self.pipe_collision = False
@@ -123,6 +134,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.__class__.__name__, hex(id(self)))
 
     # --- private ---
+
+    def _build_context_menus(self):
+        """
+        Build context menu for the node graph.
+        """
+        # "node context menu" disabled by default and enabled when a action
+        # is added through the "NodesMenu" interface.
+        self._ctx_node_menu.setDisabled(True)
+
+        # add the base menus.
+        self._ctx_menu_bar.addMenu(self._ctx_graph_menu)
+        self._ctx_menu_bar.addMenu(self._ctx_node_menu)
+
+        # undo & redo always at the top of the "node graph context menu".
+        self._ctx_graph_menu.addAction(self._undo_action)
+        self._ctx_graph_menu.addAction(self._redo_action)
+        self._ctx_graph_menu.addSeparator()
 
     def _set_viewer_zoom(self, value, sensitivity=None, pos=None):
         """
@@ -268,21 +296,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def contextMenuEvent(self, event):
         self.RMB_state = False
-        ctx_menu = None
 
-        if self._ctx_node_menu.isEnabled():
+        ctx_menu = None
+        ctx_menus = self.context_menus()
+
+        if ctx_menus['nodes'].isEnabled():
             pos = self.mapToScene(self._previous_pos)
             items = self._items_near(pos)
             nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
             if nodes:
                 node = nodes[0]
-                ctx_menu = self._ctx_node_menu.get_menu(node.type_, node.id)
+                ctx_menu = ctx_menus['nodes'].get_menu(node.type_, node.id)
                 if ctx_menu:
                     for action in ctx_menu.actions():
                         if not action.menu():
                             action.node_id = node.id
 
-        ctx_menu = ctx_menu or self._ctx_menu
+        ctx_menu = ctx_menu or ctx_menus['graph']
         if len(ctx_menu.actions()) > 0:
             if ctx_menu.isEnabled():
                 ctx_menu.exec_(event.globalPos())
@@ -887,8 +917,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._search_widget.rebuild = True
 
     def context_menus(self):
-        return {'graph': self._ctx_menu,
-                'nodes': self._ctx_node_menu}
+        return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
     @staticmethod
     def question_dialog(text, title='Node Graph'):
@@ -1249,34 +1278,44 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setViewport(QOpenGLWidget())
 
 
-class NodeNavigationViewer(QtWidgets.QWidget):
+class RootNodeViewer(QtWidgets.QWidget):
 
     # node viewer signals.
     navigation_changed = QtCore.Signal()
 
-    def __init__(self, parent=None):
-        super(NodeNavigationViewer, self).__init__(parent)
+    def __init__(self, parent=None, undo_stack=None):
+        """
+        Args:
+            parent:
+            undo_stack (QtWidgets.QUndoStack): undo stack from the parent
+                                               graph controller.
+        """
+        super(RootNodeViewer, self).__init__(parent)
         self._navigator = NodeNavigationWidget()
-        self._viewer = NodeViewer()
+        self._viewer = NodeViewer(self, undo_stack=undo_stack)
         self._layout = QtWidgets.QVBoxLayout(self)
-        self._layout.addWidget(self._nav_widget)
-        self._layout.addWidget(self._viewer_widget)
+        self._layout.addWidget(self._navigator)
+        self._layout.addWidget(self._viewer)
 
-        self._current_view = None
         self._sub_views = {}
+        self._current_view = None
 
         # wire up navigation
         self._navigator.navigation_changed.connect(self._on_navigation_changed)
 
-    def _on_navigation_changed(self, node_id, remove_ids):
+    def __repr__(self):
+        return '<{}() object at {}>'.format(
+            self.__class__.__name__, hex(id(self)))
 
+    def _on_navigation_changed(self, node_id, remove_ids):
         self.navigation_changed.emit(node_id, remove_ids)
 
-    def _exit_subview(self, node_id):
-        return
+    def viewer(self):
+        return self._viewer
 
-    def add_subview(self, node_id, view):
-        return
+    def current_view(self):
+        return self._current_view
 
-    def remove_subview(self, node_id):
-        return
+    def get_subview(self, node_id):
+        return self._sub_views.get(node_id)
+

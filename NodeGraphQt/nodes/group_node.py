@@ -39,41 +39,9 @@ class GroupNode(BaseNode):
         }
         super(GroupNode, self).__init__(qgraphics_views)
         self._sub_graph = None
+        self._input_port_nodes = {}
+        self._output_port_nodes = {}
 
     @property
     def sub_graph(self):
         return self._sub_graph
-
-    #     self._input_port_nodes = {}
-    #     self._output_port_nodes = {}
-    #
-    # def add_input(self, name='input', multi_input=False, display_name=True,
-    #               color=None, locked=False, painter_func=None):
-    #     super(GroupNode, self).add_input(name=name,
-    #                                      multi_input=multi_input,
-    #                                      display_name=display_name,
-    #                                      color=color,
-    #                                      locked=locked,
-    #                                      painter_func=painter_func)
-    #     self._input_port_nodes[name] = None
-    #
-    # def add_output(self, name='output', multi_output=True, display_name=True,
-    #                color=None, locked=False, painter_func=None):
-    #     super(GroupNode, self).add_output(name=name,
-    #                                       multi_output=multi_output,
-    #                                       display_name=display_name,
-    #                                       color=color,
-    #                                       locked=locked,
-    #                                       painter_func=painter_func)
-    #     self._output_port_nodes[name] = None
-
-    # def children(self):
-    #     return
-    #
-    # def add_chid(self, node):
-    #     self._children.add(node)
-    #
-    # def remove_child(self, node):
-    #     if node in self._children:
-    #         self._children.remove(node)
-

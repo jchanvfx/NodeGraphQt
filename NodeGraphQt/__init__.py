@@ -86,9 +86,6 @@ from .nodes.base_node import BaseNode
 from .nodes.backdrop_node import BackdropNode
 from .nodes.group_node import GroupNode
 
-# functions
-from .base.utils import setup_context_menu
-
 # widgets
 from .widgets.node_widgets import NodeBaseWidget
 from .custom_widgets.nodes_tree import NodesTreeWidget
@@ -114,6 +111,5 @@ __all__ = [
     'PropertiesBinWidget',
     'VERSION',
     'constants',
-    'setup_context_menu',
     'custom_widgets'
 ]

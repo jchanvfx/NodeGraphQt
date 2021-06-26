@@ -73,11 +73,11 @@ class GroupNodeItem(NodeItem):
             border_color = QtGui.QColor(*self.border_color)
 
         # node name background
-        padding = 3.0, 2.0
+        padding = 2.0, 2.0
         text_rect = self._text_item.boundingRect()
-        text_rect = QtCore.QRectF(rect_2.left(),
-                                  rect.y() + padding[1],
-                                  rect.width() - padding[0] - margin,
+        text_rect = QtCore.QRectF(rect_2.left() + padding[0],
+                                  rect_2.top() + padding[1],
+                                  rect.right() - (padding[0] * 2) - margin,
                                   text_rect.height() - (padding[1] * 2))
         if self.selected:
             painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
@@ -115,7 +115,7 @@ class GroupNodeItem(NodeItem):
             h_offset (float): horizontal offset.
         """
         x = 5.0 + h_offset
-        y = 6.0 + v_offset
+        y = 3.0 + v_offset
         self._icon_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
@@ -129,7 +129,7 @@ class GroupNodeItem(NodeItem):
         rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
         x = rect.center().x() - (text_rect.width() / 2)
-        y = 5.0
+        y = 2.0
         self._text_item.setPos(x + h_offset, y + v_offset)
 
     def align_ports(self, v_offset=0.0):
