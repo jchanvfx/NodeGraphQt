@@ -5,7 +5,7 @@ def build_context_menu(graph):
     populate the node graph's context menu with essential menus commands.
 
     Args:
-        graph (NodeGraphQt.NodeGraph): node graph.
+        graph (NodeGraphQt.NodeGraph): node graph controller.
     """
     from Qt import QtGui
     graph_menu = graph.get_context_menu('graph')
@@ -75,7 +75,7 @@ def build_context_menu(graph):
     edit_menu.add_separator()
 
 # ------------------------------------------------------------------------------
-# --- menu command functions. ---
+# --- menu command functions ---
 # ------------------------------------------------------------------------------
 
 

@@ -25,7 +25,8 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.group_node import GroupNode
-from NodeGraphQt.widgets.viewer import NodeViewer, RootNodeViewer
+from NodeGraphQt.widgets.viewer import NodeViewer
+from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
 
 class NodeGraph(QtCore.QObject):
@@ -117,20 +118,16 @@ class NodeGraph(QtCore.QObject):
         self._model = NodeGraphModel()
         self._node_factory = NodeFactory()
 
-        self._undo_stack = QtWidgets.QUndoStack(self)
         self._undo_view = None
-        self._widget = None
+        self._undo_stack = QtWidgets.QUndoStack(self)
 
-        if isinstance(parent, NodeGraph):
-            self._parent_graph = None
-            self._root_viewer = RootNodeViewer(undo_stack=self._undo_stack)
-            self._viewer = self._root_viewer.viewer()
-        else:
-            self._parent_graph = parent
-            self._root_viewer = None
-            self._viewer = NodeViewer(undo_stack=self._undo_stack)
+        self._navigator = None
+        self._widget = None
+        self._widget_layout = None
 
         self._sub_graphs = {}
+
+        self._viewer = NodeViewer(undo_stack=self._undo_stack)
 
         self._build_context_menu()
         self._wire_signals()
@@ -291,8 +288,8 @@ class NodeGraph(QtCore.QObject):
             data (QtCore.QMimeData): mime data.
             pos (QtCore.QPoint): scene position relative to the drop.
         """
-        uri_regex = re.compile('{}(?:/*)([\w/]+)(\\.\w+)'.format(URI_SCHEME))
-        urn_regex = re.compile('{}([\w\\.:;]+)'.format(URN_SCHEME))
+        uri_regex = re.compile(r'{}(?:/*)([\w/]+)(\.\w+)'.format(URI_SCHEME))
+        urn_regex = re.compile(r'{}([\w\.:;]+)'.format(URN_SCHEME))
         if data.hasFormat('text/uri-list'):
             for url in data.urls():
                 local_file = url.toLocalFile()
@@ -405,6 +402,20 @@ class NodeGraph(QtCore.QObject):
             port1.disconnect_from(port2)
         self._undo_stack.endMacro()
 
+    def _on_navigation_changed(self, node_id, rm_node_ids):
+        """
+        Slot when the node navigation has changed.
+
+        Args:
+            node_id (str): selected group node id.
+            rm_node_ids (list[str]): list of group node id to remove.
+        """
+        group_node = self.get_node_by_id(node_id)
+        self.expand_group_node(group_node)
+        for nid in rm_node_ids:
+            grp_node = self.get_node_by_id(nid)
+            self.collapse_group_node(grp_node)
+
     @property
     def model(self):
         """
@@ -434,10 +445,13 @@ class NodeGraph(QtCore.QObject):
             PySide2.QtWidgets.QWidget: node graph widget.
         """
         if self._widget is None:
+            self._navigator = NodeNavigationWidget()
             self._widget = QtWidgets.QWidget()
-            layout = QtWidgets.QVBoxLayout(self._widget)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.addWidget(self._viewer)
+            self._widget_layout = QtWidgets.QVBoxLayout(self._widget)
+            self._widget_layout.setContentsMargins(0, 0, 0, 0)
+            self._widget_layout.addWidget(self._navigator)
+            self._widget_layout.addWidget(self._viewer)
+
         return self._widget
 
     @property
@@ -610,7 +624,7 @@ class NodeGraph(QtCore.QObject):
 
     def context_menu(self):
         """
-        Returns the main context menu from the node graph.
+        Returns the context menu for the node graph.
 
         Note:
             This is a convenience function to
@@ -624,7 +638,7 @@ class NodeGraph(QtCore.QObject):
 
     def context_nodes_menu(self):
         """
-        Returns the main context menu for the nodes.
+        Returns the context menu for the nodes.
 
         Note:
             This is a convenience function to
@@ -1660,26 +1674,35 @@ class NodeGraph(QtCore.QObject):
             SubGraph: sub node graph used to manage the group node session.
         """
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
+        if self._widget is None:
+            return
+
         if node.id in self._sub_graphs:
             return self._sub_graphs[node.id]
+
         sub_graph = SubGraph(self, node)
         self._sub_graphs[node.id] = sub_graph
 
-        return
+        self._viewer.hide()
+        self._widget_layout.addWidget(sub_graph.widget)
+
+        return sub_graph
 
     def collapse_group_node(self, node=None):
         """
         Args:
             node (NodeGraphQt.GroupNode): group node.
-
-        Returns:
-
         """
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
-        sub_graph = self._sub_graphs[node.id]
+        if self._widget is None:
+            return
 
-        return
+        if node.id not in self._sub_graphs:
+            return
 
+        sub_graph = self._sub_graphs.pop(node.id)
+        self._viewer.hide()
+        self._widget_layout.addWidget(sub_graph.widget)
 
     ### ---
 
@@ -1715,10 +1738,9 @@ class SubGraph(NodeGraph):
     def __init__(self, parent=None, node=None):
         super(SubGraph, self).__init__(parent)
         self._node = node
+        self._parent_graph = parent
 
-    @property
-    def node(self):
-        return self._node
+        del self._widget_layout
 
     @property
     def widget(self):
@@ -1727,3 +1749,13 @@ class SubGraph(NodeGraph):
             layout = QtWidgets.QVBoxLayout(self._widget)
             layout.addWidget(self._viewer)
         return self._widget
+
+    @property
+    def node(self):
+        """
+        Returns the parent node to the sub graph.
+
+        Returns:
+            GroupNode:
+        """
+        return self._node

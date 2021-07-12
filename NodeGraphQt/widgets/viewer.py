@@ -15,7 +15,6 @@ from NodeGraphQt.qgraphics.slicer import SlicerPipeItem
 from NodeGraphQt.widgets.dialogs import BaseDialog, FileDialog
 from NodeGraphQt.widgets.scene import NodeScene
 from NodeGraphQt.widgets.tab_search import TabSearchMenuWidget
-from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -1276,46 +1275,3 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif Qt.IsPyQt5:
             from PyQt5.QtWidgets import QOpenGLWidget
         self.setViewport(QOpenGLWidget())
-
-
-class RootNodeViewer(QtWidgets.QWidget):
-
-    # node viewer signals.
-    navigation_changed = QtCore.Signal()
-
-    def __init__(self, parent=None, undo_stack=None):
-        """
-        Args:
-            parent:
-            undo_stack (QtWidgets.QUndoStack): undo stack from the parent
-                                               graph controller.
-        """
-        super(RootNodeViewer, self).__init__(parent)
-        self._navigator = NodeNavigationWidget()
-        self._viewer = NodeViewer(self, undo_stack=undo_stack)
-        self._layout = QtWidgets.QVBoxLayout(self)
-        self._layout.addWidget(self._navigator)
-        self._layout.addWidget(self._viewer)
-
-        self._sub_views = {}
-        self._current_view = None
-
-        # wire up navigation
-        self._navigator.navigation_changed.connect(self._on_navigation_changed)
-
-    def __repr__(self):
-        return '<{}() object at {}>'.format(
-            self.__class__.__name__, hex(id(self)))
-
-    def _on_navigation_changed(self, node_id, remove_ids):
-        self.navigation_changed.emit(node_id, remove_ids)
-
-    def viewer(self):
-        return self._viewer
-
-    def current_view(self):
-        return self._current_view
-
-    def get_subview(self, node_id):
-        return self._sub_views.get(node_id)
-

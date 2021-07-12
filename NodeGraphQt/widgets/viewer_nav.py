@@ -45,15 +45,12 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         if index.row() != 0:
             txt_offset = 8.0
             m = 2.8
-            h = rect.height()
-            x, y = rect.left() + 2.0, rect.top()
+            x = rect.left() + 2.0 + m
+            y = rect.top() + m
+            h = rect.height() - (m * 2)
+            itm_rect = QtCore.QRectF(x, y, 1.3, h)
             painter.setBrush(itm_color)
-            for count in range(3):
-                x += 2.8
-                y += m
-                h -= m * 2
-                itm_rect = QtCore.QRectF(x, y, 1.3, h)
-                painter.drawRoundedRect(itm_rect, 1.0, 1.0)
+            painter.drawRoundedRect(itm_rect, 1.0, 1.0)
         else:
             txt_offset = 5.0
             x = rect.left() + 2.0
@@ -104,12 +101,14 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.setItemDelegate(NodeNavigationDelagate(self))
         self.setModel(QtGui.QStandardItemModel())
 
-        self.clicked.connect(self._on_item_clicked)
-
     def keyPressEvent(self, event):
         event.ignore()
 
-    def _on_item_clicked(self, index):
+    def mouseReleaseEvent(self, event):
+        super(NodeNavigationWidget, self).mouseReleaseEvent(event)
+        if not self.selectedIndexes():
+            return
+        index = self.selectedIndexes()[0]
         rows = reversed(range(1, self.model().rowCount()))
         if index.row() == 0:
             rows = [r for r in rows if r > 0]
