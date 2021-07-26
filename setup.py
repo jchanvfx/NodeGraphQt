@@ -8,7 +8,6 @@ setuptools.setup(
     name=pkg_info.__module_name__,
     version=pkg_info.__version__,
     author=pkg_info.__author__,
-    url=pkg_info.__url__,
 )
 
 
