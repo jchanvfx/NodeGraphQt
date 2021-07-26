@@ -1,5 +1,6 @@
 import os
-from NodeGraphQt import BaseNode, QtCore
+from PySide2 import QtCore
+from NodeGraphQt import BaseNode
 
 
 class DataInputNode(BaseNode):

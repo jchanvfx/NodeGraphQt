@@ -1,4 +1,4 @@
-from NodeGraphQt import QtCore
+from PySide2 import QtCore
 from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
                                    NODE_PROP_VECTOR3,
                                    NODE_PROP_VECTOR4)

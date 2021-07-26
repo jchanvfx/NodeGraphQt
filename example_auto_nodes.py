@@ -1,12 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from NodeGraphQt import NodeGraph, setup_context_menu, \
-    QtWidgets, QtCore, PropertiesBinWidget, BackdropNode
+
+from PySide2 import QtWidgets, QtCore
+from NodeGraphQt import (NodeGraph, setup_context_menu,
+                         PropertiesBinWidget, BackdropNode,)
 from example_auto_nodes import Publish, RootNode, update_nodes, setup_node_menu
-import importlib
-import inspect
-import sys
+
 import os
+import sys
+import inspect
+import importlib
 
 
 def get_nodes_from_folder(folder_path):
