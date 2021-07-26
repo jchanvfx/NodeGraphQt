@@ -1,5 +1,5 @@
 import os
-from PySide2 import QtCore
+from Qt import QtCore
 from NodeGraphQt import BaseNode
 
 

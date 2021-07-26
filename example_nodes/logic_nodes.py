@@ -1,4 +1,5 @@
-from NodeGraphQt import BaseNode, QtCore
+from Qt import QtCore
+from NodeGraphQt import BaseNode
 
 
 class IfNode(BaseNode):
