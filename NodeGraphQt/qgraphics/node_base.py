@@ -36,6 +36,7 @@ class NodeItem(AbstractNodeItem):
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
         self._text_item = NodeTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
+        self._x_error = XDisabledItem(self, 'ERROR')
         self._input_items = OrderedDict()
         self._output_items = OrderedDict()
         self._widgets = OrderedDict()
@@ -187,6 +188,20 @@ class NodeItem(AbstractNodeItem):
         if state:
             tooltip += ' <font color="red"><b>(DISABLED)</b></font>'
         tooltip += '<br/>{}<br/>'.format(self.type_)
+        self.setToolTip(tooltip)
+
+    def _tooltip_error(self, msg=None):
+        """
+        Updates the node tooltip for errors.
+
+        Args:
+            msg (str, optional): the error message.
+        """
+        tooltip = f'<b>{self.name}</b>'
+        state = msg is not None
+        if state:
+            tooltip += f' <font color="red"><b>{msg}</b></font>'
+        tooltip += f'<br/>{self.type_}<br/>'
         self.setToolTip(tooltip)
 
     def _set_base_size(self, add_w=0.0, add_h=0.0):
@@ -535,6 +550,15 @@ class NodeItem(AbstractNodeItem):
             w.widget().setDisabled(state)
         self._tooltip_disable(state)
         self._x_item.setVisible(state)
+
+    @AbstractNodeItem.error.setter
+    def error(self, msg=None):
+        AbstractNodeItem.error.fset(self, msg)
+        state = msg is not None
+        for n, w in self._widgets.items():
+            w.widget().setDisabled(state)
+        self._tooltip_error(msg)
+        self._x_error.setVisible(state)
 
     @AbstractNodeItem.selected.setter
     def selected(self, selected=False):

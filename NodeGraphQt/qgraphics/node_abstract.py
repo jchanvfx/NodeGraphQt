@@ -138,6 +138,14 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         self._properties['disabled'] = state
 
     @property
+    def error(self):
+        return self._properties['error']
+
+    @error.setter
+    def error(self, msg=None):
+        self._properties['error'] = msg
+
+    @property
     def selected(self):
         if self._properties['selected'] != self.isSelected():
             self._properties['selected'] = self.isSelected()
