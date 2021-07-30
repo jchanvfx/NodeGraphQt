@@ -24,6 +24,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             'selected': False,
             'disabled': False,
             'visible': False,
+            'error': None,
         }
         self._width = NODE_WIDTH
         self._height = NODE_HEIGHT
