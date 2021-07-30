@@ -76,6 +76,7 @@ class NodeModel(object):
         self.inputs = {}
         self.outputs = {}
         self._custom_prop = {}
+        self.error = None
 
         # node graph model set at node added time.
         self._graph_model = None
@@ -101,6 +102,7 @@ class NodeModel(object):
             'pos': NODE_PROP,
             'inputs': NODE_PROP,
             'outputs': NODE_PROP,
+            'error': NODE_PROP,
         }
 
     def __repr__(self):
