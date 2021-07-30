@@ -38,6 +38,7 @@ def setup_context_menu(graph):
 
     file_menu = root_menu.add_menu('&File')
     edit_menu = root_menu.add_menu('&Edit')
+    control_menu = root_menu.add_menu('&Control')
 
     # create "File" menu.
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
@@ -110,8 +111,18 @@ def setup_context_menu(graph):
 
     edit_menu.add_separator()
 
+    # create control menue
+    control_menu.add_command('Pause', _pause_calculation)
+    control_menu.add_command('Resume', _resume_calculation)
+
 
 # --- menu command functions. ---
+def _pause_calculation(graph):
+    graph.auto_update = False
+
+
+def _resume_calculation(graph):
+    graph.auto_update = True
 
 
 def _zoom_in(graph):

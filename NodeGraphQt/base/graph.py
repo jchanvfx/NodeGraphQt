@@ -463,6 +463,21 @@ class NodeGraph(QtCore.QObject):
         """
         return self._auto_update
 
+    @auto_update.setter
+    def auto_update(self, auto):
+        """
+        Determines if nodes are running.
+
+        Args:
+            auto(bool)
+
+        """
+        if auto:
+            self.set_background_color(35, 35, 35)
+        else:
+            self.set_background_color(45, 35, 35)
+        self._auto_update = auto
+
     @property
     def editable(self):
         """
