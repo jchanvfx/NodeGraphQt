@@ -17,6 +17,7 @@ from .menu import NodeGraphMenu, NodesMenu
 from .model import NodeGraphModel
 from .node import NodeObject, BackdropNode, BaseNode
 from .port import Port
+from .utils import topological_sort_by_down, _update_nodes
 from ..constants import (
     URI_SCHEME, URN_SCHEME,
     NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
@@ -474,9 +475,11 @@ class NodeGraph(QtCore.QObject):
         """
         if auto:
             self.set_background_color(35, 35, 35)
+            self._auto_update = auto
+            _update_nodes(topological_sort_by_down(self.all_nodes()))
         else:
             self.set_background_color(45, 35, 35)
-        self._auto_update = auto
+            self._auto_update = auto
 
     @property
     def editable(self):
