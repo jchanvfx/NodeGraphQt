@@ -1,9 +1,12 @@
 #!/usr/bin/python
+from collections import OrderedDict
+
 from .commands import PropertyChangedCmd
 from .model import NodeModel
 from .port import Port
 from .utils import update_node_down_stream
 from ..constants import (NODE_PROP,
+                         NODE_PROP_QLABEL,
                          NODE_PROP_QLINEEDIT,
                          NODE_PROP_QTEXTEDIT,
                          NODE_PROP_QCOMBO,
@@ -15,10 +18,11 @@ from ..constants import (NODE_PROP,
                          NODE_LAYOUT_VERTICAL,
                          NODE_LAYOUT_HORIZONTAL,
                          NODE_LAYOUT_DIRECTION)
-from ..errors import PortRegistrationError
+from ..errors import PortRegistrationError, NodeWidgetError
 from ..qgraphics.node_backdrop import BackdropNodeItem
 from ..qgraphics.node_base import NodeItem, NodeItemVertical
-from ..widgets.node_widgets import (NodeComboBox,
+from ..widgets.node_widgets import (NodeBaseWidget,
+                                    NodeComboBox,
                                     NodeLineEdit,
                                     NodeFloatEdit,
                                     NodeIntEdit,
@@ -26,7 +30,7 @@ from ..widgets.node_widgets import (NodeComboBox,
                                     NodeFilePath)
 
 
-class classproperty(object):
+class _ClassProperty(object):
 
     def __init__(self, f):
         self.f = f
@@ -68,7 +72,7 @@ class NodeObject(object):
         return '<{}("{}") object at {}>'.format(
             self.__class__.__name__, self.NODE_NAME, hex(id(self)))
 
-    @classproperty
+    @_ClassProperty
     def type_(cls):
         """
         Node type identifier followed by the class name.
@@ -253,7 +257,14 @@ class NodeObject(object):
         """
         Creates a custom property to the node.
 
-        Widget Types:
+        See Also:
+            Custom node properties bin widget
+            :class:`NodeGraphQt.PropertiesBinWidget`
+
+        Hint:
+            Here are some constants variables used to define the node
+            widget type in the ``PropertiesBinWidget``.
+
             - :attr:`NodeGraphQt.constants.NODE_PROP`
             - :attr:`NodeGraphQt.constants.NODE_PROP_QLABEL`
             - :attr:`NodeGraphQt.constants.NODE_PROP_QLINEEDIT`
@@ -270,15 +281,13 @@ class NodeObject(object):
             - :attr:`NodeGraphQt.constants.NODE_PROP_INT`
             - :attr:`NodeGraphQt.constants.NODE_PROP_BUTTON`
 
-        See Also:
-            :class:`NodeGraphQt.PropertiesBinWidget`
-
         Args:
             name (str): name of the property.
             value (object): data.
             items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
             range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
-            widget_type (int): widget flag to display in the ``PropertiesBinWidget``
+            widget_type (int): widget flag to display in the
+                :class:`NodeGraphQt.PropertiesBinWidget`
             tab (str): name of the widget tab to display in the properties bin.
             ext (str): file ext of ``NODE_PROP_FILE``
             funcs (list[function]) list of functions for NODE_PROP_BUTTON
@@ -622,6 +631,33 @@ class BaseNode(NodeObject):
         """
         return self.view.widgets.get(name)
 
+    def add_custom_widget(self, widget, widget_type=NODE_PROP_QLABEL, tab=None):
+        """
+        Add a custom node widget into the node.
+
+        see example :ref:`Embedding Custom Widgets`.
+
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
+
+        Args:
+            widget (NodeBaseWidget): node widget class object.
+            widget_type: widget flag to display in the
+                :class:`NodeGraphQt.PropertiesBinWidget` (default: QLabel).
+            tab (str): name of the widget tab to display in.
+        """
+        if not isinstance(widget, NodeBaseWidget):
+            raise NodeWidgetError(
+                '\'widget\' must be an instance of a NodeBaseWidget')
+        self.create_property(widget.get_name(),
+                             widget.get_value(),
+                             widget_type=widget_type,
+                             tab=tab)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        widget._node = self
+        self.view.add_widget(widget)
+
     def add_combo_menu(self, name, label='', items=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
@@ -629,8 +665,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -653,8 +689,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -678,8 +714,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -701,8 +737,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -724,8 +760,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -747,8 +783,8 @@ class BaseNode(NodeObject):
         into the node.
 
         Note:
-            The embedded widget is wired up to the :meth:`NodeObject.set_property`
-            function use this function to to update the widget.
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
 
         Args:
             name (str): name for the custom property.
@@ -764,7 +800,8 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, data_type='NoneType', painter_func=None):
+                  color=None, data_type='NoneType', locked=False,
+                  painter_func=None):
         """
         Add input :class:`Port` to node.
 
@@ -774,6 +811,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type (str): port data type name.
+            locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
@@ -784,7 +822,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
 
-        port_args = [name, multi_input, display_name]
+        port_args = [name, multi_input, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
         view = self.view.add_input(*port_args)
@@ -799,12 +837,14 @@ class BaseNode(NodeObject):
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
         port.model.data_type = data_type
+        port.model.locked = locked
         self._inputs.append(port)
         self.model.inputs[port.name()] = port.model
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, data_type='NoneType', painter_func=None):
+                   color=None, data_type='NoneType', locked=False,
+                   painter_func=None):
         """
         Add output :class:`Port` to node.
 
@@ -814,6 +854,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             data_type(str): port data type name.
+            locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
@@ -824,7 +865,7 @@ class BaseNode(NodeObject):
             raise PortRegistrationError(
                 'port name "{}" already registered.'.format(name))
 
-        port_args = [name, multi_output, display_name]
+        port_args = [name, multi_output, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
         view = self.view.add_output(*port_args)
@@ -838,6 +879,7 @@ class BaseNode(NodeObject):
         port.model.display_name = display_name
         port.model.multi_connection = multi_output
         port.model.data_type = data_type
+        port.model.locked = locked
         self._outputs.append(port)
         self.model.outputs[port.name()] = port.model
         return port
@@ -934,27 +976,36 @@ class BaseNode(NodeObject):
 
     def set_ports(self, port_data):
         """
-        Set node input and output ports.
+        Create node input and output ports from specified port data.
+
+        Hint:
+            example snippet of port data.
+
+            .. highlight:: python
+            .. code-block:: python
+
+                {
+                    'input_ports':
+                        [{
+                            'name': 'input',
+                            'multi_connection': True,
+                            'display_name': 'Input',
+                            'data_type': 'NoneType',
+                            'locked': False
+                        }],
+                    'output_ports':
+                        [{
+                            'name': 'output',
+                            'multi_connection': True,
+                            'display_name': 'Output',
+                            'data_type': 'NoneType',
+                            'locked': False
+                        }]
+                }
 
         Args:
             port_data(dict): port data.
         """
-
-        # port data eg.
-        # {
-        #     'input_ports':
-        #         [{'name': ...,
-        #           'multi_connection': ...,
-        #           'display_name': ...,
-        #           'data_type': ...
-        #           }, ...],
-        #     'output_ports':
-        #         [{'name': ...,
-        #           'multi_connection': ...,
-        #           'display_name': ...,
-        #           'data_type': ...
-        #           }, ...]
-        # }
 
         for port in self._inputs:
             self._view.delete_input(port.view)
@@ -1067,7 +1118,7 @@ class BaseNode(NodeObject):
         Returns:
             dict: {<input_port>: <node_list>}
         """
-        nodes = {}
+        nodes = OrderedDict()
         for p in self.input_ports():
             nodes[p] = [cp.node() for cp in p.connected_ports()]
         return nodes
@@ -1079,7 +1130,7 @@ class BaseNode(NodeObject):
         Returns:
             dict: {<output_port>: <node_list>}
         """
-        nodes = {}
+        nodes = OrderedDict()
         for p in self.output_ports():
             nodes[p] = [cp.node() for cp in p.connected_ports()]
         return nodes
@@ -1170,13 +1221,57 @@ class BackdropNode(NodeObject):
         # override base default color.
         self.model.color = (5, 129, 138, 255)
         self.create_property('backdrop_text', '',
-                             widget_type=NODE_PROP_QTEXTEDIT, tab='Backdrop')
+                             widget_type=NODE_PROP_QTEXTEDIT,
+                             tab='Backdrop')
+
+    def on_backdrop_updated(self, update_prop, value=None):
+        """
+        Slot triggered by the "on_backdrop_updated" signal from
+        the node graph.
+
+        Args:
+            update_prop (str): update property type.
+            value (object): update value (optional)
+        """
+        if update_prop == 'sizer_mouse_release':
+            self.graph.begin_undo('resized "{}"'.format(self.name()))
+            self.set_property('width', value['width'])
+            self.set_property('height', value['height'])
+            self.set_pos(*value['pos'])
+            self.graph.end_undo()
+        elif update_prop == 'sizer_double_clicked':
+            self.graph.begin_undo('"{}" auto resize'.format(self.name()))
+            self.set_property('width', value['width'])
+            self.set_property('height', value['height'])
+            self.set_pos(*value['pos'])
+            self.graph.end_undo()
 
     def auto_size(self):
         """
         Auto resize the backdrop node to fit around the intersecting nodes.
         """
-        self.view.auto_resize()
+        self.graph.begin_undo('"{}" auto resize'.format(self.name()))
+        size = self.view.calc_backdrop_size()
+        self.set_property('width', size['width'])
+        self.set_property('height', size['height'])
+        self.set_pos(*size['pos'])
+        self.graph.end_undo()
+
+    def wrap_nodes(self, nodes):
+        """
+        Set the backdrop size to fit around specified nodes.
+
+        Args:
+            nodes (list[NodeGraphQt.NodeObject]): list of nodes.
+        """
+        if not nodes:
+            return
+        self.graph.begin_undo('"{}" wrap nodes'.format(self.name()))
+        size = self.view.calc_backdrop_size([n.view for n in nodes])
+        self.set_property('width', size['width'])
+        self.set_property('height', size['height'])
+        self.set_pos(*size['pos'])
+        self.graph.end_undo()
 
     def nodes(self):
         """

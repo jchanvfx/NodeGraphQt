@@ -1,12 +1,12 @@
 #!/usr/bin/python
+from Qt import QtGui, QtCore, QtWidgets
 
-from .. import QtGui, QtCore, QtWidgets
-from ..constants import (Z_VAL_PIPE,
-                         NODE_SEL_COLOR,
-                         NODE_SEL_BORDER_COLOR)
 from .node_abstract import AbstractNodeItem
 from .pipe import Pipe
 from .port import PortItem
+from ..constants import (Z_VAL_PIPE,
+                         NODE_SEL_COLOR,
+                         NODE_SEL_BORDER_COLOR)
 
 
 class BackdropSizer(QtWidgets.QGraphicsItem):
@@ -53,6 +53,19 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
     def mouseDoubleClickEvent(self, event):
         item = self.parentItem()
         item.on_sizer_double_clicked()
+        super(BackdropSizer, self).mouseDoubleClickEvent(event)
+
+    def mousePressEvent(self, event):
+        self.__prev_xy = (self.pos().x(), self.pos().y())
+        super(BackdropSizer, self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        current_xy = (self.pos().x(), self.pos().y())
+        if current_xy != self.__prev_xy:
+            item = self.parentItem()
+            item.on_sizer_pos_mouse_release()
+        del self.__prev_xy
+        super(BackdropSizer, self).mouseReleaseEvent(event)
 
     def paint(self, painter, option, widget):
         """
@@ -143,8 +156,18 @@ class BackdropNodeItem(AbstractNodeItem):
         self._width = pos.x() + self._sizer.size
         self._height = pos.y() + self._sizer.size
 
+    def on_sizer_pos_mouse_release(self):
+        size = {
+            'pos': self.xy_pos,
+            'width': self._width,
+            'height': self._height}
+        self.viewer().node_backdrop_updated.emit(
+            self.id, 'sizer_mouse_release', size)
+
     def on_sizer_double_clicked(self):
-        self.auto_resize()
+        size = self.calc_backdrop_size()
+        self.viewer().node_backdrop_updated.emit(
+            self.id, 'sizer_double_clicked', size)
 
     def paint(self, painter, option, widget):
         """
@@ -217,39 +240,17 @@ class BackdropNodeItem(AbstractNodeItem):
                     nodes.append(item)
         return nodes
 
-    def auto_resize(self, nodes=None):
+    def calc_backdrop_size(self, nodes=None):
         nodes = nodes or self.get_nodes(True)
-        if nodes:
-            padding = 40
-            nodes_rect = self._combined_rect(nodes)
-            self.xy_pos = [nodes_rect.x() - padding, nodes_rect.y() - padding]
-            self._sizer.set_pos(nodes_rect.width() + (padding * 2),
-                                nodes_rect.height() + (padding * 2))
-            return
-
-        width, height = self._min_size
-        self._sizer.set_pos(width, height)
-
-    def pre_init(self, viewer, pos=None):
-        """
-        Called before node has been added into the scene.
-
-        Args:
-            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer.
-            pos (tuple): cursor pos.
-        """
-        nodes = viewer.selected_nodes()
-        if nodes:
-            padding = 40
-            scene = viewer.scene()
-            group = scene.createItemGroup(nodes)
-            rect = group.boundingRect()
-            scene.destroyItemGroup(group)
-            self.xy_pos = [rect.x() - padding, rect.y() - padding]
-            self._sizer.set_pos(rect.width() + (padding * 2),
-                                rect.height() + (padding * 2))
-        else:
-            self.xy_pos = pos
+        padding = 40
+        nodes_rect = self._combined_rect(nodes)
+        return {
+            'pos': [
+                nodes_rect.x() - padding, nodes_rect.y() - padding
+            ],
+            'width': nodes_rect.width() + (padding * 2),
+            'height': nodes_rect.height() + (padding * 2)
+        }
 
     @property
     def minimum_size(self):

@@ -29,15 +29,14 @@ author = NodeGraphQt.pkg_info.__author__
 copyright = '{}, {}'.format(datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
-release = NodeGraphQt.VERSION
+release = '{}'.format(NodeGraphQt.VERSION)
 # The short X.Y version
-version = '{0}.{1}'.format(*release.split('.'))
+version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 
 
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
 # needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -57,14 +56,21 @@ intersphinx_mapping = {
     'PySide2': ('https://doc.qt.io/qtforpython/', None),
 }
 
+# order of members.
+autodoc_member_order = 'groupwise'
+
 # autosummary generate stubs.
 autosummary_generate = True
 
 # autosummary overwrite generated stubs files.
 autosummary_generate_option = True
 
+rst_prolog = '''
+.. |version_str| replace:: v{0}
+'''.format(release)
+
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -99,16 +105,44 @@ pygments_style = 'monokai'
 # It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
 # pixels large. Default: None.
 html_favicon = '_images/favicon.png'
+html_logo = '_images/logo.png'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = ['_themes']
+html_show_sourcelink = False
+html_show_sphinx = False
+html_context = {
+    'display_github': True,
+    'github_user': 'jchanvfx',
+    'github_repo': 'NodeGraphQt',
+    'github_version': "master",
+    'conf_py_path': '/docs/',
+    'source_suffix': '.rst',
+}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {}
+html_theme_options = {
+    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
+    # 'analytics_anonymize_ip': False,
+    # 'logo_only': False,
+    # 'display_version': True,
+    # 'prev_next_buttons_location': 'both',
+    # 'style_external_links': False,
+    # 'vcs_pageview_mode': '',
+    # 'style_nav_header_background': 'white',
+
+    ### Toc options ###
+    # 'collapse_navigation': True,
+    # 'sticky_navigation': True,
+    # 'navigation_depth': 4,
+    # 'includehidden': True,
+    # 'titles_only': False
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

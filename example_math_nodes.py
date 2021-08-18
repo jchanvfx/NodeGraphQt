@@ -1,11 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from example_nodes import Nodes
+from Qt import QtWidgets, QtCore
+
 from NodeGraphQt import (NodeGraph,
+                         PropertiesBinWidget,
+                         NodeTreeWidget,
                          update_nodes_by_down,
                          setup_context_menu)
-from NodeGraphQt import QtWidgets, QtCore, PropertiesBinWidget, NodeTreeWidget
-
+from example_nodes import Nodes
+from os.path import join
 
 if __name__ == '__main__':
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
@@ -44,7 +47,7 @@ if __name__ == '__main__':
     [graph.register_node(n) for n in Nodes]
 
     # load preset session
-    graph.load_session(r'example_nodes\networks\example.nodes')
+    graph.load_session(join('example_nodes', 'networks', 'example.nodes'))
 
     # update nodes
     update_nodes_by_down(graph.all_nodes())

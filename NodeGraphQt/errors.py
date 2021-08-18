@@ -14,4 +14,7 @@ class NodeWidgetError(Exception): pass
 class NodeRegistrationError(Exception): pass
 
 
+class PortError(Exception): pass
+
+
 class PortRegistrationError(Exception): pass

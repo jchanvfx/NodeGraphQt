@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtWidgets, QtCore, QtGui, QtCompat
+from Qt import QtWidgets, QtCore, QtGui, QtCompat
 
 from .properties import NodePropWidget
 
@@ -17,21 +17,27 @@ class PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
 
-        painter.setBrush(QtCore.Qt.NoBrush)
+        # draw background.
+        bg_clr = option.palette.midlight().color()
+        painter.setBrush(QtGui.QBrush(bg_clr))
         painter.drawRect(option.rect)
 
+        # draw border.
+        border_width = 1
         if option.state & QtWidgets.QStyle.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
-            bdr_clr = QtGui.QColor(100, 100, 100)
+            bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
         painter.setBrush(QtCore.Qt.NoBrush)
-        painter.drawRect(QtCore.QRect(option.rect.x() + 1,
-                                      option.rect.y() + 1,
-                                      option.rect.width() - 2,
-                                      option.rect.height() - 2))
+        painter.drawRect(QtCore.QRect(
+            option.rect.x() + border_width,
+            option.rect.y() + border_width,
+            option.rect.width() - (border_width * 2),
+            option.rect.height() - (border_width * 2))
+        )
         painter.restore()
 
 
@@ -45,14 +51,16 @@ class PropertiesList(QtWidgets.QTableWidget):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
         QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.Stretch)
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
         QtCompat.QHeaderView.setSectionResizeMode(
             self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     def wheelEvent(self, event):
         delta = event.delta() * 0.2
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta)
+        self.verticalScrollBar().setValue(
+            self.verticalScrollBar().value() - delta
+        )
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
@@ -135,8 +143,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         Args:
             node (NodeGraphQt.NodeObject):
-            prop_name (str):
-            prop_value (object):
+            prop_name (str): node property name.
+            prop_value (object): node property value.
         """
         properties_widget = self.prop_widget(node)
         if not properties_widget:
@@ -154,9 +162,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Slot function triggered when a property widget value has changed.
 
         Args:
-            node_id (str):
-            prop_name (str):
-            prop_value (object):
+            node_id (str): node id.
+            prop_name (str): node property name.
+            prop_value (object): node property value.
         """
         if not self._block_signal:
             self.property_changed.emit(node_id, prop_name, prop_value)
@@ -195,7 +203,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             if itm_find[0].row() == 0:
                 try:
                     itm_find[0].setEnabled(node.graph.editable)
-                except:
+                except Exception as e:
                     pass
                 return
             self._prop_list.removeRow(itm_find[0].row())

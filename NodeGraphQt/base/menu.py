@@ -1,7 +1,8 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from .. import QtGui, QtCore
+from Qt import QtGui, QtCore
+
 from ..errors import NodeMenuError
 from ..widgets.actions import BaseMenu, GraphAction, NodeAction
 
@@ -176,6 +177,7 @@ class NodesMenu(NodeGraphMenu):
         """
         if not node_type and not node_class:
             raise NodeMenuError('Node type or Node class not specified!')
+
         if node_class:
             node_type = node_class.__name__
 

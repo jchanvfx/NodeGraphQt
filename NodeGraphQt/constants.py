@@ -1,8 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+
+from Qt import QtWidgets
+
 from .pkg_info import __version__
-from . import QtWidgets
+
+__doc__ = """
+The ``NodeGraphQt.constants`` namespace contains variables used throughout 
+the whole ``NodeGraphQt`` library.
+"""
 
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__
@@ -99,7 +106,8 @@ VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_SIZE = 50
 
-DRAG_DROP_ID = 'n0deGraphQT'
+URI_SCHEME = 'nodegraphqt://'
+URN_SCHEME = 'nodegraphqt::'
 
 # === PATHS ===
 

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from .. import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from ..constants import (
     IN_PORT, OUT_PORT,
@@ -23,6 +23,7 @@ class PortItem(QtWidgets.QGraphicsItem):
     def __init__(self, parent=None):
         super(PortItem, self).__init__(parent)
         self.setAcceptHoverEvents(True)
+        self.setCacheMode(ITEM_CACHE_MODE)
         self.setFlag(self.ItemIsSelectable, False)
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
@@ -37,8 +38,7 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._border_size = 1
         self._port_type = None
         self._multi_connection = False
-
-        self.setCacheMode(ITEM_CACHE_MODE)
+        self._locked = False
 
     def __str__(self):
         return '{}.PortItem("{}")'.format(self.__module__, self.name)
@@ -131,11 +131,11 @@ class PortItem(QtWidgets.QGraphicsItem):
         super(PortItem, self).mouseReleaseEvent(event)
 
     def hoverEnterEvent(self, event):
-        self.hovered = True
+        self._hovered = True
         super(PortItem, self).hoverEnterEvent(event)
         
     def hoverLeaveEvent(self, event):
-        self.hovered = False
+        self._hovered = False
         super(PortItem, self).hoverLeaveEvent(event)
 
     def viewer_start_connection(self):
@@ -223,6 +223,19 @@ class PortItem(QtWidgets.QGraphicsItem):
         self._border_size = size
 
     @property
+    def locked(self):
+        return self._locked
+
+    @locked.setter
+    def locked(self, value=False):
+        self._locked = value
+        conn_type = 'multi' if self.multi_connection else 'single'
+        tooltip = '{}: ({})'.format(self.name, conn_type)
+        if value:
+            tooltip += ' (L)'
+        self.setToolTip(tooltip)
+
+    @property
     def multi_connection(self):
         return self._multi_connection
 
@@ -239,9 +252,6 @@ class PortItem(QtWidgets.QGraphicsItem):
     @port_type.setter
     def port_type(self, port_type):
         self._port_type = port_type
-
-    def delete(self):
-        [pipe.delete() for pipe in self.connected_pipes]
 
     def connect_to(self, port):
         if not port:
@@ -302,6 +312,7 @@ class CustomPortItem(PortItem):
                 'multi_connection': self.multi_connection,
                 'connected': bool(self.connected_pipes),
                 'hovered': self.hovered,
+                'locked': self.locked,
             }
             self._port_painter(painter, port_rect, port_info)
         else:

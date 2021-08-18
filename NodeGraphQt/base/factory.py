@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 from ..errors import NodeRegistrationError
 
 
@@ -8,9 +7,10 @@ class NodeFactory(object):
     Node factory that stores all the node types.
     """
 
-    __aliases = {}
-    __names = {}
-    __nodes = {}
+    def __init__(self):
+        self.__aliases = {}
+        self.__names = {}
+        self.__nodes = {}
 
     @property
     def names(self):
@@ -44,7 +44,7 @@ class NodeFactory(object):
 
     def create_node_instance(self, node_type=None, alias=None):
         """
-        create node class by the node type identifier or alias.
+        create node object by the node type identifier or alias.
 
         Args:
             node_type (str): node type.
@@ -66,7 +66,7 @@ class NodeFactory(object):
         register the node.
 
         Args:
-            node (Node): node item
+            node (NodeGraphQt.NodeObject): node object.
             alias (str): custom alias for the node identifier (optional).
         """
         if node is None:

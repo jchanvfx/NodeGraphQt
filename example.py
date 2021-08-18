@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 import os
 
+from Qt import QtCore, QtGui, QtWidgets
+
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
                          BackdropNode,
-                         setup_context_menu)
-from NodeGraphQt import (QtCore,
-                         QtGui,
-                         QtWidgets,
                          PropertiesBinWidget,
-                         NodeTreeWidget)
+                         NodeTreeWidget,
+                         setup_context_menu)
 
 # import example nodes from the "example_nodes" package
 from example_nodes import basic_nodes, widget_nodes
@@ -169,7 +168,7 @@ if __name__ == '__main__':
 
 
     # registered nodes.
-    reg_nodes = [
+    nodes_to_reg = [
         BackdropNode, MyNode,
         basic_nodes.FooNode,
         basic_nodes.BarNode,
@@ -177,34 +176,34 @@ if __name__ == '__main__':
         widget_nodes.TextInputNode,
         widget_nodes.CheckboxNode
     ]
-    for n in reg_nodes:
-        graph.register_node(n)
+    graph.register_nodes(nodes_to_reg)
 
-    my_node = graph.create_node('com.chantasticvfx.MyNode',
-                                name='chantastic!',
-                                color='#0a1e20',
-                                text_color='#feab20',
-                                pos=[310, 10])
+    my_node = graph.create_node(
+        'com.chantasticvfx.MyNode',
+        name='chantastic!',
+        color='#0a1e20',
+        text_color='#feab20'
+    )
 
-    foo_node = graph.create_node('com.chantasticvfx.FooNode',
-                                 name='node',
-                                 pos=[-480, 140])
+    foo_node = graph.create_node(
+        'com.chantasticvfx.FooNode',
+        name='node')
     foo_node.set_disabled(True)
 
     # create example "TextInputNode".
-    text_node = graph.create_node('com.chantasticvfx.TextInputNode',
-                                  name='text node',
-                                  pos=[-480, -160])
+    text_node = graph.create_node(
+        'com.chantasticvfx.TextInputNode',
+        name='text node')
 
     # create example "TextInputNode".
-    checkbox_node = graph.create_node('com.chantasticvfx.CheckboxNode',
-                                  name='checkbox node',
-                                  pos=[-480, -20])
+    checkbox_node = graph.create_node(
+        'com.chantasticvfx.CheckboxNode',
+        name='checkbox node')
 
     # create node with a combo box menu.
-    menu_node = graph.create_node('com.chantasticvfx.DropdownMenuNode',
-                                  name='menu node',
-                                  pos=[280, -200])
+    menu_node = graph.create_node(
+        'com.chantasticvfx.DropdownMenuNode',
+        name='menu node')
 
     # change node icon.
     this_path = os.path.dirname(os.path.abspath(__file__))
@@ -212,12 +211,18 @@ if __name__ == '__main__':
     bar_node = graph.create_node('com.chantasticvfx.BarNode')
     bar_node.set_icon(icon)
     bar_node.set_name('icon node')
-    bar_node.set_pos(-70, 10)
 
-    # connect the nodes
+    # connect the nodes.
     foo_node.set_output(0, bar_node.input(2))
     menu_node.set_input(0, bar_node.output(1))
     bar_node.set_input(0, text_node.output(0))
+
+    # auto layout nodes.
+    graph.auto_layout_nodes()
+
+    # wrap a backdrop node.
+    backdrop_node = graph.create_node('nodeGraphQt.nodes.BackdropNode')
+    backdrop_node.wrap_nodes([text_node, checkbox_node])
 
     graph.fit_to_selection()
 

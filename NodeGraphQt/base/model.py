@@ -11,6 +11,9 @@ from ..errors import NodePropertyError
 
 
 class PortModel(object):
+    """
+    Data dump for a port object.
+    """
 
     def __init__(self, node):
         self.node = node
@@ -19,6 +22,7 @@ class PortModel(object):
         self.display_name = True
         self.multi_connection = False
         self.visible = True
+        self.locked = False
         self.connected_ports = defaultdict(list)
         self.data_type = 'NoneType'
 
@@ -38,6 +42,8 @@ class PortModel(object):
                     'name': 'port',
                     'display_name': True,
                     'multi_connection': False,
+                    'visible': True,
+                    'locked': False,
                     'connected_ports': {<node_id>: [<port_name>, <port_name>]}
                 }
         """
@@ -48,6 +54,9 @@ class PortModel(object):
 
 
 class NodeModel(object):
+    """
+    Data dump for a node object.
+    """
 
     def __init__(self):
         self.type_ = None
@@ -157,8 +166,7 @@ class NodeModel(object):
         elif name in self._custom_prop.keys():
             self._custom_prop[name] = value
         else:
-            self.add_property(name, value)
-            # raise NodePropertyError('No property "{}"'.format(name))
+            raise NodePropertyError('No property "{}"'.format(name))
 
     def get_property(self, name):
         if name in self.properties.keys():
@@ -223,9 +231,11 @@ class NodeModel(object):
                     'disabled': False,
                     'visible': True,
                     'inputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'outputs': {
-                        <port_name>: {<node_id>: [<port_name>, <port_name>]}},
+                        <port_name>: {<node_id>: [<port_name>, <port_name>]}
+                    },
                     'input_ports': [<port_name>, <port_name>],
                     'output_ports': [<port_name>, <port_name>],
                     'width': 0.0,
@@ -310,25 +320,46 @@ class NodeModel(object):
 
 
 class NodeGraphModel(object):
+    """
+    Data dump for a node graph.
+    """
 
     def __init__(self):
+        self.__common_node_props = {}
+
         self.nodes = {}
         self.session = ''
         self.acyclic = True
-        self.__common_node_props = {}
+        self.pipe_collision = False
 
     def common_properties(self):
+        """
+        Return all common node properties.
+
+        Returns:
+            dict: common node properties.
+                eg.
+                    {'nodeGraphQt.nodes.FooNode': {
+                        'my_property': {
+                            'widget_type': 0,
+                            'tab': 'Properties',
+                            'items': ['foo', 'bar', 'test'],
+                            'range': (0, 100)
+                            }
+                        }
+                    }
+        """
         return self.__common_node_props
 
     def set_node_common_properties(self, attrs):
         """
-        store common node properties.
+        Store common node properties.
 
         Args:
             attrs (dict): common node properties.
                 eg.
-                     {'nodeGraphQt.nodes.FooNode': {
-                        'my_property':{
+                    {'nodeGraphQt.nodes.FooNode': {
+                        'my_property': {
                             'widget_type': 0,
                             'tab': 'Properties',
                             'items': ['foo', 'bar', 'test'],
@@ -353,6 +384,8 @@ class NodeGraphModel(object):
 
     def get_node_common_properties(self, node_type):
         """
+        Return all the common properties for a registered node.
+
         Args:
             node_type (str): node type.
 

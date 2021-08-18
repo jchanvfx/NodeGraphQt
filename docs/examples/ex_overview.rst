@@ -1,5 +1,5 @@
-NodeGraph Overview
-##################
+Basic Overview
+##############
 
 User interface overview for the node graph.
 
@@ -54,8 +54,8 @@ Connection pipes can be disconnected easily with the built in slice tool.
 +---------------------+----------------------------+
 
 
-Basic Example
-*************
+Simple Example
+**************
 
 Here's a basic example snippet for creating two nodes and connecting them together.
 
@@ -64,7 +64,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
 
     import sys
 
-    from NodeGraphQt import QtWidgets
+    from Qt import QtWidgets
     from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
 
 

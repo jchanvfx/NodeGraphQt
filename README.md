@@ -9,14 +9,14 @@
 
 ---
 
-NodeGraphQt is a node graph framework that can be implemented and re purposed into 
-applications that supports PySide2.
+NodeGraphQt is a node graph framework for PySide2 that can be implemented and re-purposed into 
+applications.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
-#### Documentation
+#### API Documentation
 
-<a href="https://jchanvfx.github.io/NodeGraphQt">NodeGraphQt Documentation</a>
+https://jchanvfx.github.io/NodeGraphQt
 
 #### Navigation
 
@@ -34,15 +34,17 @@ applications that supports PySide2.
 | ----------------- |:------------------------:|
 | Slice Connections | `Shift + Alt + LMB Drag` |
 
-#### Properties Bin
-<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
-
 #### Vertical Layout
 <img src="/docs/_images/vertical_layout.png" width="400" title="Vertical Layout">
 
 #### Pipe Layout
 
 <img src="/docs/_images/pipe_layout_types.gif" width="600" title="Pipe Layout">
+
+#### Widgets
+<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
+<img src="/docs/_images/nodes_palette.png" width="350" title="Nodes Paletten">
+<img src="/docs/_images/nodes_tree.png" width="250" title="Nodes Tree">
 
 #### Example
 
@@ -84,14 +86,20 @@ if __name__ == '__main__':
     graph.register_node(MyNode)
    
     # create nodes.
-    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
     node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
     node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
+    backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
     
-    # connect node a input to node b output.
-    node_a.set_input(0, node_b.output(0))    
+    # wrap "backdrop" node around "node_a" and "node_b"
+    backdrop.wrap_nodes([node_a, node_b])
 
-    # get the widget and show.
+    # connect "node_a" input to "node_b" output.
+    node_a.set_input(0, node_b.output(0)) 
+
+    # auto layout nodes.
+    graph.auto_layout_nodes()
+
+    # show the node graph widget.
     graph_widget = graph.widget
     graph_widget.show()
 

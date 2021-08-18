@@ -10,7 +10,7 @@ NodeObject
 
         Initial base node name.
 
-        .. note:: re-implement this attribute to provide a base node name.
+        .. important:: re-implement this attribute to provide a base node name.
 
         :return: node name
         :rtype: str
@@ -18,11 +18,11 @@ NodeObject
     .. autoattribute:: __identifier__
         :annotation:
 
-        Unique node identifier domain. eg. ``"com.chantacticvfx"``
+        Unique node identifier domain. eg. ``"nodeGraphQt.nodes"``
 
-        .. note:: re-implement this attribute to provide a unique node type.
+        .. important:: re-implement this attribute to provide a unique node type.
 
-        :return: node identifer domain
+        :return: node identifier domain
         :rtype: str
 
     .. autoattribute:: graph
@@ -31,7 +31,7 @@ NodeObject
     .. autoattribute:: type_
         :annotation:
 
-        Node type identifier followed by the class name. `eg.` ``"com.chantacticvfx.NodeObject"``
+        Node type identifier followed by the class name (<identifier>.<class_name>). `eg.` ``"nodeGraphQt.nodes.NodeObject"``
 
         :return: node type (``__identifier__.__className__``)
         :rtype: str

@@ -1,11 +1,14 @@
 #!/usr/bin/python
 from .commands import (PortConnectedCmd,
                        PortDisconnectedCmd,
+                       PortLockedCmd,
+                       PortUnlockedCmd,
                        PortVisibleCmd,
                        NodeInputConnectedCmd,
                        NodeInputDisconnectedCmd)
 from .model import PortModel
 from ..constants import IN_PORT, OUT_PORT
+from ..errors import PortError
 
 
 class Port(object):
@@ -14,6 +17,10 @@ class Port(object):
 
     .. image:: ../_images/port.png
         :width: 50%
+
+    See Also:
+        For adding a ports into a node see:
+        :meth:`BaseNode.add_input`, :meth:`BaseNode.add_output`
 
     Args:
         node (NodeGraphQt.NodeObject): parent node.
@@ -32,7 +39,7 @@ class Port(object):
     @property
     def view(self):
         """
-        returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
+        Returns the :class:`QtWidgets.QGraphicsItem` used in the scene.
 
         Returns:
             NodeGraphQt.qgraphics.port.PortItem: port item.
@@ -42,7 +49,7 @@ class Port(object):
     @property
     def model(self):
         """
-        returns the port model.
+        Returns the port model.
 
         Returns:
             NodeGraphQt.base.model.PortModel: port model.
@@ -116,6 +123,57 @@ class Port(object):
         undo_stack.push(PortVisibleCmd(self))
         undo_stack.endMacro()
 
+    def locked(self):
+        """
+        Returns the locked state.
+
+        If ports are locked then new pipe connections can't be connected
+        and current connected pipes can't be disconnected.
+
+        Returns:
+            bool: true if locked.
+        """
+        return self.model.locked
+
+    def lock(self):
+        """
+        Lock the port so new pipe connections can't be connected and
+        current connected pipes can't be disconnected.
+
+        This is the same as calling :meth:`Port.set_locked` with the arg
+        set to ``True``
+        """
+        self.set_locked(True, connected_ports=True)
+
+    def unlock(self):
+        """
+        Unlock the port so new pipe connections can be connected and
+        existing connected pipes can be disconnected.
+
+        This is the same as calling :meth:`Port.set_locked` with the arg
+        set to ``False``
+        """
+        self.set_locked(False, connected_ports=True)
+
+    def set_locked(self, state=False, connected_ports=True):
+        """
+        Sets the port locked state. When locked pipe connections can't be
+        connected or disconnected from this port.
+
+        Args:
+            state (Bool): port lock state.
+            connected_ports (Bool): apply to lock state to connected ports.
+        """
+        graph = self.node().graph
+        undo_stack = graph.undo_stack()
+        if state:
+            undo_stack.push(PortLockedCmd(self))
+        else:
+            undo_stack.push(PortUnlockedCmd(self))
+        if connected_ports:
+            for port in self.connected_ports():
+                port.set_locked(state, connected_ports=False)
+
     def connected_ports(self):
         """
         Returns all connected ports.
@@ -147,6 +205,11 @@ class Port(object):
 
         if self in port.connected_ports():
             return
+
+        if self.locked() or port.locked():
+            name = [p.name() for p in [self, port] if p.locked()][0]
+            raise PortError(
+                'Can\'t connect port because "{}" is locked.'.format(name))
 
         graph = self.node().graph
         viewer = graph.viewer()
@@ -199,6 +262,12 @@ class Port(object):
         """
         if not port:
             return
+
+        if self.locked() or port.locked():
+            name = [p.name() for p in [self, port] if p.locked()][0]
+            raise PortError(
+                'Can\'t disconnect port because "{}" is locked.'.format(name))
+
         graph = self.node().graph
         graph.undo_stack().beginMacro('disconnect port')
         graph.undo_stack().push(PortDisconnectedCmd(self, port))
@@ -208,6 +277,30 @@ class Port(object):
         # emit "port_disconnected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
         graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])
+
+    def clear_connections(self):
+        """
+        Disconnect from all port connections and emit the
+        :attr:`NodeGraph.port_disconnected` signals from the node graph.
+
+        See Also:
+            :meth:`Port.disconnect_from`,
+            :meth:`Port.connect_to`,
+            :meth:`Port.connected_ports`
+        """
+        if self.locked():
+            err = 'Can\'t clear connections because port "{}" is locked.'
+            raise PortError(err.format(self.name()))
+
+        if not self.connected_ports():
+            return
+
+        graph = self.node().graph
+        undo_stack = graph.undo_stack()
+        undo_stack.beginMacro('"{}" clear connections')
+        for cp in self.connected_ports():
+            self.disconnect_from(cp)
+        undo_stack.endMacro()
 
     @property
     def color(self):
