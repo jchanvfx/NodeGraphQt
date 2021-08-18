@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from NodeGraphQt import NodeGraph, setup_context_menu, \
-    QtWidgets, QtCore, PropertiesBinWidget, BackdropNode
+    PropertiesBinWidget, BackdropNode
+from Qt import QtWidgets, QtCore
 from example_auto_nodes import Publish, RootNode, update_nodes, setup_node_menu
 import importlib
 import inspect

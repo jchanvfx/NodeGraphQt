@@ -676,7 +676,7 @@ class NodeItem(AbstractNodeItem):
             port (PortItem): port object.
             text (QtWidgets.QGraphicsTextItem): port text object.
         """
-        port.delete()
+        [pipe.delete() for pipe in port.connected_pipes]
         port.setParentItem(None)
         text.setParentItem(None)
         self.scene().removeItem(port)

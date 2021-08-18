@@ -1368,9 +1368,14 @@ class NodeGraph(QtCore.QObject):
                 for prop in node.model.properties.keys():
                     if prop in n_data.keys():
                         node.model.set_property(prop, n_data[prop])
+                        if prop in node.view.widgets:
+                            node.view.widgets[prop].set_value(n_data[prop])
+
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
+                    if prop in node.view.widgets:
+                        node.view.widgets[prop].set_value(val)
 
                 nodes[n_id] = node
 
