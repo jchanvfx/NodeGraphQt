@@ -16,7 +16,7 @@ applications.
 
 #### API Documentation
 
-https://jchanvfx.github.io/NodeGraphQt
+<a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">https://jchanvfx.github.io/NodeGraphQt</a>
 
 #### Navigation
 
