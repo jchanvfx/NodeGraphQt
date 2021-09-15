@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import signal
 from Qt import QtWidgets, QtCore
 
 from NodeGraphQt import (NodeGraph,
@@ -11,6 +12,10 @@ from example_nodes import Nodes
 from os.path import join
 
 if __name__ == '__main__':
+    
+    # handle SIGINT to make the app terminate on CTRL+C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication([])
 

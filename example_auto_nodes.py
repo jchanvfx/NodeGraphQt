@@ -1,10 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from NodeGraphQt import NodeGraph, setup_context_menu, \
-    QtWidgets, QtCore, PropertiesBinWidget, BackdropNode
+     PropertiesBinWidget, BackdropNode
+from Qt import QtWidgets, QtCore
 from example_auto_nodes import Publish, RootNode, update_nodes, setup_node_menu
 import importlib
 import inspect
+import signal
 import sys
 import os
 
@@ -47,6 +49,9 @@ def get_published_nodes_from_folder(folder_path):
 
 
 if __name__ == '__main__':
+    # handle SIGINT to make the app terminate on CTRL+C
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication()
 
