@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from Qt import QtCore, QtWidgets
 
 from ..constants import (Z_VAL_NODE, NODE_WIDTH, NODE_HEIGHT, ITEM_CACHE_MODE)

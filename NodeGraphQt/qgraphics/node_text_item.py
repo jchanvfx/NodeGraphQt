@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from Qt import QtWidgets, QtCore, QtGui
 
 

@@ -1,5 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from NodeGraphQt import NodeGraph, setup_context_menu, \
     QtWidgets, QtCore, PropertiesBinWidget, BackdropNode
 from example_auto_nodes import Publish, RootNode, update_nodes, setup_node_menu

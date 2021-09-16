@@ -1,5 +1,7 @@
-import re
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+import re
 from ..constants import ICON_DOWN_ARROW
 
 # Reformat the icon path on Windows OS.

@@ -1,0 +1,22 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: NodeGraphQt
+Upstream-Contact: Johnny Chan
+Source: https://github.com/jchanvfx/NodeGraphQt
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+Files: MANIFEST.in
+Copyright: 2021 Johnny Chan
+License: MIT
+
+Files: *.node *.nodes
+Copyright: 2021 Johnny Chan
+License: MIT
+
+Files: docs/_images/*
+Copyright: 2021 Johnny Chan
+License: CC-BY-4.0

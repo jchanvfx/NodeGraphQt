@@ -1,5 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from Qt import QtWidgets, QtCore, QtGui
 
 from ..constants import URN_SCHEME

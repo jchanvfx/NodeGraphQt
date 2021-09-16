@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from NodeGraphQt import QtCore
 from NodeGraphQt.constants import (NODE_PROP_VECTOR2,
                                    NODE_PROP_VECTOR3,

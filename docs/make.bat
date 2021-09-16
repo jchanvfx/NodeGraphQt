@@ -1,8 +1,10 @@
-@ECHO OFF
+@echo off
+
+REM SPDX-FileCopyrightText: 2021 The Sphinx Authors
+REM SPDX-License-Identifier: CC-BY-4.0
+REM Command file for Sphinx documentation
 
 pushd %~dp0
-
-REM Command file for Sphinx documentation
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build

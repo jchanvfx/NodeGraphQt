@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from Qt import QtWidgets
 
 from .utils import minimize_node_ref_count

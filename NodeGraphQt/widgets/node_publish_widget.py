@@ -1,5 +1,8 @@
-import os
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+import os
 from .properties import PropFileSavePath
 from Qt import QtWidgets
 

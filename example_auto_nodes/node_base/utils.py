@@ -1,5 +1,7 @@
-import hashlib
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+import hashlib
 from NodeGraphQt import topological_sort_by_down, NodePublishWidget
 
 

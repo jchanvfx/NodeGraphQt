@@ -1,5 +1,8 @@
-from Qt import QtWidgets, QtCore
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+from Qt import QtWidgets, QtCore
 from .stylesheet import STYLE_SLASH_BUTTON, STYLE_NODE_BUTTON
 
 

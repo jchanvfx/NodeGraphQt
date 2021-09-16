@@ -1,5 +1,7 @@
-import inspect
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+import inspect
 from .auto_node import AutoNode
 
 

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from .node_base import (ModuleNode,
                         get_functions_from_module,
                         get_functions_from_type)

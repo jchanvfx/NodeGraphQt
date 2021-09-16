@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2021 Johnny Chan -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+
 ## NodeGraphQt
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md) 

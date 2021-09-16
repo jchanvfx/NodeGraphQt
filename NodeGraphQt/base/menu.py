@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from distutils.version import LooseVersion
 
 from Qt import QtGui, QtCore

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 def append(self, object):
     self.append(object)
     return self

@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 from .dialogs import FileDialog
 from .properties import _ValueEdit
 from .stylesheet import *

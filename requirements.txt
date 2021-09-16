@@ -1,1 +1,4 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 Qt.py>=1.2.0

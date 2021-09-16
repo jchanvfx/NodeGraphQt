@@ -1,3 +1,6 @@
+.. SPDX-FileCopyrightText: 2021 Johnny Chan
+.. SPDX-License-Identifier: CC-BY-4.0
+
 Pipe Examples
 #############
 

@@ -1,6 +1,8 @@
-#!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+#! /usr/bin/python3
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
 
+from Qt import QtGui, QtCore, QtWidgets
 from ..constants import Z_VAL_NODE_WIDGET
 
 

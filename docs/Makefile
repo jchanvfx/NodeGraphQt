@@ -1,5 +1,7 @@
+# SPDX-FileCopyrightText: 2021 The Sphinx Authors
+# SPDX-License-Identifier: CC-BY-4.0
+
 # Minimal makefile for Sphinx documentation
-#
 
 # You can set these variables from the command line.
 SPHINXOPTS    =

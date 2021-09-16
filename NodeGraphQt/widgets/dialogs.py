@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Johnny Chan
+# SPDX-License-Identifier: MIT
+
 import os
 
 from .stylesheet import STYLE_MESSAGEBOX
