@@ -135,7 +135,6 @@ class MyNode(BaseNode):
 
 
 if __name__ == '__main__':
-    
     # handle SIGINT to make the app terminate on CTRL+C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     
