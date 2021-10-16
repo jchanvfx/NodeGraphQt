@@ -354,7 +354,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         items = self._items_near(map_pos, None, 20, 20)
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        pipes = [i for i in items if isinstance(i, PipeItem)]
+        # pipes = [i for i in items if isinstance(i, PipeItem)]
 
         if nodes:
             self.MMB_state = False

@@ -95,8 +95,10 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.setFlow(self.LeftToRight)
         self.setDragEnabled(False)
         self.setMinimumHeight(20)
-        self.setMaximumHeight(26)
+        self.setMaximumHeight(36)
         self.setSpacing(0)
+
+        self.viewport().setAutoFillBackground(False)
 
         self.setItemDelegate(NodeNavigationDelagate(self))
         self.setModel(QtGui.QStandardItemModel())
@@ -114,6 +116,8 @@ class NodeNavigationWidget(QtWidgets.QListView):
             rows = [r for r in rows if r > 0]
         else:
             rows = [r for r in rows if index.row() < r]
+        if not rows:
+            return
         rm_node_ids = [self.model().item(r, 0).toolTip() for r in rows]
         node_id = self.model().item(index.row(), 0).toolTip()
         [self.model().removeRow(r) for r in rows]
@@ -132,6 +136,21 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.selectionModel().setCurrentIndex(
             self.model().indexFromItem(item),
             QtCore.QItemSelectionModel.ClearAndSelect)
+
+    def remove_label_item(self, node_id):
+        rows = reversed(range(1, self.model().rowCount()))
+        node_ids = [self.model().item(r, 0).toolTip() for r in rows]
+        if node_id not in node_ids:
+            return
+        index = node_ids.index(node_id)
+        if index == 0:
+            rows = [r for r in rows if r > 0]
+        else:
+            rows = [r for r in rows if index < r]
+        [self.model().removeRow(r) for r in rows]
+
+        # rm_node_ids = [self.model().item(r, 0).toolTip() for r in rows]
+        # print(rm_node_ids)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import copy
 import json
 import os
 import re
@@ -25,6 +26,7 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.group_node import GroupNode
+from NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
@@ -121,9 +123,7 @@ class NodeGraph(QtCore.QObject):
         self._undo_view = None
         self._undo_stack = QtWidgets.QUndoStack(self)
 
-        self._navigator = None
         self._widget = None
-        self._widget_layout = None
 
         self._sub_graphs = {}
 
@@ -402,20 +402,6 @@ class NodeGraph(QtCore.QObject):
             port1.disconnect_from(port2)
         self._undo_stack.endMacro()
 
-    def _on_navigation_changed(self, node_id, rm_node_ids):
-        """
-        Slot when the node navigation has changed.
-
-        Args:
-            node_id (str): selected group node id.
-            rm_node_ids (list[str]): list of group node id to remove.
-        """
-        group_node = self.get_node_by_id(node_id)
-        self.expand_group_node(group_node)
-        for nid in rm_node_ids:
-            grp_node = self.get_node_by_id(nid)
-            self.collapse_group_node(grp_node)
-
     @property
     def model(self):
         """
@@ -442,16 +428,17 @@ class NodeGraph(QtCore.QObject):
         The node graph widget for adding into a layout.
 
         Returns:
-            PySide2.QtWidgets.QWidget: node graph widget.
+            NodeGraphWidget: node graph widget.
         """
         if self._widget is None:
-            self._navigator = NodeNavigationWidget()
-            self._widget = QtWidgets.QWidget()
-            self._widget_layout = QtWidgets.QVBoxLayout(self._widget)
-            self._widget_layout.setContentsMargins(0, 0, 0, 0)
-            self._widget_layout.addWidget(self._navigator)
-            self._widget_layout.addWidget(self._viewer)
-
+            self._widget = NodeGraphWidget()
+            self._widget.addTab(self._viewer, 'Node Graph')
+            tab_bar = self._widget.tabBar()
+            for btn_flag in [tab_bar.RightSide, tab_bar.LeftSide]:
+                tab_btn = tab_bar.tabButton(0, btn_flag)
+                if tab_btn:
+                    tab_btn.deleteLater()
+                    tab_bar.setTabButton(0, btn_flag, None)
         return self._widget
 
     @property
@@ -487,10 +474,11 @@ class NodeGraph(QtCore.QObject):
 
         Warnings:
             Methods in the ``NodeViewer`` are used internally
-            by ``NodeGraphQt`` components.
+            by ``NodeGraphQt`` components to get the widget use
+            :attr:`NodeGraph.widget`.
 
         See Also:
-            :attr:`NodeGraph.widget` for adding the node graph into a
+            :attr:`NodeGraph.widget` to add the node graph widget into a
             :class:`PySide2.QtWidgets.QLayout`.
 
         Returns:
@@ -1454,7 +1442,14 @@ class NodeGraph(QtCore.QObject):
             return
         nodes[0].set_disabled(mode)
 
+    def use_OpenGL(self):
+        """
+        Set the viewport to use QOpenGLWidget widget to draw the graph.
+        """
+        self._viewer.use_OpenGL()
+
     # auto layout node functions.
+    # --------------------------------------------------------------------------
 
     @staticmethod
     def _update_node_rank(node, nodes_rank, down_stream=True):
@@ -1596,6 +1591,7 @@ class NodeGraph(QtCore.QObject):
         self.end_undo()
 
     # convenience dialog functions.
+    # --------------------------------------------------------------------------
 
     def question_dialog(self, text, title='Node Graph'):
         """
@@ -1663,10 +1659,51 @@ class NodeGraph(QtCore.QObject):
         """
         return self._viewer.save_dialog(current_dir, ext)
 
-    # group node functions.
+    # group node / sub graph.
+    # --------------------------------------------------------------------------
 
-    def expand_group_node(self, node=None):
+    @property
+    def is_root(self):
         """
+        Returns if the node graph controller is the root graph.
+
+        Returns:
+            bool: true is the node graph is root.
+        """
+        return True
+
+    @property
+    def sub_graphs(self):
+        """
+        Returns expanded group node sub graphs.
+
+        Returns:
+            dict: {<node_id>: <sub_graph>}
+        """
+        return self._sub_graphs
+
+    # def graph_rect(self):
+    #     """
+    #     Get the graph viewer range (scene size).
+    #
+    #     Returns:
+    #         list[float]: [x, y, width, height].
+    #     """
+    #     return self._viewer.scene_rect()
+    #
+    # def set_graph_rect(self, rect):
+    #     """
+    #     Set the graph viewer range (scene size).
+    #
+    #     Args:
+    #         rect (list[float]): [x, y, width, height].
+    #     """
+    #     self._viewer.set_scene_rect(rect)
+
+    def expand_group_node(self, node):
+        """
+        Expands a group node session in a new tab.
+
         Args:
             node (NodeGraphQt.GroupNode): group node.
 
@@ -1675,21 +1712,34 @@ class NodeGraph(QtCore.QObject):
         """
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
         if self._widget is None:
-            return
+            raise AssertionError('NodeGraph.widget not initialized!')
 
         if node.id in self._sub_graphs:
-            return self._sub_graphs[node.id]
+            sub_graph = self._sub_graphs[node.id]
+            tab_index = self._widget.indexOf(sub_graph.widget)
+            self._widget.setCurrentIndex(tab_index)
+            return sub_graph
 
-        sub_graph = SubGraph(self, node)
+        # build new sub graph.
+        node_factory = copy.deepcopy(self.node_factory)
+        sub_graph = SubGraph(self, node=node, node_factory=node_factory)
+
+        # populate the sub graph.
+        session = node.get_sub_graph_session()
+        sub_graph.deserialize_session(session)
+
+        # store reference to expanded.
         self._sub_graphs[node.id] = sub_graph
 
-        self._viewer.hide()
-        self._widget_layout.addWidget(sub_graph.widget)
+        # open new tab at root level.
+        self.widget.add_viewer(sub_graph.widget, node.name(), node.id)
 
         return sub_graph
 
-    def collapse_group_node(self, node=None):
+    def collapse_group_node(self, node):
         """
+        Collapse a group node session tab and it's expanded child sub graphs.
+
         Args:
             node (NodeGraphQt.GroupNode): group node.
         """
@@ -1698,57 +1748,180 @@ class NodeGraph(QtCore.QObject):
             return
 
         if node.id not in self._sub_graphs:
-            return
+            raise AssertionError('{} sub graph not initialized!'
+                                 .format(node.name()))
 
         sub_graph = self._sub_graphs.pop(node.id)
-        self._viewer.hide()
-        self._widget_layout.addWidget(sub_graph.widget)
 
-    ### ---
+        # collapse child sub graphs here.
+        child_graphs = sub_graph.sub_graphs
+        for child_node_id, child_graph in child_graphs.items():
+            child_node = sub_graph.get_node_by_id(child_node_id)
+            sub_graph.collapse_group_node(child_node)
 
-    def use_OpenGL(self):
-        """
-        Use OpenGL to draw the graph.
-        """
-        self._viewer.use_OpenGL()
+        # update the group node model with serialized session.
+        serialized_session = sub_graph.serialize_session()
+        node.set_sub_graph_session(serialized_session)
 
-    def graph_rect(self):
-        """
-        Get the graph viewer range (scene size).
+        sub_graph.clear_session()
 
-        Returns:
-            list[float]: [x, y, width, height].
-        """
-        return self._viewer.scene_rect()
+        # remove the sub graph tab.
+        self.widget.remove_viewer(sub_graph.widget)
 
-    def set_graph_rect(self, rect):
-        """
-        Set the graph viewer range (scene size).
-
-        Args:
-            rect (list[float]): [x, y, width, height].
-        """
-        self._viewer.set_scene_rect(rect)
+        del sub_graph
 
 
 class SubGraph(NodeGraph):
+    """
+    The ``SubGraph`` class is just like the ``NodeGraph`` but is the main
+    controller for managing the expanded node graph for a group node.
 
-    subgraph_exited = QtCore.Signal()
+    Inherited from: :class:`NodeGraphQt.NodeGraph`
+    """
 
-    def __init__(self, parent=None, node=None):
+    def __init__(self, parent=None, node=None, node_factory=None):
         super(SubGraph, self).__init__(parent)
+        self._node_factory = node_factory or self._node_factory
+
+        # sub graph attributes.
         self._node = node
         self._parent_graph = parent
+        self._subviewer_widget = None
 
-        del self._widget_layout
+        if self._parent_graph.is_root:
+            self._initialized_graphs = [self]
+            self._sub_graphs[self._node.id] = self
+        else:
+            # delete attributes if not top level sub graph.
+            del self._widget
+            del self._sub_graphs
+
+    def _build_context_menu(self):
+        super(SubGraph, self)._build_context_menu()
+
+    def _wire_signals(self):
+        super(SubGraph, self)._wire_signals()
+
+    def _on_navigation_changed(self, node_id, rm_node_ids):
+        """
+        Slot when the node navigation widget has changed.
+
+        Args:
+            node_id (str): selected group node id.
+            rm_node_ids (list[str]): list of group node id to remove.
+        """
+        if node_id not in self.sub_graphs:
+            if node_id == 'root':
+                # close the tab got to root graph.
+                return
+            return
+
+        # collapse child sub graphs.
+        for rm_node_id in rm_node_ids:
+            child_node = self.sub_graphs[rm_node_id].node
+            self.collapse_group_node(child_node)
+
+        # show the selected node id sub graph.
+        sub_graph = self.sub_graphs[node_id]
+        self.widget.show_viewer(sub_graph.subviewer_widget)
+
+    def _on_tab_closed(self):
+        return
+
+    @property
+    def is_root(self):
+        """
+        Returns if the node graph controller is the main root graph.
+
+        Returns:
+            bool: true is the node graph is root.
+        """
+        return False
+
+    @property
+    def sub_graphs(self):
+        """
+        Returns expanded group node sub graphs.
+
+        Returns:
+            dict: {<node_id>: <sub_graph>}
+        """
+        if self.parent_graph.is_root:
+            return self._sub_graphs
+        return self.parent_graph.sub_graphs
+
+    @property
+    def initialized_graphs(self):
+        """
+        Returns a list of the sub graphs in the order they were initialized.
+
+        Returns:
+            list[SubGraph]: list of sub graph objects.
+        """
+        if self._parent_graph.is_root:
+            return self._initialized_graphs
+        return self._parent_graph.initialized_graphs
 
     @property
     def widget(self):
-        if self._widget is None:
-            self._widget = QtWidgets.QWidget()
-            layout = QtWidgets.QVBoxLayout(self._widget)
+        """
+        The sub graph widget from the top most sub graph.
+
+        Returns:
+            SubGraphWidget: node graph widget.
+        """
+        if self.parent_graph.is_root:
+            if self._widget is None:
+                self._widget = SubGraphWidget()
+                self._widget.add_viewer(self.subviewer_widget,
+                                        self.node.name(),
+                                        self.node.id)
+                # connect the navigator widget signals.
+                navigator = self._widget.navigator
+                navigator.navigation_changed.connect(
+                    self._on_navigation_changed
+                )
+
+            return self._widget
+        return self.parent_graph.widget
+
+    @property
+    def navigation_widget(self):
+        """
+        The navigation widget from the top most sub graph.
+
+        Returns:
+            NodeNavigationWidget: navigation widget.
+        """
+        if self.parent_graph.is_root:
+            return self.widget.navigator
+        return self.parent_graph.navigation_widget
+
+    @property
+    def subviewer_widget(self):
+        """
+        The widget to the sub graph.
+
+        Returns:
+            PySide2.QtWidgets.QWidget: node graph widget.
+        """
+        if self._subviewer_widget is None:
+            self._subviewer_widget = QtWidgets.QWidget()
+            layout = QtWidgets.QVBoxLayout(self._subviewer_widget)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.setSpacing(1)
             layout.addWidget(self._viewer)
-        return self._widget
+        return self._subviewer_widget
+
+    @property
+    def parent_graph(self):
+        """
+        The parent node graph controller.
+
+        Returns:
+            NodeGraphQt.NodeGraph or NodeGraphQt.SubGraph: parent graph.
+        """
+        return self._parent_graph
 
     @property
     def node(self):
@@ -1756,6 +1929,104 @@ class SubGraph(NodeGraph):
         Returns the parent node to the sub graph.
 
         Returns:
-            GroupNode:
+            NodeGraphQt.GroupNode: group node.
         """
         return self._node
+
+    def collapse_graph(self, clear_session=True):
+        """
+        Collapse the current sub graph and hide its widget.
+
+        Args:
+            clear_session (bool): clear the current session.
+        """
+        # update the group node.
+        serialized_session = self.serialize_session()
+        self.node.set_sub_graph_session(serialized_session)
+
+        # close the visible widgets.
+        if self._undo_view:
+            self._undo_view.close()
+
+        if self._subviewer_widget:
+            self.widget.hide_viewer(self._subviewer_widget)
+
+        if clear_session:
+            self.clear_session()
+
+    def expand_group_node(self, node):
+        """
+        Expands a group node session in current sub view.
+
+        Args:
+            node (NodeGraphQt.GroupNode): group node.
+
+        Returns:
+            SubGraph: sub node graph used to manage the group node session.
+        """
+        assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
+        if self._subviewer_widget is None:
+            raise AssertionError('SubGraph.widget not initialized!')
+
+        if node.id in self.sub_graphs:
+            return self.sub_graphs[node.id]
+
+        # collapse expanded child sub graphs.
+        group_ids = [n.id for n in self.all_nodes() if isinstance(n, GroupNode)]
+        for grp_node_id, grp_sub_graph in self.sub_graphs.items():
+            # collapse current group node.
+            if grp_node_id in group_ids:
+                grp_node = self.get_node_by_id(grp_node_id)
+                self.collapse_group_node(grp_node)
+
+            # close the widgets
+            grp_sub_graph.collapse_graph(clear_session=False)
+
+        # build new sub graph.
+        node_factory = copy.deepcopy(self.node_factory)
+        sub_graph = SubGraph(self, node=node, node_factory=node_factory)
+
+        # populate the sub graph.
+        serialized_session = node.get_sub_graph_session()
+        sub_graph.deserialize_session(serialized_session)
+
+        # open new sub graph view.
+        self.widget.add_viewer(sub_graph.subviewer_widget,
+                               node.name(),
+                               node.id)
+
+        # store the references.
+        self.sub_graphs[node.id] = sub_graph
+        self.initialized_graphs.append(sub_graph)
+
+        return sub_graph
+
+    def collapse_group_node(self, node):
+        """
+        Collapse a group node session and it's expanded child sub graphs.
+
+        Args:
+            node (NodeGraphQt.GroupNode): group node.
+        """
+        # update the references.
+        sub_graph = self.sub_graphs.pop(node.id, None)
+        if not sub_graph:
+            return
+
+        init_idx = self.initialized_graphs.index(sub_graph) + 1
+        for sgraph in reversed(self.initialized_graphs[init_idx:]):
+            self.initialized_graphs.remove(sgraph)
+
+        # collapse child sub graphs here.
+        child_ids = [
+            n.id for n in sub_graph.all_nodes() if isinstance(n, GroupNode)
+        ]
+        for child_id in child_ids:
+            if self.sub_graphs.get(child_id):
+                child_graph = self.sub_graphs.pop(child_id)
+                child_graph.collapse_graph(clear_session=True)
+                # remove child viewer widget.
+                self.widget.remove_viewer(child_graph.subviewer_widget)
+
+        sub_graph.collapse_graph(clear_session=True)
+        self.widget.remove_viewer(sub_graph.subviewer_widget)

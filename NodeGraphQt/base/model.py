@@ -80,7 +80,7 @@ class NodeModel(object):
         self.port_deletion_allowed = False
 
         # GroupNode attrs.
-        self.subgraph_session = None
+        self.subgraph_session = {}
 
         # Custom
         self._custom_prop = {}

@@ -670,7 +670,6 @@ class NodeItem(AbstractNodeItem):
             port (PortItem): port object.
             text (QtWidgets.QGraphicsTextItem): port text object.
         """
-        port.delete()
         port.setParentItem(None)
         text.setParentItem(None)
         self.scene().removeItem(port)
