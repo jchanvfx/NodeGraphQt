@@ -7,7 +7,7 @@ def build_context_menu(graph):
     Args:
         graph (NodeGraphQt.NodeGraph): node graph controller.
     """
-    from Qt import QtGui
+    from Qt import QtGui, QtCore
     graph_menu = graph.get_context_menu('graph')
 
     # "File" menu.
@@ -45,25 +45,11 @@ def build_context_menu(graph):
 
     edit_menu.add_separator()
 
-    edit_menu.add_command(
-        'Auto Layout Up Stream', _layout_graph_up, 'L')
-    edit_menu.add_command(
-        'Auto Layout Down Stream', _layout_graph_down, 'Ctrl+L')
-
-    edit_menu.add_separator()
-
     edit_menu.add_command('Zoom In', _zoom_in, '=')
     edit_menu.add_command('Zoom Out', _zoom_out, '-')
     edit_menu.add_command('Reset Zoom', _reset_zoom, 'H')
 
     edit_menu.add_separator()
-
-    # "Pipe" submenu.
-    # --------------------------------------------------------------------------
-    pipe_menu = edit_menu.add_menu('&Pipe')
-    pipe_menu.add_command('Curved Pipe', _curved_pipe)
-    pipe_menu.add_command('Straight Pipe', _straight_pipe)
-    pipe_menu.add_command('Angle Pipe', _angle_pipe)
 
     # "Grid Mode" submenu.
     # --------------------------------------------------------------------------
@@ -73,6 +59,25 @@ def build_context_menu(graph):
     bg_menu.add_command('Dots', _bg_grid_dots)
 
     edit_menu.add_separator()
+
+    # "Node" menu.
+    # --------------------------------------------------------------------------
+    node_menu = graph_menu.add_menu('&Nodes')
+    node_menu.add_command(
+        'Auto Layout Up Stream', _layout_graph_up, 'L')
+    node_menu.add_command(
+        'Auto Layout Down Stream', _layout_graph_down, 'Ctrl+L')
+    node_menu.add_separator()
+    node_menu.add_command(
+        'Expand Group', _expand_group_node,
+        QtGui.QKeySequence(QtCore.Qt.ALT + QtCore.Qt.Key_Return))
+
+    # "Pipe" menu.
+    # --------------------------------------------------------------------------
+    pipe_menu = graph_menu.add_menu('&Pipes')
+    pipe_menu.add_command('Curved', _curved_pipe)
+    pipe_menu.add_command('Straight', _straight_pipe)
+    pipe_menu.add_command('Angle', _angle_pipe)
 
 # ------------------------------------------------------------------------------
 # --- menu command functions ---
@@ -218,6 +223,15 @@ def _duplicate_nodes(graph):
     Duplicated selected nodes.
     """
     graph.duplicate_nodes(graph.selected_nodes())
+
+
+def _expand_group_node(graph):
+    """
+    Expand selected group node.
+    """
+    selected_nodes = graph.selected_nodes()
+    if selected_nodes:
+        graph.expand_group_node(selected_nodes[0])
 
 
 def _fit_to_selection(graph):
