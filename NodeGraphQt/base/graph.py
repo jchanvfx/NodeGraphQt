@@ -147,6 +147,8 @@ class NodeGraph(QtCore.QObject):
         """
         Connect up all the signals and slots here.
         """
+        # TODO: refactor hard coded tab search logic into
+        #       "graph_actions.py" module.
         # hard coded tab search.
         tab = QtWidgets.QShortcut(
             QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
