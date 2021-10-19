@@ -1269,6 +1269,7 @@ class NodeGraph(QtCore.QObject):
         """
         self.clear_session()
         self._deserialize(layout_data)
+        self.clear_selection()
         self._undo_stack.clear()
 
     def save_session(self, file_path):
@@ -1812,23 +1813,15 @@ class SubGraph(NodeGraph):
             node_id (str): selected group node id.
             rm_node_ids (list[str]): list of group node id to remove.
         """
-        if node_id not in self.sub_graphs:
-            if node_id == 'root':
-                # close the tab got to root graph.
-                return
-            return
-
         # collapse child sub graphs.
         for rm_node_id in rm_node_ids:
             child_node = self.sub_graphs[rm_node_id].node
             self.collapse_group_node(child_node)
 
         # show the selected node id sub graph.
-        sub_graph = self.sub_graphs[node_id]
-        self.widget.show_viewer(sub_graph.subviewer_widget)
-
-    def _on_tab_closed(self):
-        return
+        sub_graph = self.sub_graphs.get(node_id)
+        if sub_graph:
+            self.widget.show_viewer(sub_graph.subviewer_widget)
 
     @property
     def is_root(self):
@@ -2032,3 +2025,8 @@ class SubGraph(NodeGraph):
 
         sub_graph.collapse_graph(clear_session=True)
         self.widget.remove_viewer(sub_graph.subviewer_widget)
+
+        if sub_graph.parent_graph.is_root:
+            # close the tab if top level sub graph.
+            sub_graph.parent_graph.sub_graphs.pop(self.node.id)
+            sub_graph.parent_graph.widget.remove_viewer(self.widget)
