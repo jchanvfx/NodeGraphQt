@@ -149,9 +149,6 @@ class NodeNavigationWidget(QtWidgets.QListView):
             rows = [r for r in rows if index < r]
         [self.model().removeRow(r) for r in rows]
 
-        # rm_node_ids = [self.model().item(r, 0).toolTip() for r in rows]
-        # print(rm_node_ids)
-
 
 if __name__ == '__main__':
     import sys

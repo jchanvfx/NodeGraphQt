@@ -230,8 +230,10 @@ def _expand_group_node(graph):
     Expand selected group node.
     """
     selected_nodes = graph.selected_nodes()
-    if selected_nodes:
-        graph.expand_group_node(selected_nodes[0])
+    if len(selected_nodes) > 1:
+        graph.message_dialog('Please select a single "GroupNode" to expand.')
+        return
+    graph.expand_group_node(selected_nodes[0])
 
 
 def _fit_to_selection(graph):

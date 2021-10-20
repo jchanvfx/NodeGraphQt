@@ -133,7 +133,7 @@ class NodeGraph(QtCore.QObject):
         self._wire_signals()
 
     def __repr__(self):
-        return '<{} object at {}>'.format(
+        return '<{}("root") object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
 
     def _build_context_menu(self):
@@ -435,12 +435,16 @@ class NodeGraph(QtCore.QObject):
         if self._widget is None:
             self._widget = NodeGraphWidget()
             self._widget.addTab(self._viewer, 'Node Graph')
+            # hide the close button on the first tab.
             tab_bar = self._widget.tabBar()
             for btn_flag in [tab_bar.RightSide, tab_bar.LeftSide]:
                 tab_btn = tab_bar.tabButton(0, btn_flag)
                 if tab_btn:
                     tab_btn.deleteLater()
                     tab_bar.setTabButton(0, btn_flag, None)
+            self._widget.tabCloseRequested.connect(
+                self._on_close_sub_graph_tab
+            )
         return self._widget
 
     @property
@@ -1388,8 +1392,14 @@ class NodeGraph(QtCore.QObject):
         if not cb_text:
             return
 
+        try:
+            serial_data = json.loads(cb_text)
+        except json.decoder.JSONDecodeError as e:
+            print('ERROR: Can\'t Decode Clipboard Data:\n'
+                  '"{}"'.format(cb_text))
+            return
+
         self._undo_stack.beginMacro('pasted nodes')
-        serial_data = json.loads(cb_text)
         self.clear_selection()
         nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
@@ -1665,6 +1675,16 @@ class NodeGraph(QtCore.QObject):
     # group node / sub graph.
     # --------------------------------------------------------------------------
 
+    # def _on_close_sub_graph_tab(self, index):
+    #     """
+    #     Called when the close button is clicked on a expanded sub graph.
+    #
+    #     Args:
+    #         index (int): tab index.
+    #     """
+    #     print('close tab', self.widget.tabText(index))
+    #     print(self.widget.widget(index))
+
     @property
     def is_root(self):
         """
@@ -1716,6 +1736,9 @@ class NodeGraph(QtCore.QObject):
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
         if self._widget is None:
             raise AssertionError('NodeGraph.widget not initialized!')
+
+        self.viewer().clear_key_state()
+        self.viewer().clearFocus()
 
         if node.id in self._sub_graphs:
             sub_graph = self._sub_graphs[node.id]
@@ -1799,6 +1822,10 @@ class SubGraph(NodeGraph):
             del self._widget
             del self._sub_graphs
 
+    def __repr__(self):
+        return '<{}("{}") object at {}>'.format(
+            self.__class__.__name__, self._node.name(), hex(id(self)))
+
     def _build_context_menu(self):
         super(SubGraph, self)._build_context_menu()
 
@@ -1822,6 +1849,7 @@ class SubGraph(NodeGraph):
         sub_graph = self.sub_graphs.get(node_id)
         if sub_graph:
             self.widget.show_viewer(sub_graph.subviewer_widget)
+            sub_graph.viewer().setFocus()
 
     @property
     def is_root(self):
@@ -1876,7 +1904,6 @@ class SubGraph(NodeGraph):
                 navigator.navigation_changed.connect(
                     self._on_navigation_changed
                 )
-
             return self._widget
         return self.parent_graph.widget
 
@@ -1963,7 +1990,12 @@ class SubGraph(NodeGraph):
         if self._subviewer_widget is None:
             raise AssertionError('SubGraph.widget not initialized!')
 
+        self.viewer().clear_key_state()
+        self.viewer().clearFocus()
+
         if node.id in self.sub_graphs:
+            sub_graph_viewer = self.sub_graphs[node.id].viewer()
+            sub_graph_viewer.setFocus()
             return self.sub_graphs[node.id]
 
         # collapse expanded child sub graphs.
@@ -2026,7 +2058,7 @@ class SubGraph(NodeGraph):
         sub_graph.collapse_graph(clear_session=True)
         self.widget.remove_viewer(sub_graph.subviewer_widget)
 
+        # close tab if sub graph is top level.
         if sub_graph.parent_graph.is_root:
-            # close the tab if top level sub graph.
             sub_graph.parent_graph.sub_graphs.pop(self.node.id)
             sub_graph.parent_graph.widget.remove_viewer(self.widget)

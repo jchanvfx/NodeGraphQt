@@ -76,7 +76,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._detached_port = None
         self._start_port = None
         self._origin_pos = None
-        self._previous_pos = QtCore.QPoint(self.width(), self.height())
+        self._previous_pos = QtCore.QPoint(int(self.width() / 2),
+                                           int(self.height() / 2))
         self._prev_selection_nodes = []
         self._prev_selection_pipes = []
         self._node_positions = {}

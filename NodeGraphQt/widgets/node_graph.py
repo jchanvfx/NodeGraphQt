@@ -35,7 +35,7 @@ class SubGraphWidget(QtWidgets.QWidget):
         self._viewer_current = None
 
         # add initial root item to navigator.
-        self._navigator.add_label_item('Root', 'root')
+        self._navigator.add_label_item('Close Graph', 'root')
 
     @property
     def navigator(self):
