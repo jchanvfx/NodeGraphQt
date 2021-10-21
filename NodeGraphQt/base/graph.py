@@ -911,7 +911,7 @@ class NodeGraph(QtCore.QObject):
             self._undo_stack.push(undo_cmd)
             self.node_created.emit(node)
             return node
-        raise Exception('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
+        raise TypeError('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
     def add_node(self, node, pos=None):
         """
@@ -1675,15 +1675,16 @@ class NodeGraph(QtCore.QObject):
     # group node / sub graph.
     # --------------------------------------------------------------------------
 
-    # def _on_close_sub_graph_tab(self, index):
-    #     """
-    #     Called when the close button is clicked on a expanded sub graph.
-    #
-    #     Args:
-    #         index (int): tab index.
-    #     """
-    #     print('close tab', self.widget.tabText(index))
-    #     print(self.widget.widget(index))
+    def _on_close_sub_graph_tab(self, index):
+        """
+        Called when the close button is clicked on a expanded sub graph tab.
+
+        Args:
+            index (int): tab index.
+        """
+        node_id = self.widget.tabToolTip(index)
+        group_node = self.get_node_by_id(node_id)
+        self.collapse_group_node(group_node)
 
     @property
     def is_root(self):
@@ -1735,7 +1736,7 @@ class NodeGraph(QtCore.QObject):
         """
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
         if self._widget is None:
-            raise AssertionError('NodeGraph.widget not initialized!')
+            raise RuntimeError('NodeGraph.widget not initialized!')
 
         self.viewer().clear_key_state()
         self.viewer().clearFocus()
@@ -1774,26 +1775,16 @@ class NodeGraph(QtCore.QObject):
             return
 
         if node.id not in self._sub_graphs:
-            raise AssertionError('{} sub graph not initialized!'
-                                 .format(node.name()))
+            err = '{} sub graph not initialized!'.format(node.name())
+            raise RuntimeError(err)
 
         sub_graph = self._sub_graphs.pop(node.id)
-
-        # collapse child sub graphs here.
-        child_graphs = sub_graph.sub_graphs
-        for child_node_id, child_graph in child_graphs.items():
-            child_node = sub_graph.get_node_by_id(child_node_id)
-            sub_graph.collapse_group_node(child_node)
-
-        # update the group node model with serialized session.
-        serialized_session = sub_graph.serialize_session()
-        node.set_sub_graph_session(serialized_session)
-
-        sub_graph.clear_session()
+        sub_graph.collapse_group_node(node)
 
         # remove the sub graph tab.
         self.widget.remove_viewer(sub_graph.widget)
 
+        # TODO: delete sub graph hmm... not sure if I need this here.
         del sub_graph
 
 
@@ -1988,7 +1979,7 @@ class SubGraph(NodeGraph):
         """
         assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
         if self._subviewer_widget is None:
-            raise AssertionError('SubGraph.widget not initialized!')
+            raise RuntimeError('SubGraph.widget not initialized!')
 
         self.viewer().clear_key_state()
         self.viewer().clearFocus()
@@ -2057,8 +2048,3 @@ class SubGraph(NodeGraph):
 
         sub_graph.collapse_graph(clear_session=True)
         self.widget.remove_viewer(sub_graph.subviewer_widget)
-
-        # close tab if sub graph is top level.
-        if sub_graph.parent_graph.is_root:
-            sub_graph.parent_graph.sub_graphs.pop(self.node.id)
-            sub_graph.parent_graph.widget.remove_viewer(self.widget)

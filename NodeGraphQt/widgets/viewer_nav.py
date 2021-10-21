@@ -44,16 +44,20 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
 
         if index.row() != 0:
             txt_offset = 8.0
-            m = 2.8
+            m = 6.0
             x = rect.left() + 2.0 + m
-            y = rect.top() + m
-            h = rect.height() - (m * 2)
-            itm_rect = QtCore.QRectF(x, y, 1.3, h)
+            y = rect.top() + m + 2
+            h = rect.height() - (m * 2) - 2
             painter.setBrush(itm_color)
-            painter.drawRoundedRect(itm_rect, 1.0, 1.0)
+            for i in range(4):
+                itm_rect = QtCore.QRectF(x, y, 1.3, h)
+                painter.drawRoundedRect(itm_rect, 1.0, 1.0)
+                x += 2.0
+                y += 2
+                h -= 4
         else:
             txt_offset = 5.0
-            x = rect.left() + 2.0
+            x = rect.left() + 4.0
             size = 10.0
             for clr in [QtGui.QColor(0, 0, 0, 80), itm_color]:
                 itm_rect = QtCore.QRectF(
@@ -130,7 +134,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         item = QtGui.QStandardItem(label)
         item.setToolTip(node_id)
         metrics = QtGui.QFontMetrics(item.font())
-        width = metrics.horizontalAdvance(item.text()) + 26
+        width = metrics.horizontalAdvance(item.text()) + 30
         item.setSizeHint(QtCore.QSize(width, 20))
         self.model().appendRow(item)
         self.selectionModel().setCurrentIndex(
@@ -161,10 +165,11 @@ if __name__ == '__main__':
     widget = NodeNavigationWidget()
     widget.navigation_changed.connect(on_nav_changed)
 
-    widget.add_label_item('Root', 'root')
-    for i in range(1, 6):
+    widget.add_label_item('Close Graph', 'root')
+    for i in range(1, 5):
         widget.add_label_item('group node {}'.format(i),
                               'node_id{}'.format(i))
+    widget.resize(600, 30)
     widget.show()
 
     app.exec_()
