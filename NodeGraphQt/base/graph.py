@@ -1107,7 +1107,7 @@ class NodeGraph(QtCore.QObject):
         if name not in node_names:
             return name
 
-        regex = re.compile('[\w ]+(?: )*(\d+)')
+        regex = re.compile(r'[\w ]+(?: )*(\d+)')
         search = regex.search(name)
         if not search:
             for x in range(1, len(node_names) + 2):
