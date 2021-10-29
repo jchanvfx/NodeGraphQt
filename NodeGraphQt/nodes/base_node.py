@@ -238,7 +238,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             locked (bool): locked state see :meth:`Port.set_locked`
-            painter_func (function): custom function to override the drawing
+            painter_func (function or None): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:
@@ -278,7 +278,7 @@ class BaseNode(NodeObject):
             display_name (bool): display the port name on the node.
             color (tuple): initial port color (r, g, b) ``0-255``.
             locked (bool): locked state see :meth:`Port.set_locked`
-            painter_func (function): custom function to override the drawing
+            painter_func (function or None): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
 
         Returns:

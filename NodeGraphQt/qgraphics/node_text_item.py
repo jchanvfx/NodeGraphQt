@@ -8,9 +8,8 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
 
     def __init__(self, text, parent=None):
         super(NodeTextItem, self).__init__(text, parent)
-        self.setFlags(QtWidgets.QGraphicsItem.ItemIsFocusable)
-        self.setCursor(QtCore.Qt.IBeamCursor)
-        self.setToolTip('double-click to edit node name.')
+        self._locked = False
+        self.set_locked(False)
         self.set_editable(False)
 
     def mouseDoubleClickEvent(self, event):
@@ -20,10 +19,11 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
-        if event.button() == QtCore.Qt.LeftButton:
-            self.set_editable(True)
-            event.ignore()
-            return
+        if not self._locked:
+            if event.button() == QtCore.Qt.LeftButton:
+                self.set_editable(True)
+                event.ignore()
+                return
         super(NodeTextItem, self).mouseDoubleClickEvent(event)
 
     def keyPressEvent(self, event):
@@ -61,6 +61,8 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         Args:
             value (bool):  true in edit mode.
         """
+        if self._locked:
+            return
         if value:
             self.setTextInteractionFlags(
                 QtCore.Qt.TextEditable |
@@ -86,6 +88,23 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             return
         viewer = self.node.viewer()
         viewer.node_name_changed.emit(self.node.id, name)
+
+    def set_locked(self, state=False):
+        """
+        Locks the text item so it can not be editable.
+
+        Args:
+            state (bool): lock state.
+        """
+        self._locked = state
+        if self._locked:
+            self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, False)
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            self.setToolTip('')
+        else:
+            self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, True)
+            self.setToolTip('double-click to edit node name.')
+            self.setCursor(QtCore.Qt.IBeamCursor)
 
     @property
     def node(self):

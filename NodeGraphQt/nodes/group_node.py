@@ -5,20 +5,6 @@ from NodeGraphQt.constants import (NODE_LAYOUT_VERTICAL,
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.qgraphics.node_group import (GroupNodeItem,
                                               GroupNodeVerticalItem)
-from NodeGraphQt.qgraphics.node_group_port import (GroupPortNodeItem,
-                                                   GroupPortNodeVerticalItem)
-
-
-class GroupPortNode(BaseNode):
-
-    NODE_NAME = 'GroupPort'
-
-    def __init__(self, qgraphics_views=None):
-        qgraphics_views = qgraphics_views or {
-            NODE_LAYOUT_HORIZONTAL: GroupPortNodeItem,
-            NODE_LAYOUT_VERTICAL: GroupPortNodeVerticalItem
-        }
-        super(GroupPortNode, self).__init__(qgraphics_views)
 
 
 class GroupNode(BaseNode):
@@ -78,3 +64,23 @@ class GroupNode(BaseNode):
         """
         serialized_session = serialized_session or {}
         self.model.subgraph_session = serialized_session
+
+    def expand(self):
+        """
+        Expand the group node session.
+
+        See Also:
+            :meth:`NodeGraph.expand_group_node`,
+            :meth:`SubGraph.expand_group_node`.
+        """
+        self.graph.expand_group_node(self)
+
+    def collapse(self):
+        """
+        Collapse the group node session it's expanded child sub graphs.
+
+        See Also:
+            :meth:`NodeGraph.collapse_group_node`,
+            :meth:`SubGraph.collapse_group_node`.
+        """
+        self.graph.collapse_group_node(self)

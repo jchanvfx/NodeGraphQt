@@ -6,7 +6,6 @@ from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
-                         BackdropNode,
                          GroupNode,
                          PropertiesBinWidget,
                          NodesTreeWidget)
@@ -195,9 +194,6 @@ if __name__ == '__main__':
         widget_nodes.CheckboxNode
     ]
     graph.register_nodes(nodes_to_reg)
-
-    # register backdrop node with "Backdrop" alias.
-    graph.register_node(BackdropNode, 'Backdrop')
 
     my_node = graph.create_node(
         'com.chantasticvfx.MyNode',

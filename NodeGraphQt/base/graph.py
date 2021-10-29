@@ -26,6 +26,7 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.group_node import GroupNode
+from NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
 from NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
@@ -114,22 +115,32 @@ class NodeGraph(QtCore.QObject):
     :emits: new session path
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, **kwargs):
+        """
+        Args:
+            parent (object): object parent.
+            **kwargs (dict): Used for overriding internal objects at init time.
+        """
         super(NodeGraph, self).__init__(parent)
-        self.setObjectName('NodeGraphQt')
-        self._model = NodeGraphModel()
-        self._node_factory = NodeFactory()
+        self.setObjectName('NodeGraph')
+        self._model = (
+            kwargs.get('model') or NodeGraphModel())
+        self._node_factory = (
+            kwargs.get('node_factory') or NodeFactory())
 
         self._undo_view = None
-        self._undo_stack = QtWidgets.QUndoStack(self)
+        self._undo_stack = (
+            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self))
 
         self._widget = None
 
         self._sub_graphs = {}
 
-        self._viewer = NodeViewer(undo_stack=self._undo_stack)
+        self._viewer = (
+            kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
 
         self._build_context_menu()
+        self._register_builtin_nodes()
         self._wire_signals()
 
     def __repr__(self):
@@ -142,6 +153,12 @@ class NodeGraph(QtCore.QObject):
         """
         from NodeGraphQt.base.graph_actions import build_context_menu
         build_context_menu(self)
+
+    def _register_builtin_nodes(self):
+        """
+        Register the default builtin nodes to the :meth:`NodeGraph.node_factory`
+        """
+        self.register_node(BackdropNode, alias='Backdrop')
 
     def _wire_signals(self):
         """
@@ -1062,6 +1079,19 @@ class NodeGraph(QtCore.QObject):
             if node.name() == name:
                 return node
 
+    def get_nodes_by_type(self, node_type):
+        """
+        Return all nodes by their node type identifier.
+        (see: :attr:`NodeGraphQt.NodeObject.type_`)
+
+        Args:
+            node_type (str): node type identifier.
+
+        Returns:
+            list[NodeGraphQt.NodeObject]: list of nodes.
+        """
+        return [n for n in self._model.nodes.values() if n.type_ == node_type]
+
     def get_unique_name(self, name):
         """
         Creates a unique node name to avoid having nodes with the same name.
@@ -1797,8 +1827,13 @@ class SubGraph(NodeGraph):
     """
 
     def __init__(self, parent=None, node=None, node_factory=None):
-        super(SubGraph, self).__init__(parent)
-        self._node_factory = node_factory or self._node_factory
+        """
+        Args:
+            parent (object): object parent.
+            node (GroupNode): group node related to this sub graph.
+            node_factory (NodeFactory): override node factory.
+        """
+        super(SubGraph, self).__init__(parent, node_factory=node_factory)
 
         # sub graph attributes.
         self._node = node
@@ -1817,11 +1852,131 @@ class SubGraph(NodeGraph):
         return '<{}("{}") object at {}>'.format(
             self.__class__.__name__, self._node.name(), hex(id(self)))
 
-    def _build_context_menu(self):
-        super(SubGraph, self)._build_context_menu()
+    def _register_builtin_nodes(self):
+        """
+        Register the default builtin nodes to the :meth:`NodeGraph.node_factory`
+        """
+        self.register_node(PortInputNode, alias='PortInput')
 
-    def _wire_signals(self):
-        super(SubGraph, self)._wire_signals()
+    def _build_port_nodes(self):
+        """
+        Build the corresponding input & output nodes from the parent node ports.
+
+        Returns:
+             tuple(dict, dict): input nodes, output nodes.
+        """
+        # build the parent input port nodes.
+        input_nodes = {n.name(): n for n in
+                       self.get_nodes_by_type(PortInputNode.type_)}
+        for port in self.node.input_ports():
+            if port.name() not in input_nodes:
+                input_node = PortInputNode(parent_port=port)
+                input_node.NODE_NAME = port.name()
+                input_node.model.set_property('name', port.name())
+                input_node.add_output(port.name())
+                self.add_node(input_node)
+                input_nodes[port.name()] = input_node
+
+        # build the parent output port nodes.
+        output_nodes = {n.name(): n for n in
+                        self.get_nodes_by_type(PortOutputNode.type_)}
+        for port in self.node.output_ports():
+            if port.name() not in output_nodes:
+                output_port = PortOutputNode(parent_port=port)
+                output_port.NODE_NAME = port.name()
+                output_port.model.set_property('name', port.name())
+                output_port.add_input(port.name())
+                self.add_node(output_port)
+                output_nodes[port.name()] = output_port
+
+        return input_nodes, output_nodes
+
+    def _deserialize(self, data, relative_pos=False, pos=None):
+        """
+        deserialize node data.
+        (used internally by the node graph)
+
+        Args:
+            data (dict): node data.
+            relative_pos (bool): position node relative to the cursor.
+            pos (tuple or list): custom x, y position.
+
+        Returns:
+            list[NodeGraphQt.Nodes]: list of node instances.
+        """
+        # update node graph properties.
+        for attr_name, attr_value in data.get('graph', {}).items():
+            if attr_name == 'acyclic':
+                self.set_acyclic(attr_value)
+            elif attr_name == 'pipe_collision':
+                self.set_pipe_collision(attr_value)
+
+        # build the port input & output nodes here.
+        input_nodes, output_nodes = self._build_port_nodes()
+
+        # build the nodes.
+        nodes = {}
+        for n_id, n_data in data.get('nodes', {}).items():
+            identifier = n_data['type_']
+            name = n_data.get('name')
+            if identifier == PortInputNode.type_:
+                nodes[n_id] = input_nodes[name]
+                nodes[n_id].set_pos(*(n_data.get('pos') or [0, 0]))
+                continue
+            elif identifier == PortOutputNode.type_:
+                nodes[n_id] = output_nodes[name]
+                nodes[n_id].set_pos(*(n_data.get('pos') or [0, 0]))
+                continue
+
+            _NodeCls = self._node_factory.create_node_instance(identifier)
+            if not _NodeCls:
+                continue
+
+            node = _NodeCls()
+            node.NODE_NAME = name or node.NODE_NAME
+            # set properties.
+            for prop in node.model.properties.keys():
+                if prop in n_data.keys():
+                    node.model.set_property(prop, n_data[prop])
+            # set custom properties.
+            for prop, val in n_data.get('custom', {}).items():
+                node.model.set_property(prop, val)
+
+            nodes[n_id] = node
+            self.add_node(node, n_data.get('pos'))
+
+            if n_data.get('port_deletion_allowed', None):
+                node.set_ports({
+                    'input_ports': n_data['input_ports'],
+                    'output_ports': n_data['output_ports']
+                })
+
+        # build the connections.
+        for connection in data.get('connections', []):
+            nid, pname = connection.get('in', ('', ''))
+            in_node = nodes.get(nid)
+            if not in_node:
+                continue
+            in_port = in_node.inputs().get(pname) if in_node else None
+
+            nid, pname = connection.get('out', ('', ''))
+            out_node = nodes.get(nid)
+            if not out_node:
+                continue
+            out_port = out_node.outputs().get(pname) if out_node else None
+
+            if in_port and out_port:
+                self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+
+        node_objs = list(nodes.values())
+        if relative_pos:
+            self._viewer.move_nodes([n.view for n in node_objs])
+            [setattr(n.model, 'pos', n.view.xy_pos) for n in node_objs]
+        elif pos:
+            self._viewer.move_nodes([n.view for n in node_objs], pos=pos)
+            [setattr(n.model, 'pos', n.view.xy_pos) for n in node_objs]
+
+        return node_objs
 
     def _on_navigation_changed(self, node_id, rm_node_ids):
         """
