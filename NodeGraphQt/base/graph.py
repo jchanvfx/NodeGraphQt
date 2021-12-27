@@ -868,7 +868,7 @@ class NodeGraph(QtCore.QObject):
         self._viewer.rebuild_tab_search()
 
     def create_node(self, node_type, name=None, selected=True, color=None,
-                    text_color=None, pos=None):
+                    text_color=None, pos=None, push_undo=True):
         """
         Create a new node in the node graph.
 
@@ -882,9 +882,10 @@ class NodeGraph(QtCore.QObject):
             color (tuple or str): node color ``(255, 255, 255)`` or ``"#FFFFFF"``.
             text_color (tuple or str): text color ``(255, 255, 255)`` or ``"#FFFFFF"``.
             pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
+            push_undo (bool): register the command to the undo stack. (default: True)
 
         Returns:
-            _NodeObject: the created instance of the node.
+            NodeObject: the created instance of the node.
         """
         _NodeCls = self._node_factory.create_node_instance(node_type)
         if _NodeCls:
@@ -923,14 +924,18 @@ class NodeGraph(QtCore.QObject):
 
             node.update()
 
-            undo_cmd = NodeAddedCmd(self, node, node.model.pos)
-            undo_cmd.setText('create node: "{}"'.format(node.NODE_NAME))
-            self._undo_stack.push(undo_cmd)
+            if push_undo:
+                undo_cmd = NodeAddedCmd(self, node, node.model.pos)
+                undo_cmd.setText('create node: "{}"'.format(node.NODE_NAME))
+                self._undo_stack.push(undo_cmd)
+            else:
+                NodeAddedCmd(self, node, node.model.pos).redo()
+
             self.node_created.emit(node)
             return node
         raise TypeError('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
 
-    def add_node(self, node, pos=None):
+    def add_node(self, node, pos=None, selected=True, push_undo=True):
         """
         Add a node into the node graph.
         unlike the :meth:`NodeGraph.create_node` function this will not
@@ -939,6 +944,8 @@ class NodeGraph(QtCore.QObject):
         Args:
             node (NodeGraphQt.BaseNode): node object.
             pos (list[float]): node x,y position. (optional)
+            selected (bool): node selected state. (optional)
+            push_undo (bool): register the command to the undo stack. (default: True)
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
 
@@ -959,61 +966,124 @@ class NodeGraph(QtCore.QObject):
         node.model.name = node.NODE_NAME
         node.update()
 
-        self._undo_stack.beginMacro('add node: "{}"'.format(node.name()))
-        self._undo_stack.push(NodeAddedCmd(self, node, pos))
-        node.set_selected(True)
-        self._undo_stack.endMacro()
+        if push_undo:
+            self._undo_stack.beginMacro('add node: "{}"'.format(node.name()))
+            self._undo_stack.push(NodeAddedCmd(self, node, pos))
+            if selected:
+                node.set_selected(True)
+            self._undo_stack.endMacro()
+        else:
+            NodeAddedCmd(self, node, pos).redo()
 
-    def delete_node(self, node):
+    def delete_node(self, node, push_undo=True):
         """
         Remove the node from the node graph.
 
         Args:
             node (NodeGraphQt.BaseNode): node object.
+            push_undo (bool): register the command to the undo stack. (default: True)
         """
         assert isinstance(node, NodeObject), \
             'node must be a instance of a NodeObject.'
         node_id = node.id
-        self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+        if push_undo:
+            self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+
         if isinstance(node, BaseNode):
             for p in node.input_ports():
                 if p.locked():
-                    p.set_locked(False, connected_ports=False)
+                    p.set_locked(False,
+                                 connected_ports=False,
+                                 push_undo=push_undo)
                 p.clear_connections()
             for p in node.output_ports():
                 if p.locked():
-                    p.set_locked(False, connected_ports=False)
+                    p.set_locked(False,
+                                 connected_ports=False,
+                                 push_undo=push_undo)
                 p.clear_connections()
-        self._undo_stack.push(NodeRemovedCmd(self, node))
-        self._undo_stack.endMacro()
+
+        if push_undo:
+            self._undo_stack.push(NodeRemovedCmd(self, node))
+            self._undo_stack.endMacro()
+        else:
+            NodeRemovedCmd(self, node).redo()
+
         self.nodes_deleted.emit([node_id])
 
-    def delete_nodes(self, nodes):
+    def remove_node(self, node, push_undo=True):
+        """
+        Remove the node from the node graph.
+
+        unlike the :meth:`NodeGraph.delete_node` function this will not
+        trigger the :attr:`NodeGraph.nodes_deleted` signal.
+
+        Args:
+            node (NodeGraphQt.BaseNode): node object.
+            push_undo (bool): register the command to the undo stack. (default: True)
+
+        """
+        assert isinstance(node, NodeObject), 'node must be a Node instance.'
+
+        if push_undo:
+            self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+
+        if isinstance(node, BaseNode):
+            for p in node.input_ports():
+                if p.locked():
+                    p.set_locked(False,
+                                 connected_ports=False,
+                                 push_undo=push_undo)
+                p.clear_connections()
+            for p in node.output_ports():
+                if p.locked():
+                    p.set_locked(False,
+                                 connected_ports=False,
+                                 push_undo=push_undo)
+                p.clear_connections()
+
+        if push_undo:
+            self._undo_stack.push(NodeRemovedCmd(self, node))
+            self._undo_stack.endMacro()
+        else:
+            NodeRemovedCmd(self, node).redo()
+
+    def delete_nodes(self, nodes, push_undo=True):
         """
         Remove a list of specified nodes from the node graph.
 
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
+            push_undo (bool): register the command to the undo stack. (default: True)
         """
         if not nodes:
             return
         if len(nodes) == 1:
-            self.delete_node(nodes[0])
+            self.delete_node(nodes[0], push_undo=push_undo)
             return
         node_ids = [n.id for n in nodes]
-        self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
+        if push_undo:
+            self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
         for node in nodes:
             if isinstance(node, BaseNode):
                 for p in node.input_ports():
                     if p.locked():
-                        p.set_locked(False, connected_ports=False)
-                    p.clear_connections()
+                        p.set_locked(False,
+                                     connected_ports=False,
+                                     push_undo=push_undo)
+                    p.clear_connections(push_undo=push_undo)
                 for p in node.output_ports():
                     if p.locked():
-                        p.set_locked(False, connected_ports=False)
-                    p.clear_connections()
-            self._undo_stack.push(NodeRemovedCmd(self, node))
-        self._undo_stack.endMacro()
+                        p.set_locked(False,
+                                     connected_ports=False,
+                                     push_undo=push_undo)
+                    p.clear_connections(push_undo=push_undo)
+            if push_undo:
+                self._undo_stack.push(NodeRemovedCmd(self, node))
+            else:
+                NodeRemovedCmd(self, node).redo()
+        if push_undo:
+            self._undo_stack.endMacro()
         self.nodes_deleted.emit(node_ids)
 
     def all_nodes(self):
@@ -1860,7 +1930,8 @@ class SubGraph(NodeGraph):
 
     def _build_port_nodes(self):
         """
-        Build the corresponding input & output nodes from the parent node ports.
+        Build the corresponding input & output nodes from the parent node ports
+        and remove any port nodes that are outdated..
 
         Returns:
              tuple(dict, dict): input nodes, output nodes.
@@ -1874,8 +1945,8 @@ class SubGraph(NodeGraph):
                 input_node.NODE_NAME = port.name()
                 input_node.model.set_property('name', port.name())
                 input_node.add_output(port.name())
-                self.add_node(input_node)
                 input_nodes[port.name()] = input_node
+                self.add_node(input_node, selected=False, push_undo=False)
 
         # build the parent output port nodes.
         output_nodes = {n.name(): n for n in
@@ -1886,8 +1957,8 @@ class SubGraph(NodeGraph):
                 output_port.NODE_NAME = port.name()
                 output_port.model.set_property('name', port.name())
                 output_port.add_input(port.name())
-                self.add_node(output_port)
                 output_nodes[port.name()] = output_port
+                self.add_node(output_port, selected=False, push_undo=False)
 
         return input_nodes, output_nodes
 
@@ -2025,7 +2096,7 @@ class SubGraph(NodeGraph):
         Returns a list of the sub graphs in the order they were initialized.
 
         Returns:
-            list[SubGraph]: list of sub graph objects.
+            list[NodeGraphQt.SubGraph]: list of sub graph objects.
         """
         if self._parent_graph.is_root:
             return self._initialized_graphs
@@ -2100,6 +2171,17 @@ class SubGraph(NodeGraph):
             NodeGraphQt.GroupNode: group node.
         """
         return self._node
+
+    def delete_node(self, node, push_undo=True):
+        port_nodes = self.get_input_port_nodes() + self.get_output_port_nodes()
+        if node in port_nodes and node.parent_port is not None:
+            # note: port nodes can only be deleted by deleting the parent
+            #       port object.
+            raise RuntimeError(
+                'Can\'t delete node "{}" it is attached to port "{}"'
+                .format(node, node.parent_port)
+            )
+        super(SubGraph, self).delete_node(node, push_undo=push_undo)
 
     def collapse_graph(self, clear_session=True):
         """
@@ -2203,3 +2285,51 @@ class SubGraph(NodeGraph):
 
         sub_graph.collapse_graph(clear_session=True)
         self.widget.remove_viewer(sub_graph.subviewer_widget)
+
+    def get_input_port_nodes(self):
+        """
+        Return all the port nodes related to the group node input ports.
+
+        .. image:: _images/port_in_node.png
+            :width: 150px
+
+        See Also:
+            :meth:`NodeGraph.get_nodes_by_type`,
+            :meth:`SubGraph.get_output_port_nodes`
+
+        Returns:
+            list[NodeGraphQt.PortInputNode]: input nodes.
+        """
+        return self.get_nodes_by_type(PortInputNode.type_)
+
+    def get_output_port_nodes(self):
+        """
+        Return all the port nodes related to the group node output ports.
+
+        .. image:: _images/port_out_node.png
+            :width: 150px
+
+        See Also:
+            :meth:`NodeGraph.get_nodes_by_type`,
+            :meth:`SubGraph.get_input_port_nodes`
+
+        Returns:
+            list[NodeGraphQt.PortOutputNode]: output nodes.
+        """
+        return self.get_nodes_by_type(PortOutputNode.type_)
+
+    def get_node_by_port(self, port):
+        """
+        Returns the node related to the parent group node port object.
+
+        Args:
+            port (NodeGraphQt.Port): parent node port object.
+
+        Returns:
+            PortInputNode or PortOutputNode: port node object.
+        """
+        func_type = {IN_PORT: self.get_input_port_nodes,
+                     OUT_PORT: self.get_output_port_nodes}
+        for n in func_type.get(port.type_(), []):
+            if port == n.parent_port:
+                return n
