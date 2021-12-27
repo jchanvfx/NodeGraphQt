@@ -367,13 +367,14 @@ class NodeObject(object):
 
         return self.model.get_property(name)
 
-    def set_property(self, name, value):
+    def set_property(self, name, value, push_undo=True):
         """
         Set the value on the node custom property.
 
         Args:
             name (str): name of the property.
             value (object): property data (python built in types).
+            push_undo (bool): register the command to the undo stack. (default: True)
         """
 
         # prevent signals from causing a infinite loop.
@@ -385,8 +386,11 @@ class NodeObject(object):
             self.NODE_NAME = value
 
         if self.graph:
-            undo_stack = self.graph.undo_stack()
-            undo_stack.push(PropertyChangedCmd(self, name, value))
+            if push_undo:
+                undo_stack = self.graph.undo_stack()
+                undo_stack.push(PropertyChangedCmd(self, name, value))
+            else:
+                PropertyChangedCmd(self, name, value).redo()
         else:
             if hasattr(self.view, name):
                 setattr(self.view, name, value)
