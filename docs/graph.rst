@@ -1,5 +1,5 @@
-Graph
-#####
+Graphs
+######
 
 NodeGraph
 *********
@@ -14,3 +14,10 @@ NodeGraph
 
     .. autoattribute:: NodeGraphQt.NodeGraph.widget
     .. autoattribute:: NodeGraphQt.NodeGraph.model
+
+SubGraph
+********
+
+.. autoclass:: NodeGraphQt.SubGraph
+    :members:
+    :exclude-members: delete_node, is_root, sub_graphs, widget
