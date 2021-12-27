@@ -232,6 +232,9 @@ class BaseNode(NodeObject):
         """
         Add input :class:`Port` to node.
 
+        Warnings:
+            Undo is NOT supported for this function.
+
         Args:
             name (str): name for the input port.
             multi_input (bool): allow port to have more than one connection.
@@ -271,6 +274,9 @@ class BaseNode(NodeObject):
                    color=None, locked=False, painter_func=None):
         """
         Add output :class:`Port` to node.
+
+        Warnings:
+            Undo is NOT supported for this function.
 
         Args:
             name (str): name for the output port.
@@ -343,6 +349,8 @@ class BaseNode(NodeObject):
         Delete input port.
 
         Warnings:
+            Undo is NOT supported for this function.
+
             You can only delete ports if the node has "ports_removable"
             enabled see :meth:`BaseNode.set_ports_removable`.
 
@@ -370,6 +378,8 @@ class BaseNode(NodeObject):
         Delete output port.
 
         Warnings:
+            Undo is NOT supported for this function.
+
             You can only delete ports if the node has "ports_removable"
             enabled see :meth:`BaseNode.set_ports_removable`.
 
