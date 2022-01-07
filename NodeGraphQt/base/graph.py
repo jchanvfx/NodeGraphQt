@@ -1947,18 +1947,30 @@ class SubGraph(NodeGraph):
                 input_node.add_output(port.name())
                 input_nodes[port.name()] = input_node
                 self.add_node(input_node, selected=False, push_undo=False)
+                x, y = input_node.pos()
+                if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+                    x -= 100
+                elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+                    y -= 100
+                input_node.set_property('pos', [x, y], push_undo=False)
 
         # build the parent output port nodes.
         output_nodes = {n.name(): n for n in
                         self.get_nodes_by_type(PortOutputNode.type_)}
         for port in self.node.output_ports():
             if port.name() not in output_nodes:
-                output_port = PortOutputNode(parent_port=port)
-                output_port.NODE_NAME = port.name()
-                output_port.model.set_property('name', port.name())
-                output_port.add_input(port.name())
-                output_nodes[port.name()] = output_port
-                self.add_node(output_port, selected=False, push_undo=False)
+                output_node = PortOutputNode(parent_port=port)
+                output_node.NODE_NAME = port.name()
+                output_node.model.set_property('name', port.name())
+                output_node.add_input(port.name())
+                output_nodes[port.name()] = output_node
+                self.add_node(output_node, selected=False, push_undo=False)
+                x, y = output_node.pos()
+                if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+                    x += 100
+                elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+                    y += 100
+                output_node.set_property('pos', [x, y], push_undo=False)
 
         return input_nodes, output_nodes
 

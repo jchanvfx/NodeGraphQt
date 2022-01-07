@@ -3,6 +3,7 @@ from NodeGraphQt.constants import (NODE_LAYOUT_VERTICAL,
                                    NODE_LAYOUT_HORIZONTAL)
 
 from NodeGraphQt.nodes.base_node import BaseNode
+from NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
 from NodeGraphQt.qgraphics.node_group import (GroupNodeItem,
                                               GroupNodeVerticalItem)
 
@@ -14,6 +15,9 @@ class GroupNode(BaseNode):
     inside of it.
 
     **Inherited from:** :class:`NodeGraphQt.BaseNode`
+
+    .. image:: ../_images/group_node.png
+        :width: 250px
     """
 
     NODE_NAME = 'Group'
@@ -35,11 +39,14 @@ class GroupNode(BaseNode):
         Returns:
             bool: true if the node is expanded.
         """
+        if not self.graph:
+            return False
         return bool(self.id in self.graph.sub_graphs)
 
     def get_sub_graph(self):
         """
-        Returns the initialized sub node graph controller to the group node.
+        Returns the sub graph controller to the group node if initialized
+        or returns None.
 
         Returns:
             NodeGraphQt.SubGraph or None: sub graph controller.
@@ -84,3 +91,71 @@ class GroupNode(BaseNode):
             :meth:`SubGraph.collapse_group_node`.
         """
         self.graph.collapse_group_node(self)
+
+    def add_input(self, name='input', multi_input=False, display_name=True,
+                  color=None, locked=False, painter_func=None):
+        port = super(GroupNode, self).add_input(
+            name=name,
+            multi_input=multi_input,
+            display_name=display_name,
+            color=color,
+            locked=locked,
+            painter_func=painter_func
+        )
+        if self.is_expanded:
+            input_node = PortInputNode(parent_port=port)
+            input_node.NODE_NAME = port.name()
+            input_node.model.set_property('name', port.name())
+            input_node.add_output(port.name())
+            sub_graph = self.get_sub_graph()
+            sub_graph.add_node(input_node, selected=False, push_undo=False)
+
+        return port
+
+    def add_output(self, name='output', multi_output=True, display_name=True,
+                   color=None, locked=False, painter_func=None):
+        port = super(GroupNode, self).add_output(
+            name=name,
+            multi_output=multi_output,
+            display_name=display_name,
+            color=color,
+            locked=locked,
+            painter_func=painter_func
+        )
+        if self.is_expanded:
+            output_port = PortOutputNode(parent_port=port)
+            output_port.NODE_NAME = port.name()
+            output_port.model.set_property('name', port.name())
+            output_port.add_input(port.name())
+            sub_graph = self.get_sub_graph()
+            sub_graph.add_node(output_port, selected=False, push_undo=False)
+
+        return port
+
+    def delete_input(self, port):
+        if type(port) in [int, str]:
+            port = self.get_output(port)
+            if port is None:
+                return
+
+        if self.is_expanded:
+            sub_graph = self.get_sub_graph()
+            port_node = sub_graph.get_node_by_port(port)
+            if port_node:
+                sub_graph.remove_node(port_node, push_undo=False)
+
+        super(GroupNode, self).delete_input(port)
+
+    def delete_output(self, port):
+        if type(port) in [int, str]:
+            port = self.get_output(port)
+            if port is None:
+                return
+
+        if self.is_expanded:
+            sub_graph = self.get_sub_graph()
+            port_node = sub_graph.get_node_by_port(port)
+            if port_node:
+                sub_graph.remove_node(port_node, push_undo=False)
+
+        super(GroupNode, self).delete_output(port)

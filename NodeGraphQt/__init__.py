@@ -76,7 +76,7 @@ from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE
 
 # node graph
-from .base.graph import NodeGraph
+from .base.graph import NodeGraph, SubGraph
 from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
 
 # nodes & ports
@@ -109,6 +109,7 @@ __all__ = [
     'NodesMenu',
     'Port',
     'PropertiesBinWidget',
+    'SubGraph',
     'VERSION',
     'constants',
     'custom_widgets'

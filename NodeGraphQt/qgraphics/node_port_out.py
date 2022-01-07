@@ -56,6 +56,9 @@ class PortOutputNodeItem(NodeItem):
             text_rect.height()
         )
 
+        painter.setBrush(QtGui.QColor(255, 255, 255, 20))
+        painter.drawRoundedRect(rect, 20, 20)
+
         painter.setBrush(QtGui.QColor(0, 0, 0, 100))
         painter.drawRoundedRect(text_rect, 3, 3)
 
@@ -81,8 +84,10 @@ class PortOutputNodeItem(NodeItem):
         painter.setPen(pen)
         painter.drawPolygon(poly)
 
-        edge_rect = QtCore.QRectF(
-            rect.x() + (size * 1.7), rect.center().y() - 15, 4, 30)
+        edge_size = 30
+        edge_rect = QtCore.QRectF(rect.x() + (size * 1.6),
+                                  rect.center().y() - (edge_size / 2),
+                                  4, edge_size)
         painter.drawRect(edge_rect)
 
         painter.restore()
