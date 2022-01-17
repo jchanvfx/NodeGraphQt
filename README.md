@@ -5,8 +5,6 @@
 [![PEP8](https://img.shields.io/badge/code%20style-PEP8-green.svg)](https://www.python.org/dev/peps/pep-0008/) 
 [![stability-wip](https://img.shields.io/badge/stability-Work_In_Progress-lightgrey.svg)](https://github.com/orangemug/stability-badges/blob/master/README.md)
 
-*(Note: this project is a work in progress and not production ready.)*
-
 ---
 
 NodeGraphQt is a node graph framework for PySide2 that can be implemented and re-purposed into 
