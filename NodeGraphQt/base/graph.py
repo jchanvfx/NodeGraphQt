@@ -1370,7 +1370,7 @@ class NodeGraph(QtCore.QObject):
                         node.model.set_property(prop, n_data[prop])
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
-                    node.model.set_property(prop, val)
+                    node.set_property(prop, val)
 
                 nodes[n_id] = node
 
@@ -1407,7 +1407,7 @@ class NodeGraph(QtCore.QObject):
             out_port = out_node.outputs().get(pname) if out_node else None
 
             if in_port and out_port:
-                self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+                in_port.connect_to(out_port)
 
         node_objs = list(nodes.values())
         if relative_pos:
