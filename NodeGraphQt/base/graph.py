@@ -1395,13 +1395,13 @@ class NodeGraph(QtCore.QObject):
         # build the connections.
         for connection in data.get('connections', []):
             nid, pname = connection.get('in', ('', ''))
-            in_node = nodes.get(nid)
+            in_node = self.model.nodes.get(nid)
             if not in_node:
                 continue
             in_port = in_node.inputs().get(pname) if in_node else None
 
             nid, pname = connection.get('out', ('', ''))
-            out_node = nodes.get(nid)
+            out_node = self.model.nodes.get(nid)
             if not out_node:
                 continue
             out_port = out_node.outputs().get(pname) if out_node else None
