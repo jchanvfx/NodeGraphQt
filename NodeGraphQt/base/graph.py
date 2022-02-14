@@ -1415,7 +1415,10 @@ class NodeGraph(QtCore.QObject):
             out_port = out_node.outputs().get(pname) if out_node else None
 
             if in_port and out_port:
-                self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+                # only connect if input port is not connected yet or input port can have multiple connections.
+                #   important when duplicating nodes.
+                if not in_port.model.connected_ports or in_port.model.multi_connection:
+                    self._undo_stack.push(PortConnectedCmd(in_port, out_port))
 
         node_objs = list(nodes.values())
         if relative_pos:
