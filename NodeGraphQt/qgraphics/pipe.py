@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from Qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from .port import PortItem
 from ..constants import (

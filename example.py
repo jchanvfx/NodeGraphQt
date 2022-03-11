@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from Qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt import (NodeGraph,
                          BaseNode,
@@ -134,7 +134,7 @@ class MyNode(BaseNode):
 
 
 if __name__ == '__main__':
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    # QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication([])
 
     # create node graph.

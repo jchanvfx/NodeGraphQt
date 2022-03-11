@@ -1,4 +1,4 @@
-from Qt import QtWidgets, QtCore
+from qtpy import QtWidgets, QtCore
 
 from .stylesheet import STYLE_SLASH_BUTTON, STYLE_NODE_BUTTON
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 from .dialogs import FileDialog
 from ..constants import (NODE_PROP_QLABEL,

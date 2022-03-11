@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore
+from qtpy import QtGui, QtCore
 
 from ..errors import NodeMenuError
 from ..widgets.actions import BaseMenu, GraphAction, NodeAction

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets
+from qtpy import QtWidgets
 
 from .utils import minimize_node_ref_count
 from ..constants import IN_PORT, OUT_PORT

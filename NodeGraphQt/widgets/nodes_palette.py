@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 from ..constants import URN_SCHEME
 

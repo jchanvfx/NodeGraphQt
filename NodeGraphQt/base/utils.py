@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore
+from qtpy import QtGui, QtCore
 
 from ..constants import (PIPE_LAYOUT_CURVED,
                          PIPE_LAYOUT_STRAIGHT,
