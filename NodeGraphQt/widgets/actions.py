@@ -20,7 +20,7 @@ class BaseMenu(QtWidgets.QMenu):
 
     def get_menu(self, name, node_id=None):
         for action in self.actions():
-            menu = action.parent()
+            menu = action.menu()
             if not menu:
                 continue
             if menu.title() == name:
@@ -33,7 +33,7 @@ class BaseMenu(QtWidgets.QMenu):
     def get_menus(self, node_class):
         menus = []
         for action in self.actions():
-            menu = action.parent()
+            menu = action.menu()
             if menu.node_class:
                 if issubclass(menu.node_class, node_class):
                     menus.append(menu)
@@ -54,7 +54,7 @@ class GraphAction(QtWidgets.QAction):
 
     def get_action(self, name):
         for action in self.qmenu.actions():
-            if not action.parent() and action.text() == name:
+            if not action.menu() and action.text() == name:
                 return action
 
 
