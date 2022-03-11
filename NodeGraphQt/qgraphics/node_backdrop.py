@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from qtpy import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from .node_abstract import AbstractNodeItem
 from .pipe import Pipe

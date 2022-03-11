@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from qtpy import QtWidgets
+from Qt import QtWidgets
 
 from .pkg_info import __version__
 

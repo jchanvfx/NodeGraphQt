@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from qtpy import QtCore, QtGui, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
 
 from ..constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
 

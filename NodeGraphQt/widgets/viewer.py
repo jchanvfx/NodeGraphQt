@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 import math
 
-import qtpy
-from qtpy import QtGui, QtCore, QtWidgets
+import Qt
+from Qt import QtGui, QtCore, QtWidgets
 
 # use QOpenGLWidget instead of the deprecated QGLWidget to avoid probelms with Wayland
-from qtpy.QtWidgets import QOpenGLWidget
+if Qt.IsPySide2:
+    from PySide2.QtWidgets import QOpenGLWidget
+elif Qt.IsPyQt5:
+    from PyQt5.QtWidgets import QOpenGLWidget
 
 from .dialogs import BaseDialog, FileDialog
 from .scene import NodeScene

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from qtpy import QtGui, QtCore, QtWidgets
+from Qt import QtGui, QtCore, QtWidgets
 
 from .node_abstract import AbstractNodeItem
 from .node_overlay_disabled import XDisabledItem
