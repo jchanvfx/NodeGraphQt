@@ -119,7 +119,7 @@ class NodeGraph(QtCore.QObject):
         self._model = NodeGraphModel()
         self._viewer = NodeViewer()
         self._node_factory = NodeFactory()
-        self._undo_stack = QtGui.QUndoStack(self)
+        self._undo_stack = QtWidgets.QUndoStack(self)
         self._current_node_space = None
         self._editable = True
 
@@ -601,7 +601,7 @@ class NodeGraph(QtCore.QObject):
             :meth:`NodeGraph.end_undo()`
 
         Returns:
-            QtGui.QUndoStack: undo stack.
+            QtWidgets.QUndoStack: undo stack.
         """
         return self._undo_stack
 

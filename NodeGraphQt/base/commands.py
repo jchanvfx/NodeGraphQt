@@ -1,11 +1,11 @@
 #!/usr/bin/python
-from qtpy import QtWidgets, QtGui
+from qtpy import QtWidgets
 
 from .utils import minimize_node_ref_count
 from ..constants import IN_PORT, OUT_PORT
 
 
-class PropertyChangedCmd(QtGui.QUndoCommand):
+class PropertyChangedCmd(QtWidgets.QUndoCommand):
     """
     Node property changed command.
 
@@ -16,7 +16,7 @@ class PropertyChangedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, node, name, value):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         if name == 'name':
             self.setText('renamed "{}" to "{}"'.format(node.name(), value))
         else:
@@ -82,7 +82,7 @@ class PropertyChangedCmd(QtGui.QUndoCommand):
             graph.property_changed.emit(self.node, self.name, self.new_val)
 
 
-class NodeMovedCmd(QtGui.QUndoCommand):
+class NodeMovedCmd(QtWidgets.QUndoCommand):
     """
     Node moved command.
 
@@ -93,7 +93,7 @@ class NodeMovedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, node, pos, prev_pos):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.node = node
         self.pos = pos
         self.prev_pos = prev_pos
@@ -109,7 +109,7 @@ class NodeMovedCmd(QtGui.QUndoCommand):
         self.node.model.pos = self.pos
 
 
-class NodeAddedCmd(QtGui.QUndoCommand):
+class NodeAddedCmd(QtWidgets.QUndoCommand):
     """
     Node added command.
 
@@ -120,7 +120,7 @@ class NodeAddedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, graph, node, pos=None):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('added node')
         self.viewer = graph.viewer()
         self.model = graph.model
@@ -139,7 +139,7 @@ class NodeAddedCmd(QtGui.QUndoCommand):
         self.node.set_parent(self.node_parent)
 
 
-class NodeRemovedCmd(QtGui.QUndoCommand):
+class NodeRemovedCmd(QtWidgets.QUndoCommand):
     """
     Node deleted command.
 
@@ -149,7 +149,7 @@ class NodeRemovedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, graph, node):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('deleted node')
         self.scene = graph.scene()
         self.model = graph.model
@@ -169,7 +169,7 @@ class NodeRemovedCmd(QtGui.QUndoCommand):
         minimize_node_ref_count(self.node)
 
 
-class NodeInputConnectedCmd(QtGui.QUndoCommand):
+class NodeInputConnectedCmd(QtWidgets.QUndoCommand):
     """
     "BaseNode.on_input_connected()" command.
 
@@ -179,7 +179,7 @@ class NodeInputConnectedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, src_port, trg_port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         if src_port.type_() == IN_PORT:
             self.source = src_port
             self.target = trg_port
@@ -196,7 +196,7 @@ class NodeInputConnectedCmd(QtGui.QUndoCommand):
         node.on_input_connected(self.source, self.target)
 
 
-class NodeInputDisconnectedCmd(QtGui.QUndoCommand):
+class NodeInputDisconnectedCmd(QtWidgets.QUndoCommand):
     """
     Node "on_input_disconnected()" command.
 
@@ -206,7 +206,7 @@ class NodeInputDisconnectedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, src_port, trg_port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         if src_port.type_() == IN_PORT:
             self.source = src_port
             self.target = trg_port
@@ -223,7 +223,7 @@ class NodeInputDisconnectedCmd(QtGui.QUndoCommand):
         node.on_input_disconnected(self.source, self.target)
 
 
-class PortConnectedCmd(QtGui.QUndoCommand):
+class PortConnectedCmd(QtWidgets.QUndoCommand):
     """
     Port connected command.
 
@@ -233,7 +233,7 @@ class PortConnectedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, src_port, trg_port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.source = src_port
         self.target = trg_port
 
@@ -269,7 +269,7 @@ class PortConnectedCmd(QtGui.QUndoCommand):
         self.source.view.connect_to(self.target.view)
 
 
-class PortDisconnectedCmd(QtGui.QUndoCommand):
+class PortDisconnectedCmd(QtWidgets.QUndoCommand):
     """
     Port disconnected command.
 
@@ -279,7 +279,7 @@ class PortDisconnectedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, src_port, trg_port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.source = src_port
         self.target = trg_port
 
@@ -315,7 +315,7 @@ class PortDisconnectedCmd(QtGui.QUndoCommand):
         self.source.view.disconnect_from(self.target.view)
 
 
-class PortLockedCmd(QtGui.QUndoCommand):
+class PortLockedCmd(QtWidgets.QUndoCommand):
     """
     Port locked command.
 
@@ -324,7 +324,7 @@ class PortLockedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('lock port "{}"'.format(port.name()))
         self.port = port
 
@@ -337,7 +337,7 @@ class PortLockedCmd(QtGui.QUndoCommand):
         self.port.view.locked = True
 
 
-class PortUnlockedCmd(QtGui.QUndoCommand):
+class PortUnlockedCmd(QtWidgets.QUndoCommand):
     """
     Port unlocked command.
 
@@ -346,7 +346,7 @@ class PortUnlockedCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.setText('unlock port "{}"'.format(port.name()))
         self.port = port
 
@@ -359,7 +359,7 @@ class PortUnlockedCmd(QtGui.QUndoCommand):
         self.port.view.locked = False
 
 
-class PortVisibleCmd(QtGui.QUndoCommand):
+class PortVisibleCmd(QtWidgets.QUndoCommand):
     """
     Port visibility command.
 
@@ -368,7 +368,7 @@ class PortVisibleCmd(QtGui.QUndoCommand):
     """
 
     def __init__(self, port):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.port = port
         self.visible = port.visible()
 

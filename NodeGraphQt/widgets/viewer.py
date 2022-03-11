@@ -92,7 +92,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._SLICER_PIPE.setVisible(False)
         self.scene().addItem(self._SLICER_PIPE)
 
-        self._undo_stack = QtWidgets.QUndoView(self)
+        self._undo_stack = QtWidgets.QUndoStack(self)
         self._search_widget = TabSearchMenuWidget()
         self._search_widget.search_submitted.connect(self._on_search_submitted)
 
@@ -267,8 +267,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = True
 
-        self._origin_pos = event.position().toPoint()
-        self._previous_pos = event.position().toPoint()
+        self._origin_pos = event.pos()
+        self._previous_pos = event.pos()
         (self._prev_selection_nodes,
          self._prev_selection_pipes) = self.selected_items()
 
@@ -277,7 +277,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.tab_search_toggle()
 
         # cursor pos.
-        map_pos = self.mapToScene(event.position().toPoint())
+        map_pos = self.mapToScene(event.pos())
 
         # pipe slicer enabled.
         slicer_mode = all([self.ALT_state, self.SHIFT_state, self.LMB_state])
@@ -348,7 +348,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 map_rect = self.mapToScene(rect).boundingRect()
                 self._rubber_band.hide()
 
-                rect = QtCore.QRect(self._origin_pos, event.position().toPoint()).normalized()
+                rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
                 rect_items = self.scene().items(
                     self.mapToScene(rect).boundingRect()
                 )
@@ -401,21 +401,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 p2 = self.mapToScene(self._previous_pos)
                 self._SLICER_PIPE.draw_path(p1, p2)
                 self._SLICER_PIPE.show()
-            self._previous_pos = event.position().toPoint()
+            self._previous_pos = event.pos()
             super(NodeViewer, self).mouseMoveEvent(event)
             return
 
         if self.MMB_state and self.ALT_state:
-            pos_x = (event.position().x() - self._previous_pos.x())
+            pos_x = (event.x() - self._previous_pos.x())
             zoom = 0.1 if pos_x > 0 else -0.1
-            self._set_viewer_zoom(zoom, 0.05, pos=event.position().toPoint())
+            self._set_viewer_zoom(zoom, 0.05, pos=event.pos())
         elif self.MMB_state or (self.LMB_state and self.ALT_state):
-            pos_x = (event.position().x() - self._previous_pos.x())
-            pos_y = (event.position().y() - self._previous_pos.y())
+            pos_x = (event.x() - self._previous_pos.x())
+            pos_y = (event.y() - self._previous_pos.y())
             self._set_viewer_pan(pos_x, pos_y)
 
         if self.LMB_state and self._rubber_band.isActive:
-            rect = QtCore.QRect(self._origin_pos, event.position().toPoint()).normalized()
+            rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
             # if the rubber band is too small, do not show it.
             if max(rect.width(), rect.height()) > 5:
                 if not self._rubber_band.isVisible():
@@ -425,7 +425,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
                 self.scene().setSelectionArea(
-                    path
+                    path, QtCore.Qt.IntersectsItemShape
                 )
                 self.scene().update(map_rect)
 
@@ -467,7 +467,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                             self.COLLIDING_state = True
                             break
 
-        self._previous_pos = event.position().toPoint()
+        self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
 
     def wheelEvent(self, event):
@@ -478,10 +478,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = event.angleDelta().y()
             if delta == 0:
                 delta = event.angleDelta().x()
-        self._set_viewer_zoom(delta, pos=event.position().toPoint())
+        self._set_viewer_zoom(delta, pos=event.pos())
 
     def dropEvent(self, event):
-        pos = self.mapToScene(event.position().toPoint())
+        pos = self.mapToScene(event.pos())
         event.setDropAction(QtCore.Qt.CopyAction)
         self.data_dropped.emit(
             event.mimeData(), QtCore.QPoint(pos.x(), pos.y()))
@@ -553,7 +553,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not self._start_port:
             return
 
-        pos = QtCore.QPointF(event.scenePos())
+        pos = event.scenePos()
         items = self.scene().items(pos)
         if items and isinstance(items[0], PortItem):
             x = items[0].boundingRect().width() / 2
@@ -586,7 +586,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.apply_live_connection(event)
             return
 
-        pos = event.scenePos().toPoint()
+        pos = event.scenePos()
         items = self._items_near(pos, None, 5, 5)
 
         # filter from the selection stack in the following order
