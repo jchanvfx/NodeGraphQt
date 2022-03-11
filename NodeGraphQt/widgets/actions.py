@@ -19,24 +19,22 @@ class BaseMenu(QtWidgets.QMenu):
     #             a.node_id = None
 
     def get_menu(self, name, node_id=None):
-        for action in self.actions():
-            menu = action.parent()
-            if not menu:
-                continue
-            if menu.title() == name:
-                return menu
-            if node_id and menu.node_class:
-                node = menu.graph.get_node_by_id(node_id)
-                if isinstance(node, menu.node_class):
-                    return menu
+        for child in self.children():
+            if isinstance(child, BaseMenu):
+                if child.title() == name:
+                    return child
+                if node_id and child.node_class:
+                    node = child.graph.get_node_by_id(node_id)
+                    if isinstance(node, child.node_class):
+                        return child
 
     def get_menus(self, node_class):
         menus = []
-        for action in self.actions():
-            menu = action.parent()
-            if menu.node_class:
-                if issubclass(menu.node_class, node_class):
-                    menus.append(menu)
+        for child in self.children():
+            if isinstance(child, BaseMenu):
+                if child.node_class:
+                    if issubclass(child.node_class, node_class):
+                        menus.append(child)
         return menus
 
 
