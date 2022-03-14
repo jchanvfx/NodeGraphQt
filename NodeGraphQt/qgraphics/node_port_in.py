@@ -2,7 +2,7 @@
 from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (NODE_SEL_BORDER_COLOR, NODE_SEL_COLOR)
-from NodeGraphQt.qgraphics.node_base import NodeItem
+from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
 
 
 class PortInputNodeItem(NodeItem):
@@ -181,4 +181,79 @@ class PortInputNodeItem(NodeItem):
 class PortInputNodeVerticalItem(PortInputNodeItem):
     
     def paint(self, painter, option, widget):
-        super(PortInputNodeVerticalItem, self).paint(painter, option, widget)
+        self.auto_switch_mode()
+
+        painter.save()
+        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(QtCore.Qt.NoPen)
+
+        margin = 2.0
+        rect = self.boundingRect()
+        rect = QtCore.QRectF(rect.left() + margin,
+                             rect.top() + margin,
+                             rect.width() - (margin * 2),
+                             rect.height() - (margin * 2))
+
+        text_rect = self._text_item.boundingRect()
+        text_rect = QtCore.QRectF(
+            rect.center().x() - (text_rect.width() / 2) - 5,
+            rect.top() + margin,
+            text_rect.width() + 10,
+            text_rect.height()
+        )
+
+        painter.setBrush(QtGui.QColor(255, 255, 255, 20))
+        painter.drawRoundedRect(rect, 20, 20)
+
+        painter.setBrush(QtGui.QColor(0, 0, 0, 100))
+        painter.drawRoundedRect(text_rect, 3, 3)
+
+        size = int(rect.height() / 4)
+        triangle = QtGui.QPolygonF()
+        triangle.append(QtCore.QPointF(-size, size))
+        triangle.append(QtCore.QPointF(0.0, 0.0))
+        triangle.append(QtCore.QPointF(size, size))
+
+        transform = QtGui.QTransform()
+        transform.translate(rect.center().x(), rect.bottom() - (size / 3))
+        transform.rotate(180)
+        poly = transform.map(triangle)
+
+        if self.selected:
+            pen = QtGui.QPen(QtGui.QColor(*NODE_SEL_BORDER_COLOR), 1.3)
+            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+        else:
+            pen = QtGui.QPen(QtGui.QColor(*self.border_color), 1.2)
+            painter.setBrush(QtGui.QColor(0, 0, 0, 50))
+
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        painter.setPen(pen)
+        painter.drawPolygon(poly)
+
+        edge_size = 30
+        edge_rect = QtCore.QRectF(rect.center().x() - (edge_size / 2),
+                                  rect.bottom() - (size * 1.9),
+                                  edge_size, 4)
+        painter.drawRect(edge_rect)
+
+        painter.restore()
+
+    def align_label(self, h_offset=0.0, v_offset=0.0):
+        """
+        Center node label text to the center of the node.
+
+        Args:
+            v_offset (float): vertical offset.
+            h_offset (float): horizontal offset.
+        """
+        rect = self.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = rect.center().x() - (text_rect.width() / 2)
+        y = rect.center().y() - text_rect.height() - 2.0
+        self._text_item.setPos(x + h_offset, y + v_offset)
+
+    def align_ports(self, v_offset=0.0):
+        """
+        Align input, output ports in the node layout.
+        """
+        NodeItemVertical.align_ports(self, v_offset=v_offset)
