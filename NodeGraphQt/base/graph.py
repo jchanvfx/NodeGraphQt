@@ -887,10 +887,8 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeObject: the created instance of the node.
         """
-        _NodeCls = self._node_factory.create_node_instance(node_type)
-        if _NodeCls:
-            node = _NodeCls()
-
+        node = self._node_factory.create_node_instance(node_type)
+        if node:
             node._graph = self
             node.model._graph_model = self.model
 
@@ -1297,9 +1295,8 @@ class NodeGraph(QtCore.QObject):
         nodes = {}
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
-            _NodeCls = self._node_factory.create_node_instance(identifier)
-            if _NodeCls:
-                node = _NodeCls()
+            node = self._node_factory.create_node_instance(identifier)
+            if node:
                 node.NODE_NAME = n_data.get('name', node.NODE_NAME)
                 # set properties.
                 for prop in node.model.properties.keys():
@@ -1894,6 +1891,9 @@ class SubGraph(NodeGraph):
     controller for managing the expanded node graph for a group node.
 
     Inherited from: :class:`NodeGraphQt.NodeGraph`
+
+    .. image:: _images/sub_graph.png
+        :width: 70%
     """
 
     def __init__(self, parent=None, node=None, node_factory=None):
@@ -1926,7 +1926,7 @@ class SubGraph(NodeGraph):
         """
         Register the default builtin nodes to the :meth:`NodeGraph.node_factory`
         """
-        self.register_node(PortInputNode, alias='PortInput')
+        return
 
     def _build_port_nodes(self):
         """
@@ -2011,11 +2011,10 @@ class SubGraph(NodeGraph):
                 nodes[n_id].set_pos(*(n_data.get('pos') or [0, 0]))
                 continue
 
-            _NodeCls = self._node_factory.create_node_instance(identifier)
-            if not _NodeCls:
+            node = self._node_factory.create_node_instance(identifier)
+            if not node:
                 continue
 
-            node = _NodeCls()
             node.NODE_NAME = name or node.NODE_NAME
             # set properties.
             for prop in node.model.properties.keys():
