@@ -141,7 +141,8 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
                 transform.scale(dist, dist)
             painter.drawPolygon(transform.map(self._arrow))
 
-        painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
+        # QPaintDevice: Cannot destroy paint device that is being painted.
+        painter.restore()
 
     def __draw_path_vertical(self, start_port, pos1, pos2, path):
         """
