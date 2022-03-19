@@ -84,10 +84,10 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         Args:
             name (str): new node name.
         """
-        if name == self.node.name:
-            return
-        viewer = self.node.viewer()
-        viewer.node_name_changed.emit(self.node.id, name)
+        name = name.strip()
+        if name != self.node.name:
+            viewer = self.node.viewer()
+            viewer.node_name_changed.emit(self.node.id, name)
 
     def set_locked(self, state=False):
         """

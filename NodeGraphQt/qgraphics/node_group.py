@@ -106,32 +106,6 @@ class GroupNodeItem(NodeItem):
 
         painter.restore()
 
-    def align_icon(self, h_offset=0.0, v_offset=0.0):
-        """
-        Align node icon to the default top left of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
-        x = 5.0 + h_offset
-        y = 3.0 + v_offset
-        self._icon_item.setPos(x, y)
-
-    def align_label(self, h_offset=0.0, v_offset=0.0):
-        """
-        Center node label text to the top of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
-        rect = self.boundingRect()
-        text_rect = self._text_item.boundingRect()
-        x = rect.center().x() - (text_rect.width() / 2)
-        y = 2.0
-        self._text_item.setPos(x + h_offset, y + v_offset)
-
     def align_ports(self, v_offset=0.0):
         """
         Align input, output ports in the node layout.
@@ -187,7 +161,7 @@ class GroupNodeItem(NodeItem):
         height = self._text_item.boundingRect().height()
 
         # setup initial base size.
-        self._set_base_size(add_w=8.0, add_h=height + 10.0)
+        self._set_base_size(add_w=8.0, add_h=height)
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # set the tooltip
@@ -199,11 +173,11 @@ class GroupNodeItem(NodeItem):
         # align label text
         self.align_label()
         # arrange icon
-        self.align_icon()
+        self.align_icon(h_offset=2.0, v_offset=3.0)
         # arrange input and output ports.
-        self.align_ports(v_offset=height + (height / 2))
+        self.align_ports(v_offset=height)
         # arrange node widgets
-        self.align_widgets(v_offset=height / 2)
+        self.align_widgets(v_offset=height)
 
         self.update()
 

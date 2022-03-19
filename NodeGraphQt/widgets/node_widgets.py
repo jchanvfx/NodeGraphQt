@@ -1,10 +1,41 @@
 #!/usr/bin/python
+import re
 from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
-from NodeGraphQt.widgets.stylesheet import STYLE_QGROUPBOX, STYLE_QLINEEDIT
 
+REGEX = re.compile(r'((?: +)*([\w-]+):(?: )*<\$VALUE>;)')
+
+STYLE_NODE_GROUPBOX = '''
+QGroupBox {
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px solid rgba(0, 0, 0, 0);
+    margin-top: 1px;
+    padding-top: <$VALUE>;
+    padding-bottom: 2px;
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 8pt;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: <$VALUE>;
+    margin-left: <$VALUE>;
+margin-right: <$VALUE>;
+    color: rgba(255, 255, 255, 85);
+    padding: 0px;
+}
+'''
+STYLE_NODE_LINE_EDIT = '''
+QLineEdit {
+    border: 1px solid rgb(90, 90, 90);
+    border-radius: 0px;
+    color: rgba(255, 255, 255, 150);
+    background: rgba(0, 0, 0, 80);
+    selection-background-color: rgba(255, 198, 10, 155);
+}
+'''
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
 
@@ -15,15 +46,31 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         self.setTitle(label)
 
     def setTitle(self, text):
-        margin = (0, 0, 0, 0)
-        padding_top = '14px'
-        if text == '':
-            margin = (0, 2, 0, 0)
-            padding_top = '2px'
-        style = STYLE_QGROUPBOX.replace('$PADDING_TOP', padding_top)
+        margin = (0, 2, 0, 0) if text else (0, 0, 0, 0)
         self.layout().setContentsMargins(*margin)
-        self.setStyleSheet(style)
         super(_NodeGroupBox, self).setTitle(text)
+
+    def setTitleAlign(self, align='center'):
+        style_param = {
+            'padding-top': '14px' if self.title() else '2px',
+            'subcontrol-position': 'top'
+        }
+        if align == 'center':
+            style_param['subcontrol-position'] += ' center'
+        elif align == 'left':
+            style_param['subcontrol-position'] += ' left'
+            style_param['margin-left'] = '4px'
+        elif align == 'right':
+            style_param['subcontrol-position'] += ' right'
+            style_param['margin-right'] = '4px'
+        style = STYLE_NODE_GROUPBOX
+        for find_str, key in REGEX.findall(style):
+            if key not in style_param:
+                style = style.replace(find_str, '')
+                continue
+            replace_str = find_str.replace('<$VALUE>', style_param[key])
+            style = style.replace(find_str, replace_str)
+        self.setStyleSheet(style)
 
     def add_node_widget(self, widget):
         self.layout().addWidget(widget)
@@ -290,7 +337,7 @@ class NodeLineEdit(NodeBaseWidget):
         super(NodeLineEdit, self).__init__(parent, name, label)
         ledit = QtWidgets.QLineEdit()
         ledit.setText(text)
-        ledit.setStyleSheet(STYLE_QLINEEDIT)
+        ledit.setStyleSheet(STYLE_NODE_LINE_EDIT)
         ledit.setAlignment(QtCore.Qt.AlignCenter)
         ledit.editingFinished.connect(self.on_value_changed)
         ledit.clearFocus()

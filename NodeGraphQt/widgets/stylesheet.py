@@ -1,32 +1,3 @@
-STYLE_QGROUPBOX = '''
-QGroupBox {
-    background-color: rgba(0, 0, 0, 0);
-    border: 0px solid rgba(0, 0, 0, 0);
-    margin-top: 1px;
-    padding-top: $PADDING_TOP;
-    padding-bottom: 2px;
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 8pt;
-}
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top center;
-    color: rgba(255, 255, 255, 85);
-    padding: 0px;
-    left:-4px;
-}
-'''
-
-STYLE_QLINEEDIT = '''
-QLineEdit {
-    border: 1px solid rgb(90, 90, 90);
-    border-radius: 0px;
-    color: rgba(255, 255, 255, 150);
-    background: rgba(0, 0, 0, 80);
-    selection-background-color: rgba(255, 198, 10, 155);
-}
-'''
 
 STYLE_TABSEARCH = '''
 QLineEdit {

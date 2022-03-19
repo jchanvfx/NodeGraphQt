@@ -194,15 +194,17 @@ class NodeItem(AbstractNodeItem):
 
     def _set_base_size(self, add_w=0.0, add_h=0.0):
         """
-        setup initial base size.
+        Sets the initial base size for the node.
 
         Args:
-            add_w (float): additional width.
-            add_h (float): additional height.
+            add_w (float): add additional width.
+            add_h (float): add additional height.
         """
-        width, height = self.calc_size(add_w, add_h)
-        self._width = width if width > NODE_WIDTH else NODE_WIDTH
-        self._height = height if height > NODE_HEIGHT else NODE_HEIGHT
+        self._width, self._height = self.calc_size(add_w, add_h)
+        if self._width < NODE_WIDTH:
+            self._width = NODE_WIDTH
+        if self._height < NODE_HEIGHT:
+            self._height = NODE_HEIGHT
 
     def _set_text_color(self, color):
         """
@@ -256,52 +258,65 @@ class NodeItem(AbstractNodeItem):
         Returns:
             tuple(float, float): width, height.
         """
-        width = self._text_item.boundingRect().width()
-        height = self._text_item.boundingRect().height()
+        # width, height from node name text.
+        text_w = self._text_item.boundingRect().width()
+        text_h = self._text_item.boundingRect().height()
 
-        if self._widgets:
-            wid_width = max([
-                w.boundingRect().width() for w in self._widgets.values()
-            ])
-            if width < wid_width:
-                width = wid_width
+        # width, height from node ports.
+        port_width = 0.0
+        p_input_text_width = 0.0
+        p_output_text_width = 0.0
+        p_input_height = 0.0
+        p_output_height = 0.0
+        for port, text in self._input_items.items():
+            if not port.isVisible():
+                continue
+            if not port_width:
+                port_width = port.boundingRect().width()
+            t_width = text.boundingRect().width()
+            if text.isVisible() and t_width > p_input_text_width:
+                p_input_text_width = text.boundingRect().width()
+            p_input_height += port.boundingRect().height()
+        for port, text in self._output_items.items():
+            if not port.isVisible():
+                continue
+            if not port_width:
+                port_width = port.boundingRect().width()
+            t_width = text.boundingRect().width()
+            if text.isVisible() and t_width > p_output_text_width:
+                p_output_text_width = text.boundingRect().width()
+            p_output_height += port.boundingRect().height()
 
-        port_height = 0.0
-        if self._input_items:
-            port = None
-            input_widths = []
-            for port, text in self._input_items.items():
-                input_width = port.boundingRect().width() - PORT_FALLOFF
-                if text.isVisible():
-                    input_width += text.boundingRect().width() / 1.5
-                input_widths.append(input_width)
-            width += max(input_widths)
-            if port:
-                port_height = port.boundingRect().height()
+        port_text_width = p_input_text_width + p_output_text_width
 
-        if self._output_items:
-            port = None
-            output_widths = []
-            for port, text in self._output_items.items():
-                output_width = port.boundingRect().width()
-                if text.isVisible():
-                    output_width += text.boundingRect().width() / 1.5
-                output_widths.append(output_width)
-            width += max(output_widths)
-            if port:
-                port_height = port.boundingRect().height()
+        # width, height from node embedded widgets.
+        widget_width = 0.0
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            w_width = widget.boundingRect().width()
+            w_height = widget.boundingRect().height()
+            if w_width > widget_width:
+                widget_width = w_width
+            widget_height += w_height
 
-        in_count = len([p for p in self.inputs if p.isVisible()])
-        out_count = len([p for p in self.outputs if p.isVisible()])
-        height += port_height * max([in_count, out_count])
-        if self._widgets:
-            wid_height = 0.0
-            for w in self._widgets.values():
-                wid_height += w.boundingRect().height()
-            wid_height += wid_height / len(self._widgets.values())
-            if wid_height > height:
-                height = wid_height
+        side_padding = 0.0
+        if all([widget_width, p_input_text_width, p_output_text_width]):
+            port_text_width = max([p_input_text_width, p_output_text_width])
+            port_text_width *= 2
+        elif widget_width:
+            side_padding = 10
 
+        width = port_width + max([text_w, port_text_width]) + side_padding
+        height = max([text_h, p_input_height, p_output_height, widget_height])
+        if widget_width:
+            # add additional width for node widget.
+            width += widget_width
+        if widget_height:
+            # add bottom margin for node widget.
+            height += 4.0
+        height *= 1.05
+
+        # additional width, height.
         width += add_w
         height += add_h
         return width, height
@@ -311,12 +326,12 @@ class NodeItem(AbstractNodeItem):
         Align node icon to the default top left of the node.
 
         Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
+            v_offset (float): additional vertical offset.
+            h_offset (float): additional horizontal offset.
         """
-        x = 2.0 + h_offset
-        y = 1.0 + v_offset
-        self._icon_item.setPos(x, y)
+        top_left = self.boundingRect().topLeft()
+        x, y = top_left.x(), top_left.y()
+        self._icon_item.setPos(x + h_offset, y + v_offset)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
         """
@@ -329,8 +344,7 @@ class NodeItem(AbstractNodeItem):
         rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
         x = rect.center().x() - (text_rect.width() / 2)
-        y = 0.0
-        self._text_item.setPos(x + h_offset, y + v_offset)
+        self._text_item.setPos(x + h_offset, rect.y() + v_offset)
 
     def align_widgets(self, v_offset=0.0):
         """
@@ -341,16 +355,23 @@ class NodeItem(AbstractNodeItem):
         """
         if not self._widgets:
             return
-        wid_heights = sum(
-            [w.boundingRect().height() for w in self._widgets.values()])
-        pos_y = self._height / 2
-        pos_y -= wid_heights / 2
-        pos_y += v_offset
+        rect = self.boundingRect()
+        y = rect.y() + v_offset
+        inputs = [p for p in self.inputs if p.isVisible()]
+        outputs = [p for p in self.outputs if p.isVisible()]
         for widget in self._widgets.values():
-            rect = widget.boundingRect()
-            pos_x = (self._width / 2) - (rect.width() / 2)
-            widget.setPos(pos_x, pos_y)
-            pos_y += rect.height()
+            widget_rect = widget.boundingRect()
+            if not inputs:
+                x = rect.left() + 10
+                widget.widget().setTitleAlign('left')
+            elif not outputs:
+                x = rect.right() - widget_rect.width() - 10
+                widget.widget().setTitleAlign('right')
+            else:
+                x = rect.center().x() - (widget_rect.width() / 2)
+                widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
 
     def align_ports(self, v_offset=0.0):
         """
@@ -401,10 +422,10 @@ class NodeItem(AbstractNodeItem):
         Re-draw the node item in the scene.
         (re-implemented for vertical layout design)
         """
-        height = self._text_item.boundingRect().height()
+        height = self._text_item.boundingRect().height() + 4.0
 
         # setup initial base size.
-        self._set_base_size(add_w=0.0, add_h=height)
+        self._set_base_size(add_h=height)
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # set the tooltip
@@ -416,11 +437,11 @@ class NodeItem(AbstractNodeItem):
         # align label text
         self.align_label()
         # align icon
-        self.align_icon()
+        self.align_icon(h_offset=2.0, v_offset=1.0)
         # arrange input and output ports.
-        self.align_ports(v_offset=height + (height / 2))
+        self.align_ports(v_offset=height)
         # arrange node widgets
-        self.align_widgets(v_offset=height / 2)
+        self.align_widgets(v_offset=height)
 
         self.update()
 

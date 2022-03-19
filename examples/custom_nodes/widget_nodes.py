@@ -16,9 +16,9 @@ class DropdownMenuNode(BaseNode):
         super(DropdownMenuNode, self).__init__()
 
         # create input & output ports
-        self.add_input('hello')
-        self.add_output('world')
-        self.add_output('out A')
+        self.add_input('in 1')
+        self.add_output('out 1')
+        self.add_output('out 2')
 
         # create the QComboBox menu.
         items = ['item 1', 'item 2', 'item 3']
@@ -62,8 +62,8 @@ class CheckboxNode(BaseNode):
         super(CheckboxNode, self).__init__()
 
         # create the checkboxes.
-        self.add_checkbox('cb_hello', '', 'Hello', True)
-        self.add_checkbox('cb_world', '', 'World', False)
+        self.add_checkbox('cb_1', '', 'Checkbox 1', True)
+        self.add_checkbox('cb_2', '', 'Checkbox 2', False)
 
         # create input and output port.
         self.add_input('in', color=(200, 100, 0))
