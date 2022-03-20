@@ -845,9 +845,12 @@ class NodeItemVertical(NodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        y = self._height / 2
-        y -= self._icon_item.boundingRect().height()
-        self._icon_item.setPos(self._width + h_offset, y + v_offset)
+        center_y = self.boundingRect().center().y()
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = center_y - text_rect.height() - (icon_rect.height() / 2) + v_offset
+        self._icon_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
         """
@@ -857,9 +860,10 @@ class NodeItemVertical(NodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        y = self._height / 2
-        y -= self.text_item.boundingRect().height() / 2
-        self.text_item.setPos(self._width + h_offset, y + v_offset)
+        rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = self.boundingRect().center().y() - (rect.height() / 2) + v_offset
+        self.text_item.setPos(x, y)
 
     def align_ports(self, v_offset=0.0):
         """
@@ -891,6 +895,30 @@ class NodeItemVertical(NodeItem):
                 port.setPos(port_x-half_width, port_y)
                 port_x += delta
 
+    def align_widgets(self, v_offset=0.0):
+        """
+        Align node widgets to the default center of the node.
+
+        Args:
+            v_offset (float): vertical offset.
+        """
+        if not self._widgets:
+            return
+        rect = self.boundingRect()
+        y = rect.center().y() + v_offset
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            widget_height += widget_rect.height()
+        y -= widget_height / 2
+
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            x = rect.center().x() - (widget_rect.width() / 2)
+            widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
+
     def draw_node(self):
         """
         Re-draw the node item in the scene.
@@ -906,9 +934,9 @@ class NodeItemVertical(NodeItem):
         # (do all the graphic item layout offsets here)
 
         # align label text
-        self.align_label(h_offset=7, v_offset=6)
+        self.align_label(h_offset=6)
         # align icon
-        self.align_icon(h_offset=4, v_offset=-2)
+        self.align_icon(v_offset=4)
         # arrange input and output ports.
         self.align_ports()
         # arrange node widgets
@@ -924,36 +952,30 @@ class NodeItemVertical(NodeItem):
             add_w (float): additional width.
             add_h (float): additional height.
         """
-        width = 0
-        height = 0
+        p_input_width = 0.0
+        p_output_width = 0.0
+        p_input_height = 0.0
+        p_output_height = 0.0
+        for port in self._input_items.keys():
+            if port.isVisible():
+                p_input_width += port.boundingRect().width()
+                if not p_input_height:
+                    p_input_height = port.boundingRect().height()
+        for port in self._output_items.keys():
+            if port.isVisible():
+                p_output_width += port.boundingRect().width()
+                if not p_output_height:
+                    p_output_height = port.boundingRect().height()
 
-        if self._widgets:
-            wid_width = max([
-                w.boundingRect().width() for w in self._widgets.values()
-            ])
-            width = max(width, wid_width)
+        widget_width = 0.0
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            if widget.boundingRect().width() > widget_width:
+                widget_width = widget.boundingRect().width()
+            widget_height += widget.boundingRect().height()
 
-        port_width = 0.0
-        if self._input_items:
-            port = list(self._input_items.keys())[0]
-            port_width = port.boundingRect().width()
-
-        if self._output_items:
-            port = list(self._output_items.keys())[0]
-            port_width = port.boundingRect().width()
-
-        in_count = len([p for p in self.inputs if p.isVisible()])
-        out_count = len([p for p in self.outputs if p.isVisible()])
-        width = max(width, port_width * max(in_count, out_count))
-        if self._widgets:
-            wid_height = 0.0
-            for w in self._widgets.values():
-                wid_height += w.boundingRect().height()
-            wid_height += wid_height / len(self._widgets.values())
-            height = wid_height
-
-        width += add_w
-        height += add_h
+        width = max([p_input_width, p_output_width, widget_width]) + add_w
+        height = p_input_height + p_output_height + widget_height + add_h
         return width, height
 
     def add_input(self, name='input', multi_port=False, display_name=True,

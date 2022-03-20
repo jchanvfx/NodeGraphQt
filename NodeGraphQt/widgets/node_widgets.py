@@ -22,7 +22,7 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: <$VALUE>;
     margin-left: <$VALUE>;
-margin-right: <$VALUE>;
+    margin-right: <$VALUE>;
     color: rgba(255, 255, 255, 85);
     padding: 0px;
 }
@@ -36,6 +36,7 @@ QLineEdit {
     selection-background-color: rgba(255, 198, 10, 155);
 }
 '''
+
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
 
