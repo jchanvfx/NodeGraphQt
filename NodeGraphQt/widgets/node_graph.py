@@ -1,5 +1,25 @@
 from Qt import QtWidgets
+
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
+
+STYLE_NODE_GRAPH_TAB = '''
+QTabWidget::pane {
+    border: 0px solid black;
+    background: rgb(45, 45, 45); 
+    top:-1px; 
+} 
+QTabBar::tab {
+    color: rgba(255, 255, 255, 45);
+    background: rgb(35, 35, 35); 
+    border: 0px solid black; 
+    padding: 10px 20px;
+} 
+QTabBar::tab:selected { 
+    color: rgb(255, 255, 255);
+    background: rgb(45, 45, 45); 
+    margin-bottom: -1px; 
+}
+'''
 
 
 class NodeGraphWidget(QtWidgets.QTabWidget):
@@ -8,6 +28,7 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
         super(NodeGraphWidget, self).__init__(parent)
         self.setTabsClosable(True)
         self.setTabBarAutoHide(True)
+        self.setStyleSheet(STYLE_NODE_GRAPH_TAB)
 
     def add_viewer(self, viewer, name, node_id):
         self.addTab(viewer, name)

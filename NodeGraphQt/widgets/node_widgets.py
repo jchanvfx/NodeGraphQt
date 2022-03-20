@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import re
+
 from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
