@@ -1,6 +1,6 @@
 from Qt import QtWidgets, QtCore, QtGui
 
-from NodeGraphQt.constants import NODE_SEL_BORDER_COLOR
+from NodeGraphQt.constants import NODE_SEL_BORDER_COLOR, VIEWER_BG_COLOR
 
 
 class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
@@ -102,7 +102,11 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.setMaximumHeight(36)
         self.setSpacing(0)
 
-        self.viewport().setAutoFillBackground(False)
+        # self.viewport().setAutoFillBackground(False)
+        self.setStyleSheet(
+            'QListView {{border: 0px;background-color: rgb({0},{1},{2});}}'
+            .format(*VIEWER_BG_COLOR)
+        )
 
         self.setItemDelegate(NodeNavigationDelagate(self))
         self.setModel(QtGui.QStandardItemModel())

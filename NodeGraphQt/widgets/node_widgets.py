@@ -1,42 +1,8 @@
 #!/usr/bin/python
-import re
-
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE_WIDGET
+from NodeGraphQt.constants import VIEWER_GRID_COLOR, Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
-
-REGEX = re.compile(r'((?: +)*([\w-]+):(?: )*<\$VALUE>;)')
-
-STYLE_NODE_GROUPBOX = '''
-QGroupBox {
-    background-color: rgba(0, 0, 0, 0);
-    border: 0px solid rgba(0, 0, 0, 0);
-    margin-top: 1px;
-    padding-top: <$VALUE>;
-    padding-bottom: 2px;
-    padding-left: 1px;
-    padding-right: 1px;
-    font-size: 8pt;
-}
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: <$VALUE>;
-    margin-left: <$VALUE>;
-    margin-right: <$VALUE>;
-    color: rgba(255, 255, 255, 85);
-    padding: 0px;
-}
-'''
-STYLE_NODE_LINE_EDIT = '''
-QLineEdit {
-    border: 1px solid rgb(90, 90, 90);
-    border-radius: 0px;
-    color: rgba(255, 255, 255, 150);
-    background: rgba(0, 0, 0, 80);
-    selection-background-color: rgba(255, 198, 10, 155);
-}
-'''
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
@@ -53,26 +19,44 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         super(_NodeGroupBox, self).setTitle(text)
 
     def setTitleAlign(self, align='center'):
-        style_param = {
-            'padding-top': '14px' if self.title() else '2px',
-            'subcontrol-position': 'top'
+        text_color = self.palette().text().color().toTuple()
+        style_dict = {
+            'QGroupBox': {
+                'background-color': 'rgba(0, 0, 0, 0)',
+                'border': '0px solid rgba(0, 0, 0, 0)',
+                'margin-top': '1px',
+                'padding-bottom': '2px',
+                'padding-left': '1px',
+                'padding-right': '1px',
+                'font-size': '8pt',
+            },
+            'QGroupBox::title': {
+                'subcontrol-origin': 'margin',
+                'color': 'rgba({0}, {1}, {2}, 100)'.format(*text_color),
+                'padding': '0px',
+            }
         }
+        if self.title():
+            style_dict['QGroupBox']['padding-top'] = '14px'
+        else:
+            style_dict['QGroupBox']['padding-top'] = '2px'
+
         if align == 'center':
-            style_param['subcontrol-position'] += ' center'
+            style_dict['QGroupBox::title']['subcontrol-position'] = 'top center'
         elif align == 'left':
-            style_param['subcontrol-position'] += ' left'
-            style_param['margin-left'] = '4px'
+            style_dict['QGroupBox::title']['subcontrol-position'] += 'top left'
+            style_dict['QGroupBox::title']['margin-left'] = '4px'
         elif align == 'right':
-            style_param['subcontrol-position'] += ' right'
-            style_param['margin-right'] = '4px'
-        style = STYLE_NODE_GROUPBOX
-        for find_str, key in REGEX.findall(style):
-            if key not in style_param:
-                style = style.replace(find_str, '')
-                continue
-            replace_str = find_str.replace('<$VALUE>', style_param[key])
-            style = style.replace(find_str, replace_str)
-        self.setStyleSheet(style)
+            style_dict['QGroupBox::title']['subcontrol-position'] += 'top right'
+            style_dict['QGroupBox::title']['margin-right'] = '4px'
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        self.setStyleSheet(stylesheet)
 
     def add_node_widget(self, widget):
         self.layout().addWidget(widget)
@@ -337,9 +321,31 @@ class NodeLineEdit(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
+        plt = self.palette()
+        bg_color = plt.alternateBase().color().toTuple()
+        text_color = plt.text().color().toTuple()
+        text_sel_color = plt.highlightedText().color().toTuple()
+        style_dict = {
+            'QLineEdit': {
+                'background': 'rgba({0},{1},{2},20)'.format(*bg_color),
+                'border': '1px solid rgb({0},{1},{2})'
+                          .format(*VIEWER_GRID_COLOR),
+                'border-radius': '3px',
+                'color': 'rgba({0},{1},{2},150)'.format(*text_color),
+                'selection-background-color': 'rgba({0},{1},{2},100)'
+                                              .format(*text_sel_color),
+            }
+        }
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
         ledit = QtWidgets.QLineEdit()
         ledit.setText(text)
-        ledit.setStyleSheet(STYLE_NODE_LINE_EDIT)
+        ledit.setStyleSheet(stylesheet)
         ledit.setAlignment(QtCore.Qt.AlignCenter)
         ledit.editingFinished.connect(self.on_value_changed)
         ledit.clearFocus()
@@ -361,6 +367,7 @@ class NodeLineEdit(NodeBaseWidget):
 
     def set_value(self, text=''):
         """
+        Sets the widgets current text.
 
         Args:
             text (str): new text.
@@ -409,6 +416,7 @@ class NodeCheckBox(NodeBaseWidget):
 
     def set_value(self, state=False):
         """
+        Sets the widget checked state.
 
         Args:
             state (bool): check state.

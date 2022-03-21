@@ -1,25 +1,11 @@
 from Qt import QtWidgets
 
+from NodeGraphQt.constants import (
+    NODE_SEL_BORDER_COLOR,
+    VIEWER_BG_COLOR,
+    VIEWER_GRID_COLOR
+)
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
-
-STYLE_NODE_GRAPH_TAB = '''
-QTabWidget::pane {
-    border: 0px solid black;
-    background: rgb(45, 45, 45); 
-    top:-1px; 
-} 
-QTabBar::tab {
-    color: rgba(255, 255, 255, 45);
-    background: rgb(35, 35, 35); 
-    border: 0px solid black; 
-    padding: 10px 20px;
-} 
-QTabBar::tab:selected { 
-    color: rgb(255, 255, 255);
-    background: rgb(45, 45, 45); 
-    margin-bottom: -1px; 
-}
-'''
 
 
 class NodeGraphWidget(QtWidgets.QTabWidget):
@@ -28,7 +14,39 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
         super(NodeGraphWidget, self).__init__(parent)
         self.setTabsClosable(True)
         self.setTabBarAutoHide(True)
-        self.setStyleSheet(STYLE_NODE_GRAPH_TAB)
+        text_color = self.palette().text().color().toTuple()
+        style_dict = {
+            'QTabWidget::pane': {
+                'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'border': '0px',
+                'border-top': '1px solid rgb({0},{1},{2})'
+                              .format(*VIEWER_BG_COLOR),
+            },
+            'QTabBar::tab': {
+                'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'border': '0px solid black',
+                'color': 'rgba({0},{1},{2},45)'.format(*text_color),
+                'min-width': '10px',
+                'padding': '8px 20px',
+            },
+            'QTabBar::tab:selected': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'margin-bottom': '-1px',
+            },
+            'QTabBar::tab:hover': {
+                'color': 'rgb({0}, {1}, {2})'.format(*NODE_SEL_BORDER_COLOR),
+                'background': 'rgb({0}, {1}, {2})'.format(*VIEWER_GRID_COLOR),
+            }
+        }
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        self.setStyleSheet(stylesheet)
 
     def add_viewer(self, viewer, name, node_id):
         self.addTab(viewer, name)
