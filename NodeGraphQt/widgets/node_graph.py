@@ -1,9 +1,9 @@
-from Qt import QtWidgets
+from Qt import QtWidgets, QtGui
 
 from NodeGraphQt.constants import (
     NODE_SEL_BORDER_COLOR,
     VIEWER_BG_COLOR,
-    VIEWER_GRID_COLOR
+    VIEWER_NAV_BG_COLOR
 )
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
@@ -15,28 +15,33 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
         self.setTabsClosable(True)
         self.setTabBarAutoHide(True)
         text_color = self.palette().text().color().toTuple()
+        bg_color = QtGui.QColor(*VIEWER_BG_COLOR).darker(120).toTuple()
         style_dict = {
+            'QWidget': {
+                'background-color': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+            },
             'QTabWidget::pane': {
                 'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
                 'border': '0px',
-                'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*VIEWER_BG_COLOR),
+                'border-top': '0px solid rgb({0},{1},{2})'.format(*bg_color),
             },
             'QTabBar::tab': {
-                'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'background': 'rgb({0},{1},{2})'.format(*bg_color),
                 'border': '0px solid black',
-                'color': 'rgba({0},{1},{2},45)'.format(*text_color),
+                'color': 'rgba({0},{1},{2},30)'.format(*text_color),
                 'min-width': '10px',
-                'padding': '8px 20px',
+                'padding': '10px 20px',
             },
             'QTabBar::tab:selected': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'background': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
-                'margin-bottom': '-1px',
+                'background': 'rgb({0},{1},{2})'.format(*VIEWER_NAV_BG_COLOR),
+                'border-top': '1px solid rgb({0},{1},{2})'
+                              .format(*NODE_SEL_BORDER_COLOR),
             },
             'QTabBar::tab:hover': {
-                'color': 'rgb({0}, {1}, {2})'.format(*NODE_SEL_BORDER_COLOR),
-                'background': 'rgb({0}, {1}, {2})'.format(*VIEWER_GRID_COLOR),
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'border-top': '1px solid rgb({0},{1},{2})'
+                              .format(*NODE_SEL_BORDER_COLOR),
             }
         }
         stylesheet = ''

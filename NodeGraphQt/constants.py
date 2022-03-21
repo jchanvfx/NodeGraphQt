@@ -102,6 +102,8 @@ VIEWER_GRID_DOTS = 1
 #: Style to render the node graph background with grid lines.
 VIEWER_GRID_LINES = 2
 
+VIEWER_NAV_BG_COLOR = (25, 25, 25)
+VIEWER_NAV_ITEM_COLOR = (35, 35, 35)
 VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_SIZE = 50
