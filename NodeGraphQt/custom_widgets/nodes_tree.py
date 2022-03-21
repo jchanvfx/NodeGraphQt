@@ -55,6 +55,8 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
         self._custom_labels = {}
         self._category_items = {}
 
+        self._build_tree()
+
     def __repr__(self):
         return '<{} object at {}>'.format(
             self.__class__.__name__, hex(id(self))

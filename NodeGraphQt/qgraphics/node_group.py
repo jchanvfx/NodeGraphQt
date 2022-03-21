@@ -161,7 +161,7 @@ class GroupNodeItem(NodeItem):
         height = self._text_item.boundingRect().height()
 
         # setup initial base size.
-        self._set_base_size(add_w=8.0, add_h=height)
+        self._set_base_size(add_w=8.0, add_h=height + 10)
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # set the tooltip

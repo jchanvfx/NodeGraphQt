@@ -18,6 +18,8 @@ class GroupNode(BaseNode):
 
     .. image:: ../_images/group_node.png
         :width: 250px
+
+    -
     """
 
     NODE_NAME = 'Group'

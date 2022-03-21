@@ -21,6 +21,7 @@ class PortInputNode(BaseNode):
     .. image:: ../_images/port_in_node.png
         :width: 150px
 
+    -
     """
 
     NODE_NAME = 'InputPort'
@@ -81,6 +82,7 @@ class PortOutputNode(BaseNode):
     .. image:: ../_images/port_out_node.png
         :width: 150px
 
+    -
     """
 
     NODE_NAME = 'OutputPort'

@@ -176,8 +176,10 @@ if __name__ == '__main__':
 
     widget.add_label_item('Close Graph', 'root')
     for i in range(1, 5):
-        widget.add_label_item('group node {}'.format(i),
-                              'node_id{}'.format(i))
+        widget.add_label_item(
+            'group node {}'.format(i),
+            'node_id{}'.format(i)
+        )
     widget.resize(600, 30)
     widget.show()
 

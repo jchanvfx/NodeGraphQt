@@ -37,16 +37,16 @@ class BaseNode(NodeObject):
 
         from NodeGraphQt import BaseNode
 
-        class FooNode(BaseNode):
+        class ExampleNode(BaseNode):
 
             # unique node identifier domain.
-            __identifier__ = 'com.chantasticvfx'
+            __identifier__ = 'io.jchanvfx.github'
 
             # initial default node name.
-            NODE_NAME = 'Foo Node'
+            NODE_NAME = 'My Node'
 
             def __init__(self):
-                super(FooNode, self).__init__()
+                super(ExampleNode, self).__init__()
 
                 # create an input port.
                 self.add_input('in')

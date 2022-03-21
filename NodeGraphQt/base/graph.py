@@ -885,7 +885,7 @@ class NodeGraph(QtCore.QObject):
             push_undo (bool): register the command to the undo stack. (default: True)
 
         Returns:
-            NodeObject: the created instance of the node.
+            BaseNode: the created instance of the node.
         """
         node = self._node_factory.create_node_instance(node_type)
         if node:
@@ -1894,6 +1894,8 @@ class SubGraph(NodeGraph):
 
     .. image:: _images/sub_graph.png
         :width: 70%
+
+    -
     """
 
     def __init__(self, parent=None, node=None, node_factory=None):
@@ -2178,6 +2180,9 @@ class SubGraph(NodeGraph):
         """
         Returns the parent node to the sub graph.
 
+        .. image:: _images/group_node.png
+            :width: 250px
+
         Returns:
             NodeGraphQt.GroupNode: group node.
         """
@@ -2304,6 +2309,8 @@ class SubGraph(NodeGraph):
         .. image:: _images/port_in_node.png
             :width: 150px
 
+        -
+
         See Also:
             :meth:`NodeGraph.get_nodes_by_type`,
             :meth:`SubGraph.get_output_port_nodes`
@@ -2319,6 +2326,8 @@ class SubGraph(NodeGraph):
 
         .. image:: _images/port_out_node.png
             :width: 150px
+
+        -
 
         See Also:
             :meth:`NodeGraph.get_nodes_by_type`,

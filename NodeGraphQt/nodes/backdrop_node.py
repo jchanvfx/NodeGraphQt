@@ -15,6 +15,8 @@ class BackdropNode(NodeObject):
 
     .. image:: ../_images/backdrop.png
         :width: 250px
+
+    -
     """
 
     NODE_NAME = 'Backdrop'

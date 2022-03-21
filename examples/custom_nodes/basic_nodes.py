@@ -1,7 +1,7 @@
 from NodeGraphQt import BaseNode
 
 
-class FooNode(BaseNode):
+class BasicNodeA(BaseNode):
     """
     A node class with 2 inputs and 2 outputs.
     """
@@ -10,10 +10,10 @@ class FooNode(BaseNode):
     __identifier__ = 'nodes.basic'
 
     # initial default node name.
-    NODE_NAME = 'foo node'
+    NODE_NAME = 'node A'
 
     def __init__(self):
-        super(FooNode, self).__init__()
+        super(BasicNodeA, self).__init__()
 
         # create node inputs.
         self.add_input('in A')
@@ -24,7 +24,7 @@ class FooNode(BaseNode):
         self.add_output('out B')
 
 
-class BarNode(BaseNode):
+class BasicNodeB(BaseNode):
     """
     A node class with 3 inputs and 3 outputs.
     The last input and last output can take in multiple pipes.
@@ -34,17 +34,17 @@ class BarNode(BaseNode):
     __identifier__ = 'nodes.basic'
 
     # initial default node name.
-    NODE_NAME = 'bar'
+    NODE_NAME = 'node B'
 
     def __init__(self):
-        super(BarNode, self).__init__()
+        super(BasicNodeB, self).__init__()
 
         # create node inputs
-        self.add_input('single in 1')
-        self.add_input('single in 2')
+        self.add_input('single 1')
+        self.add_input('single 2')
         self.add_input('multi in', multi_input=True)
 
         # create node outputs
-        self.add_output('single out 1', multi_output=False)
-        self.add_output('single out 2', multi_output=False)
+        self.add_output('single 1', multi_output=False)
+        self.add_output('single 2', multi_output=False)
         self.add_output('multi out')

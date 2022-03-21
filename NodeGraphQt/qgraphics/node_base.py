@@ -29,8 +29,9 @@ class NodeItem(AbstractNodeItem):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
         if pixmap.size().height() > NODE_ICON_SIZE:
-            pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
-                                           QtCore.Qt.SmoothTransformation)
+            pixmap = pixmap.scaledToHeight(
+                NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation
+            )
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
@@ -329,8 +330,10 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): additional vertical offset.
             h_offset (float): additional horizontal offset.
         """
-        top_left = self.boundingRect().topLeft()
-        x, y = top_left.x(), top_left.y()
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().left() + 2.0
+        y = text_rect.center().y() - (icon_rect.height() / 2)
         self._icon_item.setPos(x + h_offset, y + v_offset)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
