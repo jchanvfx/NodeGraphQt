@@ -1392,22 +1392,33 @@ class NodeGraph(QtCore.QObject):
                         'output_ports': n_data['output_ports']
                     })
 
+        def get_node_by_id(nid):
+            # if nid referes to a node created during deserialization,
+            #   it may have a new id. get the new id.
+            if nid in nodes:
+                print(f'{nid}, {nodes[nid].id}')
+                nid = nodes[nid].id
+            return self.model.nodes.get(nid)
+
         # build the connections.
         for connection in data.get('connections', []):
             nid, pname = connection.get('in', ('', ''))
-            in_node = nodes.get(nid)
+            in_node = get_node_by_id(nid)
             if not in_node:
                 continue
             in_port = in_node.inputs().get(pname) if in_node else None
 
             nid, pname = connection.get('out', ('', ''))
-            out_node = nodes.get(nid)
+            out_node = get_node_by_id(nid)
             if not out_node:
                 continue
             out_port = out_node.outputs().get(pname) if out_node else None
 
             if in_port and out_port:
-                self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+                # only connect if input port is not connected yet or input port can have multiple connections.
+                #   important when duplicating nodes.
+                if not in_port.model.connected_ports or in_port.model.multi_connection:
+                    self._undo_stack.push(PortConnectedCmd(in_port, out_port))
 
         node_objs = list(nodes.values())
         if relative_pos:
