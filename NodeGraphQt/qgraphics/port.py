@@ -261,6 +261,9 @@ class PortItem(QtWidgets.QGraphicsItem):
         if self.scene():
             viewer = self.scene().viewer()
             viewer.establish_connection(self, port)
+        # redraw the ports.
+        port.update()
+        self.update()
 
     def disconnect_from(self, port):
         port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
@@ -269,6 +272,9 @@ class PortItem(QtWidgets.QGraphicsItem):
             if connected_port == port:
                 pipe.delete()
                 break
+        # redraw the ports.
+        port.update()
+        self.update()
 
 
 class CustomPortItem(PortItem):
