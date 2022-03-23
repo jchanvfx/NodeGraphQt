@@ -2189,6 +2189,18 @@ class SubGraph(NodeGraph):
         return self._node
 
     def delete_node(self, node, push_undo=True):
+        """
+        Remove the node from the node sub graph.
+
+        Note:
+            :class:`.PortInputNode` & :class:`.PortOutputNode` can't be deleted
+            as they are connected to a :class:`.Port` to remove these port nodes
+            see :meth:`BaseNode.delete_input`, :meth:`BaseNode.delete_output`.
+
+        Args:
+            node (NodeGraphQt.BaseNode): node object.
+            push_undo (bool): register the command to the undo stack. (default: True)
+        """
         port_nodes = self.get_input_port_nodes() + self.get_output_port_nodes()
         if node in port_nodes and node.parent_port is not None:
             # note: port nodes can only be deleted by deleting the parent

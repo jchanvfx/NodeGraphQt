@@ -351,8 +351,9 @@ class BaseNode(NodeObject):
         Warnings:
             Undo is NOT supported for this function.
 
-            You can only delete ports if the node has "ports_removable"
-            enabled see :meth:`BaseNode.set_ports_removable`.
+            You can only delete ports if :meth:`BaseNode.port_deletion_allowed`
+            returns ``True`` otherwise a port error is raised see also
+            :meth:`BaseNode.set_port_deletion_allowed`.
 
         Args:
             port (str or int): port name or index.
@@ -380,8 +381,9 @@ class BaseNode(NodeObject):
         Warnings:
             Undo is NOT supported for this function.
 
-            You can only delete ports if the node has "ports_removable"
-            enabled see :meth:`BaseNode.set_ports_removable`.
+            You can only delete ports if :meth:`BaseNode.port_deletion_allowed`
+            returns ``True`` otherwise a port error is raised see also
+            :meth:`BaseNode.set_port_deletion_allowed`.
 
         Args:
             port (str or int): port name or index.
@@ -407,7 +409,8 @@ class BaseNode(NodeObject):
         Allow ports to be removable on this node.
 
         See Also:
-            :meth:`BaseNode.ports_removable`
+            :meth:`BaseNode.port_deletion_allowed` and
+            :meth:`BaseNode.set_ports`
 
         Args:
             mode (bool): true to allow.
@@ -419,7 +422,7 @@ class BaseNode(NodeObject):
         Return true if ports can be deleted on this node.
 
         See Also:
-            :meth:`BaseNode.set_ports_removable`
+            :meth:`BaseNode.set_port_deletion_allowed`
 
         Returns:
             bool: true if ports can be deleted.
@@ -432,7 +435,8 @@ class BaseNode(NodeObject):
 
         Warnings:
             You can only use this function if the node has
-            "ports_removable" enabled see :meth:`BaseNode.set_ports_removable`
+            :meth:`BaseNode.port_deletion_allowed` is `True`
+            see :meth:`BaseNode.set_port_deletion_allowed`
 
         Hint:
             example snippet of port data.
@@ -446,7 +450,6 @@ class BaseNode(NodeObject):
                             'name': 'input',
                             'multi_connection': True,
                             'display_name': 'Input',
-                            'data_type': 'NoneType',
                             'locked': False
                         }],
                     'output_ports':
@@ -454,7 +457,6 @@ class BaseNode(NodeObject):
                             'name': 'output',
                             'multi_connection': True,
                             'display_name': 'Output',
-                            'data_type': 'NoneType',
                             'locked': False
                         }]
                 }
@@ -465,7 +467,7 @@ class BaseNode(NodeObject):
         if not self.port_deletion_allowed():
             raise PortError(
                 'Ports cannot be set on this node because '
-                '"ports_removable" is not enabled on this node.')
+                '"set_port_deletion_allowed" is not enabled on this node.')
 
         for port in self._inputs:
             self._view.delete_input(port.view)
@@ -480,11 +482,13 @@ class BaseNode(NodeObject):
 
         [self.add_input(name=port['name'],
                         multi_input=port['multi_connection'],
-                        display_name=port['display_name'])
+                        display_name=port['display_name'],
+                        locked=port.get('locked') or False)
          for port in port_data['input_ports']]
         [self.add_output(name=port['name'],
                          multi_output=port['multi_connection'],
-                         display_name=port['display_name'])
+                         display_name=port['display_name'],
+                         locked=port.get('locked') or False)
          for port in port_data['output_ports']]
         self.draw()
 

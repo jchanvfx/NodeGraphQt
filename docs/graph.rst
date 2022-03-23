@@ -20,4 +20,4 @@ SubGraph
 
 .. autoclass:: NodeGraphQt.SubGraph
     :members:
-    :exclude-members: delete_node, is_root, sub_graphs, widget
+    :exclude-members: is_root, sub_graphs, widget
