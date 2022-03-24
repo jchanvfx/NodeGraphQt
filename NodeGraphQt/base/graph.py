@@ -1293,7 +1293,6 @@ class NodeGraph(QtCore.QObject):
 
         # build the nodes.
         nodes = {}
-        new_node_connections = {}
         for n_id, n_data in data.get('nodes', {}).items():
             identifier = n_data['type_']
             node = self._node_factory.create_node_instance(identifier)
@@ -1306,6 +1305,8 @@ class NodeGraph(QtCore.QObject):
                 # set custom properties.
                 for prop, val in n_data.get('custom', {}).items():
                     node.model.set_property(prop, val)
+                    if prop in node.view.widgets:
+                        node.view.widgets[prop].set_value(val)
 
                 nodes[n_id] = node
                 self.add_node(node, n_data.get('pos'))

@@ -6,8 +6,6 @@ https://github.com/jchanvfx/NodeGraphQt
 .. image:: _images/screenshot.png
     :width: 95%
 
-NodeGraphQt documentation.
-
 ----
 
 .. toctree::

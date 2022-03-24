@@ -107,7 +107,6 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.setSpacing(0)
 
         # self.viewport().setAutoFillBackground(False)
-        # bg_color = QtGui.QColor(*VIEWER_BG_COLOR).darker(110).toTuple()
         self.setStyleSheet(
             'QListView {{border: 0px;background-color: rgb({0},{1},{2});}}'
             .format(*VIEWER_NAV_BG_COLOR)

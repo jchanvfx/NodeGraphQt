@@ -189,10 +189,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos_x (float): x pos.
             pos_y (float): y pos.
         """
-        speed = self._scene_range.width() * 0.0015
-        x = -pos_x * speed
-        y = -pos_y * speed
-        self._scene_range.adjust(x, y, x, y)
+        self._scene_range.adjust(pos_x, pos_y, pos_x, pos_y)
         self._update_scene()
 
     def scale(self, sx, sy, pos=None):
@@ -474,9 +471,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             zoom = 0.1 if pos_x > 0 else -0.1
             self._set_viewer_zoom(zoom, 0.05, pos=event.pos())
         elif self.MMB_state or (self.LMB_state and self.ALT_state):
-            pos_x = (event.x() - self._previous_pos.x())
-            pos_y = (event.y() - self._previous_pos.y())
-            self._set_viewer_pan(pos_x, pos_y)
+            previous_pos = self.mapToScene(self._previous_pos)
+            current_pos = self.mapToScene(event.pos())
+            delta = previous_pos - current_pos
+            self._set_viewer_pan(delta.x(), delta.y())
 
         if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
