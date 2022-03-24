@@ -1839,7 +1839,8 @@ class NodeGraph(QtCore.QObject):
         Returns:
             SubGraph: sub node graph used to manage the group node session.
         """
-        assert isinstance(node, GroupNode), 'node must be a GroupNode instance.'
+        if not isinstance(node, GroupNode):
+            return
         if self._widget is None:
             raise RuntimeError('NodeGraph.widget not initialized!')
 

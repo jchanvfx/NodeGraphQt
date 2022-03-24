@@ -69,7 +69,7 @@ def build_context_menu(graph):
         'Auto Layout Down Stream', _layout_graph_down, 'Ctrl+L')
     node_menu.add_separator()
     node_menu.add_command(
-        'Expand Group', _expand_group_node,
+        'Expand Group Node', _expand_group_node,
         QtGui.QKeySequence(QtCore.Qt.ALT + QtCore.Qt.Key_Return))
 
     # "Pipe" menu.
