@@ -3,13 +3,12 @@ Menu Examples
 
 Examples for customizing context menus in NodeGraphQt.
 
-Default Menu Setup
-******************
+Default Context Menu
+********************
 
-The NodeGraphQt module has a convenience function for setting up the node graph
-with a few essential menu commands.
-
-`See function:` :func:`NodeGraphQt.setup_context_menu`
+The ``NodeGraphQt.NodeGraph`` has a default context menu with a few essential
+menu commands built when initialized it can be accessed with the
+:meth:`NodeGraph.context_menu` function.
 
 .. image:: ../_images/menu_hotkeys.png
     :width: 300px
