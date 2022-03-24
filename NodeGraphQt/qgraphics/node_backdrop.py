@@ -1,12 +1,12 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from .node_abstract import AbstractNodeItem
-from .pipe import Pipe
-from .port import PortItem
-from ..constants import (Z_VAL_PIPE,
-                         NODE_SEL_COLOR,
-                         NODE_SEL_BORDER_COLOR)
+from NodeGraphQt.constants import (Z_VAL_PIPE,
+                                   NODE_SEL_COLOR,
+                                   NODE_SEL_BORDER_COLOR)
+from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from NodeGraphQt.qgraphics.pipe import PipeItem
+from NodeGraphQt.qgraphics.port import PortItem
 
 
 class BackdropSizer(QtWidgets.QGraphicsItem):
@@ -79,7 +79,13 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         """
         painter.save()
 
+        margin = 1.0
         rect = self.boundingRect()
+        rect = QtCore.QRectF(rect.left() + margin,
+                             rect.top() + margin,
+                             rect.width() - (margin * 2),
+                             rect.height() - (margin * 2))
+
         item = self.parentItem()
         if item and item.selected:
             color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
@@ -112,7 +118,7 @@ class BackdropNodeItem(AbstractNodeItem):
         self.setZValue(Z_VAL_PIPE - 1)
         self._properties['backdrop_text'] = text
         self._min_size = 80, 80
-        self._sizer = BackdropSizer(self, 20.0)
+        self._sizer = BackdropSizer(self, 26.0)
         self._sizer.set_pos(*self._min_size)
         self._nodes = [self]
 
@@ -134,7 +140,7 @@ class BackdropNodeItem(AbstractNodeItem):
             rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]
 
-            if isinstance(item, (PortItem, Pipe)):
+            if isinstance(item, (PortItem, PipeItem)):
                 self.setFlag(self.ItemIsMovable, False)
                 return
             if self.selected:
@@ -180,48 +186,60 @@ class BackdropNodeItem(AbstractNodeItem):
             widget (QtWidgets.QWidget): not used.
         """
         painter.save()
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtCore.Qt.NoBrush)
 
+        margin = 1.0
         rect = self.boundingRect()
+        rect = QtCore.QRectF(rect.left() + margin,
+                             rect.top() + margin,
+                             rect.width() - (margin * 2),
+                             rect.height() - (margin * 2))
+
+        radius = 2.6
         color = (self.color[0], self.color[1], self.color[2], 50)
         painter.setBrush(QtGui.QColor(*color))
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRect(rect)
+        painter.drawRoundedRect(rect, radius, radius)
 
-        top_rect = QtCore.QRectF(0.0, 0.0, rect.width(), 20.0)
-        painter.setBrush(QtGui.QColor(*self.color))
+        top_rect = QtCore.QRectF(rect.x(), rect.y(), rect.width(), 26.0)
+        painter.setBrush(QtGui.QBrush(QtGui.QColor(*self.color)))
         painter.setPen(QtCore.Qt.NoPen)
-        painter.drawRect(top_rect)
+        painter.drawRoundedRect(top_rect, radius, radius)
+        for pos in [top_rect.left(), top_rect.right() - 5.0]:
+            painter.drawRect(
+                QtCore.QRectF(pos, top_rect.bottom() - 5.0, 5.0, 5.0))
 
         if self.backdrop_text:
             painter.setPen(QtGui.QColor(*self.text_color))
             txt_rect = QtCore.QRectF(
-                top_rect.x() + 5.0, top_rect.height() + 2.0,
+                top_rect.x() + 5.0, top_rect.height() + 3.0,
                 rect.width() - 5.0, rect.height())
             painter.setPen(QtGui.QColor(*self.text_color))
             painter.drawText(txt_rect,
                              QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap,
                              self.backdrop_text)
 
-        if self.selected and NODE_SEL_COLOR:
+        if self.selected:
             sel_color = [x for x in NODE_SEL_COLOR]
-            sel_color[-1] = 10
+            sel_color[-1] = 15
             painter.setBrush(QtGui.QColor(*sel_color))
             painter.setPen(QtCore.Qt.NoPen)
-            painter.drawRect(rect)
+            painter.drawRoundedRect(rect, radius, radius)
 
-        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y() + 1.2,
+        txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y(),
                                  rect.width(), top_rect.height())
         painter.setPen(QtGui.QColor(*self.text_color))
         painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
 
-        path = QtGui.QPainterPath()
-        path.addRect(rect)
+        border = 0.8
         border_color = self.color
         if self.selected and NODE_SEL_BORDER_COLOR:
+            border = 1.0
             border_color = NODE_SEL_BORDER_COLOR
         painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(QtGui.QPen(QtGui.QColor(*border_color), 1))
-        painter.drawPath(path)
+        painter.setPen(QtGui.QPen(QtGui.QColor(*border_color), border))
+        painter.drawRoundedRect(rect, radius, radius)
 
         painter.restore()
 

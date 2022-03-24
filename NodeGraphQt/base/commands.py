@@ -1,8 +1,7 @@
 #!/usr/bin/python
 from Qt import QtWidgets
 
-from .utils import minimize_node_ref_count
-from ..constants import IN_PORT, OUT_PORT
+from NodeGraphQt.constants import IN_PORT, OUT_PORT
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
@@ -52,14 +51,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             setattr(view, name, value)
 
     def undo(self):
-        do_undo = False
-        try:
-            if self.old_val != self.new_val:
-                do_undo = True
-        except:
-            do_undo = True
-
-        if do_undo:
+        if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.old_val)
 
             # emit property changed signal.
@@ -67,14 +59,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
             graph.property_changed.emit(self.node, self.name, self.old_val)
 
     def redo(self):
-        do_redo = False
-        try:
-            if self.old_val != self.new_val:
-                do_redo = True
-        except:
-            do_redo = True
-
-        if do_redo:
+        if self.old_val != self.new_val:
             self.set_node_prop(self.name, self.new_val)
 
             # emit property changed signal.
@@ -126,17 +111,15 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.model = graph.model
         self.node = node
         self.pos = pos
-        self.node_parent = node.parent()
 
     def undo(self):
         self.pos = self.pos or self.node.pos()
         self.model.nodes.pop(self.node.id)
-        self.node.delete()
+        self.node.view.delete()
 
     def redo(self):
         self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
-        self.node.set_parent(self.node_parent)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
@@ -154,19 +137,14 @@ class NodeRemovedCmd(QtWidgets.QUndoCommand):
         self.scene = graph.scene()
         self.model = graph.model
         self.node = node
-        self.node_parent = node.parent()
 
     def undo(self):
         self.model.nodes[self.node.id] = self.node
         self.scene.addItem(self.node.view)
-        self.node.set_parent(self.node_parent)
 
     def redo(self):
         self.model.nodes.pop(self.node.id)
-        self.node.delete()
-
-    def __del__(self):
-        minimize_node_ref_count(self.node)
+        self.node.view.delete()
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

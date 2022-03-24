@@ -3,8 +3,8 @@ from distutils.version import LooseVersion
 
 from Qt import QtGui, QtCore
 
-from ..errors import NodeMenuError
-from ..widgets.actions import BaseMenu, GraphAction, NodeAction
+from NodeGraphQt.errors import NodeMenuError
+from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
 
 
 class NodeGraphMenu(object):

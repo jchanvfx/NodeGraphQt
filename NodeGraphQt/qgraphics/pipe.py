@@ -3,8 +3,7 @@ import math
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from .port import PortItem
-from ..constants import (
+from NodeGraphQt.constants import (
     PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
     PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
     PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
@@ -14,6 +13,7 @@ from ..constants import (
     ITEM_CACHE_MODE,
     NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
     NODE_LAYOUT_DIRECTION)
+from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
     PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
@@ -22,13 +22,13 @@ PIPE_STYLES = {
 }
 
 
-class Pipe(QtWidgets.QGraphicsPathItem):
+class PipeItem(QtWidgets.QGraphicsPathItem):
     """
     Base Pipe item used for drawing node connections.
     """
 
     def __init__(self, input_port=None, output_port=None):
-        super(Pipe, self).__init__()
+        super(PipeItem, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
@@ -141,7 +141,8 @@ class Pipe(QtWidgets.QGraphicsPathItem):
                 transform.scale(dist, dist)
             painter.drawPolygon(transform.map(self._arrow))
 
-        painter.restore()  # QPaintDevice: Cannot destroy paint device that is being painted
+        # QPaintDevice: Cannot destroy paint device that is being painted.
+        painter.restore()
 
     def __draw_path_vertical(self, start_port, pos1, pos2, path):
         """
@@ -342,7 +343,7 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.reset()
             if value:
                 self.highlight()
-        return super(Pipe, self).itemChange(change, value)
+        return super(PipeItem, self).itemChange(change, value)
 
     @property
     def input_port(self):
@@ -391,10 +392,10 @@ class Pipe(QtWidgets.QGraphicsPathItem):
             self.scene().removeItem(self)
 
 
-class LivePipe(Pipe):
+class LivePipeItem(PipeItem):
 
     def __init__(self):
-        super(LivePipe, self).__init__()
+        super(LivePipeItem, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
         self.shift_selected = False
 

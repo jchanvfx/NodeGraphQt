@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from ..errors import NodeRegistrationError
+from NodeGraphQt.errors import NodeRegistrationError
 
 
 class NodeFactory(object):
@@ -42,24 +42,23 @@ class NodeFactory(object):
         """
         return self.__nodes
 
-    def create_node_instance(self, node_type=None, alias=None):
+    def create_node_instance(self, node_type=None):
         """
         create node object by the node type identifier or alias.
 
         Args:
-            node_type (str): node type.
-            alias (str): alias name (optional).
+            node_type (str): node type or optional alias name.
 
         Returns:
-            NodeGraphQt.BaseNode: new node class object.
+            NodeGraphQt.NodeObject: new node object.
         """
-        if alias and self.aliases.get(alias):
-            node_type = self.aliases[alias]
+        if node_type in self.aliases:
+            node_type = self.aliases[node_type]
 
-        NodeClass = self.__nodes.get(node_type)
-        if not NodeClass:
+        _NodeClass = self.__nodes.get(node_type)
+        if not _NodeClass:
             print('can\'t find node type {}'.format(node_type))
-        return NodeClass
+        return _NodeClass()
 
     def register_node(self, node, alias=None):
         """
@@ -77,9 +76,9 @@ class NodeFactory(object):
 
         if self.__nodes.get(node_type):
             raise NodeRegistrationError(
-                'id "{}" already registered! '
+                'node type "{}" already registered to "{}"! '
                 'Please specify a new plugin class name or __identifier__.'
-                .format(node_type))
+                .format(node_type, self.__nodes[node_type]))
         self.__nodes[node_type] = node
 
         if self.__names.get(name):

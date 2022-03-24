@@ -4,7 +4,11 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from .stylesheet import STYLE_TABSEARCH, STYLE_TABSEARCH_LIST, STYLE_QMENU
+from NodeGraphQt.constants import (
+    VIEWER_BG_COLOR,
+    VIEWER_NAV_BG_COLOR,
+    NODE_SEL_BORDER_COLOR
+)
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
@@ -49,72 +53,6 @@ class TabSearchCompleter(QtWidgets.QCompleter):
         self._using_orig_model = True
 
 
-class TabSearchWidget(QtWidgets.QLineEdit):
-
-    search_submitted = QtCore.Signal(str)
-
-    def __init__(self, parent=None, node_dict=None):
-        super(TabSearchWidget, self).__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
-        self.setStyleSheet(STYLE_TABSEARCH)
-        self.setMinimumSize(200, 22)
-        self.setTextMargins(2, 0, 2, 0)
-        self.hide()
-
-        self._node_dict = node_dict or {}
-
-        node_names = sorted(self._node_dict.keys())
-        self._model = QtCore.QStringListModel(node_names, self)
-
-        self._completer = TabSearchCompleter()
-        self._completer.setModel(self._model)
-        self.setCompleter(self._completer)
-
-        popup = self._completer.popup()
-        popup.setStyleSheet(STYLE_TABSEARCH_LIST)
-        popup.clicked.connect(self._on_search_submitted)
-        self.returnPressed.connect(self._on_search_submitted)
-
-    def __repr__(self):
-        return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
-
-    def _on_search_submitted(self, index=0):
-        node_type = self._node_dict.get(self.text())
-        if not node_type:
-            model = self._completer.popup().model()
-            text = model.data(model.index(0, 0))
-            node_type = self._node_dict.get(text)
-
-        if node_type:
-            self.search_submitted.emit(node_type)
-
-        self.close()
-        self.parentWidget().clearFocus()
-
-    def showEvent(self, event):
-        super(TabSearchWidget, self).showEvent(event)
-        self.setFocus()
-        self.setText("")
-        self.completer().popup().show()
-        self.completer().complete()
-
-    def mousePressEvent(self, event):
-        if not self.text():
-            self.completer().complete()
-
-    def set_nodes(self, node_dict=None):
-        self._node_dict = {}
-        for name, node_types in node_dict.items():
-            if len(node_types) == 1:
-                self._node_dict[name] = node_types[0]
-                continue
-            for node_id in node_types:
-                self._node_dict['{} ({})'.format(name, node_id)] = node_id
-        node_names = sorted(self._node_dict.keys())
-        self._model.setStringList(node_names)
-        self._completer.setModel(self._model)
-
-
 class TabSearchMenuWidget(QtWidgets.QMenu):
 
     search_submitted = QtCore.Signal(str)
@@ -124,9 +62,30 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
 
         self.line_edit = QtWidgets.QLineEdit()
         self.line_edit.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
-        self.line_edit.setStyleSheet(STYLE_TABSEARCH)
         self.line_edit.setMinimumSize(200, 22)
-        self.line_edit.setTextMargins(2, 0, 2, 0)
+        text_color = self.palette().text().color().toTuple()
+        selected_color = self.palette().highlight().color().toTuple()
+        style_dict = {
+            'QLineEdit': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'border': '1px solid rgb({0},{1},{2})'
+                          .format(*selected_color),
+                'border-radius': '3px',
+                'padding': '2px 4px',
+                'margin': '2px 4px 8px 4px',
+                'background': 'rgb({0},{1},{2})'.format(*VIEWER_NAV_BG_COLOR),
+                'selection-background-color': 'rgba({0},{1},{2},200)'
+                                              .format(*selected_color),
+            }
+        }
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        self.line_edit.setStyleSheet(stylesheet)
 
         self._node_dict = node_dict or {}
         if self._node_dict:
@@ -135,7 +94,37 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         search_widget = QtWidgets.QWidgetAction(self)
         search_widget.setDefaultWidget(self.line_edit)
         self.addAction(search_widget)
-        self.setStyleSheet(STYLE_QMENU)
+
+        style_dict = {
+            'QMenu': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'background-color': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
+                'border-radius': '3px',
+            },
+            'QMenu::item': {
+                'padding': '5px 18px 2px',
+                'background-color': 'transparent',
+            },
+            'QMenu::item:selected': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'background-color': 'rgba({0},{1},{2},200)'
+                                    .format(*selected_color),
+            },
+            'QMenu::separator': {
+                'height': '1px',
+                'background': 'rgba({0},{1},{2}, 50)'.format(*text_color),
+                'margin': '4px 8px',
+            }
+        }
+        self._menu_stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            self._menu_stylesheet += style
+        self.setStyleSheet(self._menu_stylesheet)
 
         self._actions = {}
         self._menus = {}
@@ -233,23 +222,24 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
 
         max_depth = 0
         for node_type in node_types:
-            trees = ".".join(node_type.split(".")[:-1]).split("::")
+            trees = '.'.join(node_type.split('.')[:-1]).split('::')
             for depth, menu_name in enumerate(trees):
-                menu_path = "::".join(trees[:depth+1])
+                new_menu = None
+                menu_path = '::'.join(trees[:depth + 1])
                 if depth in menu_tree.keys():
                     if menu_name not in menu_tree[depth].keys():
                         new_menu = QtWidgets.QMenu(menu_name)
                         new_menu.keyPressEvent = self.keyPressEvent
-                        new_menu.setStyleSheet(STYLE_QMENU)
+                        new_menu.setStyleSheet(self._menu_stylesheet)
                         menu_tree[depth][menu_path] = new_menu
                 else:
                     new_menu = QtWidgets.QMenu(menu_name)
-                    new_menu.setStyleSheet(STYLE_QMENU)
+                    new_menu.setStyleSheet(self._menu_stylesheet)
                     menu_tree[depth] = {menu_path: new_menu}
-                if depth > 0:
-                    new_menu.parentPath = "::".join(trees[:depth])
+                if depth > 0 and new_menu:
+                    new_menu.parentPath = '::'.join(trees[:depth])
 
-                max_depth = max(max_depth,depth)
+                max_depth = max(max_depth, depth)
 
         for i in range(max_depth+1):
             menus = menu_tree[i]
@@ -258,8 +248,8 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
                 if i == 0:
                     self.addMenu(menu)
                 else:
-                    parentMenu = self._menus[menu.parentPath]
-                    parentMenu.addMenu(menu)
+                    parent_menu = self._menus[menu.parentPath]
+                    parent_menu.addMenu(menu)
 
         for name in node_names:
             action = QtWidgets.QAction(name, self)
@@ -268,7 +258,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             self._actions[name] = action
 
             menu_name = self._node_dict[name]
-            menu_path = ".".join(menu_name.split(".")[:-1])
+            menu_path = '.'.join(menu_name.split('.')[:-1])
 
             if menu_path in self._menus.keys():
                 self._menus[menu_path].addAction(action)
@@ -280,7 +270,8 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             self._node_dict.clear()
             self._clear_actions()
             self._set_menu_visible(False)
-            [self.removeAction(menu.menuAction()) for menu in self._menus.values()]
+            for menu in self._menus.values():
+                self.removeAction(menu.menuAction())
             self._actions.clear()
             self._menus.clear()
             for name, node_types in node_dict.items():

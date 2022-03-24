@@ -1,13 +1,45 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
-from .stylesheet import STYLE_QMENU
+
+from NodeGraphQt.constants import VIEWER_BG_COLOR
 
 
 class BaseMenu(QtWidgets.QMenu):
 
     def __init__(self, *args, **kwargs):
         super(BaseMenu, self).__init__(*args, **kwargs)
-        self.setStyleSheet(STYLE_QMENU)
+        text_color = self.palette().text().color().toTuple()
+        selected_color = self.palette().highlight().color().toTuple()
+        style_dict = {
+            'QMenu': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'background-color': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
+                'border-radius': '3px',
+            },
+            'QMenu::item': {
+                'padding': '5px 18px 2px',
+                'background-color': 'transparent',
+            },
+            'QMenu::item:selected': {
+                'color': 'rgb({0},{1},{2})'.format(*text_color),
+                'background-color': 'rgba({0},{1},{2},200)'
+                                    .format(*selected_color),
+            },
+            'QMenu::separator': {
+                'height': '1px',
+                'background': 'rgba({0},{1},{2}, 50)'.format(*text_color),
+                'margin': '4px 8px',
+            }
+        }
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        self.setStyleSheet(stylesheet)
         self.node_class = None
         self.graph = None
 
