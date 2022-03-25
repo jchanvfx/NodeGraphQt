@@ -33,7 +33,7 @@ applications.
 | Slice Connections | `Shift + Alt + LMB Drag` |
 
 #### Vertical Layout
-<img src="/docs/_images/vertical_layout.png" width="400" title="Vertical Layout">
+<img src="/docs/_images/vertical_layout.png" width="600" title="Vertical Layout">
 
 #### Pipe Layout
 
