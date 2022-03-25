@@ -939,7 +939,7 @@ class NodeItemVertical(NodeItem):
         # align label text
         self.align_label(h_offset=6)
         # align icon
-        self.align_icon(v_offset=4)
+        self.align_icon(h_offset=6, v_offset=4)
         # arrange input and output ports.
         self.align_ports()
         # arrange node widgets

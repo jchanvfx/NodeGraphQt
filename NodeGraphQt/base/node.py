@@ -62,6 +62,7 @@ class NodeObject(object):
             _NodeItem = qgraphics_views.get(NODE_LAYOUT_VERTICAL)
         elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
             _NodeItem = qgraphics_views.get(NODE_LAYOUT_HORIZONTAL)
+
         if _NodeItem is None:
             raise ValueError(
                 'qgraphics item for the {} node layout can\'t be None!'.format({
