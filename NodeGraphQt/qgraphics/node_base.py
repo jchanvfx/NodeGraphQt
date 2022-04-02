@@ -253,17 +253,7 @@ class NodeItem(AbstractNodeItem):
             for pipe in port.connected_pipes:
                 pipe.reset()
 
-    def calc_size(self, add_w=0.0, add_h=0.0):
-        """
-        Calculates the minimum node size.
-
-        Args:
-            add_w (float): additional width.
-            add_h (float): additional height.
-
-        Returns:
-            tuple(float, float): width, height.
-        """
+    def _calc_size_horizontal(self):
         # width, height from node name text.
         text_w = self._text_item.boundingRect().width()
         text_h = self._text_item.boundingRect().height()
@@ -321,11 +311,73 @@ class NodeItem(AbstractNodeItem):
             # add bottom margin for node widget.
             height += 4.0
         height *= 1.05
+        return width, height
+
+    def _calc_size_vertical(self):
+        p_input_width = 0.0
+        p_output_width = 0.0
+        p_input_height = 0.0
+        p_output_height = 0.0
+        for port in self._input_items.keys():
+            if port.isVisible():
+                p_input_width += port.boundingRect().width()
+                if not p_input_height:
+                    p_input_height = port.boundingRect().height()
+        for port in self._output_items.keys():
+            if port.isVisible():
+                p_output_width += port.boundingRect().width()
+                if not p_output_height:
+                    p_output_height = port.boundingRect().height()
+
+        widget_width = 0.0
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            if widget.boundingRect().width() > widget_width:
+                widget_width = widget.boundingRect().width()
+            widget_height += widget.boundingRect().height()
+
+        width = max([p_input_width, p_output_width, widget_width]) + add_w
+        height = p_input_height + p_output_height + widget_height + add_h
+        return width, height
+
+    def calc_size(self, add_w=0.0, add_h=0.0):
+        """
+        Calculates the minimum node size.
+
+        Args:
+            add_w (float): additional width.
+            add_h (float): additional height.
+
+        Returns:
+            tuple(float, float): width, height.
+        """
+        layout_direction = self.viewer().get_layout_direction()
+        if layout_direction is NODE_LAYOUT_HORIZONTAL:
+            width, height = self._calc_size_horizontal()
+        elif layout_direction is NODE_LAYOUT_VERTICAL:
+            width, height = self._calc_size_vertical()
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
         # additional width, height.
         width += add_w
         height += add_h
         return width, height
+
+    def _align_icon_horizontal(self, h_offset, v_offset):
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().left() + 2.0
+        y = text_rect.center().y() - (icon_rect.height() / 2)
+        self._icon_item.setPos(x + h_offset, y + v_offset)
+
+    def _align_icon_vertical(self, h_offset, v_offset):
+        center_y = self.boundingRect().center().y()
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = center_y - text_rect.height() - (icon_rect.height() / 2) + v_offset
+        self._icon_item.setPos(x, y)
 
     def align_icon(self, h_offset=0.0, v_offset=0.0):
         """
@@ -335,11 +387,25 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): additional vertical offset.
             h_offset (float): additional horizontal offset.
         """
-        icon_rect = self._icon_item.boundingRect()
+        layout_direction = self.viewer().get_layout_direction()
+        if layout_direction is NODE_LAYOUT_HORIZONTAL:
+            self._align_icon_horizontal(h_offset, v_offset)
+        elif layout_direction is NODE_LAYOUT_VERTICAL:
+            self._align_icon_vertical(h_offset, v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
+
+    def _align_label_horizontal(self, h_offset, v_offset):
+        rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
-        x = self.boundingRect().left() + 2.0
-        y = text_rect.center().y() - (icon_rect.height() / 2)
-        self._icon_item.setPos(x + h_offset, y + v_offset)
+        x = rect.center().x() - (text_rect.width() / 2)
+        self._text_item.setPos(x + h_offset, rect.y() + v_offset)
+
+    def _align_label_vertical(self, h_offset, v_offset):
+        rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = self.boundingRect().center().y() - (rect.height() / 2) + v_offset
+        self.text_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
         """
@@ -349,18 +415,15 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        rect = self.boundingRect()
-        text_rect = self._text_item.boundingRect()
-        x = rect.center().x() - (text_rect.width() / 2)
-        self._text_item.setPos(x + h_offset, rect.y() + v_offset)
+        layout_direction = self.viewer().get_layout_direction()
+        if layout_direction is NODE_LAYOUT_HORIZONTAL:
+            self._align_label_horizontal(h_offset, v_offset)
+        elif layout_direction is NODE_LAYOUT_VERTICAL:
+            self._align_label_vertical(h_offset, v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
-    def align_widgets(self, v_offset=0.0):
-        """
-        Align node widgets to the default center of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-        """
+    def _align_widgets_horizontal(self, v_offset):
         if not self._widgets:
             return
         rect = self.boundingRect()
@@ -381,13 +444,40 @@ class NodeItem(AbstractNodeItem):
             widget.setPos(x, y)
             y += widget_rect.height()
 
-    def align_ports(self, v_offset=0.0):
+    def _align_widgets_vertical(self, v_offset):
+        if not self._widgets:
+            return
+        rect = self.boundingRect()
+        y = rect.center().y() + v_offset
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            widget_height += widget_rect.height()
+        y -= widget_height / 2
+
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            x = rect.center().x() - (widget_rect.width() / 2)
+            widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
+
+    def align_widgets(self, v_offset=0.0):
         """
-        Align input, output ports in the node layout.
+        Align node widgets to the default center of the node.
 
         Args:
-            v_offset (float): port vertical offset.
+            v_offset (float): vertical offset.
         """
+        layout_direction = self.viewer().get_layout_direction()
+        if layout_direction is NODE_LAYOUT_HORIZONTAL:
+            self._align_widget_horizontal(v_offset)
+        elif layout_direction is NODE_LAYOUT_VERTICAL:
+            self._align_widget_vertical(v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
+
+    def _align_ports_horizontal(self, v_offset):
         width = self._width
         txt_offset = PortEnum.CLICK_FALLOFF.value - 2
         spacing = 1
@@ -424,6 +514,48 @@ class NodeItem(AbstractNodeItem):
                 txt_width = text.boundingRect().width() - txt_offset
                 txt_x = port.x() - txt_width
                 text.setPos(txt_x, port.y() - 1.5)
+
+    def _align_ports_vertical(self, v_offset):
+        # adjust input position
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(inputs) + 1)
+            port_x = delta
+            port_y = (port_height / 2) * -1
+            for port in inputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
+
+        # adjust output position
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(outputs) + 1)
+            port_x = delta
+            port_y = self._height - (port_height / 2)
+            for port in outputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
+
+    def align_ports(self, v_offset=0.0):
+        """
+        Align input, output ports in the node layout.
+
+        Args:
+            v_offset (float): port vertical offset.
+        """
+        layout_direction = self.viewer().get_layout_direction()
+        if layout_direction is NODE_LAYOUT_HORIZONTAL:
+            self._align_ports_horizontal(v_offset)
+        elif layout_direction is NODE_LAYOUT_VERTICAL:
+            self._align_ports_vertical(v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
     def draw_node(self):
         """
