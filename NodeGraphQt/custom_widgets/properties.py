@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,

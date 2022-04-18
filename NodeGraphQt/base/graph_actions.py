@@ -7,7 +7,7 @@ def build_context_menu(graph):
     Args:
         graph (NodeGraphQt.NodeGraph): node graph controller.
     """
-    from Qt import QtGui, QtCore
+    from qtpy import QtGui, QtCore
     graph_menu = graph.get_context_menu('graph')
 
     # "File" menu.

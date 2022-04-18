@@ -5,7 +5,7 @@ import json
 import os
 import re
 
-from Qt import QtCore, QtWidgets, QtGui
+from qtpy import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,

@@ -3,7 +3,7 @@
 import math
 from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore, QtWidgets
+from qtpy import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT_CURVED

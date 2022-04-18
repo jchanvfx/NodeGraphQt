@@ -1,4 +1,4 @@
-from Qt import QtWidgets, QtGui
+from qtpy import QtWidgets, QtGui
 
 from NodeGraphQt.constants import (
     NODE_SEL_BORDER_COLOR,

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from NodeGraphQt.constants import VIEWER_GRID_COLOR, Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
