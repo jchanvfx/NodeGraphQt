@@ -7,6 +7,7 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
+                                   NODE_PROP_FILE,
                                    IN_PORT, OUT_PORT,
                                    NODE_LAYOUT_VERTICAL,
                                    NODE_LAYOUT_HORIZONTAL)
@@ -17,7 +18,7 @@ from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
 from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
                                               NodeComboBox,
                                               NodeLineEdit,
-                                              NodeCheckBox)
+                                              NodeCheckBox,)
 
 
 class BaseNode(NodeObject):
@@ -179,6 +180,29 @@ class BaseNode(NodeObject):
             name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
 
         widget = NodeComboBox(self.view, name, label, items)
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+
+    def add_file_input(self, name, label='', text='', tab=None, ext="*"):
+        """
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            text (str): pre filled text.
+            tab (str): name of the widget tab to display in.
+            ext (str): file ext
+        """
+        self.create_property(
+            name, text, widget_type=NODE_PROP_FILE, tab=tab
+        widget = NodeFilePath(self.view, name, label, text, ext)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
 
