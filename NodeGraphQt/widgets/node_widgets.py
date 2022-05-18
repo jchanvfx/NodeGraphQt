@@ -3,6 +3,7 @@ from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.constants import VIEWER_GRID_COLOR, Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
+from NodeGraphQt.widgets.dialogs import FileDialog
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):
@@ -32,6 +33,7 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
             },
             'QGroupBox::title': {
                 'subcontrol-origin': 'margin',
+                'subcontrol-position': 'top center',
                 'color': 'rgba({0}, {1}, {2}, 100)'.format(*text_color),
                 'padding': '0px',
             }
@@ -423,3 +425,43 @@ class NodeCheckBox(NodeBaseWidget):
         """
         if state != self.get_value():
             self.get_custom_widget().setChecked(state)
+
+
+class NodeFilePath(NodeLineEdit):
+    """
+    Displays as a ``QLineEdit`` in a node.
+
+    **Inherited from:** :class:`NodeBaseWidget`
+
+    .. note::
+        To embed a ``QLineEdit`` in a node see:
+        :meth:`NodeGraphQt.BaseNode.add_file_input`
+    """
+
+    def __init__(self, parent=None, name='', label='', text='', ext='*'):
+        super(NodeLineEdit, self).__init__(parent, name, label)
+        self._ledit = QtWidgets.QLineEdit()
+        self._ledit.setAlignment(QtCore.Qt.AlignCenter)
+        self._ledit.editingFinished.connect(self.on_value_changed)
+        self._ledit.clearFocus()
+
+        _button = QtWidgets.QPushButton()
+        _button.setIcon(self.get_icon(21))
+        _button.clicked.connect(self._on_select_file)
+
+        widget = QtWidgets.QWidget()
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._ledit)
+        hbox.addWidget(_button)
+        widget.setLayout(hbox)
+
+        self._ext = ext
+        self.set_custom_widget(widget)
+        self.widget().setMaximumWidth(140)
+
+    def _on_select_file(self):
+        file_path = FileDialog.getOpenFileName(ext_filter=self._ext)
+        file = file_path[0] or None
+        if file:
+            self.value = file
+            self._ledit.setText(self.value)
