@@ -465,3 +465,27 @@ class NodeFilePath(NodeLineEdit):
         if file:
             self.value = file
             self._ledit.setText(self.value)
+
+    @property
+    def type_(self):
+        return 'FilePathNodeWidget'
+
+    def get_value(self):
+        """
+        Returns the widgets current text.
+
+        Returns:
+            str: current text.
+        """
+        return self._ledit.text()
+
+    def set_value(self, text=''):
+        """
+        Sets the widgets current text.
+
+        Args:
+            text (str): new text.
+        """
+        if text != self.get_value():
+            self._ledit.setText(self.value)
+            self.on_value_changed()
