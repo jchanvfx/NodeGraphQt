@@ -18,7 +18,8 @@ from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
 from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
                                               NodeComboBox,
                                               NodeLineEdit,
-                                              NodeCheckBox,)
+                                              NodeCheckBox,
+                                              NodeFilePath,)
 
 
 class BaseNode(NodeObject):
@@ -201,7 +202,8 @@ class BaseNode(NodeObject):
             ext (str): file ext
         """
         self.create_property(
-            name, text, widget_type=NODE_PROP_FILE, tab=tab
+            name, text, widget_type=NODE_PROP_FILE, tab=tab)
+        
         widget = NodeFilePath(self.view, name, label, text, ext)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
