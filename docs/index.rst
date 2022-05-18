@@ -36,3 +36,4 @@ https://github.com/jchanvfx/NodeGraphQt
     examples/ex_port
     examples/ex_pipe
     examples/ex_menu
+    examples/ex_app_nuke
