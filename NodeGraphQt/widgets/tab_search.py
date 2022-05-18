@@ -4,11 +4,7 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from NodeGraphQt.constants import (
-    VIEWER_BG_COLOR,
-    VIEWER_NAV_BG_COLOR,
-    NODE_SEL_BORDER_COLOR
-)
+from NodeGraphQt.constants import VIEWER_BG_COLOR, VIEWER_NAV_BG_COLOR
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
@@ -284,4 +280,3 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             self.rebuild = False
 
         self._show()
-
