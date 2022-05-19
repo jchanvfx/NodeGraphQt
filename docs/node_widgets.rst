@@ -1,10 +1,11 @@
-Node Embedded Widgets
+Embedded Node Widgets
 #####################
 
-Node embedded widgets are the widgets that can be embedded into a
-:class:`NodeGraphQt.BaseNode` and displayed in the node graph.
+| Node embedded widgets are the widgets that can be embedded into a
+ :class:`NodeGraphQt.BaseNode` and displayed in the node graph.
 
-See :ref:`Embedding Custom Widgets` example to adding your own widget into a node.
+| To add you own widget in a node see the
+ :ref:`Embedding Custom Widgets` example.
 
 NodeBaseWidget
 **************

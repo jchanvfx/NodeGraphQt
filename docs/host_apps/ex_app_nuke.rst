@@ -1,15 +1,13 @@
-NodeGraphQt in Nuke
-###################
+Nuke
+####
 
-Creating a custom node graph panel in NUKE
+Creating a node graph widget in Nuke.
 
 .. image:: ../_images/app_nuke_example.png
         :width: 800px
 
-Here is an example where the :attr:`NodeGraph.widget` can be registered as a
-panel in the compositing application NUKE.
-
----
+| Here is an example where the :attr:`NodeGraph.widget` can be registered as a
+ panel in the compositing application NUKE.
 
 .. code-block:: python
     :linenos:
@@ -22,9 +20,6 @@ panel in the compositing application NUKE.
 
     # create a simple test node class.
     class TestNode(BaseNode):
-        """
-        Simple test node object.
-        """
 
         __identifier__ = 'nodes.nuke'
         NODE_NAME = 'test node'
@@ -59,9 +54,6 @@ panel in the compositing application NUKE.
 
     # create the wrapper widget.
     class CustomNodeGraph(QtWidgets.QWidget):
-        """
-        Custom node graph widget to be registered as a panel in Nuke.
-        """
 
         def __init__(self, parent=None):
             super(CustomNodeGraph, self).__init__(parent)
