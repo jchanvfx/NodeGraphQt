@@ -3,6 +3,11 @@ Silhouette
 
 Creating a node graph widget in Silhouette FX.
 
+.. note::
+    Requires Silhouette ``7.x`` or above as previous versions don't
+    come built-in with its own PySide2 build or provide access to the
+    ``QMainWindow`` object.
+
 .. image:: ../_images/app_silhouette_example.png
         :width: 800px
 
