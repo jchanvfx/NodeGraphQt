@@ -1,10 +1,10 @@
 Host Application Examples
 #########################
 
-| Examples for implementing the NodeGraphQt framework in a host application.
+| Here are a list of examples for implementing a custom node graph into the
+ host application.
 
 .. toctree::
-    :caption: Applications
     :name: appstoc
     :maxdepth: 2
 
