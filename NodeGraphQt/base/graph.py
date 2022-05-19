@@ -736,7 +736,7 @@ class NodeGraph(QtCore.QObject):
 
         See Also:
             To enable/disable pipe collision
-            :meth:`NodeGraph.set_pipe_collision_enabled`
+            :meth:`NodeGraph.set_pipe_collision`
 
         Returns:
             bool: True if pipe collision is enabled.
