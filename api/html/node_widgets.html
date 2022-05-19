@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Embedded Node Widgets &mdash; NodeGraphQt 0.2.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="General Overview" href="examples/ex_overview.html" />
+    <link rel="prev" title="Custom Widgets" href="custom_widgets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Widgets</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Custom Widgets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Embedded Node Widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nodebasewidget">NodeBaseWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodecheckbox">NodeCheckBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodecombobox">NodeComboBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nodelineedit">NodeLineEdit</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="host_apps/_index_apps.html">Host Application Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NodeGraphQt</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Embedded Node Widgets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/master/docs/node_widgets.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="embedded-node-widgets">
+<h1>Embedded Node Widgets<a class="headerlink" href="#embedded-node-widgets" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Node embedded widgets are the widgets that can be embedded into a
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> and displayed in the node graph.</div>
+</div>
+<div class="line-block">
+<div class="line">To add you own widget in a node see the
+<a class="reference internal" href="examples/ex_node.html#embedding-custom-widgets"><span class="std std-ref">Embedding Custom Widgets</span></a> example.</div>
+</div>
+<section id="nodebasewidget">
+<h2>NodeBaseWidget<a class="headerlink" href="#nodebasewidget" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">NodeBaseWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main wrapper class that allows a <code class="docutils literal notranslate"><span class="pre">QtWidgets.QWidget</span></code> to be
+added in a <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> (<em>NodeGraphQt.BaseNode.view</em>) – parent node view.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – property name for the parent node.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label text above the embedded widget.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.get_custom_widget">
+<span class="sig-name descname"><span class="pre">get_custom_widget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.get_custom_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the embedded QWidget used in the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>nested QWidget</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QtWidgets.QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.get_icon">
+<span class="sig-name descname"><span class="pre">get_icon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default icon from the Qt framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>icon name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.get_label">
+<span class="sig-name descname"><span class="pre">get_label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the label text displayed above the embedded node widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>label text.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent node property name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>property name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widgets current value.</p>
+<p>You must re-implement this property to if you’re using a custom widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current property value.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.on_value_changed">
+<span class="sig-name descname"><span class="pre">on_value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.on_value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the slot function that
+Emits the widgets current <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeBaseWidget.value()</span></code> with the
+<a class="reference internal" href="#NodeGraphQt.NodeBaseWidget.value_changed" title="NodeGraphQt.NodeBaseWidget.value_changed"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeBaseWidget.value_changed</span></code></a> signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – not used.</p></li>
+<li><p><strong>kwargs</strong> – not used.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Emits:</dt><dd><p>str, object: &lt;node_property_name&gt;, &lt;node_property_value&gt;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.set_custom_widget">
+<span class="sig-name descname"><span class="pre">set_custom_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.set_custom_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the custom QWidget used in the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> (<em>QtWidgets.QWidget</em>) – custom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.set_label">
+<span class="sig-name descname"><span class="pre">set_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label text above the embedded widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label</strong> (<em>str</em>) – new label ext.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.set_name">
+<span class="sig-name descname"><span class="pre">set_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the property name for the parent node.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The property name must be set before the widget is added to
+the node.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – property name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.set_value">
+<span class="sig-name descname"><span class="pre">set_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the widgets current value.</p>
+<p>You must re-implement this property to if you’re using a custom widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – new text value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeBaseWidget.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><a class="headerlink" href="#NodeGraphQt.NodeBaseWidget.value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when the <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute has changed.</p>
+<p>(This is connected to the :meth: <cite>BaseNode.set_property</cite> function when the
+widget is added into the node.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p>str, object</p>
+</dd>
+<dt class="field-even">Emits</dt>
+<dd class="field-even"><p>property name, propety value</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<p>Below are builtin node widgets inherited from <a class="reference internal" href="#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeBaseWidget</span></code></a></p>
+</section>
+<section id="nodecheckbox">
+<h2>NodeCheckBox<a class="headerlink" href="#nodecheckbox" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeCheckBox">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.widgets.node_widgets.</span></span><span class="sig-name descname"><span class="pre">NodeCheckBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays as a <code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code> in a node.</p>
+<p><strong>Inherited from:</strong> <a class="reference internal" href="#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a</cite> <code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code> <cite>in a node see func:</cite>
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_checkbox()</span></code></a></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeCheckBox.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widget checked state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>checked state.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeCheckBox.set_value">
+<span class="sig-name descname"><span class="pre">set_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeCheckBox.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the widget checked state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>bool</em>) – check state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="nodecombobox">
+<h2>NodeComboBox<a class="headerlink" href="#nodecombobox" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeComboBox">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.widgets.node_widgets.</span></span><span class="sig-name descname"><span class="pre">NodeComboBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeComboBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays as a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> in a node.</p>
+<p><strong>Inherited from:</strong> <a class="reference internal" href="#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a</cite> <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> <cite>in a node see func:</cite>
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_combo_menu" title="NodeGraphQt.BaseNode.add_combo_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_combo_menu()</span></code></a></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeComboBox.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeComboBox.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widget current text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current text.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeComboBox.set_value">
+<span class="sig-name descname"><span class="pre">set_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeComboBox.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the widgets current value.</p>
+<p>You must re-implement this property to if you’re using a custom widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – new text value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="nodelineedit">
+<h2>NodeLineEdit<a class="headerlink" href="#nodelineedit" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeLineEdit">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.widgets.node_widgets.</span></span><span class="sig-name descname"><span class="pre">NodeLineEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeLineEdit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays as a <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> in a node.</p>
+<p><strong>Inherited from:</strong> <a class="reference internal" href="#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.widgets.node_widgets.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeBaseWidget</span></code></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>To embed a</cite> <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> <cite>in a node see func:</cite>
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_text_input()</span></code></a></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeLineEdit.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeLineEdit.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the widgets current text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current text.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.widgets.node_widgets.NodeLineEdit.set_value">
+<span class="sig-name descname"><span class="pre">set_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.widgets.node_widgets.NodeLineEdit.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the widgets current text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – new text.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="examples/ex_overview.html" class="btn btn-neutral float-right" title="General Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="custom_widgets.html" class="btn btn-neutral float-left" title="Custom Widgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Johnny Chan.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
