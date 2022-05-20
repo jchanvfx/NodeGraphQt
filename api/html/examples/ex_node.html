@@ -106,15 +106,15 @@
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Custom Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption"><span class="caption-text">Usage</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ex_overview.html">General Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Node Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-nodes">Creating Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#embedding-widgets">Embedding Widgets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-node-widgets">Creating Node Widgets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#embedding-custom-widgets">Embedding Custom Widgets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#connecting-nodes">Connecting Nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#connecting-a-propertiesbin">Connecting a PropertiesBin</a></li>
@@ -231,8 +231,8 @@
 </pre></div>
 </div>
 </section>
-<section id="embedding-widgets">
-<h2>Embedding Widgets<a class="headerlink" href="#embedding-widgets" title="Permalink to this headline">¶</a></h2>
+<section id="creating-node-widgets">
+<h2>Creating Node Widgets<a class="headerlink" href="#creating-node-widgets" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> class allows you to embed some basic widgets inside a node here’s a
 example to simply embed a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> widget when reimplementing the <code class="docutils literal notranslate"><span class="pre">BaseNode</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
@@ -249,7 +249,8 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_combo_menu</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;My List&#39;</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To you update the widget you can call the <a class="reference internal" href="../nodes/NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject.set_property()</span></code></a> function.</p>
+<p>To you update the widget you can call the
+<a class="reference internal" href="../nodes/NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject.set_property()</span></code></a> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">node</span> <span class="o">=</span> <span class="n">MyListNode</span><span class="p">()</span>
 <span class="linenos">2</span><span class="n">node</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;mangos&#39;</span><span class="p">)</span>
 </pre></div>
@@ -262,7 +263,7 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <li><p><code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code>: <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_text_input()</span></code></a></p></li>
 </ul>
 </div></blockquote>
-<p>See: <a class="reference internal" href="../node_widgets.html#embedded-node-widgets"><span class="std std-ref">Embedded Node Widgets</span></a> for more node widget types.</p>
+<p>See: <a class="reference internal" href="../node_widgets.html#node-widgets"><span class="std std-ref">Node Widgets</span></a> for more node widget types.</p>
 </section>
 <section id="embedding-custom-widgets">
 <h2>Embedding Custom Widgets<a class="headerlink" href="#embedding-custom-widgets" title="Permalink to this headline">¶</a></h2>

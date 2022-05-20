@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Embedded Node Widgets &mdash; NodeGraphQt 0.2.1 documentation</title>
+  <title>Node Widgets &mdash; NodeGraphQt 0.2.1 documentation</title>
   
 
   
@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="General Overview" href="examples/ex_overview.html" />
-    <link rel="prev" title="Custom Widgets" href="custom_widgets.html" /> 
+    <link rel="prev" title="Built-in Widgets" href="custom_widgets.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -106,8 +106,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Custom Widgets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Embedded Node Widgets</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Widgets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#nodebasewidget">NodeBaseWidget</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nodecheckbox">NodeCheckBox</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nodecombobox">NodeComboBox</a></li>
@@ -115,7 +115,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption"><span class="caption-text">Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
@@ -171,7 +171,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Embedded Node Widgets</li>
+      <li>Node Widgets</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -192,15 +192,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="embedded-node-widgets">
-<h1>Embedded Node Widgets<a class="headerlink" href="#embedded-node-widgets" title="Permalink to this headline">¶</a></h1>
+  <section id="node-widgets">
+<h1>Node Widgets<a class="headerlink" href="#node-widgets" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">Node embedded widgets are the widgets that can be embedded into a
+<div class="line">Node widgets are the widgets that can be embedded into a
 <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> and displayed in the node graph.</div>
 </div>
 <div class="line-block">
-<div class="line">To add you own widget in a node see the
-<a class="reference internal" href="examples/ex_node.html#embedding-custom-widgets"><span class="std std-ref">Embedding Custom Widgets</span></a> example.</div>
+<div class="line">To create your own widget embedded in a node see the
+<a class="reference internal" href="examples/ex_node.html#embedding-custom-widgets"><span class="std std-ref">Embedding Custom Widgets</span></a> example page.</div>
 </div>
 <section id="nodebasewidget">
 <h2>NodeBaseWidget<a class="headerlink" href="#nodebasewidget" title="Permalink to this headline">¶</a></h2>
@@ -378,7 +378,18 @@ widget is added into the node.)</p>
 </dd></dl>
 
 <hr class="docutils" />
-<p>Below are builtin node widgets inherited from <a class="reference internal" href="#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeBaseWidget</span></code></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Below are the classes for the <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> builtin
+functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code>: <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_checkbox()</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QComboBox</span></code>: <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_combo_menu" title="NodeGraphQt.BaseNode.add_combo_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_combo_menu()</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code>: <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_text_input()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+</div>
 </section>
 <section id="nodecheckbox">
 <h2>NodeCheckBox<a class="headerlink" href="#nodecheckbox" title="Permalink to this headline">¶</a></h2>
@@ -510,7 +521,7 @@ widget is added into the node.)</p>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="examples/ex_overview.html" class="btn btn-neutral float-right" title="General Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="custom_widgets.html" class="btn btn-neutral float-left" title="Custom Widgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom_widgets.html" class="btn btn-neutral float-left" title="Built-in Widgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
