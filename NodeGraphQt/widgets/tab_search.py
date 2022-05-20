@@ -179,7 +179,8 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         del self._searched_actions[:]
 
     def _set_menu_visible(self, visible):
-        [menu.menuAction().setVisible(visible) for menu in self._menus.values()]
+        for menu in self._menus.values():
+            menu.menuAction().setVisible(visible)
 
     def _close(self):
         self._set_menu_visible(False)
