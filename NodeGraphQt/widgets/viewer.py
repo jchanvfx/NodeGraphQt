@@ -38,7 +38,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
     insert_node = QtCore.Signal(object, str, dict)
     node_name_changed = QtCore.Signal(str, str)
     node_backdrop_updated = QtCore.Signal(str, str, object)
-    show_tab_search = QtCore.Signal()
 
     # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
@@ -315,8 +314,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 ctx_menu.exec_(event.globalPos())
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
-        else:
-            self.show_tab_search.emit()
+
         return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
@@ -893,22 +891,22 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
-        if isinstance(self._search_widget, TabSearchMenuWidget):
+        state = self._search_widget.isVisible()
+        if not state:
+            self._search_widget.setVisible(state)
+            self.setFocus()
             return
 
         pos = self._previous_pos
-        state = not self._search_widget.isVisible()
-        if state:
-            rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
-                                    int(pos.y() - rect.height() / 2))
-            self._search_widget.move(new_pos)
-            self._search_widget.setVisible(state)
-            rect = self.mapToScene(rect).boundingRect()
-            self.scene().update(rect)
-        else:
-            self._search_widget.setVisible(state)
-            self.clearFocus()
+        rect = self._search_widget.rect()
+        new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
+                                int(pos.y() - rect.height() / 2))
+        self._search_widget.move(new_pos)
+        self._search_widget.setVisible(state)
+        self._search_widget.setFocus()
+
+        rect = self.mapToScene(rect).boundingRect()
+        self.scene().update(rect)
 
     def rebuild_tab_search(self):
         if isinstance(self._search_widget, TabSearchMenuWidget):

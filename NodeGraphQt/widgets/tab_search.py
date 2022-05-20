@@ -49,16 +49,14 @@ class TabSearchCompleter(QtWidgets.QCompleter):
         self._using_orig_model = True
 
 
-class TabSearchMenuWidget(QtWidgets.QMenu):
+class TabSearchLineEditWidget(QtWidgets.QLineEdit):
 
-    search_submitted = QtCore.Signal(str)
+    tab_pressed = QtCore.Signal()
 
-    def __init__(self, node_dict=None):
-        super(TabSearchMenuWidget, self).__init__()
-
-        self.line_edit = QtWidgets.QLineEdit()
-        self.line_edit.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
-        self.line_edit.setMinimumSize(200, 22)
+    def __init__(self, parent=None):
+        super(TabSearchLineEditWidget, self).__init__(parent)
+        self.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
+        self.setMinimumSize(200, 22)
         text_color = self.palette().text().color().toTuple()
         selected_color = self.palette().highlight().color().toTuple()
         style_dict = {
@@ -81,7 +79,23 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
                 style += '  {}:{};\n'.format(elm_name, elm_val)
             style += '}\n'
             stylesheet += style
-        self.line_edit.setStyleSheet(stylesheet)
+        self.setStyleSheet(stylesheet)
+
+    def keyPressEvent(self, event):
+        super(TabSearchLineEditWidget, self).keyPressEvent(event)
+        if event.key() == QtCore.Qt.Key_Tab:
+            self.tab_pressed.emit()
+
+
+class TabSearchMenuWidget(QtWidgets.QMenu):
+
+    search_submitted = QtCore.Signal(str)
+
+    def __init__(self, node_dict=None):
+        super(TabSearchMenuWidget, self).__init__()
+
+        self.line_edit = TabSearchLineEditWidget()
+        self.line_edit.tab_pressed.connect(self._close)
 
         self._node_dict = node_dict or {}
         if self._node_dict:
@@ -91,6 +105,8 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         search_widget.setDefaultWidget(self.line_edit)
         self.addAction(search_widget)
 
+        text_color = self.palette().text().color().toTuple()
+        selected_color = self.palette().highlight().color().toTuple()
         style_dict = {
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),

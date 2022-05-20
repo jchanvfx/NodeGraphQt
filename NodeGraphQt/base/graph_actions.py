@@ -63,6 +63,8 @@ def build_context_menu(graph):
     # "Node" menu.
     # --------------------------------------------------------------------------
     node_menu = graph_menu.add_menu('&Nodes')
+    node_menu.add_command('Node Search', _toggle_node_search, 'Tab')
+    node_menu.add_separator()
     node_menu.add_command(
         'Auto Layout Up Stream', _layout_graph_up, 'L')
     node_menu.add_command(
@@ -312,3 +314,10 @@ def _layout_graph_up(graph):
     """
     nodes = graph.selected_nodes() or graph.all_nodes()
     graph.auto_layout_nodes(nodes=nodes, down_stream=False)
+
+
+def _toggle_node_search(graph):
+    """
+    show/hide the node search widget.
+    """
+    graph.toggle_node_search()
