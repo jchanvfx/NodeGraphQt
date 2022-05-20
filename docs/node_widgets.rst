@@ -1,11 +1,11 @@
-Embedded Node Widgets
-#####################
+Node Widgets
+############
 
-| Node embedded widgets are the widgets that can be embedded into a
+| Node widgets are the widgets that can be embedded into a
  :class:`NodeGraphQt.BaseNode` and displayed in the node graph.
 
-| To add you own widget in a node see the
- :ref:`Embedding Custom Widgets` example.
+| To create your own widget embedded in a node see the
+ :ref:`Embedding Custom Widgets` example page.
 
 NodeBaseWidget
 **************
@@ -16,7 +16,14 @@ NodeBaseWidget
 
 -----
 
-Below are builtin node widgets inherited from :class:`NodeGraphQt.NodeBaseWidget`
+.. note::
+    Below are the classes for the :class:`NodeGraphQt.BaseNode` builtin
+    functions:
+
+     - ``QCheckBox``: :meth:`NodeGraphQt.BaseNode.add_checkbox`
+     - ``QComboBox``: :meth:`NodeGraphQt.BaseNode.add_combo_menu`
+     - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
+
 
 NodeCheckBox
 ************
