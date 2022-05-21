@@ -164,13 +164,6 @@ class NodeGraph(QtCore.QObject):
         """
         Connect up all the signals and slots here.
         """
-        # TODO: refactor hard coded tab search logic into
-        #       "graph_actions.py" module.
-        # hard coded tab search.
-        tab = QtWidgets.QShortcut(
-            QtGui.QKeySequence(QtCore.Qt.Key_Tab), self._viewer)
-        tab.activated.connect(self._toggle_tab_search)
-        self._viewer.show_tab_search.connect(self._toggle_tab_search)
 
         # internal signals.
         self._viewer.search_triggered.connect(self._on_search_triggered)
@@ -220,14 +213,6 @@ class NodeGraph(QtCore.QObject):
         self._on_connection_changed(disconnected, connected)
         self._on_nodes_moved(prev_node_pos)
         self._undo_stack.endMacro()
-
-    def _toggle_tab_search(self):
-        """
-        toggle the tab search widget.
-        """
-        if self._viewer.underMouse():
-            self._viewer.tab_search_set_nodes(self._node_factory.names)
-            self._viewer.tab_search_toggle()
 
     def _on_property_bin_changed(self, node_id, prop_name, prop_value):
         """
@@ -476,6 +461,14 @@ class NodeGraph(QtCore.QObject):
             self._undo_view = QtWidgets.QUndoView(self._undo_stack)
             self._undo_view.setWindowTitle('Undo History')
         return self._undo_view
+
+    def toggle_node_search(self):
+        """
+        toggle the node search widget visibility.
+        """
+        if self._viewer.underMouse():
+            self._viewer.tab_search_set_nodes(self._node_factory.names)
+            self._viewer.tab_search_toggle()
 
     def show(self):
         """
