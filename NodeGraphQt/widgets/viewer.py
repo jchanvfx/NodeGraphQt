@@ -915,8 +915,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def context_menus(self):
         return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
-    @staticmethod
-    def question_dialog(text, title='Node Graph'):
+    def question_dialog(self, text, title='Node Graph'):
         """
         Prompt node viewer question dialog widget with "yes", "no" buttons.
 
@@ -927,10 +926,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             bool: true if user click yes.
         """
+        self.clear_key_state()
         return BaseDialog.question_dialog(text, title)
 
-    @staticmethod
-    def message_dialog(text, title='Node Graph'):
+    def message_dialog(self, text, title='Node Graph'):
         """
         Prompt node viewer message dialog widget with "ok" button.
 
@@ -938,6 +937,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             text (str): dialog text.
             title (str): dialog window title.
         """
+        self.clear_key_state()
         BaseDialog.message_dialog(text, title)
 
     def load_dialog(self, current_dir=None, ext=None):
@@ -951,6 +951,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             str: selected file path.
         """
+        self.clear_key_state()
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
@@ -971,6 +972,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             str: selected file path.
         """
+        self.clear_key_state()
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
