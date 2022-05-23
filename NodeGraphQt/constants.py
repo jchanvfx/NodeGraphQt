@@ -3,6 +3,7 @@
 import os
 
 from Qt import QtWidgets
+from enum import Enum
 
 from .pkg_info import __version__
 
@@ -11,28 +12,59 @@ The ``NodeGraphQt.constants`` namespace contains variables used throughout
 the whole ``NodeGraphQt`` library.
 """
 
+# =================================== GLOBAL ===================================
+
 #: Current version of the NodeGraphQt framework.
 VERSION = __version__
 
-# === PIPE ===
+# ==================================== PIPE ====================================
 
-PIPE_WIDTH = 1.2
-PIPE_STYLE_DEFAULT = 0
-PIPE_STYLE_DASHED = 1
-PIPE_STYLE_DOTTED = 2
-PIPE_DEFAULT_COLOR = (175, 95, 30, 255)
-PIPE_DISABLED_COLOR = (190, 20, 20, 255)
-PIPE_ACTIVE_COLOR = (70, 255, 220, 255)
-PIPE_HIGHLIGHT_COLOR = (232, 184, 13, 255)
-PIPE_SLICER_COLOR = (255, 50, 75)
-#: Style to draw the connection pipes as straight lines.
-PIPE_LAYOUT_STRAIGHT = 0
-#: Style to draw the connection pipes as curved lines.
-PIPE_LAYOUT_CURVED = 1
-#: Style to draw the connection pipes as angled lines.
-PIPE_LAYOUT_ANGLE = 2
 
-# === PORT ===
+class PIPE_STYLING(Enum):
+    """
+    Pipe Constant.
+    """
+    #: pipe width.
+    WIDTH = 1.2
+    #: default color.
+    COLOR = (175, 95, 30, 255)
+    #: pipe color to a node when it's disabled.
+    DISABLED_COLOR = (190, 20, 20, 255)
+    #: color when the pipe is selected or mouse hovered.
+    ACTIVE_COLOR = (70, 255, 220, 255)
+    #: pipe color to a node when it's selected.
+    HIGHLIGHT_COLOR = (232, 184, 13, 255)
+    #: draw connection as a line.
+    DRAW_TYPE_DEFAULT = 0
+    #: draw connection as dashed lines.
+    DRAW_TYPE_DASHED = 1
+    #: draw connection as a dotted line.
+    DRAW_TYPE_DOTTED = 2
+
+
+class PIPE_SLICER_STYLING(Enum):
+    """
+    Slicer Pipe Constant.
+    """
+    #: pipe width.
+    WIDTH = 1.5
+    #: default color.
+    COLOR = (255, 50, 75)
+
+
+class PIPE_LAYOUT(Enum):
+    """
+    Pipe layout constant.
+    """
+    #: draw the connection pipes as straight lines.
+    STRAIGHT = 0
+    #: draw the connection pipes as curved lines.
+    CURVED = 1
+    #: draw the connection pipes as angled lines.
+    ANGLE = 2
+
+
+# ==================================== PORT ====================================
 
 #: Connection type for input ports.
 IN_PORT = 'in'
@@ -48,7 +80,7 @@ PORT_HOVER_COLOR = (17, 43, 82, 255)
 PORT_HOVER_BORDER_COLOR = (136, 255, 35, 255)
 PORT_FALLOFF = 15.0
 
-# === NODE ===
+# ==================================== NODE ====================================
 
 NODE_WIDTH = 160
 NODE_HEIGHT = 60
@@ -107,6 +139,8 @@ VIEWER_NAV_ITEM_COLOR = (35, 35, 35)
 VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
 VIEWER_GRID_SIZE = 50
+
+# ================================== PRIVATE ===================================
 
 URI_SCHEME = 'nodegraphqt://'
 URN_SCHEME = 'nodegraphqt::'

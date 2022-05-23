@@ -6,7 +6,7 @@ from distutils.version import LooseVersion
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT_CURVED
+from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
@@ -71,7 +71,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
         self._last_size = self.size()
 
-        self._pipe_layout = PIPE_LAYOUT_CURVED
+        self._pipe_layout = PIPE_LAYOUT.CURVED.value
         self._detached_port = None
         self._start_port = None
         self._origin_pos = None

@@ -5,7 +5,7 @@ import json
 import os
 import re
 
-from Qt import QtCore, QtWidgets, QtGui
+from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
@@ -18,7 +18,7 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (
     NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
-    PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT, PIPE_LAYOUT_ANGLE,
+    PIPE_LAYOUT,
     URI_SCHEME, URN_SCHEME,
     IN_PORT, OUT_PORT,
     VIEWER_GRID_LINES
@@ -752,7 +752,7 @@ class NodeGraph(QtCore.QObject):
         self._model.pipe_collision = mode
         self._viewer.pipe_collision = mode
 
-    def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
+    def set_pipe_style(self, style=PIPE_LAYOUT.CURVED.value):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
 
@@ -764,17 +764,17 @@ class NodeGraph(QtCore.QObject):
 
             Pipe Layout Styles:
 
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_CURVED`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.CURVED.value`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.STRAIGHT.value`
+            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.ANGLE.value`
 
         Args:
             style (int): pipe layout style.
         """
-        pipe_max = max([PIPE_LAYOUT_CURVED,
-                        PIPE_LAYOUT_STRAIGHT,
-                        PIPE_LAYOUT_ANGLE])
-        style = style if 0 <= style <= pipe_max else PIPE_LAYOUT_CURVED
+        pipe_max = max([PIPE_LAYOUT.CURVED.value,
+                        PIPE_LAYOUT.STRAIGHT.value,
+                        PIPE_LAYOUT.ANGLE.value])
+        style = style if 0 <= style <= pipe_max else PIPE_LAYOUT.CURVED.value
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
