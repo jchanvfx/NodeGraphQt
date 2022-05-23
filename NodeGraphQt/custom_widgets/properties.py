@@ -23,6 +23,9 @@ from NodeGraphQt.widgets.dialogs import FileDialog
 
 
 class BaseProperty(QtWidgets.QWidget):
+    """
+    Base widget class for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -733,23 +736,16 @@ WIDGET_MAP = {
 }
 
 
-def registerPropType(name, prop_class, override=False):
-    global WIDGET_MAP
-    if name in WIDGET_MAP.keys() and not override:
-        raise Exception(
-            'Prop type {} has already exists, '
-            'u can use override=True to override)'
-            .format(name)
-        )
-    WIDGET_MAP[name] = prop_class
-
 # main property widgets.
 
 
-class PropWindow(QtWidgets.QWidget):
+class PropListWidget(QtWidgets.QWidget):
+    """
+    Node properties list displayed under a tab in the NodePropWidget widget.
+    """
 
     def __init__(self, parent=None):
-        super(PropWindow, self).__init__(parent)
+        super(PropListWidget, self).__init__(parent)
         self.__layout = QtWidgets.QGridLayout()
         self.__layout.setColumnStretch(1, 1)
         self.__layout.setSpacing(6)
@@ -759,7 +755,9 @@ class PropWindow(QtWidgets.QWidget):
         layout.addLayout(self.__layout)
 
     def __repr__(self):
-        return '<PropWindow object at {}>'.format(hex(id(self)))
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self))
+        )
 
     def add_widget(self, name, widget, value, label=None):
         """
@@ -850,7 +848,9 @@ class NodePropWidget(QtWidgets.QWidget):
         self._read_node(node)
 
     def __repr__(self):
-        return '<NodePropWidget object at {}>'.format(hex(id(self)))
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self))
+        )
 
     def _on_close(self):
         """
@@ -899,8 +899,8 @@ class NodePropWidget(QtWidgets.QWidget):
                 if wid_type == 0:
                     continue
 
-                WidClass = WIDGET_MAP.get(wid_type)
-                widget = WidClass()
+                _WidgetClass = WIDGET_MAP.get(wid_type)
+                widget = _WidgetClass()
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])
@@ -919,9 +919,9 @@ class NodePropWidget(QtWidgets.QWidget):
         prop_window = self.__tab_windows['Node']
         for prop_name in default_props:
             wid_type = model.get_widget_type(prop_name)
-            WidClass = WIDGET_MAP.get(wid_type)
+            _WidgetClass = WIDGET_MAP.get(wid_type)
 
-            widget = WidClass()
+            widget = _WidgetClass()
             prop_window.add_widget(prop_name,
                                    widget,
                                    model.get_property(prop_name),
@@ -963,11 +963,11 @@ class NodePropWidget(QtWidgets.QWidget):
             name (str): tab name.
 
         Returns:
-            PropWindow: tab child widget.
+            PropListWidget: tab child widget.
         """
         if name in self.__tab_windows.keys():
             raise AssertionError('Tab name {} already taken!'.format(name))
-        self.__tab_windows[name] = PropWindow(self)
+        self.__tab_windows[name] = PropListWidget(self)
         self.__tab.addTab(self.__tab_windows[name], name)
         return self.__tab_windows[name]
 
@@ -999,21 +999,21 @@ if __name__ == '__main__':
 
         def __init__(self):
             super(TestNode, self).__init__()
-            self.create_property('label_test', 'foo bar',
+            self.create_property('label_test', 'Test Text',
                                  widget_type=NODE_PROP_QLABEL)
-            self.create_property('line_edit', 'hello',
+            self.create_property('line_edit', 'Test Text',
                                  widget_type=NODE_PROP_QLINEEDIT)
             self.create_property('color_picker', (0, 0, 255),
                                  widget_type=NODE_PROP_COLORPICKER)
             self.create_property('integer', 10,
                                  widget_type=NODE_PROP_QSPINBOX)
-            self.create_property('list', 'foo',
-                                 items=['foo', 'bar'],
+            self.create_property('list', 'item1',
+                                 items=['item1', 'item2', 'item3'],
                                  widget_type=NODE_PROP_QCOMBO)
             self.create_property('range', 50,
                                  range=(45, 55),
                                  widget_type=NODE_PROP_SLIDER)
-            self.create_property('text_edit', 'test text',
+            self.create_property('text_edit', 'Test Text',
                                  widget_type=NODE_PROP_QTEXTEDIT,
                                  tab='text')
 
