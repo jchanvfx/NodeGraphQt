@@ -3,7 +3,7 @@ from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (NODE_SEL_BORDER_COLOR,
                                    NODE_SEL_COLOR,
-                                   PORT_FALLOFF)
+                                   PORT_STYLING)
 from NodeGraphQt.qgraphics.node_base import NodeItem
 
 
@@ -114,7 +114,7 @@ class GroupNodeItem(NodeItem):
             v_offset (float): port vertical offset.
         """
         width = self._width
-        txt_offset = PORT_FALLOFF - 2
+        txt_offset = PORT_STYLING.CLICK_FALLOFF.value - 2
         spacing = 1
 
         # adjust input position

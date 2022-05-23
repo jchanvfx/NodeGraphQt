@@ -22,15 +22,16 @@ VERSION = __version__
 
 class PIPE_STYLING(Enum):
     """
-    Pipe Constant.
+    Pipe styling layout:
+    ``NodeGraphQt.constants.PIPE_STYLING``
     """
-    #: pipe width.
+    #: default width.
     WIDTH = 1.2
     #: default color.
     COLOR = (175, 95, 30, 255)
     #: pipe color to a node when it's disabled.
     DISABLED_COLOR = (190, 20, 20, 255)
-    #: color when the pipe is selected or mouse hovered.
+    #: pipe color when selected or mouse over.
     ACTIVE_COLOR = (70, 255, 220, 255)
     #: pipe color to a node when it's selected.
     HIGHLIGHT_COLOR = (232, 184, 13, 255)
@@ -44,9 +45,10 @@ class PIPE_STYLING(Enum):
 
 class PIPE_SLICER_STYLING(Enum):
     """
-    Slicer Pipe Constant.
+    Slicer Pipe styling layout:
+    ``NodeGraphQt.constants.PIPE_SLICER_STYLING``
     """
-    #: pipe width.
+    #: default width.
     WIDTH = 1.5
     #: default color.
     COLOR = (255, 50, 75)
@@ -54,31 +56,52 @@ class PIPE_SLICER_STYLING(Enum):
 
 class PIPE_LAYOUT(Enum):
     """
-    Pipe layout constant.
+    Pipe connection drawing layout:
+    ``NodeGraphQt.constants.PIPE_LAYOUT``
     """
-    #: draw the connection pipes as straight lines.
+    #: draw straight lines for pipe connections.
     STRAIGHT = 0
-    #: draw the connection pipes as curved lines.
+    #: draw curved lines for pipe connections.
     CURVED = 1
-    #: draw the connection pipes as angled lines.
+    #: draw angled lines for pipe connections.
     ANGLE = 2
-
 
 # ==================================== PORT ====================================
 
-#: Connection type for input ports.
-IN_PORT = 'in'
-#: Connection type for output ports.
-OUT_PORT = 'out'
 
-PORT_DEFAULT_SIZE = 22.0
-PORT_DEFAULT_COLOR = (49, 115, 100, 255)
-PORT_DEFAULT_BORDER_COLOR = (29, 202, 151, 255)
-PORT_ACTIVE_COLOR = (14, 45, 59, 255)
-PORT_ACTIVE_BORDER_COLOR = (107, 166, 193, 255)
-PORT_HOVER_COLOR = (17, 43, 82, 255)
-PORT_HOVER_BORDER_COLOR = (136, 255, 35, 255)
-PORT_FALLOFF = 15.0
+class PORT_STYLING(Enum):
+    """
+    Port styling layout:
+    ``NodeGraphQt.constants.PORT_STYLING``
+    """
+    #: default port size.
+    SIZE = 22.0
+    #: default port color. (r, g, b, a)
+    COLOR = (49, 115, 100, 255)
+    #: default port border color.
+    BORDER_COLOR = (29, 202, 151, 255)
+    #: port color when selected.
+    ACTIVE_COLOR = (14, 45, 59, 255)
+    #: port border color when selected.
+    ACTIVE_BORDER_COLOR = (107, 166, 193, 255)
+    #: port color on mouse over.
+    HOVER_COLOR = (17, 43, 82, 255)
+    #: port border color on mouse over.
+    HOVER_BORDER_COLOR = (136, 255, 35, 255)
+    #: threshold for selecting a port.
+    CLICK_FALLOFF = 15.0
+
+
+class PORT_TYPE(Enum):
+    """
+    Port connection types:
+    ``NodeGraphQt.constants.PORT_TYPE``
+    """
+    #: Connection type for input ports.
+    IN = 'in'
+    #: Connection type for output ports.
+    OUT = 'out'
+
 
 # ==================================== NODE ====================================
 

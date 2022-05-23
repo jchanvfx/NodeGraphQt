@@ -20,7 +20,7 @@ from NodeGraphQt.constants import (
     NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
     PIPE_LAYOUT,
     URI_SCHEME, URN_SCHEME,
-    IN_PORT, OUT_PORT,
+    PORT_TYPE,
     VIEWER_GRID_LINES
 )
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
@@ -369,7 +369,7 @@ class NodeGraph(QtCore.QObject):
             return
 
         label = 'connect node(s)' if connected else 'disconnect node(s)'
-        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
+        ptypes = {PORT_TYPE.IN.value: 'inputs', PORT_TYPE.OUT.value: 'outputs'}
 
         self._undo_stack.beginMacro(label)
         for p1_view, p2_view in disconnected:
@@ -396,7 +396,7 @@ class NodeGraph(QtCore.QObject):
         """
         if not ports:
             return
-        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
+        ptypes = {PORT_TYPE.IN.value: 'inputs', PORT_TYPE.OUT.value: 'outputs'}
         self._undo_stack.beginMacro('slice connections')
         for p1_view, p2_view in ports:
             node1 = self._model.nodes[p1_view.node.id]
@@ -1246,16 +1246,20 @@ class NodeGraph(QtCore.QObject):
             for pname, conn_data in inputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {IN_PORT: [n_id, pname],
-                                OUT_PORT: [conn_id, conn_prt]}
+                        pipe = {
+                            PORT_TYPE.IN.value: [n_id, pname],
+                            PORT_TYPE.OUT.value: [conn_id, conn_prt]
+                        }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
             for pname, conn_data in outputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {OUT_PORT: [n_id, pname],
-                                IN_PORT: [conn_id, conn_prt]}
+                        pipe = {
+                            PORT_TYPE.OUT.value: [n_id, pname],
+                            PORT_TYPE.IN.value: [conn_id, conn_prt]
+                        }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
@@ -2362,8 +2366,10 @@ class SubGraph(NodeGraph):
         Returns:
             PortInputNode or PortOutputNode: port node object.
         """
-        func_type = {IN_PORT: self.get_input_port_nodes,
-                     OUT_PORT: self.get_output_port_nodes}
+        func_type = {
+            PORT_TYPE.IN.value: self.get_input_port_nodes,
+            PORT_TYPE.OUT.value: self.get_output_port_nodes
+        }
         for n in func_type.get(port.type_(), []):
             if port == n.parent_port:
                 return n

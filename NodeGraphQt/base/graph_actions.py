@@ -256,24 +256,24 @@ def _curved_pipe(graph):
     """
     Set node graph pipes layout as curved.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_CURVED
-    graph.set_pipe_style(PIPE_LAYOUT_CURVED)
+    from NodeGraphQt.constants import PIPE_LAYOUT
+    graph.set_pipe_style(PIPE_LAYOUT.CURVED.value)
 
 
 def _straight_pipe(graph):
     """
     Set node graph pipes layout as straight.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_STRAIGHT
-    graph.set_pipe_style(PIPE_LAYOUT_STRAIGHT)
+    from NodeGraphQt.constants import PIPE_LAYOUT
+    graph.set_pipe_style(PIPE_LAYOUT.STRAIGHT.value)
 
 
 def _angle_pipe(graph):
     """
     Set node graph pipes layout as angled.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_ANGLE
-    graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
+    from NodeGraphQt.constants import PIPE_LAYOUT
+    graph.set_pipe_style(PIPE_LAYOUT.ANGLE.value)
 
 
 def _bg_grid_none(graph):

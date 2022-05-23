@@ -6,7 +6,7 @@ from distutils.version import LooseVersion
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT
+from NodeGraphQt.constants import PORT_TYPE, PIPE_LAYOUT
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
@@ -696,7 +696,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             from_port.hovered = True
 
-            attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+            attr = {
+                PORT_TYPE.IN.value: 'output_port',
+                PORT_TYPE.OUT.value: 'input_port'
+            }
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
             self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
@@ -829,9 +832,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not selected_port:
             return
         self._start_port = selected_port
-        if self._start_port.type == IN_PORT:
+        if self._start_port.type == PORT_TYPE.IN.value:
             self._LIVE_PIPE.input_port = self._start_port
-        elif self._start_port == OUT_PORT:
+        elif self._start_port == PORT_TYPE.OUT.value:
             self._LIVE_PIPE.output_port = self._start_port
         self._LIVE_PIPE.setVisible(True)
 
@@ -873,7 +876,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         start_node = start_port.node
         check_nodes = [end_port.node]
-        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        io_types = {
+            PORT_TYPE.IN.value: 'outputs',
+            PORT_TYPE.OUT.value: 'inputs'
+        }
         while check_nodes:
             check_node = check_nodes.pop(0)
             for check_port in getattr(check_node, io_types[end_port.port_type]):

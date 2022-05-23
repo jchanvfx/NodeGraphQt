@@ -3,11 +3,11 @@ from collections import OrderedDict
 
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (IN_PORT, OUT_PORT,
+from NodeGraphQt.constants import (PORT_TYPE, PORT_STYLING,
                                    NODE_WIDTH, NODE_HEIGHT,
                                    NODE_ICON_SIZE, ICON_NODE_BASE,
                                    NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                                   PORT_FALLOFF, Z_VAL_NODE,
+                                   Z_VAL_NODE,
                                    ITEM_CACHE_MODE)
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -384,7 +384,7 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): port vertical offset.
         """
         width = self._width
-        txt_offset = PORT_FALLOFF - 2
+        txt_offset = PORT_STYLING.CLICK_FALLOFF.value - 2
         spacing = 1
 
         # adjust input position
@@ -624,9 +624,9 @@ class NodeItem(AbstractNodeItem):
         text.setFont(text.font())
         text.setVisible(port.display_name)
         text.setCacheMode(ITEM_CACHE_MODE)
-        if port.port_type == IN_PORT:
+        if port.port_type == PORT_TYPE.IN.value:
             self._input_items[port] = text
-        elif port.port_type == OUT_PORT:
+        elif port.port_type == PORT_TYPE.OUT.value:
             self._output_items[port] = text
         if self.scene():
             self.post_init()
@@ -653,7 +653,7 @@ class NodeItem(AbstractNodeItem):
         else:
             port = PortItem(self)
         port.name = name
-        port.port_type = IN_PORT
+        port.port_type = PORT_TYPE.IN.value
         port.multi_connection = multi_port
         port.display_name = display_name
         port.locked = locked
@@ -680,7 +680,7 @@ class NodeItem(AbstractNodeItem):
         else:
             port = PortItem(self)
         port.name = name
-        port.port_type = OUT_PORT
+        port.port_type = PORT_TYPE.OUT.value
         port.multi_connection = multi_port
         port.display_name = display_name
         port.locked = locked

@@ -4,7 +4,7 @@ import math
 from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
-    PIPE_STYLING, PIPE_LAYOUT, IN_PORT, OUT_PORT, Z_VAL_PIPE,
+    PIPE_STYLING, PIPE_LAYOUT, PORT_TYPE, Z_VAL_PIPE,
     Z_VAL_NODE_WIDGET,
     ITEM_CACHE_MODE,
     NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
@@ -157,7 +157,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
             max_height = start_port.node.boundingRect().height()
             tangent = min(tangent, max_height)
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PORT_TYPE.IN.value:
                 ctr_offset_y1 -= tangent
                 ctr_offset_y2 += tangent
             else:
@@ -171,7 +171,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         elif self.viewer_pipe_layout() == PIPE_LAYOUT.ANGLE.value:
             ctr_offset_y1, ctr_offset_y2 = pos1.y(), pos2.y()
             distance = abs(ctr_offset_y1 - ctr_offset_y2)/2
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PORT_TYPE.IN.value:
                 ctr_offset_y1 -= distance
                 ctr_offset_y2 += distance
             else:
@@ -201,7 +201,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
             max_width = start_port.node.boundingRect().width()
             tangent = min(tangent, max_width)
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PORT_TYPE.IN.value:
                 ctr_offset_x1 -= tangent
                 ctr_offset_x2 += tangent
             else:
@@ -215,7 +215,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         elif self.viewer_pipe_layout() == PIPE_LAYOUT.ANGLE.value:
             ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
             distance = abs(ctr_offset_x1 - ctr_offset_x2) / 2
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PORT_TYPE.IN.value:
                 ctr_offset_x1 -= distance
                 ctr_offset_x2 += distance
             else:
@@ -327,10 +327,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             port1.port_type: port1,
             port2.port_type: port2
         }
-        self.input_port = ports[IN_PORT]
-        self.output_port = ports[OUT_PORT]
-        ports[IN_PORT].add_pipe(self)
-        ports[OUT_PORT].add_pipe(self)
+        self.input_port = ports[PORT_TYPE.IN.value]
+        self.output_port = ports[PORT_TYPE.OUT.value]
+        ports[PORT_TYPE.IN.value].add_pipe(self)
+        ports[PORT_TYPE.OUT.value].add_pipe(self)
 
     def disabled(self):
         if self.input_port and self.input_port.node.disabled:

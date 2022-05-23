@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtWidgets
 
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from NodeGraphQt.constants import PORT_TYPE
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):
@@ -158,7 +158,7 @@ class NodeInputConnectedCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, src_port, trg_port):
         QtWidgets.QUndoCommand.__init__(self)
-        if src_port.type_() == IN_PORT:
+        if src_port.type_() == PORT_TYPE.IN.value:
             self.source = src_port
             self.target = trg_port
         else:
@@ -185,7 +185,7 @@ class NodeInputDisconnectedCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, src_port, trg_port):
         QtWidgets.QUndoCommand.__init__(self)
-        if src_port.type_() == IN_PORT:
+        if src_port.type_() == PORT_TYPE.IN.value:
             self.source = src_port
             self.target = trg_port
         else:
@@ -355,9 +355,9 @@ class PortVisibleCmd(QtWidgets.QUndoCommand):
         self.port.view.setVisible(visible)
         node_view = self.port.node().view
         text_item = None
-        if self.port.type_() == IN_PORT:
+        if self.port.type_() == PORT_TYPE.IN.value:
             text_item = node_view.get_input_text_item(self.port.view)
-        elif self.port.type_() == OUT_PORT:
+        elif self.port.type_() == PORT_TYPE.OUT.value:
             text_item = node_view.get_output_text_item(self.port.view)
         if text_item:
             text_item.setVisible(visible)
