@@ -37,6 +37,9 @@ class BaseProperty(QtWidgets.QWidget):
 
 
 class PropColorPicker(BaseProperty):
+    """
+    Color picker widget for a node property.
+    """
 
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
@@ -58,9 +61,6 @@ class PropColorPicker(BaseProperty):
         self._update_color()
         self.value_changed.emit(self.toolTip(), value)
 
-    def _update_vector(self):
-        self._vector.set_value(list(self._color))
-
     def _on_select_color(self):
         color = QtWidgets.QColorDialog.getColor(
             QtGui.QColor.fromRgbF(*self.get_value())
@@ -68,14 +68,21 @@ class PropColorPicker(BaseProperty):
         if color.isValid():
             self.set_value(color.getRgb())
 
+    def _update_vector(self):
+        self._vector.set_value(list(self._color))
+
     def _update_color(self):
         c = [int(max(min(i, 255), 0)) for i in self._color]
         hex_color = '#{0:02x}{1:02x}{2:02x}'.format(*c)
         self._button.setStyleSheet(
-            '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
-               QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}'''.format(*c))
-        self._button.setToolTip('rgb: {}\nhex: {}'
-                                .format(self._color[:3], hex_color))
+            '''
+            QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
+            QPushButton::hover {{background-color: rgba({0}, {1}, {2}, 200);}}
+            '''.format(*c)
+        )
+        self._button.setToolTip(
+            'rgb: {}\nhex: {}'.format(self._color[:3], hex_color)
+        )
 
     def get_value(self):
         return self._color[:3]
@@ -89,6 +96,9 @@ class PropColorPicker(BaseProperty):
 
 
 class PropSlider(BaseProperty):
+    """
+    Slider widget for a node property.
+    """
 
     def __init__(self, parent=None):
         super(PropSlider, self).__init__(parent)
@@ -110,15 +120,15 @@ class PropSlider(BaseProperty):
         self._spnbox.valueChanged.connect(self._on_spnbox_changed)
         self._slider.valueChanged.connect(self._on_slider_changed)
         # store the original press event.
-        self._slider_press_event = self._slider.mousePressEvent
-        self._slider.mousePressEvent = self.sliderMousePressEvent
-        self._slider.mouseReleaseEvent = self.sliderMouseReleaseEvent
+        self._slider_mouse_press_event = self._slider.mousePressEvent
+        self._slider.mousePressEvent = self._on_slider_mouse_press
+        self._slider.mouseReleaseEvent = self._on_slider_mouse_release
 
-    def sliderMousePressEvent(self, event):
+    def _on_slider_mouse_press(self, event):
         self._block = True
-        self._slider_press_event(event)
+        self._slider_mouse_press_event(event)
 
-    def sliderMouseReleaseEvent(self, event):
+    def _on_slider_mouse_release(self, event):
         self.value_changed.emit(self.toolTip(), self.get_value())
         self._block = False
 
@@ -151,6 +161,9 @@ class PropSlider(BaseProperty):
 
 
 class PropLabel(QtWidgets.QLabel):
+    """
+    Label widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -164,6 +177,9 @@ class PropLabel(QtWidgets.QLabel):
 
 
 class PropLineEdit(QtWidgets.QLineEdit):
+    """
+    LineEdit widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -185,6 +201,9 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
+    """
+    TextEdit widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -213,6 +232,9 @@ class PropTextEdit(QtWidgets.QTextEdit):
 
 
 class PropComboBox(QtWidgets.QComboBox):
+    """
+    ComboBox widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -224,9 +246,21 @@ class PropComboBox(QtWidgets.QComboBox):
         self.value_changed.emit(self.toolTip(), self.get_value())
 
     def items(self):
+        """
+        returns items from the combobox.
+
+        Returns:
+            list[str]: list of strings.
+        """
         return [self.itemText(i) for i in range(self.count())]
 
     def set_items(self, items):
+        """
+        Set items on the combobox.
+
+        Args:
+            items (list[str]): list of strings.
+        """
         self.clear()
         self.addItems(items)
 
@@ -242,6 +276,9 @@ class PropComboBox(QtWidgets.QComboBox):
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
+    """
+    CheckBox widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -262,6 +299,9 @@ class PropCheckBox(QtWidgets.QCheckBox):
 
 
 class PropSpinBox(QtWidgets.QSpinBox):
+    """
+    SpinBox widget for a node property.
+    """
 
     value_changed = QtCore.Signal(str, object)
 
@@ -293,28 +333,19 @@ class PropFilePath(BaseProperty):
         icon = self.style().standardIcon(QtWidgets.QStyle.StandardPixmap(21))
         _button = QtWidgets.QPushButton()
         _button.setIcon(icon)
+        _button.clicked.connect(self._on_select_file)
 
-        hbox = QtWidgets.QHBoxLayout()
+        hbox = QtWidgets.QHBoxLayout(self)
         hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(self._ledit)
         hbox.addWidget(_button)
-        self.setLayout(hbox)
-        _button.clicked.connect(self._on_select_file)
 
-        self._ledit.setStyleSheet("QLineEdit{border:1px solid}")
-        _button.setStyleSheet("QPushButton{border:1px solid}")
-        self._ext = "*"
-        self._file_dir = None
-
-    def set_ext(self, ext):
-        self._ext = ext
-
-    def set_file_dir(self, dir):
-        self._file_dir = dir
+        self._ext = '*'
+        self._file_directory = None
 
     def _on_select_file(self):
         file_path = FileDialog.getOpenFileName(self,
-                                               file_dir=self._file_dir,
+                                               file_dir=self._file_directory,
                                                ext_filter=self._ext)
         file = file_path[0] or None
         if file:
@@ -324,6 +355,12 @@ class PropFilePath(BaseProperty):
         if value is None:
             value = self._ledit.text()
         self.value_changed.emit(self.toolTip(), value)
+
+    def set_file_ext(self, ext=None):
+        self._ext = ext or '*'
+
+    def set_file_directory(self, directory):
+        self._file_directory = directory
 
     def get_value(self):
         return self._ledit.text()
@@ -339,7 +376,7 @@ class PropFileSavePath(PropFilePath):
 
     def _on_select_file(self):
         file_path = FileDialog.getSaveFileName(self,
-                                               file_dir=self._file_dir,
+                                               file_dir=self._file_directory,
                                                ext_filter=self._ext)
         file = file_path[0] or None
         if file:
@@ -725,6 +762,7 @@ WIDGET_MAP = {
     NODE_PROP_QSPINBOX: PropSpinBox,
     NODE_PROP_COLORPICKER: PropColorPicker,
     NODE_PROP_SLIDER: PropSlider,
+
     NODE_PROP_FILE: PropFilePath,
     NODE_PROP_FILE_SAVE: PropFileSavePath,
     NODE_PROP_VECTOR2: PropVector2,
@@ -737,6 +775,7 @@ WIDGET_MAP = {
 
 
 # main property widgets.
+# ==============================================================================
 
 
 class PropListWidget(QtWidgets.QWidget):
