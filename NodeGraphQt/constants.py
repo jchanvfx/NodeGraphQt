@@ -8,14 +8,20 @@ from enum import Enum
 from .pkg_info import __version__
 
 __doc__ = """
-The ``NodeGraphQt.constants`` namespace contains variables used throughout 
-the whole ``NodeGraphQt`` library.
+| The ``NodeGraphQt.constants`` namespace contains variables used throughout 
+ the whole NodeGraphQt library.
 """
 
 # =================================== GLOBAL ===================================
 
-#: Current version of the NodeGraphQt framework.
+#: current version.
 VERSION = __version__
+#: major version.
+VERSION_MAJOR = int(VERSION.split('.')[0])
+#: minor version.
+VERSION_MINOR = int(VERSION.split('.')[1])
+#: patch version.
+VERSION_PATCH = int(VERSION.split('.')[2])
 
 # ==================================== PIPE ====================================
 
