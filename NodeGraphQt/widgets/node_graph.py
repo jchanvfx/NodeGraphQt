@@ -1,7 +1,7 @@
 from Qt import QtWidgets, QtGui
 
 from NodeGraphQt.constants import (
-    NODE_SEL_BORDER_COLOR,
+    NODE_STYLING,
     VIEWER_BG_COLOR,
     VIEWER_NAV_BG_COLOR
 )
@@ -36,12 +36,12 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'background': 'rgb({0},{1},{2})'.format(*VIEWER_NAV_BG_COLOR),
                 'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NODE_SEL_BORDER_COLOR),
+                              .format(*NODE_STYLING.SELECTED_BORDER_COLOR.value),
             },
             'QTabBar::tab:hover': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NODE_SEL_BORDER_COLOR),
+                              .format(*NODE_STYLING.SELECTED_BORDER_COLOR.value),
             }
         }
         stylesheet = ''

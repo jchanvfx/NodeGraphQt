@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import (NODE_SEL_BORDER_COLOR, NODE_SEL_COLOR)
+from NodeGraphQt.constants import NODE_STYLING
 from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
 
 
@@ -74,8 +74,10 @@ class PortOutputNodeItem(NodeItem):
         poly = transform.map(triangle)
 
         if self.selected:
-            pen = QtGui.QPen(QtGui.QColor(*NODE_SEL_BORDER_COLOR), 1.3)
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            pen = QtGui.QPen(
+                QtGui.QColor(*NODE_STYLING.SELECTED_BORDER_COLOR.value), 1.3
+            )
+            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
         else:
             pen = QtGui.QPen(QtGui.QColor(*self.border_color), 1.2)
             painter.setBrush(QtGui.QColor(0, 0, 0, 50))
@@ -229,8 +231,10 @@ class PortOutputNodeVerticalItem(PortOutputNodeItem):
         poly = transform.map(triangle)
 
         if self.selected:
-            pen = QtGui.QPen(QtGui.QColor(*NODE_SEL_BORDER_COLOR), 1.3)
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            pen = QtGui.QPen(
+                QtGui.QColor(*NODE_STYLING.SELECTED_BORDER_COLOR.value), 1.3
+            )
+            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
         else:
             pen = QtGui.QPen(QtGui.QColor(*self.border_color), 1.2)
             painter.setBrush(QtGui.QColor(0, 0, 0, 50))

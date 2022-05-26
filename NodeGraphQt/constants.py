@@ -111,11 +111,22 @@ class PORT_TYPE(Enum):
 
 # ==================================== NODE ====================================
 
-NODE_WIDTH = 160
-NODE_HEIGHT = 60
-NODE_ICON_SIZE = 18
-NODE_SEL_COLOR = (255, 255, 255, 30)
-NODE_SEL_BORDER_COLOR = (254, 207, 42, 255)
+
+class NODE_STYLING(Enum):
+    """
+    Node styling layout:
+    ``NodeGraphQt.constants.NODE_STYLING``
+    """
+    #: default node width.
+    WIDTH = 160
+    #: default node height.
+    HEIGHT = 60
+    #: default node icon size (WxH).
+    ICON_SIZE = 18
+    #: default node overlay color when selected.
+    SELECTED_COLOR = (255, 255, 255, 30)
+    #: default node border color when selected.
+    SELECTED_BORDER_COLOR = (254, 207, 42, 255)
 
 # === NODE PROPERTY ===
 

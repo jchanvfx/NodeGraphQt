@@ -1,7 +1,7 @@
 from Qt import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.constants import (
-    NODE_SEL_BORDER_COLOR,
+    NODE_STYLING,
     VIEWER_NAV_BG_COLOR,
     VIEWER_NAV_ITEM_COLOR
 )
@@ -40,7 +40,7 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         itm_color = QtGui.QColor(80, 128, 123)
         if option.state & QtWidgets.QStyle.State_Selected:
             bg_color = bg_color.lighter(120)
-            itm_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+            itm_color = QtGui.QColor(*NODE_STYLING.SELECTED_BORDER_COLOR.value)
 
         roundness = 2.0
         painter.setBrush(bg_color)

@@ -3,12 +3,14 @@ from collections import OrderedDict
 
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (PORT_TYPE, PORT_STYLING,
-                                   NODE_WIDTH, NODE_HEIGHT,
-                                   NODE_ICON_SIZE, ICON_NODE_BASE,
-                                   NODE_SEL_COLOR, NODE_SEL_BORDER_COLOR,
-                                   Z_VAL_NODE,
-                                   ITEM_CACHE_MODE)
+from NodeGraphQt.constants import (
+    ITEM_CACHE_MODE,
+    ICON_NODE_BASE,
+    NODE_STYLING,
+    PORT_STYLING,
+    PORT_TYPE,
+    Z_VAL_NODE
+)
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
@@ -28,9 +30,10 @@ class NodeItem(AbstractNodeItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-        if pixmap.size().height() > NODE_ICON_SIZE:
+        if pixmap.size().height() > NODE_STYLING.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
-                NODE_ICON_SIZE, QtCore.Qt.SmoothTransformation
+                NODE_STYLING.ICON_SIZE.value,
+                QtCore.Qt.SmoothTransformation
             )
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
@@ -73,7 +76,7 @@ class NodeItem(AbstractNodeItem):
 
         # light overlay on background when selected.
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
             painter.drawRoundedRect(rect, radius, radius)
 
         # node name background.
@@ -84,7 +87,7 @@ class NodeItem(AbstractNodeItem):
                                   rect.width() - padding[0] - margin,
                                   text_rect.height() - (padding[1] * 2))
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         painter.drawRoundedRect(text_rect, 3.0, 3.0)
@@ -92,7 +95,9 @@ class NodeItem(AbstractNodeItem):
         # node border
         if self.selected:
             border_width = 1.2
-            border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+            border_color = QtGui.QColor(
+                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+            )
         else:
             border_width = 0.8
             border_color = QtGui.QColor(*self.border_color)
@@ -202,10 +207,10 @@ class NodeItem(AbstractNodeItem):
             add_h (float): add additional height.
         """
         self._width, self._height = self.calc_size(add_w, add_h)
-        if self._width < NODE_WIDTH:
-            self._width = NODE_WIDTH
-        if self._height < NODE_HEIGHT:
-            self._height = NODE_HEIGHT
+        if self._width < NODE_STYLING.WIDTH.value:
+            self._width = NODE_STYLING.WIDTH.value
+        if self._height < NODE_STYLING.HEIGHT.value:
+            self._height = NODE_STYLING.HEIGHT.value
 
     def _set_text_color(self, color):
         """
@@ -524,9 +529,11 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
-        if pixmap.size().height() > NODE_ICON_SIZE:
-            pixmap = pixmap.scaledToHeight(NODE_ICON_SIZE,
-                                           QtCore.Qt.SmoothTransformation)
+        if pixmap.size().height() > NODE_STYLING.ICON_SIZE.value:
+            pixmap = pixmap.scaledToHeight(
+                NODE_STYLING.ICON_SIZE.value,
+                QtCore.Qt.SmoothTransformation
+            )
         self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.post_init()
@@ -808,14 +815,16 @@ class NodeItemVertical(NodeItem):
 
         # light overlay on background when selected.
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            painter.setBrush(
+                QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value)
+            )
             painter.drawRoundedRect(rect, radius, radius)
 
         # top & bottom edge background.
         padding = 2.0
         height = 10
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_SEL_COLOR))
+            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         for y in [rect.y() + padding, rect.height() - height - 1]:
@@ -828,7 +837,9 @@ class NodeItemVertical(NodeItem):
         border_color = QtGui.QColor(*self.border_color)
         if self.selected:
             border_width = 1.2
-            border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+            border_color = QtGui.QColor(
+                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+            )
         border_rect = QtCore.QRectF(rect.left(), rect.top(),
                                     rect.width(), rect.height())
 
