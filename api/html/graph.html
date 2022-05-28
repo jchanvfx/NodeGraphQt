@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Graphs &mdash; NodeGraphQt 0.2.1 documentation</title>
+  <title>Graphs &mdash; NodeGraphQt 0.2.2 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.2.1
+                0.2.2
               </div>
             
           
@@ -1101,16 +1101,16 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_grid_mode">
-<span class="sig-name descname"><span class="pre">set_grid_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_grid_mode" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_grid_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_grid_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set node graph grid mode.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>By default grid mode is set to “VIEWER_GRID_LINES”.</p>
 <p>Node graph background types:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_NONE" title="NodeGraphQt.constants.VIEWER_GRID_NONE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_NONE</span></code></a></p></li>
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_DOTS" title="NodeGraphQt.constants.VIEWER_GRID_DOTS"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_DOTS</span></code></a></p></li>
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.VIEWER_GRID_LINES" title="NodeGraphQt.constants.VIEWER_GRID_LINES"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VIEWER_GRID_LINES</span></code></a></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE.value</span></code></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS.value</span></code></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES.value</span></code></p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1147,9 +1147,9 @@ inserted as a new connection between the pipe.</p>
 <p>By default pipe layout is set to “PIPE_LAYOUT_CURVED”.</p>
 <p>Pipe Layout Styles:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_CURVED" title="NodeGraphQt.constants.PIPE_LAYOUT_CURVED"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_CURVED</span></code></a></p></li>
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT" title="NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT</span></code></a></p></li>
-<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.PIPE_LAYOUT_ANGLE" title="NodeGraphQt.constants.PIPE_LAYOUT_ANGLE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_ANGLE</span></code></a></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum.CURVED.value</span></code></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT.value</span></code></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum.ANGLE.value</span></code></p></li>
 </ul>
 </div>
 <dl class="field-list simple">
@@ -1175,6 +1175,12 @@ inserted as a new connection between the pipe.</p>
 <span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show node graph widget this is just a convenience
 function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget.show()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.toggle_node_search">
+<span class="sig-name descname"><span class="pre">toggle_node_search</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.toggle_node_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle the node search widget visibility.</p>
 </dd></dl>
 
 <dl class="py method">
