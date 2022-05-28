@@ -5,7 +5,7 @@ import json
 import os
 import re
 
-from Qt import QtCore, QtWidgets, QtGui
+from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodeRemovedCmd,
@@ -18,10 +18,10 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (
     NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
-    PIPE_LAYOUT_CURVED, PIPE_LAYOUT_STRAIGHT, PIPE_LAYOUT_ANGLE,
+    PipeLayoutEnum,
     URI_SCHEME, URN_SCHEME,
-    IN_PORT, OUT_PORT,
-    VIEWER_GRID_LINES
+    PortTypeEnum,
+    ViewerEnum
 )
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
@@ -369,7 +369,8 @@ class NodeGraph(QtCore.QObject):
             return
 
         label = 'connect node(s)' if connected else 'disconnect node(s)'
-        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
+        ptypes = {PortTypeEnum.IN.value: 'inputs',
+                  PortTypeEnum.OUT.value: 'outputs'}
 
         self._undo_stack.beginMacro(label)
         for p1_view, p2_view in disconnected:
@@ -396,7 +397,8 @@ class NodeGraph(QtCore.QObject):
         """
         if not ports:
             return
-        ptypes = {IN_PORT: 'inputs', OUT_PORT: 'outputs'}
+        ptypes = {PortTypeEnum.IN.value: 'inputs',
+                  PortTypeEnum.OUT.value: 'outputs'}
         self._undo_stack.beginMacro('slice connections')
         for p1_view, p2_view in ports:
             node1 = self._model.nodes[p1_view.node.id]
@@ -553,7 +555,7 @@ class NodeGraph(QtCore.QObject):
         self.scene().grid_color = (r, g, b)
         self._viewer.force_update()
 
-    def set_grid_mode(self, mode=VIEWER_GRID_LINES):
+    def set_grid_mode(self, mode=None):
         """
         Set node graph grid mode.
 
@@ -562,13 +564,20 @@ class NodeGraph(QtCore.QObject):
 
             Node graph background types:
 
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_NONE`
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_DOTS`
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_LINES`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE.value`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS.value`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES.value`
 
         Args:
             mode (int): background style.
         """
+        display_types = [
+            ViewerEnum.GRID_DISPLAY_NONE.value,
+            ViewerEnum.GRID_DISPLAY_DOTS.value,
+            ViewerEnum.GRID_DISPLAY_LINES.value
+        ]
+        if mode not in display_types:
+            mode = ViewerEnum.GRID_DISPLAY_LINES.value
         self.scene().grid_mode = mode
         self._viewer.force_update()
 
@@ -752,7 +761,7 @@ class NodeGraph(QtCore.QObject):
         self._model.pipe_collision = mode
         self._viewer.pipe_collision = mode
 
-    def set_pipe_style(self, style=PIPE_LAYOUT_CURVED):
+    def set_pipe_style(self, style=PipeLayoutEnum.CURVED.value):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
 
@@ -764,17 +773,17 @@ class NodeGraph(QtCore.QObject):
 
             Pipe Layout Styles:
 
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_CURVED`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.CURVED.value`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT.value`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.ANGLE.value`
 
         Args:
             style (int): pipe layout style.
         """
-        pipe_max = max([PIPE_LAYOUT_CURVED,
-                        PIPE_LAYOUT_STRAIGHT,
-                        PIPE_LAYOUT_ANGLE])
-        style = style if 0 <= style <= pipe_max else PIPE_LAYOUT_CURVED
+        pipe_max = max([PipeLayoutEnum.CURVED.value,
+                        PipeLayoutEnum.STRAIGHT.value,
+                        PipeLayoutEnum.ANGLE.value])
+        style = style if 0 <= style <= pipe_max else PipeLayoutEnum.CURVED.value
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
@@ -1246,16 +1255,20 @@ class NodeGraph(QtCore.QObject):
             for pname, conn_data in inputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {IN_PORT: [n_id, pname],
-                                OUT_PORT: [conn_id, conn_prt]}
+                        pipe = {
+                            PortTypeEnum.IN.value: [n_id, pname],
+                            PortTypeEnum.OUT.value: [conn_id, conn_prt]
+                        }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
             for pname, conn_data in outputs.items():
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
-                        pipe = {OUT_PORT: [n_id, pname],
-                                IN_PORT: [conn_id, conn_prt]}
+                        pipe = {
+                            PortTypeEnum.OUT.value: [n_id, pname],
+                            PortTypeEnum.IN.value: [conn_id, conn_prt]
+                        }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
 
@@ -2362,8 +2375,10 @@ class SubGraph(NodeGraph):
         Returns:
             PortInputNode or PortOutputNode: port node object.
         """
-        func_type = {IN_PORT: self.get_input_port_nodes,
-                     OUT_PORT: self.get_output_port_nodes}
+        func_type = {
+            PortTypeEnum.IN.value: self.get_input_port_nodes,
+            PortTypeEnum.OUT.value: self.get_output_port_nodes
+        }
         for n in func_type.get(port.type_(), []):
             if port == n.parent_port:
                 return n

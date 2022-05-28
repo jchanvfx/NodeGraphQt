@@ -3,7 +3,7 @@ import math
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PIPE_SLICER_COLOR
+from NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PipeSlicerEnum
 
 
 class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
@@ -25,7 +25,7 @@ class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
-        color = QtGui.QColor(*PIPE_SLICER_COLOR)
+        color = QtGui.QColor(*PipeSlicerEnum.COLOR.value)
         p1 = self.path().pointAtPercent(0)
         p2 = self.path().pointAtPercent(1)
         size = 6.0
@@ -42,15 +42,21 @@ class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
         text_x = painter.fontMetrics().width(text) / 2
         text_y = painter.fontMetrics().height() / 1.5
         text_pos = QtCore.QPointF(p1.x() - text_x, p1.y() - text_y)
-        text_color = QtGui.QColor(*PIPE_SLICER_COLOR)
+        text_color = QtGui.QColor(*PipeSlicerEnum.COLOR.value)
         text_color.setAlpha(80)
-        painter.setPen(QtGui.QPen(text_color, 1.5, QtCore.Qt.SolidLine))
+        painter.setPen(QtGui.QPen(
+            text_color, PipeSlicerEnum.WIDTH.value, QtCore.Qt.SolidLine
+        ))
         painter.drawText(text_pos, text)
 
-        painter.setPen(QtGui.QPen(color, 1.5, QtCore.Qt.DashDotLine))
+        painter.setPen(QtGui.QPen(
+            color, PipeSlicerEnum.WIDTH.value, QtCore.Qt.DashDotLine
+        ))
         painter.drawPath(self.path())
 
-        pen = QtGui.QPen(color, 1.5, QtCore.Qt.SolidLine)
+        pen = QtGui.QPen(
+            color, PipeSlicerEnum.WIDTH.value, QtCore.Qt.SolidLine
+        )
         pen.setCapStyle(QtCore.Qt.RoundCap)
         pen.setJoinStyle(QtCore.Qt.MiterJoin)
         painter.setPen(pen)
