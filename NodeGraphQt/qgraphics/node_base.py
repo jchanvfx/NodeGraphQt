@@ -6,9 +6,9 @@ from Qt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (
     ITEM_CACHE_MODE,
     ICON_NODE_BASE,
-    NODE_STYLING,
-    PORT_STYLING,
-    PORT_TYPE,
+    NodeEnum,
+    PortEnum,
+    PortTypeEnum,
     Z_VAL_NODE
 )
 from NodeGraphQt.errors import NodeWidgetError
@@ -30,9 +30,9 @@ class NodeItem(AbstractNodeItem):
     def __init__(self, name='node', parent=None):
         super(NodeItem, self).__init__(name, parent)
         pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-        if pixmap.size().height() > NODE_STYLING.ICON_SIZE.value:
+        if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
-                NODE_STYLING.ICON_SIZE.value,
+                NodeEnum.ICON_SIZE.value,
                 QtCore.Qt.SmoothTransformation
             )
         self._properties['icon'] = ICON_NODE_BASE
@@ -76,7 +76,7 @@ class NodeItem(AbstractNodeItem):
 
         # light overlay on background when selected.
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRoundedRect(rect, radius, radius)
 
         # node name background.
@@ -87,7 +87,7 @@ class NodeItem(AbstractNodeItem):
                                   rect.width() - padding[0] - margin,
                                   text_rect.height() - (padding[1] * 2))
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         painter.drawRoundedRect(text_rect, 3.0, 3.0)
@@ -96,7 +96,7 @@ class NodeItem(AbstractNodeItem):
         if self.selected:
             border_width = 1.2
             border_color = QtGui.QColor(
-                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+                *NodeEnum.SELECTED_BORDER_COLOR.value
             )
         else:
             border_width = 0.8
@@ -207,10 +207,10 @@ class NodeItem(AbstractNodeItem):
             add_h (float): add additional height.
         """
         self._width, self._height = self.calc_size(add_w, add_h)
-        if self._width < NODE_STYLING.WIDTH.value:
-            self._width = NODE_STYLING.WIDTH.value
-        if self._height < NODE_STYLING.HEIGHT.value:
-            self._height = NODE_STYLING.HEIGHT.value
+        if self._width < NodeEnum.WIDTH.value:
+            self._width = NodeEnum.WIDTH.value
+        if self._height < NodeEnum.HEIGHT.value:
+            self._height = NodeEnum.HEIGHT.value
 
     def _set_text_color(self, color):
         """
@@ -389,7 +389,7 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): port vertical offset.
         """
         width = self._width
-        txt_offset = PORT_STYLING.CLICK_FALLOFF.value - 2
+        txt_offset = PortEnum.CLICK_FALLOFF.value - 2
         spacing = 1
 
         # adjust input position
@@ -529,9 +529,9 @@ class NodeItem(AbstractNodeItem):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
         pixmap = QtGui.QPixmap(path)
-        if pixmap.size().height() > NODE_STYLING.ICON_SIZE.value:
+        if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
-                NODE_STYLING.ICON_SIZE.value,
+                NodeEnum.ICON_SIZE.value,
                 QtCore.Qt.SmoothTransformation
             )
         self._icon_item.setPixmap(pixmap)
@@ -631,9 +631,9 @@ class NodeItem(AbstractNodeItem):
         text.setFont(text.font())
         text.setVisible(port.display_name)
         text.setCacheMode(ITEM_CACHE_MODE)
-        if port.port_type == PORT_TYPE.IN.value:
+        if port.port_type == PortTypeEnum.IN.value:
             self._input_items[port] = text
-        elif port.port_type == PORT_TYPE.OUT.value:
+        elif port.port_type == PortTypeEnum.OUT.value:
             self._output_items[port] = text
         if self.scene():
             self.post_init()
@@ -660,7 +660,7 @@ class NodeItem(AbstractNodeItem):
         else:
             port = PortItem(self)
         port.name = name
-        port.port_type = PORT_TYPE.IN.value
+        port.port_type = PortTypeEnum.IN.value
         port.multi_connection = multi_port
         port.display_name = display_name
         port.locked = locked
@@ -687,7 +687,7 @@ class NodeItem(AbstractNodeItem):
         else:
             port = PortItem(self)
         port.name = name
-        port.port_type = PORT_TYPE.OUT.value
+        port.port_type = PortTypeEnum.OUT.value
         port.multi_connection = multi_port
         port.display_name = display_name
         port.locked = locked
@@ -816,7 +816,7 @@ class NodeItemVertical(NodeItem):
         # light overlay on background when selected.
         if self.selected:
             painter.setBrush(
-                QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value)
+                QtGui.QColor(*NodeEnum.SELECTED_COLOR.value)
             )
             painter.drawRoundedRect(rect, radius, radius)
 
@@ -824,7 +824,7 @@ class NodeItemVertical(NodeItem):
         padding = 2.0
         height = 10
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         for y in [rect.y() + padding, rect.height() - height - 1]:
@@ -838,7 +838,7 @@ class NodeItemVertical(NodeItem):
         if self.selected:
             border_width = 1.2
             border_color = QtGui.QColor(
-                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+                *NodeEnum.SELECTED_BORDER_COLOR.value
             )
         border_rect = QtCore.QRectF(rect.left(), rect.top(),
                                     rect.width(), rect.height())

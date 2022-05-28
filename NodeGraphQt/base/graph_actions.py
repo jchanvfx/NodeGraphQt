@@ -256,48 +256,48 @@ def _curved_pipe(graph):
     """
     Set node graph pipes layout as curved.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT
-    graph.set_pipe_style(PIPE_LAYOUT.CURVED.value)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.CURVED.value)
 
 
 def _straight_pipe(graph):
     """
     Set node graph pipes layout as straight.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT
-    graph.set_pipe_style(PIPE_LAYOUT.STRAIGHT.value)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.STRAIGHT.value)
 
 
 def _angle_pipe(graph):
     """
     Set node graph pipes layout as angled.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT
-    graph.set_pipe_style(PIPE_LAYOUT.ANGLE.value)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.ANGLE.value)
 
 
 def _bg_grid_none(graph):
     """
     Turn off the background patterns.
     """
-    from NodeGraphQt.constants import VIEWER_STYLING
-    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_NONE.value)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_NONE.value)
 
 
 def _bg_grid_dots(graph):
     """
     Set background node graph background with grid dots.
     """
-    from NodeGraphQt.constants import VIEWER_STYLING
-    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_DOTS.value)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_DOTS.value)
 
 
 def _bg_grid_lines(graph):
     """
     Set background node graph background with grid lines.
     """
-    from NodeGraphQt.constants import VIEWER_STYLING
-    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_LINES.value)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_LINES.value)
 
 
 def _layout_graph_down(graph):

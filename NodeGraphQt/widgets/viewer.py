@@ -6,7 +6,7 @@ from distutils.version import LooseVersion
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import PORT_TYPE, PIPE_LAYOUT
+from NodeGraphQt.constants import PortTypeEnum, PipeLayoutEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
@@ -71,7 +71,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
         self._last_size = self.size()
 
-        self._pipe_layout = PIPE_LAYOUT.CURVED.value
+        self._pipe_layout = PipeLayoutEnum.CURVED.value
         self._detached_port = None
         self._start_port = None
         self._origin_pos = None
@@ -697,8 +697,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             from_port.hovered = True
 
             attr = {
-                PORT_TYPE.IN.value: 'output_port',
-                PORT_TYPE.OUT.value: 'input_port'
+                PortTypeEnum.IN.value: 'output_port',
+                PortTypeEnum.OUT.value: 'input_port'
             }
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
@@ -832,9 +832,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not selected_port:
             return
         self._start_port = selected_port
-        if self._start_port.type == PORT_TYPE.IN.value:
+        if self._start_port.type == PortTypeEnum.IN.value:
             self._LIVE_PIPE.input_port = self._start_port
-        elif self._start_port == PORT_TYPE.OUT.value:
+        elif self._start_port == PortTypeEnum.OUT.value:
             self._LIVE_PIPE.output_port = self._start_port
         self._LIVE_PIPE.setVisible(True)
 
@@ -877,8 +877,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         start_node = start_port.node
         check_nodes = [end_port.node]
         io_types = {
-            PORT_TYPE.IN.value: 'outputs',
-            PORT_TYPE.OUT.value: 'inputs'
+            PortTypeEnum.IN.value: 'outputs',
+            PortTypeEnum.OUT.value: 'inputs'
         }
         while check_nodes:
             check_node = check_nodes.pop(0)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import NODE_STYLING, PORT_STYLING
+from NodeGraphQt.constants import NodeEnum, PortEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
 
 
@@ -64,10 +64,10 @@ class GroupNodeItem(NodeItem):
 
         if self.selected:
             border_color = QtGui.QColor(
-                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+                *NodeEnum.SELECTED_BORDER_COLOR.value
             )
             # light overlay on background when selected.
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRect(rect_2)
         else:
             border_color = QtGui.QColor(*self.border_color)
@@ -80,7 +80,7 @@ class GroupNodeItem(NodeItem):
                                   rect.right() - (padding[0] * 2) - margin,
                                   text_rect.height() - (padding[1] * 2))
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
         painter.setPen(QtCore.Qt.NoPen)
@@ -114,7 +114,7 @@ class GroupNodeItem(NodeItem):
             v_offset (float): port vertical offset.
         """
         width = self._width
-        txt_offset = PORT_STYLING.CLICK_FALLOFF.value - 2
+        txt_offset = PortEnum.CLICK_FALLOFF.value - 2
         spacing = 1
 
         # adjust input position
@@ -243,10 +243,10 @@ class GroupNodeVerticalItem(NodeItem):
 
         if self.selected:
             border_color = QtGui.QColor(
-                *NODE_STYLING.SELECTED_BORDER_COLOR.value
+                *NodeEnum.SELECTED_BORDER_COLOR.value
             )
             # light overlay on background when selected.
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
             painter.drawRect(rect_2)
         else:
             border_color = QtGui.QColor(*self.border_color)
@@ -255,7 +255,7 @@ class GroupNodeVerticalItem(NodeItem):
         padding = 2.0
         height = 10
         if self.selected:
-            painter.setBrush(QtGui.QColor(*NODE_STYLING.SELECTED_COLOR.value))
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
 

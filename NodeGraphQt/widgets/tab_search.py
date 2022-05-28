@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from NodeGraphQt.constants import VIEWER_STYLING, VIEWER_NAV_STYLING
+from NodeGraphQt.constants import ViewerEnum, ViewerNavEnum
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
@@ -69,7 +69,7 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
                 'padding': '2px 4px',
                 'margin': '2px 4px 8px 4px',
                 'background': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_NAV_STYLING.BACKGROUND_COLOR.value
+                    *ViewerNavEnum.BACKGROUND_COLOR.value
                 ),
                 'selection-background-color': 'rgba({0},{1},{2},200)'
                                               .format(*selected_color),
@@ -114,7 +114,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'background-color': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_STYLING.BACKGROUND_COLOR.value
+                    *ViewerEnum.BACKGROUND_COLOR.value
                 ),
                 'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
                 'border-radius': '3px',

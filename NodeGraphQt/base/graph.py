@@ -18,10 +18,10 @@ from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (
     NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
-    PIPE_LAYOUT,
+    PipeLayoutEnum,
     URI_SCHEME, URN_SCHEME,
-    PORT_TYPE,
-    VIEWER_STYLING
+    PortTypeEnum,
+    ViewerEnum
 )
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
@@ -369,7 +369,8 @@ class NodeGraph(QtCore.QObject):
             return
 
         label = 'connect node(s)' if connected else 'disconnect node(s)'
-        ptypes = {PORT_TYPE.IN.value: 'inputs', PORT_TYPE.OUT.value: 'outputs'}
+        ptypes = {PortTypeEnum.IN.value: 'inputs',
+                  PortTypeEnum.OUT.value: 'outputs'}
 
         self._undo_stack.beginMacro(label)
         for p1_view, p2_view in disconnected:
@@ -396,7 +397,8 @@ class NodeGraph(QtCore.QObject):
         """
         if not ports:
             return
-        ptypes = {PORT_TYPE.IN.value: 'inputs', PORT_TYPE.OUT.value: 'outputs'}
+        ptypes = {PortTypeEnum.IN.value: 'inputs',
+                  PortTypeEnum.OUT.value: 'outputs'}
         self._undo_stack.beginMacro('slice connections')
         for p1_view, p2_view in ports:
             node1 = self._model.nodes[p1_view.node.id]
@@ -562,20 +564,20 @@ class NodeGraph(QtCore.QObject):
 
             Node graph background types:
 
-            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_NONE.value`
-            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_DOTS.value`
-            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_LINES.value`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE.value`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS.value`
+            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES.value`
 
         Args:
             mode (int): background style.
         """
         display_types = [
-            VIEWER_STYLING.GRID_DISPLAY_NONE.value,
-            VIEWER_STYLING.GRID_DISPLAY_DOTS.value,
-            VIEWER_STYLING.GRID_DISPLAY_LINES.value
+            ViewerEnum.GRID_DISPLAY_NONE.value,
+            ViewerEnum.GRID_DISPLAY_DOTS.value,
+            ViewerEnum.GRID_DISPLAY_LINES.value
         ]
         if mode not in display_types:
-            mode = VIEWER_STYLING.GRID_DISPLAY_LINES.value
+            mode = ViewerEnum.GRID_DISPLAY_LINES.value
         self.scene().grid_mode = mode
         self._viewer.force_update()
 
@@ -759,7 +761,7 @@ class NodeGraph(QtCore.QObject):
         self._model.pipe_collision = mode
         self._viewer.pipe_collision = mode
 
-    def set_pipe_style(self, style=PIPE_LAYOUT.CURVED.value):
+    def set_pipe_style(self, style=PipeLayoutEnum.CURVED.value):
         """
         Set node graph pipes to be drawn as straight, curved or angled.
 
@@ -771,17 +773,17 @@ class NodeGraph(QtCore.QObject):
 
             Pipe Layout Styles:
 
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.CURVED.value`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.STRAIGHT.value`
-            * :attr:`NodeGraphQt.constants.PIPE_LAYOUT.ANGLE.value`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.CURVED.value`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT.value`
+            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.ANGLE.value`
 
         Args:
             style (int): pipe layout style.
         """
-        pipe_max = max([PIPE_LAYOUT.CURVED.value,
-                        PIPE_LAYOUT.STRAIGHT.value,
-                        PIPE_LAYOUT.ANGLE.value])
-        style = style if 0 <= style <= pipe_max else PIPE_LAYOUT.CURVED.value
+        pipe_max = max([PipeLayoutEnum.CURVED.value,
+                        PipeLayoutEnum.STRAIGHT.value,
+                        PipeLayoutEnum.ANGLE.value])
+        style = style if 0 <= style <= pipe_max else PipeLayoutEnum.CURVED.value
         self._viewer.set_pipe_layout(style)
 
     def fit_to_selection(self):
@@ -1254,8 +1256,8 @@ class NodeGraph(QtCore.QObject):
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
                         pipe = {
-                            PORT_TYPE.IN.value: [n_id, pname],
-                            PORT_TYPE.OUT.value: [conn_id, conn_prt]
+                            PortTypeEnum.IN.value: [n_id, pname],
+                            PortTypeEnum.OUT.value: [conn_id, conn_prt]
                         }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
@@ -1264,8 +1266,8 @@ class NodeGraph(QtCore.QObject):
                 for conn_id, prt_names in conn_data.items():
                     for conn_prt in prt_names:
                         pipe = {
-                            PORT_TYPE.OUT.value: [n_id, pname],
-                            PORT_TYPE.IN.value: [conn_id, conn_prt]
+                            PortTypeEnum.OUT.value: [n_id, pname],
+                            PortTypeEnum.IN.value: [conn_id, conn_prt]
                         }
                         if pipe not in serial_data['connections']:
                             serial_data['connections'].append(pipe)
@@ -2374,8 +2376,8 @@ class SubGraph(NodeGraph):
             PortInputNode or PortOutputNode: port node object.
         """
         func_type = {
-            PORT_TYPE.IN.value: self.get_input_port_nodes,
-            PORT_TYPE.OUT.value: self.get_output_port_nodes
+            PortTypeEnum.IN.value: self.get_input_port_nodes,
+            PortTypeEnum.OUT.value: self.get_output_port_nodes
         }
         for n in func_type.get(port.type_(), []):
             if port == n.parent_port:

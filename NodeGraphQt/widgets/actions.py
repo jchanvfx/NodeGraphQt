@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import VIEWER_STYLING
+from NodeGraphQt.constants import ViewerEnum
 
 
 class BaseMenu(QtWidgets.QMenu):
@@ -14,7 +14,7 @@ class BaseMenu(QtWidgets.QMenu):
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'background-color': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_STYLING.BACKGROUND_COLOR.value
+                    *ViewerEnum.BACKGROUND_COLOR.value
                 ),
                 'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
                 'border-radius': '3px',

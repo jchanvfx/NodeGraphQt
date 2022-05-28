@@ -1,6 +1,6 @@
 from Qt import QtWidgets, QtCore, QtGui
 
-from NodeGraphQt.constants import NODE_STYLING, VIEWER_NAV_STYLING
+from NodeGraphQt.constants import NodeEnum, ViewerNavEnum
 
 
 class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
@@ -32,11 +32,11 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
 
         # background.
-        bg_color = QtGui.QColor(*VIEWER_NAV_STYLING.ITEM_COLOR.value)
+        bg_color = QtGui.QColor(*ViewerNavEnum.ITEM_COLOR.value)
         itm_color = QtGui.QColor(80, 128, 123)
         if option.state & QtWidgets.QStyle.State_Selected:
             bg_color = bg_color.lighter(120)
-            itm_color = QtGui.QColor(*NODE_STYLING.SELECTED_BORDER_COLOR.value)
+            itm_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
 
         roundness = 2.0
         painter.setBrush(bg_color)
@@ -105,7 +105,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         # self.viewport().setAutoFillBackground(False)
         self.setStyleSheet(
             'QListView {{border: 0px;background-color: rgb({0},{1},{2});}}'
-            .format(*VIEWER_NAV_STYLING.BACKGROUND_COLOR.value)
+            .format(*ViewerNavEnum.BACKGROUND_COLOR.value)
         )
 
         self.setItemDelegate(NodeNavigationDelagate(self))

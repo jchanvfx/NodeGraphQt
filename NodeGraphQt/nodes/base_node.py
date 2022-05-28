@@ -7,7 +7,7 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
-                                   PORT_TYPE,
+                                   PortTypeEnum,
                                    NODE_LAYOUT_VERTICAL,
                                    NODE_LAYOUT_HORIZONTAL)
 from NodeGraphQt.errors import (PortError,
@@ -261,7 +261,7 @@ class BaseNode(NodeObject):
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
 
         port = Port(self, view)
-        port.model.type_ = PORT_TYPE.IN.value
+        port.model.type_ = PortTypeEnum.IN.value
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_input
@@ -303,7 +303,7 @@ class BaseNode(NodeObject):
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
         port = Port(self, view)
-        port.model.type_ = PORT_TYPE.OUT.value
+        port.model.type_ = PortTypeEnum.OUT.value
         port.model.name = name
         port.model.display_name = display_name
         port.model.multi_connection = multi_output

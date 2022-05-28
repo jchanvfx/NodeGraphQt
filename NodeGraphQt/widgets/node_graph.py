@@ -1,7 +1,7 @@
 from Qt import QtWidgets, QtGui
 
 from NodeGraphQt.constants import (
-    NODE_STYLING, VIEWER_STYLING, VIEWER_NAV_STYLING
+    NodeEnum, ViewerEnum, ViewerNavEnum
 )
 
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
@@ -15,16 +15,16 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
         self.setTabBarAutoHide(True)
         text_color = self.palette().text().color().toTuple()
         bg_color = QtGui.QColor(
-            *VIEWER_STYLING.BACKGROUND_COLOR.value).darker(120).toTuple()
+            *ViewerEnum.BACKGROUND_COLOR.value).darker(120).toTuple()
         style_dict = {
             'QWidget': {
                 'background-color': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_STYLING.BACKGROUND_COLOR.value
+                    *ViewerEnum.BACKGROUND_COLOR.value
                 ),
             },
             'QTabWidget::pane': {
                 'background': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_STYLING.BACKGROUND_COLOR.value
+                    *ViewerEnum.BACKGROUND_COLOR.value
                 ),
                 'border': '0px',
                 'border-top': '0px solid rgb({0},{1},{2})'.format(*bg_color),
@@ -39,15 +39,15 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
             'QTabBar::tab:selected': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'background': 'rgb({0},{1},{2})'.format(
-                    *VIEWER_NAV_STYLING.BACKGROUND_COLOR.value
+                    *ViewerNavEnum.BACKGROUND_COLOR.value
                 ),
                 'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NODE_STYLING.SELECTED_BORDER_COLOR.value),
+                              .format(*NodeEnum.SELECTED_BORDER_COLOR.value),
             },
             'QTabBar::tab:hover': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
                 'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NODE_STYLING.SELECTED_BORDER_COLOR.value),
+                              .format(*NodeEnum.SELECTED_BORDER_COLOR.value),
             }
         }
         stylesheet = ''
