@@ -9,7 +9,7 @@ from NodeGraphQt.base.commands import (
     NodeInputDisconnectedCmd
 )
 from NodeGraphQt.base.model import PortModel
-from NodeGraphQt.constants import IN_PORT, OUT_PORT
+from NodeGraphQt.constants import PortTypeEnum
 from NodeGraphQt.errors import PortError
 
 
@@ -196,9 +196,9 @@ class Port(object):
         for node_id, port_names in self.model.connected_ports.items():
             for port_name in port_names:
                 node = graph.get_node_by_id(node_id)
-                if self.type_() == IN_PORT:
+                if self.type_() == PortTypeEnum.IN.value:
                     ports.append(node.outputs()[port_name])
-                elif self.type_() == OUT_PORT:
+                elif self.type_() == PortTypeEnum.OUT.value:
                     ports.append(node.inputs()[port_name])
         return ports
 
@@ -284,7 +284,8 @@ class Port(object):
 
         # emit "port_connected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
-        graph.port_connected.emit(ports[IN_PORT], ports[OUT_PORT])
+        graph.port_connected.emit(ports[PortTypeEnum.IN.value],
+                                  ports[PortTypeEnum.OUT.value])
 
     def disconnect_from(self, port=None, push_undo=True):
         """
@@ -315,7 +316,8 @@ class Port(object):
 
         # emit "port_disconnected" signal from the parent graph.
         ports = {p.type_(): p for p in [self, port]}
-        graph.port_disconnected.emit(ports[IN_PORT], ports[OUT_PORT])
+        graph.port_disconnected.emit(ports[PortTypeEnum.IN.value],
+                                     ports[PortTypeEnum.OUT.value])
 
     def clear_connections(self, push_undo=True):
         """

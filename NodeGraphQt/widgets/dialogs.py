@@ -43,20 +43,20 @@ class FileDialog(object):
 class BaseDialog(object):
 
     @staticmethod
-    def message_dialog(text, title):
+    def message_dialog(text='', title='Message'):
         dlg = QtWidgets.QMessageBox()
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        return dlg.exec_()
+        return dlg.exec()
 
     @staticmethod
-    def question_dialog(text, title):
+    def question_dialog(text='', title='Are you sure?'):
         dlg = QtWidgets.QMessageBox()
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
         )
-        result = dlg.exec_()
+        result = dlg.exec()
         return bool(result == QtWidgets.QMessageBox.Yes)

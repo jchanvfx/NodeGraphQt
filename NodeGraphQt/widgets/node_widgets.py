@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import VIEWER_GRID_COLOR, Z_VAL_NODE_WIDGET
+from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
 
 
@@ -19,7 +19,7 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         super(_NodeGroupBox, self).setTitle(text)
 
     def setTitleAlign(self, align='center'):
-        text_color = self.palette().text().color().toTuple()
+        text_color = self.palette().text().color().getRgb()
         style_dict = {
             'QGroupBox': {
                 'background-color': 'rgba(0, 0, 0, 0)',
@@ -322,14 +322,14 @@ class NodeLineEdit(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
         plt = self.palette()
-        bg_color = plt.alternateBase().color().toTuple()
-        text_color = plt.text().color().toTuple()
-        text_sel_color = plt.highlightedText().color().toTuple()
+        bg_color = plt.alternateBase().color().getRgb()
+        text_color = plt.text().color().getRgb()
+        text_sel_color = plt.highlightedText().color().getRgb()
         style_dict = {
             'QLineEdit': {
                 'background': 'rgba({0},{1},{2},20)'.format(*bg_color),
                 'border': '1px solid rgb({0},{1},{2})'
-                          .format(*VIEWER_GRID_COLOR),
+                          .format(*ViewerEnum.GRID_COLOR.value),
                 'border-radius': '3px',
                 'color': 'rgba({0},{1},{2},150)'.format(*text_color),
                 'selection-background-color': 'rgba({0},{1},{2},100)'

@@ -6,7 +6,7 @@ from distutils.version import LooseVersion
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import IN_PORT, OUT_PORT, PIPE_LAYOUT_CURVED
+from NodeGraphQt.constants import PortTypeEnum, PipeLayoutEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
@@ -38,7 +38,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
     insert_node = QtCore.Signal(object, str, dict)
     node_name_changed = QtCore.Signal(str, str)
     node_backdrop_updated = QtCore.Signal(str, str, object)
-    show_tab_search = QtCore.Signal()
 
     # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
@@ -72,7 +71,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._update_scene()
         self._last_size = self.size()
 
-        self._pipe_layout = PIPE_LAYOUT_CURVED
+        self._pipe_layout = PipeLayoutEnum.CURVED.value
         self._detached_port = None
         self._start_port = None
         self._origin_pos = None
@@ -315,8 +314,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 ctx_menu.exec_(event.globalPos())
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
-        else:
-            self.show_tab_search.emit()
+
         return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
@@ -698,7 +696,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             from_port.hovered = True
 
-            attr = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+            attr = {
+                PortTypeEnum.IN.value: 'output_port',
+                PortTypeEnum.OUT.value: 'input_port'
+            }
             self._detached_port = getattr(pipe, attr[from_port.port_type])
             self.start_live_connection(from_port)
             self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
@@ -831,9 +832,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not selected_port:
             return
         self._start_port = selected_port
-        if self._start_port.type == IN_PORT:
+        if self._start_port.type == PortTypeEnum.IN.value:
             self._LIVE_PIPE.input_port = self._start_port
-        elif self._start_port == OUT_PORT:
+        elif self._start_port == PortTypeEnum.OUT.value:
             self._LIVE_PIPE.output_port = self._start_port
         self._LIVE_PIPE.setVisible(True)
 
@@ -875,7 +876,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         start_node = start_port.node
         check_nodes = [end_port.node]
-        io_types = {IN_PORT: 'outputs', OUT_PORT: 'inputs'}
+        io_types = {
+            PortTypeEnum.IN.value: 'outputs',
+            PortTypeEnum.OUT.value: 'inputs'
+        }
         while check_nodes:
             check_node = check_nodes.pop(0)
             for check_port in getattr(check_node, io_types[end_port.port_type]):
@@ -893,22 +897,22 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._search_widget.set_nodes(nodes)
 
     def tab_search_toggle(self):
-        if isinstance(self._search_widget, TabSearchMenuWidget):
+        state = self._search_widget.isVisible()
+        if not state:
+            self._search_widget.setVisible(state)
+            self.setFocus()
             return
 
         pos = self._previous_pos
-        state = not self._search_widget.isVisible()
-        if state:
-            rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
-                                    int(pos.y() - rect.height() / 2))
-            self._search_widget.move(new_pos)
-            self._search_widget.setVisible(state)
-            rect = self.mapToScene(rect).boundingRect()
-            self.scene().update(rect)
-        else:
-            self._search_widget.setVisible(state)
-            self.clearFocus()
+        rect = self._search_widget.rect()
+        new_pos = QtCore.QPoint(int(pos.x() - rect.width() / 2),
+                                int(pos.y() - rect.height() / 2))
+        self._search_widget.move(new_pos)
+        self._search_widget.setVisible(state)
+        self._search_widget.setFocus()
+
+        rect = self.mapToScene(rect).boundingRect()
+        self.scene().update(rect)
 
     def rebuild_tab_search(self):
         if isinstance(self._search_widget, TabSearchMenuWidget):
@@ -917,8 +921,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def context_menus(self):
         return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
-    @staticmethod
-    def question_dialog(text, title='Node Graph'):
+    def question_dialog(self, text, title='Node Graph'):
         """
         Prompt node viewer question dialog widget with "yes", "no" buttons.
 
@@ -929,10 +932,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             bool: true if user click yes.
         """
+        self.clear_key_state()
         return BaseDialog.question_dialog(text, title)
 
-    @staticmethod
-    def message_dialog(text, title='Node Graph'):
+    def message_dialog(self, text, title='Node Graph'):
         """
         Prompt node viewer message dialog widget with "ok" button.
 
@@ -940,6 +943,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             text (str): dialog text.
             title (str): dialog window title.
         """
+        self.clear_key_state()
         BaseDialog.message_dialog(text, title)
 
     def load_dialog(self, current_dir=None, ext=None):
@@ -953,6 +957,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             str: selected file path.
         """
+        self.clear_key_state()
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
@@ -973,6 +978,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             str: selected file path.
         """
+        self.clear_key_state()
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
