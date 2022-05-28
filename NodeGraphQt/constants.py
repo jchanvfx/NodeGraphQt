@@ -5,23 +5,29 @@ import os
 from Qt import QtWidgets
 from enum import Enum
 
-from .pkg_info import __version__
+from .pkg_info import __version__ as _v
 
 __doc__ = """
-| The ``NodeGraphQt.constants`` namespace contains variables used throughout 
- the whole NodeGraphQt library.
+| The :py:mod:`NodeGraphQt.constants` namespace contains variables used 
+ throughout the whole NodeGraphQt library.
 """
 
 # =================================== GLOBAL ===================================
 
-#: current version.
-VERSION = __version__
-#: major version.
-VERSION_MAJOR = int(VERSION.split('.')[0])
-#: minor version.
-VERSION_MINOR = int(VERSION.split('.')[1])
-#: patch version.
-VERSION_PATCH = int(VERSION.split('.')[2])
+
+class VERSION(Enum):
+    """
+    Current framework version.
+    :py:mod:`NodeGraphQt.constants.VERSION`
+    """
+    #:
+    VERSION = _v
+    #:
+    MAJOR = int(_v.split('.')[0])
+    #:
+    MINOR = int(_v.split('.')[1])
+    #:
+    PATCH = int(_v.split('.')[2])
 
 # ==================================== PIPE ====================================
 
@@ -29,7 +35,7 @@ VERSION_PATCH = int(VERSION.split('.')[2])
 class PIPE_STYLING(Enum):
     """
     Pipe styling layout:
-    ``NodeGraphQt.constants.PIPE_STYLING``
+    :py:mod:`NodeGraphQt.constants.PIPE_STYLING`
     """
     #: default width.
     WIDTH = 1.2
@@ -52,7 +58,7 @@ class PIPE_STYLING(Enum):
 class PIPE_SLICER_STYLING(Enum):
     """
     Slicer Pipe styling layout:
-    ``NodeGraphQt.constants.PIPE_SLICER_STYLING``
+    :py:mod:`NodeGraphQt.constants.PIPE_SLICER_STYLING`
     """
     #: default width.
     WIDTH = 1.5
@@ -63,7 +69,7 @@ class PIPE_SLICER_STYLING(Enum):
 class PIPE_LAYOUT(Enum):
     """
     Pipe connection drawing layout:
-    ``NodeGraphQt.constants.PIPE_LAYOUT``
+    :py:mod:`NodeGraphQt.constants.PIPE_LAYOUT`
     """
     #: draw straight lines for pipe connections.
     STRAIGHT = 0
@@ -78,7 +84,7 @@ class PIPE_LAYOUT(Enum):
 class PORT_STYLING(Enum):
     """
     Port styling layout:
-    ``NodeGraphQt.constants.PORT_STYLING``
+    :py:mod:`NodeGraphQt.constants.PORT_STYLING`
     """
     #: default port size.
     SIZE = 22.0
@@ -101,7 +107,7 @@ class PORT_STYLING(Enum):
 class PORT_TYPE(Enum):
     """
     Port connection types:
-    ``NodeGraphQt.constants.PORT_TYPE``
+    :py:mod:`NodeGraphQt.constants.PORT_TYPE`
     """
     #: Connection type for input ports.
     IN = 'in'
@@ -115,7 +121,7 @@ class PORT_TYPE(Enum):
 class NODE_STYLING(Enum):
     """
     Node styling layout:
-    ``NodeGraphQt.constants.NODE_STYLING``
+    :py:mod:`NodeGraphQt.constants.NODE_STYLING`
     """
     #: default node width.
     WIDTH = 160
@@ -171,7 +177,7 @@ NODE_PROP_BUTTON = 17
 class VIEWER_STYLING(Enum):
     """
     Node graph viewer styling layout:
-    ``NodeGraphQt.constants.VIEWER_STYLING``
+    :py:mod:`NodeGraphQt.constants.VIEWER_STYLING`
     """
     #: default background color for the node graph.
     BACKGROUND_COLOR = (35, 35, 35)
@@ -190,7 +196,7 @@ class VIEWER_STYLING(Enum):
 class VIEWER_NAV_STYLING(Enum):
     """
     Node graph viewer navigation styling layout:
-    ``NodeGraphQt.constants.VIEWER_NAV_STYLING``
+    :py:mod:`NodeGraphQt.constants.VIEWER_NAV_STYLING`
     """
     #: default background color.
     BACKGROUND_COLOR = (25, 25, 25)
