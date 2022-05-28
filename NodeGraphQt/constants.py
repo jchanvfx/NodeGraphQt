@@ -8,8 +8,8 @@ from enum import Enum
 from .pkg_info import __version__ as _v
 
 __doc__ = """
-| The :py:mod:`NodeGraphQt.constants` namespace contains variables used 
- throughout the whole NodeGraphQt library.
+| The :py:mod:`NodeGraphQt.constants` namespace contains variables and enums 
+ used throughout the NodeGraphQt library.
 """
 
 # ================================== PRIVATE ===================================
