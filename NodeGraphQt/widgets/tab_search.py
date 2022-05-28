@@ -57,8 +57,8 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
         super(TabSearchLineEditWidget, self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
         self.setMinimumSize(200, 22)
-        text_color = self.palette().text().color().toTuple()
-        selected_color = self.palette().highlight().color().toTuple()
+        text_color = self.palette().text().color().getRgb()
+        selected_color = self.palette().highlight().color().getRgb()
         style_dict = {
             'QLineEdit': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
@@ -108,8 +108,8 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         search_widget.setDefaultWidget(self.line_edit)
         self.addAction(search_widget)
 
-        text_color = self.palette().text().color().toTuple()
-        selected_color = self.palette().highlight().color().toTuple()
+        text_color = self.palette().text().color().getRgb()
+        selected_color = self.palette().highlight().color().getRgb()
         style_dict = {
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),

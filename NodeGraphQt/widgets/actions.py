@@ -8,8 +8,8 @@ class BaseMenu(QtWidgets.QMenu):
 
     def __init__(self, *args, **kwargs):
         super(BaseMenu, self).__init__(*args, **kwargs)
-        text_color = self.palette().text().color().toTuple()
-        selected_color = self.palette().highlight().color().toTuple()
+        text_color = self.palette().text().color().getRgb()
+        selected_color = self.palette().highlight().color().getRgb()
         style_dict = {
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
