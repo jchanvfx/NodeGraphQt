@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from NodeGraphQt.constants import VIEWER_BG_COLOR, VIEWER_NAV_BG_COLOR
+from NodeGraphQt.constants import VIEWER_STYLING, VIEWER_NAV_STYLING
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):
@@ -62,12 +62,15 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
         style_dict = {
             'QLineEdit': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'border': '1px solid rgb({0},{1},{2})'
-                          .format(*selected_color),
+                'border': '1px solid rgb({0},{1},{2})'.format(
+                    *selected_color
+                ),
                 'border-radius': '3px',
                 'padding': '2px 4px',
                 'margin': '2px 4px 8px 4px',
-                'background': 'rgb({0},{1},{2})'.format(*VIEWER_NAV_BG_COLOR),
+                'background': 'rgb({0},{1},{2})'.format(
+                    *VIEWER_NAV_STYLING.BACKGROUND_COLOR.value
+                ),
                 'selection-background-color': 'rgba({0},{1},{2},200)'
                                               .format(*selected_color),
             }
@@ -110,7 +113,9 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         style_dict = {
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'background-color': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'background-color': 'rgb({0},{1},{2})'.format(
+                    *VIEWER_STYLING.BACKGROUND_COLOR.value
+                ),
                 'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
                 'border-radius': '3px',
             },

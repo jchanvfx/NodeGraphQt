@@ -167,18 +167,36 @@ NODE_PROP_BUTTON = 17
 
 # === NODE VIEWER ===
 
-#: Style to render the node graph background with nothing.
-VIEWER_GRID_NONE = 0
-#: Style to render the node graph background with dots.
-VIEWER_GRID_DOTS = 1
-#: Style to render the node graph background with grid lines.
-VIEWER_GRID_LINES = 2
 
-VIEWER_NAV_BG_COLOR = (25, 25, 25)
-VIEWER_NAV_ITEM_COLOR = (35, 35, 35)
-VIEWER_BG_COLOR = (35, 35, 35)
-VIEWER_GRID_COLOR = (45, 45, 45)
-VIEWER_GRID_SIZE = 50
+class VIEWER_STYLING(Enum):
+    """
+    Node graph viewer styling layout:
+    ``NodeGraphQt.constants.VIEWER_STYLING``
+    """
+    #: default background color for the node graph.
+    BACKGROUND_COLOR = (35, 35, 35)
+    #: style node graph background with no grid or dots.
+    GRID_DISPLAY_NONE = 0
+    #: style node graph background with dots.
+    GRID_DISPLAY_DOTS = 1
+    #: style node graph background with grid lines.
+    GRID_DISPLAY_LINES = 2
+    #: grid size when styled with grid lines.
+    GRID_SIZE = 50
+    #: grid line color.
+    GRID_COLOR = (45, 45, 45)
+
+
+class VIEWER_NAV_STYLING(Enum):
+    """
+    Node graph viewer navigation styling layout:
+    ``NodeGraphQt.constants.VIEWER_NAV_STYLING``
+    """
+    #: default background color.
+    BACKGROUND_COLOR = (25, 25, 25)
+    #: default item color.
+    ITEM_COLOR = (35, 35, 35)
+
 
 # ================================== PRIVATE ===================================
 

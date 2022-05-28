@@ -280,24 +280,24 @@ def _bg_grid_none(graph):
     """
     Turn off the background patterns.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_NONE
-    graph.set_grid_mode(VIEWER_GRID_NONE)
+    from NodeGraphQt.constants import VIEWER_STYLING
+    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_NONE.value)
 
 
 def _bg_grid_dots(graph):
     """
     Set background node graph background with grid dots.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_DOTS
-    graph.set_grid_mode(VIEWER_GRID_DOTS)
+    from NodeGraphQt.constants import VIEWER_STYLING
+    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_DOTS.value)
 
 
 def _bg_grid_lines(graph):
     """
     Set background node graph background with grid lines.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_LINES
-    graph.set_grid_mode(VIEWER_GRID_LINES)
+    from NodeGraphQt.constants import VIEWER_STYLING
+    graph.set_grid_mode(VIEWER_STYLING.GRID_DISPLAY_LINES.value)
 
 
 def _layout_graph_down(graph):

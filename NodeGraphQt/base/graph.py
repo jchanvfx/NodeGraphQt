@@ -21,7 +21,7 @@ from NodeGraphQt.constants import (
     PIPE_LAYOUT,
     URI_SCHEME, URN_SCHEME,
     PORT_TYPE,
-    VIEWER_GRID_LINES
+    VIEWER_STYLING
 )
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
@@ -553,7 +553,7 @@ class NodeGraph(QtCore.QObject):
         self.scene().grid_color = (r, g, b)
         self._viewer.force_update()
 
-    def set_grid_mode(self, mode=VIEWER_GRID_LINES):
+    def set_grid_mode(self, mode=None):
         """
         Set node graph grid mode.
 
@@ -562,13 +562,20 @@ class NodeGraph(QtCore.QObject):
 
             Node graph background types:
 
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_NONE`
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_DOTS`
-            * :attr:`NodeGraphQt.constants.VIEWER_GRID_LINES`
+            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_NONE.value`
+            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_DOTS.value`
+            * :attr:`NodeGraphQt.constants.VIEWER_STYLING.GRID_DISPLAY_LINES.value`
 
         Args:
             mode (int): background style.
         """
+        display_types = [
+            VIEWER_STYLING.GRID_DISPLAY_NONE.value,
+            VIEWER_STYLING.GRID_DISPLAY_DOTS.value,
+            VIEWER_STYLING.GRID_DISPLAY_LINES.value
+        ]
+        if mode not in display_types:
+            mode = VIEWER_STYLING.GRID_DISPLAY_LINES.value
         self.scene().grid_mode = mode
         self._viewer.force_update()
 
