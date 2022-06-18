@@ -396,7 +396,8 @@ class NodeObject(object):
             if hasattr(self.view, name):
                 setattr(self.view, name, value)
             self.model.set_property(name, value)
-            self.update()
+        
+        self.update()
 
     def has_property(self, name):
         """
