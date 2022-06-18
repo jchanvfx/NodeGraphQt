@@ -2,15 +2,7 @@
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
-    IN_PORT, OUT_PORT,
-    PORT_DEFAULT_COLOR,
-    PORT_DEFAULT_BORDER_COLOR,
-    PORT_DEFAULT_SIZE,
-    PORT_FALLOFF,
-    PORT_HOVER_COLOR,
-    PORT_HOVER_BORDER_COLOR,
-    PORT_ACTIVE_COLOR,
-    PORT_ACTIVE_BORDER_COLOR,
+    PortTypeEnum, PortEnum,
     Z_VAL_PORT,
     ITEM_CACHE_MODE)
 
@@ -28,13 +20,13 @@ class PortItem(QtWidgets.QGraphicsItem):
         self.setFlag(self.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
         self._pipes = []
-        self._width = PORT_DEFAULT_SIZE
-        self._height = PORT_DEFAULT_SIZE
+        self._width = PortEnum.SIZE.value
+        self._height = PortEnum.SIZE.value
         self._hovered = False
         self._name = 'port'
         self._display_name = True
-        self._color = PORT_DEFAULT_COLOR
-        self._border_color = PORT_DEFAULT_BORDER_COLOR
+        self._color = PortEnum.COLOR.value
+        self._border_color = PortEnum.BORDER_COLOR.value
         self._border_size = 1
         self._port_type = None
         self._multi_connection = False
@@ -47,7 +39,9 @@ class PortItem(QtWidgets.QGraphicsItem):
         return '{}.PortItem("{}")'.format(self.__module__, self.name)
 
     def boundingRect(self):
-        return QtCore.QRectF(0.0, 0.0, self._width + PORT_FALLOFF, self._height)
+        return QtCore.QRectF(0.0, 0.0,
+                             self._width + PortEnum.CLICK_FALLOFF.value,
+                             self._height)
 
     def paint(self, painter, option, widget):
         """
@@ -76,11 +70,11 @@ class PortItem(QtWidgets.QGraphicsItem):
         port_rect = QtCore.QRectF(rect_x, rect_y, rect_w, rect_h)
 
         if self._hovered:
-            color = QtGui.QColor(*PORT_HOVER_COLOR)
-            border_color = QtGui.QColor(*PORT_HOVER_BORDER_COLOR)
+            color = QtGui.QColor(*PortEnum.HOVER_COLOR.value)
+            border_color = QtGui.QColor(*PortEnum.HOVER_BORDER_COLOR.value)
         elif self.connected_pipes:
-            color = QtGui.QColor(*PORT_ACTIVE_COLOR)
-            border_color = QtGui.QColor(*PORT_ACTIVE_BORDER_COLOR)
+            color = QtGui.QColor(*PortEnum.ACTIVE_COLOR.value)
+            border_color = QtGui.QColor(*PortEnum.ACTIVE_BORDER_COLOR.value)
         else:
             color = QtGui.QColor(*self.color)
             border_color = QtGui.QColor(*self.border_color)
@@ -146,9 +140,9 @@ class PortItem(QtWidgets.QGraphicsItem):
         if not self.connected_pipes:
             return
         for pipe in self.connected_pipes:
-            if self.port_type == IN_PORT:
+            if self.port_type == PortTypeEnum.IN.value:
                 pipe.draw_path(self, pipe.output_port)
-            elif self.port_type == OUT_PORT:
+            elif self.port_type == PortTypeEnum.OUT.value:
                 pipe.draw_path(pipe.input_port, self)
 
     def add_pipe(self, pipe):
@@ -164,7 +158,10 @@ class PortItem(QtWidgets.QGraphicsItem):
     @property
     def connected_ports(self):
         ports = []
-        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+        port_types = {
+            PortTypeEnum.IN.value: 'output_port',
+            PortTypeEnum.OUT.value: 'input_port'
+        }
         for pipe in self.connected_pipes:
             ports.append(getattr(pipe, port_types[self.port_type]))
         return ports
@@ -266,7 +263,10 @@ class PortItem(QtWidgets.QGraphicsItem):
         self.update()
 
     def disconnect_from(self, port):
-        port_types = {IN_PORT: 'output_port', OUT_PORT: 'input_port'}
+        port_types = {
+            PortTypeEnum.IN.value: 'output_port',
+            PortTypeEnum.OUT.value: 'input_port'
+        }
         for pipe in self.connected_pipes:
             connected_port = getattr(pipe, port_types[self.port_type])
             if connected_port == port:

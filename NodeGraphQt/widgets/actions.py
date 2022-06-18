@@ -1,19 +1,21 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import VIEWER_BG_COLOR
+from NodeGraphQt.constants import ViewerEnum
 
 
 class BaseMenu(QtWidgets.QMenu):
 
     def __init__(self, *args, **kwargs):
         super(BaseMenu, self).__init__(*args, **kwargs)
-        text_color = self.palette().text().color().toTuple()
-        selected_color = self.palette().highlight().color().toTuple()
+        text_color = self.palette().text().color().getRgb()
+        selected_color = self.palette().highlight().color().getRgb()
         style_dict = {
             'QMenu': {
                 'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'background-color': 'rgb({0},{1},{2})'.format(*VIEWER_BG_COLOR),
+                'background-color': 'rgb({0},{1},{2})'.format(
+                    *ViewerEnum.BACKGROUND_COLOR.value
+                ),
                 'border': '1px solid rgba({0},{1},{2},30)'.format(*text_color),
                 'border-radius': '3px',
             },

@@ -63,6 +63,8 @@ def build_context_menu(graph):
     # "Node" menu.
     # --------------------------------------------------------------------------
     node_menu = graph_menu.add_menu('&Nodes')
+    node_menu.add_command('Node Search', _toggle_node_search, 'Tab')
+    node_menu.add_separator()
     node_menu.add_command(
         'Auto Layout Up Stream', _layout_graph_up, 'L')
     node_menu.add_command(
@@ -230,8 +232,8 @@ def _expand_group_node(graph):
     Expand selected group node.
     """
     selected_nodes = graph.selected_nodes()
-    if len(selected_nodes) > 1:
-        graph.message_dialog('Please select a single "GroupNode" to expand.')
+    if not selected_nodes:
+        graph.message_dialog('Please select a "GroupNode" to expand.')
         return
     graph.expand_group_node(selected_nodes[0])
 
@@ -254,48 +256,48 @@ def _curved_pipe(graph):
     """
     Set node graph pipes layout as curved.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_CURVED
-    graph.set_pipe_style(PIPE_LAYOUT_CURVED)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.CURVED.value)
 
 
 def _straight_pipe(graph):
     """
     Set node graph pipes layout as straight.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_STRAIGHT
-    graph.set_pipe_style(PIPE_LAYOUT_STRAIGHT)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.STRAIGHT.value)
 
 
 def _angle_pipe(graph):
     """
     Set node graph pipes layout as angled.
     """
-    from NodeGraphQt.constants import PIPE_LAYOUT_ANGLE
-    graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
+    from NodeGraphQt.constants import PipeLayoutEnum
+    graph.set_pipe_style(PipeLayoutEnum.ANGLE.value)
 
 
 def _bg_grid_none(graph):
     """
     Turn off the background patterns.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_NONE
-    graph.set_grid_mode(VIEWER_GRID_NONE)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_NONE.value)
 
 
 def _bg_grid_dots(graph):
     """
     Set background node graph background with grid dots.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_DOTS
-    graph.set_grid_mode(VIEWER_GRID_DOTS)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_DOTS.value)
 
 
 def _bg_grid_lines(graph):
     """
     Set background node graph background with grid lines.
     """
-    from NodeGraphQt.constants import VIEWER_GRID_LINES
-    graph.set_grid_mode(VIEWER_GRID_LINES)
+    from NodeGraphQt.constants import ViewerEnum
+    graph.set_grid_mode(ViewerEnum.GRID_DISPLAY_LINES.value)
 
 
 def _layout_graph_down(graph):
@@ -312,3 +314,10 @@ def _layout_graph_up(graph):
     """
     nodes = graph.selected_nodes() or graph.all_nodes()
     graph.auto_layout_nodes(nodes=nodes, down_stream=False)
+
+
+def _toggle_node_search(graph):
+    """
+    show/hide the node search widget.
+    """
+    graph.toggle_node_search()
