@@ -1,10 +1,14 @@
 NodeGraphQt |version_str|
 #########################
 
-https://github.com/jchanvfx/NodeGraphQt
+NodeGraphQt a node graph UI framework written in python that can be implemented
+and re-purposed into applications supporting PySide2.
 
 .. image:: _images/screenshot.png
     :width: 95%
+
+| Source: https://github.com/jchanvfx/NodeGraphQt
+| Issue Tracker: https://github.com/jchanvfx/NodeGraphQt/issues
 
 ----
 
@@ -15,24 +19,25 @@ https://github.com/jchanvfx/NodeGraphQt
 
     constants
     graph
-    nodes
+    nodes/_index_nodes
     menu
 
 .. toctree::
     :caption: Widgets
     :name: wdgtstoc
-    :maxdepth: 2
+    :maxdepth: 1
 
     custom_widgets
     node_widgets
 
 .. toctree::
-    :caption: Examples
+    :caption: Usage
     :name: exmplstoc
-    :maxdepth: 3
+    :maxdepth: 1
 
     examples/ex_overview
     examples/ex_node
     examples/ex_port
     examples/ex_pipe
     examples/ex_menu
+    host_apps/_index_apps

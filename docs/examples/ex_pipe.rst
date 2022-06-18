@@ -1,8 +1,8 @@
-Pipe Examples
+Pipe Overview
 #############
 
-Example Pipe Layouts
-********************
+Pipe Layouts
+************
 
 .. image:: ../_images/pipe_layout_types.gif
         :width: 650px

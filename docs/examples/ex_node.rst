@@ -1,4 +1,4 @@
-Node Examples
+Node Overview
 #############
 
 Creating Nodes
@@ -40,8 +40,8 @@ Creating Nodes
         app.exec_()
 
 
-Embedding Widgets
-*****************
+Creating Node Widgets
+*********************
 
 The :class:`NodeGraphQt.BaseNode` class allows you to embed some basic widgets inside a node here's a
 example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNode``.
@@ -62,7 +62,8 @@ example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNod
             items = ['apples', 'bananas', 'pears', 'mangos', 'oranges']
             self.add_combo_menu('my_list', 'My List', items)
 
-To you update the widget you can call the :meth:`NodeGraphQt.NodeObject.set_property` function.
+To you update the widget you can call the
+:meth:`NodeGraphQt.NodeObject.set_property` function.
 
 .. code-block:: python
     :linenos:
@@ -77,7 +78,7 @@ To you update the widget you can call the :meth:`NodeGraphQt.NodeObject.set_prop
  - ``QCheckBox``: :meth:`NodeGraphQt.BaseNode.add_checkbox`
  - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
 
-See: :ref:`Node Embedded Widgets` for more node widget types.
+See: :ref:`Node Widgets` for more node widget types.
 
 Embedding Custom Widgets
 ************************

@@ -1,9 +1,7 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (Z_VAL_PIPE,
-                                   NODE_SEL_COLOR,
-                                   NODE_SEL_BORDER_COLOR)
+from NodeGraphQt.constants import Z_VAL_PIPE, NodeEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem
 from NodeGraphQt.qgraphics.port import PortItem
@@ -88,7 +86,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
         item = self.parentItem()
         if item and item.selected:
-            color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
+            color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
         else:
             color = QtGui.QColor(*item.color)
             color = color.darker(110)
@@ -221,7 +219,7 @@ class BackdropNodeItem(AbstractNodeItem):
                              self.backdrop_text)
 
         if self.selected:
-            sel_color = [x for x in NODE_SEL_COLOR]
+            sel_color = [x for x in NodeEnum.SELECTED_COLOR.value]
             sel_color[-1] = 15
             painter.setBrush(QtGui.QColor(*sel_color))
             painter.setPen(QtCore.Qt.NoPen)
@@ -234,9 +232,9 @@ class BackdropNodeItem(AbstractNodeItem):
 
         border = 0.8
         border_color = self.color
-        if self.selected and NODE_SEL_BORDER_COLOR:
+        if self.selected and NodeEnum.SELECTED_BORDER_COLOR.value:
             border = 1.0
-            border_color = NODE_SEL_BORDER_COLOR
+            border_color = NodeEnum.SELECTED_BORDER_COLOR.value
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(QtGui.QPen(QtGui.QColor(*border_color), border))
         painter.drawRoundedRect(rect, radius, radius)

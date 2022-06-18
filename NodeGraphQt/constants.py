@@ -3,110 +3,16 @@
 import os
 
 from Qt import QtWidgets
+from enum import Enum
 
-from .pkg_info import __version__
+from .pkg_info import __version__ as _v
 
 __doc__ = """
-The ``NodeGraphQt.constants`` namespace contains variables used throughout 
-the whole ``NodeGraphQt`` library.
+| The :py:mod:`NodeGraphQt.constants` namespace contains variables and enums 
+ used throughout the NodeGraphQt library.
 """
 
-#: Current version of the NodeGraphQt framework.
-VERSION = __version__
-
-# === PIPE ===
-
-PIPE_WIDTH = 1.2
-PIPE_STYLE_DEFAULT = 0
-PIPE_STYLE_DASHED = 1
-PIPE_STYLE_DOTTED = 2
-PIPE_DEFAULT_COLOR = (175, 95, 30, 255)
-PIPE_DISABLED_COLOR = (190, 20, 20, 255)
-PIPE_ACTIVE_COLOR = (70, 255, 220, 255)
-PIPE_HIGHLIGHT_COLOR = (232, 184, 13, 255)
-PIPE_SLICER_COLOR = (255, 50, 75)
-#: Style to draw the connection pipes as straight lines.
-PIPE_LAYOUT_STRAIGHT = 0
-#: Style to draw the connection pipes as curved lines.
-PIPE_LAYOUT_CURVED = 1
-#: Style to draw the connection pipes as angled lines.
-PIPE_LAYOUT_ANGLE = 2
-
-# === PORT ===
-
-#: Connection type for input ports.
-IN_PORT = 'in'
-#: Connection type for output ports.
-OUT_PORT = 'out'
-
-PORT_DEFAULT_SIZE = 22.0
-PORT_DEFAULT_COLOR = (49, 115, 100, 255)
-PORT_DEFAULT_BORDER_COLOR = (29, 202, 151, 255)
-PORT_ACTIVE_COLOR = (14, 45, 59, 255)
-PORT_ACTIVE_BORDER_COLOR = (107, 166, 193, 255)
-PORT_HOVER_COLOR = (17, 43, 82, 255)
-PORT_HOVER_BORDER_COLOR = (136, 255, 35, 255)
-PORT_FALLOFF = 15.0
-
-# === NODE ===
-
-NODE_WIDTH = 160
-NODE_HEIGHT = 60
-NODE_ICON_SIZE = 18
-NODE_SEL_COLOR = (255, 255, 255, 30)
-NODE_SEL_BORDER_COLOR = (254, 207, 42, 255)
-
-# === NODE PROPERTY ===
-
-#: Property type will hidden in the properties bin (default).
-NODE_PROP = 0
-#: Property type represented with a QLabel widget in the properties bin.
-NODE_PROP_QLABEL = 2
-#: Property type represented with a QLineEdit widget in the properties bin.
-NODE_PROP_QLINEEDIT = 3
-#: Property type represented with a QTextEdit widget in the properties bin.
-NODE_PROP_QTEXTEDIT = 4
-#: Property type represented with a QComboBox widget in the properties bin.
-NODE_PROP_QCOMBO = 5
-#: Property type represented with a QCheckBox widget in the properties bin.
-NODE_PROP_QCHECKBOX = 6
-#: Property type represented with a QSpinBox widget in the properties bin.
-NODE_PROP_QSPINBOX = 7
-#: Property type represented with a ColorPicker widget in the properties bin.
-NODE_PROP_COLORPICKER = 8
-#: Property type represented with a Slider widget in the properties bin.
-NODE_PROP_SLIDER = 9
-#: Property type represented with a file selector widget in the properties bin.
-NODE_PROP_FILE = 10
-#: Property type represented with a file save widget in the properties bin.
-NODE_PROP_FILE_SAVE = 11
-#: Property type represented with a vector2 widget in the properties bin.
-NODE_PROP_VECTOR2 = 12
-#: Property type represented with vector3 widget in the properties bin.
-NODE_PROP_VECTOR3 = 13
-#: Property type represented with vector4 widget in the properties bin.
-NODE_PROP_VECTOR4 = 14
-#: Property type represented with float widget in the properties bin.
-NODE_PROP_FLOAT = 15
-#: Property type represented with int widget in the properties bin.
-NODE_PROP_INT = 16
-#: Property type represented with button widget in the properties bin.
-NODE_PROP_BUTTON = 17
-
-# === NODE VIEWER ===
-
-#: Style to render the node graph background with nothing.
-VIEWER_GRID_NONE = 0
-#: Style to render the node graph background with dots.
-VIEWER_GRID_DOTS = 1
-#: Style to render the node graph background with grid lines.
-VIEWER_GRID_LINES = 2
-
-VIEWER_NAV_BG_COLOR = (25, 25, 25)
-VIEWER_NAV_ITEM_COLOR = (35, 35, 35)
-VIEWER_BG_COLOR = (35, 35, 35)
-VIEWER_GRID_COLOR = (45, 45, 45)
-VIEWER_GRID_SIZE = 50
+# ================================== PRIVATE ===================================
 
 URI_SCHEME = 'nodegraphqt://'
 URN_SCHEME = 'nodegraphqt::'
@@ -142,3 +48,194 @@ NODE_LAYOUT_HORIZONTAL = 1
 #: Variable for setting the node layout direction.
 # NODE_LAYOUT_DIRECTION = NODE_LAYOUT_VERTICAL
 NODE_LAYOUT_DIRECTION = NODE_LAYOUT_HORIZONTAL
+
+# =================================== GLOBAL ===================================
+
+
+class VersionEnum(Enum):
+    """
+    Current framework version.
+    :py:mod:`NodeGraphQt.constants.VersionEnum`
+    """
+    #:
+    VERSION = _v
+    #:
+    MAJOR = int(_v.split('.')[0])
+    #:
+    MINOR = int(_v.split('.')[1])
+    #:
+    PATCH = int(_v.split('.')[2])
+
+# =================================== VIEWER ===================================
+
+
+class ViewerEnum(Enum):
+    """
+    Node graph viewer styling layout:
+    :py:mod:`NodeGraphQt.constants.ViewerEnum`
+    """
+    #: default background color for the node graph.
+    BACKGROUND_COLOR = (35, 35, 35)
+    #: style node graph background with no grid or dots.
+    GRID_DISPLAY_NONE = 0
+    #: style node graph background with dots.
+    GRID_DISPLAY_DOTS = 1
+    #: style node graph background with grid lines.
+    GRID_DISPLAY_LINES = 2
+    #: grid size when styled with grid lines.
+    GRID_SIZE = 50
+    #: grid line color.
+    GRID_COLOR = (45, 45, 45)
+
+
+class ViewerNavEnum(Enum):
+    """
+    Node graph viewer navigation styling layout:
+    :py:mod:`NodeGraphQt.constants.ViewerNavEnum`
+    """
+    #: default background color.
+    BACKGROUND_COLOR = (25, 25, 25)
+    #: default item color.
+    ITEM_COLOR = (35, 35, 35)
+
+# ==================================== NODE ====================================
+
+
+class NodeEnum(Enum):
+    """
+    Node styling layout:
+    :py:mod:`NodeGraphQt.constants.NodeEnum`
+    """
+    #: default node width.
+    WIDTH = 160
+    #: default node height.
+    HEIGHT = 60
+    #: default node icon size (WxH).
+    ICON_SIZE = 18
+    #: default node overlay color when selected.
+    SELECTED_COLOR = (255, 255, 255, 30)
+    #: default node border color when selected.
+    SELECTED_BORDER_COLOR = (254, 207, 42, 255)
+
+# ==================================== PORT ====================================
+
+
+class PortEnum(Enum):
+    """
+    Port styling layout:
+    :py:mod:`NodeGraphQt.constants.PortEnum`
+    """
+    #: default port size.
+    SIZE = 22.0
+    #: default port color. (r, g, b, a)
+    COLOR = (49, 115, 100, 255)
+    #: default port border color.
+    BORDER_COLOR = (29, 202, 151, 255)
+    #: port color when selected.
+    ACTIVE_COLOR = (14, 45, 59, 255)
+    #: port border color when selected.
+    ACTIVE_BORDER_COLOR = (107, 166, 193, 255)
+    #: port color on mouse over.
+    HOVER_COLOR = (17, 43, 82, 255)
+    #: port border color on mouse over.
+    HOVER_BORDER_COLOR = (136, 255, 35, 255)
+    #: threshold for selecting a port.
+    CLICK_FALLOFF = 15.0
+
+
+class PortTypeEnum(Enum):
+    """
+    Port connection types:
+    :py:mod:`NodeGraphQt.constants.PortTypeEnum`
+    """
+    #: Connection type for input ports.
+    IN = 'in'
+    #: Connection type for output ports.
+    OUT = 'out'
+
+# ==================================== PIPE ====================================
+
+
+class PipeEnum(Enum):
+    """
+    Pipe styling layout:
+    :py:mod:`NodeGraphQt.constants.PipeEnum`
+    """
+    #: default width.
+    WIDTH = 1.2
+    #: default color.
+    COLOR = (175, 95, 30, 255)
+    #: pipe color to a node when it's disabled.
+    DISABLED_COLOR = (190, 20, 20, 255)
+    #: pipe color when selected or mouse over.
+    ACTIVE_COLOR = (70, 255, 220, 255)
+    #: pipe color to a node when it's selected.
+    HIGHLIGHT_COLOR = (232, 184, 13, 255)
+    #: draw connection as a line.
+    DRAW_TYPE_DEFAULT = 0
+    #: draw connection as dashed lines.
+    DRAW_TYPE_DASHED = 1
+    #: draw connection as a dotted line.
+    DRAW_TYPE_DOTTED = 2
+
+
+class PipeSlicerEnum(Enum):
+    """
+    Slicer Pipe styling layout:
+    :py:mod:`NodeGraphQt.constants.PipeSlicerEnum`
+    """
+    #: default width.
+    WIDTH = 1.5
+    #: default color.
+    COLOR = (255, 50, 75)
+
+
+class PipeLayoutEnum(Enum):
+    """
+    Pipe connection drawing layout:
+    :py:mod:`NodeGraphQt.constants.PipeLayoutEnum`
+    """
+    #: draw straight lines for pipe connections.
+    STRAIGHT = 0
+    #: draw curved lines for pipe connections.
+    CURVED = 1
+    #: draw angled lines for pipe connections.
+    ANGLE = 2
+
+
+# === PROPERTY BIN WIDGET ===
+
+#: Property type will hidden in the properties bin (default).
+NODE_PROP = 0
+#: Property type represented with a QLabel widget in the properties bin.
+NODE_PROP_QLABEL = 2
+#: Property type represented with a QLineEdit widget in the properties bin.
+NODE_PROP_QLINEEDIT = 3
+#: Property type represented with a QTextEdit widget in the properties bin.
+NODE_PROP_QTEXTEDIT = 4
+#: Property type represented with a QComboBox widget in the properties bin.
+NODE_PROP_QCOMBO = 5
+#: Property type represented with a QCheckBox widget in the properties bin.
+NODE_PROP_QCHECKBOX = 6
+#: Property type represented with a QSpinBox widget in the properties bin.
+NODE_PROP_QSPINBOX = 7
+#: Property type represented with a ColorPicker widget in the properties bin.
+NODE_PROP_COLORPICKER = 8
+#: Property type represented with a Slider widget in the properties bin.
+NODE_PROP_SLIDER = 9
+#: Property type represented with a file selector widget in the properties bin.
+NODE_PROP_FILE = 10
+#: Property type represented with a file save widget in the properties bin.
+NODE_PROP_FILE_SAVE = 11
+#: Property type represented with a vector2 widget in the properties bin.
+NODE_PROP_VECTOR2 = 12
+#: Property type represented with vector3 widget in the properties bin.
+NODE_PROP_VECTOR3 = 13
+#: Property type represented with vector4 widget in the properties bin.
+NODE_PROP_VECTOR4 = 14
+#: Property type represented with float widget in the properties bin.
+NODE_PROP_FLOAT = 15
+#: Property type represented with int widget in the properties bin.
+NODE_PROP_INT = 16
+#: Property type represented with button widget in the properties bin.
+NODE_PROP_BUTTON = 17
