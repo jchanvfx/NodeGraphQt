@@ -1,4 +1,4 @@
-Menu Examples
+Menu Overview
 #############
 
 Examples for customizing context menus in NodeGraphQt.

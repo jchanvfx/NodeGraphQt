@@ -4,21 +4,18 @@ import math
 from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
-    PIPE_DEFAULT_COLOR, PIPE_ACTIVE_COLOR,
-    PIPE_HIGHLIGHT_COLOR, PIPE_DISABLED_COLOR,
-    PIPE_STYLE_DASHED, PIPE_STYLE_DEFAULT, PIPE_STYLE_DOTTED,
-    PIPE_LAYOUT_STRAIGHT, PIPE_WIDTH, IN_PORT, OUT_PORT, Z_VAL_PIPE,
+    PipeEnum, PipeLayoutEnum, PortTypeEnum, Z_VAL_PIPE,
     Z_VAL_NODE_WIDGET,
-    PIPE_LAYOUT_ANGLE, PIPE_LAYOUT_CURVED,
     ITEM_CACHE_MODE,
     NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
-    NODE_LAYOUT_DIRECTION)
+    NODE_LAYOUT_DIRECTION
+)
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
-    PIPE_STYLE_DEFAULT: QtCore.Qt.SolidLine,
-    PIPE_STYLE_DASHED: QtCore.Qt.DashLine,
-    PIPE_STYLE_DOTTED: QtCore.Qt.DotLine
+    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.SolidLine,
+    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.DashLine,
+    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.DotLine
 }
 
 
@@ -32,8 +29,8 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
-        self._color = PIPE_DEFAULT_COLOR
-        self._style = PIPE_STYLE_DEFAULT
+        self._color = PipeEnum.COLOR.value
+        self._style = PipeEnum.DRAW_TYPE_DEFAULT.value
         self._active = False
         self._highlight = False
         self._input_port = input_port
@@ -76,22 +73,22 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         """
         color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
-        pen_width = PIPE_WIDTH
+        pen_width = PipeEnum.WIDTH.value
         if self._active:
-            color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
+            color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
             if pen_style == QtCore.Qt.DashDotDotLine:
                 pen_width += 1
             else:
                 pen_width += 0.35
         elif self._highlight:
-            color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
-            pen_style = PIPE_STYLES.get(PIPE_STYLE_DEFAULT)
+            color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
+            pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
 
         if self.disabled():
             if not self._active:
-                color = QtGui.QColor(*PIPE_DISABLED_COLOR)
+                color = QtGui.QColor(*PipeEnum.DISABLED_COLOR.value)
             pen_width += 0.2
-            pen_style = PIPE_STYLES.get(PIPE_STYLE_DOTTED)
+            pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DOTTED.value)
 
         pen = QtGui.QPen(color, pen_width, pen_style)
         pen.setCapStyle(QtCore.Qt.RoundCap)
@@ -154,13 +151,13 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             pos2 (QPointF): end port position.
             path (QPainterPath): path to draw.
         """
-        if self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
+        if self.viewer_pipe_layout() == PipeLayoutEnum.CURVED.value:
             ctr_offset_y1, ctr_offset_y2 = pos1.y(), pos2.y()
             tangent = abs(ctr_offset_y1 - ctr_offset_y2)
 
             max_height = start_port.node.boundingRect().height()
             tangent = min(tangent, max_height)
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PortTypeEnum.IN.value:
                 ctr_offset_y1 -= tangent
                 ctr_offset_y2 += tangent
             else:
@@ -171,10 +168,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             ctr_point2 = QtCore.QPointF(pos2.x(), ctr_offset_y2)
             path.cubicTo(ctr_point1, ctr_point2, pos2)
             self.setPath(path)
-        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
+        elif self.viewer_pipe_layout() == PipeLayoutEnum.ANGLE.value:
             ctr_offset_y1, ctr_offset_y2 = pos1.y(), pos2.y()
             distance = abs(ctr_offset_y1 - ctr_offset_y2)/2
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PortTypeEnum.IN.value:
                 ctr_offset_y1 -= distance
                 ctr_offset_y2 += distance
             else:
@@ -198,13 +195,13 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             pos2 (QPointF): end port position.
             path (QPainterPath): path to draw.
         """
-        if self.viewer_pipe_layout() == PIPE_LAYOUT_CURVED:
+        if self.viewer_pipe_layout() == PipeLayoutEnum.CURVED.value:
             ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
             tangent = abs(ctr_offset_x1 - ctr_offset_x2)
 
             max_width = start_port.node.boundingRect().width()
             tangent = min(tangent, max_width)
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PortTypeEnum.IN.value:
                 ctr_offset_x1 -= tangent
                 ctr_offset_x2 += tangent
             else:
@@ -215,10 +212,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             ctr_point2 = QtCore.QPointF(ctr_offset_x2, pos2.y())
             path.cubicTo(ctr_point1, ctr_point2, pos2)
             self.setPath(path)
-        elif self.viewer_pipe_layout() == PIPE_LAYOUT_ANGLE:
+        elif self.viewer_pipe_layout() == PipeLayoutEnum.ANGLE.value:
             ctr_offset_x1, ctr_offset_x2 = pos1.x(), pos2.x()
             distance = abs(ctr_offset_x1 - ctr_offset_x2) / 2
-            if start_port.port_type == IN_PORT:
+            if start_port.port_type == PortTypeEnum.IN.value:
                 ctr_offset_x1 -= distance
                 ctr_offset_x2 += distance
             else:
@@ -260,7 +257,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         path = QtGui.QPainterPath()
         path.moveTo(line.x1(), line.y1())
 
-        if self.viewer_pipe_layout() == PIPE_LAYOUT_STRAIGHT:
+        if self.viewer_pipe_layout() == PipeLayoutEnum.STRAIGHT.value:
             path.lineTo(pos2)
             self.setPath(path)
             return
@@ -298,8 +295,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
     def activate(self):
         self._active = True
-        color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
-        pen = QtGui.QPen(color, 2.5, PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
+        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+        pen = QtGui.QPen(
+            color, 2.5, PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
+        )
         self.setPen(pen)
 
     def active(self):
@@ -307,8 +306,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
     def highlight(self):
         self._highlight = True
-        color = QtGui.QColor(*PIPE_HIGHLIGHT_COLOR)
-        pen = QtGui.QPen(color, 2, PIPE_STYLES.get(PIPE_STYLE_DEFAULT))
+        color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
+        pen = QtGui.QPen(
+            color, 2, PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
+        )
         self.setPen(pen)
 
     def highlighted(self):
@@ -326,10 +327,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             port1.port_type: port1,
             port2.port_type: port2
         }
-        self.input_port = ports[IN_PORT]
-        self.output_port = ports[OUT_PORT]
-        ports[IN_PORT].add_pipe(self)
-        ports[OUT_PORT].add_pipe(self)
+        self.input_port = ports[PortTypeEnum.IN.value]
+        self.output_port = ports[PortTypeEnum.OUT.value]
+        ports[PortTypeEnum.IN.value].add_pipe(self)
+        ports[PortTypeEnum.OUT.value].add_pipe(self)
 
     def disabled(self):
         if self.input_port and self.input_port.node.disabled:
@@ -409,9 +410,9 @@ class LivePipeItem(PipeItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
-        color = QtGui.QColor(*PIPE_ACTIVE_COLOR)
-        pen_style = PIPE_STYLES.get(PIPE_STYLE_DASHED)
-        pen_width = PIPE_WIDTH + 0.35
+        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+        pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DASHED.value)
+        pen_width = PipeEnum.WIDTH.value + 0.35
 
         pen = QtGui.QPen(color, pen_width)
         pen.setStyle(pen_style)

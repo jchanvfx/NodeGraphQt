@@ -1,20 +1,16 @@
 #!/usr/bin/python
 from qtpy import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (VIEWER_BG_COLOR,
-                                   VIEWER_GRID_SIZE,
-                                   VIEWER_GRID_COLOR,
-                                   VIEWER_GRID_DOTS,
-                                   VIEWER_GRID_LINES)
+from NodeGraphQt.constants import ViewerEnum
 
 
 class NodeScene(QtWidgets.QGraphicsScene):
 
     def __init__(self, parent=None):
         super(NodeScene, self).__init__(parent)
-        self._grid_mode = VIEWER_GRID_LINES
-        self._grid_color = VIEWER_GRID_COLOR
-        self._bg_color = VIEWER_BG_COLOR
+        self._grid_mode = ViewerEnum.GRID_DISPLAY_LINES.value
+        self._grid_color = ViewerEnum.GRID_COLOR.value
+        self._bg_color = ViewerEnum.BACKGROUND_COLOR.value
         self.setBackgroundBrush(QtGui.QColor(*self._bg_color))
 
     def __repr__(self):
@@ -98,21 +94,25 @@ class NodeScene(QtWidgets.QGraphicsScene):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
         painter.setBrush(self.backgroundBrush())
 
-        if self._grid_mode is VIEWER_GRID_DOTS:
+        if self._grid_mode is ViewerEnum.GRID_DISPLAY_DOTS.value:
             pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
-            self._draw_dots(painter, rect, pen, VIEWER_GRID_SIZE)
+            self._draw_dots(painter, rect, pen, ViewerEnum.GRID_SIZE.value)
 
-        elif self._grid_mode is VIEWER_GRID_LINES:
+        elif self._grid_mode is ViewerEnum.GRID_DISPLAY_LINES.value:
             zoom = self.viewer().get_zoom()
             if zoom > -0.5:
                 pen = QtGui.QPen(QtGui.QColor(*self.grid_color), 0.65)
-                self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE)
+                self._draw_grid(
+                    painter, rect, pen, ViewerEnum.GRID_SIZE.value
+                )
 
             color = QtGui.QColor(*self._bg_color).darker(150)
             if zoom < -0.0:
                 color = color.darker(100 - int(zoom * 110))
             pen = QtGui.QPen(color, 0.65)
-            self._draw_grid(painter, rect, pen, VIEWER_GRID_SIZE * 8)
+            self._draw_grid(
+                painter, rect, pen, ViewerEnum.GRID_SIZE.value * 8
+            )
 
         painter.restore()
 
@@ -148,7 +148,9 @@ class NodeScene(QtWidgets.QGraphicsScene):
         return self._grid_mode
 
     @grid_mode.setter
-    def grid_mode(self, mode=VIEWER_GRID_LINES):
+    def grid_mode(self, mode=None):
+        if mode is None:
+            mode = ViewerEnum.GRID_DISPLAY_LINES.value
         self._grid_mode = mode
 
     @property

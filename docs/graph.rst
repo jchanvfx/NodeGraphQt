@@ -4,7 +4,7 @@ Graphs
 NodeGraph
 *********
 
-`See` :ref:`Simple Example` `from the NodeGraph overview.`
+`See` :ref:`Getting Started` `from the overview section.`
 
 ----
 
