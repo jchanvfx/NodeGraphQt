@@ -26,12 +26,14 @@ class PortInputNode(BaseNode):
 
     NODE_NAME = 'InputPort'
 
-    def __init__(self, qgraphics_views=None, parent_port=None):
+    def __init__(self, qgraphics_views=None, parent_port=None,
+                 node_layout_direction=None):
         qgraphics_views = qgraphics_views or {
             NODE_LAYOUT_HORIZONTAL: PortInputNodeItem,
             NODE_LAYOUT_VERTICAL: PortInputNodeVerticalItem
         }
-        super(PortInputNode, self).__init__(qgraphics_views)
+        super(PortInputNode, self).__init__(qgraphics_views=qgraphics_views,
+                                            node_layout_direction=node_layout_direction)
         self._parent_port = parent_port
 
     @property
@@ -87,12 +89,14 @@ class PortOutputNode(BaseNode):
 
     NODE_NAME = 'OutputPort'
 
-    def __init__(self, qgraphics_views=None, parent_port=None):
+    def __init__(self, qgraphics_views=None, parent_port=None,
+                 node_layout_direction=None):
         qgraphics_views = qgraphics_views or {
             NODE_LAYOUT_HORIZONTAL: PortOutputNodeItem,
             NODE_LAYOUT_VERTICAL: PortOutputNodeVerticalItem
         }
-        super(PortOutputNode, self).__init__(qgraphics_views)
+        super(PortOutputNode, self).__init__(qgraphics_views=qgraphics_views,
+                                             node_layout_direction=node_layout_direction)
         self._parent_port = parent_port
 
     @property

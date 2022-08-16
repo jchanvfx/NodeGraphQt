@@ -45,7 +45,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
-    def __init__(self, parent=None, undo_stack=None):
+    def __init__(self, parent=None, undo_stack=None, node_layout_direction=None):
         """
         Args:
             parent:
@@ -65,6 +65,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
+        self._node_layout_direction = node_layout_direction
 
         self._scene_range = QtCore.QRectF(
             0, 0, self.size().width(), self.size().height())
@@ -853,7 +854,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         establish a new pipe connection.
         (adds a new pipe item to draw between 2 ports)
         """
-        pipe = PipeItem()
+        pipe = PipeItem(node_layout_direction=self._node_layout_direction)
         self.scene().addItem(pipe)
         pipe.set_connections(start_port, end_port)
         pipe.draw_path(pipe.input_port, pipe.output_port)

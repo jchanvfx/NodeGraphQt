@@ -17,7 +17,7 @@ from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import (
-    NODE_LAYOUT_DIRECTION, NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
+    NODE_LAYOUT_HORIZONTAL, NODE_LAYOUT_VERTICAL,
     PipeLayoutEnum,
     URI_SCHEME, URN_SCHEME,
     PortTypeEnum,
@@ -127,7 +127,8 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('model') or NodeGraphModel())
         self._node_factory = (
             kwargs.get('node_factory') or NodeFactory())
-
+        self._node_layout_direction = kwargs.get('node_layout_direction',
+                                                 None)
         self._undo_view = None
         self._undo_stack = (
             kwargs.get('undo_stack') or QtWidgets.QUndoStack(self))
@@ -137,7 +138,7 @@ class NodeGraph(QtCore.QObject):
         self._sub_graphs = {}
 
         self._viewer = (
-            kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
+            kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack, node_layout_direction=self._node_layout_direction))
 
         self._build_context_menu()
         self._register_builtin_nodes()
@@ -889,7 +890,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             BaseNode: the created instance of the node.
         """
-        node = self._node_factory.create_node_instance(node_type)
+        node = self._node_factory.create_node_instance(node_type, node_layout_direction=self._node_layout_direction)
         if node:
             node._graph = self
             node.model._graph_model = self.model
@@ -1672,7 +1673,7 @@ class NodeGraph(QtCore.QObject):
             else:
                 rank_map[rank] = [node]
 
-        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+        if self._node_layout_direction is NODE_LAYOUT_HORIZONTAL:
             current_x = 0
             node_height = 120
             for rank in sorted(range(len(rank_map)), reverse=not down_stream):
@@ -1687,7 +1688,7 @@ class NodeGraph(QtCore.QObject):
                     current_y += dy * 0.5 + 10
 
                 current_x += max_width * 0.5 + 100
-        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+        elif self._node_layout_direction is NODE_LAYOUT_VERTICAL:
             current_y = 0
             node_width = 250
             for rank in sorted(range(len(rank_map)), reverse=not down_stream):
@@ -1965,9 +1966,9 @@ class SubGraph(NodeGraph):
                 input_nodes[port.name()] = input_node
                 self.add_node(input_node, selected=False, push_undo=False)
                 x, y = input_node.pos()
-                if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+                if self._node_layout_direction is NODE_LAYOUT_HORIZONTAL:
                     x -= 100
-                elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+                elif self._node_layout_direction is NODE_LAYOUT_VERTICAL:
                     y -= 100
                 input_node.set_property('pos', [x, y], push_undo=False)
 
@@ -1983,9 +1984,9 @@ class SubGraph(NodeGraph):
                 output_nodes[port.name()] = output_node
                 self.add_node(output_node, selected=False, push_undo=False)
                 x, y = output_node.pos()
-                if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+                if self._node_layout_direction is NODE_LAYOUT_HORIZONTAL:
                     x += 100
-                elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+                elif self._node_layout_direction is NODE_LAYOUT_VERTICAL:
                     y += 100
                 output_node.set_property('pos', [x, y], push_undo=False)
 

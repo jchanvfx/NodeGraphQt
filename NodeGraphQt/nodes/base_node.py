@@ -57,12 +57,13 @@ class BaseNode(NodeObject):
 
     NODE_NAME = 'Node'
 
-    def __init__(self, qgraphics_views=None):
+    def __init__(self, qgraphics_views=None, node_layout_direction=None):
         qgraphics_views = qgraphics_views or {
             NODE_LAYOUT_HORIZONTAL: NodeItem,
             NODE_LAYOUT_VERTICAL: NodeItemVertical
         }
-        super(BaseNode, self).__init__(qgraphics_views)
+        super(BaseNode, self).__init__(qgraphics_views=qgraphics_views,
+                                       node_layout_direction=node_layout_direction)
         self._inputs = []
         self._outputs = []
 

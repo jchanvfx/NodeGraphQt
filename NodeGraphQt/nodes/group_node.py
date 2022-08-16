@@ -24,12 +24,13 @@ class GroupNode(BaseNode):
 
     NODE_NAME = 'Group'
 
-    def __init__(self, qgraphics_views=None):
+    def __init__(self, qgraphics_views=None, node_layout_direction=None):
         qgraphics_views = qgraphics_views or {
             NODE_LAYOUT_HORIZONTAL: GroupNodeItem,
             NODE_LAYOUT_VERTICAL: GroupNodeVerticalItem
         }
-        super(GroupNode, self).__init__(qgraphics_views)
+        super(GroupNode, self).__init__(qgraphics_views=qgraphics_views,
+                                        node_layout_direction=node_layout_direction)
         self._input_port_nodes = {}
         self._output_port_nodes = {}
 

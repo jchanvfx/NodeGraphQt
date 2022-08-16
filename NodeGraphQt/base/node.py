@@ -51,16 +51,17 @@ class NodeObject(object):
     # Base node name.
     NODE_NAME = None
 
-    def __init__(self, qgraphics_views=None):
+    def __init__(self, qgraphics_views=None, node_layout_direction=None):
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
-
         _NodeItem = None
-        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+        if node_layout_direction is None:
+            node_layout_direction = NODE_LAYOUT_DIRECTION
+        if node_layout_direction is NODE_LAYOUT_VERTICAL:
             _NodeItem = qgraphics_views.get(NODE_LAYOUT_VERTICAL)
-        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+        elif node_layout_direction is NODE_LAYOUT_HORIZONTAL:
             _NodeItem = qgraphics_views.get(NODE_LAYOUT_HORIZONTAL)
 
         if _NodeItem is None:
@@ -68,7 +69,7 @@ class NodeObject(object):
                 'qgraphics item for the {} node layout can\'t be None!'.format({
                     NODE_LAYOUT_VERTICAL: 'vertical',
                     NODE_LAYOUT_HORIZONTAL: 'horizontal'
-                }[NODE_LAYOUT_DIRECTION]))
+                }[node_layout_direction]))
 
         self._view = _NodeItem()
         self._view.type_ = self.type_

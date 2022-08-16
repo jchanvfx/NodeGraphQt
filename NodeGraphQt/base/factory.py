@@ -42,7 +42,7 @@ class NodeFactory(object):
         """
         return self.__nodes
 
-    def create_node_instance(self, node_type=None):
+    def create_node_instance(self, node_type=None, node_layout_direction=None):
         """
         create node object by the node type identifier or alias.
 
@@ -58,7 +58,7 @@ class NodeFactory(object):
         _NodeClass = self.__nodes.get(node_type)
         if not _NodeClass:
             print('can\'t find node type {}'.format(node_type))
-        return _NodeClass()
+        return _NodeClass(node_layout_direction=node_layout_direction)
 
     def register_node(self, node, alias=None):
         """

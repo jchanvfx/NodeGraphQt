@@ -6,9 +6,8 @@ from Qt import QtCore, QtGui, QtWidgets
 from NodeGraphQt.constants import (
     PipeEnum, PipeLayoutEnum, PortTypeEnum, Z_VAL_PIPE,
     Z_VAL_NODE_WIDGET,
-    ITEM_CACHE_MODE,
-    NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL,
-    NODE_LAYOUT_DIRECTION
+    ITEM_CACHE_MODE, NODE_LAYOUT_DIRECTION,
+    NODE_LAYOUT_VERTICAL, NODE_LAYOUT_HORIZONTAL
 )
 from NodeGraphQt.qgraphics.port import PortItem
 
@@ -24,13 +23,15 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
     Base Pipe item used for drawing node connections.
     """
 
-    def __init__(self, input_port=None, output_port=None):
+    def __init__(self, input_port=None, output_port=None,
+                 node_layout_direction=None):
         super(PipeItem, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
         self._color = PipeEnum.COLOR.value
         self._style = PipeEnum.DRAW_TYPE_DEFAULT.value
+
         self._active = False
         self._highlight = False
         self._input_port = input_port
@@ -41,6 +42,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
         self._arrow.append(QtCore.QPointF(size, size))
         self.setCacheMode(ITEM_CACHE_MODE)
+
+        if node_layout_direction is None:
+            node_layout_direction = NODE_LAYOUT_DIRECTION
+        self._node_layout_direction = node_layout_direction
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
@@ -262,9 +267,9 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             self.setPath(path)
             return
         else:
-            if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
+            if self._node_layout_direction is NODE_LAYOUT_VERTICAL:
                 self.__draw_path_vertical(start_port, pos1, pos2, path)
-            elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
+            elif self._node_layout_direction is NODE_LAYOUT_HORIZONTAL:
                 self.__draw_path_horizontal(start_port, pos1, pos2, path)
 
     def reset_path(self):
