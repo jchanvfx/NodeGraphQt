@@ -58,15 +58,10 @@ class LayoutDirectionEnum(Enum):
     Node graph nodes layout direction:
     :py:mod:`NodeGraphQt.constants.ViewerLayoutEnum`
     """
-    #: layout nodes top to bottom.
-    VERTICAL = 0
     #: layout nodes left to right.
-    HORIZONTAL = 1
-
-
-#: Variable for setting the node layout direction.
-# NODE_LAYOUT_DIRECTION = LayoutDirectionEnum.VERTICAL.value
-NODE_LAYOUT_DIRECTION = LayoutDirectionEnum.HORIZONTAL.value
+    HORIZONTAL = 0
+    #: layout nodes top to bottom.
+    VERTICAL = 1
 
 
 # =================================== VIEWER ===================================

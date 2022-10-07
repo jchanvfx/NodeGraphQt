@@ -4,12 +4,13 @@ import math
 from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
-    PipeEnum, PipeLayoutEnum, PortTypeEnum, Z_VAL_PIPE,
-    Z_VAL_NODE_WIDGET,
+    LayoutDirectionEnum,
+    PipeEnum,
+    PipeLayoutEnum,
+    PortTypeEnum,
     ITEM_CACHE_MODE,
-    NODE_LAYOUT_VERTICAL,
-    NODE_LAYOUT_HORIZONTAL,
-    NODE_LAYOUT_DIRECTION
+    Z_VAL_PIPE,
+    Z_VAL_NODE_WIDGET
 )
 from NodeGraphQt.qgraphics.port import PortItem
 
@@ -262,11 +263,11 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             path.lineTo(pos2)
             self.setPath(path)
             return
-        else:
-            if self.viewer_layout_direction() is NODE_LAYOUT_VERTICAL:
-                self.__draw_path_vertical(start_port, pos1, pos2, path)
-            elif self.viewer_layout_direction() is NODE_LAYOUT_HORIZONTAL:
-                self.__draw_path_horizontal(start_port, pos1, pos2, path)
+
+        if self.viewer_layout_direction() is LayoutDirectionEnum.VERTICAL.value:
+            self.__draw_path_vertical(start_port, pos1, pos2, path)
+        elif self.viewer_layout_direction() is LayoutDirectionEnum.HORIZONTAL.value:
+            self.__draw_path_horizontal(start_port, pos1, pos2, path)
 
     def reset_path(self):
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))

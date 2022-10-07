@@ -17,18 +17,7 @@ class GroupNodeItem(NodeItem):
     def __init__(self, name='group', parent=None):
         super(GroupNodeItem, self).__init__(name, parent)
 
-    def paint(self, painter, option, widget):
-        """
-        Draws the node base not the ports or text.
-
-        Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
-        """
-        self.auto_switch_mode()
-
+    def _paint_horizontal(self, painter, option, widget):
         painter.save()
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(QtCore.Qt.NoPen)
@@ -106,109 +95,7 @@ class GroupNodeItem(NodeItem):
 
         painter.restore()
 
-    def align_ports(self, v_offset=0.0):
-        """
-        Align input, output ports in the node layout.
-
-        Args:
-            v_offset (float): port vertical offset.
-        """
-        width = self._width
-        txt_offset = PortEnum.CLICK_FALLOFF.value - 2
-        spacing = 1
-
-        # adjust input position
-        inputs = [p for p in self.inputs if p.isVisible()]
-        if inputs:
-            port_width = inputs[0].boundingRect().width()
-            port_height = inputs[0].boundingRect().height()
-            port_x = port_width / 2 * -1
-            port_x += 3.0
-            port_y = v_offset
-            for port in inputs:
-                port.setPos(port_x, port_y)
-                port_y += port_height + spacing
-        # adjust input text position
-        for port, text in self._input_items.items():
-            if port.isVisible():
-                txt_x = port.boundingRect().width() / 2 - txt_offset
-                txt_x += 3.0
-                text.setPos(txt_x, port.y() - 1.5)
-
-        # adjust output position
-        outputs = [p for p in self.outputs if p.isVisible()]
-        if outputs:
-            port_width = outputs[0].boundingRect().width()
-            port_height = outputs[0].boundingRect().height()
-            port_x = width - (port_width / 2)
-            port_x -= 9.0
-            port_y = v_offset
-            for port in outputs:
-                port.setPos(port_x, port_y)
-                port_y += port_height + spacing
-        # adjust output text position
-        for port, text in self._output_items.items():
-            if port.isVisible():
-                txt_width = text.boundingRect().width() - txt_offset
-                txt_x = port.x() - txt_width
-                text.setPos(txt_x, port.y() - 1.5)
-
-    def draw_node(self):
-        """
-        Re-draw the node item in the scene.
-        (re-implemented for vertical layout design)
-        """
-        height = self._text_item.boundingRect().height()
-
-        # setup initial base size.
-        self._set_base_size(add_w=8.0, add_h=height + 10)
-        # set text color when node is initialized.
-        self._set_text_color(self.text_color)
-        # set the tooltip
-        self._tooltip_disable(self.disabled)
-
-        # --- set the initial node layout ---
-        # (do all the graphic item layout offsets here)
-
-        # align label text
-        self.align_label()
-        # arrange icon
-        self.align_icon(h_offset=2.0, v_offset=3.0)
-        # arrange input and output ports.
-        self.align_ports(v_offset=height)
-        # arrange node widgets
-        self.align_widgets(v_offset=height)
-
-        self.update()
-
-
-class GroupNodeVerticalItem(NodeItem):
-    """
-    Vertical Group Node item.
-
-    Args:
-        name (str): name displayed on the node.
-        parent (QtWidgets.QGraphicsItem): parent item.
-    """
-
-    def __init__(self, name='group', parent=None):
-        super(GroupNodeVerticalItem, self).__init__(name, parent)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.text_item.setFont(font)
-
-    def paint(self, painter, option, widget):
-        """
-        Draws the node base not the ports or text.
-
-        Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
-        """
-        self.auto_switch_mode()
-
+    def _paint_vertical(self, painter, option, widget):
         painter.save()
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.setPen(QtCore.Qt.NoPen)
@@ -284,38 +171,65 @@ class GroupNodeVerticalItem(NodeItem):
         painter.drawRect(rect_2)
 
         painter.restore()
-
-    def align_icon(self, h_offset=0.0, v_offset=0.0):
-        """
-        Align node icon to the default top left of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
+        
+    def _align_icon_horizontal(self, h_offset, v_offset):
+        super(GroupNodeItem, self)._align_icon_horizontal(h_offset, v_offset)
+        
+    def _align_icon_vertical(self, h_offset, v_offset):
         y = self._height / 2
         y -= self._icon_item.boundingRect().height()
         self._icon_item.setPos(self._width + h_offset, y + v_offset)
 
-    def align_label(self, h_offset=0.0, v_offset=0.0):
-        """
-        Center node label text to the top of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
+    def _align_label_horizontal(self, h_offset, v_offset):
+        super(GroupNodeItem, self)._align_label_horizontal(h_offset, v_offset)
+        
+    def _align_label_vertical(self, h_offset, v_offset):
         y = self._height / 2
         y -= self.text_item.boundingRect().height() / 2
         self._text_item.setPos(self._width + h_offset, y + v_offset)
 
-    def align_ports(self, v_offset=0.0):
-        """
-        Align input, output ports in the node layout.
+    def _align_ports_horizontal(self, v_offset):
+        width = self._width
+        txt_offset = PortEnum.CLICK_FALLOFF.value - 2
+        spacing = 1
 
-        Args:
-            v_offset (float): port vertical offset.
-        """
+        # adjust input position
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            port_x = port_width / 2 * -1
+            port_x += 3.0
+            port_y = v_offset
+            for port in inputs:
+                port.setPos(port_x, port_y)
+                port_y += port_height + spacing
+        # adjust input text position
+        for port, text in self._input_items.items():
+            if port.isVisible():
+                txt_x = port.boundingRect().width() / 2 - txt_offset
+                txt_x += 3.0
+                text.setPos(txt_x, port.y() - 1.5)
+
+        # adjust output position
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            port_x = width - (port_width / 2)
+            port_x -= 9.0
+            port_y = v_offset
+            for port in outputs:
+                port.setPos(port_x, port_y)
+                port_y += port_height + spacing
+        # adjust output text position
+        for port, text in self._output_items.items():
+            if port.isVisible():
+                txt_width = text.boundingRect().width() - txt_offset
+                txt_x = port.x() - txt_width
+                text.setPos(txt_x, port.y() - 1.5)
+
+    def _align_ports_vertical(self, v_offset):
         # adjust input position
         inputs = [p for p in self.inputs if p.isVisible()]
         if inputs:
@@ -342,12 +256,44 @@ class GroupNodeVerticalItem(NodeItem):
                 port.setPos(port_x - half_width, port_y)
                 port_x += delta
 
-    def draw_node(self):
-        """
-        Re-draw the node item in the scene.
-        (re-implemented for vertical layout design)
-        """
+    def _draw_node_horizontal(self):
         height = self._text_item.boundingRect().height()
+
+        # update port text items in visibility.
+        for port, text in self._input_items.items():
+            text.setVisible(port.display_name)
+        for port, text in self._output_items.items():
+            text.setVisible(port.display_name)
+
+        # setup initial base size.
+        self._set_base_size(add_w=8.0, add_h=height + 10)
+        # set text color when node is initialized.
+        self._set_text_color(self.text_color)
+        # set the tooltip
+        self._tooltip_disable(self.disabled)
+
+        # --- set the initial node layout ---
+        # (do all the graphic item layout offsets here)
+
+        # align label text
+        self.align_label()
+        # arrange icon
+        self.align_icon(h_offset=2.0, v_offset=3.0)
+        # arrange input and output ports.
+        self.align_ports(v_offset=height)
+        # arrange node widgets
+        self.align_widgets(v_offset=height)
+
+        self.update()
+
+    def _draw_node_vertical(self):
+        height = self._text_item.boundingRect().height()
+
+        # hide the port text items in vertical layout.
+        for port, text in self._input_items.items():
+            text.setVisible(False)
+        for port, text in self._output_items.items():
+            text.setVisible(False)
 
         # setup initial base size.
         self._set_base_size(add_w=8.0)
@@ -369,41 +315,3 @@ class GroupNodeVerticalItem(NodeItem):
         self.align_widgets(v_offset=height / 2)
 
         self.update()
-
-    def add_input(self, name='input', multi_port=False, display_name=True,
-                  locked=False, painter_func=None):
-        """
-        Adds a port qgraphics item into the node with the "port_type" set as
-        IN_PORT
-
-        Args:
-            name (str): name for the port.
-            multi_port (bool): allow multiple connections.
-            display_name (bool): (not used).
-            locked (bool): locked state.
-            painter_func (function): custom paint function.
-
-        Returns:
-            PortItem: port qgraphics item.
-        """
-        return super(GroupNodeVerticalItem, self).add_input(
-            name, multi_port, False, locked, painter_func)
-
-    def add_output(self, name='output', multi_port=False, display_name=True,
-                   locked=False, painter_func=None):
-        """
-        Adds a port qgraphics item into the node with the "port_type" set as
-        OUT_PORT
-
-        Args:
-            name (str): name for the port.
-            multi_port (bool): allow multiple connections.
-            display_name (bool): (not used).
-            locked (bool): locked state.
-            painter_func (function): custom paint function.
-
-        Returns:
-            PortItem: port qgraphics item.
-        """
-        return super(GroupNodeVerticalItem, self).add_output(
-            name, multi_port, False, locked, painter_func)
