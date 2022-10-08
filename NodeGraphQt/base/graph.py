@@ -126,6 +126,15 @@ class NodeGraph(QtCore.QObject):
         self.setObjectName('NodeGraph')
         self._model = (
             kwargs.get('model') or NodeGraphModel())
+
+        layout_direction = kwargs.get('layout_direction')
+        if layout_direction:
+            if layout_direction not in [e.value for e in LayoutDirectionEnum]:
+                layout_direction = LayoutDirectionEnum.HORIZONTAL.value
+            self._model.layout_direction = layout_direction
+        else:
+            layout_direction = self._model.layout_direction
+
         self._node_factory = (
             kwargs.get('node_factory') or NodeFactory())
 
@@ -139,6 +148,7 @@ class NodeGraph(QtCore.QObject):
 
         self._viewer = (
             kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
+        self._viewer.set_layout_direction(layout_direction)
 
         self._build_context_menu()
         self._register_builtin_nodes()
@@ -801,6 +811,8 @@ class NodeGraph(QtCore.QObject):
         Sets the node graph layout direction to horizontal or vertical.
         This function will also override the layout direction on all
         nodes in the current node graph.
+
+        `Implemented in` ``v0.3.0``
 
         Note:
             By default node graph direction is set to "NODE_LAYOUT_HORIZONTAL".
@@ -1906,7 +1918,11 @@ class NodeGraph(QtCore.QObject):
 
         # build new sub graph.
         node_factory = copy.deepcopy(self.node_factory)
-        sub_graph = SubGraph(self, node=node, node_factory=node_factory)
+        layout_direction = self.layout_direction()
+        sub_graph = SubGraph(self,
+                             node=node,
+                             node_factory=node_factory,
+                             layout_direction=layout_direction)
 
         # populate the sub graph.
         session = node.get_sub_graph_session()
@@ -1958,14 +1974,17 @@ class SubGraph(NodeGraph):
     -
     """
 
-    def __init__(self, parent=None, node=None, node_factory=None):
+    def __init__(self, parent=None, node=None, node_factory=None, **kwargs):
         """
         Args:
             parent (object): object parent.
             node (GroupNode): group node related to this sub graph.
             node_factory (NodeFactory): override node factory.
+            **kwargs (dict): additional kwargs.
         """
-        super(SubGraph, self).__init__(parent, node_factory=node_factory)
+        super(SubGraph, self).__init__(
+            parent, node_factory=node_factory, **kwargs
+        )
 
         # sub graph attributes.
         self._node = node
@@ -2329,7 +2348,10 @@ class SubGraph(NodeGraph):
 
         # build new sub graph.
         node_factory = copy.deepcopy(self.node_factory)
-        sub_graph = SubGraph(self, node=node, node_factory=node_factory)
+        sub_graph = SubGraph(self,
+                             node=node,
+                             node_factory=node_factory,
+                             layout_direction=self.layout_direction())
 
         # populate the sub graph.
         serialized_session = node.get_sub_graph_session()

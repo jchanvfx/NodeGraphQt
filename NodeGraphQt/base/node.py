@@ -474,6 +474,8 @@ class NodeObject(object):
         """
         Sets the node layout direction to either horizontal or vertical.
 
+        `Implemented in` ``v0.3.0``
+
         Note:
             This function does not register to the undo stack.
 
@@ -482,3 +484,4 @@ class NodeObject(object):
         """
         self.model.layout_direction = value
         self.view.layout_direction = value
+

@@ -3,8 +3,7 @@ from collections import OrderedDict
 
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (LayoutDirectionEnum,
-                                   NODE_PROP_QLABEL,
+from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
@@ -76,6 +75,8 @@ class BaseNode(NodeObject):
     def set_layout_direction(self, value=0):
         """
         Sets the node layout direction to either horizontal or vertical.
+
+        `Implemented in` ``v0.3.0``
 
         Note:
             This function does not register to the undo stack.

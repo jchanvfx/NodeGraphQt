@@ -56,13 +56,13 @@ def build_context_menu(graph):
     graph_menu = context_menu.add_menu('&Graph')
 
     bg_menu = graph_menu.add_menu('&Background')
-    bg_menu.add_command('None', _bg_grid_none)
-    bg_menu.add_command('Lines', _bg_grid_lines)
-    bg_menu.add_command('Dots', _bg_grid_dots)
+    bg_menu.add_command('None', _bg_grid_none, 'Alt+1')
+    bg_menu.add_command('Lines', _bg_grid_lines, 'Alt+2')
+    bg_menu.add_command('Dots', _bg_grid_dots, 'Alt+3')
 
     layout_menu = graph_menu.add_menu('&Layout')
-    layout_menu.add_command('Horizontal', _layout_h_mode)
-    layout_menu.add_command('Vertical', _layout_v_mode)
+    layout_menu.add_command('Horizontal', _layout_h_mode, 'Shift+1')
+    layout_menu.add_command('Vertical', _layout_v_mode, 'Shift+2')
 
     # "Node" menu.
     # --------------------------------------------------------------------------

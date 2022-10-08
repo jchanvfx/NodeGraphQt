@@ -188,7 +188,7 @@ class PortInputNodeItem(NodeItem):
     def _align_label_vertical(self, h_offset, v_offset):
         rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
-        x = rect.center().x() - (text_rect.width() / 2)
+        x = rect.center().x() - (text_rect.width() / 1.5) - 2.0
         y = rect.center().y() - text_rect.height() - 2.0
         self._text_item.setPos(x + h_offset, y + v_offset)
 
@@ -202,7 +202,7 @@ class PortInputNodeItem(NodeItem):
                 if ports:
                     v_offset -= ports[0].boundingRect().height() / 2
                     break
-        super(PortInputNodeItem, self).align_ports(v_offset=v_offset)
+        super(PortInputNodeItem, self)._align_ports_horizontal(v_offset)
 
     def _align_ports_vertical(self, v_offset):
         super(PortInputNodeItem, self)._align_ports_vertical(v_offset)
