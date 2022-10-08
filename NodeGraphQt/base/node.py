@@ -463,7 +463,10 @@ class NodeObject(object):
 
     def layout_direction(self):
         """
-        Returns the current node layout direction.
+        Returns layout direction for this node.
+
+        See Also:
+            :meth:`NodeObject.set_layout_direction`
 
         Returns:
             int: node layout direction.
@@ -472,11 +475,16 @@ class NodeObject(object):
 
     def set_layout_direction(self, value=0):
         """
-        Sets the node layout direction to either horizontal or vertical.
+        Sets the node layout direction to either horizontal or vertical on
+        the current node only.
 
         `Implemented in` ``v0.3.0``
 
-        Note:
+        See Also:
+            :meth:`NodeGraph.set_layout_direction`
+            :meth:`NodeObject.layout_direction`
+
+        Warnings:
             This function does not register to the undo stack.
 
         Args:

@@ -801,6 +801,11 @@ class NodeGraph(QtCore.QObject):
         """
         Return the current node graph layout direction.
 
+        `Implemented in` ``v0.3.0``
+
+        See Also:
+            :meth:`NodeGraph.set_layout_direction`
+
         Returns:
             int: layout direction.
         """
@@ -814,13 +819,20 @@ class NodeGraph(QtCore.QObject):
 
         `Implemented in` ``v0.3.0``
 
+        See Also:
+            :meth:`NodeGraph.layout_direction`,
+            :meth:`NodeObject.set_layout_direction`
+
         Note:
-            By default node graph direction is set to "NODE_LAYOUT_HORIZONTAL".
+            By default node graph direction is set to horizontal.
 
             Node Graph Layout Types:
 
-            * :attr:`NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL`
-            * :attr:`NodeGraphQt.constants.NODE_LAYOUT_VERTICAL`
+            * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
+            * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL`
+
+        Warnings:
+            This function does not register to the undo stack.
 
         Args:
             direction (int): layout direction.
@@ -900,7 +912,7 @@ class NodeGraph(QtCore.QObject):
         Register the node to the :meth:`NodeGraph.node_factory`
 
         Args:
-            node (_NodeGraphQt.NodeObject): node object.
+            node (NodeGraphQt.NodeObject): node object.
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
