@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NodeGraphQt 0.2.2 documentation</title>
+  <title>Index &mdash; NodeGraphQt 0.3.0 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -404,8 +404,6 @@
 </li>
       <li><a href="nodes/Port.html#NodeGraphQt.Port.disconnect_from">disconnect_from() (NodeGraphQt.Port method)</a>
 </li>
-      <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.draw">draw() (NodeGraphQt.BaseNode method)</a>
-</li>
       <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DASHED">DRAW_TYPE_DASHED (NodeGraphQt.constants.PipeEnum attribute)</a>
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DEFAULT">DRAW_TYPE_DEFAULT (NodeGraphQt.constants.PipeEnum attribute)</a>
@@ -526,9 +524,11 @@
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.NodeEnum.HEIGHT">HEIGHT (NodeGraphQt.constants.NodeEnum attribute)</a>
 </li>
+      <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.HIGHLIGHT_COLOR">HIGHLIGHT_COLOR (NodeGraphQt.constants.PipeEnum attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.HIGHLIGHT_COLOR">HIGHLIGHT_COLOR (NodeGraphQt.constants.PipeEnum attribute)</a>
+      <li><a href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL">HORIZONTAL (NodeGraphQt.constants.LayoutDirectionEnum attribute)</a>
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.PortEnum.HOVER_BORDER_COLOR">HOVER_BORDER_COLOR (NodeGraphQt.constants.PortEnum attribute)</a>
 </li>
@@ -572,14 +572,22 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="graph.html#NodeGraphQt.NodeGraph.layout_direction">layout_direction() (NodeGraphQt.NodeGraph method)</a>
+
+      <ul>
+        <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.layout_direction">(NodeGraphQt.NodeObject method)</a>
+</li>
+      </ul></li>
+      <li><a href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum">LayoutDirectionEnum (class in NodeGraphQt.constants)</a>
+</li>
       <li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.limit">limit() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="graph.html#NodeGraphQt.NodeGraph.load_dialog">load_dialog() (NodeGraphQt.NodeGraph method)</a>
 </li>
       <li><a href="graph.html#NodeGraphQt.NodeGraph.load_session">load_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nodes/Port.html#NodeGraphQt.Port.lock">lock() (NodeGraphQt.Port method)</a>
 </li>
       <li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.lock_bin">lock_bin() (NodeGraphQt.PropertiesBinWidget method)</a>
@@ -643,10 +651,6 @@
 </li>
       <li><a href="graph.html#NodeGraphQt.NodeGraph.node_factory">node_factory (NodeGraphQt.NodeGraph property)</a>
 </li>
-      <li><a href="constants.html#NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL">NODE_LAYOUT_HORIZONTAL (in module NodeGraphQt.constants)</a>
-</li>
-      <li><a href="constants.html#NodeGraphQt.constants.NODE_LAYOUT_VERTICAL">NODE_LAYOUT_VERTICAL (in module NodeGraphQt.constants)</a>
-</li>
       <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.NODE_NAME">NODE_NAME (NodeGraphQt.NodeObject attribute)</a>
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.NODE_PROP">NODE_PROP (in module NodeGraphQt.constants)</a>
@@ -671,10 +675,10 @@
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.NODE_PROP_QLINEEDIT">NODE_PROP_QLINEEDIT (in module NodeGraphQt.constants)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="constants.html#NodeGraphQt.constants.NODE_PROP_QSPINBOX">NODE_PROP_QSPINBOX (in module NodeGraphQt.constants)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="constants.html#NodeGraphQt.constants.NODE_PROP_QTEXTEDIT">NODE_PROP_QTEXTEDIT (in module NodeGraphQt.constants)</a>
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.NODE_PROP_SLIDER">NODE_PROP_SLIDER (in module NodeGraphQt.constants)</a>
@@ -888,6 +892,12 @@
 </li>
       <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.set_label">set_label() (NodeGraphQt.NodeBaseWidget method)</a>
 </li>
+      <li><a href="graph.html#NodeGraphQt.NodeGraph.set_layout_direction">set_layout_direction() (NodeGraphQt.NodeGraph method)</a>
+
+      <ul>
+        <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction">(NodeGraphQt.NodeObject method)</a>
+</li>
+      </ul></li>
       <li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.set_limit">set_limit() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
       <li><a href="nodes/Port.html#NodeGraphQt.Port.set_locked">set_locked() (NodeGraphQt.Port method)</a>
@@ -1014,10 +1024,12 @@
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.VersionEnum">VersionEnum (class in NodeGraphQt.constants)</a>
 </li>
-      <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.view">view (NodeGraphQt.NodeObject attribute)</a>
+      <li><a href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL">VERTICAL (NodeGraphQt.constants.LayoutDirectionEnum attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.view">view (NodeGraphQt.NodeObject attribute)</a>
+</li>
       <li><a href="graph.html#NodeGraphQt.NodeGraph.viewer">viewer() (NodeGraphQt.NodeGraph method)</a>
 </li>
       <li><a href="constants.html#NodeGraphQt.constants.ViewerEnum">ViewerEnum (class in NodeGraphQt.constants)</a>

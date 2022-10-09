@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Graphs &mdash; NodeGraphQt 0.2.2 documentation</title>
+  <title>Graphs &mdash; NodeGraphQt 0.3.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -782,6 +782,25 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.layout_direction">
+<span class="sig-name descname"><span class="pre">layout_direction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current node graph layout direction.</p>
+<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>layout direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.load_dialog">
 <span class="sig-name descname"><span class="pre">load_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.load_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prompts a file open dialog in the node graph.</p>
@@ -900,7 +919,7 @@ the node graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>node</strong> (<em>_NodeGraphQt.NodeObject</em>) – node object.</p></li>
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a>) – node object.</p></li>
 <li><p><strong>alias</strong> (<em>str</em>) – custom alias name for the node type.</p></li>
 </ul>
 </dd>
@@ -1116,6 +1135,37 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mode</strong> (<em>int</em>) – background style.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_layout_direction">
+<span class="sig-name descname"><span class="pre">set_layout_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the node graph layout direction to horizontal or vertical.
+This function will also override the layout direction on all
+nodes in the current node graph.</p>
+<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction" title="NodeGraphQt.NodeGraph.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a>,
+<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Node Graph Layout Types:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL" title="NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL" title="NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL</span></code></a></p></li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function does not register to the undo stack.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>direction</strong> (<em>int</em>) – layout direction.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1437,7 +1487,7 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <h2>SubGraph<a class="headerlink" href="#subgraph" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="NodeGraphQt.SubGraph">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">SubGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">SubGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">SubGraph</span></code> class is just like the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> but is the main
 controller for managing the expanded node graph for a group node.</p>
 <p>Inherited from: <a class="reference internal" href="#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a></p>
