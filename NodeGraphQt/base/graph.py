@@ -829,6 +829,9 @@ class NodeGraph(QtCore.QObject):
             * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
             * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL`
 
+            .. image:: _images/layout_direction_switch.gif
+                :width: 300px
+
         Warnings:
             This function does not register to the undo stack.
 
