@@ -8,11 +8,11 @@ def build_context_menu(graph):
         graph (NodeGraphQt.NodeGraph): node graph controller.
     """
     from Qt import QtGui, QtCore
-    graph_menu = graph.get_context_menu('graph')
+    context_menu = graph.get_context_menu('graph')
 
     # "File" menu.
     # --------------------------------------------------------------------------
-    file_menu = graph_menu.add_menu('&File')
+    file_menu = context_menu.add_menu('&File')
 
     file_menu.add_command('Open...', _open_session, QtGui.QKeySequence.Open)
     file_menu.add_command('Import...', _import_session)
@@ -22,7 +22,7 @@ def build_context_menu(graph):
 
     # "Edit" menu.
     # --------------------------------------------------------------------------
-    edit_menu = graph_menu.add_menu('&Edit')
+    edit_menu = context_menu.add_menu('&Edit')
 
     edit_menu.add_separator()
     edit_menu.add_command('Clear Undo History', _clear_undo)
@@ -49,20 +49,24 @@ def build_context_menu(graph):
     edit_menu.add_command('Zoom Out', _zoom_out, '-')
     edit_menu.add_command('Reset Zoom', _reset_zoom, 'H')
 
-    edit_menu.add_separator()
-
-    # "Grid Mode" submenu.
-    # --------------------------------------------------------------------------
-    bg_menu = edit_menu.add_menu('&Grid Mode')
-    bg_menu.add_command('None', _bg_grid_none)
-    bg_menu.add_command('Lines', _bg_grid_lines)
-    bg_menu.add_command('Dots', _bg_grid_dots)
-
-    edit_menu.add_separator()
+    context_menu.add_separator()
 
     # "Node" menu.
     # --------------------------------------------------------------------------
-    node_menu = graph_menu.add_menu('&Nodes')
+    graph_menu = context_menu.add_menu('&Graph')
+
+    bg_menu = graph_menu.add_menu('&Background')
+    bg_menu.add_command('None', _bg_grid_none, 'Alt+1')
+    bg_menu.add_command('Lines', _bg_grid_lines, 'Alt+2')
+    bg_menu.add_command('Dots', _bg_grid_dots, 'Alt+3')
+
+    layout_menu = graph_menu.add_menu('&Layout')
+    layout_menu.add_command('Horizontal', _layout_h_mode, 'Shift+1')
+    layout_menu.add_command('Vertical', _layout_v_mode, 'Shift+2')
+
+    # "Node" menu.
+    # --------------------------------------------------------------------------
+    node_menu = context_menu.add_menu('&Nodes')
     node_menu.add_command('Node Search', _toggle_node_search, 'Tab')
     node_menu.add_separator()
     node_menu.add_command(
@@ -76,7 +80,7 @@ def build_context_menu(graph):
 
     # "Pipe" menu.
     # --------------------------------------------------------------------------
-    pipe_menu = graph_menu.add_menu('&Pipes')
+    pipe_menu = context_menu.add_menu('&Pipes')
     pipe_menu.add_command('Curved', _curved_pipe)
     pipe_menu.add_command('Straight', _straight_pipe)
     pipe_menu.add_command('Angle', _angle_pipe)
@@ -107,6 +111,20 @@ def _reset_zoom(graph):
     Reset zoom level.
     """
     graph.reset_zoom()
+
+
+def _layout_h_mode(graph):
+    """
+    Set node graph layout direction to horizontal.
+    """
+    graph.set_layout_direction(0)
+
+
+def _layout_v_mode(graph):
+    """
+    Set node graph layout direction to vertical.
+    """
+    graph.set_layout_direction(1)
 
 
 def _open_session(graph):

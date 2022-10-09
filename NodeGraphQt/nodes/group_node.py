@@ -1,15 +1,13 @@
 #!/usr/bin/python
-from NodeGraphQt.constants import (NODE_LAYOUT_VERTICAL,
-                                   NODE_LAYOUT_HORIZONTAL)
-
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
-from NodeGraphQt.qgraphics.node_group import (GroupNodeItem,
-                                              GroupNodeVerticalItem)
+from NodeGraphQt.qgraphics.node_group import GroupNodeItem
 
 
 class GroupNode(BaseNode):
     """
+    `Implemented in` ``v0.2.0``
+
     The ``NodeGraphQt.GroupNode`` class extends from the
     :class:``NodeGraphQt.BaseNode`` class with the ability to nest other nodes
     inside of it.
@@ -24,12 +22,8 @@ class GroupNode(BaseNode):
 
     NODE_NAME = 'Group'
 
-    def __init__(self, qgraphics_views=None):
-        qgraphics_views = qgraphics_views or {
-            NODE_LAYOUT_HORIZONTAL: GroupNodeItem,
-            NODE_LAYOUT_VERTICAL: GroupNodeVerticalItem
-        }
-        super(GroupNode, self).__init__(qgraphics_views)
+    def __init__(self, qgraphics_item=None):
+        super(GroupNode, self).__init__(qgraphics_item or GroupNodeItem)
         self._input_port_nodes = {}
         self._output_port_nodes = {}
 

@@ -7,13 +7,11 @@ from NodeGraphQt.constants import (NODE_PROP_QLABEL,
                                    NODE_PROP_QLINEEDIT,
                                    NODE_PROP_QCOMBO,
                                    NODE_PROP_QCHECKBOX,
-                                   PortTypeEnum,
-                                   NODE_LAYOUT_VERTICAL,
-                                   NODE_LAYOUT_HORIZONTAL)
+                                   PortTypeEnum)
 from NodeGraphQt.errors import (PortError,
                                 PortRegistrationError,
                                 NodeWidgetError)
-from NodeGraphQt.qgraphics.node_base import NodeItem, NodeItemVertical
+from NodeGraphQt.qgraphics.node_base import NodeItem
 from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
                                               NodeComboBox,
                                               NodeLineEdit,
@@ -57,20 +55,10 @@ class BaseNode(NodeObject):
 
     NODE_NAME = 'Node'
 
-    def __init__(self, qgraphics_views=None):
-        qgraphics_views = qgraphics_views or {
-            NODE_LAYOUT_HORIZONTAL: NodeItem,
-            NODE_LAYOUT_VERTICAL: NodeItemVertical
-        }
-        super(BaseNode, self).__init__(qgraphics_views)
+    def __init__(self, qgraphics_item=None):
+        super(BaseNode, self).__init__(qgraphics_item or NodeItem)
         self._inputs = []
         self._outputs = []
-
-    def draw(self):
-        """
-        Redraws the node in the scene.
-        """
-        self.view.draw_node()
 
     def update_model(self):
         """
@@ -83,6 +71,29 @@ class BaseNode(NodeObject):
 
         for name, widget in self.view.widgets.items():
             self.model.set_property(name, widget.value)
+
+    def set_layout_direction(self, value=0):
+        """
+        Sets the node layout direction to either horizontal or vertical on
+        the current node only.
+
+        `Implemented in` ``v0.3.0``
+
+        See Also:
+            :meth:`NodeGraph.set_layout_direction`,
+            :meth:`NodeObject.layout_direction`
+
+
+        Warnings:
+            This function does not register to the undo stack.
+
+        Args:
+            value (int): layout direction mode.
+        """
+        # base logic to update the model and view attributes only.
+        super(BaseNode, self).set_layout_direction(value)
+        # redraw the node.
+        self._view.draw_node()
 
     def set_icon(self, icon=None):
         """
@@ -372,7 +383,7 @@ class BaseNode(NodeObject):
         self._model.inputs.pop(port.name())
         self._view.delete_input(port.view)
         port.model.node = None
-        self.draw()
+        self._view.draw_node()
 
     def delete_output(self, port):
         """
@@ -402,7 +413,7 @@ class BaseNode(NodeObject):
         self._model.outputs.pop(port.name())
         self._view.delete_output(port.view)
         port.model.node = None
-        self.draw()
+        self._view.draw_node()
 
     def set_port_deletion_allowed(self, mode=False):
         """
@@ -490,7 +501,7 @@ class BaseNode(NodeObject):
                          display_name=port['display_name'],
                          locked=port.get('locked') or False)
          for port in port_data['output_ports']]
-        self.draw()
+        self._view.draw_node()
 
     def inputs(self):
         """

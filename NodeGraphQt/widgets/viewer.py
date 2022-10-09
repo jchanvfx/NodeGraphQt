@@ -6,7 +6,9 @@ from distutils.version import LooseVersion
 from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import PortTypeEnum, PipeLayoutEnum
+from NodeGraphQt.constants import (
+    LayoutDirectionEnum, PortTypeEnum, PipeLayoutEnum
+)
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
@@ -70,6 +72,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             0, 0, self.size().width(), self.size().height())
         self._update_scene()
         self._last_size = self.size()
+
+        self._layout_direction = LayoutDirectionEnum.HORIZONTAL.value
 
         self._pipe_layout = PipeLayoutEnum.CURVED.value
         self._detached_port = None
@@ -999,7 +1003,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns all pipe qgraphic items.
 
         Returns:
-            list[Pipe]: instances of pipe items.
+            list[PipeItem]: instances of pipe items.
         """
         excl = [self._LIVE_PIPE, self._SLICER_PIPE]
         return [i for i in self.scene().items()
@@ -1153,11 +1157,33 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Sets the pipe layout mode and redraw all pipe items in the scene.
 
         Args:
-            layout (int): pipe layout mode. (see the contants module)
+            layout (int): pipe layout mode. (see the constants module)
         """
         self._pipe_layout = layout
         for pipe in self.all_pipes():
             pipe.draw_path(pipe.input_port, pipe.output_port)
+
+    def get_layout_direction(self):
+        """
+        Returns the layout direction set on the the node graph viewer
+        used by the pipe items for drawing.
+
+        Returns:
+            int: graph layout mode.
+        """
+        return self._layout_direction
+
+    def set_layout_direction(self, direction):
+        """
+        Sets the node graph viewer layout direction for re-drawing
+        the pipe items.
+
+        Args:
+            direction (int): graph layout direction.
+        """
+        self._layout_direction = direction
+        for pipe_item in self.all_pipes():
+            pipe_item.draw_path(pipe_item.input_port, pipe_item.output_port)
 
     def reset_zoom(self, cent=None):
         """

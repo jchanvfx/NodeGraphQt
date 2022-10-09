@@ -17,37 +17,23 @@ __doc__ = """
 URI_SCHEME = 'nodegraphqt://'
 URN_SCHEME = 'nodegraphqt::'
 
-# === PATHS ===
-
+# PATHS
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.join(BASE_PATH, 'widgets', 'icons')
 ICON_DOWN_ARROW = os.path.join(ICON_PATH, 'down_arrow.png')
 ICON_NODE_BASE = os.path.join(ICON_PATH, 'node_base.png')
 
-# === DRAW STACK ORDER ===
-
+# DRAW STACK ORDER
 Z_VAL_PIPE = -1
 Z_VAL_NODE = 1
 Z_VAL_PORT = 2
 Z_VAL_NODE_WIDGET = 3
 
-# === ITEM CACHE MODE ===
-
+# ITEM CACHE MODE
 # QGraphicsItem.NoCache
 # QGraphicsItem.DeviceCoordinateCache
 # QGraphicsItem.ItemCoordinateCache
-
 ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
-
-# === NODE LAYOUT DIRECTION ===
-
-#: Mode for vertical node layout.
-NODE_LAYOUT_VERTICAL = 0
-#: Mode for horizontal node layout.
-NODE_LAYOUT_HORIZONTAL = 1
-#: Variable for setting the node layout direction.
-# NODE_LAYOUT_DIRECTION = NODE_LAYOUT_VERTICAL
-NODE_LAYOUT_DIRECTION = NODE_LAYOUT_HORIZONTAL
 
 # =================================== GLOBAL ===================================
 
@@ -65,6 +51,18 @@ class VersionEnum(Enum):
     MINOR = int(_v.split('.')[1])
     #:
     PATCH = int(_v.split('.')[2])
+
+
+class LayoutDirectionEnum(Enum):
+    """
+    Node graph nodes layout direction:
+    :py:mod:`NodeGraphQt.constants.ViewerLayoutEnum`
+    """
+    #: layout nodes left to right.
+    HORIZONTAL = 0
+    #: layout nodes top to bottom.
+    VERTICAL = 1
+
 
 # =================================== VIEWER ===================================
 
