@@ -1,7 +1,12 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE, NodeEnum, ITEM_CACHE_MODE
+from NodeGraphQt.constants import (
+    Z_VAL_NODE,
+    ITEM_CACHE_MODE,
+    LayoutDirectionEnum,
+    NodeEnum
+)
 
 
 class AbstractNodeItem(QtWidgets.QGraphicsItem):
@@ -24,6 +29,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             'selected': False,
             'disabled': False,
             'visible': False,
+            'layout_direction': LayoutDirectionEnum.HORIZONTAL.value,
         }
         self._width = NodeEnum.WIDTH.value
         self._height = NodeEnum.HEIGHT.value
@@ -84,6 +90,14 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     @type_.setter
     def type_(self, node_type='NODE'):
         self._properties['type_'] = node_type
+
+    @property
+    def layout_direction(self):
+        return self._properties['layout_direction']
+
+    @layout_direction.setter
+    def layout_direction(self, value=0):
+        self._properties['layout_direction'] = value
 
     @property
     def size(self):

@@ -121,6 +121,11 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         self.model.nodes[self.node.id] = self.node
         self.viewer.add_node(self.node.view, self.pos)
 
+        # node width & height is calculated when its added to the scene
+        # so we have to update the node model here.
+        self.node.model.width = self.node.view.width
+        self.node.model.height = self.node.view.height
+
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):
     """

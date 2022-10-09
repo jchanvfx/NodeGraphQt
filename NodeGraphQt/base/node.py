@@ -1,10 +1,7 @@
 #!/usr/bin/python
 from NodeGraphQt.base.commands import PropertyChangedCmd
 from NodeGraphQt.base.model import NodeModel
-from NodeGraphQt.constants import (NODE_PROP,
-                                   NODE_LAYOUT_DIRECTION,
-                                   NODE_LAYOUT_VERTICAL,
-                                   NODE_LAYOUT_HORIZONTAL)
+from NodeGraphQt.constants import NODE_PROP
 
 
 class _ClassProperty(object):
@@ -26,9 +23,7 @@ class NodeObject(object):
         :class:`NodeGraphQt.BackdropNode`
 
     Args:
-        qgraphics_views (dict): Dictionary with the node layout type as the key
-            and a custom graphics item subclassed from the ``AbstractNodeItem``
-            as the value.
+        qgraphics_item (AbstractNodeItem): QGraphicsItem item used for drawing.
 
             .. code-block:: python
 
@@ -36,11 +31,8 @@ class NodeObject(object):
 
                 class BaseNode(NodeObject):
 
-                    def __init__(self, qgraphics_views=None):
-                        qgraphics_views = qgraphics_views or {
-                            NodeGraphQt.constants.NODE_LAYOUT_HORIZONTAL: NodeItem,
-                            NodeGraphQt.constants.NODE_LAYOUT_VERTICAL: NodeItemVertical
-                        }
+                    def __init__(self, qgraphics_item=None):
+                        qgraphics_item = qgraphics_item or NodeItem
                         super(BaseNode, self).__init__(qgraphics_views)
 
     """
@@ -51,29 +43,27 @@ class NodeObject(object):
     # Base node name.
     NODE_NAME = None
 
-    def __init__(self, qgraphics_views=None):
+    def __init__(self, qgraphics_item=None):
+        """
+        Args:
+            qgraphics_item (AbstractNodeItem): QGraphicsItem used for drawing.
+        """
         self._graph = None
         self._model = NodeModel()
         self._model.type_ = self.type_
         self._model.name = self.NODE_NAME
 
-        _NodeItem = None
-        if NODE_LAYOUT_DIRECTION is NODE_LAYOUT_VERTICAL:
-            _NodeItem = qgraphics_views.get(NODE_LAYOUT_VERTICAL)
-        elif NODE_LAYOUT_DIRECTION is NODE_LAYOUT_HORIZONTAL:
-            _NodeItem = qgraphics_views.get(NODE_LAYOUT_HORIZONTAL)
-
+        _NodeItem = qgraphics_item
         if _NodeItem is None:
-            raise ValueError(
-                'qgraphics item for the {} node layout can\'t be None!'.format({
-                    NODE_LAYOUT_VERTICAL: 'vertical',
-                    NODE_LAYOUT_HORIZONTAL: 'horizontal'
-                }[NODE_LAYOUT_DIRECTION]))
+            raise RuntimeError(
+                'No qgraphics item specified for the node object!'
+            )
 
         self._view = _NodeItem()
         self._view.type_ = self.type_
         self._view.name = self.model.name
         self._view.id = self._model.id
+        self._view.layout_direction = self._model.layout_direction
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -217,6 +207,7 @@ class NodeObject(object):
                 'width': 0.0,
                 'height: 0.0,
                 'pos': (0.0, 0.0),
+                'layout_direction': 0,
                 'custom': {},
                 }
             }
@@ -469,3 +460,36 @@ class NodeObject(object):
             self.model.pos = self.view.xy_pos
 
         return self.model.pos
+
+    def layout_direction(self):
+        """
+        Returns layout direction for this node.
+
+        See Also:
+            :meth:`NodeObject.set_layout_direction`
+
+        Returns:
+            int: node layout direction.
+        """
+        return self.model.layout_direction
+
+    def set_layout_direction(self, value=0):
+        """
+        Sets the node layout direction to either horizontal or vertical on
+        the current node only.
+
+        `Implemented in` ``v0.3.0``
+
+        See Also:
+            :meth:`NodeGraph.set_layout_direction`
+            :meth:`NodeObject.layout_direction`
+
+        Warnings:
+            This function does not register to the undo stack.
+
+        Args:
+            value (int): layout direction mode.
+        """
+        self.model.layout_direction = value
+        self.view.layout_direction = value
+

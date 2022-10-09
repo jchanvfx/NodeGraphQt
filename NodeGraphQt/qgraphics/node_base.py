@@ -6,6 +6,7 @@ from Qt import QtGui, QtCore, QtWidgets
 from NodeGraphQt.constants import (
     ITEM_CACHE_MODE,
     ICON_NODE_BASE,
+    LayoutDirectionEnum,
     NodeEnum,
     PortEnum,
     PortTypeEnum,
@@ -46,18 +47,27 @@ class NodeItem(AbstractNodeItem):
         self._proxy_mode = False
         self._proxy_mode_threshold = 70
 
-    def paint(self, painter, option, widget):
+    def post_init(self, viewer, pos=None):
         """
-        Draws the node base not the ports or text.
+        Called after node has been added into the scene.
 
         Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
+            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
+            pos (tuple): the cursor pos if node is called with tab search.
         """
-        self.auto_switch_mode()
+        if self.layout_direction == LayoutDirectionEnum.VERTICAL.value:
+            font = QtGui.QFont()
+            font.setPointSize(15)
+            self.text_item.setFont(font)
 
+            # hide port text items for vertical layout.
+            if self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+                for text_item in self._input_items.values():
+                    text_item.setVisible(False)
+                for text_item in self._output_items.values():
+                    text_item.setVisible(False)
+
+    def _paint_horizontal(self, painter, option, widget):
         painter.save()
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(QtCore.Qt.NoBrush)
@@ -114,6 +124,79 @@ class NodeItem(AbstractNodeItem):
         painter.drawPath(path)
 
         painter.restore()
+
+    def _paint_vertical(self, painter, option, widget):
+        painter.save()
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtCore.Qt.NoBrush)
+
+        # base background.
+        margin = 1.0
+        rect = self.boundingRect()
+        rect = QtCore.QRectF(rect.left() + margin,
+                             rect.top() + margin,
+                             rect.width() - (margin * 2),
+                             rect.height() - (margin * 2))
+
+        radius = 4.0
+        painter.setBrush(QtGui.QColor(*self.color))
+        painter.drawRoundedRect(rect, radius, radius)
+
+        # light overlay on background when selected.
+        if self.selected:
+            painter.setBrush(
+                QtGui.QColor(*NodeEnum.SELECTED_COLOR.value)
+            )
+            painter.drawRoundedRect(rect, radius, radius)
+
+        # top & bottom edge background.
+        padding = 2.0
+        height = 10
+        if self.selected:
+            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
+        else:
+            painter.setBrush(QtGui.QColor(0, 0, 0, 80))
+        for y in [rect.y() + padding, rect.height() - height - 1]:
+            edge_rect = QtCore.QRectF(rect.x() + padding, y,
+                                     rect.width() - (padding * 2), height)
+            painter.drawRoundedRect(edge_rect, 3.0, 3.0)
+
+        # node border
+        border_width = 0.8
+        border_color = QtGui.QColor(*self.border_color)
+        if self.selected:
+            border_width = 1.2
+            border_color = QtGui.QColor(
+                *NodeEnum.SELECTED_BORDER_COLOR.value
+            )
+        border_rect = QtCore.QRectF(rect.left(), rect.top(),
+                                    rect.width(), rect.height())
+
+        pen = QtGui.QPen(border_color, border_width)
+        pen.setCosmetic(self.viewer().get_zoom() < 0.0)
+        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(pen)
+        painter.drawRoundedRect(border_rect, radius, radius)
+
+        painter.restore()
+
+    def paint(self, painter, option, widget):
+        """
+        Draws the node base not the ports.
+
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
+        self.auto_switch_mode()
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._paint_horizontal(painter, option, widget)
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._paint_vertical(painter, option, widget)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
     def mousePressEvent(self, event):
         """
@@ -253,17 +336,7 @@ class NodeItem(AbstractNodeItem):
             for pipe in port.connected_pipes:
                 pipe.reset()
 
-    def calc_size(self, add_w=0.0, add_h=0.0):
-        """
-        Calculates the minimum node size.
-
-        Args:
-            add_w (float): additional width.
-            add_h (float): additional height.
-
-        Returns:
-            tuple(float, float): width, height.
-        """
+    def _calc_size_horizontal(self):
         # width, height from node name text.
         text_w = self._text_item.boundingRect().width()
         text_h = self._text_item.boundingRect().height()
@@ -321,11 +394,72 @@ class NodeItem(AbstractNodeItem):
             # add bottom margin for node widget.
             height += 4.0
         height *= 1.05
+        return width, height
+
+    def _calc_size_vertical(self):
+        p_input_width = 0.0
+        p_output_width = 0.0
+        p_input_height = 0.0
+        p_output_height = 0.0
+        for port in self._input_items.keys():
+            if port.isVisible():
+                p_input_width += port.boundingRect().width()
+                if not p_input_height:
+                    p_input_height = port.boundingRect().height()
+        for port in self._output_items.keys():
+            if port.isVisible():
+                p_output_width += port.boundingRect().width()
+                if not p_output_height:
+                    p_output_height = port.boundingRect().height()
+
+        widget_width = 0.0
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            if widget.boundingRect().width() > widget_width:
+                widget_width = widget.boundingRect().width()
+            widget_height += widget.boundingRect().height()
+
+        width = max([p_input_width, p_output_width, widget_width])
+        height = p_input_height + p_output_height + widget_height
+        return width, height
+
+    def calc_size(self, add_w=0.0, add_h=0.0):
+        """
+        Calculates the minimum node size.
+
+        Args:
+            add_w (float): additional width.
+            add_h (float): additional height.
+
+        Returns:
+            tuple(float, float): width, height.
+        """
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            width, height = self._calc_size_horizontal()
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            width, height = self._calc_size_vertical()
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
         # additional width, height.
         width += add_w
         height += add_h
         return width, height
+
+    def _align_icon_horizontal(self, h_offset, v_offset):
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().left() + 2.0
+        y = text_rect.center().y() - (icon_rect.height() / 2)
+        self._icon_item.setPos(x + h_offset, y + v_offset)
+
+    def _align_icon_vertical(self, h_offset, v_offset):
+        center_y = self.boundingRect().center().y()
+        icon_rect = self._icon_item.boundingRect()
+        text_rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = center_y - text_rect.height() - (icon_rect.height() / 2) + v_offset
+        self._icon_item.setPos(x, y)
 
     def align_icon(self, h_offset=0.0, v_offset=0.0):
         """
@@ -335,11 +469,24 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): additional vertical offset.
             h_offset (float): additional horizontal offset.
         """
-        icon_rect = self._icon_item.boundingRect()
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._align_icon_horizontal(h_offset, v_offset)
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._align_icon_vertical(h_offset, v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
+
+    def _align_label_horizontal(self, h_offset, v_offset):
+        rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
-        x = self.boundingRect().left() + 2.0
-        y = text_rect.center().y() - (icon_rect.height() / 2)
-        self._icon_item.setPos(x + h_offset, y + v_offset)
+        x = rect.center().x() - (text_rect.width() / 2)
+        self._text_item.setPos(x + h_offset, rect.y() + v_offset)
+
+    def _align_label_vertical(self, h_offset, v_offset):
+        rect = self._text_item.boundingRect()
+        x = self.boundingRect().right() + h_offset
+        y = self.boundingRect().center().y() - (rect.height() / 2) + v_offset
+        self.text_item.setPos(x, y)
 
     def align_label(self, h_offset=0.0, v_offset=0.0):
         """
@@ -349,18 +496,14 @@ class NodeItem(AbstractNodeItem):
             v_offset (float): vertical offset.
             h_offset (float): horizontal offset.
         """
-        rect = self.boundingRect()
-        text_rect = self._text_item.boundingRect()
-        x = rect.center().x() - (text_rect.width() / 2)
-        self._text_item.setPos(x + h_offset, rect.y() + v_offset)
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._align_label_horizontal(h_offset, v_offset)
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._align_label_vertical(h_offset, v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
-    def align_widgets(self, v_offset=0.0):
-        """
-        Align node widgets to the default center of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-        """
+    def _align_widgets_horizontal(self, v_offset):
         if not self._widgets:
             return
         rect = self.boundingRect()
@@ -381,13 +524,39 @@ class NodeItem(AbstractNodeItem):
             widget.setPos(x, y)
             y += widget_rect.height()
 
-    def align_ports(self, v_offset=0.0):
+    def _align_widgets_vertical(self, v_offset):
+        if not self._widgets:
+            return
+        rect = self.boundingRect()
+        y = rect.center().y() + v_offset
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            widget_height += widget_rect.height()
+        y -= widget_height / 2
+
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            x = rect.center().x() - (widget_rect.width() / 2)
+            widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
+
+    def align_widgets(self, v_offset=0.0):
         """
-        Align input, output ports in the node layout.
+        Align node widgets to the default center of the node.
 
         Args:
-            v_offset (float): port vertical offset.
+            v_offset (float): vertical offset.
         """
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._align_widgets_horizontal(v_offset)
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._align_widgets_vertical(v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
+
+    def _align_ports_horizontal(self, v_offset):
         width = self._width
         txt_offset = PortEnum.CLICK_FALLOFF.value - 2
         spacing = 1
@@ -425,12 +594,55 @@ class NodeItem(AbstractNodeItem):
                 txt_x = port.x() - txt_width
                 text.setPos(txt_x, port.y() - 1.5)
 
-    def draw_node(self):
+    def _align_ports_vertical(self, v_offset):
+        # adjust input position
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(inputs) + 1)
+            port_x = delta
+            port_y = (port_height / 2) * -1
+            for port in inputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
+
+        # adjust output position
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(outputs) + 1)
+            port_x = delta
+            port_y = self._height - (port_height / 2)
+            for port in outputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
+
+    def align_ports(self, v_offset=0.0):
         """
-        Re-draw the node item in the scene.
-        (re-implemented for vertical layout design)
+        Align input, output ports in the node layout.
+
+        Args:
+            v_offset (float): port vertical offset.
         """
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._align_ports_horizontal(v_offset)
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._align_ports_vertical(v_offset)
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
+
+    def _draw_node_horizontal(self):
         height = self._text_item.boundingRect().height() + 4.0
+
+        # update port text items in visibility.
+        for port, text in self._input_items.items():
+            text.setVisible(port.display_name)
+        for port, text in self._output_items.items():
+            text.setVisible(port.display_name)
 
         # setup initial base size.
         self._set_base_size(add_h=height)
@@ -452,6 +664,46 @@ class NodeItem(AbstractNodeItem):
         self.align_widgets(v_offset=height)
 
         self.update()
+
+    def _draw_node_vertical(self):
+        # hide the port text items in vertical layout.
+        for port, text in self._input_items.items():
+            text.setVisible(False)
+        for port, text in self._output_items.items():
+            text.setVisible(False)
+
+        # setup initial base size.
+        self._set_base_size()
+        # set text color when node is initialized.
+        self._set_text_color(self.text_color)
+        # set the tooltip
+        self._tooltip_disable(self.disabled)
+
+        # --- setup node layout ---
+        # (do all the graphic item layout offsets here)
+
+        # align label text
+        self.align_label(h_offset=6)
+        # align icon
+        self.align_icon(h_offset=6, v_offset=4)
+        # arrange input and output ports.
+        self.align_ports()
+        # arrange node widgets
+        self.align_widgets()
+
+        self.update()
+
+    def draw_node(self):
+        """
+        Re-draw the node item in the scene with proper
+        calculated size and widgets aligned.
+        """
+        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+            self._draw_node_horizontal()
+        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            self._draw_node_vertical()
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
     def post_init(self, viewer=None, pos=None):
         """
@@ -539,6 +791,11 @@ class NodeItem(AbstractNodeItem):
             self.post_init()
 
         self.update()
+
+    @AbstractNodeItem.layout_direction.setter
+    def layout_direction(self, value=0):
+        AbstractNodeItem.layout_direction.fset(self, value)
+        self.draw_node()
 
     @AbstractNodeItem.width.setter
     def width(self, width=0.0):
@@ -768,264 +1025,3 @@ class NodeItem(AbstractNodeItem):
         for name, value in widgets.items():
             if self._widgets.get(name):
                 self._widgets[name].value = value
-
-
-class NodeItemVertical(NodeItem):
-    """
-    Vertical Node item.
-
-    Args:
-        name (str): name displayed on the node.
-        parent (QtWidgets.QGraphicsItem): parent item.
-    """
-
-    def __init__(self, name='node', parent=None):
-        super(NodeItemVertical, self).__init__(name, parent)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.text_item.setFont(font)
-
-    def paint(self, painter, option, widget):
-        """
-        Draws the node base not the ports.
-
-        Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
-        """
-        self.auto_switch_mode()
-
-        painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
-
-        # base background.
-        margin = 1.0
-        rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
-
-        radius = 4.0
-        painter.setBrush(QtGui.QColor(*self.color))
-        painter.drawRoundedRect(rect, radius, radius)
-
-        # light overlay on background when selected.
-        if self.selected:
-            painter.setBrush(
-                QtGui.QColor(*NodeEnum.SELECTED_COLOR.value)
-            )
-            painter.drawRoundedRect(rect, radius, radius)
-
-        # top & bottom edge background.
-        padding = 2.0
-        height = 10
-        if self.selected:
-            painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
-        else:
-            painter.setBrush(QtGui.QColor(0, 0, 0, 80))
-        for y in [rect.y() + padding, rect.height() - height - 1]:
-            edge_rect = QtCore.QRectF(rect.x() + padding, y,
-                                     rect.width() - (padding * 2), height)
-            painter.drawRoundedRect(edge_rect, 3.0, 3.0)
-
-        # node border
-        border_width = 0.8
-        border_color = QtGui.QColor(*self.border_color)
-        if self.selected:
-            border_width = 1.2
-            border_color = QtGui.QColor(
-                *NodeEnum.SELECTED_BORDER_COLOR.value
-            )
-        border_rect = QtCore.QRectF(rect.left(), rect.top(),
-                                    rect.width(), rect.height())
-
-        pen = QtGui.QPen(border_color, border_width)
-        pen.setCosmetic(self.viewer().get_zoom() < 0.0)
-        painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(pen)
-        painter.drawRoundedRect(border_rect, radius, radius)
-
-        painter.restore()
-
-    def align_icon(self, h_offset=0.0, v_offset=0.0):
-        """
-        Align node icon to the right side of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
-        center_y = self.boundingRect().center().y()
-        icon_rect = self._icon_item.boundingRect()
-        text_rect = self._text_item.boundingRect()
-        x = self.boundingRect().right() + h_offset
-        y = center_y - text_rect.height() - (icon_rect.height() / 2) + v_offset
-        self._icon_item.setPos(x, y)
-
-    def align_label(self, h_offset=0.0, v_offset=0.0):
-        """
-        Align node label to the right side of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-            h_offset (float): horizontal offset.
-        """
-        rect = self._text_item.boundingRect()
-        x = self.boundingRect().right() + h_offset
-        y = self.boundingRect().center().y() - (rect.height() / 2) + v_offset
-        self.text_item.setPos(x, y)
-
-    def align_ports(self, v_offset=0.0):
-        """
-        Align input, output ports in the node layout.
-        """
-        # adjust input position
-        inputs = [p for p in self.inputs if p.isVisible()]
-        if inputs:
-            port_width = inputs[0].boundingRect().width()
-            port_height = inputs[0].boundingRect().height()
-            half_width = port_width/2
-            delta = self._width / (len(inputs)+1)
-            port_x = delta
-            port_y = (port_height / 2) * -1
-            for port in inputs:
-                port.setPos(port_x - half_width, port_y)
-                port_x += delta
-
-        # adjust output position
-        outputs = [p for p in self.outputs if p.isVisible()]
-        if outputs:
-            port_width = outputs[0].boundingRect().width()
-            port_height = outputs[0].boundingRect().height()
-            half_width = port_width / 2
-            delta = self._width / (len(outputs)+1)
-            port_x = delta
-            port_y = self._height - (port_height / 2)
-            for port in outputs:
-                port.setPos(port_x-half_width, port_y)
-                port_x += delta
-
-    def align_widgets(self, v_offset=0.0):
-        """
-        Align node widgets to the default center of the node.
-
-        Args:
-            v_offset (float): vertical offset.
-        """
-        if not self._widgets:
-            return
-        rect = self.boundingRect()
-        y = rect.center().y() + v_offset
-        widget_height = 0.0
-        for widget in self._widgets.values():
-            widget_rect = widget.boundingRect()
-            widget_height += widget_rect.height()
-        y -= widget_height / 2
-
-        for widget in self._widgets.values():
-            widget_rect = widget.boundingRect()
-            x = rect.center().x() - (widget_rect.width() / 2)
-            widget.widget().setTitleAlign('center')
-            widget.setPos(x, y)
-            y += widget_rect.height()
-
-    def draw_node(self):
-        """
-        Re-draw the node item in the scene.
-        """
-        # setup initial base size.
-        self._set_base_size()
-        # set text color when node is initialized.
-        self._set_text_color(self.text_color)
-        # set the tooltip
-        self._tooltip_disable(self.disabled)
-
-        # --- setup node layout ---
-        # (do all the graphic item layout offsets here)
-
-        # align label text
-        self.align_label(h_offset=6)
-        # align icon
-        self.align_icon(h_offset=6, v_offset=4)
-        # arrange input and output ports.
-        self.align_ports()
-        # arrange node widgets
-        self.align_widgets()
-
-        self.update()
-
-    def calc_size(self, add_w=0.0, add_h=0.0):
-        """
-        Calculate minimum node size.
-
-        Args:
-            add_w (float): additional width.
-            add_h (float): additional height.
-        """
-        p_input_width = 0.0
-        p_output_width = 0.0
-        p_input_height = 0.0
-        p_output_height = 0.0
-        for port in self._input_items.keys():
-            if port.isVisible():
-                p_input_width += port.boundingRect().width()
-                if not p_input_height:
-                    p_input_height = port.boundingRect().height()
-        for port in self._output_items.keys():
-            if port.isVisible():
-                p_output_width += port.boundingRect().width()
-                if not p_output_height:
-                    p_output_height = port.boundingRect().height()
-
-        widget_width = 0.0
-        widget_height = 0.0
-        for widget in self._widgets.values():
-            if widget.boundingRect().width() > widget_width:
-                widget_width = widget.boundingRect().width()
-            widget_height += widget.boundingRect().height()
-
-        width = max([p_input_width, p_output_width, widget_width]) + add_w
-        height = p_input_height + p_output_height + widget_height + add_h
-        return width, height
-
-    def add_input(self, name='input', multi_port=False, display_name=True,
-                  locked=False, painter_func=None):
-        """
-        Adds a port qgraphics item into the node with the "port_type" set as
-        IN_PORT
-
-        Args:
-            name (str): name for the port.
-            multi_port (bool): allow multiple connections.
-            display_name (bool): (not used).
-            locked (bool): locked state.
-            painter_func (function): custom paint function.
-
-        Returns:
-            PortItem: port qgraphics item.
-        """
-        return super(NodeItemVertical, self).add_input(
-            name, multi_port, False, locked, painter_func)
-
-    def add_output(self, name='output', multi_port=False, display_name=True,
-                   locked=False, painter_func=None):
-        """
-        Adds a port qgraphics item into the node with the "port_type" set as
-        OUT_PORT
-
-        Args:
-            name (str): name for the port.
-            multi_port (bool): allow multiple connections.
-            display_name (bool): (not used).
-            locked (bool): locked state.
-            painter_func (function): custom paint function.
-
-        Returns:
-            PortItem: port qgraphics item.
-        """
-        return super(NodeItemVertical, self).add_output(
-            name, multi_port, False, locked, painter_func)
