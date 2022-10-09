@@ -824,8 +824,6 @@ class NodeGraph(QtCore.QObject):
             :meth:`NodeObject.set_layout_direction`
 
         Note:
-            By default node graph direction is set to horizontal.
-
             Node Graph Layout Types:
 
             * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
