@@ -146,7 +146,7 @@ class NodesGridView(QtWidgets.QListView):
         self.setItemDelegate(NodesGridDelagate(self))
 
     def clear(self):
-        self.model().sourceMode().clear()
+        self.model().sourceModel().clear()
 
     def add_item(self, label, tooltip=''):
         item = QtGui.QStandardItem(label)
@@ -200,21 +200,58 @@ class NodesPaletteWidget(QtWidgets.QWidget):
 
         self._build_ui()
 
+        # update the ui if new nodes are registered post init.
+        node_graph.nodes_registered.connect(self._on_nodes_registered)
+
     def __repr__(self):
         return '<{} object at {}>'.format(
             self.__class__.__name__, hex(id(self))
         )
 
+    def _on_nodes_registered(self, nodes):
+        """
+        Slot function when a new node has been registered into the node graph.
+
+        Args:
+            nodes (list[NodeObject]): node objects.
+        """
+        node_types = defaultdict(list)
+        for node in nodes:
+            name = node.NODE_NAME
+            node_type = node.type_
+            category = '.'.join(node_type.split('.')[:-1])
+            node_types[category].append((node_type, name))
+
+        update_tabs = False
+        for category, nodes_list in node_types.items():
+            if not update_tabs and category not in self._category_tabs:
+                update_tabs = True
+            grid_view = self._add_category_tab(category)
+            for node_id, node_name in nodes_list:
+                grid_view.add_item(node_name, node_id)
+
+        if update_tabs:
+            self._update_tab_labels()
+
+    def _update_tab_labels(self):
+        """
+        Update the tab labels.
+        """
+        tabs_idx = {self._tab_widget.tabText(x): x
+                    for x in range(self._tab_widget.count())}
+        for category, label in self._custom_labels.items():
+            if category in tabs_idx:
+                idx = tabs_idx[category]
+                self._tab_widget.setTabText(idx, label)
+
     def _build_ui(self):
         """
         populate the ui
         """
-        categories = set()
         node_types = defaultdict(list)
         for name, node_ids in self._factory.names.items():
             for nid in node_ids:
                 category = '.'.join(nid.split('.')[:-1])
-                categories.add(category)
                 node_types[category].append((nid, name))
 
         for category, nodes_list in node_types.items():
@@ -267,13 +304,34 @@ class NodesPaletteWidget(QtWidgets.QWidget):
                 break
         self._custom_labels[category] = label
 
+    def tab_widget(self):
+        """
+        Get the tab widget.
+
+        Returns:
+            QtWidgets.QTabWidget: tab widget.
+        """
+        return self._tab_widget
+
     def update(self):
         """
         Update and refresh the node palette widget.
         """
-        self._build_tree()
+        for category, grid_view in self._category_tabs.items():
+            grid_view.clear()
 
+        node_types = defaultdict(list)
+        for name, node_ids in self._factory.names.items():
+            for nid in node_ids:
+                category = '.'.join(nid.split('.')[:-1])
+                node_types[category].append((nid, name))
 
+        for category, nodes_list in node_types.items():
+            grid_view = self._category_tabs.get(category)
+            if not grid_view:
+                grid_view = self._add_category_tab(category)
 
+            for node_id, node_name in nodes_list:
+                grid_view.add_item(node_name, node_id)
 
-
+        self._update_tab_labels()

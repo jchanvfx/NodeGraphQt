@@ -44,6 +44,14 @@ class NodeGraph(QtCore.QObject):
         :width: 60%
     """
 
+    nodes_registered = QtCore.Signal(list)
+    """
+    Signal triggered when a node is registered into the node graph.
+
+    :parameters: list[:class:`NodeGraphQt.NodeObject`]
+    :emits: registered nodes
+    """
+
     node_created = QtCore.Signal(NodeObject)
     """
     Signal triggered when a node is created in the node graph.
@@ -918,6 +926,7 @@ class NodeGraph(QtCore.QObject):
         """
         self._node_factory.register_node(node, alias)
         self._viewer.rebuild_tab_search()
+        self.nodes_registered.emit([node])
 
     def register_nodes(self, nodes):
         """
@@ -928,6 +937,7 @@ class NodeGraph(QtCore.QObject):
         """
         [self._node_factory.register_node(n) for n in nodes]
         self._viewer.rebuild_tab_search()
+        self.nodes_registered.emit(nodes)
 
     def create_node(self, node_type, name=None, selected=True, color=None,
                     text_color=None, pos=None, push_undo=True):
