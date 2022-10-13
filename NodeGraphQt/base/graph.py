@@ -158,20 +158,12 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
         self._viewer.set_layout_direction(layout_direction)
 
-        self._build_context_menu()
         self._register_builtin_nodes()
         self._wire_signals()
 
     def __repr__(self):
         return '<{}("root") object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
-
-    def _build_context_menu(self):
-        """
-        build the essential menus commands for the graph context menu.
-        """
-        from NodeGraphQt.base.graph_actions import build_context_menu
-        build_context_menu(self)
 
     def _register_builtin_nodes(self):
         """
@@ -702,6 +694,117 @@ class NodeGraph(QtCore.QObject):
                 return NodeGraphMenu(self, menus[menu])
             elif menu == 'nodes':
                 return NodesMenu(self, menus[menu])
+
+    @staticmethod
+    def _build_context_menu_command(menu, data):
+        """
+        Create context menu command from serialized data.
+
+        Args:
+            menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
+                menu object.
+            data (dict): serialized menu command data.
+        """
+        import sys
+        import importlib.util
+
+        full_path = os.path.abspath(data['file'])
+        base_dir, file_name = os.path.split(full_path)
+        base_name = os.path.basename(base_dir)
+        file_name, _ = file_name.split('.')
+
+        mod_name = '{}.{}'.format(base_name, file_name)
+
+        spec = importlib.util.spec_from_file_location(mod_name, full_path)
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[mod_name] = mod
+        spec.loader.exec_module(mod)
+
+        cmd_func = getattr(mod, data['function_name'])
+        cmd_name = data.get('label') or '<command>'
+        cmd_shortcut = data.get('shortcut')
+        menu.add_command(cmd_name, cmd_func, cmd_shortcut)
+
+    def _build_context_menu(self, menu, menu_data):
+        """
+        Populate context menu from a dictionary.
+
+        Args:
+            menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
+                parent context menu.
+            menu_data (list[dict] or dict): serialized menu data.
+        """
+        if not menu:
+            raise ValueError('No context menu named: "{}"'.format(menu))
+
+        if isinstance(menu_data, dict):
+            item_type = menu_data.get('type')
+            if item_type == 'separator':
+                menu.add_separator()
+            elif item_type == 'command':
+                self._build_context_menu_command(menu, menu_data)
+            elif item_type == 'menu':
+                sub_menu = menu.add_menu(menu_data['label'])
+                items = menu_data.get('items', [])
+                self._build_context_menu(sub_menu, items)
+        elif isinstance(menu_data, list):
+            for item_data in menu_data:
+                self._build_context_menu(menu, item_data)
+
+    def set_context_menu(self, menu_name, data):
+        """
+        Populate a context menu from serialized data.
+
+        serialized menu data example:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            [
+                {
+                    'type': 'menu',
+                    'label': 'test sub menu',
+                    'items': [
+                        {
+                            'type': 'command',
+                            'label': 'test command',
+                            'file': '../path/to/my/test_module.py',
+                            'function': 'run_test',
+                            'shortcut': 'Ctrl+b'
+                        },
+
+                    ]
+                },
+            ]
+
+        Args:
+            menu_name (str): name of the parent context menu to populate under.
+            data (dict): serialized menu data.
+        """
+        context_menu = self.get_context_menu(menu_name)
+        self._build_context_menu(context_menu, data)
+
+    def set_context_menu_from_file(self, file_path, menu=None):
+        """
+        Populate a context menu from a serialized json file.
+
+        Menu Types:
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
+
+        Args:
+            menu (str): name of the parent context menu to populate under.
+            file_path (str): serialized menu commands json file.
+        """
+        menu = menu or 'graph'
+        if not os.path.isfile(file_path):
+            return
+
+        with open(file_path) as f:
+            data = json.load(f)
+        context_menu = self.get_context_menu(menu)
+        self._build_context_menu(context_menu, data)
+
 
     def disable_context_menu(self, disabled=True, name='all'):
         """
@@ -1255,7 +1358,7 @@ class NodeGraph(QtCore.QObject):
         if name not in node_names:
             return name
 
-        regex = re.compile(r'[\w ]+(?: )*(\d+)')
+        regex = re.compile(r'\w+ (\d+)$')
         search = regex.search(name)
         if not search:
             for x in range(1, len(node_names) + 2):

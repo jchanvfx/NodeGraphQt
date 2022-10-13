@@ -75,7 +75,7 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
 
         font = painter.font()
         font_metrics = QtGui.QFontMetrics(font)
-        font_width = font_metrics.horizontalAdvance(
+        font_width = font_metrics.width(
             item.text().replace(' ', '_')
         )
         font_height = font_metrics.height()
@@ -138,7 +138,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         item = QtGui.QStandardItem(label)
         item.setToolTip(node_id)
         metrics = QtGui.QFontMetrics(item.font())
-        width = metrics.horizontalAdvance(item.text()) + 30
+        width = metrics.width(item.text()) + 30
         item.setSizeHint(QtCore.QSize(width, 20))
         self.model().appendRow(item)
         self.selectionModel().setCurrentIndex(

@@ -13,14 +13,10 @@ from NodeGraphQt import (
 )
 
 # import example nodes from the "example_nodes" package
-from examples import group_node
-from examples.custom_nodes import (
-    basic_nodes,
-    custom_ports_node,
-    widget_nodes,
-)
+from nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
 
 if __name__ == '__main__':
+
     # handle SIGINT to make the app terminate on CTRL+C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -30,6 +26,7 @@ if __name__ == '__main__':
 
     # create graph controller.
     graph = NodeGraph()
+    graph.set_context_menu_from_file('/Users/jchan/PycharmProjects/NodeGraphQt/examples/hotkeys/hotkeys.json')
 
     # registered example nodes.
     graph.register_nodes([

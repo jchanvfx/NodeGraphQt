@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 from distutils.version import LooseVersion
 
 from Qt import QtGui, QtCore
@@ -129,6 +130,18 @@ class NodeGraphMenu(object):
         action.graph = self._graph
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
+
+        if isinstance(shortcut, str):
+            search = re.search(r'(?:\.|)QKeySequence\.(\w+)', shortcut)
+            if search:
+                shortcut = getattr(QtGui.QKeySequence, search.group(1))
+            elif all([i in ['Alt', 'Enter'] for i in shortcut.split('+')]):
+                shortcut = QtGui.QKeySequence(
+                    QtCore.Qt.ALT + QtCore.Qt.Key_Return
+                )
+            elif all([i in ['Return', 'Enter'] for i in shortcut.split('+')]):
+                shortcut = QtCore.Qt.Key_Return
+
         if shortcut:
             action.setShortcut(shortcut)
         if func:
