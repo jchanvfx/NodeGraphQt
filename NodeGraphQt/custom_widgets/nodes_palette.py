@@ -102,7 +102,11 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
 
         font = painter.font()
         font_metrics = QtGui.QFontMetrics(font)
-        font_width = font_metrics.width(item.text().replace(' ', '_'))
+        item_text = item.text().replace(' ', '_')
+        if hasattr(font_metrics, 'horizontalAdvance'):
+            font_width = font_metrics.horizontalAdvance(item_text)
+        else:
+            font_width = font_metrics.width(item_text)
         font_height = font_metrics.height()
         text_rect = QtCore.QRectF(
             sub_rect.center().x() - (font_width / 2),
