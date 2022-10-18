@@ -29,6 +29,10 @@ class NodeGraphMenu(object):
     def __init__(self, graph, qmenu):
         self._graph = graph
         self._qmenu = qmenu
+        self._name = qmenu.title()
+        self._menus = {}
+        self._commands = {}
+        self._items = []
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -37,10 +41,10 @@ class NodeGraphMenu(object):
     @property
     def qmenu(self):
         """
-        The underlying qmenu.
+        The underlying QMenu.
 
         Returns:
-            BaseMenu: qmenu object.
+            BaseMenu: menu object.
         """
         return self._qmenu
 
@@ -51,7 +55,16 @@ class NodeGraphMenu(object):
         Returns:
             str: label name.
         """
-        return self.qmenu.title()
+        return self._name
+
+    def get_items(self):
+        """
+        Return the menu items in the order they were added.
+
+        Returns:
+            list: current menu items.
+        """
+        return self._items
 
     def get_menu(self, name):
         """
@@ -63,9 +76,7 @@ class NodeGraphMenu(object):
         Returns:
             NodeGraphQt.NodeGraphMenu: menu item.
         """
-        menu = self.qmenu.get_menu(name)
-        if menu:
-            return NodeGraphMenu(self._graph, menu)
+        self._menus.get(name)
 
     def get_command(self, name):
         """
@@ -77,28 +88,7 @@ class NodeGraphMenu(object):
         Returns:
             NodeGraphQt.MenuCommand: context menu command.
         """
-        for action in self.qmenu.actions():
-            if not action.menu() and action.text() == name:
-                return NodeGraphCommand(self._graph, action)
-
-    def all_commands(self):
-        """
-        Returns all child and sub child commands from the current context menu.
-
-        Returns:
-            list[NodeGraphQt.MenuCommand]: list of commands.
-        """
-        def get_actions(menu):
-            actions = []
-            for action in menu.actions():
-                if not action.menu():
-                    if not action.isSeparator():
-                        actions.append(action)
-                else:
-                    actions += get_actions(action.menu())
-            return actions
-        child_actions = get_actions(self.qmenu)
-        return [NodeGraphCommand(self._graph, a) for a in child_actions]
+        return self._commands.get(name)
 
     def add_menu(self, name):
         """
@@ -110,9 +100,14 @@ class NodeGraphMenu(object):
         Returns:
             NodeGraphQt.NodeGraphMenu: the appended menu item.
         """
-        menu = BaseMenu(name, self.qmenu)
-        self.qmenu.addMenu(menu)
-        return NodeGraphMenu(self._graph, menu)
+        if name in self._menus:
+            raise NodeMenuError('menu object "{}" already exists!'.format(name))
+        base_menu = BaseMenu(name, self.qmenu)
+        self.qmenu.addMenu(base_menu)
+        menu = NodeGraphMenu(self._graph, base_menu)
+        self._menus[name] = menu
+        self._items.append(menu)
+        return menu
 
     def add_command(self, name, func=None, shortcut=None):
         """
@@ -121,7 +116,7 @@ class NodeGraphMenu(object):
         Args:
             name (str): command name.
             func (function): command function eg. "func(``graph``)".
-            shortcut (str): shotcut key.
+            shortcut (str): shortcut key.
 
         Returns:
             NodeGraphQt.NodeGraphCommand: the appended command.
@@ -146,14 +141,18 @@ class NodeGraphMenu(object):
             action.setShortcut(shortcut)
         if func:
             action.executed.connect(func)
-        qaction = self.qmenu.addAction(action)
-        return NodeGraphCommand(self._graph, qaction)
+        self.qmenu.addAction(action)
+        command = NodeGraphCommand(self._graph, action, func)
+        self._commands[name] = command
+        self._items.append(command)
+        return command
 
     def add_separator(self):
         """
         Adds a separator to the menu.
         """
         self.qmenu.addSeparator()
+        self._items.append(None)
 
 
 class NodesMenu(NodeGraphMenu):
@@ -222,7 +221,10 @@ class NodesMenu(NodeGraphMenu):
                 menu.addAction(action)
 
         qaction = node_menu.addAction(action)
-        return NodeGraphCommand(self._graph, qaction)
+        command = NodeGraphCommand(self._graph, qaction, func)
+        self._commands[name] = command
+        self._items.append(command)
+        return command
 
 
 class NodeGraphCommand(object):
@@ -230,9 +232,11 @@ class NodeGraphCommand(object):
     Node graph menu command.
     """
 
-    def __init__(self, graph, qaction):
+    def __init__(self, graph, qaction, func=None):
         self._graph = graph
         self._qaction = qaction
+        self._name = qaction.text()
+        self._func = func
 
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
@@ -248,6 +252,16 @@ class NodeGraphCommand(object):
         """
         return self._qaction
 
+    @property
+    def slot_function(self):
+        """
+        The function executed by this command.
+
+        Returns:
+            function: command function.
+        """
+        return self._func
+
     def name(self):
         """
         Returns the name for the menu command.
@@ -255,7 +269,7 @@ class NodeGraphCommand(object):
         Returns:
             str: label name.
         """
-        return self.qaction.text()
+        return self._name
 
     def set_shortcut(self, shortcut=None):
         """

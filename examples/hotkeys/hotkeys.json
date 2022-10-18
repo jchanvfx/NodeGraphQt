@@ -52,6 +52,9 @@
         "shortcut":""
       },
       {
+        "type":"separator"
+      },
+      {
         "type":"command",
         "label":"Copy",
         "file":"../examples/hotkeys/hotkey_functions.py",
@@ -112,7 +115,7 @@
       },
       {
         "type":"command",
-        "label":"Center Selection",
+        "label":"Fit to Selection",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"fit_to_selection",
         "shortcut":"F"
