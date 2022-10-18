@@ -683,7 +683,8 @@ class PropVector(BaseProperty):
 
     def set_value(self, value):
         if value != self.get_value():
-            self._value = value.copy()
+            # cast a new list.
+            self._value = list(value)
             self._can_emit = False
             self._update_items()
             self._can_emit = True

@@ -24,6 +24,7 @@ from NodeGraphQt.constants import (
     PortTypeEnum,
     ViewerEnum
 )
+from NodeGraphQt.errors import NodeCreationError, NodeDeletionError
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.group_node import GroupNode
@@ -158,7 +159,9 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
         self._viewer.set_layout_direction(layout_direction)
 
-        self._build_context_menu()
+        self._context_menu = {}
+
+        self._register_context_menu()
         self._register_builtin_nodes()
         self._wire_signals()
 
@@ -166,12 +169,17 @@ class NodeGraph(QtCore.QObject):
         return '<{}("root") object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
 
-    def _build_context_menu(self):
+    def _register_context_menu(self):
         """
-        build the essential menus commands for the graph context menu.
+        Register the default context menus.
         """
-        from NodeGraphQt.base.graph_actions import build_context_menu
-        build_context_menu(self)
+        if not self._viewer:
+            return
+        menus = self._viewer.context_menus()
+        if menus.get('graph'):
+            self._context_menu['graph'] = NodeGraphMenu(self, menus['graph'])
+        if menus.get('nodes'):
+            self._context_menu['nodes'] = NodesMenu(self, menus['nodes'])
 
     def _register_builtin_nodes(self):
         """
@@ -696,12 +704,116 @@ class NodeGraph(QtCore.QObject):
         Returns:
             NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu: context menu object.
         """
-        menus = self._viewer.context_menus()
-        if menus.get(menu):
-            if menu == 'graph':
-                return NodeGraphMenu(self, menus[menu])
-            elif menu == 'nodes':
-                return NodesMenu(self, menus[menu])
+        return self._context_menu.get(menu)
+
+    def _deserialize_context_menu(self, menu, menu_data):
+        """
+        Populate context menu from a dictionary.
+
+        Args:
+            menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
+                parent context menu.
+            menu_data (list[dict] or dict): serialized menu data.
+        """
+        if not menu:
+            raise ValueError('No context menu named: "{}"'.format(menu))
+
+        import sys
+        import importlib.util
+
+        def build_menu_command(menu, data):
+            """
+            Create menu command from serialized data.
+
+            Args:
+                menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
+                    menu object.
+                data (dict): serialized menu command data.
+            """
+            full_path = os.path.abspath(data['file'])
+            base_dir, file_name = os.path.split(full_path)
+            base_name = os.path.basename(base_dir)
+            file_name, _ = file_name.split('.')
+
+            mod_name = '{}.{}'.format(base_name, file_name)
+
+            spec = importlib.util.spec_from_file_location(mod_name, full_path)
+            mod = importlib.util.module_from_spec(spec)
+            sys.modules[mod_name] = mod
+            spec.loader.exec_module(mod)
+
+            cmd_func = getattr(mod, data['function_name'])
+            cmd_name = data.get('label') or '<command>'
+            cmd_shortcut = data.get('shortcut')
+            menu.add_command(cmd_name, cmd_func, cmd_shortcut)
+
+        if isinstance(menu_data, dict):
+            item_type = menu_data.get('type')
+            if item_type == 'separator':
+                menu.add_separator()
+            elif item_type == 'command':
+                build_menu_command(menu, menu_data)
+            elif item_type == 'menu':
+                sub_menu = menu.add_menu(menu_data['label'])
+                items = menu_data.get('items', [])
+                self._deserialize_context_menu(sub_menu, items)
+        elif isinstance(menu_data, list):
+            for item_data in menu_data:
+                self._deserialize_context_menu(menu, item_data)
+
+    def set_context_menu(self, menu_name, data):
+        """
+        Populate a context menu from serialized data.
+
+        serialized menu data example:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            [
+                {
+                    'type': 'menu',
+                    'label': 'test sub menu',
+                    'items': [
+                        {
+                            'type': 'command',
+                            'label': 'test command',
+                            'file': '../path/to/my/test_module.py',
+                            'function': 'run_test',
+                            'shortcut': 'Ctrl+b'
+                        },
+
+                    ]
+                },
+            ]
+
+        Args:
+            menu_name (str): name of the parent context menu to populate under.
+            data (dict): serialized menu data.
+        """
+        context_menu = self.get_context_menu(menu_name)
+        self._deserialize_context_menu(context_menu, data)
+
+    def set_context_menu_from_file(self, file_path, menu=None):
+        """
+        Populate a context menu from a serialized json file.
+
+        Menu Types:
+            - ``"graph"`` context menu from the node graph.
+            - ``"nodes"`` context menu for the nodes.
+
+        Args:
+            menu (str): name of the parent context menu to populate under.
+            file_path (str): serialized menu commands json file.
+        """
+        menu = menu or 'graph'
+        if not os.path.isfile(file_path):
+            return
+
+        with open(file_path) as f:
+            data = json.load(f)
+        context_menu = self.get_context_menu(menu)
+        self._deserialize_context_menu(context_menu, data)
 
     def disable_context_menu(self, disabled=True, name='all'):
         """
@@ -997,16 +1109,22 @@ class NodeGraph(QtCore.QObject):
 
             node.update()
 
+            undo_cmd = NodeAddedCmd(self, node, node.model.pos)
             if push_undo:
-                undo_cmd = NodeAddedCmd(self, node, node.model.pos)
-                undo_cmd.setText('create node: "{}"'.format(node.NODE_NAME))
+                undo_label = 'create node: "{}"'.format(node.NODE_NAME)
+                self._undo_stack.beginMacro(undo_label)
+                for n in self.selected_nodes():
+                    n.set_property('selected', False, push_undo=True)
                 self._undo_stack.push(undo_cmd)
+                self._undo_stack.endMacro()
             else:
+                for n in self.selected_nodes():
+                    n.set_property('selected', False, push_undo=False)
                 NodeAddedCmd(self, node, node.model.pos).redo()
 
             self.node_created.emit(node)
             return node
-        raise TypeError('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
+        raise NodeCreationError('Can\'t find node: "{}"'.format(node_type))
 
     def add_node(self, node, pos=None, selected=True, push_undo=True):
         """
@@ -1081,6 +1199,10 @@ class NodeGraph(QtCore.QObject):
                                  push_undo=push_undo)
                 p.clear_connections()
 
+        # collapse group node before removing.
+        if isinstance(node, GroupNode) and node.is_expanded:
+            node.collapse()
+
         if push_undo:
             self._undo_stack.push(NodeRemovedCmd(self, node))
             self._undo_stack.endMacro()
@@ -1105,6 +1227,10 @@ class NodeGraph(QtCore.QObject):
 
         if push_undo:
             self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+
+        # collapse group node before removing.
+        if isinstance(node, GroupNode) and node.is_expanded:
+            node.collapse()
 
         if isinstance(node, BaseNode):
             for p in node.input_ports():
@@ -1143,6 +1269,11 @@ class NodeGraph(QtCore.QObject):
         if push_undo:
             self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
         for node in nodes:
+
+            # collapse group node before removing.
+            if isinstance(node, GroupNode) and node.is_expanded:
+                node.collapse()
+
             if isinstance(node, BaseNode):
                 for p in node.input_ports():
                     if p.locked():
@@ -1255,7 +1386,7 @@ class NodeGraph(QtCore.QObject):
         if name not in node_names:
             return name
 
-        regex = re.compile(r'[\w ]+(?: )*(\d+)')
+        regex = re.compile(r'\w+ (\d+)$')
         search = regex.search(name)
         if not search:
             for x in range(1, len(node_names) + 2):
@@ -2023,6 +2154,9 @@ class SubGraph(NodeGraph):
             del self._widget
             del self._sub_graphs
 
+        # clone context menu from the parent node graph.
+        self._clone_context_menu_from_parent()
+
     def __repr__(self):
         return '<{}("{}") object at {}>'.format(
             self.__class__.__name__, self._node.name(), hex(id(self)))
@@ -2032,6 +2166,48 @@ class SubGraph(NodeGraph):
         Register the default builtin nodes to the :meth:`NodeGraph.node_factory`
         """
         return
+
+    def _clone_context_menu_from_parent(self):
+        """
+        Clone the context menus from the parent node graph.
+        """
+        graph_menu = self.get_context_menu('graph')
+        parent_menu = self.parent_graph.get_context_menu('graph')
+        parent_viewer = self.parent_graph.viewer()
+        excl_actions = [parent_viewer.qaction_for_undo(),
+                        parent_viewer.qaction_for_redo()]
+
+        def clone_menu(menu, menu_to_clone):
+            """
+            Args:
+                menu (NodeGraphQt.NodeGraphMenu):
+                menu_to_clone (NodeGraphQt.NodeGraphMenu):
+            """
+            sub_items = []
+            for item in menu_to_clone.get_items():
+                if item is None:
+                    menu.add_separator()
+                    continue
+                name = item.name()
+                if isinstance(item, NodeGraphMenu):
+                    sub_menu = menu.add_menu(name)
+                    sub_items.append([sub_menu, item])
+                    continue
+
+                if item in excl_actions:
+                    continue
+
+                menu.add_command(
+                    name,
+                    func=item.slot_function,
+                    shortcut=item.qaction.shortcut()
+                )
+
+            for sub_menu, to_clone in sub_items:
+                clone_menu(sub_menu, to_clone)
+
+        # duplicate the menu items.
+        clone_menu(graph_menu, parent_menu)
 
     def _build_port_nodes(self):
         """
@@ -2310,11 +2486,33 @@ class SubGraph(NodeGraph):
         if node in port_nodes and node.parent_port is not None:
             # note: port nodes can only be deleted by deleting the parent
             #       port object.
-            raise RuntimeError(
-                'Can\'t delete node "{}" it is attached to port "{}"'
-                .format(node, node.parent_port)
+            raise NodeDeletionError(
+                '{} can\'t be deleted as it is attached to a port!'.format(node)
             )
         super(SubGraph, self).delete_node(node, push_undo=push_undo)
+
+    def delete_nodes(self, nodes, push_undo=True):
+        """
+        Remove a list of specified nodes from the node graph.
+
+        Args:
+            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
+            push_undo (bool): register the command to the undo stack. (default: True)
+        """
+        if not nodes:
+            return
+
+        port_nodes = self.get_input_port_nodes() + self.get_output_port_nodes()
+        for node in nodes:
+            if node in port_nodes and node.parent_port is not None:
+                # note: port nodes can only be deleted by deleting the parent
+                #       port object.
+                raise NodeDeletionError(
+                    '{} can\'t be deleted as it is attached to a port!'
+                    .format(node)
+                )
+
+        super(SubGraph, self).delete_nodes(nodes, push_undo=push_undo)
 
     def collapse_graph(self, clear_session=True):
         """
