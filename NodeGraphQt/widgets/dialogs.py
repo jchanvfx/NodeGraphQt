@@ -48,7 +48,7 @@ class BaseDialog(object):
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        return dlg.exec_()
+        dlg.exec_()
 
     @staticmethod
     def question_dialog(text='', title='Are you sure?'):

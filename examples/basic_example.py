@@ -97,7 +97,8 @@ if __name__ == '__main__':
     n_backdrop = graph.create_node('Backdrop')
     n_backdrop.wrap_nodes([n_custom_ports, n_combo_menu])
 
-    # fit node selection to the viewer.
+    # fit nodes to the viewer.
+    graph.clear_selection()
     graph.fit_to_selection()
 
     # Custom builtin widgets from NodeGraphQt

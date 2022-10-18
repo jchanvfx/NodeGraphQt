@@ -24,6 +24,7 @@ from NodeGraphQt.constants import (
     PortTypeEnum,
     ViewerEnum
 )
+from NodeGraphQt.errors import NodeCreationError, NodeDeletionError
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
 from NodeGraphQt.nodes.group_node import GroupNode
@@ -1123,7 +1124,7 @@ class NodeGraph(QtCore.QObject):
 
             self.node_created.emit(node)
             return node
-        raise TypeError('\n\n>> Cannot find node:\t"{}"\n'.format(node_type))
+        raise NodeCreationError('Can\'t find node: "{}"'.format(node_type))
 
     def add_node(self, node, pos=None, selected=True, push_undo=True):
         """
@@ -1198,6 +1199,10 @@ class NodeGraph(QtCore.QObject):
                                  push_undo=push_undo)
                 p.clear_connections()
 
+        # collapse group node before removing.
+        if isinstance(node, GroupNode) and node.is_expanded:
+            node.collapse()
+
         if push_undo:
             self._undo_stack.push(NodeRemovedCmd(self, node))
             self._undo_stack.endMacro()
@@ -1222,6 +1227,10 @@ class NodeGraph(QtCore.QObject):
 
         if push_undo:
             self._undo_stack.beginMacro('delete node: "{}"'.format(node.name()))
+
+        # collapse group node before removing.
+        if isinstance(node, GroupNode) and node.is_expanded:
+            node.collapse()
 
         if isinstance(node, BaseNode):
             for p in node.input_ports():
@@ -1260,6 +1269,11 @@ class NodeGraph(QtCore.QObject):
         if push_undo:
             self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
         for node in nodes:
+
+            # collapse group node before removing.
+            if isinstance(node, GroupNode) and node.is_expanded:
+                node.collapse()
+
             if isinstance(node, BaseNode):
                 for p in node.input_ports():
                     if p.locked():
@@ -2472,11 +2486,33 @@ class SubGraph(NodeGraph):
         if node in port_nodes and node.parent_port is not None:
             # note: port nodes can only be deleted by deleting the parent
             #       port object.
-            raise RuntimeError(
-                'Can\'t delete node "{}" it is attached to port "{}"'
-                .format(node, node.parent_port)
+            raise NodeDeletionError(
+                '{} can\'t be deleted as it is attached to a port!'.format(node)
             )
         super(SubGraph, self).delete_node(node, push_undo=push_undo)
+
+    def delete_nodes(self, nodes, push_undo=True):
+        """
+        Remove a list of specified nodes from the node graph.
+
+        Args:
+            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
+            push_undo (bool): register the command to the undo stack. (default: True)
+        """
+        if not nodes:
+            return
+
+        port_nodes = self.get_input_port_nodes() + self.get_output_port_nodes()
+        for node in nodes:
+            if node in port_nodes and node.parent_port is not None:
+                # note: port nodes can only be deleted by deleting the parent
+                #       port object.
+                raise NodeDeletionError(
+                    '{} can\'t be deleted as it is attached to a port!'
+                    .format(node)
+                )
+
+        super(SubGraph, self).delete_nodes(nodes, push_undo=push_undo)
 
     def collapse_graph(self, clear_session=True):
         """
