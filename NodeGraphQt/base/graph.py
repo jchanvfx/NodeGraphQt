@@ -721,6 +721,8 @@ class NodeGraph(QtCore.QObject):
         import sys
         import importlib.util
 
+        nodes_menu = self.get_context_menu('nodes')
+
         def build_menu_command(menu, data):
             """
             Create menu command from serialized data.
@@ -745,7 +747,12 @@ class NodeGraph(QtCore.QObject):
             cmd_func = getattr(mod, data['function_name'])
             cmd_name = data.get('label') or '<command>'
             cmd_shortcut = data.get('shortcut')
-            menu.add_command(cmd_name, cmd_func, cmd_shortcut)
+            cmd_kwargs = {'func': cmd_func, 'shortcut': cmd_shortcut}
+
+            if menu == nodes_menu and data.get('node_type'):
+                cmd_kwargs['node_type'] = data['node_type']
+
+            menu.add_command(name=cmd_name, **cmd_kwargs)
 
         if isinstance(menu_data, dict):
             item_type = menu_data.get('type')
@@ -780,7 +787,8 @@ class NodeGraph(QtCore.QObject):
                             'label': 'test command',
                             'file': '../path/to/my/test_module.py',
                             'function': 'run_test',
-                            'shortcut': 'Ctrl+b'
+                            'shortcut': 'Ctrl+b',
+                            'node_type': 'nodeGraphQt.nodes.MyNodeClass'
                         },
 
                     ]
@@ -806,6 +814,8 @@ class NodeGraph(QtCore.QObject):
             menu (str): name of the parent context menu to populate under.
             file_path (str): serialized menu commands json file.
         """
+        file_path = os.path.abspath(file_path)
+
         menu = menu or 'graph'
         if not os.path.isfile(file_path):
             return

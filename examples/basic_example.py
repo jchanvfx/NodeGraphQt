@@ -26,7 +26,9 @@ if __name__ == '__main__':
 
     # create graph controller.
     graph = NodeGraph()
-    graph.set_context_menu_from_file('/Users/jchan/PycharmProjects/NodeGraphQt/examples/hotkeys/hotkeys.json')
+
+    # set up context menu for the node graph.
+    graph.set_context_menu_from_file('../examples/hotkeys/hotkeys.json')
 
     # registered example nodes.
     graph.register_nodes([
