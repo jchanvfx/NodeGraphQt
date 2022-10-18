@@ -950,7 +950,31 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if isinstance(self._search_widget, TabSearchMenuWidget):
             self._search_widget.rebuild = True
 
+    def qaction_for_undo(self):
+        """
+        Get the undo QAction from the parent undo stack.
+
+        Returns:
+            QtWidgets.QAction: undo action.
+        """
+        return self._undo_action
+
+    def qaction_for_redo(self):
+        """
+        Get the redo QAction from the parent undo stack.
+
+        Returns:
+            QtWidgets.QAction: redo action.
+        """
+        return self._redo_action
+
     def context_menus(self):
+        """
+        All the available context menus for the viewer.
+
+        Returns:
+            dict: viewer context menu.
+        """
         return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
     def question_dialog(self, text, title='Node Graph'):

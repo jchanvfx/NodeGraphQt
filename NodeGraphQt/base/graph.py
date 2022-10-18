@@ -2151,8 +2151,11 @@ class SubGraph(NodeGraph):
         """
         Clone the context menus from the parent node graph.
         """
-        undo_regex = re.compile(r'^\&Undo(?:| \w+)')
-        redo_regex = re.compile(r'^\&Redo(?:| \w+)')
+        graph_menu = self.get_context_menu('graph')
+        parent_menu = self.parent_graph.get_context_menu('graph')
+        parent_viewer = self.parent_graph.viewer()
+        excl_actions = [parent_viewer.qaction_for_undo(),
+                        parent_viewer.qaction_for_redo()]
 
         def clone_menu(menu, menu_to_clone):
             """
@@ -2161,7 +2164,7 @@ class SubGraph(NodeGraph):
                 menu_to_clone (NodeGraphQt.NodeGraphMenu):
             """
             sub_items = []
-            for idx, item in enumerate(menu_to_clone.get_items()):
+            for item in menu_to_clone.get_items():
                 if item is None:
                     menu.add_separator()
                     continue
@@ -2171,9 +2174,9 @@ class SubGraph(NodeGraph):
                     sub_items.append([sub_menu, item])
                     continue
 
-                if idx <= 1:
-                    if undo_regex.match(name) or redo_regex.match(name):
-                        continue
+                if item in excl_actions:
+                    continue
+
                 menu.add_command(
                     name,
                     func=item.slot_function,
@@ -2183,8 +2186,7 @@ class SubGraph(NodeGraph):
             for sub_menu, to_clone in sub_items:
                 clone_menu(sub_menu, to_clone)
 
-        graph_menu = self.get_context_menu('graph')
-        parent_menu = self.parent_graph.get_context_menu('graph')
+        # duplicate the menu items.
         clone_menu(graph_menu, parent_menu)
 
     def _build_port_nodes(self):
