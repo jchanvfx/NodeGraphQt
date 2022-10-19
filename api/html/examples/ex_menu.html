@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Menu Overview &mdash; NodeGraphQt 0.3.0 documentation</title>
+  <title>Menu Overview &mdash; NodeGraphQt 0.4.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -193,13 +193,20 @@
             
   <section id="menu-overview">
 <h1>Menu Overview<a class="headerlink" href="#menu-overview" title="Permalink to this headline">¶</a></h1>
-<p>Examples for customizing context menus in NodeGraphQt.</p>
+<div class="line-block">
+<div class="line">Examples for customizing context menus in NodeGraphQt.</div>
+</div>
 <section id="default-context-menu">
 <h2>Default Context Menu<a class="headerlink" href="#default-context-menu" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code> has a default context menu with a few essential
-menu commands built when initialized it can be accessed with the
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.context_menu()</span></code> function.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code> has a context menu can be accessed with
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.context_menu" title="NodeGraphQt.NodeGraph.context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.context_menu()</span></code></a>.</p>
+<p>It can also be populated it with a config file in <code class="docutils literal notranslate"><span class="pre">JSON</span></code> format by using
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_context_menu_from_file" title="NodeGraphQt.NodeGraph.set_context_menu_from_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code></a>.</p>
 <img alt="../_images/menu_hotkeys.png" src="../_images/menu_hotkeys.png" style="width: 300px;" />
+<div class="line-block">
+<div class="line">Here’s a link to the example config file with a few essential menu commands.</div>
+<div class="line"><a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json">https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json</a></div>
+</div>
 </section>
 <section id="adding-to-the-graph-menu">
 <h2>Adding to the Graph Menu<a class="headerlink" href="#adding-to-the-graph-menu" title="Permalink to this headline">¶</a></h2>
@@ -232,7 +239,9 @@ the registered <code class="docutils literal notranslate"><span class="pre">my_t
 <h2>Adding to the Nodes Menu<a class="headerlink" href="#adding-to-the-nodes-menu" title="Permalink to this headline">¶</a></h2>
 <p>Aside from the main context menu, the NodeGraph also has a nodes menu where you
 can override context menus on a per node type basis.</p>
-<p>Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">&quot;com.chantasticvfx.FooNode&quot;</span></code></p>
+<div class="line-block">
+<div class="line">Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">&quot;com.chantasticvfx.FooNode&quot;</span></code></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">setup_context_menu</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># define a couple example nodes.</span>
