@@ -56,9 +56,8 @@ class NodeFactory(object):
             node_type = self.aliases[node_type]
 
         _NodeClass = self.__nodes.get(node_type)
-        if not _NodeClass:
-            print('can\'t find node type {}'.format(node_type))
-        return _NodeClass()
+        if _NodeClass:
+            return _NodeClass()
 
     def register_node(self, node, alias=None):
         """

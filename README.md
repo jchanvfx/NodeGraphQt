@@ -5,9 +5,9 @@ applications.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
-#### API Documentation
+#### Documentation
 
-<a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">NodeGraphQt API documentation</a>
+<a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">https://jchanvfx.github.io/NodeGraphQt</a>
 
 #### Navigation
 

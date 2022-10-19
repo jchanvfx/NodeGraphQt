@@ -107,12 +107,12 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._block_signal = False
 
         self._lock = False
-        self.btn_lock = QtWidgets.QPushButton('lock')
+        self.btn_lock = QtWidgets.QPushButton('Lock')
         self.btn_lock.setToolTip(
             'Lock the properties bin prevent nodes from being loaded.')
         self.btn_lock.clicked.connect(self.lock_bin)
 
-        btn_clr = QtWidgets.QPushButton('clear')
+        btn_clr = QtWidgets.QPushButton('Clear')
         btn_clr.setToolTip('Clear the properties bin.')
         btn_clr.clicked.connect(self.clear_bin)
 

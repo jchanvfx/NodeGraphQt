@@ -326,7 +326,7 @@ class NodeObject(object):
             name (str): name of the property.
             value (object): data.
             items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
-            range (tuple)): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
+            range (tuple or list): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
             widget_type (int): widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget`
             tab (str): name of the widget tab to display in the properties bin.
@@ -387,6 +387,8 @@ class NodeObject(object):
             if hasattr(self.view, name):
                 setattr(self.view, name, value)
             self.model.set_property(name, value)
+        
+        self.update()
 
     def has_property(self, name):
         """

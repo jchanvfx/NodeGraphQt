@@ -1,17 +1,25 @@
 Menu Overview
 #############
 
-Examples for customizing context menus in NodeGraphQt.
+.. currentmodule:: NodeGraphQt
+
+| Examples for customizing context menus in NodeGraphQt.
 
 Default Context Menu
 ********************
 
-The ``NodeGraphQt.NodeGraph`` has a default context menu with a few essential
-menu commands built when initialized it can be accessed with the
-:meth:`NodeGraph.context_menu` function.
+The ``NodeGraphQt.NodeGraph`` has a context menu can be accessed with
+:meth:`NodeGraph.context_menu`.
+
+
+It can also be populated it with a config file in ``JSON`` format by using
+:meth:`NodeGraph.set_context_menu_from_file`.
 
 .. image:: ../_images/menu_hotkeys.png
     :width: 300px
+
+| Here's a link to the example config file with a few essential menu commands.
+| https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json
 
 Adding to the Graph Menu
 ************************
@@ -49,7 +57,7 @@ Adding to the Nodes Menu
 Aside from the main context menu, the NodeGraph also has a nodes menu where you
 can override context menus on a per node type basis.
 
-Below is an example for overriding a context menu for the node type ``"com.chantasticvfx.FooNode"``
+| Below is an example for overriding a context menu for the node type ``"com.chantasticvfx.FooNode"``
 
 .. code-block:: python
     :linenos:
