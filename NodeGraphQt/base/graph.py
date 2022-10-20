@@ -818,7 +818,7 @@ class NodeGraph(QtCore.QObject):
 
         menu = menu or 'graph'
         if not os.path.isfile(file_path):
-            return
+            raise IOError('file doesn\'t exists: "{}"'.format(file_path))
 
         with open(file_path) as f:
             data = json.load(f)
