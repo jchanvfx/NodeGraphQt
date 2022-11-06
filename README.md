@@ -39,7 +39,7 @@ applications.
 
 #### Examples
 
-See the [basic_example.py](/basic_example.py) python script in this repo.
+See the [basic_example.py](/examples//basic_example.py) python script in this repo.
 
 More examples can be found in the API documentation here:
 
