@@ -1701,6 +1701,10 @@ class NodeGraph(QtCore.QObject):
         """
         Cut nodes to the clipboard.
 
+        Note:
+            This function doesn't not trigger the
+            :attr:`NodeGraph.nodes_deleted` signal.
+
         See Also:
             :meth:`NodeGraph.copy_nodes`
 
@@ -1711,7 +1715,28 @@ class NodeGraph(QtCore.QObject):
         nodes = nodes or self.selected_nodes()
         self.copy_nodes(nodes)
         self._undo_stack.beginMacro('cut nodes')
-        [self._undo_stack.push(NodeRemovedCmd(self, n)) for n in nodes]
+
+        for node in nodes:
+            if isinstance(node, BaseNode):
+                for p in node.input_ports():
+                    if p.locked():
+                        p.set_locked(False,
+                                     connected_ports=False,
+                                     push_undo=True)
+                    p.clear_connections()
+                for p in node.output_ports():
+                    if p.locked():
+                        p.set_locked(False,
+                                     connected_ports=False,
+                                     push_undo=True)
+                    p.clear_connections()
+
+            # collapse group node before removing.
+            if isinstance(node, GroupNode) and node.is_expanded:
+                node.collapse()
+
+            self._undo_stack.push(NodeRemovedCmd(self, node))
+
         self._undo_stack.endMacro()
 
     def paste_nodes(self):
