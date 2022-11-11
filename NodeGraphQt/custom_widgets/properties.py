@@ -859,7 +859,11 @@ class NodePropWidget(QtWidgets.QWidget):
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
-        close_btn = QtWidgets.QPushButton('X')
+        close_btn = QtWidgets.QPushButton()
+        close_btn.setIcon(QtGui.QIcon(
+            self.style().standardPixmap(QtWidgets.QStyle.SP_DialogCancelButton)
+        ))
+        close_btn.setMaximumWidth(40)
         close_btn.setToolTip('close property')
         close_btn.clicked.connect(self._on_close)
 
