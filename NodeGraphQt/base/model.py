@@ -2,14 +2,7 @@
 import json
 from collections import defaultdict
 
-from NodeGraphQt.constants import (
-    LayoutDirectionEnum,
-    NODE_PROP,
-    NODE_PROP_QLABEL,
-    NODE_PROP_QLINEEDIT,
-    NODE_PROP_QCHECKBOX,
-    NODE_PROP_COLORPICKER
-)
+from NodeGraphQt.constants import LayoutDirectionEnum, NodePropWidgetEnum
 from NodeGraphQt.errors import NodePropertyError
 
 
@@ -97,21 +90,21 @@ class NodeModel(object):
         # temp store the property widget types.
         # (deleted when node is added to the graph)
         self._TEMP_property_widget_types = {
-            'type_': NODE_PROP_QLABEL,
-            'id': NODE_PROP_QLABEL,
-            'icon': NODE_PROP,
-            'name': NODE_PROP_QLINEEDIT,
-            'color': NODE_PROP_COLORPICKER,
-            'border_color': NODE_PROP,
-            'text_color': NODE_PROP_COLORPICKER,
-            'disabled': NODE_PROP_QCHECKBOX,
-            'selected': NODE_PROP,
-            'width': NODE_PROP,
-            'height': NODE_PROP,
-            'pos': NODE_PROP,
-            'layout_direction': NODE_PROP,
-            'inputs': NODE_PROP,
-            'outputs': NODE_PROP,
+            'type_': NodePropWidgetEnum.QLABEL.value,
+            'id': NodePropWidgetEnum.QLABEL.value,
+            'icon': NodePropWidgetEnum.HIDDEN.value,
+            'name': NodePropWidgetEnum.QLINE_EDIT.value,
+            'color': NodePropWidgetEnum.COLOR_PICKER.value,
+            'border_color': NodePropWidgetEnum.HIDDEN.value,
+            'text_color': NodePropWidgetEnum.COLOR_PICKER.value,
+            'disabled': NodePropWidgetEnum.QCHECK_BOX.value,
+            'selected': NodePropWidgetEnum.HIDDEN.value,
+            'width': NodePropWidgetEnum.HIDDEN.value,
+            'height': NodePropWidgetEnum.HIDDEN.value,
+            'pos': NodePropWidgetEnum.HIDDEN.value,
+            'layout_direction': NodePropWidgetEnum.HIDDEN.value,
+            'inputs': NodePropWidgetEnum.HIDDEN.value,
+            'outputs': NodePropWidgetEnum.HIDDEN.value,
         }
 
     def __repr__(self):
@@ -119,7 +112,7 @@ class NodeModel(object):
             self.__class__.__name__, self.name, self.id)
 
     def add_property(self, name, value, items=None, range=None,
-                     widget_type=NODE_PROP, tab=None):
+                     widget_type=None, tab=None):
         """
         add custom property.
 
@@ -127,10 +120,11 @@ class NodeModel(object):
             name (str): name of the property.
             value (object): data.
             items (list[str]): items used by widget type NODE_PROP_QCOMBO.
-            range (tuple)): min, max values used by NODE_PROP_SLIDER.
+            range (tuple): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
             tab (str): widget tab name.
         """
+        widget_type = widget_type or NodePropWidgetEnum.HIDDEN.value
         tab = tab or 'Properties'
 
         if name in self.properties.keys():
@@ -150,10 +144,14 @@ class NodeModel(object):
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
         else:
-            attrs = {self.type_: {name: {
-                'widget_type': widget_type,
-                'tab': tab
-            }}}
+            attrs = {
+                self.type_: {
+                    name: {
+                        'widget_type': widget_type,
+                        'tab': tab
+                    }
+                }
+            }
             if items:
                 attrs[self.type_][name]['items'] = items
             if range:

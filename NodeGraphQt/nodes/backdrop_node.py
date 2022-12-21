@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from NodeGraphQt.base.node import NodeObject
-from NodeGraphQt.constants import NODE_PROP_QTEXTEDIT
+from NodeGraphQt.constants import NodePropWidgetEnum
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
 
 
@@ -24,7 +24,7 @@ class BackdropNode(NodeObject):
         # override base default color.
         self.model.color = (5, 129, 138, 255)
         self.create_property('backdrop_text', '',
-                             widget_type=NODE_PROP_QTEXTEDIT,
+                             widget_type=NodePropWidgetEnum.QTEXT_EDIT.value,
                              tab='Backdrop')
 
     def on_backdrop_updated(self, update_prop, value=None):

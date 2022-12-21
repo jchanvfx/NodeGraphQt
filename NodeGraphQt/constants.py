@@ -203,37 +203,46 @@ class PipeLayoutEnum(Enum):
 
 # === PROPERTY BIN WIDGET ===
 
-#: Property type will hidden in the properties bin (default).
-NODE_PROP = 0
-#: Property type represented with a QLabel widget in the properties bin.
-NODE_PROP_QLABEL = 2
-#: Property type represented with a QLineEdit widget in the properties bin.
-NODE_PROP_QLINEEDIT = 3
-#: Property type represented with a QTextEdit widget in the properties bin.
-NODE_PROP_QTEXTEDIT = 4
-#: Property type represented with a QComboBox widget in the properties bin.
-NODE_PROP_QCOMBO = 5
-#: Property type represented with a QCheckBox widget in the properties bin.
-NODE_PROP_QCHECKBOX = 6
-#: Property type represented with a QSpinBox widget in the properties bin.
-NODE_PROP_QSPINBOX = 7
-#: Property type represented with a ColorPicker widget in the properties bin.
-NODE_PROP_COLORPICKER = 8
-#: Property type represented with a Slider widget in the properties bin.
-NODE_PROP_SLIDER = 9
-#: Property type represented with a file selector widget in the properties bin.
-NODE_PROP_FILE = 10
-#: Property type represented with a file save widget in the properties bin.
-NODE_PROP_FILE_SAVE = 11
-#: Property type represented with a vector2 widget in the properties bin.
-NODE_PROP_VECTOR2 = 12
-#: Property type represented with vector3 widget in the properties bin.
-NODE_PROP_VECTOR3 = 13
-#: Property type represented with vector4 widget in the properties bin.
-NODE_PROP_VECTOR4 = 14
-#: Property type represented with float widget in the properties bin.
-NODE_PROP_FLOAT = 15
-#: Property type represented with int widget in the properties bin.
-NODE_PROP_INT = 16
-#: Property type represented with button widget in the properties bin.
-NODE_PROP_BUTTON = 17
+class NodePropWidgetEnum(Enum):
+    """
+    Mapping used for the :class:`NodeGraphQt.PropertiesBinWidget` to display a
+    node property in the specified widget type.
+
+    :py:mod:`NodeGraphQt.constants.NodePropWidgetEnum`
+    """
+    #: Node property will be hidden in the ``PropertiesBinWidget`` (default).
+    HIDDEN = 0
+    #: Node property represented with a ``QLabel`` widget.
+    QLABEL = 2
+    #: Node property represented with a ``QLineEdit`` widget.
+    QLINE_EDIT = 3
+    #: Node property represented with a ``QTextEdit`` widget.
+    QTEXT_EDIT = 4
+    #: Node property represented with a ``QComboBox`` widget.
+    QCOMBO_BOX = 5
+    #: Node property represented with a ``QCheckBox`` widget.
+    QCHECK_BOX = 6
+    #: Node property represented with a ``QSpinBox`` widget.
+    QSPIN_BOX = 7
+    #: Node property represented with a ``QDoubleSpinBox`` widget.
+    QDOUBLESPIN_BOX = 8
+    #: Node property represented with a ColorPicker widget.
+    COLOR_PICKER = 9
+    #: Node property represented with a Slider widget.
+    SLIDER = 10
+    #: Node property represented with a file selector widget.
+    FILE_OPEN = 11
+    #: Node property represented with a file save widget.
+    FILE_SAVE = 12
+    #: Node property represented with a vector2 widget.
+    VECTOR2 = 13
+    #: Node property represented with vector3 widget.
+    VECTOR3 = 14
+    #: Node property represented with vector4 widget.
+    VECTOR4 = 15
+    #: Node property represented with float line edit widget.
+    FLOAT = 16
+    #: Node property represented with int line edit widget.
+    INT = 17
+    #: Node property represented with button widget.
+    BUTTON = 18

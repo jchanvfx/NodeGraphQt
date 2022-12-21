@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from NodeGraphQt.base.commands import PropertyChangedCmd
 from NodeGraphQt.base.model import NodeModel
-from NodeGraphQt.constants import NODE_PROP
+from NodeGraphQt.constants import NodePropWidgetEnum
 
 
 class _ClassProperty(object):
@@ -294,7 +294,7 @@ class NodeObject(object):
         self.set_property('selected', selected)
 
     def create_property(self, name, value, items=None, range=None,
-                        widget_type=NODE_PROP, tab=None):
+                        widget_type=None, tab=None):
         """
         Creates a custom property to the node.
 
@@ -303,34 +303,21 @@ class NodeObject(object):
             :class:`NodeGraphQt.PropertiesBinWidget`
 
         Hint:
-            Here are some constants variables used to define the node
-            widget type in the ``PropertiesBinWidget``.
-
-            - :attr:`NodeGraphQt.constants.NODE_PROP`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QLABEL`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QLINEEDIT`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QTEXTEDIT`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QCOMBO`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QCHECKBOX`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_QSPINBOX`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_COLORPICKER`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_FILE`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR2`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR3`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_VECTOR4`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_FLOAT`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_INT`
-            - :attr:`NodeGraphQt.constants.NODE_PROP_BUTTON`
+            To see all the available property widget types to display in
+            the ``PropertiesBinWidget`` widget checkout
+            :attr:`NodeGraphQt.constants.NodePropWidgetEnum`.
 
         Args:
             name (str): name of the property.
             value (object): data.
-            items (list[str]): items used by widget type ``NODE_PROP_QCOMBO``
-            range (tuple or list): ``(min, max)`` values used by ``NODE_PROP_SLIDER``
+            items (list[str]): items used by widget type attr:`NodePropWidgetEnum.QCOMBO_BOX`
+            range (tuple or list): ``(min, max)`` values used by :attr:`NodePropWidgetEnum.SLIDER`
             widget_type (int): widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget`
-            tab (str): name of the widget tab to display in the properties bin.
+            tab (str): name of the widget tab to display in the
+                :class:`NodeGraphQt.PropertiesBinWidget`.
         """
+        widget_type = widget_type or NodePropWidgetEnum.HIDDEN.value
         self.model.add_property(name, value, items, range, widget_type, tab)
 
     def properties(self):
@@ -494,4 +481,3 @@ class NodeObject(object):
         """
         self.model.layout_direction = value
         self.view.layout_direction = value
-
