@@ -1189,6 +1189,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 nodes = self.selected_nodes()
             elif self.all_nodes():
                 nodes = self.all_nodes()
+            if not nodes:
+                return
+
         if len(nodes) == 1:
             self.centerOn(nodes[0])
         else:

@@ -3,11 +3,7 @@ from collections import OrderedDict
 
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (NODE_PROP_QLABEL,
-                                   NODE_PROP_QLINEEDIT,
-                                   NODE_PROP_QCOMBO,
-                                   NODE_PROP_QCHECKBOX,
-                                   PortTypeEnum)
+from NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
 from NodeGraphQt.errors import (PortError,
                                 PortRegistrationError,
                                 NodeWidgetError)
@@ -70,7 +66,7 @@ class BaseNode(NodeObject):
             self.model.set_property(name, val)
 
         for name, widget in self.view.widgets.items():
-            self.model.set_property(name, widget.value)
+            self.model.set_property(name, widget.get_value())
 
     def set_layout_direction(self, value=0):
         """
@@ -142,7 +138,7 @@ class BaseNode(NodeObject):
         """
         return self.view.widgets.get(name)
 
-    def add_custom_widget(self, widget, widget_type=NODE_PROP_QLABEL, tab=None):
+    def add_custom_widget(self, widget, widget_type=None, tab=None):
         """
         Add a custom node widget into the node.
 
@@ -155,12 +151,15 @@ class BaseNode(NodeObject):
         Args:
             widget (NodeBaseWidget): node widget class object.
             widget_type: widget flag to display in the
-                :class:`NodeGraphQt.PropertiesBinWidget` (default: QLabel).
+                :class:`NodeGraphQt.PropertiesBinWidget`
+                (default: :attr:`NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN`).
             tab (str): name of the widget tab to display in.
         """
         if not isinstance(widget, NodeBaseWidget):
             raise NodeWidgetError(
                 '\'widget\' must be an instance of a NodeBaseWidget')
+
+        widget_type = widget_type or NodePropWidgetEnum.HIDDEN.value
         self.create_property(widget.get_name(),
                              widget.get_value(),
                              widget_type=widget_type,
@@ -185,10 +184,13 @@ class BaseNode(NodeObject):
             items (list[str]): items to be added into the menu.
             tab (str): name of the widget tab to display in.
         """
-        items = items or []
         self.create_property(
-            name, items[0], items=items, widget_type=NODE_PROP_QCOMBO, tab=tab)
-
+            name,
+            value=items[0] if items else None,
+            items=items or [],
+            widget_type=NodePropWidgetEnum.QCOMBO_BOX.value,
+            tab=tab
+        )
         widget = NodeComboBox(self.view, name, label, items)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
@@ -210,7 +212,11 @@ class BaseNode(NodeObject):
             tab (str): name of the widget tab to display in.
         """
         self.create_property(
-            name, text, widget_type=NODE_PROP_QLINEEDIT, tab=tab)
+            name,
+            value=text,
+            widget_type=NodePropWidgetEnum.QLINE_EDIT.value,
+            tab=tab
+        )
         widget = NodeLineEdit(self.view, name, label, text)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
@@ -233,7 +239,11 @@ class BaseNode(NodeObject):
             tab (str): name of the widget tab to display in.
         """
         self.create_property(
-            name, state, widget_type=NODE_PROP_QCHECKBOX, tab=tab)
+            name,
+            value=state,
+            widget_type=NodePropWidgetEnum.QCHECK_BOX.value,
+            tab=tab
+        )
         widget = NodeCheckBox(self.view, name, label, text, state)
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
