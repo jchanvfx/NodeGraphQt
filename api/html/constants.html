@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Constants &mdash; NodeGraphQt 0.4.0 documentation</title>
+  <title>Constants &mdash; NodeGraphQt 0.5.0 documentation</title>
   
 
   
@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Graphs" href="graph.html" />
-    <link rel="prev" title="NodeGraphQt v0.4.0" href="index.html" /> 
+    <link rel="prev" title="NodeGraphQt v0.5.0" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -199,7 +199,7 @@ used throughout the NodeGraphQt library.</div>
 <a class="reference internal" href="#NodeGraphQt.constants.VersionEnum" title="NodeGraphQt.constants.VersionEnum"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NodeGraphQt.constants.VersionEnum</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="NodeGraphQt.constants.VersionEnum.VERSION">
-<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'0.4.0'</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.VERSION" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'0.5.0'</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.VERSION" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -209,7 +209,7 @@ used throughout the NodeGraphQt library.</div>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="NodeGraphQt.constants.VersionEnum.MINOR">
-<span class="sig-name descname"><span class="pre">MINOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.MINOR" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">MINOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.MINOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -510,106 +510,120 @@ used throughout the NodeGraphQt library.</div>
 
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type will hidden in the properties bin (default).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NodePropWidgetEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping used for the <a class="reference internal" href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> to display a
+node property in the specified widget type.</p>
+<p><a class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum" title="NodeGraphQt.constants.NodePropWidgetEnum"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN">
+<span class="sig-name descname"><span class="pre">HIDDEN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property will be hidden in the <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> (default).</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QLABEL">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QLABEL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QLabel widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QLABEL">
+<span class="sig-name descname"><span class="pre">QLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QLABEL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QLabel</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QLINEEDIT">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QLINEEDIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QLINEEDIT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QLineEdit widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QLINE_EDIT">
+<span class="sig-name descname"><span class="pre">QLINE_EDIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QLINE_EDIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QLineEdit</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QTEXTEDIT">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QTEXTEDIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QTEXTEDIT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QTextEdit widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QTEXT_EDIT">
+<span class="sig-name descname"><span class="pre">QTEXT_EDIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QTEXT_EDIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QTextEdit</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QCOMBO">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QCOMBO</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QCOMBO" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QComboBox widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX">
+<span class="sig-name descname"><span class="pre">QCOMBO_BOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QCHECKBOX">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QCHECKBOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QCHECKBOX" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QCheckBox widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QCHECK_BOX">
+<span class="sig-name descname"><span class="pre">QCHECK_BOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QCHECK_BOX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QCheckBox</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_QSPINBOX">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_QSPINBOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_QSPINBOX" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a QSpinBox widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QSPIN_BOX">
+<span class="sig-name descname"><span class="pre">QSPIN_BOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QSPIN_BOX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QSpinBox</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_COLORPICKER">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_COLORPICKER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_COLORPICKER" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a ColorPicker widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.QDOUBLESPIN_BOX">
+<span class="sig-name descname"><span class="pre">QDOUBLESPIN_BOX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.QDOUBLESPIN_BOX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a <code class="docutils literal notranslate"><span class="pre">QDoubleSpinBox</span></code> widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_SLIDER">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_SLIDER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_SLIDER" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a Slider widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.COLOR_PICKER">
+<span class="sig-name descname"><span class="pre">COLOR_PICKER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.COLOR_PICKER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a ColorPicker widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_FILE">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_FILE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a file selector widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.SLIDER">
+<span class="sig-name descname"><span class="pre">SLIDER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a Slider widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_FILE_SAVE">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_FILE_SAVE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">11</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_FILE_SAVE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a file save widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.FILE_OPEN">
+<span class="sig-name descname"><span class="pre">FILE_OPEN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">11</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.FILE_OPEN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a file selector widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_VECTOR2">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_VECTOR2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">12</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_VECTOR2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with a vector2 widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.FILE_SAVE">
+<span class="sig-name descname"><span class="pre">FILE_SAVE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">12</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.FILE_SAVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a file save widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_VECTOR3">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_VECTOR3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">13</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_VECTOR3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with vector3 widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.VECTOR2">
+<span class="sig-name descname"><span class="pre">VECTOR2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">13</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with a vector2 widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_VECTOR4">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_VECTOR4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">14</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_VECTOR4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with vector4 widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.VECTOR3">
+<span class="sig-name descname"><span class="pre">VECTOR3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">14</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with vector3 widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_FLOAT">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_FLOAT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">15</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_FLOAT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with float widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.VECTOR4">
+<span class="sig-name descname"><span class="pre">VECTOR4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">15</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with vector4 widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_INT">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_INT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_INT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with int widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.FLOAT">
+<span class="sig-name descname"><span class="pre">FLOAT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.FLOAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with float line edit widget.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="NodeGraphQt.constants.NODE_PROP_BUTTON">
-<span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NODE_PROP_BUTTON</span></span><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#NodeGraphQt.constants.NODE_PROP_BUTTON" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property type represented with button widget in the properties bin.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.INT">
+<span class="sig-name descname"><span class="pre">INT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">17</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.INT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with int line edit widget.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum.BUTTON">
+<span class="sig-name descname"><span class="pre">BUTTON</span></span><em class="property"> <span class="pre">=</span> <span class="pre">18</span></em><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum.BUTTON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node property represented with button widget.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -621,7 +635,7 @@ used throughout the NodeGraphQt library.</div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="graph.html" class="btn btn-neutral float-right" title="Graphs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="index.html" class="btn btn-neutral float-left" title="NodeGraphQt v0.4.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="NodeGraphQt v0.5.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
