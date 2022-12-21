@@ -32,9 +32,8 @@ class PropColorPickerRGB(BaseProperty):
         self.value_changed.emit(self.toolTip(), value)
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(
-            QtGui.QColor.fromRgbF(*self.get_value())
-        )
+        current_color = QtGui.QColor(*self.get_value())
+        color = QtWidgets.QColorDialog.getColor(current_color, self)
         if color.isValid():
             self.set_value(color.getRgb())
 
