@@ -310,8 +310,10 @@ class NodeObject(object):
         Args:
             name (str): name of the property.
             value (object): data.
-            items (list[str]): items used by widget type attr:`NodePropWidgetEnum.QCOMBO_BOX`
-            range (tuple or list): ``(min, max)`` values used by :attr:`NodePropWidgetEnum.SLIDER`
+            items (list[str]): items used by widget type
+                attr:`NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX`
+            range (tuple or list): ``(min, max)`` values used by
+                :attr:`NodeGraphQt.constants.NodePropWidgetEnum.SLIDER`
             widget_type (int): widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget`
             tab (str): name of the widget tab to display in the

@@ -342,6 +342,11 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         properties_bin = PropertiesBinWidget(parent=None, node_graph=graph)
         properties_bin.show()
 
+    See Also:
+            :meth:`NodeGraphQt.BaseNode.add_custom_widget`,
+            :meth:`NodeGraphQt.NodeObject.create_property`,
+            :attr:`NodeGraphQt.constants.NodePropWidgetEnum`
+
     Args:
         parent (QtWidgets.QWidget): parent of the new widget.
         node_graph (NodeGraphQt.NodeGraph): node graph.

@@ -152,7 +152,7 @@ class BaseNode(NodeObject):
             widget (NodeBaseWidget): node widget class object.
             widget_type: widget flag to display in the
                 :class:`NodeGraphQt.PropertiesBinWidget`
-                (default: :attr:`NodePropWidgetEnum.HIDDEN`).
+                (default: :attr:`NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN`).
             tab (str): name of the widget tab to display in.
         """
         if not isinstance(widget, NodeBaseWidget):
