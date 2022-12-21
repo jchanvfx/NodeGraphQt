@@ -1017,6 +1017,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             nodes (list[NodeGraphQt.BaseNode]): a list of nodes.
         """
+        nodes = nodes or []
         self._viewer.center_selection([n.view for n in nodes])
 
     def center_selection(self):
