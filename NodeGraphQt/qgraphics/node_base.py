@@ -1024,4 +1024,4 @@ class NodeItem(AbstractNodeItem):
         widgets = node_dict.pop('widgets', {})
         for name, value in widgets.items():
             if self._widgets.get(name):
-                self._widgets[name].get_value = value
+                self._widgets[name].set_value(value)
