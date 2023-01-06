@@ -1202,13 +1202,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         # collapse group node before removing.
         if isinstance(node, GroupNode) and node.is_expanded:
@@ -1249,13 +1249,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         if push_undo:
             self._undo_stack.push(NodeRemovedCmd(self, node))
