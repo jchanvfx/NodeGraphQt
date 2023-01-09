@@ -772,7 +772,7 @@ class NodeGraph(QtCore.QObject):
         """
         Populate a context menu from serialized data.
 
-        serialized menu data example:
+        example of serialized menu data:
 
         .. highlight:: python
         .. code-block:: python
@@ -795,6 +795,15 @@ class NodeGraph(QtCore.QObject):
                 },
             ]
 
+        the ``run_test`` example function:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            def run_test(graph):
+                print(graph.selected_nodes())
+
+
         Args:
             menu_name (str): name of the parent context menu to populate under.
             data (dict): serialized menu data.
@@ -806,7 +815,8 @@ class NodeGraph(QtCore.QObject):
         """
         Populate a context menu from a serialized json file.
 
-        Menu Types:
+        menu types:
+
             - ``"graph"`` context menu from the node graph.
             - ``"nodes"`` context menu for the nodes.
 
@@ -1202,13 +1212,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         # collapse group node before removing.
         if isinstance(node, GroupNode) and node.is_expanded:
@@ -1249,13 +1259,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         if push_undo:
             self._undo_stack.push(NodeRemovedCmd(self, node))
