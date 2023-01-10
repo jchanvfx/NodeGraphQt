@@ -114,7 +114,8 @@ class NodeModel(object):
     def add_property(self, name, value, items=None, range=None,
                      widget_type=None, tab=None):
         """
-        add custom property.
+        add custom property or raises an error if the property name is already
+        taken.
 
         Args:
             name (str): name of the property.
@@ -159,6 +160,11 @@ class NodeModel(object):
             self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):
+        """
+        Args:
+            name (str): property name.
+            value (object): property value.
+        """
         if name in self.properties.keys():
             setattr(self, name, value)
         elif name in self._custom_prop.keys():
@@ -167,17 +173,48 @@ class NodeModel(object):
             raise NodePropertyError('No property "{}"'.format(name))
 
     def get_property(self, name):
+        """
+        Args:
+            name (str): property name.
+
+        Returns:
+            object: property value.
+        """
         if name in self.properties.keys():
             return self.properties[name]
         return self._custom_prop.get(name)
 
+    def is_custom_property(self, name):
+        """
+        Args:
+            name (str): property name.
+
+        Returns:
+            bool: true if custom property.
+        """
+        return name in self._custom_prop
+
     def get_widget_type(self, name):
+        """
+        Args:
+            name (str): property name.
+
+        Returns:
+            int: node property widget type.
+        """
         model = self._graph_model
         if model is None:
             return self._TEMP_property_widget_types.get(name)
         return model.get_node_common_properties(self.type_)[name]['widget_type']
 
     def get_tab_name(self, name):
+        """
+        Args:
+            name (str): property name.
+
+        Returns:
+            str: name of the tab for the properties bin.
+        """
         model = self._graph_model
         if model is None:
             attrs = self._TEMP_property_attrs.get(name)
