@@ -376,8 +376,10 @@ class NodeObject(object):
             if hasattr(self.view, name):
                 setattr(self.view, name, value)
             self.model.set_property(name, value)
-        
-        self.update()
+
+        # redraw the node for custom properties.
+        if self.model.is_custom_property(name):
+            self.view.draw_node()
 
     def has_property(self, name):
         """

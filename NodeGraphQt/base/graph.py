@@ -1813,14 +1813,16 @@ class NodeGraph(QtCore.QObject):
             return
         if mode is None:
             mode = not nodes[0].disabled()
-        if len(nodes) > 1:
-            text = {False: 'enable', True: 'disable'}[mode]
-            text = '{} ({}) nodes'.format(text, len(nodes))
-            self._undo_stack.beginMacro(text)
-            [n.set_disabled(mode) for n in nodes]
-            self._undo_stack.endMacro()
+        if len(nodes) == 1:
+            nodes[0].set_disabled(mode)
             return
-        nodes[0].set_disabled(mode)
+
+        text = '{} ({}) nodes'.format(
+            {False: 'enable', True: 'disable'}[mode], len(nodes)
+        )
+        self._undo_stack.beginMacro(text)
+        [n.set_disabled(mode) for n in nodes]
+        self._undo_stack.endMacro()
 
     def use_OpenGL(self):
         """
