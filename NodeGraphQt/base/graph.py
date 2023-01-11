@@ -1800,28 +1800,43 @@ class NodeGraph(QtCore.QObject):
 
     def disable_nodes(self, nodes, mode=None):
         """
-        Set weather to Disable or Enable specified nodes.
+        Toggle nodes to be either disabled or enabled state.
 
         See Also:
             :meth:`NodeObject.set_disabled`
 
         Args:
-            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
-            mode (bool): (optional) disable state of the nodes.
+            nodes (list[NodeGraphQt.BaseNode]): list of nodes.
+            mode (bool): (optional) override state of the nodes.
         """
         if not nodes:
             return
-        if mode is None:
-            mode = not nodes[0].disabled()
+
         if len(nodes) == 1:
+            if mode is None:
+                mode = not nodes[0].disabled()
             nodes[0].set_disabled(mode)
             return
 
-        text = '{} ({}) nodes'.format(
-            {False: 'enable', True: 'disable'}[mode], len(nodes)
-        )
+        if mode is not None:
+            states = {False: 'enable', True: 'disable'}
+            text = '{} ({}) nodes'.format(states[mode], len(nodes))
+            self._undo_stack.beginMacro(text)
+            [n.set_disabled(mode) for n in nodes]
+            self._undo_stack.endMacro()
+            return
+
+        text = []
+        enabled_count = len([n for n in nodes if n.disabled()])
+        disabled_count = len([n for n in nodes if not n.disabled()])
+        if enabled_count > 0:
+            text.append('enabled ({})'.format(enabled_count))
+        if disabled_count > 0:
+            text.append('disabled ({})'.format(disabled_count))
+        text = ' / '.join(text) + ' nodes'
+
         self._undo_stack.beginMacro(text)
-        [n.set_disabled(mode) for n in nodes]
+        [n.set_disabled(not n.disabled()) for n in nodes]
         self._undo_stack.endMacro()
 
     def use_OpenGL(self):
