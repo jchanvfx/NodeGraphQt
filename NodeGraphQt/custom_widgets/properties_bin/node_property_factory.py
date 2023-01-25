@@ -1,5 +1,5 @@
 from NodeGraphQt.constants import NodePropWidgetEnum
-from .custom_widget_color_picker import PropColorPickerRGB
+from .custom_widget_color_picker import PropColorPickerRGB, PropColorPickerRGBA
 from .custom_widget_file_paths import PropFilePath, PropFileSavePath
 from .custom_widget_slider import PropSlider
 from .custom_widget_value_edit import FloatValueEdit, IntValueEdit
@@ -34,6 +34,7 @@ class NodePropertyWidgetFactory(object):
             NodePropWidgetEnum.QDOUBLESPIN_BOX.value: PropDoubleSpinBox,
             # custom widgets.
             NodePropWidgetEnum.COLOR_PICKER.value: PropColorPickerRGB,
+            NodePropWidgetEnum.COLOR4_PICKER.value: PropColorPickerRGBA,
             NodePropWidgetEnum.SLIDER.value: PropSlider,
             NodePropWidgetEnum.FILE_OPEN.value: PropFilePath,
             NodePropWidgetEnum.FILE_SAVE.value: PropFileSavePath,
