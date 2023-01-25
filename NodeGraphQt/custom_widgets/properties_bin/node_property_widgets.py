@@ -587,6 +587,11 @@ if __name__ == '__main__':
                 range=(45, 55),
                 widget_type=NodePropWidgetEnum.SLIDER.value
             )
+            self.create_property(
+                'color4_picker',
+                value=(255, 0, 0, 122),
+                widget_type=NodePropWidgetEnum.COLOR4_PICKER.value
+            )
 
     def _prop_changed(node_id, prop_name, prop_value):
         print('-'*100)

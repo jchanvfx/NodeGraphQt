@@ -246,3 +246,5 @@ class NodePropWidgetEnum(Enum):
     INT = 17
     #: Node property represented with button widget.
     BUTTON = 18
+    #: Node property represented with a ColorPickerRGBA widget.
+    COLOR4_PICKER = 19
