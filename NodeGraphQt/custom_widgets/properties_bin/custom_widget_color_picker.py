@@ -111,7 +111,7 @@ class PropColorPickerRGBA(BaseProperty):
             '''.format(*c)
         )
         self._button.setToolTip(
-            'rgb: {}\nhex: {}'.format(self._color[:3], hex_color)
+            'rgba: {}\nhex: {}'.format(self._color, hex_color)
         )
 
     def get_value(self):
