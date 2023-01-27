@@ -228,23 +228,23 @@ class NodePropWidgetEnum(Enum):
     QDOUBLESPIN_BOX = 8
     #: Node property represented with a ColorPicker widget.
     COLOR_PICKER = 9
+    #: Node property represented with a ColorPicker (RGBA) widget.
+    COLOR4_PICKER = 10
     #: Node property represented with a Slider widget.
-    SLIDER = 10
+    SLIDER = 11
     #: Node property represented with a file selector widget.
-    FILE_OPEN = 11
+    FILE_OPEN = 12
     #: Node property represented with a file save widget.
-    FILE_SAVE = 12
+    FILE_SAVE = 13
     #: Node property represented with a vector2 widget.
-    VECTOR2 = 13
+    VECTOR2 = 14
     #: Node property represented with vector3 widget.
-    VECTOR3 = 14
+    VECTOR3 = 15
     #: Node property represented with vector4 widget.
-    VECTOR4 = 15
+    VECTOR4 = 16
     #: Node property represented with float line edit widget.
-    FLOAT = 16
+    FLOAT = 17
     #: Node property represented with int line edit widget.
-    INT = 17
+    INT = 18
     #: Node property represented with button widget.
-    BUTTON = 18
-    #: Node property represented with a ColorPickerRGBA widget.
-    COLOR4_PICKER = 19
+    BUTTON = 19

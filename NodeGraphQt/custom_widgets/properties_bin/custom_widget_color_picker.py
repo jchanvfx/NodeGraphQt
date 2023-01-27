@@ -64,13 +64,13 @@ class PropColorPickerRGB(BaseProperty):
             self.value_changed.emit(self.toolTip(), value)
 
 
-class PropColorPickerRGBA(BaseProperty):
+class PropColorPickerRGBA(PropColorPickerRGB):
     """
     Color4 (rgba) picker widget for a node property.
     """
 
     def __init__(self, parent=None):
-        super(PropColorPickerRGBA, self).__init__(parent)
+        BaseProperty.__init__(self, parent)
         self._color = (0, 0, 0, 255)
         self._button = QtWidgets.QPushButton()
         self._vector = PropVector4()
@@ -84,22 +84,6 @@ class PropColorPickerRGBA(BaseProperty):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
         layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
-
-    def _on_vector_changed(self, _, value):
-        self._color = tuple(value)
-        self._update_color()
-        self.value_changed.emit(self.toolTip(), value)
-
-    def _on_select_color(self):
-        current_color = QtGui.QColor(*self.get_value())
-        alpha_option = QtWidgets.QColorDialog.ShowAlphaChannel
-        color = QtWidgets.QColorDialog.getColor(
-            current_color, self, options=alpha_option)
-        if color.isValid():
-            self.set_value(color.getRgb())
-
-    def _update_vector(self):
-        self._vector.set_value(self._color)
 
     def _update_color(self):
         c = [int(max(min(i, 255), 0)) for i in self._color]
@@ -116,10 +100,3 @@ class PropColorPickerRGBA(BaseProperty):
 
     def get_value(self):
         return self._color[:4]
-
-    def set_value(self, value):
-        if value != self.get_value():
-            self._color = value
-            self._update_color()
-            self._update_vector()
-            self.value_changed.emit(self.toolTip(), value)
