@@ -34,6 +34,7 @@ if __name__ == '__main__':
     graph.register_nodes([
         basic_nodes.BasicNodeA,
         basic_nodes.BasicNodeB,
+        basic_nodes.CircleNode,
         custom_ports_node.CustomPortsNode,
         group_node.MyGroupNode,
         widget_nodes.DropdownMenuNode,
@@ -73,6 +74,10 @@ if __name__ == '__main__':
     # create node with the QComboBox widget.
     n_combo_menu = graph.create_node(
         'nodes.widget.DropdownMenuNode', name='combobox node')
+
+    # crete node with the circular design.
+    n_circle = graph.create_node(
+        'nodes.basic.CircleNode', name='circle node')
 
     # create group node.
     n_group = graph.create_node('nodes.group.MyGroupNode')
