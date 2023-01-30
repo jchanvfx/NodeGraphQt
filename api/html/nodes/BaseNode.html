@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>BaseNode &mdash; NodeGraphQt 0.5.1 documentation</title>
+  <title>BaseNode &mdash; NodeGraphQt 0.5.2 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Port.html">Port</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basenode-circle">BaseNode (Circle)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="GroupNode.html">GroupNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PortNode.html">PortNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
@@ -778,6 +779,40 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd></dl>
 
 </section>
+<section id="basenode-circle">
+<h1>BaseNode (Circle)<a class="headerlink" href="#basenode-circle" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.BaseNodeCircle">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">BaseNodeCircle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNodeCircle" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.5.2</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNodeCircle</span></code> is pretty much the same class as the
+<a class="reference internal" href="#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> except with a different design.</p>
+<p><strong>Inherited from:</strong> <a class="reference internal" href="#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a></p>
+<img alt="../_images/node_circle.png" src="../_images/node_circle.png" style="width: 250px;" />
+<p>example snippet:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNodeCircle</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">class</span> <span class="nc">ExampleNode</span><span class="p">(</span><span class="n">BaseNodeCircle</span><span class="p">):</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="c1"># unique node identifier domain.</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.jchanvfx.github&#39;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>    <span class="c1"># initial default node name.</span>
+<span class="linenos"> 9</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;My Node&#39;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>        <span class="c1"># create an input port.</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>        <span class="c1"># create an output port.</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 
 
            </div>
@@ -793,7 +828,7 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2022, Johnny Chan.
+        &#169; Copyright 2023, Johnny Chan.
 
     </p>
   </div> 

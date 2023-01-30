@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Graphs &mdash; NodeGraphQt 0.5.1 documentation</title>
+  <title>Graphs &mdash; NodeGraphQt 0.5.2 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -591,7 +591,7 @@ with the arg <code class="docutils literal notranslate"><span class="pre">menu=&
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.disable_nodes">
 <span class="sig-name descname"><span class="pre">disable_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.disable_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set weather to Disable or Enable specified nodes.</p>
+<dd><p>Toggle nodes to be either disabled or enabled state.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_disabled" title="NodeGraphQt.NodeObject.set_disabled"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_disabled()</span></code></a></p>
@@ -599,8 +599,8 @@ with the arg <code class="docutils literal notranslate"><span class="pre">menu=&
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p></li>
-<li><p><strong>mode</strong> (<em>bool</em>) – (optional) disable state of the nodes.</p></li>
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes.</p></li>
+<li><p><strong>mode</strong> (<em>bool</em>) – (optional) override state of the nodes.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1112,7 +1112,7 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_context_menu">
 <span class="sig-name descname"><span class="pre">set_context_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">menu_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_context_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate a context menu from serialized data.</p>
-<p>serialized menu data example:</p>
+<p>example of serialized menu data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
         <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;menu&#39;</span><span class="p">,</span>
@@ -1132,6 +1132,11 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <span class="p">]</span>
 </pre></div>
 </div>
+<p>the <code class="docutils literal notranslate"><span class="pre">run_test</span></code> example function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">selected_nodes</span><span class="p">())</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1146,13 +1151,13 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_context_menu_from_file">
 <span class="sig-name descname"><span class="pre">set_context_menu_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_context_menu_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate a context menu from a serialized json file.</p>
-<dl class="simple">
-<dt>Menu Types:</dt><dd><ul class="simple">
+<p>menu types:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1762,7 +1767,7 @@ controller for managing the expanded node graph for a group node.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2022, Johnny Chan.
+        &#169; Copyright 2023, Johnny Chan.
 
     </p>
   </div> 

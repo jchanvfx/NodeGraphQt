@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>GroupNode &mdash; NodeGraphQt 0.5.1 documentation</title>
+  <title>GroupNode &mdash; NodeGraphQt 0.5.2 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Port.html">Port</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BaseNode.html">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BaseNode.html#basenode-circle">BaseNode (Circle)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">GroupNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PortNode.html">PortNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
@@ -202,9 +203,8 @@
 <dt class="sig sig-object py" id="NodeGraphQt.GroupNode">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">GroupNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.GroupNode" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.2.0</span></code></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code> class extends from the
-:class:<code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code> class with the ability to nest other nodes
-inside of it.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code> class extends from the :class:<code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code>
+class with the ability to nest other nodes inside of it.</p>
 <p><strong>Inherited from:</strong> <a class="reference internal" href="BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a></p>
 <img alt="../_images/group_node.png" src="../_images/group_node.png" style="width: 250px;" />
 <ul class="simple">
@@ -230,6 +230,14 @@ inside of it.</p>
 <p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.expand_group_node()</span></code></a>,
 <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.expand_group_node()</span></code></a>.</p>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node graph used to manage the nodes expaneded session.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -242,7 +250,7 @@ or returns None.</p>
 <dd class="field-odd"><p>sub graph controller.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">NodeGraphQt.SubGraph</a> or None</p>
+<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -304,7 +312,7 @@ or returns None.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2022, Johnny Chan.
+        &#169; Copyright 2023, Johnny Chan.
 
     </p>
   </div> 
