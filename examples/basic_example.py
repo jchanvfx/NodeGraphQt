@@ -34,6 +34,7 @@ if __name__ == '__main__':
     graph.register_nodes([
         basic_nodes.BasicNodeA,
         basic_nodes.BasicNodeB,
+        basic_nodes.CircleNode,
         custom_ports_node.CustomPortsNode,
         group_node.MyGroupNode,
         widget_nodes.DropdownMenuNode,
@@ -54,9 +55,9 @@ if __name__ == '__main__':
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    this_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(this_path, 'examples', 'star.png')
-    n_basic_b.set_icon(icon)
+    n_basic_b.set_icon(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'star.png')
+    )
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
@@ -73,6 +74,10 @@ if __name__ == '__main__':
     # create node with the QComboBox widget.
     n_combo_menu = graph.create_node(
         'nodes.widget.DropdownMenuNode', name='combobox node')
+
+    # crete node with the circular design.
+    n_circle = graph.create_node(
+        'nodes.basic.CircleNode', name='circle node')
 
     # create group node.
     n_group = graph.create_node('nodes.group.MyGroupNode')
