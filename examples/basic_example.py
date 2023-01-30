@@ -55,9 +55,9 @@ if __name__ == '__main__':
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    this_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(this_path, 'examples', 'star.png')
-    n_basic_b.set_icon(icon)
+    n_basic_b.set_icon(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'star.png')
+    )
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(

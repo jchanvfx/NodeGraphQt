@@ -64,6 +64,7 @@ class CircleNode(BaseNodeCircle):
 
     def __init__(self):
         super(CircleNode, self).__init__()
+        self.set_color(10, 24, 38)
 
         # create node inputs
         self.add_input('in 1')
