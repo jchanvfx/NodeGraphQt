@@ -61,7 +61,11 @@ class _PropertiesList(QtWidgets.QTableWidget):
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     def wheelEvent(self, event):
-        delta = event.delta() * 0.2
+        """
+        Args:
+            event (QtGui.QWheelEvent):
+        """
+        delta = event.angleDelta().y() * 0.2
         self.verticalScrollBar().setValue(
             self.verticalScrollBar().value() - delta
         )
@@ -582,6 +586,11 @@ if __name__ == '__main__':
                 value=50,
                 range=(45, 55),
                 widget_type=NodePropWidgetEnum.SLIDER.value
+            )
+            self.create_property(
+                'color4_picker',
+                value=(255, 0, 0, 122),
+                widget_type=NodePropWidgetEnum.COLOR4_PICKER.value
             )
 
     def _prop_changed(node_id, prop_name, prop_value):

@@ -236,14 +236,14 @@ class NodeItem(AbstractNodeItem):
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
         if event.button() == QtCore.Qt.LeftButton:
-
-            # enable text item edit mode.
-            items = self.scene().items(event.scenePos())
-            if self._text_item in items:
-                self._text_item.set_editable(True)
-                self._text_item.setFocus()
-                event.ignore()
-                return
+            if not self.disabled:
+                # enable text item edit mode.
+                items = self.scene().items(event.scenePos())
+                if self._text_item in items:
+                    self._text_item.set_editable(True)
+                    self._text_item.setFocus()
+                    event.ignore()
+                    return
 
             viewer = self.viewer()
             if viewer:

@@ -8,9 +8,8 @@ class GroupNode(BaseNode):
     """
     `Implemented in` ``v0.2.0``
 
-    The ``NodeGraphQt.GroupNode`` class extends from the
-    :class:``NodeGraphQt.BaseNode`` class with the ability to nest other nodes
-    inside of it.
+    The ``NodeGraphQt.GroupNode`` class extends from the :class:``NodeGraphQt.BaseNode``
+    class with the ability to nest other nodes inside of it.
 
     **Inherited from:** :class:`NodeGraphQt.BaseNode`
 
@@ -45,7 +44,7 @@ class GroupNode(BaseNode):
         or returns None.
 
         Returns:
-            NodeGraphQt.SubGraph or None: sub graph controller.
+            SubGraph or None: sub graph controller.
         """
         return self.graph.sub_graphs.get(self.id)
 
@@ -75,8 +74,12 @@ class GroupNode(BaseNode):
         See Also:
             :meth:`NodeGraph.expand_group_node`,
             :meth:`SubGraph.expand_group_node`.
+
+        Returns:
+            SubGraph: node graph used to manage the nodes expaneded session.
         """
-        self.graph.expand_group_node(self)
+        sub_graph = self.graph.expand_group_node(self)
+        return sub_graph
 
     def collapse(self):
         """

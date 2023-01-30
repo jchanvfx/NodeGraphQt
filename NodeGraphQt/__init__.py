@@ -54,6 +54,7 @@ from .base.menu import NodesMenu, NodeGraphMenu, NodeGraphCommand
 from .base.port import Port
 from .base.node import NodeObject
 from .nodes.base_node import BaseNode
+from .nodes.base_node_circle import BaseNodeCircle
 from .nodes.backdrop_node import BackdropNode
 from .nodes.group_node import GroupNode
 
@@ -68,6 +69,7 @@ __version__ = VERSION
 __all__ = [
     'BackdropNode',
     'BaseNode',
+    'BaseNodeCircle',
     'GroupNode',
     'LICENSE',
     'NodeBaseWidget',

@@ -772,7 +772,7 @@ class NodeGraph(QtCore.QObject):
         """
         Populate a context menu from serialized data.
 
-        serialized menu data example:
+        example of serialized menu data:
 
         .. highlight:: python
         .. code-block:: python
@@ -795,6 +795,15 @@ class NodeGraph(QtCore.QObject):
                 },
             ]
 
+        the ``run_test`` example function:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            def run_test(graph):
+                print(graph.selected_nodes())
+
+
         Args:
             menu_name (str): name of the parent context menu to populate under.
             data (dict): serialized menu data.
@@ -806,7 +815,8 @@ class NodeGraph(QtCore.QObject):
         """
         Populate a context menu from a serialized json file.
 
-        Menu Types:
+        menu types:
+
             - ``"graph"`` context menu from the node graph.
             - ``"nodes"`` context menu for the nodes.
 
@@ -1202,13 +1212,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         # collapse group node before removing.
         if isinstance(node, GroupNode) and node.is_expanded:
@@ -1249,13 +1259,13 @@ class NodeGraph(QtCore.QObject):
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
             for p in node.output_ports():
                 if p.locked():
                     p.set_locked(False,
                                  connected_ports=False,
                                  push_undo=push_undo)
-                p.clear_connections()
+                p.clear_connections(push_undo=push_undo)
 
         if push_undo:
             self._undo_stack.push(NodeRemovedCmd(self, node))
@@ -1790,27 +1800,44 @@ class NodeGraph(QtCore.QObject):
 
     def disable_nodes(self, nodes, mode=None):
         """
-        Set weather to Disable or Enable specified nodes.
+        Toggle nodes to be either disabled or enabled state.
 
         See Also:
             :meth:`NodeObject.set_disabled`
 
         Args:
-            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
-            mode (bool): (optional) disable state of the nodes.
+            nodes (list[NodeGraphQt.BaseNode]): list of nodes.
+            mode (bool): (optional) override state of the nodes.
         """
         if not nodes:
             return
-        if mode is None:
-            mode = not nodes[0].disabled()
-        if len(nodes) > 1:
-            text = {False: 'enable', True: 'disable'}[mode]
-            text = '{} ({}) nodes'.format(text, len(nodes))
+
+        if len(nodes) == 1:
+            if mode is None:
+                mode = not nodes[0].disabled()
+            nodes[0].set_disabled(mode)
+            return
+
+        if mode is not None:
+            states = {False: 'enable', True: 'disable'}
+            text = '{} ({}) nodes'.format(states[mode], len(nodes))
             self._undo_stack.beginMacro(text)
             [n.set_disabled(mode) for n in nodes]
             self._undo_stack.endMacro()
             return
-        nodes[0].set_disabled(mode)
+
+        text = []
+        enabled_count = len([n for n in nodes if n.disabled()])
+        disabled_count = len([n for n in nodes if not n.disabled()])
+        if enabled_count > 0:
+            text.append('enabled ({})'.format(enabled_count))
+        if disabled_count > 0:
+            text.append('disabled ({})'.format(disabled_count))
+        text = ' / '.join(text) + ' nodes'
+
+        self._undo_stack.beginMacro(text)
+        [n.set_disabled(not n.disabled()) for n in nodes]
+        self._undo_stack.endMacro()
 
     def use_OpenGL(self):
         """
