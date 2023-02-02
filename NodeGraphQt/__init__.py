@@ -17,7 +17,7 @@ example code:
 
     class MyNode(BaseNode):
 
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
         NODE_NAME = 'My Node'
 
         def __init__(self):
@@ -33,8 +33,8 @@ example code:
         graph.register_node(BackdropNode)
 
         backdrop = graph.create_node('nodeGraphQt.nodes.Backdrop', name='Backdrop')
-        node_a = graph.create_node('com.chantasticvfx.MyNode', name='Node A')
-        node_b = graph.create_node('com.chantasticvfx.MyNode', name='Node B', color='#5b162f')
+        node_a = graph.create_node('io.github.jchanvfx.MyNode', name='Node A')
+        node_b = graph.create_node('io.github.jchanvfx.MyNode', name='Node B', color='#5b162f')
 
         node_a.set_input(0, node_b.output(0))
 

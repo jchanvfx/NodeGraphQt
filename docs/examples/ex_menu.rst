@@ -57,7 +57,7 @@ Adding to the Nodes Menu
 Aside from the main context menu, the NodeGraph also has a nodes menu where you
 can override context menus on a per node type basis.
 
-| Below is an example for overriding a context menu for the node type ``"com.chantasticvfx.FooNode"``
+| Below is an example for overriding a context menu for the node type ``"io.github.jchanvfx.FooNode"``
 
 .. code-block:: python
     :linenos:
@@ -67,7 +67,7 @@ can override context menus on a per node type basis.
     # define a couple example nodes.
     class FooNode(BaseNode):
 
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
         NODE_NAME = 'foo node'
 
         def __init__(self):
@@ -94,14 +94,14 @@ can override context menus on a per node type basis.
     # get the nodes menu.
     nodes_menu = node_graph.get_context_menu('nodes')
 
-    # here we add override the context menu for "com.chantasticvfx.FooNode".
+    # here we add override the context menu for "io.github.jchanvfx.FooNode".
     nodes_menu.add_command('Test',
                            func=test_func,
-                           node_type='com.chantasticvfx.FooNode')
+                           node_type='io.github.jchanvfx.FooNode')
 
     # create some nodes.
-    foo_node = graph.create_node('com.chantasticvfx.FooNode')
-    bar_node = graph.create_node('com.chantasticvfx.BarNode', pos=[300, 100])
+    foo_node = graph.create_node('io.github.jchanvfx.FooNode')
+    bar_node = graph.create_node('io.github.jchanvfx', pos=[300, 100])
 
     # show widget.
     node_graph.widget.show()

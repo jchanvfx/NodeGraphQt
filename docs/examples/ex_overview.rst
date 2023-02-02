@@ -65,14 +65,14 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
     import sys
 
     from Qt import QtWidgets
-    from NodeGraphQt import NodeGraph, BaseNode, setup_context_menu
+    from NodeGraphQt import NodeGraph, BaseNode
 
 
     # create a node class object inherited from BaseNode.
     class FooNode(BaseNode):
 
         # unique node identifier domain.
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
 
         # initial default node name.
         NODE_NAME = 'Foo Node'
@@ -93,9 +93,6 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
         # create node graph controller.
         graph = NodeGraph()
 
-        # set up default menu and commands.
-        setup_context_menu(graph)
-
         # register the FooNode node class.
         graph.register_node(FooNode)
 
@@ -104,8 +101,8 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
         graph_widget.show()
 
         # create two nodes.
-        node_a = graph.create_node('com.chantasticvfx.FooNode', name='node A')
-        node_b = graph.create_node('com.chantasticvfx.FooNode', name='node B', pos=(300, 50))
+        node_a = graph.create_node('io.github.jchanvfx.FooNode', name='node A')
+        node_b = graph.create_node('io.github.jchanvfx.FooNode', name='node B', pos=(300, 50))
 
         # connect node_a to node_b
         node_a.set_output(0, node_b.input(2))
