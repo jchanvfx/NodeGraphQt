@@ -16,7 +16,7 @@ Creating Nodes
 
     class MyNode(BaseNode):
 
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
         NODE_NAME = 'my node'
 
         def __init__(self):
@@ -34,8 +34,8 @@ Creating Nodes
         node_graph.widget.show()
 
         # here we create a couple nodes in the node graph.
-        node_a = node_graph.create_node('com.chantasticvfx.MyNode', name='node a')
-        node_b = node_graph.create_node('com.chantasticvfx.MyNode', name='node b', pos=[300, 100])
+        node_a = node_graph.create_node('io.github.jchanvfx.MyNode', name='node a')
+        node_b = node_graph.create_node('io.github.jchanvfx.MyNode', name='node b', pos=[300, 100])
 
         app.exec_()
 
@@ -53,7 +53,7 @@ example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNod
 
     class MyListNode(BaseNode):
 
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
         NODE_NAME = 'node'
 
         def __init__(self):
@@ -174,7 +174,7 @@ Here's an example to embed a custom widget where we subclass the
         """
 
         # set a unique node identifier.
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
 
         # set the initial default node name.
         NODE_NAME = 'my node'
@@ -246,7 +246,7 @@ Here's an example where we subclass the ``NodeGraph`` and connect it up to a
 
     class MyNode(BaseNode):
 
-        __identifier__ = 'com.chantasticvfx'
+        __identifier__ = 'io.github.jchanvfx'
         NODE_NAME = 'my node'
 
         def __init__(self):
@@ -283,7 +283,7 @@ Here's an example where we subclass the ``NodeGraph`` and connect it up to a
         node_graph.register_node(MyNode)
         node_graph.widget.show()
 
-        node_a = node_graph.create_node('com.chantasticvfx.MyNode')
+        node_a = node_graph.create_node('io.github.jchanvfx.MyNode')
 
         app.exec_()
 

@@ -261,7 +261,7 @@ class NodeModel(object):
                     'color': (48, 58, 69, 255),
                     'border_color': (85, 100, 100, 255),
                     'text_color': (255, 255, 255, 180),
-                    'type_': 'com.chantasticvfx.FooNode',
+                    'type_': 'io.github.jchanvfx.FooNode',
                     'selected': False,
                     'disabled': False,
                     'visible': True,
