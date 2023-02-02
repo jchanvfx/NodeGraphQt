@@ -37,7 +37,7 @@ class NodeObject(object):
 
     """
 
-    # Unique node identifier domain. `eg.` ``"com.chantacticvfx"``
+    # Unique node identifier domain. `eg.` ``"io.github.jchanvfx"``
     __identifier__ = 'nodeGraphQt.nodes'
 
     # Base node name.
@@ -192,7 +192,7 @@ class NodeObject(object):
                 'color': (48, 58, 69, 255),
                 'border_color': (85, 100, 100, 255),
                 'text_color': (255, 255, 255, 180),
-                'type': 'com.chantasticvfx.MyNode',
+                'type': 'io.github.jchanvfx.MyNode',
                 'selected': False,
                 'disabled': False,
                 'visible': True,
