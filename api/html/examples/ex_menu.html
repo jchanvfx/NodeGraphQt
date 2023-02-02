@@ -240,14 +240,14 @@ the registered <code class="docutils literal notranslate"><span class="pre">my_t
 <p>Aside from the main context menu, the NodeGraph also has a nodes menu where you
 can override context menus on a per node type basis.</p>
 <div class="line-block">
-<div class="line">Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">&quot;com.chantasticvfx.FooNode&quot;</span></code></div>
+<div class="line">Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">&quot;io.github.jchanvfx.FooNode&quot;</span></code></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">setup_context_menu</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># define a couple example nodes.</span>
 <span class="linenos"> 4</span><span class="k">class</span> <span class="nc">FooNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;com.chantasticvfx&#39;</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
 <span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;foo node&#39;</span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -274,14 +274,14 @@ can override context menus on a per node type basis.</p>
 <span class="linenos">30</span><span class="c1"># get the nodes menu.</span>
 <span class="linenos">31</span><span class="n">nodes_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">)</span>
 <span class="linenos">32</span>
-<span class="linenos">33</span><span class="c1"># here we add override the context menu for &quot;com.chantasticvfx.FooNode&quot;.</span>
+<span class="linenos">33</span><span class="c1"># here we add override the context menu for &quot;io.github.jchanvfx.FooNode&quot;.</span>
 <span class="linenos">34</span><span class="n">nodes_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span>
 <span class="linenos">35</span>                       <span class="n">func</span><span class="o">=</span><span class="n">test_func</span><span class="p">,</span>
-<span class="linenos">36</span>                       <span class="n">node_type</span><span class="o">=</span><span class="s1">&#39;com.chantasticvfx.FooNode&#39;</span><span class="p">)</span>
+<span class="linenos">36</span>                       <span class="n">node_type</span><span class="o">=</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">)</span>
 <span class="linenos">37</span>
 <span class="linenos">38</span><span class="c1"># create some nodes.</span>
-<span class="linenos">39</span><span class="n">foo_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;com.chantasticvfx.FooNode&#39;</span><span class="p">)</span>
-<span class="linenos">40</span><span class="n">bar_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;com.chantasticvfx.BarNode&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="linenos">39</span><span class="n">foo_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">)</span>
+<span class="linenos">40</span><span class="n">bar_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
 <span class="linenos">41</span>
 <span class="linenos">42</span><span class="c1"># show widget.</span>
 <span class="linenos">43</span><span class="n">node_graph</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
