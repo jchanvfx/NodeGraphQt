@@ -356,6 +356,7 @@ class NodeGraphModel(object):
         self.session = ''
         self.acyclic = True
         self.pipe_collision = False
+        self.pipe_slicing = True
         self.layout_direction = LayoutDirectionEnum.HORIZONTAL.value
 
     def common_properties(self):
