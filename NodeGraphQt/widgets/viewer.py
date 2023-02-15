@@ -122,6 +122,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         self.acyclic = True
         self.pipe_collision = False
+        self.pipe_slicing = True
 
         self.LMB_state = False
         self.RMB_state = False
@@ -370,11 +371,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
         map_pos = self.mapToScene(event.pos())
 
         # pipe slicer enabled.
-        slicer_mode = all([self.ALT_state, self.SHIFT_state, self.LMB_state])
-        if slicer_mode:
-            self._SLICER_PIPE.draw_path(map_pos, map_pos)
-            self._SLICER_PIPE.setVisible(True)
-            return
+        if self.pipe_slicing:
+            slicer_mode = all([
+                self.ALT_state, self.SHIFT_state, self.LMB_state
+            ])
+            if slicer_mode:
+                self._SLICER_PIPE.draw_path(map_pos, map_pos)
+                self._SLICER_PIPE.setVisible(True)
+                return
 
         # pan mode.
         if self.ALT_state:
@@ -487,11 +491,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def mouseMoveEvent(self, event):
         if self.ALT_state and self.SHIFT_state:
-            if self.LMB_state and self._SLICER_PIPE.isVisible():
-                p1 = self._SLICER_PIPE.path().pointAtPercent(0)
-                p2 = self.mapToScene(self._previous_pos)
-                self._SLICER_PIPE.draw_path(p1, p2)
-                self._SLICER_PIPE.show()
+            if self.pipe_slicing:
+                if self.LMB_state and self._SLICER_PIPE.isVisible():
+                    p1 = self._SLICER_PIPE.path().pointAtPercent(0)
+                    p2 = self.mapToScene(self._previous_pos)
+                    self._SLICER_PIPE.draw_path(p1, p2)
+                    self._SLICER_PIPE.show()
             self._previous_pos = event.pos()
             super(NodeViewer, self).mouseMoveEvent(event)
             return
