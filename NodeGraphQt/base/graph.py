@@ -929,7 +929,7 @@ class NodeGraph(QtCore.QObject):
         """
         Enable/Disable pipe slicer.
 
-        When set to true holding down `Alt + Shift + LMB Drag` will allow node
+        When set to true holding down ``Alt + Shift + LMB Drag`` will allow node
         pipe connections to be sliced.
 
         .. image:: _images/slicer.png
