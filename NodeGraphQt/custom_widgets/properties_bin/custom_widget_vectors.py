@@ -38,7 +38,6 @@ class _PropVector(BaseProperty):
             if index is not None:
                 self._value[index] = value
             self.value_changed.emit(self.toolTip(), self._value)
-        self.value_changed.emit(self.toolTip(), self._value)
 
     def _update_items(self):
         if not isinstance(self._value, (list, tuple)):
