@@ -588,6 +588,12 @@ if __name__ == '__main__':
                 widget_type=NodePropWidgetEnum.SLIDER.value
             )
             self.create_property(
+                'float_range',
+                value=150.5,
+                range=(50.5, 200),
+                widget_type=NodePropWidgetEnum.DOUBLE_SLIDER.value
+            )
+            self.create_property(
                 'color4_picker',
                 value=(255, 0, 0, 122),
                 widget_type=NodePropWidgetEnum.COLOR4_PICKER.value

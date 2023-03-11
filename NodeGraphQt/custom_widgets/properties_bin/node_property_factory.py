@@ -1,7 +1,7 @@
 from NodeGraphQt.constants import NodePropWidgetEnum
 from .custom_widget_color_picker import PropColorPickerRGB, PropColorPickerRGBA
 from .custom_widget_file_paths import PropFilePath, PropFileSavePath
-from .custom_widget_slider import PropSlider
+from .custom_widget_slider import PropSlider, PropDoubleSlider
 from .custom_widget_value_edit import FloatValueEdit, IntValueEdit
 from .custom_widget_vectors import PropVector2, PropVector3, PropVector4
 from .prop_widgets_base import (
@@ -36,6 +36,7 @@ class NodePropertyWidgetFactory(object):
             NodePropWidgetEnum.COLOR_PICKER.value: PropColorPickerRGB,
             NodePropWidgetEnum.COLOR4_PICKER.value: PropColorPickerRGBA,
             NodePropWidgetEnum.SLIDER.value: PropSlider,
+            NodePropWidgetEnum.DOUBLE_SLIDER.value: PropDoubleSlider,
             NodePropWidgetEnum.FILE_OPEN.value: PropFilePath,
             NodePropWidgetEnum.FILE_SAVE.value: PropFileSavePath,
             NodePropWidgetEnum.VECTOR2.value: PropVector2,
