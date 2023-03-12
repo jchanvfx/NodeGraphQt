@@ -42,6 +42,7 @@ class PropFilePath(BaseProperty):
     def _on_value_change(self, value=None):
         if value is None:
             value = self._ledit.text()
+        self.set_file_directory(value)
         self.value_changed.emit(self.toolTip(), value)
 
     def set_file_ext(self, ext=None):

@@ -566,6 +566,11 @@ if __name__ == '__main__':
                 widget_type=NodePropWidgetEnum.QLABEL.value
             )
             self.create_property(
+                "file",
+                value="",
+                widget_type=NodePropWidgetEnum.FILE_OPEN.value
+            )
+            self.create_property(
                 'color_picker',
                 value=(0, 0, 255),
                 widget_type=NodePropWidgetEnum.COLOR_PICKER.value
