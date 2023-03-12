@@ -16,6 +16,7 @@ class PropSlider(BaseProperty):
         self._slider = QtWidgets.QSlider()
         self._spinbox = QtWidgets.QSpinBox()
         self._init()
+        self._init_signal_connections()
 
     def _init(self):
         self._slider.setOrientation(QtCore.Qt.Horizontal)
@@ -27,12 +28,14 @@ class PropSlider(BaseProperty):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._spinbox)
         layout.addWidget(self._slider)
-        self._spinbox.valueChanged.connect(self._on_spnbox_changed)
-        self._slider.valueChanged.connect(self._on_slider_changed)
         # store the original press event.
         self._slider_mouse_press_event = self._slider.mousePressEvent
         self._slider.mousePressEvent = self._on_slider_mouse_press
         self._slider.mouseReleaseEvent = self._on_slider_mouse_release
+
+    def _init_signal_connections(self):
+        self._spinbox.valueChanged.connect(self._on_spnbox_changed)
+        self._slider.valueChanged.connect(self._on_slider_changed)
 
     def _on_slider_mouse_press(self, event):
         self._block = True
@@ -68,3 +71,51 @@ class PropSlider(BaseProperty):
     def set_max(self, value=0):
         self._spinbox.setMaximum(value)
         self._slider.setMaximum(value)
+
+
+class QDoubleSlider(QtWidgets.QSlider):
+    double_value_changed = QtCore.Signal(float)
+
+    def __init__(self, decimals=2, *args, **kargs):
+        super(QDoubleSlider, self).__init__(*args, **kargs)
+        self._multiplier = 10 ** decimals
+
+        self.valueChanged.connect(self._on_value_change)
+
+    def _on_value_change(self):
+        value = float(super(QDoubleSlider, self).value()) / self._multiplier
+        self.double_value_changed.emit(value)
+
+    def value(self):
+        return float(super(QDoubleSlider, self).value()) / self._multiplier
+
+    def setMinimum(self, value):
+        return super(QDoubleSlider, self).setMinimum(value * self._multiplier)
+
+    def setMaximum(self, value):
+        return super(QDoubleSlider, self).setMaximum(value * self._multiplier)
+
+    def setSingleStep(self, value):
+        return super(QDoubleSlider, self).setSingleStep(value * self._multiplier)
+
+    def singleStep(self):
+        return float(super(QDoubleSlider, self).singleStep()) / self._multiplier
+
+    def setValue(self, value):
+        super(QDoubleSlider, self).setValue(int(value * self._multiplier))
+
+
+class PropDoubleSlider(PropSlider):
+    def __init__(self, parent=None, decimals=2):
+        # Do not initialize Propslider, just its parents
+        super(PropSlider, self).__init__(parent)
+        self._block = False
+        self._slider = QDoubleSlider(decimals=decimals)
+        self._spinbox = QtWidgets.QDoubleSpinBox()
+        self._init()
+        self._init_signal_connections()
+
+    def _init_signal_connections(self):
+        self._spinbox.valueChanged.connect(self._on_spnbox_changed)
+        # Connect to double_value_changed instead valueChanged
+        self._slider.double_value_changed.connect(self._on_slider_changed)
