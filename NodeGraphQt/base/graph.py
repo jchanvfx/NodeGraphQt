@@ -1788,6 +1788,9 @@ class NodeGraph(QtCore.QObject):
     def paste_nodes(self):
         """
         Pastes nodes copied from the clipboard.
+        
+        Returns:
+            list[NodeGraphQt.BaseNode]: list of pasted node instances.
         """
         clipboard = QtWidgets.QApplication.clipboard()
         cb_text = clipboard.text()
@@ -1806,6 +1809,7 @@ class NodeGraph(QtCore.QObject):
         nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
         self._undo_stack.endMacro()
+        return nodes
 
     def duplicate_nodes(self, nodes):
         """
