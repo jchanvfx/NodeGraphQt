@@ -73,10 +73,6 @@ class BaseNode(NodeObject):
         """
         Set the value on the node custom property.
 
-        Note:
-            When setting the `"visible"` property to `False` all node
-            connections will be disconnected.
-
         Args:
             name (str): name of the property.
             value (object): property data (python built in types).
