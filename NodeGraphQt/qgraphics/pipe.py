@@ -73,6 +73,21 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
+
+        # only draw if a port or node is visible.
+        is_visible = all([
+            self._input_port.isVisible(),
+            self._output_port.isVisible(),
+            self._input_port.node.isVisible(),
+            self._output_port.node.isVisible()
+        ])
+        if not is_visible:
+            painter.save()
+            painter.setBrush(QtCore.Qt.NoBrush)
+            painter.setPen(QtCore.Qt.NoPen)
+            painter.restore()
+            return
+
         color = QtGui.QColor(*self._color)
         pen_style = PIPE_STYLES.get(self.style)
         pen_width = PipeEnum.WIDTH.value
