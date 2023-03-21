@@ -36,9 +36,9 @@ class _PropVector(BaseProperty):
     def _on_value_change(self, value=None, index=None):
         if self._can_emit:
             if index is not None:
+                self._value = list(self._value)
                 self._value[index] = value
             self.value_changed.emit(self.toolTip(), self._value)
-        self.value_changed.emit(self.toolTip(), self._value)
 
     def _update_items(self):
         if not isinstance(self._value, (list, tuple)):
@@ -58,7 +58,6 @@ class _PropVector(BaseProperty):
         return self._value
 
     def set_value(self, value=None):
-        value = list(value)
         if value != self.get_value():
             self._value = value
             self._can_emit = False

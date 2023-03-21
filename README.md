@@ -35,7 +35,6 @@ applications.
 #### Widgets
 <img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
 <img src="/docs/_images/nodes_palette.png" width="350" title="Nodes Paletten">
-<img src="/docs/_images/nodes_tree.png" width="250" title="Nodes Tree">
 
 #### Examples
 

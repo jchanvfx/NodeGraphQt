@@ -230,21 +230,23 @@ class NodePropWidgetEnum(Enum):
     COLOR_PICKER = 9
     #: Node property represented with a ColorPicker (RGBA) widget.
     COLOR4_PICKER = 10
-    #: Node property represented with a Slider widget.
+    #: Node property represented with an (Int) Slider widget.
     SLIDER = 11
+    #: Node property represented with a (Dobule) Slider widget.
+    DOUBLE_SLIDER = 12
     #: Node property represented with a file selector widget.
-    FILE_OPEN = 12
+    FILE_OPEN = 13
     #: Node property represented with a file save widget.
-    FILE_SAVE = 13
+    FILE_SAVE = 14
     #: Node property represented with a vector2 widget.
-    VECTOR2 = 14
+    VECTOR2 = 15
     #: Node property represented with vector3 widget.
-    VECTOR3 = 15
+    VECTOR3 = 16
     #: Node property represented with vector4 widget.
-    VECTOR4 = 16
+    VECTOR4 = 17
     #: Node property represented with float line edit widget.
-    FLOAT = 17
+    FLOAT = 18
     #: Node property represented with int line edit widget.
-    INT = 18
+    INT = 19
     #: Node property represented with button widget.
-    BUTTON = 19
+    BUTTON = 20

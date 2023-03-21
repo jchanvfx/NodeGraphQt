@@ -566,6 +566,11 @@ if __name__ == '__main__':
                 widget_type=NodePropWidgetEnum.QLABEL.value
             )
             self.create_property(
+                "file",
+                value="",
+                widget_type=NodePropWidgetEnum.FILE_OPEN.value
+            )
+            self.create_property(
                 'color_picker',
                 value=(0, 0, 255),
                 widget_type=NodePropWidgetEnum.COLOR_PICKER.value
@@ -586,6 +591,12 @@ if __name__ == '__main__':
                 value=50,
                 range=(45, 55),
                 widget_type=NodePropWidgetEnum.SLIDER.value
+            )
+            self.create_property(
+                'float_range',
+                value=150.5,
+                range=(50.5, 200),
+                widget_type=NodePropWidgetEnum.DOUBLE_SLIDER.value
             )
             self.create_property(
                 'color4_picker',

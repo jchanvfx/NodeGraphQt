@@ -881,7 +881,7 @@ class NodeGraph(QtCore.QObject):
             mode (bool): true to enable acyclic.
         """
         self._model.acyclic = mode
-        self._viewer.acyclic = mode
+        self._viewer.acyclic = self._model.acyclic
 
     def pipe_collision(self):
         """
@@ -910,7 +910,39 @@ class NodeGraph(QtCore.QObject):
             mode (bool): False to disable pipe collision.
         """
         self._model.pipe_collision = mode
-        self._viewer.pipe_collision = mode
+        self._viewer.pipe_collision = self._model.pipe_collision
+
+    def pipe_slicing(self):
+        """
+        Returns if pipe slicing is enabled.
+
+        See Also:
+            To enable/disable pipe slicer
+            :meth:`NodeGraph.set_pipe_slicing`
+
+        Returns:
+            bool: True if pipe slicing is enabled.
+        """
+        return self._model.pipe_collision
+
+    def set_pipe_slicing(self, mode=True):
+        """
+        Enable/Disable pipe slicer.
+
+        When set to true holding down ``Alt + Shift + LMB Drag`` will allow node
+        pipe connections to be sliced.
+
+        .. image:: _images/slicer.png
+            :width: 400px
+
+        See Also:
+            :meth:`NodeGraph.pipe_slicing`
+
+        Args:
+            mode (bool): False to disable the slicer pipe.
+        """
+        self._model.pipe_slicing = mode
+        self._viewer.pipe_slicing = self._model.pipe_slicing
 
     def set_pipe_style(self, style=PipeLayoutEnum.CURVED.value):
         """
@@ -1466,6 +1498,7 @@ class NodeGraph(QtCore.QObject):
         # serialize graph session.
         serial_data['graph']['acyclic'] = self.acyclic()
         serial_data['graph']['pipe_collision'] = self.pipe_collision()
+        serial_data['graph']['pipe_slicing'] = self.pipe_slicing()
 
         # serialize nodes.
         for n in nodes:
@@ -1526,6 +1559,8 @@ class NodeGraph(QtCore.QObject):
                 self.set_acyclic(attr_value)
             elif attr_name == 'pipe_collision':
                 self.set_pipe_collision(attr_value)
+            elif attr_name == 'pipe_slicing':
+                self.set_pipe_slicing(attr_value)
 
         # build the nodes.
         nodes = {}
@@ -1753,6 +1788,9 @@ class NodeGraph(QtCore.QObject):
     def paste_nodes(self):
         """
         Pastes nodes copied from the clipboard.
+        
+        Returns:
+            list[NodeGraphQt.BaseNode]: list of pasted node instances.
         """
         clipboard = QtWidgets.QApplication.clipboard()
         cb_text = clipboard.text()
@@ -1771,6 +1809,7 @@ class NodeGraph(QtCore.QObject):
         nodes = self._deserialize(serial_data, relative_pos=True)
         [n.set_selected(True) for n in nodes]
         self._undo_stack.endMacro()
+        return nodes
 
     def duplicate_nodes(self, nodes):
         """
