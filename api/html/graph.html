@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Graphs &mdash; NodeGraphQt 0.5.2 documentation</title>
+  <title>Graphs &mdash; NodeGraphQt 0.5.3 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -870,6 +870,14 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.paste_nodes">
 <span class="sig-name descname"><span class="pre">paste_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.paste_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pastes nodes copied from the clipboard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of pasted node instances.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -884,6 +892,25 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if pipe collision is enabled.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.pipe_slicing">
+<span class="sig-name descname"><span class="pre">pipe_slicing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.pipe_slicing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if pipe slicing is enabled.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To enable/disable pipe slicer
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_slicing" title="NodeGraphQt.NodeGraph.set_pipe_slicing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_slicing()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if pipe slicing is enabled.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>bool</p>
@@ -1249,6 +1276,24 @@ inserted as a new connection between the pipe.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – False to disable pipe collision.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_pipe_slicing">
+<span class="sig-name descname"><span class="pre">set_pipe_slicing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_pipe_slicing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/Disable pipe slicer.</p>
+<p>When set to true holding down <code class="docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">Shift</span> <span class="pre">+</span> <span class="pre">LMB</span> <span class="pre">Drag</span></code> will allow node
+pipe connections to be sliced.</p>
+<img alt="_images/slicer.png" src="_images/slicer.png" style="width: 400px;" />
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_slicing" title="NodeGraphQt.NodeGraph.pipe_slicing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.pipe_slicing()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – False to disable the slicer pipe.</p>
 </dd>
 </dl>
 </dd></dl>

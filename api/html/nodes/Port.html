@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Port &mdash; NodeGraphQt 0.5.2 documentation</title>
+  <title>Port &mdash; NodeGraphQt 0.5.3 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -364,11 +364,14 @@ connected or disconnected from this port.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.set_visible">
-<span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_visible" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_visible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets weather the port should be visible or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – true if visible.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<em>bool</em>) – true if visible.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
