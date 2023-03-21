@@ -107,23 +107,20 @@ class Port(object):
         """
         return self.model.visible
 
-    def set_visible(self, visible=True):
+    def set_visible(self, visible=True, push_undo=True):
         """
         Sets weather the port should be visible or not.
 
         Args:
             visible (bool): true if visible.
+            push_undo (bool): register the command to the undo stack. (default: True)
         """
-        self.model.visible = visible
-        label = 'show' if visible else 'hide'
-        undo_stack = self.node().graph.undo_stack()
-        undo_stack.beginMacro('{} port {}'.format(label, self.name()))
-
-        for port in self.connected_ports():
-            undo_stack.push(PortDisconnectedCmd(self, port))
-
-        undo_stack.push(PortVisibleCmd(self))
-        undo_stack.endMacro()
+        undo_cmd = PortVisibleCmd(self, visible)
+        if push_undo:
+            undo_stack = self.node().graph.undo_stack()
+            undo_stack.push(undo_cmd)
+        else:
+            undo_cmd.redo()
 
     def locked(self):
         """

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
+from NodeGraphQt.base.commands import NodeVisibleCmd
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
@@ -67,6 +68,34 @@ class BaseNode(NodeObject):
 
         for name, widget in self.view.widgets.items():
             self.model.set_property(name, widget.get_value())
+
+    def set_property(self, name, value, push_undo=True):
+        """
+        Set the value on the node custom property.
+
+        Note:
+            When setting the `"visible"` property to `False` all node
+            connections will be disconnected.
+
+        Args:
+            name (str): name of the property.
+            value (object): property data (python built in types).
+            push_undo (bool): register the command to the undo stack. (default: True)
+        """
+        # prevent signals from causing a infinite loop.
+        if self.get_property(name) == value:
+            return
+
+        if name == 'visible':
+            if self.graph:
+                undo_cmd = NodeVisibleCmd(self, value)
+                if push_undo:
+                    undo_stack = self.graph.undo_stack()
+                    undo_stack.push(undo_cmd)
+                else:
+                    undo_cmd.redo()
+                return
+        super(BaseNode, self).set_property(name, value, push_undo)
 
     def set_layout_direction(self, value=0):
         """
