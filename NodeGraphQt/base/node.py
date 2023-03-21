@@ -352,6 +352,10 @@ class NodeObject(object):
         """
         Set the value on the node custom property.
 
+        Note:
+            When setting the node ``"name"`` property a new unique name will be
+            used if another node in the graph has the same node name.
+
         Args:
             name (str): name of the property.
             value (object): property data (python built in types).
@@ -362,16 +366,22 @@ class NodeObject(object):
         if self.get_property(name) == value:
             return
 
+        # prevent nodes from have the same name.
         if self.graph and name == 'name':
             value = self.graph.get_unique_name(value)
             self.NODE_NAME = value
 
         if self.graph:
+            undo_cmd = PropertyChangedCmd(self, name, value)
+            if name == 'name':
+                undo_cmd.setText(
+                    'renamed "{}" to "{}"'.format(self.name(), value)
+                )
             if push_undo:
                 undo_stack = self.graph.undo_stack()
-                undo_stack.push(PropertyChangedCmd(self, name, value))
+                undo_stack.push(undo_cmd)
             else:
-                PropertyChangedCmd(self, name, value).redo()
+                undo_cmd.redo()
         else:
             if hasattr(self.view, name):
                 setattr(self.view, name, value)

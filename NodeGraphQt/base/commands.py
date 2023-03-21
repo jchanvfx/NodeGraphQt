@@ -16,10 +16,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
 
     def __init__(self, node, name, value):
         QtWidgets.QUndoCommand.__init__(self)
-        if name == 'name':
-            self.setText('renamed "{}" to "{}"'.format(node.name(), value))
-        else:
-            self.setText('property "{}:{}"'.format(node.name(), name))
+        self.setText('property "{}:{}"'.format(node.name(), name))
         self.node = node
         self.name = name
         self.old_val = node.get_property(name)
