@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import NodeEnum
+from NodeGraphQt.constants import NodeEnum, PortEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
 
 
@@ -16,6 +16,71 @@ class CircleNodeItem(NodeItem):
 
     def __init__(self, name='circle', parent=None):
         super(CircleNodeItem, self).__init__(name, parent)
+
+    def _align_ports_horizontal(self, v_offset):
+        width = self._width
+        txt_offset = PortEnum.CLICK_FALLOFF.value - 2
+        spacing = 1
+
+        # adjust input position
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            port_x = (port_width / 2) * -1
+            port_y = v_offset
+            for port in inputs:
+                port.setPos(port_x, port_y)
+                port_y += port_height + spacing
+        # adjust input text position
+        for port, text in self._input_items.items():
+            if port.isVisible():
+                txt_x = port.boundingRect().width() / 2 - txt_offset
+                text.setPos(txt_x, port.y() - 1.5)
+
+        # adjust output position
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            port_x = width - (port_width / 2)
+            port_y = v_offset
+            for port in outputs:
+                port.setPos(port_x, port_y)
+                port_y += port_height + spacing
+        # adjust output text position
+        for port, text in self._output_items.items():
+            if port.isVisible():
+                txt_width = text.boundingRect().width() - txt_offset
+                txt_x = port.x() - txt_width
+                text.setPos(txt_x, port.y() - 1.5)
+
+    def _align_ports_vertical(self, v_offset):
+        # adjust input position
+        inputs = [p for p in self.inputs if p.isVisible()]
+        if inputs:
+            port_width = inputs[0].boundingRect().width()
+            port_height = inputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(inputs) + 1)
+            port_x = delta
+            port_y = (port_height / 2) * -1
+            for port in inputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
+
+        # adjust output position
+        outputs = [p for p in self.outputs if p.isVisible()]
+        if outputs:
+            port_width = outputs[0].boundingRect().width()
+            port_height = outputs[0].boundingRect().height()
+            half_width = port_width / 2
+            delta = self._width / (len(outputs) + 1)
+            port_x = delta
+            port_y = self._height - (port_height / 2)
+            for port in outputs:
+                port.setPos(port_x - half_width, port_y)
+                port_x += delta
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
@@ -201,6 +266,45 @@ class CircleNodeItem(NodeItem):
         x = rect.left() - icon_rect.width() + (rect.width() / 4)
         y = rect.center().y() - (icon_rect.height() / 2)
         self._icon_item.setPos(x + h_offset, y + v_offset)
+
+    def _align_widgets_horizontal(self, v_offset):
+        if not self._widgets:
+            return
+        rect = self.boundingRect()
+        y = rect.bottom() + v_offset
+        inputs = [p for p in self.inputs if p.isVisible()]
+        outputs = [p for p in self.outputs if p.isVisible()]
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            if not inputs:
+                x = rect.left() + 10
+                widget.widget().setTitleAlign('left')
+            elif not outputs:
+                x = rect.right() - widget_rect.width() - 10
+                widget.widget().setTitleAlign('right')
+            else:
+                x = rect.center().x() - (widget_rect.width() / 2)
+                widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
+
+    def _align_widgets_vertical(self, v_offset):
+        if not self._widgets:
+            return
+        rect = self.boundingRect()
+        y = rect.center().y() + v_offset
+        widget_height = 0.0
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            widget_height += widget_rect.height()
+        y -= widget_height / 2
+
+        for widget in self._widgets.values():
+            widget_rect = widget.boundingRect()
+            x = rect.center().x() - (widget_rect.width() / 2)
+            widget.widget().setTitleAlign('center')
+            widget.setPos(x, y)
+            y += widget_rect.height()
 
     def _align_label_horizontal(self, h_offset, v_offset):
         rect = self.boundingRect()
