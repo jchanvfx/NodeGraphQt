@@ -80,7 +80,7 @@ class NodeVisibleCmd(QtWidgets.QUndoCommand):
         model.set_property('visible', visible)
 
         node_view = self.node.view
-        node_view.setVisible(visible)
+        node_view.visible = visible
 
         # redraw the connected pipes in the scene.
         ports = node_view.inputs + node_view.outputs
