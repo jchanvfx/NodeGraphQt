@@ -115,10 +115,12 @@ class QDoubleSlider(QtWidgets.QSlider):
 
 
 class PropDoubleSlider(PropSlider):
-    def __init__(self, parent=None, decimals=2):
+    def __init__(self, parent=None, decimals=2, disable_scroll=True, realtime_update=False):
         # Do not initialize Propslider, just its parents
         super(PropSlider, self).__init__(parent)
         self._block = False
+        self._realtime_update = realtime_update
+        self._disable_scroll = disable_scroll
         self._slider = QDoubleSlider(decimals=decimals)
         self._spinbox = QtWidgets.QDoubleSpinBox()
         self._init()
