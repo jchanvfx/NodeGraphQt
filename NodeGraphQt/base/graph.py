@@ -1612,6 +1612,9 @@ class NodeGraph(QtCore.QObject):
                 if allow_connection:
                     self._undo_stack.push(PortConnectedCmd(in_port, out_port))
 
+                # Run on_input_connected to ensure connections are fully set up after deserialization.
+                in_node.on_input_connected(in_port, out_port)
+
         node_objs = nodes.values()
         if relative_pos:
             self._viewer.move_nodes([n.view for n in node_objs])
