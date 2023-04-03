@@ -19,7 +19,8 @@ class _NodeGroupBox(QtWidgets.QGroupBox):
         super(_NodeGroupBox, self).setTitle(text)
 
     def setTitleAlign(self, align='center'):
-        text_color = self.palette().text().color().getRgb()
+        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
+                               ViewerEnum.BACKGROUND_COLOR.value))
         style_dict = {
             'QGroupBox': {
                 'background-color': 'rgba(0, 0, 0, 0)',
@@ -322,10 +323,10 @@ class NodeLineEdit(NodeBaseWidget):
 
     def __init__(self, parent=None, name='', label='', text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
-        plt = self.palette()
-        bg_color = plt.alternateBase().color().getRgb()
-        text_color = plt.text().color().getRgb()
-        text_sel_color = plt.highlightedText().color().getRgb()
+        bg_color = ViewerEnum.BACKGROUND_COLOR.value
+        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
+                               bg_color))
+        text_sel_color = text_color
         style_dict = {
             'QLineEdit': {
                 'background': 'rgba({0},{1},{2},20)'.format(*bg_color),
@@ -392,9 +393,23 @@ class NodeCheckBox(NodeBaseWidget):
     def __init__(self, parent=None, name='', label='', text='', state=False):
         super(NodeCheckBox, self).__init__(parent, name, label)
         _cbox = QtWidgets.QCheckBox(text)
+        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
+                               ViewerEnum.BACKGROUND_COLOR.value))
+        style_dict = {
+            'QCheckBox': {
+                'color': 'rgba({0},{1},{2},150)'.format(*text_color),
+            }
+        }
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        _cbox.setStyleSheet(stylesheet)
         _cbox.setChecked(state)
         _cbox.setMinimumWidth(80)
-
         font = _cbox.font()
         font.setPointSize(11)
         _cbox.setFont(font)
