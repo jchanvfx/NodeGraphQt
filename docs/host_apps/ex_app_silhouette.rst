@@ -11,8 +11,8 @@ Creating a node graph widget in Silhouette FX.
 .. image:: ../_images/app_silhouette_example.png
         :width: 800px
 
-| Here is an example where the :attr:`NodeGraph.widget` can be registered as a
- dockable panel in the application .
+| Here is an example where the :attr:`NodeGraphQt.NodeGraph.widget` can be
+registered as a dockable panel in the application .
 
 .. code-block:: python
     :linenos:

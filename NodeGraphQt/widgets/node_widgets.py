@@ -72,6 +72,9 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
     This is the main wrapper class that allows a ``QtWidgets.QWidget`` to be
     added in a :class:`NodeGraphQt.BaseNode` object.
 
+    .. inheritance-diagram:: NodeGraphQt.NodeBaseWidget
+        :parts: 1
+
     Args:
         parent (NodeGraphQt.BaseNode.view): parent node view.
         name (str): property name for the parent node.
@@ -245,7 +248,8 @@ class NodeComboBox(NodeBaseWidget):
     """
     Displays as a ``QComboBox`` in a node.
 
-    **Inherited from:** :class:`NodeBaseWidget`
+    .. inheritance-diagram:: NodeGraphQt.widgets.node_widgets.NodeComboBox
+        :parts: 1
 
     .. note::
         `To embed a` ``QComboBox`` `in a node see func:`
@@ -314,7 +318,8 @@ class NodeLineEdit(NodeBaseWidget):
     """
     Displays as a ``QLineEdit`` in a node.
 
-    **Inherited from:** :class:`NodeBaseWidget`
+    .. inheritance-diagram:: NodeGraphQt.widgets.node_widgets.NodeLineEdit
+        :parts: 1
 
     .. note::
         `To embed a` ``QLineEdit`` `in a node see func:`
@@ -383,7 +388,8 @@ class NodeCheckBox(NodeBaseWidget):
     """
     Displays as a ``QCheckBox`` in a node.
 
-    **Inherited from:** :class:`NodeBaseWidget`
+    .. inheritance-diagram:: NodeGraphQt.widgets.node_widgets.NodeCheckBox
+        :parts: 1
 
     .. note::
         `To embed a` ``QCheckBox`` `in a node see func:`

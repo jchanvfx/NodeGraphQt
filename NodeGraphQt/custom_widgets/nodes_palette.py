@@ -168,6 +168,9 @@ class NodesPaletteWidget(QtWidgets.QWidget):
 
     | *Implemented on NodeGraphQt:* ``v0.1.7``
 
+    .. inheritance-diagram:: NodeGraphQt.NodesPaletteWidget
+        :parts: 1
+
     .. image:: _images/nodes_palette.png
         :width: 400px
 

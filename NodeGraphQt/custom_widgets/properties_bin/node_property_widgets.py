@@ -331,6 +331,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     The :class:`NodeGraphQt.PropertiesBinWidget` is a list widget for displaying
     and editing a nodes properties.
 
+    .. inheritance-diagram:: NodeGraphQt.PropertiesBinWidget
+        :parts: 1
+
     .. image:: _images/prop_bin.png
         :width: 950px
 

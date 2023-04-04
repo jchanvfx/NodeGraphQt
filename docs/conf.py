@@ -47,6 +47,7 @@ extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
 ]
@@ -54,6 +55,18 @@ extensions = [
 intersphinx_mapping = {
     # 'python': ('https://docs.python.org/3', None),
     'PySide2': ('https://doc.qt.io/qtforpython/', None),
+}
+
+# inheritance diagram remapping.
+inheritance_alias = {
+    'NodeGraphQt.base.graph.NodeGraph': 'NodeGraphQt.NodeGraph',
+    'NodeGraphQt.base.graph.SubGraph': 'NodeGraphQt.SubGraph',
+    'NodeGraphQt.base.node.NodeObject': 'NodeGraphQt.NodeObject',
+    'NodeGraphQt.base.port.Port': 'NodeGraphQt.Port',
+    'NodeGraphQt.nodes.backdrop_node.BackdropNode': 'NodeGraphQt.BackdropNode',
+    'NodeGraphQt.nodes.base_node.BaseNode': 'NodeGraphQt.BaseNode',
+    'NodeGraphQt.nodes.base_node_circle.BaseNodeCircle': 'NodeGraphQt.BaseNodeCircle',
+    'NodeGraphQt.nodes.group_node.GroupNode': 'NodeGraphQt.GroupNode',
 }
 
 # order of members.
