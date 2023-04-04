@@ -1,0 +1,6 @@
+<map id="inheritance8d2a1ae39e" name="inheritance8d2a1ae39e">
+<area shape="rect" id="node4" title="QObject(self, parent: typing.Union[PySide2.QtCore.QObject, NoneType] = None) &#45;&gt; None" alt="" coords="141,5,213,31"/>
+<area shape="rect" id="node5" title="QPaintDevice(self) &#45;&gt; None" alt="" coords="125,55,228,80"/>
+<area shape="rect" id="node2" href="#NodeGraphQt.PropertiesBinWidget" target="_top" title="The :class:`NodeGraphQt.PropertiesBinWidget` is a list widget for displaying" alt="" coords="397,31,539,56"/>
+<area shape="rect" id="node3" title="QWidget(self, parent: typing.Union[PySide2.QtWidgets.QWidget, NoneType] = None, f: PySide2.QtCore.Qt.WindowFlags = Default(Qt.WindowFlags)) &#45;&gt; None" alt="" coords="276,31,349,56"/>
+</map>
