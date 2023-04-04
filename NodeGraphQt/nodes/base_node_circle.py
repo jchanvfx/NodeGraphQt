@@ -10,7 +10,7 @@ class BaseNodeCircle(BaseNode):
     The ``NodeGraphQt.BaseNodeCircle`` is pretty much the same class as the
     :class:`NodeGraphQt.BaseNode` except with a different design.
 
-    **Inherited from:** :class:`NodeGraphQt.BaseNode`
+    .. inheritance-diagram:: NodeGraphQt.BaseNodeCircle
 
     .. image:: ../_images/node_circle.png
         :width: 250px

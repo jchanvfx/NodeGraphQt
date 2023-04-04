@@ -4,6 +4,7 @@ PortNode
 Port node are the nodes in a expanded :class:`NodeGraphQt.SubGraph` that
 represent the ports from the parent :class:`NodeGraphQt.GroupNode` object.
 
+
 PortInputNode
 =============
 

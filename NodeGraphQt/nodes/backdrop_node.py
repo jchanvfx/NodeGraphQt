@@ -9,7 +9,7 @@ class BackdropNode(NodeObject):
     The ``NodeGraphQt.BackdropNode`` class allows other node object to be
     nested inside, it's mainly good for grouping nodes together.
 
-    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+    .. inheritance-diagram:: NodeGraphQt.BackdropNode
 
     .. image:: ../_images/backdrop.png
         :width: 250px

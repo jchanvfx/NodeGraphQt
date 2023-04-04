@@ -39,7 +39,8 @@ class NodeGraph(QtCore.QObject):
     The ``NodeGraph`` class is the main controller for managing all nodes
     and the node graph.
 
-    Inherited from: :class:`PySide2.QtCore.QObject`
+    .. inheritance-diagram:: NodeGraphQt.NodeGraph
+        :top-classes: PySide2.QtCore.QObject
 
     .. image:: _images/graph.png
         :width: 60%
@@ -1612,6 +1613,9 @@ class NodeGraph(QtCore.QObject):
                 if allow_connection:
                     self._undo_stack.push(PortConnectedCmd(in_port, out_port))
 
+                # Run on_input_connected to ensure connections are fully set up after deserialization.
+                in_node.on_input_connected(in_port, out_port)
+
         node_objs = nodes.values()
         if relative_pos:
             self._viewer.move_nodes([n.view for n in node_objs])
@@ -2223,7 +2227,8 @@ class SubGraph(NodeGraph):
     The ``SubGraph`` class is just like the ``NodeGraph`` but is the main
     controller for managing the expanded node graph for a group node.
 
-    Inherited from: :class:`NodeGraphQt.NodeGraph`
+    .. inheritance-diagram:: NodeGraphQt.SubGraph
+        :top-classes: PySide2.QtCore.QObject
 
     .. image:: _images/sub_graph.png
         :width: 70%
