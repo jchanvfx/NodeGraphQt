@@ -24,6 +24,10 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
     registered nodes from the node graph with this widget a user can create
     nodes by dragging and dropping.
 
+    .. inheritance-diagram:: NodeGraphQt.NodesTreeWidget
+        :parts: 1
+        :top-classes: PySide2.QtWidgets.QWidget
+
     .. image:: _images/nodes_tree.png
         :width: 300px
 

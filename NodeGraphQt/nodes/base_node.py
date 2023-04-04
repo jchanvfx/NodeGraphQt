@@ -20,7 +20,7 @@ class BaseNode(NodeObject):
     The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows
     port connections from one node to another.
 
-    **Inherited from:** :class:`NodeGraphQt.NodeObject`
+    .. inheritance-diagram:: NodeGraphQt.BaseNode
 
     .. image:: ../_images/node.png
         :width: 250px

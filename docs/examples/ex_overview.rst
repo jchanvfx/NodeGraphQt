@@ -53,6 +53,10 @@ Connection pipes can be disconnected easily with the built in slice tool.
 | Slice connections   | *Alt + Shift + LMB + Drag* |
 +---------------------+----------------------------+
 
+Additional Info:
+    To disable or enable the pipe slicer see
+    :meth:`NodeGraphQt.NodeGraph.set_pipe_slicing`
+
 
 Getting Started
 ***************

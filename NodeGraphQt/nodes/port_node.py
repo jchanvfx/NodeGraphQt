@@ -11,7 +11,8 @@ class PortInputNode(BaseNode):
     :class:`NodeGraphQt.GroupNode` when expanded in a
     :class:`NodeGraphQt.SubGraph`.
 
-    **Inherited from:** :class:`NodeGraphQt.BaseNode`
+    .. inheritance-diagram:: NodeGraphQt.nodes.port_node.PortInputNode
+        :parts: 1
 
     .. image:: ../_images/port_in_node.png
         :width: 150px
@@ -68,7 +69,8 @@ class PortOutputNode(BaseNode):
     from a :class:`NodeGraphQt.GroupNode` when expanded in a
     :class:`NodeGraphQt.SubGraph`.
 
-    **Inherited from:** :class:`NodeGraphQt.BaseNode`
+    .. inheritance-diagram:: NodeGraphQt.nodes.port_node.PortOutputNode
+        :parts: 1
 
     .. image:: ../_images/port_out_node.png
         :width: 150px
