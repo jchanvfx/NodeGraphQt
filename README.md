@@ -1,6 +1,8 @@
 ## NodeGraphQt
 
-NodeGraphQt is a node graph UI framework for PySide2 that can be implemented and re-purposed into 
+<img src="/docs/_images/logo.png" title="logo">
+
+``NodeGraphQt`` is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
 applications.
 
 <img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
