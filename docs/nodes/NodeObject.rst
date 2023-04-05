@@ -4,6 +4,7 @@ NodeObject
 .. autoclass:: NodeGraphQt.NodeObject
     :members:
     :exclude-members: NODE_NAME, graph, id, model, type_, view
+    :member-order: bysource
 
     .. autoattribute:: NODE_NAME
         :annotation:

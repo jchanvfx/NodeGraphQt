@@ -11,6 +11,7 @@ NodeGraph
 .. autoclass:: NodeGraphQt.NodeGraph
     :members:
     :exclude-members: model, widget
+    :member-order: bysource
 
     .. autoattribute:: NodeGraphQt.NodeGraph.widget
     .. autoattribute:: NodeGraphQt.NodeGraph.model
