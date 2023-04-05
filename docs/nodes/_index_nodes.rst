@@ -1,7 +1,7 @@
 Nodes
 #####
 
-| Node object types from the NodeGraphQt module.
+| Node object types from the ``NodeGraphQt`` module.
 
 .. toctree::
     :caption: Node Classes
