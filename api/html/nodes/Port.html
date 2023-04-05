@@ -222,165 +222,6 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.clear_connections">
-<span class="sig-name descname"><span class="pre">clear_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.clear_connections" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disconnect from all port connections and emit the
-<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signals from the node graph.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#NodeGraphQt.Port.disconnect_from" title="NodeGraphQt.Port.disconnect_from"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.disconnect_from()</span></code></a>,
-<a class="reference internal" href="#NodeGraphQt.Port.connect_to" title="NodeGraphQt.Port.connect_to"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.connect_to()</span></code></a>,
-<a class="reference internal" href="#NodeGraphQt.Port.connected_ports" title="NodeGraphQt.Port.connected_ports"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.connected_ports()</span></code></a></p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.connect_to">
-<span class="sig-name descname"><span class="pre">connect_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connect_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create connection to the specified port and emits the
-<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_connected" title="NodeGraphQt.NodeGraph.port_connected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a> signal from the parent node graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
-<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.connected_ports">
-<span class="sig-name descname"><span class="pre">connected_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connected_ports" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all connected ports.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of connected ports.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.disconnect_from">
-<span class="sig-name descname"><span class="pre">disconnect_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.disconnect_from" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disconnect from the specified port and emits the
-<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signal from the parent node graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
-<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.lock">
-<span class="sig-name descname"><span class="pre">lock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.lock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lock the port so new pipe connections can’t be connected and
-current connected pipes can’t be disconnected.</p>
-<p>This is the same as calling <a class="reference internal" href="#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a> with the arg
-set to <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.locked">
-<span class="sig-name descname"><span class="pre">locked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.locked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the locked state.</p>
-<p>If ports are locked then new pipe connections can’t be connected
-and current connected pipes can’t be disconnected.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>true if locked.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.multi_connection">
-<span class="sig-name descname"><span class="pre">multi_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.multi_connection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns if the ports is a single connection or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>false if port is a single connection port</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the port name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>port name.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the parent node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>parent node object.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.set_locked">
-<span class="sig-name descname"><span class="pre">set_locked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connected_ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_locked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the port locked state. When locked pipe connections can’t be
-connected or disconnected from this port.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>state</strong> (<em>Bool</em>) – port lock state.</p></li>
-<li><p><strong>connected_ports</strong> (<em>Bool</em>) – apply to lock state to connected ports.</p></li>
-<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.set_visible">
-<span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_visible" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets weather the port should be visible or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>visible</strong> (<em>bool</em>) – true if visible.</p></li>
-<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.type_">
 <span class="sig-name descname"><span class="pre">type_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.type_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the port type.</p>
@@ -402,12 +243,45 @@ connected or disconnected from this port.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.Port.unlock">
-<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.unlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unlock the port so new pipe connections can be connected and
-existing connected pipes can be disconnected.</p>
-<p>This is the same as calling <a class="reference internal" href="#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a> with the arg
-set to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<dt class="sig sig-object py" id="NodeGraphQt.Port.multi_connection">
+<span class="sig-name descname"><span class="pre">multi_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.multi_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if the ports is a single connection or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>false if port is a single connection port</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parent node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>parent node object.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the port name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>port name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -420,6 +294,132 @@ set to <code class="docutils literal notranslate"><span class="pre">False</span>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.set_visible">
+<span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets weather the port should be visible or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<em>bool</em>) – true if visible.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.locked">
+<span class="sig-name descname"><span class="pre">locked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.locked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the locked state.</p>
+<p>If ports are locked then new pipe connections can’t be connected
+and current connected pipes can’t be disconnected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if locked.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.lock">
+<span class="sig-name descname"><span class="pre">lock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lock the port so new pipe connections can’t be connected and
+current connected pipes can’t be disconnected.</p>
+<p>This is the same as calling <a class="reference internal" href="#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a> with the arg
+set to <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.unlock">
+<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.unlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlock the port so new pipe connections can be connected and
+existing connected pipes can be disconnected.</p>
+<p>This is the same as calling <a class="reference internal" href="#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a> with the arg
+set to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.set_locked">
+<span class="sig-name descname"><span class="pre">set_locked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connected_ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.set_locked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the port locked state. When locked pipe connections can’t be
+connected or disconnected from this port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>Bool</em>) – port lock state.</p></li>
+<li><p><strong>connected_ports</strong> (<em>Bool</em>) – apply to lock state to connected ports.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.connected_ports">
+<span class="sig-name descname"><span class="pre">connected_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connected_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all connected ports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of connected ports.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.connect_to">
+<span class="sig-name descname"><span class="pre">connect_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connect_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create connection to the specified port and emits the
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_connected" title="NodeGraphQt.NodeGraph.port_connected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a> signal from the parent node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.disconnect_from">
+<span class="sig-name descname"><span class="pre">disconnect_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.disconnect_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect from the specified port and emits the
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signal from the parent node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.Port.clear_connections">
+<span class="sig-name descname"><span class="pre">clear_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.clear_connections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect from all port connections and emit the
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signals from the node graph.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.Port.disconnect_from" title="NodeGraphQt.Port.disconnect_from"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.disconnect_from()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.Port.connect_to" title="NodeGraphQt.Port.connect_to"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.connect_to()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.Port.connected_ports" title="NodeGraphQt.Port.connected_ports"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.connected_ports()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p>
 </dd>
 </dl>
 </dd></dl>

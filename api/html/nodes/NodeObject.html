@@ -330,172 +330,40 @@ nodes inherit from.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the node color in (red, green, blue) value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b)</span></code> from <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.create_property">
-<span class="sig-name descname"><span class="pre">create_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a custom property to the node.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>Custom node properties bin widget
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p>
-</div>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>To see all the available property widget types to display in
-the <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> widget checkout
-<a class="reference internal" href="../constants.html#NodeGraphQt.constants.NodePropWidgetEnum" title="NodeGraphQt.constants.NodePropWidgetEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum</span></code></a>.</p>
-</div>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_view">
+<span class="sig-name descname"><span class="pre">set_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new <code class="docutils literal notranslate"><span class="pre">QGraphicsItem</span></code> item to be used as the view.
+(the provided qgraphics item must be subclassed from the
+<code class="docutils literal notranslate"><span class="pre">AbstractNodeItem</span></code> object.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – name of the property.</p></li>
-<li><p><strong>value</strong> (<em>object</em>) – data.</p></li>
-<li><p><strong>items</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – items used by widget type
-attr:<cite>NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX</cite></p></li>
-<li><p><strong>range</strong> (<em>tuple</em><em> or </em><em>list</em>) – <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code> values used by
-<a class="reference internal" href="../constants.html#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER" title="NodeGraphQt.constants.NodePropWidgetEnum.SLIDER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum.SLIDER</span></code></a></p></li>
-<li><p><strong>widget_type</strong> (<em>int</em>) – widget flag to display in the
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p></li>
-<li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in the
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a>.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>item</strong> (<em>NodeGraphQt.qgraphics.node_abstract.AbstractNodeItem</em>) – node item.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.disabled">
-<span class="sig-name descname"><span class="pre">disabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.disabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns whether the node is enabled or disabled.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the node is disabled.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.get_property">
-<span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.get_property" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the node custom property.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_model">
+<span class="sig-name descname"><span class="pre">set_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new model to the node model.
+(Setting a new node model will also update the views qgraphics item.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the property.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>property data.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object</p>
+<dd class="field-odd"><p><strong>model</strong> (<em>NodeGraphQt.base.model.NodeModel</em>) – node model object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.has_property">
-<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.has_property" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if node custom property exists.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the node.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>true if property name exists in the Node.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.update_model">
+<span class="sig-name descname"><span class="pre">update_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.update_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the node model from view.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.layout_direction">
-<span class="sig-name descname"><span class="pre">layout_direction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.layout_direction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns layout direction for this node.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node layout direction.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.name">
-<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>name of the node.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.pos">
-<span class="sig-name descname"><span class="pre">pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.pos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the node XY position in the node graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>x, y position.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[float, float]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.properties">
-<span class="sig-name descname"><span class="pre">properties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all the node properties.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a dictionary of node properties.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.selected">
-<span class="sig-name descname"><span class="pre">selected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.selected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the selected state of the node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the node is selected.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the node view from model.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -540,61 +408,15 @@ attr:<cite>NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX</cite></p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_color">
-<span class="sig-name descname"><span class="pre">set_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the color of the node in (red, green, blue) value.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the node.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r</strong> (<em>int</em>) – red value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
-<li><p><strong>g</strong> (<em>int</em>) – green value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
-<li><p><strong>b</strong> (<em>int</em>) – blue value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>name of the node.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_disabled">
-<span class="sig-name descname"><span class="pre">set_disabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_disabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the node state to either disabled or enabled.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – True to disable node.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_layout_direction">
-<span class="sig-name descname"><span class="pre">set_layout_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_layout_direction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the node layout direction to either horizontal or vertical on
-the current node only.</p>
-<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a>
-<a class="reference internal" href="#NodeGraphQt.NodeObject.layout_direction" title="NodeGraphQt.NodeObject.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.layout_direction()</span></code></a></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function does not register to the undo stack.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – layout direction mode.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_model">
-<span class="sig-name descname"><span class="pre">set_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a new model to the node model.
-(Setting a new node model will also update the views qgraphics item.)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>NodeGraphQt.base.model.NodeModel</em>) – node model object.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -611,15 +433,144 @@ the current node only.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_pos">
-<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_pos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the node X and Y position in the node graph.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the node color in (red, green, blue) value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b)</span></code> from <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_color">
+<span class="sig-name descname"><span class="pre">set_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of the node in (red, green, blue) value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em><em> or </em><em>int</em>) – node X position.</p></li>
-<li><p><strong>y</strong> (<em>float</em><em> or </em><em>int</em>) – node Y position.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – red value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
+<li><p><strong>g</strong> (<em>int</em>) – green value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – blue value <code class="docutils literal notranslate"><span class="pre">0-255</span></code> range.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.disabled">
+<span class="sig-name descname"><span class="pre">disabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the node is enabled or disabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the node is disabled.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_disabled">
+<span class="sig-name descname"><span class="pre">set_disabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the node state to either disabled or enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – True to disable node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.selected">
+<span class="sig-name descname"><span class="pre">selected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the selected state of the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the node is selected.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_selected">
+<span class="sig-name descname"><span class="pre">set_selected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the node to be selected or not selected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>selected</strong> (<em>bool</em>) – True to select the node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.create_property">
+<span class="sig-name descname"><span class="pre">create_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom property to the node.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Custom node properties bin widget
+<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>To see all the available property widget types to display in
+the <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> widget checkout
+<a class="reference internal" href="../constants.html#NodeGraphQt.constants.NodePropWidgetEnum" title="NodeGraphQt.constants.NodePropWidgetEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name of the property.</p></li>
+<li><p><strong>value</strong> (<em>object</em>) – data.</p></li>
+<li><p><strong>items</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – items used by widget type
+attr:<cite>NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX</cite></p></li>
+<li><p><strong>range</strong> (<em>tuple</em><em> or </em><em>list</em>) – <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code> values used by
+<a class="reference internal" href="../constants.html#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER" title="NodeGraphQt.constants.NodePropWidgetEnum.SLIDER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum.SLIDER</span></code></a></p></li>
+<li><p><strong>widget_type</strong> (<em>int</em>) – widget flag to display in the
+<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p></li>
+<li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in the
+<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.properties">
+<span class="sig-name descname"><span class="pre">properties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the node properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary of node properties.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.get_property">
+<span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node custom property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the property.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>property data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -645,25 +596,18 @@ used if another node in the graph has the same node name.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_selected">
-<span class="sig-name descname"><span class="pre">set_selected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_selected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the node to be selected or not selected.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.has_property">
+<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.has_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if node custom property exists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>selected</strong> (<em>bool</em>) – True to select the node.</p>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the node.</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_view">
-<span class="sig-name descname"><span class="pre">set_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_view" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a new <code class="docutils literal notranslate"><span class="pre">QGraphicsItem</span></code> item to be used as the view.
-(the provided qgraphics item must be subclassed from the
-<code class="docutils literal notranslate"><span class="pre">AbstractNodeItem</span></code> object.)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item</strong> (<em>NodeGraphQt.qgraphics.node_abstract.AbstractNodeItem</em>) – node item.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if property name exists in the Node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -691,15 +635,17 @@ used if another node in the graph has the same node name.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the node view from model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.update_model">
-<span class="sig-name descname"><span class="pre">update_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.update_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the node model from view.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_pos">
+<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the node X and Y position in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em><em> or </em><em>int</em>) – node X position.</p></li>
+<li><p><strong>y</strong> (<em>float</em><em> or </em><em>int</em>) – node Y position.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -726,6 +672,60 @@ used if another node in the graph has the same node name.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.pos">
+<span class="sig-name descname"><span class="pre">pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the node XY position in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>x, y position.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.layout_direction">
+<span class="sig-name descname"><span class="pre">layout_direction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns layout direction for this node.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node layout direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeObject.set_layout_direction">
+<span class="sig-name descname"><span class="pre">set_layout_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.set_layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the node layout direction to either horizontal or vertical on
+the current node only.</p>
+<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a>
+<a class="reference internal" href="#NodeGraphQt.NodeObject.layout_direction" title="NodeGraphQt.NodeObject.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.layout_direction()</span></code></a></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function does not register to the undo stack.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – layout direction mode.</p>
 </dd>
 </dl>
 </dd></dl>

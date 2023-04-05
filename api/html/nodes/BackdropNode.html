@@ -214,9 +214,35 @@ nested inside, it’s mainly good for grouping nodes together.</p>
 <li></li>
 </ul>
 <dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.on_backdrop_updated">
+<span class="sig-name descname"><span class="pre">on_backdrop_updated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.on_backdrop_updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slot triggered by the “on_backdrop_updated” signal from
+the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>update_prop</strong> (<em>str</em>) – update property type.</p></li>
+<li><p><strong>value</strong> (<em>object</em>) – update value (optional)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.auto_size">
 <span class="sig-name descname"><span class="pre">auto_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.auto_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Auto resize the backdrop node to fit around the intersecting nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.wrap_nodes">
+<span class="sig-name descname"><span class="pre">wrap_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.wrap_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the backdrop size to fit around specified nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a><em>]</em>) – list of nodes.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -234,55 +260,12 @@ nested inside, it’s mainly good for grouping nodes together.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.on_backdrop_updated">
-<span class="sig-name descname"><span class="pre">on_backdrop_updated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.on_backdrop_updated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Slot triggered by the “on_backdrop_updated” signal from
-the node graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>update_prop</strong> (<em>str</em>) – update property type.</p></li>
-<li><p><strong>value</strong> (<em>object</em>) – update value (optional)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.set_size">
-<span class="sig-name descname"><span class="pre">set_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.set_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the backdrop size.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width</strong> (<em>float</em>) – backdrop width size.</p></li>
-<li><p><strong>height</strong> (<em>float</em>) – backdrop height size.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.set_text">
 <span class="sig-name descname"><span class="pre">set_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.set_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the text to be displayed in the backdrop node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – text string.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the current size of the node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>node width, height</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,12 +285,29 @@ the node graph.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.wrap_nodes">
-<span class="sig-name descname"><span class="pre">wrap_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.wrap_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the backdrop size to fit around specified nodes.</p>
+<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.set_size">
+<span class="sig-name descname"><span class="pre">set_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.set_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the backdrop size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a><em>]</em>) – list of nodes.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<em>float</em>) – backdrop width size.</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – backdrop height size.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BackdropNode.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BackdropNode.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current size of the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node width, height</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>

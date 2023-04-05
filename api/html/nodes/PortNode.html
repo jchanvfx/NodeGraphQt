@@ -206,6 +206,9 @@
 <h1>PortNode<a class="headerlink" href="#portnode" title="Permalink to this headline">¶</a></h1>
 <p>Port node are the nodes in a expanded <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code></a> that
 represent the ports from the parent <a class="reference internal" href="GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code></a> object.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <section id="portinputnode">
 <h2>PortInputNode<a class="headerlink" href="#portinputnode" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -237,8 +240,30 @@ represent the ports from the parent <a class="reference internal" href="GroupNod
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.nodes.port_node.PortInputNode.add_input">
+<span class="sig-name descname"><span class="pre">add_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.nodes.port_node.PortInputNode.add_input" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is not available for the <code class="docutils literal notranslate"><span class="pre">PortInputNode</span></code> class.</p>
+</div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.nodes.port_node.PortInputNode.add_output">
+<span class="sig-name descname"><span class="pre">add_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.nodes.port_node.PortInputNode.add_output" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function is called by <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.expand_group_node()</span></code></a>
+and is not available for the <code class="docutils literal notranslate"><span class="pre">PortInputNode</span></code> class.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </section>
 <section id="portoutputnode">
 <h2>PortOutputNode<a class="headerlink" href="#portoutputnode" title="Permalink to this headline">¶</a></h2>
@@ -269,6 +294,25 @@ from a <a class="reference internal" href="GroupNode.html#NodeGraphQt.GroupNode"
 <dd class="field-even"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.nodes.port_node.PortOutputNode.add_input">
+<span class="sig-name descname"><span class="pre">add_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.nodes.port_node.PortOutputNode.add_input" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function is called by <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.expand_group_node()</span></code></a>
+and is not available for the <code class="docutils literal notranslate"><span class="pre">PortOutputNode</span></code> class.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.nodes.port_node.PortOutputNode.add_output">
+<span class="sig-name descname"><span class="pre">add_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.nodes.port_node.PortOutputNode.add_output" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is not available for the <code class="docutils literal notranslate"><span class="pre">PortOutputNode</span></code> class.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
