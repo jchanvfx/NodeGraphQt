@@ -1,7 +1,7 @@
 Built-in Widgets
 ################
 
-The ``NodeGraphQt`` framework comes included with a few custom widgets.
+| The ``NodeGraphQt`` framework comes included with a few custom widgets.
 
 
 Properties Bin

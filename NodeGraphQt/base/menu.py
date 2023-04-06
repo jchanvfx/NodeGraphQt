@@ -12,6 +12,9 @@ class NodeGraphMenu(object):
     """
     The ``NodeGraphMenu`` is the main context menu triggered from the node graph.
 
+    .. inheritance-diagram:: NodeGraphQt.NodeGraphMenu
+        :parts: 1
+
     example for accessing the node graph context menu.
 
     .. code-block:: python
@@ -86,7 +89,7 @@ class NodeGraphMenu(object):
             name (str): name of the command.
 
         Returns:
-            NodeGraphQt.MenuCommand: context menu command.
+            NodeGraphQt.NodeGraphCommand: context menu command.
         """
         return self._commands.get(name)
 
@@ -159,7 +162,8 @@ class NodesMenu(NodeGraphMenu):
     """
     The ``NodesMenu`` is the context menu triggered from a node.
 
-    **Inherited from:** :class:`NodeGraphQt.NodeGraphMenu`
+    .. inheritance-diagram:: NodeGraphQt.NodesMenu
+        :parts: 1
 
     example for accessing the nodes context menu.
 
@@ -230,6 +234,10 @@ class NodesMenu(NodeGraphMenu):
 class NodeGraphCommand(object):
     """
     Node graph menu command.
+
+    .. inheritance-diagram:: NodeGraphQt.NodeGraphCommand
+        :parts: 1
+
     """
 
     def __init__(self, graph, qaction, func=None):

@@ -585,16 +585,17 @@ class NodeGraph(QtCore.QObject):
 
     def set_grid_mode(self, mode=None):
         """
-        Set node graph grid mode.
+        Set node graph background grid mode.
 
-        Note:
-            By default grid mode is set to "VIEWER_GRID_LINES".
+        (default: :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES`).
 
-            Node graph background types:
+        See: :attr:`NodeGraphQt.constants.ViewerEnum`
 
-            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE.value`
-            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS.value`
-            * :attr:`NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES.value`
+        .. code-block:: python
+            :linenos:
+
+            graph = NodeGraph()
+            graph.set_grid_mode(ViewerEnum.CURVED.value)
 
         Args:
             mode (int): background style.
@@ -695,7 +696,8 @@ class NodeGraph(QtCore.QObject):
         """
         Returns the context menu specified by the name.
 
-        Menu Types:
+        menu types:
+
             - ``"graph"`` context menu from the node graph.
             - ``"nodes"`` context menu for the nodes.
 
@@ -840,7 +842,8 @@ class NodeGraph(QtCore.QObject):
         """
         Disable/Enable context menus from the node graph.
 
-        Menu Types:
+        menu types:
+
             - ``"all"`` all context menus from the node graph.
             - ``"graph"`` context menu from the node graph.
             - ``"nodes"`` context menu for the nodes.
@@ -947,19 +950,19 @@ class NodeGraph(QtCore.QObject):
 
     def set_pipe_style(self, style=PipeLayoutEnum.CURVED.value):
         """
-        Set node graph pipes to be drawn as straight, curved or angled.
+        Set node graph pipes to be drawn as curved `(default)`, straight or angled.
+
+        .. code-block:: python
+            :linenos:
+
+            graph = NodeGraph()
+            graph.set_pipe_style(PipeLayoutEnum.CURVED.value)
+
+        See: :attr:`NodeGraphQt.constants.PipeLayoutEnum`
 
         .. image:: _images/pipe_layout_types.gif
             :width: 80%
 
-        Note:
-            By default pipe layout is set to "PIPE_LAYOUT_CURVED".
-
-            Pipe Layout Styles:
-
-            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.CURVED.value`
-            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT.value`
-            * :attr:`NodeGraphQt.constants.PipeLayoutEnum.ANGLE.value`
 
         Args:
             style (int): pipe layout style.

@@ -8,7 +8,7 @@ Menu Overview
 Default Context Menu
 ********************
 
-The ``NodeGraphQt.NodeGraph`` has a context menu can be accessed with
+The :class:`NodeGraphQt.NodeGraph` has a context menu can be accessed with
 :meth:`NodeGraph.context_menu`.
 
 
@@ -19,7 +19,8 @@ It can also be populated it with a config file in ``JSON`` format by using
     :width: 300px
 
 | Here's a link to the example config file with a few essential menu commands.
-| https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json
+| `example JSON config file <https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json>`_
+
 
 Adding to the Graph Menu
 ************************
