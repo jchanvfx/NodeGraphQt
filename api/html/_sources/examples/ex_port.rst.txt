@@ -4,7 +4,7 @@ Port Overview
 Creating Custom Shapes
 **********************
 
-(*Implemented on* ``v0.1.1``)
+| (*Implemented on* ``v0.1.1``)
 
 To have custom port shapes the :meth:`NodeGraphQt.BaseNode.add_input` and
 :meth:`NodeGraphQt.BaseNode.add_output` functions now have a ``painter_func``
@@ -12,6 +12,8 @@ argument where you specify you custom port painter function.
 
 .. image:: ../_images/custom_ports.png
         :width: 178px
+
+|
 
 Example Triangle Port
 *********************
@@ -88,6 +90,8 @@ The ``draw_triangle_port`` painter function can then be passed to the ``painter_
             super(MyListNode, self).__init__()
             # create a input port with custom painter function.
             self.add_input('triangle', painter_func=draw_triangle_port)
+
+|
 
 Example Square Port
 *******************

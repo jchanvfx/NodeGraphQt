@@ -196,11 +196,16 @@
 <h1>Port Overview<a class="headerlink" href="#port-overview" title="Permalink to this headline">¶</a></h1>
 <section id="creating-custom-shapes">
 <h2>Creating Custom Shapes<a class="headerlink" href="#creating-custom-shapes" title="Permalink to this headline">¶</a></h2>
-<p>(<em>Implemented on</em> <code class="docutils literal notranslate"><span class="pre">v0.1.1</span></code>)</p>
+<div class="line-block">
+<div class="line">(<em>Implemented on</em> <code class="docutils literal notranslate"><span class="pre">v0.1.1</span></code>)</div>
+</div>
 <p>To have custom port shapes the <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_input()</span></code></a> and
 <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_output()</span></code></a> functions now have a <code class="docutils literal notranslate"><span class="pre">painter_func</span></code>
 argument where you specify you custom port painter function.</p>
 <img alt="../_images/custom_ports.png" src="../_images/custom_ports.png" style="width: 178px;" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </section>
 <section id="example-triangle-port">
 <h2>Example Triangle Port<a class="headerlink" href="#example-triangle-port" title="Permalink to this headline">¶</a></h2>
@@ -269,6 +274,9 @@ argument where you specify you custom port painter function.</p>
 <span class="linenos">7</span>        <span class="c1"># create a input port with custom painter function.</span>
 <span class="hll"><span class="linenos">8</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;triangle&#39;</span><span class="p">,</span> <span class="n">painter_func</span><span class="o">=</span><span class="n">draw_triangle_port</span><span class="p">)</span>
 </span></pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
 </section>
 <section id="example-square-port">

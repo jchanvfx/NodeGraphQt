@@ -39,6 +39,7 @@ Creating Nodes
 
         app.exec_()
 
+|
 
 Creating Node Widgets
 *********************
@@ -79,6 +80,8 @@ To you update the widget you can call the
  - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
 
 See: :ref:`Node Widgets` for more node widget types.
+
+|
 
 Embedding Custom Widgets
 ************************
@@ -230,6 +233,7 @@ connecting nodes with the port objects:
         - :func:`NodeGraphQt.Port.connect_to`
         - :func:`NodeGraphQt.Port.disconnect_from`
 
+|
 
 Connecting a PropertiesBin
 **************************

@@ -204,8 +204,18 @@
             
   <section id="portnode">
 <h1>PortNode<a class="headerlink" href="#portnode" title="Permalink to this headline">¶</a></h1>
-<p>Port node are the nodes in a expanded <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code></a> that
+<p>Port nodes are the nodes in a expanded <a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code></a> that
 represent the ports from the parent <a class="reference internal" href="GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code></a> object.</p>
+<hr class="docutils" />
+<p>To access a port node a <a class="reference internal" href="GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code></a> need to be expanded
+which can be done with one of the follow functions:</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.GroupNode.expand()</span></code>,
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.expand_group_node()</span></code></a>,
+<a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.expand_group_node()</span></code></a></p>
+<p>Port nodes object can accessed with:</p>
+<p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.get_node_by_port" title="NodeGraphQt.SubGraph.get_node_by_port"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.get_node_by_port()</span></code></a>,
+<a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.get_input_port_nodes" title="NodeGraphQt.SubGraph.get_input_port_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.get_input_port_nodes()</span></code></a>,
+<a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.get_output_port_nodes" title="NodeGraphQt.SubGraph.get_output_port_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph.get_output_port_nodes()</span></code></a></p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>

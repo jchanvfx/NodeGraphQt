@@ -198,26 +198,29 @@
 <p>The <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a> class has 3 different pipe layout styles as
 shown above this can be set easily with the <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_pipe_style" title="NodeGraphQt.NodeGraph.set_pipe_style"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.set_pipe_style()</span></code></a>
 function.</p>
-<p>Here’s a super simple example snippet for setting the pipe layout style to be angled.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Here’s a example snippet for setting the pipe layout style to be “angled”.</div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
-<span class="linenos">2</span><span class="kn">from</span> <span class="nn">NodeGraphQt.constants</span> <span class="kn">import</span> <span class="n">PIPE_LAYOUT_ANGLE</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">NodeGraphQt.constants</span> <span class="kn">import</span> <span class="n">PipeLayoutEnum</span>
 <span class="linenos">3</span>
 <span class="linenos">4</span><span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
-<span class="linenos">5</span><span class="n">graph</span><span class="o">.</span><span class="n">set_pipe_style</span><span class="p">(</span><span class="n">PIPE_LAYOUT_ANGLE</span><span class="p">)</span>
+<span class="linenos">5</span><span class="n">graph</span><span class="o">.</span><span class="n">set_pipe_style</span><span class="p">(</span><span class="n">PipeLayoutEnum</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Constants variables for the 3 different pipe layout styles:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Curved</span></code>: <code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_CURVED</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Straight</span></code>: <code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Angle</span></code>: <code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PIPE_LAYOUT_ANGLE</span></code></p></li>
-</ul>
-</div></blockquote>
-<p>Note: if you’ve set up your node graph with the <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.setup_context_menu</span></code>
-is a convenience function then you’ll already have the actions to set the pipe
-layout under “Edit&gt;Pipe”.</p>
+<div class="line-block">
+<div class="line">There are 3 different pipe layout styles see: <a class="reference internal" href="../constants.html#NodeGraphQt.constants.PipeLayoutEnum" title="NodeGraphQt.constants.PipeLayoutEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum</span></code></a></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you’ve set up your node graph with the <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code>
+function and the example
+<a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json">example JSON</a>
+then you’ll already have the actions to set the pipe layout under the
+“Pipes” menu.</p>
 <img alt="../_images/pipe_layout_menu.png" src="../_images/pipe_layout_menu.png" />
+</div>
 </section>
 </section>
 
