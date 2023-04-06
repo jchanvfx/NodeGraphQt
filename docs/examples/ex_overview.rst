@@ -9,13 +9,13 @@ User interface overview for the node graph.
 Navigation
 **********
 
-+---------------+----------------------------------------------+
-| action        | controls                                     |
-+===============+==============================================+
-| Zoom in/out   | *Alt + MMB + Drag* or *Mouse Scroll Up/Down* |
-+---------------+----------------------------------------------+
-| Pan           | *Alt + LMB + Drag* or *MMB + Drag*           |
-+---------------+----------------------------------------------+
++---------------+----------------------------------------------------+
+| action        | controls                                           |
++===============+====================================================+
+| Zoom In/Out   | ``Alt + MMB + Drag`` or ``Mouse Scroll Up/Down``   |
++---------------+----------------------------------------------------+
+| Pan           | ``Alt + LMB + Drag`` or ``MMB + Drag``             |
++---------------+----------------------------------------------------+
 
 Node Selection
 **************
@@ -33,11 +33,11 @@ Tab Search
 
 Nodes registered in the node graph can be created with the tab search widget.
 
-+-------------------+--------+
-| action            | hotkey |
-+===================+========+
-| Toggle Visibility | *Tab*  |
-+-------------------+--------+
++-------------------+----------+
+| action            | hotkey   |
++===================+==========+
+| Toggle Visibility | ``Tab``  |
++-------------------+----------+
 
 Pipe Slicing
 ************
@@ -47,11 +47,11 @@ Pipe Slicing
 
 Connection pipes can be disconnected easily with the built in slice tool.
 
-+---------------------+----------------------------+
-| action              | controls                   |
-+=====================+============================+
-| Slice connections   | *Alt + Shift + LMB + Drag* |
-+---------------------+----------------------------+
++---------------------+------------------------------+
+| action              | controls                     |
++=====================+==============================+
+| Slice Connections   | ``Alt + Shift + LMB + Drag`` |
++---------------------+------------------------------+
 
 Additional Info:
     To disable or enable the pipe slicer see

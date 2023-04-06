@@ -11,25 +11,26 @@ The :class:`NodeGraphQt.NodeGraph` class has 3 different pipe layout styles as
 shown above this can be set easily with the :meth:`NodeGraphQt.NodeGraph.set_pipe_style`
 function.
 
-Here's a super simple example snippet for setting the pipe layout style to be angled.
+|
+| Here's a example snippet for setting the pipe layout style to be "angled".
 
 .. code-block:: python
     :linenos:
 
     from NodeGraphQt import NodeGraph
-    from NodeGraphQt.constants import PIPE_LAYOUT_ANGLE
+    from NodeGraphQt.constants import PipeLayoutEnum
 
     graph = NodeGraph()
-    graph.set_pipe_style(PIPE_LAYOUT_ANGLE)
+    graph.set_pipe_style(PipeLayoutEnum.ANGLE.value)
 
-Constants variables for the 3 different pipe layout styles:
+| There are 3 different pipe layout styles see: :attr:`NodeGraphQt.constants.PipeLayoutEnum`
 
- - ``Curved``: :attr:`NodeGraphQt.constants.PIPE_LAYOUT_CURVED`
- - ``Straight``: :attr:`NodeGraphQt.constants.PIPE_LAYOUT_STRAIGHT`
- - ``Angle``: :attr:`NodeGraphQt.constants.PIPE_LAYOUT_ANGLE`
+.. note::
 
-Note: if you've set up your node graph with the ``NodeGraphQt.setup_context_menu``
-is a convenience function then you'll already have the actions to set the pipe
-layout under "Edit>Pipe".
+    If you've set up your node graph with the :meth:`NodeGraph.set_context_menu_from_file`
+    function and the example
+    `example JSON <https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json>`_
+    then you'll already have the actions to set the pipe layout under the
+    "Pipes" menu.
 
-.. image:: ../_images/pipe_layout_menu.png
+    .. image:: ../_images/pipe_layout_menu.png
