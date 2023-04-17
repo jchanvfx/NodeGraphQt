@@ -1,0 +1,10 @@
+<map id="inheritance2ffd4bb505" name="inheritance2ffd4bb505">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodeBaseWidget" target="_top" title="This is the main wrapper class that allows a ``QtWidgets.QWidget`` to be" alt="" coords="581,54,665,71"/>
+<area shape="rect" id="node3" href="#NodeGraphQt.widgets.node_widgets.NodeLineEdit" target="_top" title="Displays as a ``QLineEdit`` in a node." alt="" coords="697,54,764,71"/>
+<area shape="rect" id="node2" title="QGraphicsProxyWidget(self, parent: typing.Union[PySide2.QtWidgets.QGraphicsItem, NoneType] = None, wFlags: PySide2.QtCore.Qt.WindowFlags = Default(Qt.WindowFlags)) &#45;&gt; None" alt="" coords="442,54,549,71"/>
+<area shape="rect" id="node5" title="QGraphicsItem(self, parent: typing.Union[PySide2.QtWidgets.QGraphicsItem, NoneType] = None) &#45;&gt; None" alt="" coords="85,4,159,21"/>
+<area shape="rect" id="node6" title="QGraphicsLayoutItem(self, parent: typing.Union[PySide2.QtWidgets.QGraphicsLayoutItem, NoneType] = None, isLayout: bool = False) &#45;&gt; None" alt="" coords="192,70,292,87"/>
+<area shape="rect" id="node8" title="QObject(self, parent: typing.Union[PySide2.QtCore.QObject, NoneType] = None) &#45;&gt; None" alt="" coords="98,37,146,54"/>
+<area shape="rect" id="node7" title="QGraphicsObject(self, parent: typing.Union[PySide2.QtWidgets.QGraphicsItem, NoneType] = None) &#45;&gt; None" alt="" coords="201,37,283,54"/>
+<area shape="rect" id="node9" title="QGraphicsWidget(self, parent: typing.Union[PySide2.QtWidgets.QGraphicsItem, NoneType] = None, wFlags: PySide2.QtCore.Qt.WindowFlags = Default(Qt.WindowFlags)) &#45;&gt; None" alt="" coords="325,54,409,71"/>
+</map>
