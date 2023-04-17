@@ -50,6 +50,7 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
+    'autodocsumm',
 ]
 
 intersphinx_mapping = {
@@ -68,6 +69,9 @@ inheritance_alias = {
     'NodeGraphQt.nodes.base_node_circle.BaseNodeCircle': 'NodeGraphQt.BaseNodeCircle',
     'NodeGraphQt.nodes.group_node.GroupNode': 'NodeGraphQt.GroupNode',
 }
+
+# autodocsumm options
+autodoc_default_options = {'autosummary': True}
 
 # order of members.
 autodoc_member_order = 'groupwise'
