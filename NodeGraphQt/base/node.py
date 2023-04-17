@@ -45,6 +45,8 @@ class NodeObject(object):
     
     :return: node type domain.
     :rtype: str
+    
+    :meta hide-value:
     """
 
     NODE_NAME = None
@@ -68,6 +70,8 @@ class NodeObject(object):
     
     :return: node name
     :rtype: str
+    
+    :meta hide-value:
     """
 
     def __init__(self, qgraphics_item=None):

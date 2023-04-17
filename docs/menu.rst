@@ -8,6 +8,11 @@ Menus
     Context menus can also be set from a config file or a dictionary with:
     :meth:`NodeGraph.set_context_menu_from_file`, :meth:`NodeGraph.set_context_menu`
 
+.. autosummary::
+    NodeGraphMenu
+    NodesMenu
+    NodeGraphCommand
+
 |
 
 GraphMenu

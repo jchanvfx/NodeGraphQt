@@ -10,7 +10,7 @@ Nodes
 
     Port
     NodeObject
+    BackdropNode
     BaseNode
     GroupNode
     PortNode
-    BackdropNode

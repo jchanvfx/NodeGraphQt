@@ -43,13 +43,13 @@ class VersionEnum(Enum):
     Current framework version.
     :py:mod:`NodeGraphQt.constants.VersionEnum`
     """
-    #:
+    #: current version string.
     VERSION = _v
-    #:
+    #: version major int.
     MAJOR = int(_v.split('.')[0])
-    #:
+    #: version minor int.
     MINOR = int(_v.split('.')[1])
-    #:
+    #: version patch int.
     PATCH = int(_v.split('.')[2])
 
 

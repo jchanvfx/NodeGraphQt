@@ -1,16 +1,20 @@
 Graphs
 ######
 
+| `See` :ref:`Getting Started` `from the overview section.`
+
+.. autosummary::
+    NodeGraphQt.NodeGraph
+    NodeGraphQt.SubGraph
+
 NodeGraph
 *********
-
-`See` :ref:`Getting Started` `from the overview section.`
-
-----
 
 .. autoclass:: NodeGraphQt.NodeGraph
     :members:
     :member-order: bysource
+
+|
 
 SubGraph
 ********
