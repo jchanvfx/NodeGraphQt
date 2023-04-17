@@ -70,11 +70,13 @@ inheritance_alias = {
     'NodeGraphQt.nodes.group_node.GroupNode': 'NodeGraphQt.GroupNode',
 }
 
-# autodocsumm options
-autodoc_default_options = {'autosummary': True}
-
-# order of members.
-autodoc_member_order = 'groupwise'
+# autodoc options.
+autodoc_default_options = {
+    'autosummary': True,
+    'members': True,
+    'member-order': 'bysource',
+    'undoc-members': False,
+}
 
 # autosummary generate stubs.
 autosummary_generate = True

@@ -2231,7 +2231,8 @@ class NodeGraph(QtCore.QObject):
 class SubGraph(NodeGraph):
     """
     The ``SubGraph`` class is just like the ``NodeGraph`` but is the main
-    controller for managing the expanded node graph for a group node.
+    controller for managing the expanded node graph for a
+    :class:`NodeGraphQt.GroupNode`.
 
     .. inheritance-diagram:: NodeGraphQt.SubGraph
         :top-classes: PySide2.QtCore.QObject
