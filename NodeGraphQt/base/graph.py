@@ -1500,6 +1500,7 @@ class NodeGraph(QtCore.QObject):
         nodes_data = {}
 
         # serialize graph session.
+        serial_data['graph']['layout_direction'] = self.layout_direction()
         serial_data['graph']['acyclic'] = self.acyclic()
         serial_data['graph']['pipe_collision'] = self.pipe_collision()
         serial_data['graph']['pipe_slicing'] = self.pipe_slicing()
@@ -1559,7 +1560,9 @@ class NodeGraph(QtCore.QObject):
         """
         # update node graph properties.
         for attr_name, attr_value in data.get('graph', {}).items():
-            if attr_name == 'acyclic':
+            if attr_name == 'layout_direction':
+                self.set_layout_direction(attr_value)
+            elif attr_name == 'acyclic':
                 self.set_acyclic(attr_value)
             elif attr_name == 'pipe_collision':
                 self.set_pipe_collision(attr_value)
