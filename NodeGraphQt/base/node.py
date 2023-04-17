@@ -22,24 +22,53 @@ class NodeObject(object):
 
     Args:
         qgraphics_item (AbstractNodeItem): QGraphicsItem item used for drawing.
-
-            .. code-block:: python
-
-                # snippet taken from the NodeGraphQt.BaseNode class.
-
-                class BaseNode(NodeObject):
-
-                    def __init__(self, qgraphics_item=None):
-                        qgraphics_item = qgraphics_item or NodeItem
-                        super(BaseNode, self).__init__(qgraphics_views)
-
     """
 
-    # Unique node identifier domain. `eg.` ``"io.github.jchanvfx"``
     __identifier__ = 'nodeGraphQt.nodes'
+    """
+    Unique node identifier domain. eg. ``"io.github.jchanvfx"``
 
-    # Base node name.
+    .. important:: re-implement this attribute to provide a unique node type.
+    
+        .. code-block:: python
+            :linenos:
+    
+            from NodeGraphQt import NodeObject
+    
+            class ExampleNode(NodeObject):
+    
+                # unique node identifier domain.
+                __identifier__ = 'io.jchanvfx.github'
+    
+                def __init__(self):
+                    ...
+    
+    :return: node type domain.
+    :rtype: str
+    """
+
     NODE_NAME = None
+    """
+    Initial base node name.
+
+    .. important:: re-implement this attribute to provide a base node name.
+    
+        .. code-block:: python
+            :linenos:
+    
+            from NodeGraphQt import NodeObject
+    
+            class ExampleNode(NodeObject):
+    
+                # initial default node name.
+                NODE_NAME = 'Example Node'
+    
+                def __init__(self):
+                    ...
+    
+    :return: node name
+    :rtype: str
+    """
 
     def __init__(self, qgraphics_item=None):
         """
@@ -71,10 +100,10 @@ class NodeObject(object):
     def type_(cls):
         """
         Node type identifier followed by the class name.
-        `eg.` ``"com.chantacticvfx.NodeObject"``
+        `eg.` ``"nodeGraphQt.nodes.NodeObject"``
 
         Returns:
-            str: node type.
+            str: node type (``__identifier__.__className__``)
         """
         return cls.__identifier__ + '.' + cls.__name__
 
@@ -84,7 +113,7 @@ class NodeObject(object):
         The node unique id.
 
         Returns:
-            str: unique id string.
+            str: unique identifier string to the node.
         """
         return self.model.id
 
@@ -94,7 +123,7 @@ class NodeObject(object):
         The parent node graph.
 
         Returns:
-            NodeGraphQt.NodeGraph: node graph.
+            NodeGraphQt.NodeGraph: node graph instance.
         """
         return self._graph
 
