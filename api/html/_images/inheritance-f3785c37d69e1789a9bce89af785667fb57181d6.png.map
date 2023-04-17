@@ -1,0 +1,5 @@
+<map id="inheritance0a8909a132" name="inheritance0a8909a132">
+<area shape="rect" id="node1" href="BaseNode.html#NodeGraphQt.BaseNode" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows" alt="" coords="228,5,395,31"/>
+<area shape="rect" id="node3" href="#NodeGraphQt.GroupNode" target="_top" title="`Implemented in` ``v0.2.0``" alt="" coords="443,5,615,31"/>
+<area shape="rect" id="node2" href="NodeObject.html#NodeGraphQt.NodeObject" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all" alt="" coords="5,5,180,31"/>
+</map>

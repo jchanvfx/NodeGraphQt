@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>General Overview &mdash; NodeGraphQt 0.5.5 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Node Overview" href="ex_node.html" />
+    <link rel="prev" title="Node Widgets" href="../node_widgets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">General Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#navigation">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#node-selection">Node Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tab-search">Tab Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipe-slicing">Pipe Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ex_node.html">Node Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex_port.html">Port Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex_pipe.html">Pipe Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex_menu.html">Menu Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host_apps/_index_apps.html">Host Application Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NodeGraphQt</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>General Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/master/docs/examples/ex_overview.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="general-overview">
+<h1>General Overview<a class="headerlink" href="#general-overview" title="Permalink to this headline">¶</a></h1>
+<p>User interface overview for the node graph.</p>
+<img alt="../_images/overview.png" src="../_images/overview.png" style="width: 70%;" />
+<section id="navigation">
+<h2>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>action</p></th>
+<th class="head"><p>controls</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Zoom In/Out</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">MMB</span> <span class="pre">+</span> <span class="pre">Drag</span></code> or <code class="docutils literal notranslate"><span class="pre">Mouse</span> <span class="pre">Scroll</span> <span class="pre">Up/Down</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Pan</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">LMB</span> <span class="pre">+</span> <span class="pre">Drag</span></code> or <code class="docutils literal notranslate"><span class="pre">MMB</span> <span class="pre">+</span> <span class="pre">Drag</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="node-selection">
+<h2>Node Selection<a class="headerlink" href="#node-selection" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/selection.png" src="../_images/selection.png" style="width: 500px;" />
+<p>Nodes can be selected/unselected with the selection marquee using LMB + Drag</p>
+</section>
+<section id="tab-search">
+<h2>Tab Search<a class="headerlink" href="#tab-search" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/node_search.png" src="../_images/node_search.png" style="width: 269px;" />
+<p>Nodes registered in the node graph can be created with the tab search widget.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 66%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>action</p></th>
+<th class="head"><p>hotkey</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Toggle Visibility</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Tab</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pipe-slicing">
+<h2>Pipe Slicing<a class="headerlink" href="#pipe-slicing" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/slicer.png" src="../_images/slicer.png" style="width: 600px;" />
+<p>Connection pipes can be disconnected easily with the built in slice tool.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>action</p></th>
+<th class="head"><p>controls</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Slice Connections</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">Shift</span> <span class="pre">+</span> <span class="pre">LMB</span> <span class="pre">+</span> <span class="pre">Drag</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt>Additional Info:</dt><dd><p>To disable or enable the pipe slicer see
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_pipe_slicing" title="NodeGraphQt.NodeGraph.set_pipe_slicing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.set_pipe_slicing()</span></code></a></p>
+</dd>
+</dl>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a basic example snippet for creating two nodes and connecting them together.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">BaseNode</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># create a node class object inherited from BaseNode.</span>
+<span class="linenos"> 8</span><span class="k">class</span> <span class="nc">FooNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="c1"># unique node identifier domain.</span>
+<span class="linenos">11</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="c1"># initial default node name.</span>
+<span class="linenos">14</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;Foo Node&#39;</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">17</span>        <span class="nb">super</span><span class="p">(</span><span class="n">FooNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span>        <span class="c1"># create an input port.</span>
+<span class="linenos">20</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>        <span class="c1"># create an output port.</span>
+<span class="linenos">23</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">27</span>    <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="linenos">28</span>
+<span class="linenos">29</span>    <span class="c1"># create node graph controller.</span>
+<span class="linenos">30</span>    <span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span>    <span class="c1"># register the FooNode node class.</span>
+<span class="linenos">33</span>    <span class="n">graph</span><span class="o">.</span><span class="n">register_node</span><span class="p">(</span><span class="n">FooNode</span><span class="p">)</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span>    <span class="c1"># show the node graph widget.</span>
+<span class="linenos">36</span>    <span class="n">graph_widget</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">widget</span>
+<span class="linenos">37</span>    <span class="n">graph_widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="c1"># create two nodes.</span>
+<span class="linenos">40</span>    <span class="n">node_a</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;node A&#39;</span><span class="p">)</span>
+<span class="linenos">41</span>    <span class="n">node_b</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;node B&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<span class="linenos">42</span>
+<span class="linenos">43</span>    <span class="c1"># connect node_a to node_b</span>
+<span class="linenos">44</span>    <span class="n">node_a</span><span class="o">.</span><span class="n">set_output</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_b</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span>    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>result:</p>
+<img alt="../_images/example_result.png" src="../_images/example_result.png" style="width: 60%;" />
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ex_node.html" class="btn btn-neutral float-right" title="Node Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../node_widgets.html" class="btn btn-neutral float-left" title="Node Widgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Johnny Chan.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
