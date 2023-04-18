@@ -8,7 +8,7 @@ class GroupNode(BaseNode):
     """
     `Implemented in` ``v0.2.0``
 
-    The ``NodeGraphQt.GroupNode`` class extends from the :class:``NodeGraphQt.BaseNode``
+    The ``NodeGraphQt.GroupNode`` class extends from the :class:`NodeGraphQt.BaseNode`
     class with the ability to nest other nodes inside of it.
 
     .. inheritance-diagram:: NodeGraphQt.GroupNode

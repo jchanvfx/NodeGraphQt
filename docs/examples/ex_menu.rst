@@ -3,7 +3,7 @@ Menu Overview
 
 .. currentmodule:: NodeGraphQt
 
-| Examples for customizing context menus in NodeGraphQt.
+| Examples for customizing context menus in ``NodeGraphQt``.
 
 Default Context Menu
 ********************

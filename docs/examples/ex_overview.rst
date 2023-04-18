@@ -66,8 +66,6 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
 .. code-block:: python
     :linenos:
 
-    import sys
-
     from Qt import QtWidgets
     from NodeGraphQt import NodeGraph, BaseNode
 
@@ -92,7 +90,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
 
 
     if __name__ == '__main__':
-        app = QtWidgets.QApplication(sys.argv)
+        app = QtWidgets.QApplication([])
 
         # create node graph controller.
         graph = NodeGraph()

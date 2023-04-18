@@ -7,7 +7,7 @@ from NodeGraphQt.qgraphics.node_port_out import PortOutputNodeItem
 
 class PortInputNode(BaseNode):
     """
-    The ``PortInputNode`` class is the node object that represents a port from a
+    The ``PortInputNode`` is the node that represents a input port from a
     :class:`NodeGraphQt.GroupNode` when expanded in a
     :class:`NodeGraphQt.SubGraph`.
 
@@ -71,8 +71,8 @@ class PortInputNode(BaseNode):
 
 class PortOutputNode(BaseNode):
     """
-    The ``PortOutputNode`` class is the node object that represents a port
-    from a :class:`NodeGraphQt.GroupNode` when expanded in a
+    The ``PortOutputNode`` is the node that represents a output port from a
+    :class:`NodeGraphQt.GroupNode` when expanded in a
     :class:`NodeGraphQt.SubGraph`.
 
     .. inheritance-diagram:: NodeGraphQt.nodes.port_node.PortOutputNode

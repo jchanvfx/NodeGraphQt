@@ -19,7 +19,7 @@ class Port(object):
 
     .. inheritance-diagram:: NodeGraphQt.Port
 
-    .. image:: ../_images/port.png
+    .. image:: _images/port.png
         :width: 50%
 
     See Also:

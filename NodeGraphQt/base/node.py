@@ -38,7 +38,7 @@ class NodeObject(object):
             class ExampleNode(NodeObject):
     
                 # unique node identifier domain.
-                __identifier__ = 'io.jchanvfx.github'
+                __identifier__ = 'io.github.jchanvfx'
     
                 def __init__(self):
                     ...
