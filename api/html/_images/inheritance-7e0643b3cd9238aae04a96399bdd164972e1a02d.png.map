@@ -1,5 +1,5 @@
 <map id="inheritance8c64f52c43" name="inheritance8c64f52c43">
 <area shape="rect" id="node1" href="BaseNode.html#NodeGraphQt.BaseNode" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows" alt="" coords="144,5,227,31"/>
-<area shape="rect" id="node3" href="#NodeGraphQt.nodes.port_node.PortOutputNode" target="_top" title="The ``PortOutputNode`` class is the node object that represents a port" alt="" coords="275,5,391,31"/>
+<area shape="rect" id="node3" href="#NodeGraphQt.nodes.port_node.PortOutputNode" target="_top" title="The ``PortOutputNode`` is the node that represents a output port from a" alt="" coords="275,5,391,31"/>
 <area shape="rect" id="node2" href="NodeObject.html#NodeGraphQt.NodeObject" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all" alt="" coords="5,5,96,31"/>
 </map>

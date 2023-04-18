@@ -103,15 +103,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="_index_nodes.html">Nodes</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Port.html">Port</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BaseNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#basenode-circle">BaseNode (Circle)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="GroupNode.html">GroupNode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="PortNode.html">PortNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortNode.html">Port Nodes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
@@ -119,7 +119,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage</span></p>
+<p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_overview.html">General Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_node.html">Node Overview</a></li>
@@ -263,10 +263,10 @@ port connections from one node to another.</p>
 <td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget into the node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, …])</p></td>
-<td><p>Add input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
+<td><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_output</span></code></a>([name, multi_output, …])</p></td>
-<td><p>Add output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
+<td><p>Add output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_input" title="NodeGraphQt.BaseNode.get_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input</span></code></a>(port)</p></td>
 <td><p>Get input port by the name or index.</p></td>
@@ -305,13 +305,13 @@ port connections from one node to another.</p>
 <td><p>Return the input port with the matching index.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_input" title="NodeGraphQt.BaseNode.set_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_input</span></code></a>(index, port)</p></td>
-<td><p>Creates a connection pipe to the targeted output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
+<td><p>Creates a connection pipe to the targeted output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output" title="NodeGraphQt.BaseNode.output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output</span></code></a>(index)</p></td>
 <td><p>Return the output port with the matching index.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_output" title="NodeGraphQt.BaseNode.set_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_output</span></code></a>(index, port)</p></td>
-<td><p>Creates a connection pipe to the targeted input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
+<td><p>Creates a connection pipe to the targeted input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="NodeGraphQt.BaseNode.connected_input_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_input_nodes</span></code></a>()</p></td>
 <td><p>Returns all nodes connected from the input ports.</p></td>
@@ -489,7 +489,7 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_input">
 <span class="sig-name descname"><span class="pre">add_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
+<dd><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Undo is NOT supported for this function.</p>
@@ -501,7 +501,7 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 <li><p><strong>multi_input</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
 <li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
 <li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
-<li><p><strong>locked</strong> (<em>bool</em>) – locked state see <a class="reference internal" href="Port.html#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a></p></li>
+<li><p><strong>locked</strong> (<em>bool</em>) – locked state see <a class="reference internal" href="../port.html#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a></p></li>
 <li><p><strong>painter_func</strong> (<em>function</em><em> or </em><em>None</em>) – custom function to override the drawing
 of the port shape see example: <a class="reference internal" href="../examples/ex_port.html#creating-custom-shapes"><span class="std std-ref">Creating Custom Shapes</span></a></p></li>
 </ul>
@@ -510,7 +510,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <dd class="field-even"><p>the created port object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -518,7 +518,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_output">
 <span class="sig-name descname"><span class="pre">add_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
+<dd><p>Add output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Undo is NOT supported for this function.</p>
@@ -530,7 +530,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <li><p><strong>multi_output</strong> (<em>bool</em>) – allow port to have more than one connection.</p></li>
 <li><p><strong>display_name</strong> (<em>bool</em>) – display the port name on the node.</p></li>
 <li><p><strong>color</strong> (<em>tuple</em>) – initial port color (r, g, b) <code class="docutils literal notranslate"><span class="pre">0-255</span></code>.</p></li>
-<li><p><strong>locked</strong> (<em>bool</em>) – locked state see <a class="reference internal" href="Port.html#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a></p></li>
+<li><p><strong>locked</strong> (<em>bool</em>) – locked state see <a class="reference internal" href="../port.html#NodeGraphQt.Port.set_locked" title="NodeGraphQt.Port.set_locked"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Port.set_locked()</span></code></a></p></li>
 <li><p><strong>painter_func</strong> (<em>function</em><em> or </em><em>None</em>) – custom function to override the drawing
 of the port shape see example: <a class="reference internal" href="../examples/ex_port.html#creating-custom-shapes"><span class="std std-ref">Creating Custom Shapes</span></a></p></li>
 </ul>
@@ -539,7 +539,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <dd class="field-even"><p>the created port object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -556,7 +556,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <dd class="field-even"><p>node port.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -573,7 +573,7 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 <dd class="field-even"><p>node port.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -710,7 +710,7 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dd class="field-odd"><p>node input ports.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,7 +738,7 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dd class="field-odd"><p>node output ports.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
+<dd class="field-even"><p>list[<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -755,7 +755,7 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dd class="field-even"><p>port object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -763,12 +763,12 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_input">
 <span class="sig-name descname"><span class="pre">set_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a connection pipe to the targeted output <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
+<dd><p>Creates a connection pipe to the targeted output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>index</strong> (<em>int</em>) – index of the port.</p></li>
-<li><p><strong>port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
+<li><p><strong>port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
 </ul>
 </dd>
 </dl>
@@ -786,7 +786,7 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dd class="field-even"><p>port object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port">NodeGraphQt.Port</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -794,12 +794,12 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_output">
 <span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a connection pipe to the targeted input <a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
+<dd><p>Creates a connection pipe to the targeted input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>index</strong> (<em>int</em>) – index of the port.</p></li>
-<li><p><strong>port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
+<li><p><strong>port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
 </ul>
 </dd>
 </dl>
@@ -847,8 +847,8 @@ logic to run for this event.</em></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>in_port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – source input port from this node.</p></li>
-<li><p><strong>out_port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – output port that connected to this node.</p></li>
+<li><p><strong>in_port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – source input port from this node.</p></li>
+<li><p><strong>out_port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – output port that connected to this node.</p></li>
 </ul>
 </dd>
 </dl>
@@ -869,8 +869,8 @@ logic to run for this event.</em></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>in_port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – source input port from this node.</p></li>
-<li><p><strong>out_port</strong> (<a class="reference internal" href="Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – output port that was disconnected.</p></li>
+<li><p><strong>in_port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – source input port from this node.</p></li>
+<li><p><strong>out_port</strong> (<a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – output port that was disconnected.</p></li>
 </ul>
 </dd>
 </dl>

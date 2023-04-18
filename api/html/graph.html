@@ -107,6 +107,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
@@ -114,7 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage</span></p>
+<p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
@@ -196,6 +197,7 @@
 <div class="line-block">
 <div class="line"><cite>See</cite> <a class="reference internal" href="examples/ex_overview.html#getting-started"><span class="std std-ref">Getting Started</span></a> <cite>from the overview section.</cite></div>
 </div>
+<p><strong>Classes:</strong></p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -278,9 +280,6 @@ and the node graph.</p>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.sub_graphs" title="NodeGraphQt.NodeGraph.sub_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_graphs</span></code></a></p></td>
 <td><p>Returns expanded group node sub graphs.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.staticMetaObject" title="NodeGraphQt.NodeGraph.staticMetaObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticMetaObject</span></code></a></p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -600,7 +599,7 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <dd><p>Signal triggered when a node port has been connected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
 </dd>
 <dt class="field-even">Emits</dt>
 <dd class="field-even"><p>input port, output port</p>
@@ -614,7 +613,7 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <dd><p>Signal triggered when a node port has been disconnected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
 </dd>
 <dt class="field-even">Emits</dt>
 <dd class="field-even"><p>input port, output port</p>
@@ -1215,23 +1214,20 @@ pipe connections to be sliced.</p>
 This function will also override the layout direction on all
 nodes in the current node graph.</p>
 <p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction" title="NodeGraphQt.NodeGraph.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a>,
-<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Node Graph Layout Types:</p>
+<p><strong>Layout Types:</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL" title="NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL</span></code></a></p></li>
 <li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL" title="NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL</span></code></a></p></li>
 </ul>
 <img alt="_images/layout_direction_switch.gif" src="_images/layout_direction_switch.gif" style="width: 300px;" />
-</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This function does not register to the undo stack.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction" title="NodeGraphQt.NodeGraph.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a>,
+<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1902,11 +1898,6 @@ the node graph.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#NodeGraphQt.NodeGraph.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <div class="line-block">
@@ -1942,16 +1933,13 @@ controller for managing the expanded node graph for a
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.navigation_widget" title="NodeGraphQt.SubGraph.navigation_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">navigation_widget</span></code></a></p></td>
 <td><p>The navigation widget from the top most sub graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.staticMetaObject" title="NodeGraphQt.SubGraph.staticMetaObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticMetaObject</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.subviewer_widget" title="NodeGraphQt.SubGraph.subviewer_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subviewer_widget</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.subviewer_widget" title="NodeGraphQt.SubGraph.subviewer_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subviewer_widget</span></code></a></p></td>
 <td><p>The widget to the sub graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.parent_graph" title="NodeGraphQt.SubGraph.parent_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent_graph</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.parent_graph" title="NodeGraphQt.SubGraph.parent_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent_graph</span></code></a></p></td>
 <td><p>The parent node graph controller.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.node" title="NodeGraphQt.SubGraph.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph.node" title="NodeGraphQt.SubGraph.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a></p></td>
 <td><p>Returns the parent node to the sub graph.</p></td>
 </tr>
 </tbody>
@@ -2010,11 +1998,6 @@ controller for managing the expanded node graph for a
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#NodeGraphQt.SubGraph.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="NodeGraphQt.SubGraph.subviewer_widget">
@@ -2150,7 +2133,7 @@ controller for managing the expanded node graph for a
 <dd><p>Returns the node related to the parent group node port object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>port</strong> (<a class="reference internal" href="nodes/Port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – parent node port object.</p>
+<dd class="field-odd"><p><strong>port</strong> (<a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – parent node port object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>port node object.</p>

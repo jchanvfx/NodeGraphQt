@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
@@ -110,13 +111,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage</span></p>
+<p class="caption"><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ex_overview.html">General Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_node.html">Node Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_port.html">Port Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Pipe Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pipe-layouts">Pipe Layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layout-styles">Layout Styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layout-direction">Layout Direction</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ex_menu.html">Menu Overview</a></li>
@@ -192,8 +194,8 @@
             
   <section id="pipe-overview">
 <h1>Pipe Overview<a class="headerlink" href="#pipe-overview" title="Permalink to this headline">¶</a></h1>
-<section id="pipe-layouts">
-<h2>Pipe Layouts<a class="headerlink" href="#pipe-layouts" title="Permalink to this headline">¶</a></h2>
+<section id="layout-styles">
+<h2>Layout Styles<a class="headerlink" href="#layout-styles" title="Permalink to this headline">¶</a></h2>
 <img alt="../_images/pipe_layout_types.gif" src="../_images/pipe_layout_types.gif" style="width: 650px;" />
 <p>The <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a> class has 3 different pipe layout styles as
 shown above this can be set easily with the <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_pipe_style" title="NodeGraphQt.NodeGraph.set_pipe_style"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.set_pipe_style()</span></code></a>
@@ -221,6 +223,12 @@ then you’ll already have the actions to set the pipe layout under the
 “Pipes” menu.</p>
 <img alt="../_images/pipe_layout_menu.png" src="../_images/pipe_layout_menu.png" />
 </div>
+</section>
+<section id="layout-direction">
+<h2>Layout Direction<a class="headerlink" href="#layout-direction" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a> pipes can also be set with a vertical layout
+direction with the  <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.set_layout_direction()</span></code></a> function.</p>
+<img alt="../_images/vertical_layout.png" src="../_images/vertical_layout.png" style="width: 450px;" />
 </section>
 </section>
 

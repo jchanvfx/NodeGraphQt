@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Widgets</span></p>
@@ -115,7 +116,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage</span></p>
+<p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
@@ -197,6 +198,24 @@
 <div class="line-block">
 <div class="line">The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code> framework comes included with a few custom widgets.</div>
 </div>
+<p><strong>Classes:</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a>([parent, …])</p></td>
+<td><p>The <a class="reference internal" href="#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> is a list widget for displaying and editing a nodes properties.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodesPaletteWidget" title="NodeGraphQt.NodesPaletteWidget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeGraphQt.NodesPaletteWidget</span></code></a>([parent, …])</p></td>
+<td><p>The <a class="reference internal" href="#NodeGraphQt.NodesPaletteWidget" title="NodeGraphQt.NodesPaletteWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodesPaletteWidget</span></code></a> is a widget for displaying all registered nodes from the node graph in a grid layout with this widget a user can create nodes by dragging and dropping.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodesTreeWidget" title="NodeGraphQt.NodesTreeWidget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeGraphQt.NodesTreeWidget</span></code></a>([parent, node_graph])</p></td>
+<td><p>The <a class="reference internal" href="#NodeGraphQt.NodesTreeWidget" title="NodeGraphQt.NodesTreeWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodesTreeWidget</span></code></a> is a widget for displaying all registered nodes from the node graph with this widget a user can create nodes by dragging and dropping.</p></td>
+</tr>
+</tbody>
+</table>
 <section id="properties-bin">
 <h2>Properties Bin<a class="headerlink" href="#properties-bin" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -232,6 +251,18 @@ and editing a nodes properties.</p>
 </ul>
 </dd>
 </dl>
+<p><strong>Attributes:</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.PropertiesBinWidget.property_changed" title="NodeGraphQt.PropertiesBinWidget.property_changed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">property_changed</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Signal emitted (node_id, prop_name, prop_value)</p></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Methods:</strong></p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -262,18 +293,12 @@ and editing a nodes properties.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Attributes:</strong></p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.PropertiesBinWidget.staticMetaObject" title="NodeGraphQt.PropertiesBinWidget.staticMetaObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticMetaObject</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.PropertiesBinWidget.property_changed">
+<span class="sig-name descname"><span class="pre">property_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.PropertiesBinWidget.property_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal emitted (node_id, prop_name, prop_value)</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.PropertiesBinWidget.limit">
 <span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.PropertiesBinWidget.limit" title="Permalink to this definition">¶</a></dt>
@@ -350,11 +375,6 @@ and editing a nodes properties.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="NodeGraphQt.PropertiesBinWidget.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#NodeGraphQt.PropertiesBinWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </section>
@@ -409,18 +429,6 @@ user can create nodes by dragging and dropping.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Attributes:</strong></p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodesPaletteWidget.staticMetaObject" title="NodeGraphQt.NodesPaletteWidget.staticMetaObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticMetaObject</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodesPaletteWidget.set_category_label">
 <span class="sig-name descname"><span class="pre">set_category_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesPaletteWidget.set_category_label" title="Permalink to this definition">¶</a></dt>
@@ -454,11 +462,6 @@ user can create nodes by dragging and dropping.</p>
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesPaletteWidget.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update and refresh the node palette widget.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="NodeGraphQt.NodesPaletteWidget.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#NodeGraphQt.NodesPaletteWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -508,18 +511,6 @@ nodes by dragging and dropping.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Attributes:</strong></p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodesTreeWidget.staticMetaObject" title="NodeGraphQt.NodesTreeWidget.staticMetaObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">staticMetaObject</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodesTreeWidget.set_category_label">
 <span class="sig-name descname"><span class="pre">set_category_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesTreeWidget.set_category_label" title="Permalink to this definition">¶</a></dt>
@@ -540,11 +531,6 @@ nodes by dragging and dropping.</p>
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodesTreeWidget.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update and refresh the node tree widget.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="NodeGraphQt.NodesTreeWidget.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;PySide2.QtCore.QMetaObject</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#NodeGraphQt.NodesTreeWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
