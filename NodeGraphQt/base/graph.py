@@ -995,21 +995,20 @@ class NodeGraph(QtCore.QObject):
 
         `Implemented in` ``v0.3.0``
 
-        See Also:
-            :meth:`NodeGraph.layout_direction`,
-            :meth:`NodeObject.set_layout_direction`
+        **Layout Types:**
 
-        Note:
-            Node Graph Layout Types:
+        - :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
+        - :attr:`NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL`
 
-            * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
-            * :attr:`NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL`
-
-            .. image:: _images/layout_direction_switch.gif
-                :width: 300px
+        .. image:: _images/layout_direction_switch.gif
+            :width: 300px
 
         Warnings:
             This function does not register to the undo stack.
+
+        See Also:
+            :meth:`NodeGraph.layout_direction`,
+            :meth:`NodeObject.set_layout_direction`
 
         Args:
             direction (int): layout direction.

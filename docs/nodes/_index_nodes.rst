@@ -8,7 +8,6 @@ Nodes
     :name: nodestoc
     :maxdepth: 2
 
-    Port
     NodeObject
     BackdropNode
     BaseNode

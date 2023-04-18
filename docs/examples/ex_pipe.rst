@@ -1,8 +1,8 @@
 Pipe Overview
 #############
 
-Pipe Layouts
-************
+Layout Styles
+*************
 
 .. image:: ../_images/pipe_layout_types.gif
         :width: 650px
@@ -34,3 +34,13 @@ function.
     "Pipes" menu.
 
     .. image:: ../_images/pipe_layout_menu.png
+
+
+Layout Direction
+****************
+
+The :class:`NodeGraphQt.NodeGraph` pipes can also be set with a vertical layout
+direction with the  :meth:`NodeGraphQt.NodeGraph.set_layout_direction` function.
+
+.. image:: ../_images/vertical_layout.png
+    :width: 450px

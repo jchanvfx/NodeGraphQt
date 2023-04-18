@@ -25,12 +25,8 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_overview.html#simple
 
 <img src="/docs/_images/pipe_layout_types.gif" width="600" title="Pipe Layout">
 
-#### Slice Connections
-
-<img src="/docs/_images/slicer.png" width="500" title="Pipe Slicer">
-
 #### Custom Widgets
+
+https://jchanvfx.github.io/NodeGraphQt/api/html/custom_widgets.html
+
 <img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
-<img src="/docs/_images/nodes_palette.png" width="350" title="Nodes Paletten">
-
-

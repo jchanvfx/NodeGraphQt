@@ -20,6 +20,7 @@ and re-purposed into applications supporting PySide2.
     constants
     graph
     nodes/_index_nodes
+    port
     menu
 
 .. toctree::
@@ -31,7 +32,7 @@ and re-purposed into applications supporting PySide2.
     node_widgets
 
 .. toctree::
-    :caption: Usage
+    :caption: Examples
     :name: exmplstoc
     :maxdepth: 1
 

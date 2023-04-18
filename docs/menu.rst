@@ -1,12 +1,11 @@
 Menus
 #####
 
+| `See` :ref:`Menu Overview` `from the overview section.`
+
 .. currentmodule:: NodeGraphQt
 
-.. seealso::
-
-    Context menus can also be set from a config file or a dictionary with:
-    :meth:`NodeGraph.set_context_menu_from_file`, :meth:`NodeGraph.set_context_menu`
+**Classes:**
 
 .. autosummary::
     NodeGraphMenu
