@@ -22,20 +22,56 @@ class CircleNodeItem(NodeItem):
         txt_offset = PortEnum.CLICK_FALLOFF.value - 2
         spacing = 1
 
+        node_center_y = self.boundingRect().center().y()
+        node_center_y += v_offset
+
         # adjust input position
         inputs = [p for p in self.inputs if p.isVisible()]
         if inputs:
             port_width = inputs[0].boundingRect().width()
             port_height = inputs[0].boundingRect().height()
-            port_x = (port_width / 2) * -1
-            port_y = v_offset
-            for port in inputs:
-                port.setPos(port_x, port_y)
-                port_y += port_height + spacing
+
+            count = len(inputs)
+            if count > 2:
+                is_odd = bool(count % 2)
+                middle_idx = int(count / 2)
+
+                # top half
+                port_x = (port_width / 2) * -1
+                port_y = node_center_y - (port_height / 2)
+                for idx, port in enumerate(reversed(inputs[:middle_idx])):
+                    if idx == 0:
+                        if is_odd:
+                            port_x += (port_width / 2) - (txt_offset / 2)
+                            port_y -= port_height + spacing
+                        else:
+                            port_y -= (port_height / 2) + spacing
+                    port.setPos(port_x, port_y)
+                    port_x += (port_width / 2) - (txt_offset / 2)
+                    port_y -= port_height + spacing
+
+                # bottom half
+                port_x = (port_width / 2) * -1
+                port_y = node_center_y - (port_height / 2)
+                for idx, port in enumerate(inputs[middle_idx:]):
+                    if idx == 0:
+                        if not is_odd:
+                            port_y += (port_height / 2) + spacing
+                    port.setPos(port_x, port_y)
+                    port_x += (port_width / 2) - (txt_offset / 2)
+                    port_y += port_height + spacing
+
+            else:
+                port_x = (port_width / 2) * -1
+                port_y = node_center_y - (port_height / 2)
+                inputs[0].setPos(port_x, port_y - (port_height / 2) + spacing)
+                inputs[1].setPos(port_x, port_y + (port_height / 2) + spacing)
+
         # adjust input text position
         for port, text in self._input_items.items():
             if port.isVisible():
-                txt_x = port.boundingRect().width() / 2 - txt_offset
+                port_width = port.boundingRect().width()
+                txt_x = port.pos().x() + port_width - txt_offset
                 text.setPos(txt_x, port.y() - 1.5)
 
         # adjust output position
@@ -43,11 +79,42 @@ class CircleNodeItem(NodeItem):
         if outputs:
             port_width = outputs[0].boundingRect().width()
             port_height = outputs[0].boundingRect().height()
-            port_x = width - (port_width / 2)
-            port_y = v_offset
-            for port in outputs:
-                port.setPos(port_x, port_y)
-                port_y += port_height + spacing
+
+            count = len(outputs)
+            if count > 2:
+                is_odd = bool(count % 2)
+                middle_idx = int(count / 2)
+
+                # top half
+                port_x = width - (port_width / 2)
+                port_y = node_center_y - (port_height / 2)
+                for idx, port in enumerate(reversed(outputs[:middle_idx])):
+                    if idx == 0:
+                        if is_odd:
+                            port_x -= (port_width / 2) - (txt_offset / 2)
+                            port_y -= port_height + spacing
+                        else:
+                            port_y -= (port_height / 2) + spacing
+                    port.setPos(port_x, port_y)
+                    port_x -= (port_width / 2) - (txt_offset / 2)
+                    port_y -= port_height + spacing
+
+                # bottom half
+                port_x = width - (port_width / 2)
+                port_y = node_center_y - (port_height / 2)
+                for idx, port in enumerate(outputs[middle_idx:]):
+                    if idx == 0:
+                        if not is_odd:
+                            port_y += (port_width / 2) - (txt_offset / 2)
+                    port.setPos(port_x, port_y)
+                    port_x -= (port_width / 2) - (txt_offset / 2)
+                    port_y += port_height + spacing
+            else:
+                port_x = width - (port_width / 2)
+                port_y = node_center_y - (port_height / 2)
+                outputs[0].setPos(port_x, port_y - (port_height / 2) + spacing)
+                outputs[1].setPos(port_x, port_y + (port_height / 2) + spacing)
+
         # adjust output text position
         for port, text in self._output_items.items():
             if port.isVisible():
@@ -84,6 +151,12 @@ class CircleNodeItem(NodeItem):
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
+
+        # debugging show click area.
+        # painter.setPen(QtCore.Qt.NoPen)
+        # painter.setBrush(QtGui.QColor(255, 255, 255, 80))
+        # painter.drawRect(self.boundingRect())
+
 
         text_rect = self._text_item.boundingRect()
         text_width = text_rect.width()
@@ -125,7 +198,7 @@ class CircleNodeItem(NodeItem):
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
-                path.lineTo(QtCore.QPointF(pt1.x() + 4.0, pt1.y()))
+                # path.lineTo(QtCore.QPointF(pt1.x() + 4.0, pt1.y()))
                 path.lineTo(rect.center())
                 painter.drawPath(path)
 
@@ -142,7 +215,7 @@ class CircleNodeItem(NodeItem):
                 )
                 path = QtGui.QPainterPath()
                 path.moveTo(pt1)
-                path.lineTo(QtCore.QPointF(pt1.x() - 2.0, pt1.y()))
+                # path.lineTo(QtCore.QPointF(pt1.x() - 2.0, pt1.y()))
                 path.lineTo(rect.center())
                 painter.drawPath(path)
 
@@ -189,6 +262,12 @@ class CircleNodeItem(NodeItem):
 
     def _paint_vertical(self, painter, option, widget):
         painter.save()
+
+        # debugging show click area.
+        # painter.setPen(QtCore.Qt.NoPen)
+        # painter.setBrush(QtGui.QColor(255, 255, 255, 80))
+        # painter.drawRect(self.boundingRect())
+
         rect = self.boundingRect()
         width = min(rect.width(), rect.height()) / 1.8
         rect = QtCore.QRectF(
@@ -345,7 +424,8 @@ class CircleNodeItem(NodeItem):
         # arrange icon
         self.align_icon()
         # arrange input and output ports.
-        self.align_ports(v_offset=add_height / 2)
+        # self.align_ports(v_offset=add_height / 2)
+        self.align_ports()
         # arrange node widgets
         self.align_widgets(v_offset=0.0)
 
