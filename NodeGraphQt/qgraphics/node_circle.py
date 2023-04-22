@@ -123,40 +123,95 @@ class CircleNodeItem(NodeItem):
                 text.setPos(txt_x, port.y() - 1.5)
 
     def _align_ports_vertical(self, v_offset):
+        height = self._height
+        node_center_x = self.boundingRect().center().x() + v_offset
+
         # adjust input position
         inputs = [p for p in self.inputs if p.isVisible()]
         if inputs:
             port_width = inputs[0].boundingRect().width()
             port_height = inputs[0].boundingRect().height()
-            half_width = port_width / 2
-            delta = self._width / (len(inputs) + 1)
-            port_x = delta
-            port_y = (port_height / 2) * -1
-            for port in inputs:
-                port.setPos(port_x - half_width, port_y)
-                port_x += delta
+
+            count = len(inputs)
+            if count > 2:
+                is_odd = bool(count % 2)
+                middle_idx = int(count / 2)
+
+                delta = (self._width / (len(inputs) + 1)) / 2
+
+                # left half
+                port_x = node_center_x - (port_width / 2)
+                port_y = (port_height / 2) * -1
+                for idx, port in enumerate(reversed(inputs[:middle_idx])):
+                    if idx == 0:
+                        if is_odd:
+                            port_x -= (port_width / 2) + delta
+                            port_y += (port_height / 2)
+                        else:
+                            port_x -= delta
+                    port.setPos(port_x, port_y)
+                    port_x -= (port_width / 2) + delta
+                    port_y += (port_height / 2)
+
+                # right half
+                port_x = node_center_x - (port_width / 2)
+                port_y = (port_height / 2) * -1
+                for idx, port in enumerate(inputs[middle_idx:]):
+                    if idx == 0:
+                        if not is_odd:
+                            port_x += delta
+                    port.setPos(port_x, port_y)
+                    port_x += (port_width / 2) + delta
+                    port_y += (port_height / 2)
 
         # adjust output position
         outputs = [p for p in self.outputs if p.isVisible()]
         if outputs:
             port_width = outputs[0].boundingRect().width()
             port_height = outputs[0].boundingRect().height()
-            half_width = port_width / 2
-            delta = self._width / (len(outputs) + 1)
-            port_x = delta
-            port_y = self._height - (port_height / 2)
-            for port in outputs:
-                port.setPos(port_x - half_width, port_y)
-                port_x += delta
+
+            count = len(outputs)
+            if count > 2:
+                is_odd = bool(count % 2)
+                middle_idx = int(count / 2)
+
+                delta = (self._width / (len(outputs) + 1)) / 2
+
+                # left half
+                port_x = node_center_x - (port_width / 2)
+                port_y = height - (port_height / 2)
+                for idx, port in enumerate(reversed(outputs[:middle_idx])):
+                    if idx == 0:
+                        if is_odd:
+                            port_x -= (port_width / 2) + delta
+                            port_y -= (port_height / 2)
+                        else:
+                            port_x -= delta
+                    port.setPos(port_x, port_y)
+                    port_x -= (port_width / 2) + delta
+                    port_y -= (port_height / 2)
+
+                # right half
+                port_x = node_center_x - (port_width / 2)
+                port_y = height - (port_height / 2)
+                for idx, port in enumerate(outputs[middle_idx:]):
+                    if idx == 0:
+                        if not is_odd:
+                            port_x += delta
+                    port.setPos(port_x, port_y)
+                    port_x += (port_width / 2) + delta
+                    port_y -= (port_height / 2)
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
 
-        # debugging show click area.
-        # painter.setPen(QtCore.Qt.NoPen)
-        # painter.setBrush(QtGui.QColor(255, 255, 255, 80))
+        #  display node area for debugging
+        # ----------------------------------------------------------------------
+        # pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 80), 0.8)
+        # pen.setStyle(QtCore.Qt.DotLine)
+        # painter.setPen(pen)
         # painter.drawRect(self.boundingRect())
-
+        # ----------------------------------------------------------------------
 
         text_rect = self._text_item.boundingRect()
         text_width = text_rect.width()
@@ -263,10 +318,13 @@ class CircleNodeItem(NodeItem):
     def _paint_vertical(self, painter, option, widget):
         painter.save()
 
-        # debugging show click area.
-        # painter.setPen(QtCore.Qt.NoPen)
-        # painter.setBrush(QtGui.QColor(255, 255, 255, 80))
+        #  display node area for debugging
+        # ----------------------------------------------------------------------
+        # pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 80), 0.8)
+        # pen.setStyle(QtCore.Qt.DotLine)
+        # painter.setPen(pen)
         # painter.drawRect(self.boundingRect())
+        # ----------------------------------------------------------------------
 
         rect = self.boundingRect()
         width = min(rect.width(), rect.height()) / 1.8
@@ -395,19 +453,30 @@ class CircleNodeItem(NodeItem):
     def _align_label_vertical(self, h_offset, v_offset):
         rect = self.boundingRect()
         text_rect = self._text_item.boundingRect()
-        x = rect.right() - (rect.width() / 3)
+        x = rect.right() - (rect.width() / 4)
         y = rect.center().y() - (text_rect.height() / 2)
         self._text_item.setPos(x + h_offset, y + v_offset)
 
     def _draw_node_horizontal(self):
-        add_width = self.text_item.boundingRect().width() * 1.5
-        add_height = self.text_item.boundingRect().width() / 2
-
         # update port text items in visibility.
+        text_width = 0
+        port_widths = 0
         for port, text in self._input_items.items():
             text.setVisible(port.display_name)
+            if port.display_name:
+                if text.boundingRect().width() > text_width:
+                    text_width = text.boundingRect().width()
+                port_widths += port.boundingRect().width() / len(self._input_items)
+
         for port, text in self._output_items.items():
             text.setVisible(port.display_name)
+            if port.display_name:
+                if text.boundingRect().width() > text_width:
+                    text_width = text.boundingRect().width()
+                port_widths += port.boundingRect().width() / len(self._output_items)
+
+        add_width = (text_width * 2) + port_widths
+        add_height = self.text_item.boundingRect().width() / 2
 
         # setup initial base size.
         self._set_base_size(add_w=add_width, add_h=add_height)
@@ -424,7 +493,6 @@ class CircleNodeItem(NodeItem):
         # arrange icon
         self.align_icon()
         # arrange input and output ports.
-        # self.align_ports(v_offset=add_height / 2)
         self.align_ports()
         # arrange node widgets
         self.align_widgets(v_offset=0.0)
@@ -432,14 +500,21 @@ class CircleNodeItem(NodeItem):
         self.update()
 
     def _draw_node_vertical(self):
+        add_height = 0
+
         # hide the port text items in vertical layout.
         for port, text in self._input_items.items():
             text.setVisible(False)
+            add_height += port.boundingRect().height() / 2
         for port, text in self._output_items.items():
             text.setVisible(False)
+            add_height += port.boundingRect().height() / 2
+
+        if add_height < 50:
+            add_height = 50
 
         # setup initial base size.
-        self._set_base_size(add_w=50, add_h=50)
+        self._set_base_size(add_w=50, add_h=add_height)
         # set text color when node is initialized.
         self._set_text_color(self.text_color)
         # set the tooltip
