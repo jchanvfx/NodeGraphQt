@@ -71,8 +71,10 @@ class CircleNode(BaseNodeCircle):
         self.add_input('in 2')
         self.add_input('in 3', multi_input=True)
         self.add_input('in 4', display_name=False)
+        self.add_input('in 5', display_name=False)
 
         # create node outputs
-        self.add_output('out 1', display_name=False)
+        self.add_output('out 1')
         self.add_output('out 2', multi_output=False)
-        self.add_output('out 3', multi_output=True)
+        self.add_output('out 3', multi_output=True, display_name=False)
+        self.add_output('out 4', multi_output=True, display_name=False)
