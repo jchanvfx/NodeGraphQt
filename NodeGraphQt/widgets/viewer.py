@@ -248,7 +248,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns a QRectF with the combined size of the provided node items.
 
         Args:
-            nodes (list[AbstractNodeItem]): list of node gqgraphics items.
+            nodes (list[AbstractNodeItem]): list of node qgraphics items.
 
         Returns:
             QtCore.QRectF: combined rect
@@ -1197,11 +1197,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if not nodes:
                 return
 
-        if len(nodes) == 1:
-            self.centerOn(nodes[0])
-        else:
-            rect = self._combined_rect(nodes)
-            self.centerOn(rect.center().x(), rect.center().y())
+        rect = self._combined_rect(nodes)
+        self._scene_range.translate(rect.center() - self._scene_range.center())
+        self.setSceneRect(self._scene_range)
 
     def get_pipe_layout(self):
         """
