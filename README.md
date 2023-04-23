@@ -26,7 +26,7 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_overview.html#simple
 
 https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-direction
 
-<img src="/docs/_images/vertical_layout.png" width="600" title="Vertical Layout">
+<img src="/docs/_images/vertical_layout.png" width="800" title="Vertical Layout">
 
 ## Pipe Layout
 

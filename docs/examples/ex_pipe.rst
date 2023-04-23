@@ -43,4 +43,3 @@ The :class:`NodeGraphQt.NodeGraph` pipes can also be set with a vertical layout
 direction with the  :meth:`NodeGraphQt.NodeGraph.set_layout_direction` function.
 
 .. image:: ../_images/vertical_layout.png
-    :width: 450px
