@@ -3,14 +3,14 @@
 
 <p align="center">
     <a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">
-    <img src="/docs/_images/logo.png" title="logo">
+    <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/logo.png" title="logo">
     </a>
 </p>
 
 ``NodeGraphQt`` is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
 applications.
 
-<img src="/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
 
 ## Documentation
@@ -26,16 +26,16 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_overview.html#simple
 
 https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-direction
 
-<img src="/docs/_images/vertical_layout.png" width="800" title="Vertical Layout">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/vertical_layout.png" width="800" title="Vertical Layout">
 
 ## Pipe Layout
 
 https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-styles
 
-<img src="/docs/_images/pipe_layout_types.gif" width="600" title="Pipe Layout">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/pipe_layout_types.gif" width="600" title="Pipe Layout">
 
 ## Custom Widgets
 
 https://jchanvfx.github.io/NodeGraphQt/api/html/custom_widgets.html
 
-<img src="/docs/_images/prop_bin.png" width="600" title="Properties Bin">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/prop_bin.png" width="600" title="Properties Bin">
