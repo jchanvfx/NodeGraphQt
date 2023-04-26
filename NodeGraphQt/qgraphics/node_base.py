@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from Qt import QtGui, QtCore, QtWidgets
+from qtpy import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     ITEM_CACHE_MODE,

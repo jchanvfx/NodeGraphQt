@@ -3,7 +3,7 @@
 import math
 from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore, QtWidgets
+from qtpy import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
@@ -1638,7 +1638,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         # use QOpenGLWidget instead of the deprecated QGLWidget to avoid
         # problems with Wayland.
-        import Qt
+        import qtpy
         if Qt.IsPySide2:
             from PySide2.QtWidgets import QOpenGLWidget
         elif Qt.IsPyQt5:

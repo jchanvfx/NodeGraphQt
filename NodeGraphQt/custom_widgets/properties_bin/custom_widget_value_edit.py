@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import re
 
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 _NUMB_REGEX = re.compile(r'^((?:\-)*\d+)*([\.,])*(\d+(?:[eE](?:[\-\+])*\d+)*)*')
 

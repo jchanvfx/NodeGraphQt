@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 from .custom_widget_vectors import PropVector3, PropVector4
 from .prop_widgets_abstract import BaseProperty
