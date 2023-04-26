@@ -27,8 +27,8 @@ class PropColorPickerRGB(BaseProperty):
 
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
-        layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(self._button, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
+        layout.addWidget(self._vector, 1, QtCore.Qt.AlignmentFlag.AlignLeft)
 
     def _on_vector_changed(self, _, value):
         self._color = tuple(value)
@@ -99,8 +99,8 @@ class PropColorPickerRGBA(PropColorPickerRGB):
 
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
-        layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(self._button, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
+        layout.addWidget(self._vector, 1, QtCore.Qt.AlignmentFlag.AlignLeft)
 
     def _update_color(self):
         c = [int(max(min(i, 255), 0)) for i in self._color]

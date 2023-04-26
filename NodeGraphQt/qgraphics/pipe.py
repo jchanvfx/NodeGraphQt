@@ -15,9 +15,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
-    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.SolidLine,
-    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.DashLine,
-    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.DotLine
+    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.PenStyle.SolidLine,
+    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.PenStyle.DashLine,
+    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.PenStyle.DotLine
 }
 
 
@@ -72,7 +72,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             self.highlight()
 
     def itemChange(self, change, value):
-        if change == self.ItemSelectedChange and self.scene():
+        if change == self.GraphicsItemChange.ItemSelectedChange and self.scene():
             if value:
                 self.highlight()
             else:
@@ -100,7 +100,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
-        painter.setRenderHint(painter.Antialiasing, True)
+        painter.setRenderHint(painter.RenderHint.Antialiasing, True)
         painter.drawPath(self.path())
 
         # QPaintDevice: Cannot destroy paint device that is being painted.
@@ -427,14 +427,14 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         pen.setStyle(PIPE_STYLES.get(style))
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         self.setPen(pen)
         self.setBrush(QtGui.QBrush(QtCore.Qt.NoBrush))
 
         pen = self._dir_pointer.pen()
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         self._dir_pointer.setPen(pen)

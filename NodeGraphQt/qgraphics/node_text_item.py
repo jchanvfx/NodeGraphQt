@@ -20,7 +20,7 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
         if not self._locked:
-            if event.button() == QtCore.Qt.LeftButton:
+            if event.button() == QtCore.Qt.MouseButton.LeftButton:
                 self.set_editable(True)
                 event.ignore()
                 return
@@ -33,11 +33,11 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        if event.key() == QtCore.Qt.Key_Return:
+        if event.key() == QtCore.Qt.Key.Key_Return:
             current_text = self.toPlainText()
             self.set_node_name(current_text)
             self.set_editable(False)
-        elif event.key() == QtCore.Qt.Key_Escape:
+        elif event.key() == QtCore.Qt.Key.Key_Escape:
             self.setPlainText(self.node.name)
             self.set_editable(False)
         super(NodeTextItem, self).keyPressEvent(event)
@@ -65,12 +65,12 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
             return
         if value:
             self.setTextInteractionFlags(
-                QtCore.Qt.TextEditable |
-                QtCore.Qt.TextSelectableByMouse |
-                QtCore.Qt.TextSelectableByKeyboard
+                QtCore.Qt.TextInteractionFlag.TextEditable |
+                QtCore.Qt.TextInteractionFlag.TextSelectableByMouse |
+                QtCore.Qt.TextInteractionFlag.TextSelectableByKeyboard
             )
         else:
-            self.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+            self.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.NoTextInteraction)
             cursor = self.textCursor()
             cursor.clearSelection()
             self.setTextCursor(cursor)
@@ -99,12 +99,12 @@ class NodeTextItem(QtWidgets.QGraphicsTextItem):
         self._locked = state
         if self._locked:
             self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, False)
-            self.setCursor(QtCore.Qt.ArrowCursor)
+            self.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
             self.setToolTip('')
         else:
             self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable, True)
             self.setToolTip('double-click to edit node name.')
-            self.setCursor(QtCore.Qt.IBeamCursor)
+            self.setCursor(QtCore.Qt.CursorShape.IBeamCursor)
 
     @property
     def node(self):

@@ -287,7 +287,7 @@ class NodeComboBox(NodeBaseWidget):
             combo_widget.addItems(text)
             return
         if text != self.get_value():
-            index = combo_widget.findText(text, QtCore.Qt.MatchExactly)
+            index = combo_widget.findText(text, QtCore.Qt.MatchFlag.MatchExactly)
             combo_widget.setCurrentIndex(index)
 
     def add_item(self, item):
@@ -354,7 +354,7 @@ class NodeLineEdit(NodeBaseWidget):
         ledit.setText(text)
         ledit.setPlaceholderText(placeholder_text)
         ledit.setStyleSheet(stylesheet)
-        ledit.setAlignment(QtCore.Qt.AlignCenter)
+        ledit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         ledit.editingFinished.connect(self.on_value_changed)
         ledit.clearFocus()
         self.set_custom_widget(ledit)
