@@ -117,7 +117,7 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         super(_NumberValueEdit, self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MiddleButton:
+        if event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self._MMB_STATE = True
             self._reset_previous_x()
             self._menu.exec_(QtGui.QCursor.pos())
@@ -130,9 +130,9 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
 
     def keyPressEvent(self, event):
         super(_NumberValueEdit, self).keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Up:
+        if event.key() == QtCore.Qt.Key.Key_Up:
             return
-        elif event.key() == QtCore.Qt.Key_Down:
+        elif event.key() == QtCore.Qt.Key.Key_Down:
             return
 
     # private

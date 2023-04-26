@@ -130,7 +130,7 @@ class PropComboBox(QtWidgets.QComboBox):
 
     def set_value(self, value):
         if value != self.get_value():
-            idx = self.findText(value, QtCore.Qt.MatchExactly)
+            idx = self.findText(value, QtCore.Qt.MatchFlag.MatchExactly)
             self.setCurrentIndex(idx)
             if idx >= 0:
                 self.value_changed.emit(self.toolTip(), value)
@@ -174,7 +174,7 @@ class PropSpinBox(QtWidgets.QSpinBox):
 
     def __init__(self, parent=None):
         super(PropSpinBox, self).__init__(parent)
-        self.setButtonSymbols(self.NoButtons)
+        self.setButtonSymbols(self.ButtonSymbols.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):
@@ -202,7 +202,7 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
 
     def __init__(self, parent=None):
         super(PropDoubleSpinBox, self).__init__(parent)
-        self.setButtonSymbols(self.NoButtons)
+        self.setButtonSymbols(self.ButtonSymbols.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):

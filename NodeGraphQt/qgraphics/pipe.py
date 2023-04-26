@@ -15,9 +15,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
-    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.SolidLine,
-    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.DashLine,
-    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.DotLine
+    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.PenStyle.SolidLine,
+    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.PenStyle.DashLine,
+    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.PenStyle.DotLine
 }
 
 
@@ -100,7 +100,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
-        painter.setRenderHint(painter.Antialiasing, True)
+        painter.setRenderHint(painter.RenderHint.Antialiasing, True)
         painter.drawPath(self.path())
 
         # QPaintDevice: Cannot destroy paint device that is being painted.

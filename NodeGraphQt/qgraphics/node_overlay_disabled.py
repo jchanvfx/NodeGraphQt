@@ -44,7 +44,7 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                                  rect.height() + margin)
         if not self.proxy_mode:
             pen = QtGui.QPen(QtGui.QColor(*self.color), 8)
-            pen.setCapStyle(QtCore.Qt.RoundCap)
+            pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
             painter.setPen(pen)
             painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
             painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
