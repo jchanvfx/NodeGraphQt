@@ -51,19 +51,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         Args:
             parent:
-            undo_stack (QtWidgets.QUndoStack): undo stack from the parent
+            undo_stack (QtGui.QUndoStack): undo stack from the parent
                                                graph controller.
         """
         super(NodeViewer, self).__init__(parent)
 
         self.setScene(NodeScene(self))
-        self.setRenderHint(QtGui.QPainter.Antialiasing, True)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
-        self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
+        self.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
+        self.setCacheMode(QtWidgets.QGraphicsView.CacheModeFlag.CacheBackground)
         self.setOptimizationFlag(
-            QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+            QtWidgets.QGraphicsView.OptimizationFlag.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
@@ -85,7 +85,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._prev_selection_pipes = []
         self._node_positions = {}
         self._rubber_band = QtWidgets.QRubberBand(
-            QtWidgets.QRubberBand.Rectangle, self
+            QtWidgets.QRubberBand.Shape.Rectangle, self
         )
         self._rubber_band.isActive = False
 
@@ -173,8 +173,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # setup the undo and redo actions.
         if self._undo_action and self._redo_action:
-            self._undo_action.setShortcuts(QtGui.QKeySequence.Undo)
-            self._redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+            self._undo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Undo)
+            self._redo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Redo)
             if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
                 self._undo_action.setShortcutVisibleInContextMenu(True)
                 self._redo_action.setShortcutVisibleInContextMenu(True)
@@ -241,7 +241,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Redraw the scene.
         """
         self.setSceneRect(self._scene_range)
-        self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
+        self.fitInView(self._scene_range, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
 
     def _combined_rect(self, nodes):
         """
@@ -351,11 +351,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return super(NodeViewer, self).contextMenuEvent(event)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             self.LMB_state = True
-        elif event.button() == QtCore.Qt.RightButton:
+        elif event.button() == QtCore.Qt.MouseButton.RightButton:
             self.RMB_state = True
-        elif event.button() == QtCore.Qt.MiddleButton:
+        elif event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self.MMB_state = True
 
         self._origin_pos = event.pos()
@@ -421,11 +421,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             super(NodeViewer, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             self.LMB_state = False
-        elif event.button() == QtCore.Qt.RightButton:
+        elif event.button() == QtCore.Qt.MouseButton.RightButton:
             self.RMB_state = False
-        elif event.button() == QtCore.Qt.MiddleButton:
+        elif event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self.MMB_state = False
 
         # hide pipe slicer.
@@ -522,7 +522,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
                 self.scene().setSelectionArea(
-                    path, QtCore.Qt.IntersectsItemShape
+                    path, QtCore.Qt.ItemSelectionMode.IntersectsItemShape
                 )
                 self.scene().update(map_rect)
 
@@ -577,7 +577,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
-        event.setDropAction(QtCore.Qt.CopyAction)
+        event.setDropAction(QtCore.Qt.DropAction.CopyAction)
         self.data_dropped.emit(
             event.mimeData(), QtCore.QPoint(pos.x(), pos.y()))
 
@@ -606,12 +606,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
-        self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
-        self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
+        self.ALT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
+        self.CTRL_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ControlModifier
+        self.SHIFT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier
 
         # Todo: find a better solution to catch modifier keys.
-        if event.modifiers() == (QtCore.Qt.AltModifier | QtCore.Qt.ShiftModifier):
+        if event.modifiers() == (QtCore.Qt.KeyboardModifier.AltModifier | QtCore.Qt.KeyboardModifier.ShiftModifier):
             self.ALT_state = True
             self.SHIFT_state = True
 
@@ -627,9 +627,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
-        self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
-        self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
+        self.ALT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
+        self.CTRL_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ControlModifier
+        self.SHIFT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier
         super(NodeViewer, self).keyReleaseEvent(event)
 
     # --- scene events ---
@@ -716,7 +716,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self._node_positions[n] = n.xy_pos
 
             # emit selected node id with LMB.
-            if event.button() == QtCore.Qt.LeftButton:
+            if event.button() == QtCore.Qt.MouseButton.LeftButton:
                 self.node_selected.emit(node.id)
 
             if not isinstance(node, BackdropNodeItem):
@@ -755,7 +755,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        if event.button() != QtCore.Qt.MiddleButton:
+        if event.button() != QtCore.Qt.MouseButton.MiddleButton:
             self.apply_live_connection(event)
 
     # --- port connections ---
@@ -1358,9 +1358,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         # use QOpenGLWidget instead of the deprecated QGLWidget to avoid
         # problems with Wayland.
-        import qtpy
-        if Qt.IsPySide2:
-            from PySide2.QtWidgets import QOpenGLWidget
-        elif Qt.IsPyQt5:
-            from PyQt5.QtWidgets import QOpenGLWidget
-        self.setViewport(QOpenGLWidget())
+
+        # TODO: Review this part and make sure we do not break anything
+        # import qtpy
+        # if qtpy.PYSIDE2:
+        #     from PySide2.QtWidgets import QOpenGLWidget
+        # elif qtpy.PYQT5:
+        #     from PyQt5.QtWidgets import QOpenGLWidget
+        # elif qtpy.PYSIDE6:
+        #     from PySide6.QtOpenGLWidgets import QOpenGLWidget
+        # elif qtpy.PYQT6:
+        #     from PyQt6.QtOpenGLWidgets import QOpenGLWidget
+
+        self.setViewport(QtWidgets.QOpenGLWidget())

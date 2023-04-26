@@ -19,8 +19,8 @@ class GroupNodeItem(NodeItem):
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
-        painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # base background.
         margin = 6.0
@@ -72,14 +72,14 @@ class GroupNodeItem(NodeItem):
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawRect(text_rect)
 
         # draw the outlines.
         pen = QtGui.QPen(border_color.darker(120), 0.8)
-        pen.setJoinStyle(QtCore.Qt.RoundJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.RoundJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(pen)
         painter.drawLines([rect_1.topRight(), rect_2.topRight(),
                            rect_1.topRight(), rect_1.bottomRight(),
@@ -88,8 +88,8 @@ class GroupNodeItem(NodeItem):
         painter.drawLine(rect_1.bottomRight(), rect_2.bottomRight())
 
         pen = QtGui.QPen(border_color, 0.8)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
         painter.drawRect(rect_2)
 
@@ -97,8 +97,8 @@ class GroupNodeItem(NodeItem):
 
     def _paint_vertical(self, painter, option, widget):
         painter.save()
-        painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # base background.
         margin = 6.0
@@ -146,7 +146,7 @@ class GroupNodeItem(NodeItem):
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
 
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         for y in [rect_2.top() + padding, rect_2.bottom() - height - padding]:
             top_rect = QtCore.QRectF(rect.x() + padding - offset, y,
                                      rect.width() - (padding * 2), height)
@@ -154,9 +154,9 @@ class GroupNodeItem(NodeItem):
 
         # draw the outlines.
         pen = QtGui.QPen(border_color.darker(120), 0.8)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(pen)
         painter.drawLines([rect_1.topRight(), rect_2.topRight(),
                            rect_1.topRight(), rect_1.bottomRight(),
@@ -165,8 +165,8 @@ class GroupNodeItem(NodeItem):
         painter.drawLine(rect_1.bottomRight(), rect_2.bottomRight())
 
         pen = QtGui.QPen(border_color, 0.8)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
         painter.drawRect(rect_2)
 

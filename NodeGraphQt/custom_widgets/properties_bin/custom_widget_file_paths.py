@@ -14,7 +14,7 @@ class PropFilePath(BaseProperty):
     def __init__(self, parent=None):
         super(PropFilePath, self).__init__(parent)
         self._ledit = QtWidgets.QLineEdit()
-        self._ledit.setAlignment(QtCore.Qt.AlignLeft)
+        self._ledit.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._ledit.editingFinished.connect(self._on_value_change)
         self._ledit.clearFocus()
 

@@ -27,14 +27,14 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         )
 
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
 
         # background.
         bg_color = QtGui.QColor(*ViewerNavEnum.ITEM_COLOR.value)
         itm_color = QtGui.QColor(80, 128, 123)
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bg_color = bg_color.lighter(120)
             itm_color = QtGui.QColor(*NodeEnum.SELECTED_BORDER_COLOR.value)
 
@@ -70,7 +70,7 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         # text
         pen_color = option.palette.text().color()
         pen = QtGui.QPen(pen_color, 0.5)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
 
         font = painter.font()
@@ -148,7 +148,7 @@ class NodeNavigationWidget(QtWidgets.QListView):
         self.model().appendRow(item)
         self.selectionModel().setCurrentIndex(
             self.model().indexFromItem(item),
-            QtCore.QItemSelectionModel.ClearAndSelect)
+            QtCore.QItemSelectionModel.SelectionFlag.ClearAndSelect)
 
     def remove_label_item(self, node_id):
         rows = reversed(range(1, self.model().rowCount()))

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from qtpy import QtWidgets, QtCore, QtGui, QtCompat
+from qtpy import QtWidgets, QtCore, QtGui
 
 from .node_property_factory import NodePropertyWidgetFactory
 from .prop_widgets_base import PropLineEdit
@@ -54,11 +54,11 @@ class _PropertiesList(QtWidgets.QTableWidget):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
 
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
-        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        QtWidgets.QHeaderView.setSectionResizeMode(
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        QtWidgets.QHeaderView.setSectionResizeMode(
+            self.horizontalHeader(), 0, QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollMode.ScrollPerPixel)
 
     def wheelEvent(self, event):
         """
@@ -110,9 +110,9 @@ class _PropertiesContainer(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
-        label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
+        label_flags = QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
-            label_flags = label_flags | QtCore.Qt.AlignTop
+            label_flags = label_flags | QtCore.Qt.AlignmentFlag.AlignTop
 
         self.__layout.addWidget(QtWidgets.QLabel(label), row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
@@ -154,7 +154,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
         close_btn = QtWidgets.QPushButton()
         close_btn.setIcon(QtGui.QIcon(
-            self.style().standardPixmap(QtWidgets.QStyle.SP_DialogCancelButton)
+            self.style().standardPixmap(QtWidgets.QStyle.StandardPixmap.SP_DialogCancelButton)
         ))
         close_btn.setMaximumWidth(40)
         close_btn.setToolTip('close property')
@@ -166,7 +166,7 @@ class NodePropWidget(QtWidgets.QWidget):
         self.name_wgt.value_changed.connect(self._on_property_changed)
 
         self.type_wgt = QtWidgets.QLabel(node.type_)
-        self.type_wgt.setAlignment(QtCore.Qt.AlignRight)
+        self.type_wgt.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         self.type_wgt.setToolTip('type_')
         font = self.type_wgt.font()
         font.setPointSize(10)
@@ -407,7 +407,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
 
     def __on_prop_close(self, node_id):
-        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         [self._prop_list.removeRow(i.row()) for i in items]
 
     def __on_limit_changed(self, value):
@@ -488,7 +488,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if rows >= self.limit():
             self._prop_list.removeRow(rows - 1)
 
-        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchFlag.MatchExactly)
         if itm_find:
             self._prop_list.removeRow(itm_find[0].row())
 
@@ -539,7 +539,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             NodePropWidget: node property widget.
         """
         node_id = node if isinstance(node, str) else node.id
-        itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         if itm_find:
             item = itm_find[0]
             return self._prop_list.cellWidget(item.row(), 0)

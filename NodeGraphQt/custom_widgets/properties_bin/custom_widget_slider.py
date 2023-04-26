@@ -21,11 +21,11 @@ class PropSlider(BaseProperty):
         self._init_signal_connections()
 
     def _init(self):
-        self._slider.setOrientation(QtCore.Qt.Horizontal)
-        self._slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self._slider.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
-                                   QtWidgets.QSizePolicy.Preferred)
-        self._spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+        self._slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self._slider.setTickPosition(QtWidgets.QSlider.TickPosition.TicksBelow)
+        self._slider.setSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding,
+                                   QtWidgets.QSizePolicy.Policy.Preferred)
+        self._spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._spinbox)
