@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 
 class _NumberValueMenu(QtWidgets.QMenu):
