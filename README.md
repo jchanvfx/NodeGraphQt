@@ -12,6 +12,14 @@ applications.
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
+## Install
+
+NodeGraphQt is avaliable on The Python Package Index (PyPI) here https://pypi.org/project/NodeGraphQt so it can be installed with:
+```
+pip install NodeGraphQt
+```
+or you can download previous versions from the [releases](https://github.com/jchanvfx/NodeGraphQt/releases) page.
+
 
 ## Documentation
 
