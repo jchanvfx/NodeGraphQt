@@ -416,11 +416,32 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
 
 class LivePipeItem(PipeItem):
+    """
+    Live Pipe item used for drawing the live connection with the cursor.
+    """
 
     def __init__(self):
         super(LivePipeItem, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
         self.shift_selected = False
+
+        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+        pen = QtGui.QPen(color, PipeEnum.WIDTH.value + 0.35)
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
+
+        self._idx_pointer = LivePipePolygonItem(self)
+        self._idx_pointer.setPolygon(self._arrow)
+        self._idx_pointer.setBrush(color.darker(300))
+        self._idx_pointer.setPen(pen)
+
+        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+        color.setAlpha(50)
+        self._idx_text = QtWidgets.QGraphicsTextItem(self)
+        self._idx_text.setDefaultTextColor(color)
+        font = self._idx_text.font()
+        font.setPointSize(7)
+        self._idx_text.setFont(font)
 
     def paint(self, painter, option, widget):
         """
@@ -449,20 +470,11 @@ class LivePipeItem(PipeItem):
         cen_y = self.path().pointAtPercent(0.5).y()
         loc_pt = self.path().pointAtPercent(0.9)
         tgt_pt = self.path().pointAtPercent(1.0)
-        start_pt = self.path().pointAtPercent(0.0)
 
         dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
         if dist < 0.05:
             painter.restore()
             return
-
-        # draw start circle
-        size = 5.0
-        rect = QtCore.QRectF(start_pt.x() - (size / 2),
-                             start_pt.y() - (size / 2),
-                             size, size)
-        painter.setBrush(color)
-        painter.drawEllipse(rect)
 
         # draw middle circle
         size = 10.0
@@ -490,9 +502,89 @@ class LivePipeItem(PipeItem):
         degrees = math.degrees(radians) + 90
         transform.rotate(degrees)
 
-        scale = 1.0
-        if dist < 20.0:
-            scale = dist / 20.0
-        transform.scale(scale, scale)
-        painter.drawPolygon(transform.map(self._arrow))
+        painter.restore()
+
+    def draw_path(self, start_port, end_port=None, cursor_pos=None,
+                  color_mode=None):
+        """
+        re-implemented to also update the index pointer arrow position.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            end_port (PortItem): port used to draw the end point.
+            cursor_pos (QtCore.QPointF): cursor position if specified this
+                will be the draw end point.
+            color_mode (str): arrow index pointer color mode
+                              ('accept', 'reject' or None).
+        """
+        super(LivePipeItem, self).draw_path(start_port, end_port, cursor_pos)
+        self.draw_index_pointer(start_port, cursor_pos, color_mode)
+
+    def draw_index_pointer(self, start_port, cursor_pos, color_mode=None):
+        """
+        Update the index pointer arrow position and direction when the
+        live pipe path is redrawn.
+
+        Args:
+            start_port (PortItem): start port item.
+            cursor_pos (QtCore.QPoint): cursor scene position.
+            color_mode (str): arrow index pointer color mode
+                              ('accept', 'reject' or None).
+        """
+        text_rect = self._idx_text.boundingRect()
+
+        transform = QtGui.QTransform()
+        transform.translate(cursor_pos.x(), cursor_pos.y())
+        if self.viewer_layout_direction() is LayoutDirectionEnum.VERTICAL.value:
+            text_pos = (
+                cursor_pos.x() + (text_rect.width() / 2.5),
+                cursor_pos.y() - (text_rect.height() / 2)
+            )
+            if start_port.port_type == PortTypeEnum.OUT.value:
+                transform.rotate(180)
+        elif self.viewer_layout_direction() is LayoutDirectionEnum.HORIZONTAL.value:
+            text_pos = (
+                cursor_pos.x() - (text_rect.width() / 2),
+                cursor_pos.y() - (text_rect.height() * 1.25)
+            )
+            if start_port.port_type == PortTypeEnum.IN.value:
+                transform.rotate(-90)
+            else:
+                transform.rotate(90)
+        self._idx_text.setPos(*text_pos)
+        self._idx_text.setPlainText('{}'.format(start_port.name))
+
+        self._idx_pointer.setPolygon(transform.map(self._arrow))
+
+        if color_mode == 'accept':
+            color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
+        elif color_mode == 'reject':
+            color = QtGui.QColor(*PipeEnum.DISABLED_COLOR.value)
+        else:
+            color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+
+        pen = self._idx_pointer.pen()
+        pen.setColor(color)
+        self._idx_pointer.setBrush(color.darker(300))
+        self._idx_pointer.setPen(pen)
+
+
+class LivePipePolygonItem(QtWidgets.QGraphicsPolygonItem):
+
+    def __init__(self, parent):
+        super(LivePipePolygonItem, self).__init__(parent)
+        self.setFlag(self.ItemIsSelectable, True)
+
+    def paint(self, painter, option, widget):
+        """
+        Args:
+            painter (QtGui.QPainter): painter used for drawing the item.
+            option (QtGui.QStyleOptionGraphicsItem):
+                used to describe the parameters needed to draw.
+            widget (QtWidgets.QWidget): not used.
+        """
+        painter.save()
+        painter.setBrush(self.brush())
+        painter.setPen(self.pen())
+        painter.drawPolygon(self.polygon())
         painter.restore()

@@ -637,7 +637,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def sceneMouseMoveEvent(self, event):
         """
         triggered mouse move event for the scene.
-         - redraw the connection pipe.
+         - redraw the live connection pipe.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
@@ -649,15 +649,27 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         pos = event.scenePos()
-        items = self.scene().items(pos)
-        if items and isinstance(items[0], PortItem):
-            x = items[0].boundingRect().width() / 2
-            y = items[0].boundingRect().height() / 2
-            pos = items[0].scenePos()
-            pos.setX(pos.x() + x)
-            pos.setY(pos.y() + y)
+        color_mode = None
+        for item in self.scene().items(pos):
+            if isinstance(item, PortItem):
+                x = item.boundingRect().width() / 2
+                y = item.boundingRect().height() / 2
+                pos = item.scenePos()
+                pos.setX(pos.x() + x)
+                pos.setY(pos.y() + y)
+                if item == self._start_port:
+                    break
+                color_mode = 'accept'
+                if self.acyclic:
+                    if item.node == self._start_port.node:
+                        color_mode = 'reject'
+                    elif item.port_type == self._start_port.port_type:
+                        color_mode = 'reject'
+                break
 
-        self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
+        self._LIVE_PIPE.draw_path(
+            self._start_port, cursor_pos=pos, color_mode=color_mode
+        )
 
     def sceneMousePressEvent(self, event):
         """
@@ -874,6 +886,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif self._start_port == PortTypeEnum.OUT.value:
             self._LIVE_PIPE.output_port = self._start_port
         self._LIVE_PIPE.setVisible(True)
+        self._LIVE_PIPE.draw_index_pointer(
+            selected_port,
+            self.mapToScene(self._origin_pos)
+        )
 
     def end_live_connection(self):
         """
