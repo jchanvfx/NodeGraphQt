@@ -570,6 +570,9 @@ class LivePipeItem(PipeItem):
 
 
 class LivePipePolygonItem(QtWidgets.QGraphicsPolygonItem):
+    """
+    Custom live pipe polygon shape.
+    """
 
     def __init__(self, parent):
         super(LivePipePolygonItem, self).__init__(parent)
