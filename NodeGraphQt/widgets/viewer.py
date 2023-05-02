@@ -385,25 +385,60 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         items = self._items_near(map_pos, None, 20, 20)
-        nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        # pipes = [i for i in items if isinstance(i, PipeItem)]
+        pipes = []
+        nodes = []
+        backdrop = None
+        for itm in items:
+            if isinstance(itm, PipeItem):
+                pipes.append(itm)
+            elif isinstance(itm, AbstractNodeItem):
+                if isinstance(itm, BackdropNodeItem):
+                    backdrop = itm
+                    continue
+                nodes.append(itm)
 
         if nodes:
             self.MMB_state = False
 
+        # record the node selection as "self.selected_nodes()" is not as
+        # reliable here.
+        selection = set([])
+
         # toggle extend node selection.
         if self.LMB_state:
             if self.SHIFT_state:
-                for node in nodes:
-                    node.selected = not node.selected
+                if items and backdrop == items[0]:
+                    backdrop.selected = not backdrop.selected
+                    if backdrop.selected:
+                        selection.add(backdrop)
+                    for n in backdrop.get_nodes():
+                        n.selected = backdrop.selected
+                        if backdrop.selected:
+                            selection.add(n)
+                else:
+                    for node in nodes:
+                        node.selected = not node.selected
+                        if node.selected:
+                            selection.add(node)
             elif self.CTRL_state:
+                if items and backdrop == items[0]:
+                    backdrop.selected = False
+                else:
+                    for node in nodes:
+                        node.selected = False
+            else:
+                if backdrop:
+                    selection.add(backdrop)
+                    for n in backdrop.get_nodes():
+                        selection.add(n)
                 for node in nodes:
-                    node.selected = False
+                    if node.selected:
+                        selection.add(node)
+
+        selection.update(self.selected_nodes())
 
         # update the recorded node positions.
-        self._node_positions.update(
-            {n: n.xy_pos for n in self.selected_nodes()}
-        )
+        self._node_positions.update({n: n.xy_pos for n in selection})
 
         # show selection selection marquee.
         if self.LMB_state and not items:
