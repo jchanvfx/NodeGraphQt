@@ -68,7 +68,10 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
                 x += 2.5
 
         # text
-        pen_color = option.palette.text().color()
+        # pen_color = option.palette.text().color()
+        pen_color = QtGui.QColor(*tuple(map(
+            lambda i, j: i - j, (255, 255, 255), bg_color.getRgb()
+        )))
         pen = QtGui.QPen(pen_color, 0.5)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
