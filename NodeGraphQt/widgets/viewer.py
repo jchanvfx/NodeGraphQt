@@ -7,7 +7,11 @@ from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
-    LayoutDirectionEnum, PortTypeEnum, PipeLayoutEnum
+    LayoutDirectionEnum,
+    PortTypeEnum,
+    PipeLayoutEnum,
+    ViewerEnum,
+    Z_VAL_NODE_WIDGET
 )
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
@@ -88,6 +92,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             QtWidgets.QRubberBand.Rectangle, self
         )
         self._rubber_band.isActive = False
+
+        text_color = QtGui.QColor(*tuple(map(
+            lambda i, j: i - j, (255, 255, 255),
+            ViewerEnum.BACKGROUND_COLOR.value
+        )))
+        text_color.setAlpha(50)
+        self._cusor_text = QtWidgets.QGraphicsTextItem()
+        self._cusor_text.setDefaultTextColor(text_color)
+        self._cusor_text.setZValue(Z_VAL_NODE_WIDGET + 1)
+        font = self._cusor_text.font()
+        font.setPointSize(7)
+        self._cusor_text.setFont(font)
+        self.scene().addItem(self._cusor_text)
 
         self._LIVE_PIPE = LivePipeItem()
         self._LIVE_PIPE.setVisible(False)
@@ -400,12 +417,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if nodes:
             self.MMB_state = False
 
-        # record the node selection as "self.selected_nodes()" is not as
-        # reliable here.
+        # record the node selection as "self.selected_nodes()" is not updated
+        # here on the mouse press event.
         selection = set([])
 
-        # toggle extend node selection.
         if self.LMB_state:
+            # toggle extend node selection.
             if self.SHIFT_state:
                 if items and backdrop == items[0]:
                     backdrop.selected = not backdrop.selected
@@ -420,12 +437,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
                         node.selected = not node.selected
                         if node.selected:
                             selection.add(node)
+            # unselected nodes with the "ctrl" key.
             elif self.CTRL_state:
                 if items and backdrop == items[0]:
                     backdrop.selected = False
                 else:
                     for node in nodes:
                         node.selected = False
+            # if no modifier keys then add to selection set.
             else:
                 if backdrop:
                     selection.add(backdrop)
@@ -546,6 +565,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = previous_pos - current_pos
             self._set_viewer_pan(delta.x(), delta.y())
 
+        if not self.ALT_state:
+            if self.SHIFT_state or self.CTRL_state:
+                self._cusor_text.setPos(self.mapToScene(event.pos()))
+
         if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
             # if the rubber band is too small, do not show it.
@@ -650,6 +673,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.ALT_state = True
             self.SHIFT_state = True
 
+        # show cursor text
+        self._cusor_text.setVisible(False)
+        if not self.ALT_state:
+            if self.SHIFT_state:
+                self._cusor_text.setPlainText(
+                    '\n    SHIFT:'
+                    '\n    Toggle/Extend Selection'
+                )
+            elif self.CTRL_state:
+                self._cusor_text.setPlainText(
+                    '\n    CTRL:'
+                    '\n    Deselect Nodes'
+                )
+            if self.SHIFT_state or self.CTRL_state:
+                self._cusor_text.setPos(self.mapToScene(self._previous_pos))
+                self._cusor_text.setVisible(True)
+
         super(NodeViewer, self).keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
@@ -666,6 +706,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
         self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
         super(NodeViewer, self).keyReleaseEvent(event)
+
+        # hide and reset cursor text.
+        self._cusor_text.setPlainText('')
+        self._cusor_text.setVisible(False)
 
     # --- scene events ---
 
