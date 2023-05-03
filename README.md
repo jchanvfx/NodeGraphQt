@@ -47,3 +47,4 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-sty
 https://jchanvfx.github.io/NodeGraphQt/api/html/custom_widgets.html
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/prop_bin.png" width="600" title="Properties Bin">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/nodes_palette.png" width="600" title="Node Palette">
