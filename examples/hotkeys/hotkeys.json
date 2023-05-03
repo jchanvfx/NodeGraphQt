@@ -115,6 +115,20 @@
       },
       {
         "type":"command",
+        "label":"Extract",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"extract_nodes",
+        "shortcut":"Ctrl+Shift+X"
+      },
+      {
+        "type":"command",
+        "label":"Clear Connections",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"clear_node_connections",
+        "shortcut":"Ctrl+D"
+      },
+      {
+        "type":"command",
         "label":"Fit to Selection",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"fit_to_selection",

@@ -1323,7 +1323,9 @@ class NodeGraph(QtCore.QObject):
             return
         node_ids = [n.id for n in nodes]
         if push_undo:
-            self._undo_stack.beginMacro('deleted "{}" nodes'.format(len(nodes)))
+            self._undo_stack.beginMacro(
+                'deleted "{}" node(s)'.format(len(nodes))
+            )
         for node in nodes:
 
             # collapse group node before removing.
@@ -1350,6 +1352,54 @@ class NodeGraph(QtCore.QObject):
         if push_undo:
             self._undo_stack.endMacro()
         self.nodes_deleted.emit(node_ids)
+
+    def extract_nodes(self, nodes, push_undo=True, prompt_warning=True):
+        """
+        Extract select nodes from it connections.
+
+        Args:
+            nodes (list[NodeGraphQt.BaseNode]): list of node instances.
+            push_undo (bool): register the command to the undo stack. (default: True)
+            prompt_warning (bool): prompt warning dialog box.
+        """
+        if not nodes:
+            return
+
+        locked_ports = []
+        base_nodes = []
+        for node in nodes:
+            if not isinstance(node, BaseNode):
+                continue
+
+            for port in node.input_ports() + node.output_ports():
+                if port.locked():
+                    locked_ports.append('{0.node.name}: {0.name}'.format(port))
+
+            base_nodes.append(node)
+
+        if locked_ports:
+            message = (
+                'Selected nodes cannot be extracted because the following '
+                'ports are locked:\n{}'.format('\n'.join(sorted(locked_ports)))
+            )
+            if prompt_warning:
+                self._viewer.message_dialog(message, 'Can\'t Extract Nodes')
+            return
+
+        if push_undo:
+            self._undo_stack.beginMacro(
+                'extracted "{}" node(s)'.format(len(nodes))
+            )
+
+        for node in base_nodes:
+            for port in node.input_ports() + node.output_ports():
+                for connected_port in port.connected_ports():
+                    if connected_port.node() in base_nodes:
+                        continue
+                    port.disconnect_from(connected_port, push_undo=push_undo)
+
+        if push_undo:
+            self._undo_stack.endMacro()
 
     def all_nodes(self):
         """
