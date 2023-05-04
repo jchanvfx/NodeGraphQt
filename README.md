@@ -12,6 +12,14 @@ applications.
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
+## Install
+
+NodeGraphQt is avaliable on The Python Package Index (PyPI) here https://pypi.org/project/NodeGraphQt so it can be installed with:
+```
+pip install NodeGraphQt
+```
+or you can download previous versions from the [releases](https://github.com/jchanvfx/NodeGraphQt/releases) page.
+
 
 ## Documentation
 
@@ -39,3 +47,4 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-sty
 https://jchanvfx.github.io/NodeGraphQt/api/html/custom_widgets.html
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/prop_bin.png" width="600" title="Properties Bin">
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/nodes_palette.png" width="600" title="Node Palette">

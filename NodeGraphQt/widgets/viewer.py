@@ -7,7 +7,11 @@ from Qt import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
-    LayoutDirectionEnum, PortTypeEnum, PipeLayoutEnum
+    LayoutDirectionEnum,
+    PortTypeEnum,
+    PipeLayoutEnum,
+    ViewerEnum,
+    Z_VAL_NODE_WIDGET
 )
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
@@ -88,6 +92,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             QtWidgets.QRubberBand.Rectangle, self
         )
         self._rubber_band.isActive = False
+
+        text_color = QtGui.QColor(*tuple(map(
+            lambda i, j: i - j, (255, 255, 255),
+            ViewerEnum.BACKGROUND_COLOR.value
+        )))
+        text_color.setAlpha(50)
+        self._cusor_text = QtWidgets.QGraphicsTextItem()
+        self._cusor_text.setDefaultTextColor(text_color)
+        self._cusor_text.setZValue(Z_VAL_NODE_WIDGET + 1)
+        font = self._cusor_text.font()
+        font.setPointSize(7)
+        self._cusor_text.setFont(font)
+        self.scene().addItem(self._cusor_text)
 
         self._LIVE_PIPE = LivePipeItem()
         self._LIVE_PIPE.setVisible(False)
@@ -385,25 +402,62 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         items = self._items_near(map_pos, None, 20, 20)
-        nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
-        # pipes = [i for i in items if isinstance(i, PipeItem)]
+        pipes = []
+        nodes = []
+        backdrop = None
+        for itm in items:
+            if isinstance(itm, PipeItem):
+                pipes.append(itm)
+            elif isinstance(itm, AbstractNodeItem):
+                if isinstance(itm, BackdropNodeItem):
+                    backdrop = itm
+                    continue
+                nodes.append(itm)
 
         if nodes:
             self.MMB_state = False
 
-        # toggle extend node selection.
+        # record the node selection as "self.selected_nodes()" is not updated
+        # here on the mouse press event.
+        selection = set([])
+
         if self.LMB_state:
+            # toggle extend node selection.
             if self.SHIFT_state:
-                for node in nodes:
-                    node.selected = not node.selected
+                if items and backdrop == items[0]:
+                    backdrop.selected = not backdrop.selected
+                    if backdrop.selected:
+                        selection.add(backdrop)
+                    for n in backdrop.get_nodes():
+                        n.selected = backdrop.selected
+                        if backdrop.selected:
+                            selection.add(n)
+                else:
+                    for node in nodes:
+                        node.selected = not node.selected
+                        if node.selected:
+                            selection.add(node)
+            # unselected nodes with the "ctrl" key.
             elif self.CTRL_state:
+                if items and backdrop == items[0]:
+                    backdrop.selected = False
+                else:
+                    for node in nodes:
+                        node.selected = False
+            # if no modifier keys then add to selection set.
+            else:
+                if backdrop:
+                    selection.add(backdrop)
+                    for n in backdrop.get_nodes():
+                        selection.add(n)
                 for node in nodes:
-                    node.selected = False
+                    if node.selected:
+                        selection.add(node)
+
+        selection.update(self.selected_nodes())
 
         # update the recorded node positions.
-        self._node_positions.update(
-            {n: n.xy_pos for n in self.selected_nodes()}
-        )
+        self._node_positions.update({n: n.xy_pos for n in selection})
 
         # show selection selection marquee.
         if self.LMB_state and not items:
@@ -511,6 +565,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = previous_pos - current_pos
             self._set_viewer_pan(delta.x(), delta.y())
 
+        if not self.ALT_state:
+            if self.SHIFT_state or self.CTRL_state:
+                self._cusor_text.setPos(self.mapToScene(event.pos()))
+
         if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
             # if the rubber band is too small, do not show it.
@@ -615,6 +673,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.ALT_state = True
             self.SHIFT_state = True
 
+        # show cursor text
+        self._cusor_text.setVisible(False)
+        if not self.ALT_state:
+            if self.SHIFT_state:
+                self._cusor_text.setPlainText(
+                    '\n    SHIFT:'
+                    '\n    Toggle/Extend Selection'
+                )
+            elif self.CTRL_state:
+                self._cusor_text.setPlainText(
+                    '\n    CTRL:'
+                    '\n    Deselect Nodes'
+                )
+            if self.SHIFT_state or self.CTRL_state:
+                self._cusor_text.setPos(self.mapToScene(self._previous_pos))
+                self._cusor_text.setVisible(True)
+
         super(NodeViewer, self).keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
@@ -632,12 +707,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
         super(NodeViewer, self).keyReleaseEvent(event)
 
+        # hide and reset cursor text.
+        self._cusor_text.setPlainText('')
+        self._cusor_text.setVisible(False)
+
     # --- scene events ---
 
     def sceneMouseMoveEvent(self, event):
         """
         triggered mouse move event for the scene.
-         - redraw the connection pipe.
+         - redraw the live connection pipe.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
@@ -649,15 +728,27 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         pos = event.scenePos()
-        items = self.scene().items(pos)
-        if items and isinstance(items[0], PortItem):
-            x = items[0].boundingRect().width() / 2
-            y = items[0].boundingRect().height() / 2
-            pos = items[0].scenePos()
-            pos.setX(pos.x() + x)
-            pos.setY(pos.y() + y)
+        color_mode = None
+        for item in self.scene().items(pos):
+            if isinstance(item, PortItem):
+                x = item.boundingRect().width() / 2
+                y = item.boundingRect().height() / 2
+                pos = item.scenePos()
+                pos.setX(pos.x() + x)
+                pos.setY(pos.y() + y)
+                if item == self._start_port:
+                    break
+                color_mode = 'accept'
+                if self.acyclic:
+                    if item.node == self._start_port.node:
+                        color_mode = 'reject'
+                    elif item.port_type == self._start_port.port_type:
+                        color_mode = 'reject'
+                break
 
-        self._LIVE_PIPE.draw_path(self._start_port, cursor_pos=pos)
+        self._LIVE_PIPE.draw_path(
+            self._start_port, cursor_pos=pos, color_mode=color_mode
+        )
 
     def sceneMousePressEvent(self, event):
         """
@@ -874,6 +965,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         elif self._start_port == PortTypeEnum.OUT.value:
             self._LIVE_PIPE.output_port = self._start_port
         self._LIVE_PIPE.setVisible(True)
+        self._LIVE_PIPE.draw_index_pointer(
+            selected_port,
+            self.mapToScene(self._origin_pos)
+        )
 
     def end_live_connection(self):
         """
