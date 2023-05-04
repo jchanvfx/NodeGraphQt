@@ -87,7 +87,8 @@ class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):
         text_rect = QtCore.QRectF(
             rect.center().x() - (font_width / 2) + txt_offset,
             rect.center().y() - (font_height / 2),
-            font_width, font_height)
+            font_width, font_height
+        )
         painter.drawText(text_rect, item.text())
         painter.restore()
 
@@ -144,14 +145,22 @@ class NodeNavigationWidget(QtWidgets.QListView):
         item.setToolTip(node_id)
         metrics = QtGui.QFontMetrics(item.font())
         if hasattr(metrics, 'horizontalAdvance'):
-            width = metrics.horizontalAdvance(item.text()) + 30
+            width = metrics.horizontalAdvance(item.text())
         else:
-            width = metrics.width(item.text()) + 30
+            width = metrics.width(item.text())
+        width *= 1.5
         item.setSizeHint(QtCore.QSize(width, 20))
         self.model().appendRow(item)
         self.selectionModel().setCurrentIndex(
             self.model().indexFromItem(item),
             QtCore.QItemSelectionModel.ClearAndSelect)
+
+    def update_label_item(self, label, node_id):
+        rows = reversed(range(self.model().rowCount()))
+        for r in rows:
+            item = self.model().item(r, 0)
+            if item.toolTip() == node_id:
+                item.setText(label)
 
     def remove_label_item(self, node_id):
         rows = reversed(range(1, self.model().rowCount()))

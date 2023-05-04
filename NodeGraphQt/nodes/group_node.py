@@ -44,7 +44,7 @@ class GroupNode(BaseNode):
         or returns None.
 
         Returns:
-            SubGraph or None: sub graph controller.
+            SubGraph: sub graph controller.
         """
         return self.graph.sub_graphs.get(self.id)
 
@@ -90,6 +90,22 @@ class GroupNode(BaseNode):
             :meth:`SubGraph.collapse_group_node`.
         """
         self.graph.collapse_group_node(self)
+
+    def set_name(self, name=''):
+        super(GroupNode, self).set_name(name)
+        # update the tab bar and navigation labels.
+        sub_graph = self.get_sub_graph()
+        if sub_graph:
+            nav_widget = sub_graph.navigation_widget
+            nav_widget.update_label_item(self.name(), self.id)
+
+            if sub_graph.parent_graph.is_root:
+                root_graph = sub_graph.parent_graph
+                tab_bar = root_graph.widget.tabBar()
+                for idx in range(tab_bar.count()):
+                    if tab_bar.tabToolTip(idx) == self.id:
+                        tab_bar.setTabText(idx, self.name())
+                        break
 
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None, locked=False, painter_func=None):
