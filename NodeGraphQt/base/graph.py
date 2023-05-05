@@ -927,7 +927,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             bool: True if pipe slicing is enabled.
         """
-        return self._model.pipe_collision
+        return self._model.pipe_slicing
 
     def set_pipe_slicing(self, mode=True):
         """
