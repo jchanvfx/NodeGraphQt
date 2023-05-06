@@ -168,21 +168,20 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             pos2 (QPointF): end port position.
             path (QPainterPath): path to draw.
         """
-        ptype = start_port.port_type
-        in_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
-        out_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
-
         n_rect = start_port.node.boundingRect()
-        padding = 40
+        ptype = start_port.port_type
+        start_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
+        end_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
 
-        top = in_pos.y() - padding
-        bottom = out_pos.y() + padding
-        path.moveTo(out_pos)
-        path.lineTo(out_pos.x(), bottom)
-        path.lineTo(out_pos.x() + n_rect.right(), bottom)
-        path.lineTo(out_pos.x() + n_rect.right(), top)
-        path.lineTo(in_pos.x(), top)
-        path.lineTo(in_pos)
+        padding = 40
+        top = start_pos.y() - padding
+        bottom = end_pos.y() + padding
+        path.moveTo(end_pos)
+        path.lineTo(end_pos.x(), bottom)
+        path.lineTo(end_pos.x() + n_rect.right(), bottom)
+        path.lineTo(end_pos.x() + n_rect.right(), top)
+        path.lineTo(start_pos.x(), top)
+        path.lineTo(start_pos)
         self.setPath(path)
 
     def __draw_path_cycled_horizontal(self, start_port, pos1, pos2, path):
@@ -195,21 +194,20 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             pos2 (QPointF): end port position.
             path (QPainterPath): path to draw.
         """
-        ptype = start_port.port_type
-        in_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
-        out_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
-
         n_rect = start_port.node.boundingRect()
-        padding = 40
+        ptype = start_port.port_type
+        start_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
+        end_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
 
-        left = out_pos.x() + padding
-        right = in_pos.x() - padding
-        path.moveTo(out_pos)
-        path.lineTo(left, out_pos.y())
-        path.lineTo(left, out_pos.y() + n_rect.bottom())
-        path.lineTo(right, out_pos.y() + n_rect.bottom())
-        path.lineTo(right, in_pos.y())
-        path.lineTo(in_pos)
+        padding = 40
+        left = end_pos.x() + padding
+        right = start_pos.x() - padding
+        path.moveTo(start_pos)
+        path.lineTo(right, start_pos.y())
+        path.lineTo(right, end_pos.y() + n_rect.bottom())
+        path.lineTo(left, end_pos.y() + n_rect.bottom())
+        path.lineTo(left, end_pos.y())
+        path.lineTo(end_pos)
         self.setPath(path)
 
     def __draw_path_vertical(self, start_port, pos1, pos2, path):
@@ -326,7 +324,6 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         line = QtCore.QLineF(pos1, pos2)
         path = QtGui.QPainterPath()
-        path.moveTo(line.x1(), line.y1())
 
         direction = self.viewer_layout_direction()
 
@@ -342,6 +339,8 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
                         start_port, pos1, pos2, path
                     )
                     return
+
+        path.moveTo(line.x1(), line.y1())
 
         if self.viewer_pipe_layout() == PipeLayoutEnum.STRAIGHT.value:
             path.lineTo(pos2)
