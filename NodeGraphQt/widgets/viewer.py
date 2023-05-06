@@ -897,6 +897,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self._start_port is end_port:
                 return
 
+        # if connection to itself
+        same_node_connection = end_port.node == self._start_port.node
+        if not self.acyclic:
+            # allow a node cycle connection.
+            same_node_connection = False
+
         # restore connection check.
         restore_connection = any([
             # if the end port is locked.
@@ -904,7 +910,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             # if same port type.
             end_port.port_type == self._start_port.port_type,
             # if connection to itself.
-            end_port.node == self._start_port.node,
+            same_node_connection,
             # if end port is the start port.
             end_port == self._start_port,
             # if detached port is the end port.
