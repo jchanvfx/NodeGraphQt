@@ -158,6 +158,46 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         # QPaintDevice: Cannot destroy paint device that is being painted.
         painter.restore()
 
+    def __draw_path_cycled_vertical(self, start_port, pos1, pos2, path):
+        """
+        Draws the pipe path around the node if the in port and out port
+        connect to each other for cycle connection.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            pos1 (QPointF): start port position.
+            pos2 (QPointF): end port position.
+            path (QPainterPath): path to draw.
+        """
+
+    def __draw_path_cycled_horizontal(self, start_port, pos1, pos2, path):
+        """
+        Draws the pipe path around the node if the in port and out port
+        connect to each other for cycle connection.
+
+        Args:
+            start_port (PortItem): port used to draw the starting point.
+            pos1 (QPointF): start port position.
+            pos2 (QPointF): end port position.
+            path (QPainterPath): path to draw.
+        """
+        ptype = start_port.port_type
+        in_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
+        out_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
+
+        n_rect = start_port.node.boundingRect()
+        padding = 40
+
+        left = out_pos.x() + padding
+        right = in_pos.x() - padding
+        path.moveTo(out_pos)
+        path.lineTo(left, out_pos.y())
+        path.lineTo(left, out_pos.y() + n_rect.bottom())
+        path.lineTo(right, out_pos.y() + n_rect.bottom())
+        path.lineTo(right, in_pos.y())
+        path.lineTo(in_pos)
+        self.setPath(path)
+
     def __draw_path_vertical(self, start_port, pos1, pos2, path):
         """
         Draws the vertical path between ports.
@@ -274,14 +314,29 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         path = QtGui.QPainterPath()
         path.moveTo(line.x1(), line.y1())
 
+        direction = self.viewer_layout_direction()
+
+        if end_port and not self.viewer().acyclic:
+            if end_port.node == start_port.node:
+                if direction is LayoutDirectionEnum.VERTICAL.value:
+                    self.__draw_path_cycled_vertical(
+                        start_port, pos1, pos2, path
+                    )
+                    return
+                elif direction is LayoutDirectionEnum.HORIZONTAL.value:
+                    self.__draw_path_cycled_horizontal(
+                        start_port, pos1, pos2, path
+                    )
+                    return
+
         if self.viewer_pipe_layout() == PipeLayoutEnum.STRAIGHT.value:
             path.lineTo(pos2)
             self.setPath(path)
             return
 
-        if self.viewer_layout_direction() is LayoutDirectionEnum.VERTICAL.value:
+        if direction is LayoutDirectionEnum.VERTICAL.value:
             self.__draw_path_vertical(start_port, pos1, pos2, path)
-        elif self.viewer_layout_direction() is LayoutDirectionEnum.HORIZONTAL.value:
+        elif direction is LayoutDirectionEnum.HORIZONTAL.value:
             self.__draw_path_horizontal(start_port, pos1, pos2, path)
 
     def reset_path(self):
@@ -289,7 +344,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self.setPath(path)
 
     @staticmethod
-    def calc_distance(p1, p2):
+    def _calc_distance(p1, p2):
         x = math.pow((p2.x() - p1.x()), 2)
         y = math.pow((p2.y() - p1.y()), 2)
         return math.sqrt(x + y)
@@ -297,22 +352,38 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
     def port_from_pos(self, pos, reverse=False):
         inport_pos = self.input_port.scenePos()
         outport_pos = self.output_port.scenePos()
-        input_dist = self.calc_distance(inport_pos, pos)
-        output_dist = self.calc_distance(outport_pos, pos)
+        input_dist = self._calc_distance(inport_pos, pos)
+        output_dist = self._calc_distance(outport_pos, pos)
         if input_dist < output_dist:
             port = self.output_port if reverse else self.input_port
         else:
             port = self.input_port if reverse else self.output_port
         return port
 
-    def viewer_pipe_layout(self):
+    def viewer(self):
+        """
+        Returns:
+            NodeViewer: node graph viewer.
+        """
         if self.scene():
-            viewer = self.scene().viewer()
+            return self.scene().viewer()
+
+    def viewer_pipe_layout(self):
+        """
+        Returns:
+            int: pipe layout mode.
+        """
+        viewer = self.viewer()
+        if viewer:
             return viewer.get_pipe_layout()
 
     def viewer_layout_direction(self):
-        if self.scene():
-            viewer = self.scene().viewer()
+        """
+        Returns:
+            int: graph layout mode.
+        """
+        viewer = self.viewer()
+        if viewer:
             return viewer.get_layout_direction()
 
     def activate(self):
