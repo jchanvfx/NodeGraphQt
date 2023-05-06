@@ -160,8 +160,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
     def __draw_path_cycled_vertical(self, start_port, pos1, pos2, path):
         """
-        Draws the pipe path around the node if the in port and out port
-        connect to each other for cycle connection.
+        Draw pipe vertically around node if connection is cyclic.
 
         Args:
             start_port (PortItem): port used to draw the starting point.
@@ -169,11 +168,26 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             pos2 (QPointF): end port position.
             path (QPainterPath): path to draw.
         """
+        ptype = start_port.port_type
+        in_pos = pos1 if ptype == PortTypeEnum.IN.value else pos2
+        out_pos = pos2 if ptype == PortTypeEnum.IN.value else pos1
+
+        n_rect = start_port.node.boundingRect()
+        padding = 40
+
+        top = in_pos.y() - padding
+        bottom = out_pos.y() + padding
+        path.moveTo(out_pos)
+        path.lineTo(out_pos.x(), bottom)
+        path.lineTo(out_pos.x() + n_rect.right(), bottom)
+        path.lineTo(out_pos.x() + n_rect.right(), top)
+        path.lineTo(in_pos.x(), top)
+        path.lineTo(in_pos)
+        self.setPath(path)
 
     def __draw_path_cycled_horizontal(self, start_port, pos1, pos2, path):
         """
-        Draws the pipe path around the node if the in port and out port
-        connect to each other for cycle connection.
+        Draw pipe horizontally around node if connection is cyclic.
 
         Args:
             start_port (PortItem): port used to draw the starting point.
