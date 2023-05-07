@@ -7,14 +7,14 @@
     </a>
 </p>
 
-``NodeGraphQt`` is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
+NodeGraphQt is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
 applications.
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
 ## Install
 
-NodeGraphQt is avaliable on The Python Package Index (PyPI) here https://pypi.org/project/NodeGraphQt so it can be installed with:
+NodeGraphQt is avaliable on The Python Package Index (PyPI) [here](https://pypi.org/project/NodeGraphQt) so it can be installed with:
 ```
 pip install NodeGraphQt
 ```
@@ -25,10 +25,8 @@ or you can download previous versions from the [releases](https://github.com/jch
 
 <a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">https://jchanvfx.github.io/NodeGraphQt</a>
 
-See the [basic_example.py](/examples/basic_example.py) python script from this repo.
-
-More examples can be found in the API documentation:<br>
-https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_overview.html#simple-example
+See the [basic_example.py](/examples/basic_example.py) script to get started or check out the API example overview 
+<a href="https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_overview.html#simple-example" target="_blank">here.</a>
 
 ## Vertical Layout
 
@@ -47,4 +45,5 @@ https://jchanvfx.github.io/NodeGraphQt/api/html/examples/ex_pipe.html#layout-sty
 https://jchanvfx.github.io/NodeGraphQt/api/html/custom_widgets.html
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/prop_bin.png" width="600" title="Properties Bin">
-<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/nodes_palette.png" width="600" title="Node Palette">
+
+<img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/nodes_palette.png" width="450" title="Node Palette">
