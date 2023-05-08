@@ -524,86 +524,30 @@ class LivePipeItem(PipeItem):
     def __init__(self):
         super(LivePipeItem, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
+
         self.shift_selected = False
 
-        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
-        pen = QtGui.QPen(color, PipeEnum.WIDTH.value + 0.35)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        self._color = PipeEnum.ACTIVE_COLOR.value
+        self._style = PipeEnum.DRAW_TYPE_DASHED.value
+
+        self.set_pipe_styling(color=self.color, width=2.5, style=self.style)
 
         self._idx_pointer = LivePipePolygonItem(self)
         self._idx_pointer.setPolygon(self._poly)
-        self._idx_pointer.setBrush(color.darker(300))
+        self._idx_pointer.setBrush(QtGui.QColor(*self.color).darker(300))
+        pen = self._idx_pointer.pen()
+        pen.setWidth(self.pen().width())
+        pen.setColor(self.pen().color())
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
         self._idx_pointer.setPen(pen)
 
-        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
-        color.setAlpha(50)
+        color = self.pen().color()
+        color.setAlpha(80)
         self._idx_text = QtWidgets.QGraphicsTextItem(self)
         self._idx_text.setDefaultTextColor(color)
         font = self._idx_text.font()
         font.setPointSize(7)
         self._idx_text.setFont(font)
-
-    def paint(self, painter, option, widget):
-        """
-        Draws the connection line.
-
-        Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
-        """
-        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
-        pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DASHED.value)
-        pen_width = PipeEnum.WIDTH.value + 0.35
-
-        pen = QtGui.QPen(color, pen_width)
-        pen.setStyle(pen_style)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-
-        painter.save()
-        painter.setPen(pen)
-        painter.setRenderHint(painter.Antialiasing, True)
-        painter.drawPath(self.path())
-
-        cen_x = self.path().pointAtPercent(0.5).x()
-        cen_y = self.path().pointAtPercent(0.5).y()
-        loc_pt = self.path().pointAtPercent(0.9)
-        tgt_pt = self.path().pointAtPercent(1.0)
-
-        dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
-        if dist < 0.05:
-            painter.restore()
-            return
-
-        # draw middle circle
-        size = 10.0
-        if dist < 50.0:
-            size *= (dist / 50.0)
-        rect = QtCore.QRectF(cen_x-(size/2), cen_y-(size/2), size, size)
-        painter.setBrush(color)
-        painter.setPen(QtGui.QPen(color.darker(130), pen_width))
-        painter.drawEllipse(rect)
-
-        # draw arrow
-        color.setAlpha(255)
-        painter.setBrush(color.darker(200))
-
-        pen_width = 0.6
-        if dist < 1.0:
-            pen_width *= 1.0 + dist
-        painter.setPen(QtGui.QPen(color, pen_width))
-
-        transform = QtGui.QTransform()
-        transform.translate(tgt_pt.x(), tgt_pt.y())
-
-        radians = math.atan2(tgt_pt.y() - loc_pt.y(),
-                             tgt_pt.x() - loc_pt.x())
-        degrees = math.degrees(radians) + 90
-        transform.rotate(degrees)
-
-        painter.restore()
 
     def draw_path(self, start_port, end_port=None, cursor_pos=None,
                   color_mode=None):
