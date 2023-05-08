@@ -674,21 +674,20 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.SHIFT_state = True
 
         # show cursor text
+        overlay_text = None
         self._cusor_text.setVisible(False)
         if not self.ALT_state:
             if self.SHIFT_state:
-                self._cusor_text.setPlainText(
-                    '\n    SHIFT:'
-                    '\n    Toggle/Extend Selection'
-                )
+                overlay_text = '\n    SHIFT:\n    Toggle/Extend Selection'
             elif self.CTRL_state:
-                self._cusor_text.setPlainText(
-                    '\n    CTRL:'
-                    '\n    Deselect Nodes'
-                )
-            if self.SHIFT_state or self.CTRL_state:
-                self._cusor_text.setPos(self.mapToScene(self._previous_pos))
-                self._cusor_text.setVisible(True)
+                overlay_text = '\n    CTRL:\n    Deselect Nodes'
+        elif self.ALT_state and self.SHIFT_state:
+            if self.pipe_slicing:
+                overlay_text = '\n    ALT + SHIFT:\n    Pipe Slicer Enabled'
+        if overlay_text:
+            self._cusor_text.setPlainText(overlay_text)
+            self._cusor_text.setPos(self.mapToScene(self._previous_pos))
+            self._cusor_text.setVisible(True)
 
         super(NodeViewer, self).keyPressEvent(event)
 
@@ -898,6 +897,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self._start_port is end_port:
                 return
 
+        # if connection to itself
+        same_node_connection = end_port.node == self._start_port.node
+        if not self.acyclic:
+            # allow a node cycle connection.
+            same_node_connection = False
+
         # restore connection check.
         restore_connection = any([
             # if the end port is locked.
@@ -905,7 +910,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             # if same port type.
             end_port.port_type == self._start_port.port_type,
             # if connection to itself.
-            end_port.node == self._start_port.node,
+            same_node_connection,
             # if end port is the start port.
             end_port == self._start_port,
             # if detached port is the end port.

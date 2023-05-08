@@ -874,9 +874,9 @@ class NodeGraph(QtCore.QObject):
         """
         return self._model.acyclic
 
-    def set_acyclic(self, mode=False):
+    def set_acyclic(self, mode=True):
         """
-        Enable the node graph to be a acyclic graph. (default: ``False``)
+        Enable the node graph to be a acyclic graph. (default: ``True``)
 
         See Also:
             :meth:`NodeGraph.acyclic`
@@ -927,7 +927,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             bool: True if pipe slicing is enabled.
         """
-        return self._model.pipe_collision
+        return self._model.pipe_slicing
 
     def set_pipe_slicing(self, mode=True):
         """
