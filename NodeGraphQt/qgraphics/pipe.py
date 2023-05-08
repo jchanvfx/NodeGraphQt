@@ -31,18 +31,26 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        self.setCacheMode(ITEM_CACHE_MODE)
+
         self._color = PipeEnum.COLOR.value
         self._style = PipeEnum.DRAW_TYPE_DEFAULT.value
         self._active = False
         self._highlight = False
         self._input_port = input_port
         self._output_port = output_port
+
         size = 6.0
-        self._arrow = QtGui.QPolygonF()
-        self._arrow.append(QtCore.QPointF(-size, size))
-        self._arrow.append(QtCore.QPointF(0.0, -size * 1.5))
-        self._arrow.append(QtCore.QPointF(size, size))
-        self.setCacheMode(ITEM_CACHE_MODE)
+        self._poly = QtGui.QPolygonF()
+        self._poly.append(QtCore.QPointF(-size, size))
+        self._poly.append(QtCore.QPointF(0.0, -size * 1.5))
+        self._poly.append(QtCore.QPointF(size, size))
+
+        self._dir_pointer = QtWidgets.QGraphicsPolygonItem(self)
+        self._dir_pointer.setPolygon(self._poly)
+        self._dir_pointer.setFlag(self.ItemIsSelectable, False)
+
+        self.reset()
 
     def __repr__(self):
         in_name = self._input_port.name if self._input_port else ''
@@ -63,6 +71,13 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if self.isSelected():
             self.highlight()
 
+    def itemChange(self, change, value):
+        if change == self.ItemSelectedChange and self.scene():
+            self.reset()
+            if value:
+                self.highlight()
+        return super(PipeItem, self).itemChange(change, value)
+
     def paint(self, painter, option, widget):
         """
         Draws the connection line between nodes.
@@ -73,92 +88,52 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
                 used to describe the parameters needed to draw.
             widget (QtWidgets.QWidget): not used.
         """
+        painter.save()
 
-        # only draw if a port or node is visible.
-        is_visible = all([
-            self._input_port.isVisible(),
-            self._output_port.isVisible(),
-            self._input_port.node.isVisible(),
-            self._output_port.node.isVisible()
-        ])
-        if not is_visible:
-            painter.save()
-            painter.setBrush(QtCore.Qt.NoBrush)
-            painter.setPen(QtCore.Qt.NoPen)
-            painter.restore()
-            return
-
-        color = QtGui.QColor(*self._color)
-        pen_style = PIPE_STYLES.get(self.style)
-        pen_width = PipeEnum.WIDTH.value
-        if self._active:
-            color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
-            if pen_style == QtCore.Qt.DashDotDotLine:
-                pen_width += 1
-            else:
-                pen_width += 0.35
-        elif self._highlight:
-            color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
-            pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
-
+        pen = self.pen()
         if self.disabled():
             if not self._active:
-                color = QtGui.QColor(*PipeEnum.DISABLED_COLOR.value)
-            pen_width += 0.2
-            pen_style = PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DOTTED.value)
+                pen.setColor(QtGui.QColor(*PipeEnum.DISABLED_COLOR.value))
+                pen.setStyle(PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DOTTED.value))
 
-        pen = QtGui.QPen(color, pen_width, pen_style)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-
-        painter.save()
         painter.setPen(pen)
+        painter.setBrush(self.brush())
         painter.setRenderHint(painter.Antialiasing, True)
         painter.drawPath(self.path())
-
-        # draw arrow
-        if self.input_port and self.output_port:
-            cen_x = self.path().pointAtPercent(0.5).x()
-            cen_y = self.path().pointAtPercent(0.5).y()
-            loc_pt = self.path().pointAtPercent(0.49)
-            tgt_pt = self.path().pointAtPercent(0.51)
-
-            dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
-            if dist < 0.5:
-                painter.restore()
-                return
-
-            color.setAlpha(255)
-            if self._highlight:
-                painter.setBrush(QtGui.QBrush(color.lighter(150)))
-            elif self._active or self.disabled():
-                painter.setBrush(QtGui.QBrush(color.darker(200)))
-            else:
-                painter.setBrush(QtGui.QBrush(color.darker(130)))
-
-            pen_width = 0.6
-            if dist < 1.0:
-                pen_width *= (1.0 + dist)
-
-            pen = QtGui.QPen(color, pen_width)
-            pen.setCapStyle(QtCore.Qt.RoundCap)
-            pen.setJoinStyle(QtCore.Qt.MiterJoin)
-            painter.setPen(pen)
-
-            transform = QtGui.QTransform()
-            transform.translate(cen_x, cen_y)
-            radians = math.atan2(tgt_pt.y() - loc_pt.y(),
-                                 tgt_pt.x() - loc_pt.x())
-            degrees = math.degrees(radians) - 90
-            transform.rotate(degrees)
-            if dist < 1.0:
-                transform.scale(dist, dist)
-            painter.drawPolygon(transform.map(self._arrow))
 
         # QPaintDevice: Cannot destroy paint device that is being painted.
         painter.restore()
 
-    def __draw_path_cycled_vertical(self, start_port, pos1, pos2, path):
+    @staticmethod
+    def _calc_distance(p1, p2):
+        x = math.pow((p2.x() - p1.x()), 2)
+        y = math.pow((p2.y() - p1.y()), 2)
+        return math.sqrt(x + y)
+
+    def _draw_direction_pointer(self):
+        """
+        updates the pipe direction pointer arrow.
+        """
+        if not (self.input_port and self.output_port):
+            self._dir_pointer.setVisible(False)
+            return
+
+        self._dir_pointer.setVisible(True)
+        loc_pt = self.path().pointAtPercent(0.49)
+        tgt_pt = self.path().pointAtPercent(0.51)
+        radians = math.atan2(tgt_pt.y() - loc_pt.y(),
+                             tgt_pt.x() - loc_pt.x())
+        degrees = math.degrees(radians) - 90
+        self._dir_pointer.setRotation(degrees)
+        self._dir_pointer.setPos(self.path().pointAtPercent(0.5))
+
+        cen_x = self.path().pointAtPercent(0.5).x()
+        cen_y = self.path().pointAtPercent(0.5).y()
+        dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
+        if dist < 1.0:
+            self._dir_pointer.setScale(dist)
+
+    def _draw_path_cycled_vertical(self, start_port, pos1, pos2, path):
         """
         Draw pipe vertically around node if connection is cyclic.
 
@@ -184,7 +159,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         path.lineTo(start_pos)
         self.setPath(path)
 
-    def __draw_path_cycled_horizontal(self, start_port, pos1, pos2, path):
+    def _draw_path_cycled_horizontal(self, start_port, pos1, pos2, path):
         """
         Draw pipe horizontally around node if connection is cyclic.
 
@@ -210,7 +185,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         path.lineTo(end_pos)
         self.setPath(path)
 
-    def __draw_path_vertical(self, start_port, pos1, pos2, path):
+    def _draw_path_vertical(self, start_port, pos1, pos2, path):
         """
         Draws the vertical path between ports.
 
@@ -254,7 +229,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             path.lineTo(pos2)
             self.setPath(path)
 
-    def __draw_path_horizontal(self, start_port, pos1, pos2, path):
+    def _draw_path_horizontal(self, start_port, pos1, pos2, path):
         """
         Draws the horizontal path between ports.
 
@@ -322,6 +297,20 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         else:
             return
 
+        # visibility check for connected pipe.
+        if self.input_port and self.output_port:
+            is_visible = all([
+                self._input_port.isVisible(),
+                self._output_port.isVisible(),
+                self._input_port.node.isVisible(),
+                self._output_port.node.isVisible()
+            ])
+            self.setVisible(is_visible)
+
+            # don't draw pipe if a port or node is not visible.
+            if not is_visible:
+                return
+
         line = QtCore.QLineF(pos1, pos2)
         path = QtGui.QPainterPath()
 
@@ -330,14 +319,16 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if end_port and not self.viewer().acyclic:
             if end_port.node == start_port.node:
                 if direction is LayoutDirectionEnum.VERTICAL.value:
-                    self.__draw_path_cycled_vertical(
+                    self._draw_path_cycled_vertical(
                         start_port, pos1, pos2, path
                     )
+                    self._draw_direction_pointer()
                     return
                 elif direction is LayoutDirectionEnum.HORIZONTAL.value:
-                    self.__draw_path_cycled_horizontal(
+                    self._draw_path_cycled_horizontal(
                         start_port, pos1, pos2, path
                     )
+                    self._draw_direction_pointer()
                     return
 
         path.moveTo(line.x1(), line.y1())
@@ -345,24 +336,32 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if self.viewer_pipe_layout() == PipeLayoutEnum.STRAIGHT.value:
             path.lineTo(pos2)
             self.setPath(path)
+            self._draw_direction_pointer()
             return
 
         if direction is LayoutDirectionEnum.VERTICAL.value:
-            self.__draw_path_vertical(start_port, pos1, pos2, path)
+            self._draw_path_vertical(start_port, pos1, pos2, path)
         elif direction is LayoutDirectionEnum.HORIZONTAL.value:
-            self.__draw_path_horizontal(start_port, pos1, pos2, path)
+            self._draw_path_horizontal(start_port, pos1, pos2, path)
+
+        self._draw_direction_pointer()
 
     def reset_path(self):
+        """
+        reset the pipe initial path position.
+        """
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
 
-    @staticmethod
-    def _calc_distance(p1, p2):
-        x = math.pow((p2.x() - p1.x()), 2)
-        y = math.pow((p2.y() - p1.y()), 2)
-        return math.sqrt(x + y)
-
     def port_from_pos(self, pos, reverse=False):
+        """
+        Args:
+            pos (QtCore.QPointF): current scene position.
+            reverse (bool): false to return the nearest port.
+
+        Returns:
+            PortItem: port item.
+        """
         inport_pos = self.input_port.scenePos()
         outport_pos = self.output_port.scenePos()
         input_dist = self._calc_distance(inport_pos, pos)
@@ -399,34 +398,59 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if viewer:
             return viewer.get_layout_direction()
 
+    def set_pipe_styling(self, color, width=0.5, style=0):
+        """
+        Args:
+            color (list or tuple): (r, g, b, a) values 0-255
+            width (float): pipe width.
+            style (int): pipe style.
+        """
+        pen = self.pen()
+        pen.setWidth(width)
+        pen.setColor(QtGui.QColor(*color))
+        pen.setStyle(PIPE_STYLES.get(style))
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
+        self.setPen(pen)
+        self.setBrush(QtCore.Qt.NoBrush)
+
+        pen = self._dir_pointer.pen()
+        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setWidth(width)
+        pen.setColor(QtGui.QColor(*color))
+        self._dir_pointer.setPen(pen)
+        self._dir_pointer.setBrush(QtGui.QColor(*color).darker(200))
+
     def activate(self):
         self._active = True
-        color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
-        pen = QtGui.QPen(
-            color, 2.5, PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
+        self.set_pipe_styling(
+            color=PipeEnum.ACTIVE_COLOR.value,
+            width=2.5,
+            style=PipeEnum.DRAW_TYPE_DEFAULT.value
         )
-        self.setPen(pen)
 
     def active(self):
         return self._active
 
     def highlight(self):
         self._highlight = True
-        color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
-        pen = QtGui.QPen(
-            color, 2, PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DEFAULT.value)
+        self.set_pipe_styling(
+            color=PipeEnum.HIGHLIGHT_COLOR.value,
+            width=2.5,
+            style=PipeEnum.DRAW_TYPE_DEFAULT.value
         )
-        self.setPen(pen)
 
     def highlighted(self):
         return self._highlight
 
     def reset(self):
+        """
+        reset the pipe state and styling.
+        """
         self._active = False
         self._highlight = False
-        color = QtGui.QColor(*self.color)
-        pen = QtGui.QPen(color, 2, PIPE_STYLES.get(self.style))
-        self.setPen(pen)
+        self.set_pipe_styling(color=self.color, width=1.2, style=self.style)
 
     def set_connections(self, port1, port2):
         ports = {
@@ -444,13 +468,6 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if self.output_port and self.output_port.node.disabled:
             return True
         return False
-
-    def itemChange(self, change, value):
-        if change == self.ItemSelectedChange and self.scene():
-            self.reset()
-            if value:
-                self.highlight()
-        return super(PipeItem, self).itemChange(change, value)
 
     @property
     def input_port(self):
@@ -515,7 +532,7 @@ class LivePipeItem(PipeItem):
         pen.setCapStyle(QtCore.Qt.RoundCap)
 
         self._idx_pointer = LivePipePolygonItem(self)
-        self._idx_pointer.setPolygon(self._arrow)
+        self._idx_pointer.setPolygon(self._poly)
         self._idx_pointer.setBrush(color.darker(300))
         self._idx_pointer.setPen(pen)
 
@@ -638,7 +655,7 @@ class LivePipeItem(PipeItem):
         self._idx_text.setPos(*text_pos)
         self._idx_text.setPlainText('{}'.format(start_port.name))
 
-        self._idx_pointer.setPolygon(transform.map(self._arrow))
+        self._idx_pointer.setPolygon(transform.map(self._poly))
 
         if color_mode == 'accept':
             color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
@@ -660,7 +677,7 @@ class LivePipePolygonItem(QtWidgets.QGraphicsPolygonItem):
 
     def __init__(self, parent):
         super(LivePipePolygonItem, self).__init__(parent)
-        self.setFlag(self.ItemIsSelectable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
 
     def paint(self, painter, option, widget):
         """
