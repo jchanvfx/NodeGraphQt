@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+from qtpy import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import ViewerEnum
 
@@ -122,9 +122,9 @@ class NodeScene(QtWidgets.QGraphicsScene):
             self.viewer().sceneMousePressEvent(event)
         super(NodeScene, self).mousePressEvent(event)
         keep_selection = any([
-            event.button() == QtCore.Qt.MiddleButton,
-            event.button() == QtCore.Qt.RightButton,
-            event.modifiers() == QtCore.Qt.AltModifier
+            event.button() == QtCore.Qt.MouseButton.MiddleButton,
+            event.button() == QtCore.Qt.MouseButton.RightButton,
+            event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
         ])
         if keep_selection:
             for node in selected_nodes:
