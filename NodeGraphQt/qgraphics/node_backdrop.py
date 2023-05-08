@@ -258,8 +258,16 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def calc_backdrop_size(self, nodes=None):
         nodes = nodes or self.get_nodes(True)
+        if nodes:
+            nodes_rect = self._combined_rect(nodes)
+        else:
+            center = self.mapToScene(self.boundingRect().center())
+            nodes_rect = QtCore.QRectF(
+                center.x(), center.y(),
+                self._min_size[0], self._min_size[1]
+            )
+
         padding = 40
-        nodes_rect = self._combined_rect(nodes)
         return {
             'pos': [
                 nodes_rect.x() - padding, nodes_rect.y() - padding
