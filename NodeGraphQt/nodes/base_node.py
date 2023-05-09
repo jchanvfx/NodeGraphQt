@@ -86,11 +86,16 @@ class BaseNode(NodeObject):
             if self.graph:
                 undo_cmd = NodeVisibleCmd(self, value)
                 if push_undo:
-                    undo_stack = self.graph.undo_stack()
-                    undo_stack.push(undo_cmd)
+                    self.graph.undo_stack().push(undo_cmd)
                 else:
                     undo_cmd.redo()
                 return
+        elif name == 'disabled':
+            # redraw the connected pipes in the scene.
+            ports = self.view.inputs + self.view.outputs
+            for port in ports:
+                for pipe in port.connected_pipes:
+                    pipe.update()
         super(BaseNode, self).set_property(name, value, push_undo)
 
     def set_layout_direction(self, value=0):

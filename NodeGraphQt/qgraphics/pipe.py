@@ -73,9 +73,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
     def itemChange(self, change, value):
         if change == self.ItemSelectedChange and self.scene():
-            self.reset()
             if value:
                 self.highlight()
+            else:
+                self.reset()
         return super(PipeItem, self).itemChange(change, value)
 
     def paint(self, painter, option, widget):
@@ -95,6 +96,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             if not self._active:
                 pen.setColor(QtGui.QColor(*PipeEnum.DISABLED_COLOR.value))
                 pen.setStyle(PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DOTTED.value))
+                pen.setWidth(pen.width() * 1.25)
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
@@ -118,6 +120,14 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             self._dir_pointer.setVisible(False)
             return
 
+        if self.disabled():
+            if not (self._active or self._highlight):
+                color = QtGui.QColor(*PipeEnum.DISABLED_COLOR.value)
+                pen = self._dir_pointer.pen()
+                pen.setColor(color)
+                self._dir_pointer.setPen(pen)
+                self._dir_pointer.setBrush(color.darker(200))
+
         self._dir_pointer.setVisible(True)
         loc_pt = self.path().pointAtPercent(0.49)
         tgt_pt = self.path().pointAtPercent(0.51)
@@ -130,6 +140,11 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         cen_x = self.path().pointAtPercent(0.5).x()
         cen_y = self.path().pointAtPercent(0.5).y()
         dist = math.hypot(tgt_pt.x() - cen_x, tgt_pt.y() - cen_y)
+
+        self._dir_pointer.setVisible(True)
+        if dist < 0.3:
+            self._dir_pointer.setVisible(False)
+            return
         if dist < 1.0:
             self._dir_pointer.setScale(dist)
 
@@ -285,6 +300,8 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         """
         if not start_port:
             return
+
+        # get start / end positions.
         pos1 = start_port.scenePos()
         pos1.setX(pos1.x() + (start_port.boundingRect().width() / 2))
         pos1.setY(pos1.y() + (start_port.boundingRect().height() / 2))
@@ -352,6 +369,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         """
         path = QtGui.QPainterPath(QtCore.QPointF(0.0, 0.0))
         self.setPath(path)
+        self._draw_direction_pointer()
 
     def port_from_pos(self, pos, reverse=False):
         """
@@ -451,8 +469,14 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self._active = False
         self._highlight = False
         self.set_pipe_styling(color=self.color, width=1.2, style=self.style)
+        self._draw_direction_pointer()
 
     def set_connections(self, port1, port2):
+        """
+        Args:
+            port1 (PortItem): port item object.
+            port2 (PortItem): port item object.
+        """
         ports = {
             port1.port_type: port1,
             port2.port_type: port2
@@ -463,6 +487,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         ports[PortTypeEnum.OUT.value].add_pipe(self)
 
     def disabled(self):
+        """
+        Returns:
+            bool: true if pipe is a disabled connection.
+        """
         if self.input_port and self.input_port.node.disabled:
             return True
         if self.output_port and self.output_port.node.disabled:
@@ -525,12 +553,11 @@ class LivePipeItem(PipeItem):
         super(LivePipeItem, self).__init__()
         self.setZValue(Z_VAL_NODE_WIDGET + 1)
 
+        self.color = PipeEnum.ACTIVE_COLOR.value
+        self.style = PipeEnum.DRAW_TYPE_DASHED.value
+        self.set_pipe_styling(color=self.color, width=2.8, style=self.style)
+
         self.shift_selected = False
-
-        self._color = PipeEnum.ACTIVE_COLOR.value
-        self._style = PipeEnum.DRAW_TYPE_DASHED.value
-
-        self.set_pipe_styling(color=self.color, width=2.5, style=self.style)
 
         self._idx_pointer = LivePipePolygonItem(self)
         self._idx_pointer.setPolygon(self._poly)
@@ -548,6 +575,13 @@ class LivePipeItem(PipeItem):
         font = self._idx_text.font()
         font.setPointSize(7)
         self._idx_text.setFont(font)
+
+    def hoverEnterEvent(self, event):
+        """
+        re-implemented back to the base default behaviour or the pipe will
+        lose it styling when another pipe is selected.
+        """
+        QtWidgets.QGraphicsPathItem.hoverEnterEvent(self, event)
 
     def draw_path(self, start_port, end_port=None, cursor_pos=None,
                   color_mode=None):

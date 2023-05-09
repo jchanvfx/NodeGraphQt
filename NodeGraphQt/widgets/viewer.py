@@ -11,7 +11,7 @@ from NodeGraphQt.constants import (
     PortTypeEnum,
     PipeLayoutEnum,
     ViewerEnum,
-    Z_VAL_NODE_WIDGET
+    Z_VAL_PIPE,
 )
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
@@ -99,8 +99,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         )))
         text_color.setAlpha(50)
         self._cusor_text = QtWidgets.QGraphicsTextItem()
+        self._cusor_text.setFlag(self._cusor_text.ItemIsSelectable, False)
         self._cusor_text.setDefaultTextColor(text_color)
-        self._cusor_text.setZValue(Z_VAL_NODE_WIDGET + 1)
+        self._cusor_text.setZValue(Z_VAL_PIPE - 1)
         font = self._cusor_text.font()
         font.setPointSize(7)
         self._cusor_text.setFont(font)
@@ -468,7 +469,19 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._rubber_band.setGeometry(rect)
             self._rubber_band.isActive = True
 
-        if self.LMB_state and (self.SHIFT_state or self.CTRL_state):
+        # stop here so we don't select a node.
+        if self.CTRL_state:
+            return
+
+        # allow new live pipe with the shift modifier on port that allow
+        # for multi connection.
+        if self.SHIFT_state and pipes:
+            pipes[0].reset()
+            port = pipes[0].port_from_pos(map_pos, reverse=True)
+            if not port.locked and port.multi_connection:
+                self._cusor_text.setPlainText('')
+                self._cusor_text.setVisible(False)
+                self.start_live_connection(port)
             return
 
         if not self._LIVE_PIPE.isVisible():
@@ -567,7 +580,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         if not self.ALT_state:
             if self.SHIFT_state or self.CTRL_state:
-                self._cusor_text.setPos(self.mapToScene(event.pos()))
+                if not self._LIVE_PIPE.isVisible():
+                    self._cusor_text.setPos(self.mapToScene(event.pos()))
 
         if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
@@ -672,6 +686,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if event.modifiers() == (QtCore.Qt.AltModifier | QtCore.Qt.ShiftModifier):
             self.ALT_state = True
             self.SHIFT_state = True
+
+        if self._LIVE_PIPE.isVisible():
+            super(NodeViewer, self).keyPressEvent(event)
+            return
 
         # show cursor text
         overlay_text = None
