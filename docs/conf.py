@@ -137,7 +137,7 @@ html_context = {
     'display_github': True,
     'github_user': 'jchanvfx',
     'github_repo': 'NodeGraphQt',
-    'github_version': "master",
+    'github_version': "main",
     'conf_py_path': '/docs/',
     'source_suffix': '.rst',
 }

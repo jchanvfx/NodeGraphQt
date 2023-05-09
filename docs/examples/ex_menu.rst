@@ -19,8 +19,8 @@ It can also be populated it with a config file in ``JSON`` format by using
     :width: 300px
 
 | Here's a couple links to the example config file and functions with a few essential menu commands.
-| `example JSON config file <https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkeys.json>`_
-| `example python hotkey functions <https://github.com/jchanvfx/NodeGraphQt/blob/master/examples/hotkeys/hotkey_functions.py>`_
+| `example JSON config file <https://github.com/jchanvfx/NodeGraphQt/blob/main/examples/hotkeys/hotkeys.json>`_
+| `example python hotkey functions <https://github.com/jchanvfx/NodeGraphQt/blob/main/examples/hotkeys/hotkey_functions.py>`_
 
 
 Adding to the Graph Menu
