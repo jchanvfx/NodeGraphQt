@@ -470,18 +470,23 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._rubber_band.isActive = True
 
         # stop here so we don't select a node.
+        # (ctrl modifier can be used for something else in future.)
         if self.CTRL_state:
             return
 
         # allow new live pipe with the shift modifier on port that allow
         # for multi connection.
-        if self.SHIFT_state and pipes:
-            pipes[0].reset()
-            port = pipes[0].port_from_pos(map_pos, reverse=True)
-            if not port.locked and port.multi_connection:
-                self._cusor_text.setPlainText('')
-                self._cusor_text.setVisible(False)
-                self.start_live_connection(port)
+        if self.SHIFT_state:
+            if pipes:
+                pipes[0].reset()
+                port = pipes[0].port_from_pos(map_pos, reverse=True)
+                if not port.locked and port.multi_connection:
+                    self._cusor_text.setPlainText('')
+                    self._cusor_text.setVisible(False)
+                    self.start_live_connection(port)
+
+            # return here as the default behaviour unselects nodes with
+            # the shift modifier.
             return
 
         if not self._LIVE_PIPE.isVisible():
