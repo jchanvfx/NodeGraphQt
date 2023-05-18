@@ -221,6 +221,35 @@ class Port(object):
             raise PortError(
                 'Can\'t connect port because "{}" is locked.'.format(name))
 
+        # validate accept connection.
+        node_type = self.node().type_
+        accepted_types = port.accepted_port_types().get(node_type)
+        if accepted_types:
+            accepted_pnames = accepted_types.get(self.type_()) or set([])
+            if self.name() not in accepted_pnames:
+                return
+        node_type = port.node().type_
+        accepted_types = self.accepted_port_types().get(node_type)
+        if accepted_types:
+            accepted_pnames = accepted_types.get(port.type_()) or set([])
+            if port.name() not in accepted_pnames:
+                return
+
+        # validate reject connection.
+        node_type = self.node().type_
+        rejected_types = port.rejected_port_types().get(node_type)
+        if rejected_types:
+            rejected_pnames = rejected_types.get(self.type_()) or set([])
+            if self.name() in rejected_pnames:
+                return
+        node_type = port.node().type_
+        rejected_types = self.rejected_port_types().get(node_type)
+        if rejected_types:
+            rejected_pnames = rejected_types.get(port.type_()) or set([])
+            if port.name() in rejected_pnames:
+                return
+
+        # make the connection from here.
         graph = self.node().graph
         viewer = graph.viewer()
 
@@ -348,6 +377,88 @@ class Port(object):
         else:
             for cp in self.connected_ports():
                 self.disconnect_from(cp, push_undo=False)
+
+    def add_accept_port_type(self, port_name, port_type, port_node_type):
+        """
+        Add a constrain to "accept" a pipe connection.
+
+        Once a constrain has been added only ports of that type specified will
+        be allowed a pipe connection.
+
+        See Also:
+            :meth:`NodeGraphQt.Port.add_reject_ports_type`,
+            :meth:`NodeGraphQt.BaseNode.add_accept_port_type`
+
+        Args:
+            port_name (str): name of the port.
+            port_type (str): port type.
+            port_node_type (str): port node type.
+        """
+        # storing the connection constrain at the graph level instead of the
+        # port level so we don't serialize the same data for every port
+        # instance.
+        self.node().add_accept_port_type(
+            port=self,
+            port_type_data={
+                'port_name': port_name,
+                'port_type': port_type,
+                'node_type': port_node_type,
+            }
+        )
+
+    def accepted_port_types(self):
+        """
+        Returns a dictionary of connection constrains of the port types
+        that allow for a pipe connection to this node.
+
+        See Also:
+            :meth:`NodeGraphQt.BaseNode.accepted_port_types`
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        return self.node().accepted_port_types(self)
+
+    def add_reject_port_type(self, port_name, port_type, port_node_type):
+        """
+        Add a constrain to "reject" a pipe connection.
+
+        Once a constrain has been added only ports of that type specified will
+        be rejected a pipe connection.
+
+        See Also:
+            :meth:`NodeGraphQt.Port.add_accept_ports_type`,
+            :meth:`NodeGraphQt.BaseNode.add_reject_port_type`
+
+        Args:
+            port_name (str): name of the port.
+            port_type (str): port type.
+            port_node_type (str): port node type.
+        """
+        # storing the connection constrain at the graph level instead of the
+        # port level so we don't serialize the same data for every port
+        # instance.
+        self.node().add_reject_port_type(
+            port=self,
+            port_type_data={
+                'port_name': port_name,
+                'port_type': port_type,
+                'node_type': port_node_type,
+            }
+        )
+
+    def rejected_port_types(self):
+        """
+        Returns a dictionary of connection constrains of the port types
+        that are NOT allowed for a pipe connection to this node.
+
+        See Also:
+            :meth:`NodeGraphQt.BaseNode.rejected_port_types`
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        return self.node().rejected_port_types(self)
 
     @property
     def color(self):

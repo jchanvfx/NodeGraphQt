@@ -88,6 +88,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._prev_selection_nodes = []
         self._prev_selection_pipes = []
         self._node_positions = {}
+
         self._rubber_band = QtWidgets.QRubberBand(
             QtWidgets.QRubberBand.Rectangle, self
         )
@@ -149,6 +150,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.CTRL_state = False
         self.SHIFT_state = False
         self.COLLIDING_state = False
+
+        # connection constrains.
+        # TODO: maybe this should be a reference to the graph model instead?
+        self.accept_connection_types = None
+        self.reject_connection_types = None
 
     def __repr__(self):
         return '<{}() object at {}>'.format(
@@ -752,21 +758,33 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = event.scenePos()
         color_mode = None
         for item in self.scene().items(pos):
-            if isinstance(item, PortItem):
-                x = item.boundingRect().width() / 2
-                y = item.boundingRect().height() / 2
-                pos = item.scenePos()
-                pos.setX(pos.x() + x)
-                pos.setY(pos.y() + y)
-                if item == self._start_port:
-                    break
-                color_mode = 'accept'
-                if self.acyclic:
-                    if item.node == self._start_port.node:
-                        color_mode = 'reject'
-                    elif item.port_type == self._start_port.port_type:
-                        color_mode = 'reject'
+            if not isinstance(item, PortItem):
+                continue
+
+            x = item.boundingRect().width() / 2
+            y = item.boundingRect().height() / 2
+            pos = item.scenePos()
+            pos.setX(pos.x() + x)
+            pos.setY(pos.y() + y)
+            if item == self._start_port:
                 break
+            color_mode = 'accept'
+
+            accept = self._validate_accept_connection(self._start_port, item)
+            if not accept:
+                color_mode = 'reject'
+                break
+            reject = self._validate_reject_connection(self._start_port, item)
+            if reject:
+                color_mode = 'reject'
+                break
+
+            if self.acyclic:
+                if item.node == self._start_port.node:
+                    color_mode = 'reject'
+                elif item.port_type == self._start_port.port_type:
+                    color_mode = 'reject'
+            break
 
         self._LIVE_PIPE.draw_path(
             self._start_port, cursor_pos=pos, color_mode=color_mode
@@ -873,6 +891,78 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- port connections ---
 
+    def _validate_accept_connection(self, from_port, to_port):
+        """
+        Check if a pipe connection is allowed if there are a constrains set
+        on the ports.
+
+        Args:
+            from_port (PortItem):
+            to_port (PortItem):
+
+        Returns:
+            bool: true to allow connection.
+        """
+        to_ptype = to_port.port_type
+        from_ptype = from_port.port_type
+
+        to_data = self.accept_connection_types.get(to_port.node.type_) or {}
+        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
+        accept_data = constraints.get(from_port.node.type_, {})
+
+        accepted_pnames = accept_data.get(from_ptype)
+        if accepted_pnames:
+            if from_port.name in accepted_pnames:
+                return True
+            return False
+
+        from_data = self.accept_connection_types.get(from_port.node.type_) or {}
+        constraints = from_data.get(from_ptype, {}).get(from_port.name, {})
+        accept_data = constraints.get(to_port.node.type_, {})
+
+        accepted_pnames = accept_data.get(to_ptype)
+        if accepted_pnames:
+            if from_port.name in accepted_pnames:
+                return True
+            return False
+        return True
+
+    def _validate_reject_connection(self, from_port, to_port):
+        """
+        Check if a pipe connection is NOT allowed if there are a constrains set
+        on the ports.
+
+        Args:
+            from_port (PortItem):
+            to_port (PortItem):
+
+        Returns:
+            bool: true to reject connection.
+        """
+        to_ptype = to_port.port_type
+        from_ptype = from_port.port_type
+
+        to_data = self.reject_connection_types.get(to_port.node.type_) or {}
+        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
+        reject_data = constraints.get(from_port.node.type_, {})
+
+        rejected_pnames = reject_data.get(from_ptype)
+        if rejected_pnames:
+            if from_port.name in rejected_pnames:
+                return True
+            return False
+
+        from_data = self.reject_connection_types.get(from_port.node.type_) or {}
+        constraints = from_data.get(from_ptype, {}).get(from_port.name, {})
+        reject_data = constraints.get(to_port.node.type_, {})
+
+        rejected_pnames = reject_data.get(to_ptype)
+        if rejected_pnames:
+            if to_port.name in rejected_pnames:
+                return True
+            return False
+        return False
+
     def apply_live_connection(self, event):
         """
         triggered mouse press/release event for the scene.
@@ -926,6 +1016,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             # allow a node cycle connection.
             same_node_connection = False
 
+        # constrain check
+        accept_connection = self._validate_accept_connection(
+            self._start_port, end_port
+        )
+        reject_connection = self._validate_reject_connection(
+            self._start_port, end_port
+        )
+
         # restore connection check.
         restore_connection = any([
             # if the end port is locked.
@@ -937,7 +1035,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             # if end port is the start port.
             end_port == self._start_port,
             # if detached port is the end port.
-            self._detached_port == end_port
+            self._detached_port == end_port,
+            # if a port has a accept port type constrain.
+            not accept_connection,
+            # if a port has a reject port type constrain.
+            reject_connection
         ])
         if restore_connection:
             if self._detached_port:

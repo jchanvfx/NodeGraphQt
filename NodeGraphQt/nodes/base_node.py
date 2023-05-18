@@ -657,6 +657,112 @@ class BaseNode(NodeObject):
             nodes[p] = [cp.node() for cp in p.connected_ports()]
         return nodes
 
+    def add_accept_port_type(self, port, port_type_data):
+        """
+        Add a accept constrain to a specified node port.
+
+        Once a constrain has been added only ports of that type specified will
+        be allowed a pipe connection.
+
+        Args:
+            port (NodeGraphQt.Port): port to assign constrain to.
+            port_type_data (dict): port type data to accept a connection
+                eg.
+                .. code-block:: python
+                    {
+                        'port_name': 'test 1'
+                        'port_type': PortTypeEnum.IN.value
+                        'node_type': 'io.github.jchanvfx.ExampleNode'
+                    }
+        """
+        node_ports = self._inputs + self._outputs
+        if port not in node_ports:
+            raise PortError('Node does not contain port: "{}"'.format(port))
+
+        self._model.add_port_accept_connection_type(
+            port_name=port.name(),
+            port_type=port.type_(),
+            node_type=self.type_,
+            accept_pname=port_type_data['port_name'],
+            accept_ptype=port_type_data['port_type'],
+            accept_ntype=port_type_data['node_type']
+        )
+
+    def accepted_port_types(self, port):
+        """
+        Returns a dictionary of connection constrains of the port types
+        that allow for a pipe connection to this node.
+
+        Args:
+            port (NodeGraphQt.Port): port object.
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        ports = self._inputs + self._outputs
+        if port not in ports:
+            raise PortError('Node does not contain port "{}"'.format(port))
+
+        accepted_types = self.graph.model.port_accept_connection_types(
+            node_type=self.type_,
+            port_type=port.type_(),
+            port_name=port.name()
+        )
+        return accepted_types
+
+    def add_reject_port_type(self, port, port_type_data):
+        """
+        Add a reject constrain to a specified node port.
+
+        Once a constrain has been added only ports of that type specified will
+        NOT be allowed a pipe connection.
+
+        Args:
+            port (NodeGraphQt.Port): port to assign constrain to.
+            port_type_data (dict): port type data to reject a connection
+                eg.
+                .. code-block:: python
+                    {
+                        'port_name': 'test 1'
+                        'port_type': PortTypeEnum.IN.value
+                        'node_type': 'io.github.jchanvfx.ExampleNode'
+                    }
+        """
+        node_ports = self._inputs + self._outputs
+        if port not in node_ports:
+            raise PortError('Node does not contain port: "{}"'.format(port))
+
+        self._model.add_port_reject_connection_type(
+            port_name=port.name(),
+            port_type=port.type_(),
+            node_type=self.type_,
+            reject_pname=port_type_data['port_name'],
+            reject_ptype=port_type_data['port_type'],
+            reject_ntype=port_type_data['node_type']
+        )
+
+    def rejected_port_types(self, port):
+        """
+        Returns a dictionary of connection constrains of the port types
+        that are NOT allowed for a pipe connection to this node.
+
+        Args:
+            port (NodeGraphQt.Port): port object.
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        ports = self._inputs + self._outputs
+        if port not in ports:
+            raise PortError('Node does not contain port "{}"'.format(port))
+
+        rejected_types = self.graph.model.port_reject_connection_types(
+            node_type=self.type_,
+            port_type=port.type_(),
+            port_name=port.name()
+        )
+        return rejected_types
+
     def on_input_connected(self, in_port, out_port):
         """
         Callback triggered when a new pipe connection is made.
