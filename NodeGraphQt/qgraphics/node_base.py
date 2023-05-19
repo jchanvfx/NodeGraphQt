@@ -761,15 +761,23 @@ class NodeItem(AbstractNodeItem):
         for w in self._widgets.values():
             w.widget().setVisible(visible)
 
+        # port text is not visible in vertical layout.
+        if self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+            port_text_visible = False
+        else:
+            port_text_visible = visible
+
         # input port text visibility.
         for port, text in self._input_items.items():
             if port.display_name:
-                text.setVisible(visible)
+                text.setVisible(port_text_visible)
 
         # output port text visibility.
         for port, text in self._output_items.items():
             if port.display_name:
-                text.setVisible(visible)
+                text.setVisible(port_text_visible)
+
+
 
         self._text_item.setVisible(visible)
         self._icon_item.setVisible(visible)
