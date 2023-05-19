@@ -583,8 +583,7 @@ class LivePipeItem(PipeItem):
         """
         QtWidgets.QGraphicsPathItem.hoverEnterEvent(self, event)
 
-    def draw_path(self, start_port, end_port=None, cursor_pos=None,
-                  color_mode=None):
+    def draw_path(self, start_port, end_port=None, cursor_pos=None, color=None):
         """
         re-implemented to also update the index pointer arrow position.
 
@@ -593,13 +592,12 @@ class LivePipeItem(PipeItem):
             end_port (PortItem): port used to draw the end point.
             cursor_pos (QtCore.QPointF): cursor position if specified this
                 will be the draw end point.
-            color_mode (str): arrow index pointer color mode
-                              ('accept', 'reject' or None).
+            color (list[int]): override arrow index pointer color. (r, g, b)
         """
         super(LivePipeItem, self).draw_path(start_port, end_port, cursor_pos)
-        self.draw_index_pointer(start_port, cursor_pos, color_mode)
+        self.draw_index_pointer(start_port, cursor_pos, color)
 
-    def draw_index_pointer(self, start_port, cursor_pos, color_mode=None):
+    def draw_index_pointer(self, start_port, cursor_pos, color=None):
         """
         Update the index pointer arrow position and direction when the
         live pipe path is redrawn.
@@ -607,8 +605,7 @@ class LivePipeItem(PipeItem):
         Args:
             start_port (PortItem): start port item.
             cursor_pos (QtCore.QPoint): cursor scene position.
-            color_mode (str): arrow index pointer color mode
-                              ('accept', 'reject' or None).
+            color (list[int]): override arrow index pointer color. (r, g, b).
         """
         text_rect = self._idx_text.boundingRect()
 
@@ -635,16 +632,13 @@ class LivePipeItem(PipeItem):
 
         self._idx_pointer.setPolygon(transform.map(self._poly))
 
-        if color_mode == 'accept':
-            color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
-        elif color_mode == 'reject':
-            color = QtGui.QColor(*PipeEnum.DISABLED_COLOR.value)
-        else:
-            color = QtGui.QColor(*PipeEnum.ACTIVE_COLOR.value)
+        pen_color = QtGui.QColor(*PipeEnum.HIGHLIGHT_COLOR.value)
+        if isinstance(color, (list, tuple)):
+            pen_color = QtGui.QColor(*color)
 
         pen = self._idx_pointer.pen()
-        pen.setColor(color)
-        self._idx_pointer.setBrush(color.darker(300))
+        pen.setColor(pen_color)
+        self._idx_pointer.setBrush(pen_color.darker(300))
         self._idx_pointer.setPen(pen)
 
 

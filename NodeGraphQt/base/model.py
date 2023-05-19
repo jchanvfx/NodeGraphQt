@@ -107,6 +107,11 @@ class NodeModel(object):
             'outputs': NodePropWidgetEnum.HIDDEN.value,
         }
 
+        # temp store connection constrains.
+        # (deleted when node is added to the graph)
+        self._TEMP_accept_connection_types = {}
+        self._TEMP_reject_connection_types = {}
+
     def __repr__(self):
         return '<{}(\'{}\') object at {}>'.format(
             self.__class__.__name__, self.name, self.id)
@@ -222,6 +227,85 @@ class NodeModel(object):
                 return attrs[name].get('tab')
             return
         return model.get_node_common_properties(self.type_)[name]['tab']
+
+    def add_port_accept_connection_type(
+            self,
+            port_name, port_type, node_type,
+            accept_pname, accept_ptype, accept_ntype
+    ):
+        """
+        Convenience function for adding to the "accept_connection_types" dict.
+        If the node graph model is unavailable yet then we store it to a
+        temp var that gets deleted.
+
+        Args:
+            port_name (str): current port name.
+            port_type (str): current port type.
+            node_type (str): current port node type.
+            accept_pname (str):port name to accept.
+            accept_ptype (str): port type accept.
+            accept_ntype (str):port node type to accept.
+        """
+        model = self._graph_model
+        if model:
+            model.add_port_accept_connection_type(
+                port_name, port_type, node_type,
+                accept_pname, accept_ptype, accept_ntype
+            )
+            return
+
+        connection_data = self._TEMP_accept_connection_types
+        keys = [node_type, port_type, port_name, accept_ntype]
+        for key in keys:
+            if key not in connection_data.keys():
+                connection_data[key] = {}
+            connection_data = connection_data[key]
+
+        if accept_ptype not in connection_data:
+            connection_data[accept_ptype] = set([accept_pname])
+        else:
+            connection_data[accept_ptype].add(accept_pname)
+
+    def add_port_reject_connection_type(
+        self,
+        port_name, port_type, node_type,
+        reject_pname, reject_ptype, reject_ntype
+    ):
+        """
+        Convenience function for adding to the "reject_connection_types" dict.
+        If the node graph model is unavailable yet then we store it to a
+        temp var that gets deleted.
+
+        Args:
+            port_name (str): current port name.
+            port_type (str): current port type.
+            node_type (str): current port node type.
+            reject_pname:
+            reject_ptype:
+            reject_ntype:
+
+        Returns:
+
+        """
+        model = self._graph_model
+        if model:
+            model.add_port_reject_connection_type(
+                port_name, port_type, node_type,
+                reject_pname, reject_ptype, reject_ntype
+            )
+            return
+
+        connection_data = self._TEMP_reject_connection_types
+        keys = [node_type, port_type, port_name, reject_ntype]
+        for key in keys:
+            if key not in connection_data.keys():
+                connection_data[key] = {}
+            connection_data = connection_data[key]
+
+        if reject_ptype not in connection_data:
+            connection_data[reject_ptype] = set([reject_pname])
+        else:
+            connection_data[reject_ptype].add(reject_pname)
 
     @property
     def properties(self):
@@ -352,6 +436,9 @@ class NodeGraphModel(object):
     def __init__(self):
         self.__common_node_props = {}
 
+        self.accept_connection_types = {}
+        self.reject_connection_types = {}
+
         self.nodes = {}
         self.session = ''
         self.acyclic = True
@@ -420,6 +507,96 @@ class NodeGraphModel(object):
             dict: node common properties.
         """
         return self.__common_node_props.get(node_type)
+
+    def add_port_accept_connection_type(
+            self,
+            port_name, port_type, node_type,
+            accept_pname, accept_ptype, accept_ntype
+    ):
+        """
+        Convenience function for adding to the "accept_connection_types" dict.
+
+        Args:
+            port_name (str): current port name.
+            port_type (str): current port type.
+            node_type (str): current port node type.
+            accept_pname (str):port name to accept.
+            accept_ptype (str): port type accept.
+            accept_ntype (str):port node type to accept.
+        """
+        connection_data = self.accept_connection_types
+        keys = [node_type, port_type, port_name, accept_ntype]
+        for key in keys:
+            if key not in connection_data.keys():
+                connection_data[key] = {}
+            connection_data = connection_data[key]
+
+        if accept_ptype not in connection_data:
+            connection_data[accept_ptype] = set([accept_pname])
+        else:
+            connection_data[accept_ptype].add(accept_pname)
+
+    def port_accept_connection_types(self, node_type, port_type, port_name):
+        """
+        Convenience function for getting the accepted port types from the
+        "accept_connection_types" dict.
+
+        Args:
+            node_type (str):
+            port_type (str):
+            port_name (str):
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        data = self.accept_connection_types.get(node_type) or {}
+        accepted_types = data.get(port_type) or {}
+        return accepted_types.get(port_name) or {}
+
+    def add_port_reject_connection_type(
+            self,
+            port_name, port_type, node_type,
+            reject_pname, reject_ptype, reject_ntype
+    ):
+        """
+        Convenience function for adding to the "reject_connection_types" dict.
+
+        Args:
+            port_name (str): current port name.
+            port_type (str): current port type.
+            node_type (str): current port node type.
+            reject_pname (str): port name to reject.
+            reject_ptype (str): port type to reject.
+            reject_ntype (str): port node type to reject.
+        """
+        connection_data = self.reject_connection_types
+        keys = [node_type, port_type, port_name, reject_ntype]
+        for key in keys:
+            if key not in connection_data.keys():
+                connection_data[key] = {}
+            connection_data = connection_data[key]
+
+        if reject_ptype not in connection_data:
+            connection_data[reject_ptype] = set([reject_pname])
+        else:
+            connection_data[reject_ptype].add(reject_pname)
+
+    def port_reject_connection_types(self, node_type, port_type, port_name):
+        """
+        Convenience function for getting the accepted port types from the
+        "reject_connection_types" dict.
+
+        Args:
+            node_type (str):
+            port_type (str):
+            port_name (str):
+
+        Returns:
+            dict: {<node_type>: {<port_type>: [<port_name>]}}
+        """
+        data = self.reject_connection_types.get(node_type) or {}
+        rejected_types = data.get(port_type) or {}
+        return rejected_types.get(port_name) or {}
 
 
 if __name__ == '__main__':
