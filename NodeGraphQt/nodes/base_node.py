@@ -668,6 +668,7 @@ class BaseNode(NodeObject):
 
         .. highlight:: python
         .. code-block:: python
+
             {
                 'port_name': 'foo'
                 'port_type': PortTypeEnum.IN.value
@@ -727,6 +728,7 @@ class BaseNode(NodeObject):
 
         .. highlight:: python
         .. code-block:: python
+
             {
                 'port_name': 'foo'
                 'port_type': PortTypeEnum.IN.value

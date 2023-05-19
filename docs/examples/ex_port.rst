@@ -148,10 +148,14 @@ Connection Constrains
 
 From version ``v0.6.0`` port object can now have pipe connection constraints the functions implemented are:
 
-:meth:`NodeGraphQt.Port.add_accept_ports_type` and :meth:`NodeGraphQt.Port.add_reject_ports_type`
+ - :meth:`NodeGraphQt.Port.add_accept_port_type`
+ - :meth:`NodeGraphQt.Port.add_reject_port_type`
 
 this can also be set on the ``BaseNode`` level as well with:
-:meth:`NodeGraphQt.BaseNode.add_accept_port_type`, :meth:`NodeGraphQt.BaseNode.add_accept_port_type`
+
+ - :meth:`NodeGraphQt.BaseNode.add_accept_port_type`
+ - :meth:`NodeGraphQt.BaseNode.add_accept_port_type`
+
 
 Here's an example snippet to add pipe connection constraints to a port.
 
@@ -191,7 +195,8 @@ Here's an example snippet to add pipe connection constraints to a port.
 
             # create node inputs.
 
-            # port "in A" will only accept pipe connections from port "output 1" under the node "BasicNodeA".
+            # port "in A" will only accept pipe connections from port "output 1"
+            # under the node "BasicNodeA".
             in_port_a = self.add_input('in A')
             in_port_a.add_accept_port_type(
                 port_name='output 1',
@@ -199,7 +204,8 @@ Here's an example snippet to add pipe connection constraints to a port.
                 node_type='io.github.jchanvfx.BasicNodeA'
             )
 
-            # port "in A" will reject pipe connections from port "output 1" under the node "BasicNodeA".
+            # port "in A" will reject pipe connections from port "output 1"
+            # under the node "BasicNodeA".
             in_port_b = self.add_input('in B')
             in_port_b.add_reject_port_type(
                 port_name='output 1',
