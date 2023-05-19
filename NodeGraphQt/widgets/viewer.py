@@ -9,6 +9,7 @@ from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
     LayoutDirectionEnum,
     PortTypeEnum,
+    PipeEnum,
     PipeLayoutEnum,
     ViewerEnum,
     Z_VAL_PIPE,
@@ -756,7 +757,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return
 
         pos = event.scenePos()
-        color_mode = None
+        pointer_color = None
         for item in self.scene().items(pos):
             if not isinstance(item, PortItem):
                 continue
@@ -768,26 +769,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
             pos.setY(pos.y() + y)
             if item == self._start_port:
                 break
-            color_mode = 'accept'
-
+            pointer_color = PipeEnum.HIGHLIGHT_COLOR.value
             accept = self._validate_accept_connection(self._start_port, item)
             if not accept:
-                color_mode = 'reject'
+                pointer_color = [150, 60, 255]
                 break
             reject = self._validate_reject_connection(self._start_port, item)
             if reject:
-                color_mode = 'reject'
+                pointer_color = [150, 60, 255]
                 break
 
             if self.acyclic:
                 if item.node == self._start_port.node:
-                    color_mode = 'reject'
+                    pointer_color = PipeEnum.DISABLED_COLOR.value
                 elif item.port_type == self._start_port.port_type:
-                    color_mode = 'reject'
+                    pointer_color = PipeEnum.DISABLED_COLOR.value
             break
 
         self._LIVE_PIPE.draw_path(
-            self._start_port, cursor_pos=pos, color_mode=color_mode
+            self._start_port, cursor_pos=pos, color=pointer_color
         )
 
     def sceneMousePressEvent(self, event):
