@@ -141,3 +141,68 @@ And here's another example function for drawing a Square port.
         painter.drawRect(rect)
 
         painter.restore()
+
+
+Connection Constrains
+*********************
+
+From version ``v0.6.0`` port object can now have pipe connection constraints the functions implemented are:
+
+:meth:`NodeGraphQt.Port.add_accept_ports_type` and :meth:`NodeGraphQt.Port.add_reject_ports_type`
+
+this can also be set on the ``BaseNode`` level as well with:
+:meth:`NodeGraphQt.BaseNode.add_accept_port_type`, :meth:`NodeGraphQt.BaseNode.add_accept_port_type`
+
+Here's an example snippet to add pipe connection constraints to a port.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import BaseNode
+    from NodeGraphQt.constants import PortTypeEnum
+
+
+    class BasicNodeA(BaseNode):
+
+        # unique node identifier.
+        __identifier__ = 'io.github.jchanvfx'
+
+        # initial default node name.
+        NODE_NAME = 'node A'
+
+        def __init__(self):
+            super(BasicNode, self).__init__()
+
+            # create node output ports.
+            self.add_output('output 1')
+            self.add_output('output 2')
+
+
+    class BasicNodeB(BaseNode):
+
+        # unique node identifier.
+        __identifier__ = 'io.github.jchanvfx'
+
+        # initial default node name.
+        NODE_NAME = 'node B'
+
+        def __init__(self):
+            super(BasicNode, self).__init__()
+
+            # create node inputs.
+
+            # port "in A" will only accept pipe connections from port "output 1" under the node "BasicNodeA".
+            in_port_a = self.add_input('in A')
+            in_port_a.add_accept_port_type(
+                port_name='output 1',
+                port_type=PortTypeEnum.OUT.value,
+                node_type='io.github.jchanvfx.BasicNodeA'
+            )
+
+            # port "in A" will reject pipe connections from port "output 1" under the node "BasicNodeA".
+            in_port_b = self.add_input('in B')
+            in_port_b.add_reject_port_type(
+                port_name='output 1',
+                port_type=PortTypeEnum.OUT.value,
+                node_type='io.github.jchanvfx.BasicNodeA'
+            )

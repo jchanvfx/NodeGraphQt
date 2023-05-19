@@ -378,12 +378,14 @@ class Port(object):
             for cp in self.connected_ports():
                 self.disconnect_from(cp, push_undo=False)
 
-    def add_accept_port_type(self, port_name, port_type, port_node_type):
+    def add_accept_port_type(self, port_name, port_type, node_type):
         """
         Add a constrain to "accept" a pipe connection.
 
         Once a constrain has been added only ports of that type specified will
         be allowed a pipe connection.
+
+        `Implemented in` ``v0.6.0``
 
         See Also:
             :meth:`NodeGraphQt.Port.add_reject_ports_type`,
@@ -392,7 +394,7 @@ class Port(object):
         Args:
             port_name (str): name of the port.
             port_type (str): port type.
-            port_node_type (str): port node type.
+            node_type (str): port node type.
         """
         # storing the connection constrain at the graph level instead of the
         # port level so we don't serialize the same data for every port
@@ -402,7 +404,7 @@ class Port(object):
             port_type_data={
                 'port_name': port_name,
                 'port_type': port_type,
-                'node_type': port_node_type,
+                'node_type': node_type,
             }
         )
 
@@ -419,12 +421,14 @@ class Port(object):
         """
         return self.node().accepted_port_types(self)
 
-    def add_reject_port_type(self, port_name, port_type, port_node_type):
+    def add_reject_port_type(self, port_name, port_type, node_type):
         """
         Add a constrain to "reject" a pipe connection.
 
         Once a constrain has been added only ports of that type specified will
         be rejected a pipe connection.
+
+        `Implemented in` ``v0.6.0``
 
         See Also:
             :meth:`NodeGraphQt.Port.add_accept_ports_type`,
@@ -433,7 +437,7 @@ class Port(object):
         Args:
             port_name (str): name of the port.
             port_type (str): port type.
-            port_node_type (str): port node type.
+            node_type (str): port node type.
         """
         # storing the connection constrain at the graph level instead of the
         # port level so we don't serialize the same data for every port
@@ -443,7 +447,7 @@ class Port(object):
             port_type_data={
                 'port_name': port_name,
                 'port_type': port_type,
-                'node_type': port_node_type,
+                'node_type': node_type,
             }
         )
 

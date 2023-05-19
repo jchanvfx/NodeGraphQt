@@ -664,16 +664,22 @@ class BaseNode(NodeObject):
         Once a constrain has been added only ports of that type specified will
         be allowed a pipe connection.
 
+        port type data example
+
+        .. highlight:: python
+        .. code-block:: python
+            {
+                'port_name': 'foo'
+                'port_type': PortTypeEnum.IN.value
+                'node_type': 'io.github.jchanvfx.NodeClass'
+            }
+
+        See Also:
+            :meth:`NodeGraphQt.BaseNode.accepted_port_types`
+
         Args:
             port (NodeGraphQt.Port): port to assign constrain to.
             port_type_data (dict): port type data to accept a connection
-                eg.
-                .. code-block:: python
-                    {
-                        'port_name': 'test 1'
-                        'port_type': PortTypeEnum.IN.value
-                        'node_type': 'io.github.jchanvfx.ExampleNode'
-                    }
         """
         node_ports = self._inputs + self._outputs
         if port not in node_ports:
@@ -717,16 +723,22 @@ class BaseNode(NodeObject):
         Once a constrain has been added only ports of that type specified will
         NOT be allowed a pipe connection.
 
+        port type data example
+
+        .. highlight:: python
+        .. code-block:: python
+            {
+                'port_name': 'foo'
+                'port_type': PortTypeEnum.IN.value
+                'node_type': 'io.github.jchanvfx.NodeClass'
+            }
+
+        See Also:
+            :meth:`NodeGraphQt.Port.rejected_port_types`
+
         Args:
             port (NodeGraphQt.Port): port to assign constrain to.
             port_type_data (dict): port type data to reject a connection
-                eg.
-                .. code-block:: python
-                    {
-                        'port_name': 'test 1'
-                        'port_type': PortTypeEnum.IN.value
-                        'node_type': 'io.github.jchanvfx.ExampleNode'
-                    }
         """
         node_ports = self._inputs + self._outputs
         if port not in node_ports:
