@@ -136,6 +136,17 @@ class NodeGraph(QtCore.QObject):
         self.setObjectName('NodeGraph')
         self._model = (
             kwargs.get('model') or NodeGraphModel())
+        self._node_factory = (
+            kwargs.get('node_factory') or NodeFactory())
+        self._undo_view = None
+        self._undo_stack = (
+            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self)
+        )
+        self._widget = None
+        self._sub_graphs = {}
+        self._viewer = (
+            kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack)
+        )
 
         layout_direction = kwargs.get('layout_direction')
         if layout_direction:
@@ -144,21 +155,16 @@ class NodeGraph(QtCore.QObject):
             self._model.layout_direction = layout_direction
         else:
             layout_direction = self._model.layout_direction
-
-        self._node_factory = (
-            kwargs.get('node_factory') or NodeFactory())
-
-        self._undo_view = None
-        self._undo_stack = (
-            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self))
-
-        self._widget = None
-
-        self._sub_graphs = {}
-
-        self._viewer = (
-            kwargs.get('viewer') or NodeViewer(undo_stack=self._undo_stack))
         self._viewer.set_layout_direction(layout_direction)
+
+        pipe_style = kwargs.get('pipe_style')
+        if pipe_style is not None:
+            if pipe_style not in [e.value for e in PipeLayoutEnum]:
+                pipe_style = PipeLayoutEnum.CURVED.value
+            self._model.pipe_style = pipe_style
+        else:
+            pipe_style = self._model.pipe_style
+        self._viewer.set_pipe_layout(pipe_style)
 
         # viewer needs a reference to the model port connection constrains
         # for the user interaction with the live pipe.
@@ -953,6 +959,18 @@ class NodeGraph(QtCore.QObject):
         self._model.pipe_slicing = mode
         self._viewer.pipe_slicing = self._model.pipe_slicing
 
+    def pipe_style(self):
+        """
+        Returns the current pipe layout style.
+
+        See Also:
+            :meth:`NodeGraph.set_pipe_style`
+
+        Returns:
+            int: pipe style value. :attr:`NodeGraphQt.constants.PipeLayoutEnum`
+        """
+        return self._model.pipe_style
+
     def set_pipe_style(self, style=PipeLayoutEnum.CURVED.value):
         """
         Set node graph pipes to be drawn as curved `(default)`, straight or angled.
@@ -976,6 +994,7 @@ class NodeGraph(QtCore.QObject):
                         PipeLayoutEnum.STRAIGHT.value,
                         PipeLayoutEnum.ANGLE.value])
         style = style if 0 <= style <= pipe_max else PipeLayoutEnum.CURVED.value
+        self._model.pipe_style = style
         self._viewer.set_pipe_layout(style)
 
     def layout_direction(self):
@@ -990,7 +1009,7 @@ class NodeGraph(QtCore.QObject):
         Returns:
             int: layout direction.
         """
-        return self.model.layout_direction
+        return self._model.layout_direction
 
     def set_layout_direction(self, direction):
         """
@@ -1624,6 +1643,7 @@ class NodeGraph(QtCore.QObject):
         serial_data['graph']['acyclic'] = self.acyclic()
         serial_data['graph']['pipe_collision'] = self.pipe_collision()
         serial_data['graph']['pipe_slicing'] = self.pipe_slicing()
+        serial_data['graph']['pipe_style'] = self.pipe_style()
 
         # connection constrains.
         serial_data['graph']['accept_connection_types'] = self.model.accept_connection_types
@@ -1692,6 +1712,8 @@ class NodeGraph(QtCore.QObject):
                 self.set_pipe_collision(attr_value)
             elif attr_name == 'pipe_slicing':
                 self.set_pipe_slicing(attr_value)
+            elif attr_name == 'pipe_style':
+                self.set_pipe_style(attr_value)
 
             # connection constrains.
             elif attr_name == 'accept_connection_types':
@@ -2316,10 +2338,14 @@ class NodeGraph(QtCore.QObject):
         # build new sub graph.
         node_factory = copy.deepcopy(self.node_factory)
         layout_direction = self.layout_direction()
+        kwargs = {
+            'layout_direction': self.layout_direction(),
+            'pipe_style': self.pipe_style(),
+        }
         sub_graph = SubGraph(self,
                              node=node,
                              node_factory=node_factory,
-                             layout_direction=layout_direction)
+                             **kwargs)
 
         # populate the sub graph.
         session = node.get_sub_graph_session()

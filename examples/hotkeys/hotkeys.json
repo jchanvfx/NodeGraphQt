@@ -265,21 +265,21 @@
         "label":"Curved",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"curved_pipe",
-        "shortcut":""
+        "shortcut":"Ctrl+1"
       },
       {
         "type":"command",
         "label":"Straight",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"straight_pipe",
-        "shortcut":""
+        "shortcut":"Ctrl+2"
       },
       {
         "type":"command",
         "label":"Angle",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"angle_pipe",
-        "shortcut":""
+        "shortcut":"Ctrl+3"
       }
     ]
   }
