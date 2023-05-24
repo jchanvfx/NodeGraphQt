@@ -100,14 +100,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
             ViewerEnum.BACKGROUND_COLOR.value
         )))
         text_color.setAlpha(50)
-        self._cusor_text = QtWidgets.QGraphicsTextItem()
-        self._cusor_text.setFlag(self._cusor_text.ItemIsSelectable, False)
-        self._cusor_text.setDefaultTextColor(text_color)
-        self._cusor_text.setZValue(Z_VAL_PIPE - 1)
-        font = self._cusor_text.font()
+        self._cursor_text = QtWidgets.QGraphicsTextItem()
+        self._cursor_text.setFlag(self._cursor_text.ItemIsSelectable, False)
+        self._cursor_text.setDefaultTextColor(text_color)
+        self._cursor_text.setZValue(Z_VAL_PIPE - 1)
+        font = self._cursor_text.font()
         font.setPointSize(7)
-        self._cusor_text.setFont(font)
-        self.scene().addItem(self._cusor_text)
+        self._cursor_text.setFont(font)
+        self.scene().addItem(self._cursor_text)
 
         self._LIVE_PIPE = LivePipeItem()
         self._LIVE_PIPE.setVisible(False)
@@ -488,8 +488,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 pipes[0].reset()
                 port = pipes[0].port_from_pos(map_pos, reverse=True)
                 if not port.locked and port.multi_connection:
-                    self._cusor_text.setPlainText('')
-                    self._cusor_text.setVisible(False)
+                    self._cursor_text.setPlainText('')
+                    self._cursor_text.setVisible(False)
                     self.start_live_connection(port)
 
             # return here as the default behaviour unselects nodes with
@@ -593,7 +593,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not self.ALT_state:
             if self.SHIFT_state or self.CTRL_state:
                 if not self._LIVE_PIPE.isVisible():
-                    self._cusor_text.setPos(self.mapToScene(event.pos()))
+                    self._cursor_text.setPos(self.mapToScene(event.pos()))
 
         if self.LMB_state and self._rubber_band.isActive:
             rect = QtCore.QRect(self._origin_pos, event.pos()).normalized()
@@ -705,7 +705,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # show cursor text
         overlay_text = None
-        self._cusor_text.setVisible(False)
+        self._cursor_text.setVisible(False)
         if not self.ALT_state:
             if self.SHIFT_state:
                 overlay_text = '\n    SHIFT:\n    Toggle/Extend Selection'
@@ -715,9 +715,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
             if self.pipe_slicing:
                 overlay_text = '\n    ALT + SHIFT:\n    Pipe Slicer Enabled'
         if overlay_text:
-            self._cusor_text.setPlainText(overlay_text)
-            self._cusor_text.setPos(self.mapToScene(self._previous_pos))
-            self._cusor_text.setVisible(True)
+            self._cursor_text.setPlainText(overlay_text)
+            self._cursor_text.setPos(self.mapToScene(self._previous_pos))
+            self._cursor_text.setVisible(True)
 
         super(NodeViewer, self).keyPressEvent(event)
 
@@ -737,8 +737,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).keyReleaseEvent(event)
 
         # hide and reset cursor text.
-        self._cusor_text.setPlainText('')
-        self._cusor_text.setVisible(False)
+        self._cursor_text.setPlainText('')
+        self._cursor_text.setVisible(False)
 
     # --- scene events ---
 
