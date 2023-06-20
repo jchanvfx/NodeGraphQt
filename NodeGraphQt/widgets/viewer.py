@@ -467,7 +467,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # update the recorded node positions.
         self._node_positions.update({n: n.xy_pos for n in selection})
 
-        # show selection selection marquee.
+        # show selection marquee.
         if self.LMB_state and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize())
             rect = rect.normalized()
@@ -893,7 +893,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def _validate_accept_connection(self, from_port, to_port):
         """
-        Check if a pipe connection is allowed if there are a constrains set
+        Check if a pipe connection is allowed if there are a constraints set
         on the ports.
 
         Args:
@@ -903,27 +903,34 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             bool: true to allow connection.
         """
+        accept_validation = []
+
         to_ptype = to_port.port_type
         from_ptype = from_port.port_type
 
-        to_data = self.accept_connection_types.get(to_port.node.type_) or {}
-        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
-        accept_data = constraints.get(from_port.node.type_, {})
-
-        accepted_pnames = accept_data.get(from_ptype)
-        if accepted_pnames:
-            if from_port.name in accepted_pnames:
-                return True
-            return False
-
+        # validate the start.
         from_data = self.accept_connection_types.get(from_port.node.type_) or {}
         constraints = from_data.get(from_ptype, {}).get(from_port.name, {})
         accept_data = constraints.get(to_port.node.type_, {})
+        accepted_pnames = accept_data.get(to_ptype, {})
+        if constraints:
+            if to_port.name in accepted_pnames:
+                accept_validation.append(True)
+            else:
+                accept_validation.append(False)
 
-        accepted_pnames = accept_data.get(to_ptype)
-        if accepted_pnames:
+        # validate the end.
+        to_data = self.accept_connection_types.get(to_port.node.type_) or {}
+        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
+        accept_data = constraints.get(from_port.node.type_, {})
+        accepted_pnames = accept_data.get(from_ptype, {})
+        if constraints:
             if from_port.name in accepted_pnames:
-                return True
+                accept_validation.append(True)
+            else:
+                accept_validation.append(False)
+
+        if False in accept_validation:
             return False
         return True
 
