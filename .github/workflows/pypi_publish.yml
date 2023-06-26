@@ -1,0 +1,28 @@
+# Workflow for publishing module package to https://pypi.org.
+name: Publish PyPI Package
+
+on:
+  # trigger this workflow when a release is published.
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Run build to a specified version of python into a specified directory.
+      - name: Python Build
+        run: python3 -m pip install --upgrade build && python3 -m build
+      # Publish the python package to pypi.org with the api token.
+      - name: Publish Package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://upload.pypi.org/legacy/
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

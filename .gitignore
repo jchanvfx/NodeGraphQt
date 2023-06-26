@@ -4,7 +4,6 @@ venv/*
 
 # sphinx documentation
 docs/_build/
-api/doctrees
 
 # python stuff
 *.pyc

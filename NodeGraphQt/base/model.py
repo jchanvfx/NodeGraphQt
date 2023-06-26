@@ -2,7 +2,11 @@
 import json
 from collections import defaultdict
 
-from NodeGraphQt.constants import LayoutDirectionEnum, NodePropWidgetEnum
+from NodeGraphQt.constants import (
+    LayoutDirectionEnum,
+    NodePropWidgetEnum,
+    PipeLayoutEnum
+)
 from NodeGraphQt.errors import NodePropertyError
 
 
@@ -444,6 +448,7 @@ class NodeGraphModel(object):
         self.acyclic = True
         self.pipe_collision = False
         self.pipe_slicing = True
+        self.pipe_style = PipeLayoutEnum.CURVED.value
         self.layout_direction = LayoutDirectionEnum.HORIZONTAL.value
 
     def common_properties(self):
