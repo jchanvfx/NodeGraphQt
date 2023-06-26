@@ -1,10 +1,11 @@
 # Workflow for publishing module package to https://pypi.org.
-name: PyPI Package Publish
+name: Publish PyPI Package
 
 on:
   # trigger this workflow when a release is published.
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   publish:
