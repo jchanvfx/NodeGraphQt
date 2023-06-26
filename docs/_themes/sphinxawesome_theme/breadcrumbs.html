@@ -1,0 +1,31 @@
+{#- Template file for the breadcrumbs. -#}
+{%- set separator %}
+<div class="mr-1">{{ theme_breadcrumbs_separator|default('/') }}</div>
+{%- endset %}
+<nav aria-label="{{ _('breadcrumbs') }}"
+     class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+  <a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground"
+     href="{{ pathto(master_doc) }}">
+    <span class="hidden md:inline">{{ docstitle }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         height="18"
+         width="18"
+         viewBox="0 96 960 960"
+         aria-label="Home"
+         fill="currentColor"
+         stroke="none"
+         class="md:hidden">
+      <path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z" />
+    </svg>
+  </a>
+  {{ separator }}
+  {%- for doc in parents -%}
+    <a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap"
+       href="{{ doc.link|e }}">{{ doc.title
+    }}</a>
+    {{ separator }}
+  {%- endfor -%}
+  <span aria-current="page"
+        class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">{{ title
+  }}</span>
+</nav>

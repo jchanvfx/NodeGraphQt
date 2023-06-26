@@ -1,0 +1,22 @@
+{%- if docsearch %}
+docsearch({
+  container: "{{ docsearch_container|default('#docsearch') }}",
+  appId: "{{ docsearch_app_id }}",
+  apiKey: "{{ docsearch_api_key }}",
+  indexName: "{{ docsearch_index_name }}",
+  {%- if docsearch_initial_query %}
+  initialQuery: "{{ docsearch_initial_query }}",
+  {%- endif %}
+  {%- if docsearch_placeholder %}
+  placeholder: "{{ docsearch_placeholder|default('Search docs') }}",
+  {%- endif %}
+  {%- if docsearch_search_parameters %}
+  searchParameters: "{{ docsearch_search_parameters }}",
+  {%- endif %}
+  {%- if docsearch_missing_results_url %}
+  getMissingResultsUrl({ query }) {
+    return `{{ docsearch_missing_results_url }}`
+  }
+  {%- endif %}
+});
+{%- endif %}

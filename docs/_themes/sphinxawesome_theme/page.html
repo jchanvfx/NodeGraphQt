@@ -1,0 +1,36 @@
+{#- Template for the main docs page. #}
+
+{%- extends "layout.html" -%}
+
+{%- block body %}
+
+{%- set only_main_nav = sidebars == ["sidebar_main_nav_links.html"] %}
+{%- if not only_main_nav and sidebars|length > 0 %}
+<div class="w-full min-w-0 mx-auto">
+  {%- else %}
+  <div class="w-full min-w-0 mx-auto max-w-prose">
+    {%- endif %}
+
+    {%- block body_before %}{%- endblock body_before -%}
+
+    {%- if pagename != master_doc and theme_show_breadcrumbs|tobool %}
+    {%- include "breadcrumbs.html" %}
+    {%- endif %}
+
+    <div id="content" role="main">
+      {{ body }}
+    </div>
+
+    {%- if theme_show_prev_next|tobool %}
+      {%- include "prev_next.html" %}
+    {%- endif %}
+
+    {%- block body_after %}{%- endblock body_after -%}
+  </div>
+
+  {%- block on_page_toc %}
+  {%- if display_toc %}
+    {%- include "toc.html" %}
+  {%- endif %}
+  {%- endblock on_page_toc %}
+  {%- endblock body %}
