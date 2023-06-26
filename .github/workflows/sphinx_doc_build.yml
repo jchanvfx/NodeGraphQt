@@ -1,0 +1,59 @@
+# Workflow for building the sphinx api documentation.
+name: Build API Documentation
+
+on:
+  # trigger this workflow when a release is published.
+  release:
+    types:
+      - published
+
+env:
+  # environment variables.
+  SOURCE_BRANCH: main
+  GH_PAGES_BRANCH: gh-pages
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Install Graphviz required for the sphinx plugin.
+      - name: Set up Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      # Install a version of python.
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      # Install the python dependencies required for building.
+      - name: Install Dependencies
+        run: |
+            pip install -U sphinx
+            pip install sphinx-rtd-theme
+            pip install PySide2
+            pip install Qt.py
+      # Set the local git configs.
+      - name: Set Git Config
+        run: |
+            git config --local user.email "actions@github.com"
+            git config --local user.name "Github Actions"
+      # Merge the "main" branch to the "gh-pages" branch.
+      - name: Update "gh-pages" branch
+        run: |
+            git checkout $GH_PAGES_BRANCH
+            git merge $SOURCE_BRANCH
+            git push origin $GH_PAGES_BRANCH
+      # Build the sphinx api documentation.
+      - name: Run Sphinx Build
+        run: sphinx-build -b html ./docs ./api -a -E
+      # Deploy the html updates to the "gh-pages" branch.
+      - name: Deploy HTML
+        run: |
+            git ls-files --others --exclude-standard
+            git add ./api
+            git commit -m "auto build docs"
+            git push origin $GH_PAGES_BRANCH
