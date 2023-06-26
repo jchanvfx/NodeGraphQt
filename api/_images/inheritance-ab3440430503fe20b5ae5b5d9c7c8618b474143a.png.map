@@ -1,0 +1,9 @@
+<map id="inheritanceebb802ad25" name="inheritanceebb802ad25">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodesTreeWidget" target="_top" title="The :class:`NodeGraphQt.NodesTreeWidget` is a widget for displaying all" alt="" coords="668,4,764,22"/>
+<area shape="rect" id="node2" title="QTreeWidget(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None) &#45;&gt; None" alt="" coords="559,4,634,22"/>
+<area shape="rect" id="node3" title="QAbstractItemView(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None) &#45;&gt; None" alt="" coords="322,4,427,22"/>
+<area shape="rect" id="node7" title="QTreeView(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None) &#45;&gt; None" alt="" coords="461,4,525,22"/>
+<area shape="rect" id="node4" title="QAbstractScrollArea(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None) &#45;&gt; None" alt="" coords="180,4,288,22"/>
+<area shape="rect" id="node5" title="QFrame(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None, f: PySide2.QtCore.Qt.WindowFlags = Default(Qt.WindowFlags)) &#45;&gt; None" alt="" coords="94,4,146,22"/>
+<area shape="rect" id="node6" title="QWidget(self, parent: typing.Optional[PySide2.QtWidgets.QWidget] = None, f: PySide2.QtCore.Qt.WindowFlags = Default(Qt.WindowFlags)) &#45;&gt; None" alt="" coords="4,4,60,22"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="inheritanceaca16a19a3" name="inheritanceaca16a19a3">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodeGraphMenu" target="_top" title="The ``NodeGraphMenu`` is the main context menu triggered from the node graph." alt="" coords="5,5,136,31"/>
+<area shape="rect" id="node2" href="#NodeGraphQt.NodesMenu" target="_top" title="The ``NodesMenu`` is the context menu triggered from a node." alt="" coords="184,5,283,31"/>
+</map>

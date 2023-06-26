@@ -1,0 +1,1991 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Graphs &mdash; NodeGraphQt 0.6.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Nodes" href="nodes/_index_nodes.html" />
+    <link rel="prev" title="Constants" href="constants.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NodeGraphQt
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.6.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nodegraph">NodeGraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#NodeGraphQt.NodeGraph"><code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_registered"><code class="docutils literal notranslate"><span class="pre">NodeGraph.nodes_registered</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_created"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_created</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_deleted"><code class="docutils literal notranslate"><span class="pre">NodeGraph.nodes_deleted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_selected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_selected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_selection_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_selection_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_double_clicked"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_double_clicked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.port_connected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.port_disconnected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.property_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.property_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.data_dropped"><code class="docutils literal notranslate"><span class="pre">NodeGraph.data_dropped</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.session_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.session_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.model"><code class="docutils literal notranslate"><span class="pre">NodeGraph.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_factory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget"><code class="docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.undo_view"><code class="docutils literal notranslate"><span class="pre">NodeGraph.undo_view</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.toggle_node_search"><code class="docutils literal notranslate"><span class="pre">NodeGraph.toggle_node_search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.show"><code class="docutils literal notranslate"><span class="pre">NodeGraph.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.close"><code class="docutils literal notranslate"><span class="pre">NodeGraph.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.viewer"><code class="docutils literal notranslate"><span class="pre">NodeGraph.viewer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.scene"><code class="docutils literal notranslate"><span class="pre">NodeGraph.scene()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.background_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.background_color()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_background_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_background_color()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.grid_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.grid_color()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_grid_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_grid_color()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_grid_mode"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_grid_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.add_properties_bin"><code class="docutils literal notranslate"><span class="pre">NodeGraph.add_properties_bin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.undo_stack"><code class="docutils literal notranslate"><span class="pre">NodeGraph.undo_stack()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_undo_stack"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_undo_stack()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.begin_undo"><code class="docutils literal notranslate"><span class="pre">NodeGraph.begin_undo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.end_undo"><code class="docutils literal notranslate"><span class="pre">NodeGraph.end_undo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.context_menu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.context_nodes_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.context_nodes_menu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_context_menu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_context_menu_from_file"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.disable_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.disable_context_menu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.acyclic"><code class="docutils literal notranslate"><span class="pre">NodeGraph.acyclic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_acyclic"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_acyclic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_collision"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_collision()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_collision"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_collision()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_slicing"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_slicing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_slicing"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_slicing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_style"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_style()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_style"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_style()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction"><code class="docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_layout_direction"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.fit_to_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.fit_to_selection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.reset_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.reset_zoom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_zoom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_zoom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.center_on"><code class="docutils literal notranslate"><span class="pre">NodeGraph.center_on()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.center_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.center_selection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.registered_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.registered_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.register_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.register_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.register_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.register_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.create_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.add_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.add_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.delete_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.delete_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.remove_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.remove_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.delete_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.delete_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.extract_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.extract_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.all_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.all_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.selected_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.selected_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.select_all"><code class="docutils literal notranslate"><span class="pre">NodeGraph.select_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_selection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_id"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_node_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_name"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_node_by_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_nodes_by_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_unique_name"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_unique_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.current_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.current_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.serialize_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.deserialize_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.save_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.load_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.import_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.import_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.copy_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.cut_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.paste_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.duplicate_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.duplicate_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.disable_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.disable_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.use_OpenGL"><code class="docutils literal notranslate"><span class="pre">NodeGraph.use_OpenGL()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.auto_layout_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.auto_layout_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.question_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.message_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.load_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.save_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.is_root"><code class="docutils literal notranslate"><span class="pre">NodeGraph.is_root</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.sub_graphs"><code class="docutils literal notranslate"><span class="pre">NodeGraph.sub_graphs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.expand_group_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.expand_group_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.NodeGraph.collapse_group_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.collapse_group_node()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#subgraph">SubGraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#NodeGraphQt.SubGraph"><code class="docutils literal notranslate"><span class="pre">SubGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.initialized_graphs"><code class="docutils literal notranslate"><span class="pre">SubGraph.initialized_graphs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.navigation_widget"><code class="docutils literal notranslate"><span class="pre">SubGraph.navigation_widget</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.subviewer_widget"><code class="docutils literal notranslate"><span class="pre">SubGraph.subviewer_widget</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.parent_graph"><code class="docutils literal notranslate"><span class="pre">SubGraph.parent_graph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.node"><code class="docutils literal notranslate"><span class="pre">SubGraph.node</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.collapse_graph"><code class="docutils literal notranslate"><span class="pre">SubGraph.collapse_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.expand_group_node"><code class="docutils literal notranslate"><span class="pre">SubGraph.expand_group_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.collapse_group_node"><code class="docutils literal notranslate"><span class="pre">SubGraph.collapse_group_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.get_input_port_nodes"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_input_port_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.get_output_port_nodes"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_output_port_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.SubGraph.get_node_by_port"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_node_by_port()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="port.html">Port</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menus</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="host_apps/_index_apps.html">Host Application Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NodeGraphQt</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Graphs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/main/docs/graph.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="graphs">
+<h1>Graphs<a class="headerlink" href="#graphs" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line"><cite>See</cite> <a class="reference internal" href="examples/ex_overview.html#getting-started"><span class="std std-ref">Getting Started</span></a> <cite>from the overview section.</cite></div>
+</div>
+<p><strong>Classes:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a>([parent])</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes and the node graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodeGraphQt.SubGraph</span></code></a>([parent, node, ...])</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">SubGraph</span></code> class is just like the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> but is the main controller for managing the expanded node graph for a <a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code></a>.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="nodegraph">
+<h2>NodeGraph<a class="headerlink" href="#nodegraph" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">NodeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> class is the main controller for managing all nodes
+and the node graph.</p>
+<div class="graphviz"><img src="_images/inheritance-280fdb57cbf05274cb4213235e37fb4afedc675e.png" alt="Inheritance diagram of NodeGraphQt.NodeGraph" usemap="#inheritancee3d949aebd" class="inheritance graphviz" /></div>
+<map id="inheritancee3d949aebd" name="inheritancee3d949aebd">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodeGraph" target="_top" title="The ``NodeGraph`` class is the main controller for managing all nodes" alt="" coords="232,5,419,31"/>
+</map><img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" />
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.nodes_registered">
+<span class="sig-name descname"><span class="pre">nodes_registered</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.nodes_registered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node is registered into the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a>]</p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>registered nodes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.node_created">
+<span class="sig-name descname"><span class="pre">node_created</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_created" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node is created in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>created node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.nodes_deleted">
+<span class="sig-name descname"><span class="pre">nodes_deleted</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.nodes_deleted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when nodes have been deleted from the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of deleted node ids.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.node_selected">
+<span class="sig-name descname"><span class="pre">node_selected</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node is clicked with the LMB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.node_selection_changed">
+<span class="sig-name descname"><span class="pre">node_selection_changed</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_selection_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when the node selection has changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a>],
+list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a>]</p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected node, deselected nodes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.node_double_clicked">
+<span class="sig-name descname"><span class="pre">node_double_clicked</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_double_clicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node is double clicked and emits the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.port_connected">
+<span class="sig-name descname"><span class="pre">port_connected</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.port_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node port has been connected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>input port, output port</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.port_disconnected">
+<span class="sig-name descname"><span class="pre">port_disconnected</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.port_disconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal triggered when a node port has been disconnected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a>, <a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.Port</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>input port, output port</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.property_changed">
+<span class="sig-name descname"><span class="pre">property_changed</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.property_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal is triggered when a property has changed on a node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a>, str, object</p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>triggered node, property name, property value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.data_dropped">
+<span class="sig-name descname"><span class="pre">data_dropped</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.data_dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal is triggered when data has been dropped to the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QMimeData</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QPoint</span></code></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>mime data, node graph position</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.session_changed">
+<span class="sig-name descname"><span class="pre">session_changed</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.session_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal is triggered when session has been changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p>:str</p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>new session path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.model">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The model used for storing the node graph data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node graph model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeGraphQt.base.model.NodeGraphModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.node_factory">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_factory</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.node_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node factory object used by the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node factory.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeFactory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.widget">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">widget</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node graph widget for adding into a layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node graph widget.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeGraphWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.undo_view">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">undo_view</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.undo_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns node graph undo history list widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node graph undo view.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>PySide2.QtWidgets.QUndoView</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.toggle_node_search">
+<span class="sig-name descname"><span class="pre">toggle_node_search</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.toggle_node_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle the node search widget visibility.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show node graph widget this is just a convenience
+function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget.show()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close node graph NodeViewer widget this is just a convenience
+function to <code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.widget.close()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.viewer">
+<span class="sig-name descname"><span class="pre">viewer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.viewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the internal view interface used by the node graph.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Methods in the <code class="docutils literal notranslate"><span class="pre">NodeViewer</span></code> are used internally
+by <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code> components to get the widget use
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a> to add the node graph widget into a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLayout</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>viewer interface.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeGraphQt.widgets.viewer.NodeViewer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.scene">
+<span class="sig-name descname"><span class="pre">scene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="docutils literal notranslate"><span class="pre">QGraphicsScene</span></code> object used in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node scene.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeGraphQt.widgets.scene.NodeScene</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.background_color">
+<span class="sig-name descname"><span class="pre">background_color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.background_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node graph background color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>r, g ,b</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_background_color">
+<span class="sig-name descname"><span class="pre">set_background_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_background_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node graph background color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – red value.</p></li>
+<li><p><strong>g</strong> (<em>int</em>) – green value.</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – blue value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.grid_color">
+<span class="sig-name descname"><span class="pre">grid_color</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.grid_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node graph grid color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>r, g ,b</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_grid_color">
+<span class="sig-name descname"><span class="pre">set_grid_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_grid_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node graph grid color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>int</em>) – red value.</p></li>
+<li><p><strong>g</strong> (<em>int</em>) – green value.</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – blue value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_grid_mode">
+<span class="sig-name descname"><span class="pre">set_grid_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_grid_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node graph background grid mode.</p>
+<p>(default: <a class="reference internal" href="constants.html#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES" title="NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES</span></code></a>).</p>
+<p>See: <a class="reference internal" href="constants.html#NodeGraphQt.constants.ViewerEnum" title="NodeGraphQt.constants.ViewerEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.ViewerEnum</span></code></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="linenos">2</span><span class="n">graph</span><span class="o">.</span><span class="n">set_grid_mode</span><span class="p">(</span><span class="n">ViewerEnum</span><span class="o">.</span><span class="n">CURVED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>int</em>) – background style.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.add_properties_bin">
+<span class="sig-name descname"><span class="pre">add_properties_bin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_bin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.add_properties_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wire up a properties bin widget to the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prop_bin</strong> (<a class="reference internal" href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><em>NodeGraphQt.PropertiesBinWidget</em></a>) – properties widget.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.undo_stack">
+<span class="sig-name descname"><span class="pre">undo_stack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.undo_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the undo stack used in the node graph.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.begin_undo" title="NodeGraphQt.NodeGraph.begin_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.begin_undo()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.end_undo" title="NodeGraphQt.NodeGraph.end_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.end_undo()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>undo stack.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QtWidgets.QUndoStack</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.clear_undo_stack">
+<span class="sig-name descname"><span class="pre">clear_undo_stack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.clear_undo_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the undo stack.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Convenience function to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.undo_stack().clear()</span></code></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.begin_undo" title="NodeGraphQt.NodeGraph.begin_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.begin_undo()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.end_undo" title="NodeGraphQt.NodeGraph.end_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.end_undo()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.undo_stack" title="NodeGraphQt.NodeGraph.undo_stack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.undo_stack()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.begin_undo">
+<span class="sig-name descname"><span class="pre">begin_undo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.begin_undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start of an undo block followed by a
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.end_undo" title="NodeGraphQt.NodeGraph.end_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.end_undo()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name for the undo block.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.end_undo">
+<span class="sig-name descname"><span class="pre">end_undo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.end_undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>End of an undo block started by
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.begin_undo" title="NodeGraphQt.NodeGraph.begin_undo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.begin_undo()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.context_menu">
+<span class="sig-name descname"><span class="pre">context_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu for the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a convenience function to
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu" title="NodeGraphQt.NodeGraph.get_context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.get_context_menu()</span></code></a>
+with the arg <code class="docutils literal notranslate"><span class="pre">menu=&quot;graph&quot;</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>context menu object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.context_nodes_menu">
+<span class="sig-name descname"><span class="pre">context_nodes_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.context_nodes_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu for the nodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a convenience function to
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu" title="NodeGraphQt.NodeGraph.get_context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.get_context_menu()</span></code></a>
+with the arg <code class="docutils literal notranslate"><span class="pre">menu=&quot;nodes&quot;</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>context menu object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodeGraphQt.NodesMenu</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_context_menu">
+<span class="sig-name descname"><span class="pre">get_context_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">menu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu specified by the name.</p>
+<p>menu types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>menu</strong> (<em>str</em>) – menu name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>context menu object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu">NodeGraphQt.NodeGraphMenu</a> or <a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu">NodeGraphQt.NodesMenu</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_context_menu">
+<span class="sig-name descname"><span class="pre">set_context_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">menu_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate a context menu from serialized data.</p>
+<p>example of serialized menu data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;menu&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;test sub menu&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;command&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;test command&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="s1">&#39;../path/to/my/test_module.py&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;function&#39;</span><span class="p">:</span> <span class="s1">&#39;run_test&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;shortcut&#39;</span><span class="p">:</span> <span class="s1">&#39;Ctrl+b&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;node_type&#39;</span><span class="p">:</span> <span class="s1">&#39;nodeGraphQt.nodes.MyNodeClass&#39;</span>
+            <span class="p">},</span>
+
+        <span class="p">]</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>the <code class="docutils literal notranslate"><span class="pre">run_test</span></code> example function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_test</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">selected_nodes</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>menu_name</strong> (<em>str</em>) – name of the parent context menu to populate under.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – serialized menu data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_context_menu_from_file">
+<span class="sig-name descname"><span class="pre">set_context_menu_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_context_menu_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate a context menu from a serialized json file.</p>
+<p>menu types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>menu</strong> (<em>str</em>) – name of the parent context menu to populate under.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – serialized menu commands json file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.disable_context_menu">
+<span class="sig-name descname"><span class="pre">disable_context_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.disable_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable/Enable context menus from the node graph.</p>
+<p>menu types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> all context menus from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> context menu from the node graph.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;nodes&quot;</span></code> context menu for the nodes.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>disabled</strong> (<em>bool</em>) – true to enable context menu.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – menu name. (default: <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.acyclic">
+<span class="sig-name descname"><span class="pre">acyclic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.acyclic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the current node graph is acyclic.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_acyclic" title="NodeGraphQt.NodeGraph.set_acyclic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_acyclic()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true if acyclic (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_acyclic">
+<span class="sig-name descname"><span class="pre">set_acyclic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_acyclic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the node graph to be a acyclic graph. (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.acyclic" title="NodeGraphQt.NodeGraph.acyclic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.acyclic()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – true to enable acyclic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.pipe_collision">
+<span class="sig-name descname"><span class="pre">pipe_collision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.pipe_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if pipe collision is enabled.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To enable/disable pipe collision
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_collision" title="NodeGraphQt.NodeGraph.set_pipe_collision"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_collision()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if pipe collision is enabled.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_pipe_collision">
+<span class="sig-name descname"><span class="pre">set_pipe_collision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_pipe_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/Disable pipe collision.</p>
+<p>When enabled dragging a node over a pipe will allow the node to be
+inserted as a new connection between the pipe.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_collision" title="NodeGraphQt.NodeGraph.pipe_collision"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.pipe_collision()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – False to disable pipe collision.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.pipe_slicing">
+<span class="sig-name descname"><span class="pre">pipe_slicing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.pipe_slicing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if pipe slicing is enabled.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To enable/disable pipe slicer
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_slicing" title="NodeGraphQt.NodeGraph.set_pipe_slicing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_slicing()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if pipe slicing is enabled.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_pipe_slicing">
+<span class="sig-name descname"><span class="pre">set_pipe_slicing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_pipe_slicing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/Disable pipe slicer.</p>
+<p>When set to true holding down <code class="docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">Shift</span> <span class="pre">+</span> <span class="pre">LMB</span> <span class="pre">Drag</span></code> will allow node
+pipe connections to be sliced.</p>
+<img alt="_images/slicer.png" src="_images/slicer.png" style="width: 400px;" />
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_slicing" title="NodeGraphQt.NodeGraph.pipe_slicing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.pipe_slicing()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – False to disable the slicer pipe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.pipe_style">
+<span class="sig-name descname"><span class="pre">pipe_style</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.pipe_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current pipe layout style.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_style" title="NodeGraphQt.NodeGraph.set_pipe_style"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_style()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pipe style value. <a class="reference internal" href="constants.html#NodeGraphQt.constants.PipeLayoutEnum" title="NodeGraphQt.constants.PipeLayoutEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum</span></code></a></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_pipe_style">
+<span class="sig-name descname"><span class="pre">set_pipe_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_pipe_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set node graph pipes to be drawn as curved <cite>(default)</cite>, straight or angled.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="linenos">2</span><span class="n">graph</span><span class="o">.</span><span class="n">set_pipe_style</span><span class="p">(</span><span class="n">PipeLayoutEnum</span><span class="o">.</span><span class="n">CURVED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See: <a class="reference internal" href="constants.html#NodeGraphQt.constants.PipeLayoutEnum" title="NodeGraphQt.constants.PipeLayoutEnum"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum</span></code></a></p>
+<img alt="_images/pipe_layout_types.gif" src="_images/pipe_layout_types.gif" style="width: 80%;" />
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>int</em>) – pipe layout style.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.layout_direction">
+<span class="sig-name descname"><span class="pre">layout_direction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current node graph layout direction.</p>
+<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>layout direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_layout_direction">
+<span class="sig-name descname"><span class="pre">set_layout_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_layout_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the node graph layout direction to horizontal or vertical.
+This function will also override the layout direction on all
+nodes in the current node graph.</p>
+<p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
+<p><strong>Layout Types:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL" title="NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL</span></code></a></p></li>
+<li><p><a class="reference internal" href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL" title="NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL</span></code></a></p></li>
+</ul>
+<img alt="_images/layout_direction_switch.gif" src="_images/layout_direction_switch.gif" style="width: 300px;" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function does not register to the undo stack.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction" title="NodeGraphQt.NodeGraph.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a>,
+<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction" title="NodeGraphQt.NodeObject.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_layout_direction()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>direction</strong> (<em>int</em>) – layout direction.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.fit_to_selection">
+<span class="sig-name descname"><span class="pre">fit_to_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.fit_to_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the zoom level to fit selected nodes.
+If no nodes are selected then all nodes in the graph will be framed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.reset_zoom">
+<span class="sig-name descname"><span class="pre">reset_zoom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.reset_zoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the zoom level</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.set_zoom">
+<span class="sig-name descname"><span class="pre">set_zoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.set_zoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the zoom factor of the Node Graph the default is <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>zoom</strong> (<em>float</em>) – zoom factor (max zoom out <code class="docutils literal notranslate"><span class="pre">-0.9</span></code> / max zoom in <code class="docutils literal notranslate"><span class="pre">2.0</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_zoom">
+<span class="sig-name descname"><span class="pre">get_zoom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_zoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current zoom level of the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the current zoom level.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.center_on">
+<span class="sig-name descname"><span class="pre">center_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.center_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center the node graph on the given nodes or all nodes by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – a list of nodes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.center_selection">
+<span class="sig-name descname"><span class="pre">center_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.center_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Centers on the current selected nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.registered_nodes">
+<span class="sig-name descname"><span class="pre">registered_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.registered_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all node types that have been registered.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To register a node <a class="reference internal" href="#NodeGraphQt.NodeGraph.register_node" title="NodeGraphQt.NodeGraph.register_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.register_node()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of node type identifiers.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.register_node">
+<span class="sig-name descname"><span class="pre">register_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.register_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the node to the <a class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory" title="NodeGraphQt.NodeGraph.node_factory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.node_factory()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject"><em>NodeGraphQt.NodeObject</em></a>) – node object.</p></li>
+<li><p><strong>alias</strong> (<em>str</em>) – custom alias name for the node type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.register_nodes">
+<span class="sig-name descname"><span class="pre">register_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.register_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the nodes to the <a class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory" title="NodeGraphQt.NodeGraph.node_factory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.node_factory()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em>) – list of nodes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new node in the node graph.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To list all node types <a class="reference internal" href="#NodeGraphQt.NodeGraph.registered_nodes" title="NodeGraphQt.NodeGraph.registered_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.registered_nodes()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_type</strong> (<em>str</em>) – node instance type.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – set name of the node.</p></li>
+<li><p><strong>selected</strong> (<em>bool</em>) – set created node to be selected.</p></li>
+<li><p><strong>color</strong> (<em>tuple</em><em> or </em><em>str</em>) – node color <code class="docutils literal notranslate"><span class="pre">(255,</span> <span class="pre">255,</span> <span class="pre">255)</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;#FFFFFF&quot;</span></code>.</p></li>
+<li><p><strong>text_color</strong> (<em>tuple</em><em> or </em><em>str</em>) – text color <code class="docutils literal notranslate"><span class="pre">(255,</span> <span class="pre">255,</span> <span class="pre">255)</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;#FFFFFF&quot;</span></code>.</p></li>
+<li><p><strong>pos</strong> (<em>list</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – initial x, y position for the node (default: <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>).</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the created instance of the node.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">BaseNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.add_node">
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.add_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a node into the node graph.
+unlike the <a class="reference internal" href="#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.create_node()</span></code></a> function this will not
+trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.node_created" title="NodeGraphQt.NodeGraph.node_created"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.node_created</span></code></a> signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p></li>
+<li><p><strong>pos</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – node x,y position. (optional)</p></li>
+<li><p><strong>selected</strong> (<em>bool</em>) – node selected state. (optional)</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.delete_node">
+<span class="sig-name descname"><span class="pre">delete_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.delete_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the node from the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.remove_node">
+<span class="sig-name descname"><span class="pre">remove_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.remove_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the node from the node graph.</p>
+<p>unlike the <a class="reference internal" href="#NodeGraphQt.NodeGraph.delete_node" title="NodeGraphQt.NodeGraph.delete_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.delete_node()</span></code></a> function this will not
+trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_deleted" title="NodeGraphQt.NodeGraph.nodes_deleted"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.nodes_deleted</span></code></a> signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a>) – node object.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.delete_nodes">
+<span class="sig-name descname"><span class="pre">delete_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.delete_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a list of specified nodes from the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.extract_nodes">
+<span class="sig-name descname"><span class="pre">extract_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt_warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.extract_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract select nodes from it connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of node instances.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+<li><p><strong>prompt_warning</strong> (<em>bool</em>) – prompt warning dialog box.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.all_nodes">
+<span class="sig-name descname"><span class="pre">all_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.all_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all nodes in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of nodes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.selected_nodes">
+<span class="sig-name descname"><span class="pre">selected_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.selected_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all selected nodes that are in the node graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of nodes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.select_all">
+<span class="sig-name descname"><span class="pre">select_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.select_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all nodes in the node graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.clear_selection">
+<span class="sig-name descname"><span class="pre">clear_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.clear_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the selection in the node graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_node_by_id">
+<span class="sig-name descname"><span class="pre">get_node_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_node_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the node from the node id string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node_id</strong> (<em>str</em>) – node id (<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.id" title="NodeGraphQt.NodeObject.id"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeObject.id</span></code></a>)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>node object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_node_by_name">
+<span class="sig-name descname"><span class="pre">get_node_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_node_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns node that matches the name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of the node.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>node object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_nodes_by_type">
+<span class="sig-name descname"><span class="pre">get_nodes_by_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_nodes_by_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all nodes by their node type identifier.
+(see: <a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.type_" title="NodeGraphQt.NodeObject.type_"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject.type_</span></code></a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node_type</strong> (<em>str</em>) – node type identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of nodes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject" title="NodeGraphQt.NodeObject">NodeGraphQt.NodeObject</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_unique_name">
+<span class="sig-name descname"><span class="pre">get_unique_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.get_unique_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a unique node name to avoid having nodes with the same name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>unique node name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.current_session">
+<span class="sig-name descname"><span class="pre">current_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the file path to the currently loaded session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path to the currently loaded session</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.clear_session">
+<span class="sig-name descname"><span class="pre">clear_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.clear_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the current node graph session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.serialize_session">
+<span class="sig-name descname"><span class="pre">serialize_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.serialize_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the current node graph layout to a dictionary.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.deserialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.save_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.load_session()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>serialized session of the current node layout.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.deserialize_session">
+<span class="sig-name descname"><span class="pre">deserialize_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.deserialize_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load node graph session from a dictionary object.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.serialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.load_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.save_session()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layout_data</strong> (<em>dict</em>) – dictionary object containing a node session.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.save_session">
+<span class="sig-name descname"><span class="pre">save_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.save_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the current node graph session layout to a <cite>JSON</cite> formatted file.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.serialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.deserialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.load_session()</span></code></a>,</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – path to the saved node layout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.load_session">
+<span class="sig-name descname"><span class="pre">load_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.load_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load node graph session layout file.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.deserialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.serialize_session()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.save_session()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – path to the serialized layout file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.import_session">
+<span class="sig-name descname"><span class="pre">import_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.import_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import node graph session layout file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – path to the serialized layout file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.copy_nodes">
+<span class="sig-name descname"><span class="pre">copy_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.copy_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy nodes to the clipboard.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.cut_nodes()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes (default: selected nodes).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.cut_nodes">
+<span class="sig-name descname"><span class="pre">cut_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.cut_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cut nodes to the clipboard.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function doesn’t not trigger the
+<a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_deleted" title="NodeGraphQt.NodeGraph.nodes_deleted"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.nodes_deleted</span></code></a> signal.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes" title="NodeGraphQt.NodeGraph.copy_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.copy_nodes()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes (default: selected nodes).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.paste_nodes">
+<span class="sig-name descname"><span class="pre">paste_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.paste_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pastes nodes copied from the clipboard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of pasted node instances.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.duplicate_nodes">
+<span class="sig-name descname"><span class="pre">duplicate_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.duplicate_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create duplicate copy from the list of nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of duplicated node instances.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.disable_nodes">
+<span class="sig-name descname"><span class="pre">disable_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.disable_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle nodes to be either disabled or enabled state.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_disabled" title="NodeGraphQt.NodeObject.set_disabled"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.set_disabled()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes.</p></li>
+<li><p><strong>mode</strong> (<em>bool</em>) – (optional) override state of the nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.use_OpenGL">
+<span class="sig-name descname"><span class="pre">use_OpenGL</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.use_OpenGL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the viewport to use QOpenGLWidget widget to draw the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.auto_layout_nodes">
+<span class="sig-name descname"><span class="pre">auto_layout_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.auto_layout_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auto layout the nodes in the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the node graph is acyclic then the <code class="docutils literal notranslate"><span class="pre">start_nodes</span></code> will need
+to be specified.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes to auto layout
+if nodes is None then all nodes is layed out.</p></li>
+<li><p><strong>down_stream</strong> (<em>bool</em>) – false to layout up stream.</p></li>
+<li><p><strong>start_nodes</strong> (<em>list</em><em>[</em><a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><em>NodeGraphQt.BaseNode</em></a><em>]</em>) – list of nodes to start the auto layout from (Optional).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.question_dialog">
+<span class="sig-name descname"><span class="pre">question_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.question_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts a question open dialog with <code class="docutils literal notranslate"><span class="pre">&quot;Yes&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;No&quot;</span></code> buttons in
+the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Convenience function to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.viewer().question_dialog()</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – question text.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – dialog window title.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>true if user clicked yes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.message_dialog">
+<span class="sig-name descname"><span class="pre">message_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.message_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts a file open dialog in the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Convenience function to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.viewer().message_dialog()</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – message text.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – dialog window title.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.load_dialog">
+<span class="sig-name descname"><span class="pre">load_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.load_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts a file open dialog in the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Convenience function to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.viewer().load_dialog()</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">&quot;json&quot;</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected file path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.save_dialog">
+<span class="sig-name descname"><span class="pre">save_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.save_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts a file save dialog in the node graph.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Convenience function to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.viewer().save_dialog()</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
+<li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">&quot;json&quot;</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected file path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.is_root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_root</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.is_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if the node graph controller is the root graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true is the node graph is root.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.sub_graphs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_graphs</span></span><a class="headerlink" href="#NodeGraphQt.NodeGraph.sub_graphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns expanded group node sub graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>{&lt;node_id&gt;: &lt;sub_graph&gt;}</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.expand_group_node">
+<span class="sig-name descname"><span class="pre">expand_group_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.expand_group_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands a group node session in a new tab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><em>NodeGraphQt.GroupNode</em></a>) – group node.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>sub node graph used to manage the group node session.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.collapse_group_node">
+<span class="sig-name descname"><span class="pre">collapse_group_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.collapse_group_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collapse a group node session tab and it’s expanded child sub graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><em>NodeGraphQt.GroupNode</em></a>) – group node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="subgraph">
+<h2>SubGraph<a class="headerlink" href="#subgraph" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">SubGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">SubGraph</span></code> class is just like the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> but is the main
+controller for managing the expanded node graph for a
+<a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.GroupNode</span></code></a>.</p>
+<div class="graphviz"><img src="_images/inheritance-4d11d3d6f94b5a617296d22a39b7d9117f3224c1.png" alt="Inheritance diagram of NodeGraphQt.SubGraph" usemap="#inheritance146860d3fa" class="inheritance graphviz" /></div>
+<map id="inheritance146860d3fa" name="inheritance146860d3fa">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodeGraph" target="_top" title="The ``NodeGraph`` class is the main controller for managing all nodes" alt="" coords="232,5,419,31"/>
+<area shape="rect" id="node3" href="#NodeGraphQt.SubGraph" target="_top" title="The ``SubGraph`` class is just like the ``NodeGraph`` but is the main" alt="" coords="467,5,644,31"/>
+</map><img alt="_images/sub_graph.png" src="_images/sub_graph.png" style="width: 70%;" />
+<ul class="simple">
+<li></li>
+</ul>
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.initialized_graphs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initialized_graphs</span></span><a class="headerlink" href="#NodeGraphQt.SubGraph.initialized_graphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the sub graphs in the order they were initialized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of sub graph objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">NodeGraphQt.SubGraph</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.navigation_widget">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">navigation_widget</span></span><a class="headerlink" href="#NodeGraphQt.SubGraph.navigation_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The navigation widget from the top most sub graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>navigation widget.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NodeNavigationWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.subviewer_widget">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subviewer_widget</span></span><a class="headerlink" href="#NodeGraphQt.SubGraph.subviewer_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>The widget to the sub graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>node graph widget.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>PySide2.QtWidgets.QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.parent_graph">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent_graph</span></span><a class="headerlink" href="#NodeGraphQt.SubGraph.parent_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent node graph controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>parent graph.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph">NodeGraphQt.NodeGraph</a> or <a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">NodeGraphQt.SubGraph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.node">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node</span></span><a class="headerlink" href="#NodeGraphQt.SubGraph.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent node to the sub graph.</p>
+<img alt="_images/group_node.png" src="_images/group_node.png" style="width: 250px;" />
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>group node.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode">NodeGraphQt.GroupNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.collapse_graph">
+<span class="sig-name descname"><span class="pre">collapse_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clear_session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.collapse_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collapse the current sub graph and hide its widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clear_session</strong> (<em>bool</em>) – clear the current session.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.expand_group_node">
+<span class="sig-name descname"><span class="pre">expand_group_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.expand_group_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands a group node session in current sub view.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><em>NodeGraphQt.GroupNode</em></a>) – group node.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>sub node graph used to manage the group node session.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.collapse_group_node">
+<span class="sig-name descname"><span class="pre">collapse_group_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.collapse_group_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collapse a group node session and it’s expanded child sub graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="nodes/GroupNode.html#NodeGraphQt.GroupNode" title="NodeGraphQt.GroupNode"><em>NodeGraphQt.GroupNode</em></a>) – group node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.get_input_port_nodes">
+<span class="sig-name descname"><span class="pre">get_input_port_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.get_input_port_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all the port nodes related to the group node input ports.</p>
+<img alt="_images/port_in_node.png" src="_images/port_in_node.png" style="width: 150px;" />
+<ul class="simple">
+<li></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type" title="NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.get_nodes_by_type()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.SubGraph.get_output_port_nodes" title="NodeGraphQt.SubGraph.get_output_port_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.get_output_port_nodes()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>input nodes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[NodeGraphQt.PortInputNode]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.get_output_port_nodes">
+<span class="sig-name descname"><span class="pre">get_output_port_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.get_output_port_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all the port nodes related to the group node output ports.</p>
+<img alt="_images/port_out_node.png" src="_images/port_out_node.png" style="width: 150px;" />
+<ul class="simple">
+<li></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type" title="NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.get_nodes_by_type()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.SubGraph.get_input_port_nodes" title="NodeGraphQt.SubGraph.get_input_port_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.get_input_port_nodes()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>output nodes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[NodeGraphQt.PortOutputNode]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.SubGraph.get_node_by_port">
+<span class="sig-name descname"><span class="pre">get_node_by_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.SubGraph.get_node_by_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the node related to the parent group node port object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>port</strong> (<a class="reference internal" href="port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – parent node port object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>port node object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="nodes/PortNode.html#NodeGraphQt.nodes.port_node.PortInputNode" title="NodeGraphQt.nodes.port_node.PortInputNode">PortInputNode</a> or <a class="reference internal" href="nodes/PortNode.html#NodeGraphQt.nodes.port_node.PortOutputNode" title="NodeGraphQt.nodes.port_node.PortOutputNode">PortOutputNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="nodes/_index_nodes.html" class="btn btn-neutral float-right" title="Nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="constants.html" class="btn btn-neutral float-left" title="Constants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Johnny Chan.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

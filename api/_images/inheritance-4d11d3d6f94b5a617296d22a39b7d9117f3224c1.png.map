@@ -1,0 +1,5 @@
+<map id="inheritance146860d3fa" name="inheritance146860d3fa">
+<area shape="rect" id="node1" href="#NodeGraphQt.NodeGraph" target="_top" title="The ``NodeGraph`` class is the main controller for managing all nodes" alt="" coords="232,5,419,31"/>
+<area shape="rect" id="node3" href="#NodeGraphQt.SubGraph" target="_top" title="The ``SubGraph`` class is just like the ``NodeGraph`` but is the main" alt="" coords="467,5,644,31"/>
+<area shape="rect" id="node2" title="QObject(self, parent: typing.Optional[PySide2.QtCore.QObject] = None) &#45;&gt; None" alt="" coords="5,5,184,31"/>
+</map>
