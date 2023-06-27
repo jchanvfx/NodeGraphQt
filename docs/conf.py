@@ -43,6 +43,7 @@ version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'autodocsumm',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
@@ -110,7 +111,7 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', "_themes"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'monokai'
@@ -124,12 +125,16 @@ pygments_style = 'monokai'
 # It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
 # pixels large. Default: None.
 html_favicon = '_images/favicon.png'
-html_logo = '_images/logo.png'
+html_logo = '_images/favicon.png'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+
+sys.path.insert(0, os.path.abspath('_themes'))
+extensions += ['sphinxawesome_theme']
+
+html_theme = 'sphinxawesome_theme'
 html_theme_path = ['_themes']
 html_show_sourcelink = False
 html_show_sphinx = False
@@ -145,28 +150,22 @@ html_context = {
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+html_title = 'NodeGraphQt'
 html_theme_options = {
-    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
-    # 'analytics_anonymize_ip': False,
-    # 'logo_only': False,
-    # 'display_version': True,
-    # 'prev_next_buttons_location': 'both',
-    # 'style_external_links': False,
-    # 'vcs_pageview_mode': '',
-    # 'style_nav_header_background': 'white',
-
-    ### Toc options ###
-    # 'collapse_navigation': True,
-    # 'sticky_navigation': True,
-    # 'navigation_depth': 4,
-    # 'includehidden': True,
-    # 'titles_only': False
+    # "logo_light": "_images/logo.png",
+    # "logo_dark": "_images/logo.png"
+    # # Add your theme options. For example:
+    # 'show_breadcrumbs': True,
+    # 'main_nav_links': {
+    #     'About': '/about',
+    # }
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static', '_images']
+html_css_files = ['custom.css']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -177,10 +176,10 @@ html_static_path = ['_static', '_images']
 # 'searchbox.html']``.
 
 html_sidebars = {
-    '**': ['globaltoc.html',
-           'relations.html',
-           'sourcelink.html',
-           'searchbox.html']
+    '**': [
+        'sidebar_main_nav_links.html',
+        'sidebar_toc.html'
+    ]
 }
 
 
@@ -192,23 +191,7 @@ htmlhelp_basename = 'NodeGraphQTdoc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
+latex_elements = {}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
