@@ -1,147 +1,92 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>BaseNode &mdash; NodeGraphQt 0.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="GroupNode" href="GroupNode.html" />
-    <link rel="prev" title="BackdropNode" href="BackdropNode.html" /> 
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" metia="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>BaseNode | NodeGraphQt</title>
+<meta content="BaseNode | NodeGraphQt" property="og:title"/>
+<meta content="BaseNode | NodeGraphQt" name="twitter:title"/>
+<link href="../_static/pygments.css" rel="stylesheet"/>
+<link href="../_static/theme.3849c567b4e07dd3db70.css" rel="stylesheet"/>
+<link href="../_static/graphviz.css" rel="stylesheet"/>
+<link href="../_static/custom.css" rel="stylesheet"/>
+<link href="../_static/favicon.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="GroupNode.html" rel="next" title="GroupNode"/>
+<link href="BackdropNode.html" rel="prev" title="BackdropNode"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+<script src="../_static/doctools.js"></script>
+<script src="../_static/sphinx_highlight.js"></script>
+<script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
 </head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> NodeGraphQt
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.6.3
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<body :class="{ 'overflow-hidden': showSidebar }" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="24" src="../_static/favicon.png" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">NodeGraphQt</span>
+</a></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none">
+<form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+      K
+    </kbd>
+</form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="16" src="../_static/favicon.png" width="16"/><span class="font-bold text-clip whitespace-nowrap">NodeGraphQt</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="_index_nodes.html">Nodes</a><ul class="current">
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">BaseNode</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#NodeGraphQt.BaseNode"><code class="docutils literal notranslate"><span class="pre">BaseNode</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.set_icon"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_icon()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.icon"><code class="docutils literal notranslate"><span class="pre">BaseNode.icon()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.widgets"><code class="docutils literal notranslate"><span class="pre">BaseNode.widgets()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.get_widget"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_widget()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_custom_widget"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_custom_widget()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_combo_menu"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_combo_menu()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_text_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_text_input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_checkbox()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_output()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.get_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.get_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_output()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.delete_input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.delete_output()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_port_deletion_allowed()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.port_deletion_allowed"><code class="docutils literal notranslate"><span class="pre">BaseNode.port_deletion_allowed()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.set_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_ports()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.inputs"><code class="docutils literal notranslate"><span class="pre">BaseNode.inputs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.input_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.input_ports()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.outputs"><code class="docutils literal notranslate"><span class="pre">BaseNode.outputs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.output_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.output_ports()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.input"><code class="docutils literal notranslate"><span class="pre">BaseNode.input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.set_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_input()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.output"><code class="docutils literal notranslate"><span class="pre">BaseNode.output()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.set_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_output()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes"><code class="docutils literal notranslate"><span class="pre">BaseNode.connected_input_nodes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_output_nodes"><code class="docutils literal notranslate"><span class="pre">BaseNode.connected_output_nodes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_accept_port_type()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types"><code class="docutils literal notranslate"><span class="pre">BaseNode.accepted_port_types()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.add_reject_port_type"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_reject_port_type()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.rejected_port_types"><code class="docutils literal notranslate"><span class="pre">BaseNode.rejected_port_types()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_connected"><code class="docutils literal notranslate"><span class="pre">BaseNode.on_input_connected()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_disconnected"><code class="docutils literal notranslate"><span class="pre">BaseNode.on_input_disconnected()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#basenode-circle">BaseNode (Circle)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#NodeGraphQt.BaseNodeCircle"><code class="docutils literal notranslate"><span class="pre">BaseNodeCircle</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basenode-circle">BaseNode (Circle)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="GroupNode.html">GroupNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PortNode.html">Port Nodes</a></li>
 </ul>
@@ -163,112 +108,168 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex_menu.html">Menu Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../host_apps/_index_apps.html">Host Application Examples</a></li>
 </ul>
-
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">NodeGraphQt</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="_index_nodes.html">Nodes</a> &raquo;</li>
-        
-      <li>BaseNode</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            
-              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/main/docs/nodes/BaseNode.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
+</nav>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <section id="basenode">
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">NodeGraphQt</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="_index_nodes.html">Nodes</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">BaseNode</span>
+</nav>
+<div id="content" role="main">
+<section id="basenode">
 <h1>BaseNode<a class="headerlink" href="#basenode" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">BaseNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">BaseNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode'">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code> class is the base class for nodes that allows
 port connections from one node to another.</p>
-<div class="graphviz"><img src="../_images/inheritance-488327f170d335f0eae803c534296459f72c2623.png" alt="Inheritance diagram of NodeGraphQt.BaseNode" usemap="#inheritance45cde90828" class="inheritance graphviz" /></div>
+<div class="graphviz"><img alt="Inheritance diagram of NodeGraphQt.BaseNode" class="inheritance graphviz" src="../_images/inheritance-488327f170d335f0eae803c534296459f72c2623.png" usemap="#inheritance45cde90828"/></div>
 <map id="inheritance45cde90828" name="inheritance45cde90828">
-<area shape="rect" id="node1" href="#NodeGraphQt.BaseNode" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows" alt="" coords="244,5,424,31"/>
-<area shape="rect" id="node2" href="NodeObject.html#NodeGraphQt.NodeObject" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all" alt="" coords="5,5,196,31"/>
-</map><img alt="../_images/node.png" src="../_images/node.png" style="width: 250px;" />
+<area alt="" coords="244,5,424,31" href="#NodeGraphQt.BaseNode" id="node1" shape="rect" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows"/>
+<area alt="" coords="5,5,196,31" href="NodeObject.html#NodeGraphQt.NodeObject" id="node2" shape="rect" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all"/>
+</map><img alt="../_images/node.png" src="../_images/node.png" style="width: 250px;"/>
 <p>example snippet:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="k">class</span> <span class="nc">ExampleNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span>    <span class="c1"># unique node identifier domain.</span>
-<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.jchanvfx.github&#39;</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.jchanvfx.github'</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span>    <span class="c1"># initial default node name.</span>
-<span class="linenos"> 9</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;My Node&#39;</span>
+<span class="linenos"> 9</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'My Node'</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">12</span>        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">13</span>
 <span class="linenos">14</span>        <span class="c1"># create an input port.</span>
-<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
 <span class="linenos">16</span>
 <span class="linenos">17</span>        <span class="c1"># create an output port.</span>
-<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>Methods:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_icon" title="NodeGraphQt.BaseNode.set_icon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_icon</span></code></a>([icon])</p></td>
+<td><p>Set the node icon.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.icon" title="NodeGraphQt.BaseNode.icon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">icon</span></code></a>()</p></td>
+<td><p>Node icon path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.widgets" title="NodeGraphQt.BaseNode.widgets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">widgets</span></code></a>()</p></td>
+<td><p>Returns all embedded widgets from this node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_widget" title="NodeGraphQt.BaseNode.get_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_widget</span></code></a>(name)</p></td>
+<td><p>Returns the embedded widget associated with the property name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_custom_widget" title="NodeGraphQt.BaseNode.add_custom_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_custom_widget</span></code></a>(widget[, widget_type, tab])</p></td>
+<td><p>Add a custom node widget into the node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_combo_menu" title="NodeGraphQt.BaseNode.add_combo_menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_combo_menu</span></code></a>(name[, label, items, tab])</p></td>
+<td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code> widget into the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_text_input</span></code></a>(name[, label, text, tab])</p></td>
+<td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code> widget into the node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_checkbox</span></code></a>(name[, label, text, state, tab])</p></td>
+<td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget into the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, ...])</p></td>
+<td><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_output</span></code></a>([name, multi_output, ...])</p></td>
+<td><p>Add output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_input" title="NodeGraphQt.BaseNode.get_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input</span></code></a>(port)</p></td>
+<td><p>Get input port by the name or index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_output" title="NodeGraphQt.BaseNode.get_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_output</span></code></a>(port)</p></td>
+<td><p>Get output port by the name or index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_input" title="NodeGraphQt.BaseNode.delete_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_input</span></code></a>(port)</p></td>
+<td><p>Delete input port.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_output" title="NodeGraphQt.BaseNode.delete_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_output</span></code></a>(port)</p></td>
+<td><p>Delete output port.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed" title="NodeGraphQt.BaseNode.set_port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_port_deletion_allowed</span></code></a>([mode])</p></td>
+<td><p>Allow ports to be removable on this node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.port_deletion_allowed" title="NodeGraphQt.BaseNode.port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">port_deletion_allowed</span></code></a>()</p></td>
+<td><p>Return true if ports can be deleted on this node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_ports" title="NodeGraphQt.BaseNode.set_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ports</span></code></a>(port_data)</p></td>
+<td><p>Create node input and output ports from serialized port data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.inputs" title="NodeGraphQt.BaseNode.inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inputs</span></code></a>()</p></td>
+<td><p>Returns all the input ports from the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input_ports" title="NodeGraphQt.BaseNode.input_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_ports</span></code></a>()</p></td>
+<td><p>Return all input ports.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.outputs" title="NodeGraphQt.BaseNode.outputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outputs</span></code></a>()</p></td>
+<td><p>Returns all the output ports from the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output_ports" title="NodeGraphQt.BaseNode.output_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output_ports</span></code></a>()</p></td>
+<td><p>Return all output ports.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input" title="NodeGraphQt.BaseNode.input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input</span></code></a>(index)</p></td>
+<td><p>Return the input port with the matching index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_input" title="NodeGraphQt.BaseNode.set_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_input</span></code></a>(index, port)</p></td>
+<td><p>Creates a connection pipe to the targeted output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output" title="NodeGraphQt.BaseNode.output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output</span></code></a>(index)</p></td>
+<td><p>Return the output port with the matching index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_output" title="NodeGraphQt.BaseNode.set_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_output</span></code></a>(index, port)</p></td>
+<td><p>Creates a connection pipe to the targeted input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="NodeGraphQt.BaseNode.connected_input_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_input_nodes</span></code></a>()</p></td>
+<td><p>Returns all nodes connected from the input ports.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_output_nodes" title="NodeGraphQt.BaseNode.connected_output_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_output_nodes</span></code></a>()</p></td>
+<td><p>Returns all nodes connected from the output ports.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="NodeGraphQt.BaseNode.add_accept_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_accept_port_type</span></code></a>(port, port_type_data)</p></td>
+<td><p>Add a accept constrain to a specified node port.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types" title="NodeGraphQt.BaseNode.accepted_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accepted_port_types</span></code></a>(port)</p></td>
+<td><p>Returns a dictionary of connection constrains of the port types that allow for a pipe connection to this node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="NodeGraphQt.BaseNode.add_reject_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_reject_port_type</span></code></a>(port, port_type_data)</p></td>
+<td><p>Add a reject constrain to a specified node port.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.rejected_port_types" title="NodeGraphQt.BaseNode.rejected_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rejected_port_types</span></code></a>(port)</p></td>
+<td><p>Returns a dictionary of connection constrains of the port types that are NOT allowed for a pipe connection to this node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_connected" title="NodeGraphQt.BaseNode.on_input_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_connected</span></code></a>(in_port, out_port)</p></td>
+<td><p>Callback triggered when a new pipe connection is made.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_disconnected" title="NodeGraphQt.BaseNode.on_input_disconnected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_disconnected</span></code></a>(in_port, out_port)</p></td>
+<td><p>Callback triggered when a pipe connection has been disconnected from a INPUT port.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_icon">
-<span class="sig-name descname"><span class="pre">set_icon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_icon" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_icon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_icon" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.set_icon'">¶</a></dt>
 <dd><p>Set the node icon.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -276,10 +277,9 @@ port connections from one node to another.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.icon">
-<span class="sig-name descname"><span class="pre">icon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.icon" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">icon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.icon" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.icon'">¶</a></dt>
 <dd><p>Node icon path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -290,10 +290,9 @@ port connections from one node to another.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.widgets">
-<span class="sig-name descname"><span class="pre">widgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.widgets" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">widgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.widgets" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.widgets'">¶</a></dt>
 <dd><p>Returns all embedded widgets from this node.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -308,10 +307,9 @@ port connections from one node to another.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.get_widget">
-<span class="sig-name descname"><span class="pre">get_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_widget" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.get_widget'">¶</a></dt>
 <dd><p>Returns the embedded widget associated with the property name.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -331,10 +329,9 @@ port connections from one node to another.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_custom_widget">
-<span class="sig-name descname"><span class="pre">add_custom_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_custom_widget" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_custom_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_custom_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_custom_widget'">¶</a></dt>
 <dd><p>Add a custom node widget into the node.</p>
 <p>see example <a class="reference internal" href="../examples/ex_node.html#embedding-custom-widgets"><span class="std std-ref">Embedding Custom Widgets</span></a>.</p>
 <div class="admonition note">
@@ -354,10 +351,9 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_combo_menu">
-<span class="sig-name descname"><span class="pre">add_combo_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_combo_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_combo_menu" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_combo_menu'">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QComboBox</span></code> widget
 into the node.</p>
@@ -377,10 +373,9 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_text_input">
-<span class="sig-name descname"><span class="pre">add_text_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_text_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_text_input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_text_input'">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code> widget
 into the node.</p>
@@ -400,10 +395,9 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_checkbox">
-<span class="sig-name descname"><span class="pre">add_checkbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_checkbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_checkbox" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_checkbox'">¶</a></dt>
 <dd><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a>
 function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget
 into the node.</p>
@@ -424,10 +418,9 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_input">
-<span class="sig-name descname"><span class="pre">add_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_input'">¶</a></dt>
 <dd><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -453,10 +446,9 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_output">
-<span class="sig-name descname"><span class="pre">add_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">painter_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_output" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_output'">¶</a></dt>
 <dd><p>Add output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -482,10 +474,9 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.get_input">
-<span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.get_input'">¶</a></dt>
 <dd><p>Get input port by the name or index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -499,10 +490,9 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.get_output">
-<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.get_output" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.get_output'">¶</a></dt>
 <dd><p>Get output port by the name or index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -516,10 +506,9 @@ of the port shape see example: <a class="reference internal" href="../examples/e
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.delete_input">
-<span class="sig-name descname"><span class="pre">delete_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">delete_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.delete_input'">¶</a></dt>
 <dd><p>Delete input port.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -534,10 +523,9 @@ returns <code class="docutils literal notranslate"><span class="pre">True</span>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.delete_output">
-<span class="sig-name descname"><span class="pre">delete_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">delete_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.delete_output" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.delete_output'">¶</a></dt>
 <dd><p>Delete output port.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -552,10 +540,9 @@ returns <code class="docutils literal notranslate"><span class="pre">True</span>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_port_deletion_allowed">
-<span class="sig-name descname"><span class="pre">set_port_deletion_allowed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_port_deletion_allowed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.set_port_deletion_allowed'">¶</a></dt>
 <dd><p>Allow ports to be removable on this node.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -568,10 +555,9 @@ returns <code class="docutils literal notranslate"><span class="pre">True</span>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.port_deletion_allowed">
-<span class="sig-name descname"><span class="pre">port_deletion_allowed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.port_deletion_allowed" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">port_deletion_allowed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.port_deletion_allowed" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.port_deletion_allowed'">¶</a></dt>
 <dd><p>Return true if ports can be deleted on this node.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -586,10 +572,9 @@ returns <code class="docutils literal notranslate"><span class="pre">True</span>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_ports">
-<span class="sig-name descname"><span class="pre">set_ports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_ports" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_ports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_ports" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.set_ports'">¶</a></dt>
 <dd><p>Create node input and output ports from serialized port data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -601,19 +586,19 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <p class="admonition-title">Hint</p>
 <p>example snippet of port data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;input_ports&#39;</span><span class="p">:</span>
+    <span class="s1">'input_ports'</span><span class="p">:</span>
         <span class="p">[{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;multi_connection&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Input&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;locked&#39;</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="s1">'name'</span><span class="p">:</span> <span class="s1">'input'</span><span class="p">,</span>
+            <span class="s1">'multi_connection'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">'display_name'</span><span class="p">:</span> <span class="s1">'Input'</span><span class="p">,</span>
+            <span class="s1">'locked'</span><span class="p">:</span> <span class="kc">False</span>
         <span class="p">}],</span>
-    <span class="s1">&#39;output_ports&#39;</span><span class="p">:</span>
+    <span class="s1">'output_ports'</span><span class="p">:</span>
         <span class="p">[{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;multi_connection&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Output&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;locked&#39;</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="s1">'name'</span><span class="p">:</span> <span class="s1">'output'</span><span class="p">,</span>
+            <span class="s1">'multi_connection'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">'display_name'</span><span class="p">:</span> <span class="s1">'Output'</span><span class="p">,</span>
+            <span class="s1">'locked'</span><span class="p">:</span> <span class="kc">False</span>
         <span class="p">}]</span>
 <span class="p">}</span>
 </pre></div>
@@ -625,10 +610,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.inputs">
-<span class="sig-name descname"><span class="pre">inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.inputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.inputs" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.inputs'">¶</a></dt>
 <dd><p>Returns all the input ports from the node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -639,10 +623,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.input_ports">
-<span class="sig-name descname"><span class="pre">input_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.input_ports" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">input_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.input_ports" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.input_ports'">¶</a></dt>
 <dd><p>Return all input ports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -653,10 +636,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.outputs">
-<span class="sig-name descname"><span class="pre">outputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.outputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">outputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.outputs" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.outputs'">¶</a></dt>
 <dd><p>Returns all the output ports from the node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -667,10 +649,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.output_ports">
-<span class="sig-name descname"><span class="pre">output_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.output_ports" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.output_ports" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.output_ports'">¶</a></dt>
 <dd><p>Return all output ports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -681,10 +662,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.input">
-<span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.input'">¶</a></dt>
 <dd><p>Return the input port with the matching index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -698,10 +678,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_input">
-<span class="sig-name descname"><span class="pre">set_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_input" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.set_input'">¶</a></dt>
 <dd><p>Creates a connection pipe to the targeted output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -712,10 +691,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.output">
-<span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.output" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.output'">¶</a></dt>
 <dd><p>Return the output port with the matching index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -729,10 +707,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.set_output">
-<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.set_output" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.set_output'">¶</a></dt>
 <dd><p>Creates a connection pipe to the targeted input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -743,10 +720,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.connected_input_nodes">
-<span class="sig-name descname"><span class="pre">connected_input_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">connected_input_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.connected_input_nodes'">¶</a></dt>
 <dd><p>Returns all nodes connected from the input ports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -757,10 +733,9 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.connected_output_nodes">
-<span class="sig-name descname"><span class="pre">connected_output_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.connected_output_nodes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">connected_output_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.connected_output_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.connected_output_nodes'">¶</a></dt>
 <dd><p>Returns all nodes connected from the output ports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -771,18 +746,17 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_accept_port_type">
-<span class="sig-name descname"><span class="pre">add_accept_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_accept_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_accept_port_type'">¶</a></dt>
 <dd><p>Add a accept constrain to a specified node port.</p>
 <p>Once a constrain has been added only ports of that type specified will
 be allowed a pipe connection.</p>
 <p>port type data example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;port_name&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span>
-    <span class="s1">&#39;port_type&#39;</span><span class="p">:</span> <span class="n">PortTypeEnum</span><span class="o">.</span><span class="n">IN</span><span class="o">.</span><span class="n">value</span>
-    <span class="s1">&#39;node_type&#39;</span><span class="p">:</span> <span class="s1">&#39;io.github.jchanvfx.NodeClass&#39;</span>
+    <span class="s1">'port_name'</span><span class="p">:</span> <span class="s1">'foo'</span>
+    <span class="s1">'port_type'</span><span class="p">:</span> <span class="n">PortTypeEnum</span><span class="o">.</span><span class="n">IN</span><span class="o">.</span><span class="n">value</span>
+    <span class="s1">'node_type'</span><span class="p">:</span> <span class="s1">'io.github.jchanvfx.NodeClass'</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -799,10 +773,9 @@ be allowed a pipe connection.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.accepted_port_types">
-<span class="sig-name descname"><span class="pre">accepted_port_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.accepted_port_types" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">accepted_port_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.accepted_port_types" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.accepted_port_types'">¶</a></dt>
 <dd><p>Returns a dictionary of connection constrains of the port types
 that allow for a pipe connection to this node.</p>
 <dl class="field-list simple">
@@ -817,18 +790,17 @@ that allow for a pipe connection to this node.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_reject_port_type">
-<span class="sig-name descname"><span class="pre">add_reject_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_reject_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_reject_port_type'">¶</a></dt>
 <dd><p>Add a reject constrain to a specified node port.</p>
 <p>Once a constrain has been added only ports of that type specified will
 NOT be allowed a pipe connection.</p>
 <p>port type data example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s1">&#39;port_name&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span>
-    <span class="s1">&#39;port_type&#39;</span><span class="p">:</span> <span class="n">PortTypeEnum</span><span class="o">.</span><span class="n">IN</span><span class="o">.</span><span class="n">value</span>
-    <span class="s1">&#39;node_type&#39;</span><span class="p">:</span> <span class="s1">&#39;io.github.jchanvfx.NodeClass&#39;</span>
+    <span class="s1">'port_name'</span><span class="p">:</span> <span class="s1">'foo'</span>
+    <span class="s1">'port_type'</span><span class="p">:</span> <span class="n">PortTypeEnum</span><span class="o">.</span><span class="n">IN</span><span class="o">.</span><span class="n">value</span>
+    <span class="s1">'node_type'</span><span class="p">:</span> <span class="s1">'io.github.jchanvfx.NodeClass'</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -845,10 +817,9 @@ NOT be allowed a pipe connection.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.rejected_port_types">
-<span class="sig-name descname"><span class="pre">rejected_port_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.rejected_port_types" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">rejected_port_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.rejected_port_types" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.rejected_port_types'">¶</a></dt>
 <dd><p>Returns a dictionary of connection constrains of the port types
 that are NOT allowed for a pipe connection to this node.</p>
 <dl class="field-list simple">
@@ -863,10 +834,9 @@ that are NOT allowed for a pipe connection to this node.</p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.on_input_connected">
-<span class="sig-name descname"><span class="pre">on_input_connected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.on_input_connected" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">on_input_connected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.on_input_connected" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.on_input_connected'">¶</a></dt>
 <dd><p>Callback triggered when a new pipe connection is made.</p>
 <p><em>The default of this function does nothing re-implement if you require
 logic to run for this event.</em></p>
@@ -884,10 +854,9 @@ logic to run for this event.</em></p>
 </dd>
 </dl>
 </dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.on_input_disconnected">
-<span class="sig-name descname"><span class="pre">on_input_disconnected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.on_input_disconnected" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">on_input_disconnected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.on_input_disconnected" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.on_input_disconnected'">¶</a></dt>
 <dd><p>Callback triggered when a pipe connection has been disconnected
 from a INPUT port.</p>
 <p><em>The default of this function does nothing re-implement if you require
@@ -906,87 +875,103 @@ logic to run for this event.</em></p>
 </dd>
 </dl>
 </dd></dl>
-
 </dd></dl>
-
 </section>
 <section id="basenode-circle">
 <h1>BaseNode (Circle)<a class="headerlink" href="#basenode-circle" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNodeCircle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">BaseNodeCircle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNodeCircle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.</span></span><span class="sig-name descname"><span class="pre">BaseNodeCircle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qgraphics_item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNodeCircle" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNodeCircle'">¶</a></dt>
 <dd><p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.5.2</span></code></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNodeCircle</span></code> is pretty much the same class as the
 <a class="reference internal" href="#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> except with a different design.</p>
-<div class="graphviz"><img src="../_images/inheritance-a88e69616cb9e7923cceb06bd9fdb22bb3bce504.png" alt="Inheritance diagram of NodeGraphQt.BaseNodeCircle" usemap="#inheritance6e8e82e61d" class="inheritance graphviz" /></div>
+<div class="graphviz"><img alt="Inheritance diagram of NodeGraphQt.BaseNodeCircle" class="inheritance graphviz" src="../_images/inheritance-a88e69616cb9e7923cceb06bd9fdb22bb3bce504.png" usemap="#inheritance6e8e82e61d"/></div>
 <map id="inheritance6e8e82e61d" name="inheritance6e8e82e61d">
-<area shape="rect" id="node1" href="#NodeGraphQt.BaseNode" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows" alt="" coords="244,5,424,31"/>
-<area shape="rect" id="node3" href="#NodeGraphQt.BaseNodeCircle" target="_top" title="`Implemented in` ``v0.5.2``" alt="" coords="472,5,689,31"/>
-<area shape="rect" id="node2" href="NodeObject.html#NodeGraphQt.NodeObject" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all" alt="" coords="5,5,196,31"/>
-</map><img alt="../_images/node_circle.png" src="../_images/node_circle.png" style="width: 250px;" />
+<area alt="" coords="244,5,424,31" href="#NodeGraphQt.BaseNode" id="node1" shape="rect" target="_top" title="The ``NodeGraphQt.BaseNode`` class is the base class for nodes that allows"/>
+<area alt="" coords="472,5,689,31" href="#NodeGraphQt.BaseNodeCircle" id="node3" shape="rect" target="_top" title="`Implemented in` ``v0.5.2``"/>
+<area alt="" coords="5,5,196,31" href="NodeObject.html#NodeGraphQt.NodeObject" id="node2" shape="rect" target="_top" title="The ``NodeGraphQt.NodeObject`` class is the main base class that all"/>
+</map><img alt="../_images/node_circle.png" src="../_images/node_circle.png" style="width: 250px;"/>
 <p>example snippet:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNodeCircle</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="k">class</span> <span class="nc">ExampleNode</span><span class="p">(</span><span class="n">BaseNodeCircle</span><span class="p">):</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span>    <span class="c1"># unique node identifier domain.</span>
-<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.jchanvfx.github&#39;</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.jchanvfx.github'</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span>    <span class="c1"># initial default node name.</span>
-<span class="linenos"> 9</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;My Node&#39;</span>
+<span class="linenos"> 9</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'My Node'</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">12</span>        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">13</span>
 <span class="linenos">14</span>        <span class="c1"># create an input port.</span>
-<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
 <span class="linenos">16</span>
 <span class="linenos">17</span>        <span class="c1"># create an output port.</span>
-<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
-
 </section>
-
-
-           </div>
-           
-          </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="GroupNode.html" class="btn btn-neutral float-right" title="GroupNode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="BackdropNode.html" class="btn btn-neutral float-left" title="BackdropNode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2023, Johnny Chan.
-
-    </p>
-  </div> 
-
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode'" class="reference internal" href="#NodeGraphQt.BaseNode"><code class="docutils literal notranslate"><span class="pre">BaseNode</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.set_icon'" class="reference internal" href="#NodeGraphQt.BaseNode.set_icon"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_icon()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.icon'" class="reference internal" href="#NodeGraphQt.BaseNode.icon"><code class="docutils literal notranslate"><span class="pre">BaseNode.icon()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.widgets'" class="reference internal" href="#NodeGraphQt.BaseNode.widgets"><code class="docutils literal notranslate"><span class="pre">BaseNode.widgets()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.get_widget'" class="reference internal" href="#NodeGraphQt.BaseNode.get_widget"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_widget()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_custom_widget'" class="reference internal" href="#NodeGraphQt.BaseNode.add_custom_widget"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_custom_widget()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_combo_menu'" class="reference internal" href="#NodeGraphQt.BaseNode.add_combo_menu"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_combo_menu()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_text_input'" class="reference internal" href="#NodeGraphQt.BaseNode.add_text_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_text_input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_checkbox'" class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_checkbox()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_input'" class="reference internal" href="#NodeGraphQt.BaseNode.add_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_output'" class="reference internal" href="#NodeGraphQt.BaseNode.add_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_output()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.get_input'" class="reference internal" href="#NodeGraphQt.BaseNode.get_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.get_output'" class="reference internal" href="#NodeGraphQt.BaseNode.get_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.get_output()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.delete_input'" class="reference internal" href="#NodeGraphQt.BaseNode.delete_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.delete_input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.delete_output'" class="reference internal" href="#NodeGraphQt.BaseNode.delete_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.delete_output()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.set_port_deletion_allowed'" class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_port_deletion_allowed()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.port_deletion_allowed'" class="reference internal" href="#NodeGraphQt.BaseNode.port_deletion_allowed"><code class="docutils literal notranslate"><span class="pre">BaseNode.port_deletion_allowed()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.set_ports'" class="reference internal" href="#NodeGraphQt.BaseNode.set_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_ports()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.inputs'" class="reference internal" href="#NodeGraphQt.BaseNode.inputs"><code class="docutils literal notranslate"><span class="pre">BaseNode.inputs()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.input_ports'" class="reference internal" href="#NodeGraphQt.BaseNode.input_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.input_ports()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.outputs'" class="reference internal" href="#NodeGraphQt.BaseNode.outputs"><code class="docutils literal notranslate"><span class="pre">BaseNode.outputs()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.output_ports'" class="reference internal" href="#NodeGraphQt.BaseNode.output_ports"><code class="docutils literal notranslate"><span class="pre">BaseNode.output_ports()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.input'" class="reference internal" href="#NodeGraphQt.BaseNode.input"><code class="docutils literal notranslate"><span class="pre">BaseNode.input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.set_input'" class="reference internal" href="#NodeGraphQt.BaseNode.set_input"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_input()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.output'" class="reference internal" href="#NodeGraphQt.BaseNode.output"><code class="docutils literal notranslate"><span class="pre">BaseNode.output()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.set_output'" class="reference internal" href="#NodeGraphQt.BaseNode.set_output"><code class="docutils literal notranslate"><span class="pre">BaseNode.set_output()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.connected_input_nodes'" class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes"><code class="docutils literal notranslate"><span class="pre">BaseNode.connected_input_nodes()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.connected_output_nodes'" class="reference internal" href="#NodeGraphQt.BaseNode.connected_output_nodes"><code class="docutils literal notranslate"><span class="pre">BaseNode.connected_output_nodes()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_accept_port_type'" class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_accept_port_type()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.accepted_port_types'" class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types"><code class="docutils literal notranslate"><span class="pre">BaseNode.accepted_port_types()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.add_reject_port_type'" class="reference internal" href="#NodeGraphQt.BaseNode.add_reject_port_type"><code class="docutils literal notranslate"><span class="pre">BaseNode.add_reject_port_type()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.rejected_port_types'" class="reference internal" href="#NodeGraphQt.BaseNode.rejected_port_types"><code class="docutils literal notranslate"><span class="pre">BaseNode.rejected_port_types()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.on_input_connected'" class="reference internal" href="#NodeGraphQt.BaseNode.on_input_connected"><code class="docutils literal notranslate"><span class="pre">BaseNode.on_input_connected()</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNode.on_input_disconnected'" class="reference internal" href="#NodeGraphQt.BaseNode.on_input_disconnected"><code class="docutils literal notranslate"><span class="pre">BaseNode.on_input_disconnected()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#basenode-circle'" class="reference internal" href="#basenode-circle">BaseNode (Circle)</a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.BaseNodeCircle'" class="reference internal" href="#NodeGraphQt.BaseNodeCircle"><code class="docutils literal notranslate"><span class="pre">BaseNodeCircle</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2023, Johnny Chan </p>
+</div>
+</div>
 </footer>
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
+</div>
 </body>
 </html>

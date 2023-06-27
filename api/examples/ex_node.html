@@ -1,102 +1,96 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Node Overview &mdash; NodeGraphQt 0.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Port Overview" href="ex_port.html" />
-    <link rel="prev" title="General Overview" href="ex_overview.html" /> 
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" metia="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Node Overview | NodeGraphQt</title>
+<meta content="Node Overview | NodeGraphQt" property="og:title"/>
+<meta content="Node Overview | NodeGraphQt" name="twitter:title"/>
+<link href="../_static/pygments.css" rel="stylesheet"/>
+<link href="../_static/theme.3849c567b4e07dd3db70.css" rel="stylesheet"/>
+<link href="../_static/graphviz.css" rel="stylesheet"/>
+<link href="../_static/custom.css" rel="stylesheet"/>
+<link href="../_static/favicon.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="ex_port.html" rel="next" title="Port Overview"/>
+<link href="ex_overview.html" rel="prev" title="General Overview"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+<script src="../_static/doctools.js"></script>
+<script src="../_static/sphinx_highlight.js"></script>
+<script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
 </head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> NodeGraphQt
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.6.3
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<body :class="{ 'overflow-hidden': showSidebar }" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="24" src="../_static/favicon.png" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">NodeGraphQt</span>
+</a></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none">
+<form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+      K
+    </kbd>
+</form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="16" src="../_static/favicon.png" width="16"/><span class="font-bold text-clip whitespace-nowrap">NodeGraphQt</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../nodes/_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../nodes/NodeObject.html">NodeObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BackdropNode.html">BackdropNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BaseNode.html">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BaseNode.html#basenode-circle">BaseNode (Circle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/GroupNode.html">GroupNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/PortNode.html">Port Nodes</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
 </ul>
@@ -108,91 +102,37 @@
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ex_overview.html">General Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-nodes">Creating Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-node-widgets">Creating Node Widgets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#embedding-custom-widgets">Embedding Custom Widgets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-nodes">Connecting Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-a-propertiesbin">Connecting a PropertiesBin</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_port.html">Port Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_pipe.html">Pipe Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_menu.html">Menu Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../host_apps/_index_apps.html">Host Application Examples</a></li>
 </ul>
-
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">NodeGraphQt</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Node Overview</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            
-              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/main/docs/examples/ex_node.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
+</nav>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <section id="node-overview">
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">NodeGraphQt</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Node Overview</span>
+</nav>
+<div id="content" role="main">
+<section id="node-overview">
 <h1>Node Overview<a class="headerlink" href="#node-overview" title="Permalink to this heading">¶</a></h1>
 <section id="creating-nodes">
-<h2>Creating Nodes<a class="headerlink" href="#creating-nodes" title="Permalink to this heading">¶</a></h2>
+<h2>Creating Nodes<a class="headerlink" href="#creating-nodes" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-nodes'">¶</a></h2>
 <div class="line-block">
 <div class="line">Creating a node is done by calling the <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.create_node()</span></code></a> function.</div>
 <div class="line">(<cite>see example below</cite> <code class="docutils literal notranslate"><span class="pre">line:</span> <span class="pre">23</span></code>)</div>
@@ -202,17 +142,17 @@
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
-<span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;my node&#39;</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
+<span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">10</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">)</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'bar'</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'world'</span><span class="p">)</span>
 <span class="linenos">15</span>
-<span class="linenos">16</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">16</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
 <span class="linenos">17</span>    <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">([])</span>
 <span class="linenos">18</span>
 <span class="linenos">19</span>    <span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
@@ -220,38 +160,38 @@
 <span class="linenos">21</span>    <span class="n">node_graph</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="linenos">22</span>
 <span class="hll"><span class="linenos">23</span>    <span class="c1"># here we create a couple nodes in the node graph.</span>
-</span><span class="linenos">24</span>    <span class="n">node_a</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.MyNode&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;node a&#39;</span><span class="p">)</span>
-<span class="linenos">25</span>    <span class="n">node_b</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.MyNode&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;node b&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+</span><span class="linenos">24</span>    <span class="n">node_a</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">'io.github.jchanvfx.MyNode'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'node a'</span><span class="p">)</span>
+<span class="linenos">25</span>    <span class="n">node_b</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">'io.github.jchanvfx.MyNode'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'node b'</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
 <span class="linenos">26</span>
 <span class="linenos">27</span>    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><br/></div>
 </div>
 </section>
 <section id="creating-node-widgets">
-<h2>Creating Node Widgets<a class="headerlink" href="#creating-node-widgets" title="Permalink to this heading">¶</a></h2>
+<h2>Creating Node Widgets<a class="headerlink" href="#creating-node-widgets" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-node-widgets'">¶</a></h2>
 <p>The <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> class allows you to embed some basic widgets inside a node here’s a
 example to simply embed a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> widget when reimplementing the <code class="docutils literal notranslate"><span class="pre">BaseNode</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="k">class</span> <span class="nc">MyListNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
-<span class="linenos"> 6</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;node&#39;</span>
+<span class="linenos"> 5</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
+<span class="linenos"> 6</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'node'</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos"> 9</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyListNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">10</span>
-<span class="linenos">11</span>        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;apples&#39;</span><span class="p">,</span> <span class="s1">&#39;bananas&#39;</span><span class="p">,</span> <span class="s1">&#39;pears&#39;</span><span class="p">,</span> <span class="s1">&#39;mangos&#39;</span><span class="p">,</span> <span class="s1">&#39;oranges&#39;</span><span class="p">]</span>
-<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_combo_menu</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;My List&#39;</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+<span class="linenos">11</span>        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'apples'</span><span class="p">,</span> <span class="s1">'bananas'</span><span class="p">,</span> <span class="s1">'pears'</span><span class="p">,</span> <span class="s1">'mangos'</span><span class="p">,</span> <span class="s1">'oranges'</span><span class="p">]</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_combo_menu</span><span class="p">(</span><span class="s1">'my_list'</span><span class="p">,</span> <span class="s1">'My List'</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To you update the widget you can call the
 <a class="reference internal" href="../nodes/NodeObject.html#NodeGraphQt.NodeObject.set_property" title="NodeGraphQt.NodeObject.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.NodeObject.set_property()</span></code></a> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">node</span> <span class="o">=</span> <span class="n">MyListNode</span><span class="p">()</span>
-<span class="linenos">2</span><span class="n">node</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span> <span class="s1">&#39;mangos&#39;</span><span class="p">)</span>
+<span class="linenos">2</span><span class="n">node</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s1">'my_list'</span><span class="p">,</span> <span class="s1">'mangos'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><cite>functions for embedding widgets into a base node:</cite></p>
@@ -264,11 +204,11 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 </div></blockquote>
 <p>See: <a class="reference internal" href="../node_widgets.html#node-widgets"><span class="std std-ref">Node Widgets</span></a> for more node widget types.</p>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><br/></div>
 </div>
 </section>
 <section id="embedding-custom-widgets">
-<h2>Embedding Custom Widgets<a class="headerlink" href="#embedding-custom-widgets" title="Permalink to this heading">¶</a></h2>
+<h2>Embedding Custom Widgets<a class="headerlink" href="#embedding-custom-widgets" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#embedding-custom-widgets'">¶</a></h2>
 <p>Here’s an example to embed a custom widget where we subclass the
 <a class="reference internal" href="../node_widgets.html#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeBaseWidget</span></code></a> and then add to the node with the
 <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_custom_widget" title="NodeGraphQt.BaseNode.add_custom_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_custom_widget()</span></code></a> function.</p>
@@ -276,17 +216,17 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeBaseWidget</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="k">class</span> <span class="nc">MyCustomWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos"> 6</span><span class="sd">    Custom widget to be embedded inside a node.</span>
-<span class="linenos"> 7</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos"> 7</span><span class="sd">    """</span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">10</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyCustomWidget</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_1</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
-<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">])</span>
 <span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_2</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
-<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_2</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
-<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">btn_go</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Go&#39;</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_2</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">])</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">btn_go</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">'Go'</span><span class="p">)</span>
 <span class="linenos">16</span>
 <span class="linenos">17</span>        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 <span class="linenos">18</span>        <span class="n">layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -296,18 +236,18 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">22</span>
 <span class="linenos">23</span>
 <span class="linenos">24</span><span class="k">class</span> <span class="nc">NodeWidgetWrapper</span><span class="p">(</span><span class="n">NodeBaseWidget</span><span class="p">):</span>
-<span class="linenos">25</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">25</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos">26</span><span class="sd">    Wrapper that allows the widget to be added in a node object.</span>
-<span class="linenos">27</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">27</span><span class="sd">    """</span>
 <span class="linenos">28</span>
 <span class="linenos">29</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">30</span>        <span class="nb">super</span><span class="p">(</span><span class="n">NodeWidgetWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">31</span>
 <span class="linenos">32</span>        <span class="c1"># set the name for node property.</span>
-<span class="linenos">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s1">&#39;my_widget&#39;</span><span class="p">)</span>
+<span class="linenos">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s1">'my_widget'</span><span class="p">)</span>
 <span class="linenos">34</span>
 <span class="linenos">35</span>        <span class="c1"># set the label above the widget.</span>
-<span class="linenos">36</span>        <span class="bp">self</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Custom Widget&#39;</span><span class="p">)</span>
+<span class="linenos">36</span>        <span class="bp">self</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">'Custom Widget'</span><span class="p">)</span>
 <span class="linenos">37</span>
 <span class="hll"><span class="linenos">38</span>        <span class="c1"># set the custom widget.</span>
 </span><span class="linenos">39</span>        <span class="bp">self</span><span class="o">.</span><span class="n">set_custom_widget</span><span class="p">(</span><span class="n">MyCustomWidget</span><span class="p">())</span>
@@ -326,18 +266,18 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">52</span>        <span class="n">widget</span><span class="o">.</span><span class="n">btn_go</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_go_clicked</span><span class="p">)</span>
 <span class="linenos">53</span>
 <span class="linenos">54</span>    <span class="k">def</span> <span class="nf">on_btn_go_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">55</span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Clicked on node: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
+<span class="linenos">55</span>        <span class="nb">print</span><span class="p">(</span><span class="s1">'Clicked on node: "</span><span class="si">{}</span><span class="s1">"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
 <span class="linenos">56</span>
 <span class="linenos">57</span>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">58</span>        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_custom_widget</span><span class="p">()</span>
-<span class="linenos">59</span>        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">widget</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">currentText</span><span class="p">(),</span>
+<span class="linenos">59</span>        <span class="k">return</span> <span class="s1">'</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">widget</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">currentText</span><span class="p">(),</span>
 <span class="linenos">60</span>                              <span class="n">widget</span><span class="o">.</span><span class="n">combo_2</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
 <span class="linenos">61</span>
 <span class="linenos">62</span>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="linenos">63</span>        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="linenos">63</span>        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
 <span class="linenos">64</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
 <span class="linenos">65</span>            <span class="n">combo1_val</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos">66</span>            <span class="n">combo2_val</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="linenos">66</span>            <span class="n">combo2_val</span> <span class="o">=</span> <span class="s1">''</span>
 <span class="linenos">67</span>        <span class="k">else</span><span class="p">:</span>
 <span class="linenos">68</span>            <span class="n">combo1_val</span><span class="p">,</span> <span class="n">combo2_val</span> <span class="o">=</span> <span class="n">value</span>
 <span class="linenos">69</span>        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_custom_widget</span><span class="p">()</span>
@@ -350,45 +290,45 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">76</span>
 <span class="linenos">77</span>
 <span class="linenos">78</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
-<span class="linenos">79</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">79</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos">80</span><span class="sd">    Example node.</span>
-<span class="linenos">81</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">81</span><span class="sd">    """</span>
 <span class="linenos">82</span>
 <span class="linenos">83</span>    <span class="c1"># set a unique node identifier.</span>
-<span class="linenos">84</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
+<span class="linenos">84</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
 <span class="linenos">85</span>
 <span class="linenos">86</span>    <span class="c1"># set the initial default node name.</span>
-<span class="linenos">87</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;my node&#39;</span>
+<span class="linenos">87</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos">88</span>
 <span class="linenos">89</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">90</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">91</span>
 <span class="linenos">92</span>        <span class="c1"># create input and output port.</span>
-<span class="linenos">93</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
-<span class="linenos">94</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">93</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="linenos">94</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 <span class="linenos">95</span>
-<span class="hll"><span class="linenos">96</span>        <span class="c1"># add custom widget to node with &quot;node.view&quot; as the parent.</span>
+<span class="hll"><span class="linenos">96</span>        <span class="c1"># add custom widget to node with "node.view" as the parent.</span>
 </span><span class="hll"><span class="linenos">97</span>        <span class="n">node_widget</span> <span class="o">=</span> <span class="n">NodeWidgetWrapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">)</span>
-</span><span class="linenos">98</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_custom_widget</span><span class="p">(</span><span class="n">node_widget</span><span class="p">,</span> <span class="n">tab</span><span class="o">=</span><span class="s1">&#39;Custom&#39;</span><span class="p">)</span>
+</span><span class="linenos">98</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_custom_widget</span><span class="p">(</span><span class="n">node_widget</span><span class="p">,</span> <span class="n">tab</span><span class="o">=</span><span class="s1">'Custom'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="connecting-nodes">
-<h2>Connecting Nodes<a class="headerlink" href="#connecting-nodes" title="Permalink to this heading">¶</a></h2>
+<h2>Connecting Nodes<a class="headerlink" href="#connecting-nodes" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connecting-nodes'">¶</a></h2>
 <p>There a multiple ways for connecting node ports here are a few examples below.</p>
 <p>connecting nodes by the port index:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_b</span><span class="o">.</span><span class="n">set_input</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_a</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>connect nodes by the port name:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">()[</span><span class="s1">&#39;bar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">connect_to</span><span class="p">(</span><span class="n">node_b</span><span class="o">.</span><span class="n">inputs</span><span class="p">()[</span><span class="s1">&#39;foo&#39;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_a</span><span class="o">.</span><span class="n">outputs</span><span class="p">()[</span><span class="s1">'bar'</span><span class="p">]</span><span class="o">.</span><span class="n">connect_to</span><span class="p">(</span><span class="n">node_b</span><span class="o">.</span><span class="n">inputs</span><span class="p">()[</span><span class="s1">'foo'</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>connecting nodes with the port objects:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># node_a &quot;bar&quot; output port.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># node_a "bar" output port.</span>
 <span class="n">port_a</span> <span class="o">=</span> <span class="n">node_a</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="c1"># node_b &quot;foo&quot; input port.</span>
-<span class="n">port_b</span> <span class="o">=</span> <span class="n">node_b</span><span class="o">.</span><span class="n">inputs</span><span class="p">()[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+<span class="c1"># node_b "foo" input port.</span>
+<span class="n">port_b</span> <span class="o">=</span> <span class="n">node_b</span><span class="o">.</span><span class="n">inputs</span><span class="p">()[</span><span class="s1">'foo'</span><span class="p">]</span>
 <span class="c1"># make the connection.</span>
 <span class="n">port_a</span><span class="o">.</span><span class="n">connect_to</span><span class="p">(</span><span class="n">port_b</span><span class="p">)</span>
 </pre></div>
@@ -407,11 +347,11 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 </ul>
 </div></blockquote>
 <div class="line-block">
-<div class="line"><br /></div>
+<div class="line"><br/></div>
 </div>
 </section>
 <section id="connecting-a-propertiesbin">
-<h2>Connecting a PropertiesBin<a class="headerlink" href="#connecting-a-propertiesbin" title="Permalink to this heading">¶</a></h2>
+<h2>Connecting a PropertiesBin<a class="headerlink" href="#connecting-a-propertiesbin" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connecting-a-propertiesbin'">¶</a></h2>
 <p>Here’s an example where we subclass the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> and connect it up to a
 <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> and have it show when a node is double clicked.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
@@ -420,13 +360,13 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
-<span class="linenos"> 8</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;my node&#39;</span>
+<span class="linenos"> 7</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
+<span class="linenos"> 8</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">11</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
-<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span>
 <span class="linenos">16</span><span class="k">class</span> <span class="nc">MyNodeGraph</span><span class="p">(</span><span class="n">NodeGraph</span><span class="p">):</span>
@@ -442,22 +382,22 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">26</span>        <span class="bp">self</span><span class="o">.</span><span class="n">node_double_clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_prop_bin</span><span class="p">)</span>
 <span class="linenos">27</span>
 <span class="linenos">28</span>    <span class="k">def</span> <span class="nf">display_prop_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-<span class="linenos">29</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">29</span><span class="w">        </span><span class="sd">"""</span>
 <span class="linenos">30</span><span class="sd">        function for displaying the properties bin when a node</span>
 <span class="linenos">31</span><span class="sd">        is double clicked</span>
-<span class="linenos">32</span><span class="sd">        &quot;&quot;&quot;</span>
+<span class="linenos">32</span><span class="sd">        """</span>
 <span class="linenos">33</span>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prop_bin</span><span class="o">.</span><span class="n">isVisible</span><span class="p">():</span>
 <span class="linenos">34</span>            <span class="bp">self</span><span class="o">.</span><span class="n">_prop_bin</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="linenos">35</span>
 <span class="linenos">36</span>
-<span class="linenos">37</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">37</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
 <span class="linenos">38</span>    <span class="n">app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">([])</span>
 <span class="linenos">39</span>
 <span class="linenos">40</span>    <span class="n">node_graph</span> <span class="o">=</span> <span class="n">MyNodeGraph</span><span class="p">()</span>
 <span class="linenos">41</span>    <span class="n">node_graph</span><span class="o">.</span><span class="n">register_node</span><span class="p">(</span><span class="n">MyNode</span><span class="p">)</span>
 <span class="linenos">42</span>    <span class="n">node_graph</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="linenos">43</span>
-<span class="linenos">44</span>    <span class="n">node_a</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.MyNode&#39;</span><span class="p">)</span>
+<span class="linenos">44</span>    <span class="n">node_a</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">'io.github.jchanvfx.MyNode'</span><span class="p">)</span>
 <span class="linenos">45</span>
 <span class="linenos">46</span>    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
 </pre></div>
@@ -471,45 +411,26 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 </div></blockquote>
 </section>
 </section>
-
-
-           </div>
-           
-          </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ex_port.html" class="btn btn-neutral float-right" title="Port Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="ex_overview.html" class="btn btn-neutral float-left" title="General Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2023, Johnny Chan.
-
-    </p>
-  </div> 
-
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#creating-nodes'" class="reference internal" href="#creating-nodes">Creating Nodes</a></li>
+<li><a :data-current="activeSection === '#creating-node-widgets'" class="reference internal" href="#creating-node-widgets">Creating Node Widgets</a></li>
+<li><a :data-current="activeSection === '#embedding-custom-widgets'" class="reference internal" href="#embedding-custom-widgets">Embedding Custom Widgets</a></li>
+<li><a :data-current="activeSection === '#connecting-nodes'" class="reference internal" href="#connecting-nodes">Connecting Nodes</a></li>
+<li><a :data-current="activeSection === '#connecting-a-propertiesbin'" class="reference internal" href="#connecting-a-propertiesbin">Connecting a PropertiesBin</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2023, Johnny Chan </p>
+</div>
+</div>
 </footer>
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
+</div>
 </body>
 </html>

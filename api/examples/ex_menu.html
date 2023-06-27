@@ -1,102 +1,96 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Menu Overview &mdash; NodeGraphQt 0.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Host Application Examples" href="../host_apps/_index_apps.html" />
-    <link rel="prev" title="Pipe Overview" href="ex_pipe.html" /> 
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" metia="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Menu Overview | NodeGraphQt</title>
+<meta content="Menu Overview | NodeGraphQt" property="og:title"/>
+<meta content="Menu Overview | NodeGraphQt" name="twitter:title"/>
+<link href="../_static/pygments.css" rel="stylesheet"/>
+<link href="../_static/theme.3849c567b4e07dd3db70.css" rel="stylesheet"/>
+<link href="../_static/graphviz.css" rel="stylesheet"/>
+<link href="../_static/custom.css" rel="stylesheet"/>
+<link href="../_static/favicon.png" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../host_apps/_index_apps.html" rel="next" title="Host Application Examples"/>
+<link href="ex_pipe.html" rel="prev" title="Pipe Overview"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+<script src="../_static/doctools.js"></script>
+<script src="../_static/sphinx_highlight.js"></script>
+<script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
 </head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> NodeGraphQt
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.6.3
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<body :class="{ 'overflow-hidden': showSidebar }" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="24" src="../_static/favicon.png" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">NodeGraphQt</span>
+</a></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none">
+<form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+      K
+    </kbd>
+</form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html">
+<img alt="Logo" class="mr-2 dark:invert" height="16" src="../_static/favicon.png" width="16"/><span class="font-bold text-clip whitespace-nowrap">NodeGraphQt</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../nodes/_index_nodes.html">Nodes</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../nodes/_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../nodes/NodeObject.html">NodeObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BackdropNode.html">BackdropNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BaseNode.html">BaseNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/BaseNode.html#basenode-circle">BaseNode (Circle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/GroupNode.html">GroupNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/PortNode.html">Port Nodes</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../port.html">Port</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../menu.html">Menus</a></li>
 </ul>
@@ -111,94 +105,42 @@
 <li class="toctree-l1"><a class="reference internal" href="ex_node.html">Node Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_port.html">Port Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex_pipe.html">Pipe Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Menu Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#default-context-menu">Default Context Menu</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-to-the-graph-menu">Adding to the Graph Menu</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-to-the-nodes-menu">Adding to the Nodes Menu</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Menu Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../host_apps/_index_apps.html">Host Application Examples</a></li>
 </ul>
-
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">NodeGraphQt</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Menu Overview</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            
-              <a href="https://github.com/jchanvfx/NodeGraphQt/blob/main/docs/examples/ex_menu.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
+</nav>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <section id="menu-overview">
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">NodeGraphQt</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Menu Overview</span>
+</nav>
+<div id="content" role="main">
+<section id="menu-overview">
 <h1>Menu Overview<a class="headerlink" href="#menu-overview" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
 <div class="line">Examples for customizing context menus in <code class="docutils literal notranslate"><span class="pre">NodeGraphQt</span></code>.</div>
 </div>
 <section id="default-context-menu">
-<h2>Default Context Menu<a class="headerlink" href="#default-context-menu" title="Permalink to this heading">¶</a></h2>
+<h2>Default Context Menu<a class="headerlink" href="#default-context-menu" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#default-context-menu'">¶</a></h2>
 <p>The <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph</span></code></a> has a context menu can be accessed with
 <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.context_menu" title="NodeGraphQt.NodeGraph.context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.context_menu()</span></code></a>.</p>
 <p>It can also be populated it with a config file in <code class="docutils literal notranslate"><span class="pre">JSON</span></code> format by using
 <a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_context_menu_from_file" title="NodeGraphQt.NodeGraph.set_context_menu_from_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code></a>.</p>
-<img alt="../_images/menu_hotkeys.png" src="../_images/menu_hotkeys.png" style="width: 300px;" />
+<img alt="../_images/menu_hotkeys.png" src="../_images/menu_hotkeys.png" style="width: 300px;"/>
 <div class="line-block">
 <div class="line">Here’s a couple links to the example config file and functions with a few essential menu commands.</div>
 <div class="line"><a class="reference external" href="https://github.com/jchanvfx/NodeGraphQt/blob/main/examples/hotkeys/hotkeys.json">example JSON config file</a></div>
@@ -206,59 +148,59 @@
 </div>
 </section>
 <section id="adding-to-the-graph-menu">
-<h2>Adding to the Graph Menu<a class="headerlink" href="#adding-to-the-graph-menu" title="Permalink to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">&quot;graph&quot;</span></code> menu is the main context menu from the NodeGraph object, below
-is an example where we add a <code class="docutils literal notranslate"><span class="pre">&quot;Foo&quot;</span></code> menu and then a <code class="docutils literal notranslate"><span class="pre">&quot;Bar&quot;</span></code> command with
+<h2>Adding to the Graph Menu<a class="headerlink" href="#adding-to-the-graph-menu" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#adding-to-the-graph-menu'">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">"graph"</span></code> menu is the main context menu from the NodeGraph object, below
+is an example where we add a <code class="docutils literal notranslate"><span class="pre">"Foo"</span></code> menu and then a <code class="docutils literal notranslate"><span class="pre">"Bar"</span></code> command with
 the registered <code class="docutils literal notranslate"><span class="pre">my_test()</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># test function.</span>
 <span class="linenos"> 4</span><span class="k">def</span> <span class="nf">my_test</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
 <span class="linenos"> 5</span>    <span class="n">selected_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">selected_nodes</span><span class="p">()</span>
-<span class="linenos"> 6</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of nodes selected: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_nodes</span><span class="p">)))</span>
+<span class="linenos"> 6</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">'Number of nodes selected: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_nodes</span><span class="p">)))</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span><span class="c1"># create node graph.</span>
 <span class="linenos"> 9</span><span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1"># get the main context menu.</span>
-<span class="linenos">12</span><span class="n">context_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">context_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">'graph'</span><span class="p">)</span>
 <span class="linenos">13</span>
-<span class="linenos">14</span><span class="c1"># add a menu called &quot;Foo&quot;.</span>
-<span class="linenos">15</span><span class="n">foo_menu</span> <span class="o">=</span> <span class="n">context_menu</span><span class="o">.</span><span class="n">add_menu</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="p">)</span>
+<span class="linenos">14</span><span class="c1"># add a menu called "Foo".</span>
+<span class="linenos">15</span><span class="n">foo_menu</span> <span class="o">=</span> <span class="n">context_menu</span><span class="o">.</span><span class="n">add_menu</span><span class="p">(</span><span class="s1">'Foo'</span><span class="p">)</span>
 <span class="linenos">16</span>
-<span class="linenos">17</span><span class="c1"># add &quot;Bar&quot; command to the &quot;Foo&quot; menu.</span>
-<span class="linenos">18</span><span class="c1"># we also assign a short cut key &quot;Shift+t&quot; for this example.</span>
-<span class="linenos">19</span><span class="n">foo_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">&#39;Bar&#39;</span><span class="p">,</span> <span class="n">my_test</span><span class="p">,</span> <span class="s1">&#39;Shift+t&#39;</span><span class="p">)</span>
+<span class="linenos">17</span><span class="c1"># add "Bar" command to the "Foo" menu.</span>
+<span class="linenos">18</span><span class="c1"># we also assign a short cut key "Shift+t" for this example.</span>
+<span class="linenos">19</span><span class="n">foo_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">'Bar'</span><span class="p">,</span> <span class="n">my_test</span><span class="p">,</span> <span class="s1">'Shift+t'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="adding-to-the-nodes-menu">
-<h2>Adding to the Nodes Menu<a class="headerlink" href="#adding-to-the-nodes-menu" title="Permalink to this heading">¶</a></h2>
+<h2>Adding to the Nodes Menu<a class="headerlink" href="#adding-to-the-nodes-menu" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#adding-to-the-nodes-menu'">¶</a></h2>
 <p>Aside from the main context menu, the NodeGraph also has a nodes menu where you
 can override context menus on a per node type basis.</p>
 <div class="line-block">
-<div class="line">Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">&quot;io.github.jchanvfx.FooNode&quot;</span></code></div>
+<div class="line">Below is an example for overriding a context menu for the node type <code class="docutils literal notranslate"><span class="pre">"io.github.jchanvfx.FooNode"</span></code></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">setup_context_menu</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># define a couple example nodes.</span>
 <span class="linenos"> 4</span><span class="k">class</span> <span class="nc">FooNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">&#39;io.github.jchanvfx&#39;</span>
-<span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;foo node&#39;</span>
+<span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
+<span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'foo node'</span>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">10</span>        <span class="nb">super</span><span class="p">(</span><span class="n">FooNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
-<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 <span class="linenos">13</span>
 <span class="linenos">14</span><span class="k">class</span> <span class="nc">BarNode</span><span class="p">(</span><span class="n">FooNode</span><span class="p">):</span>
 <span class="linenos">15</span>
-<span class="linenos">16</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">&#39;bar node&#39;</span>
+<span class="linenos">16</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'bar node'</span>
 <span class="linenos">17</span>
 <span class="linenos">18</span><span class="c1"># define a test function.</span>
 <span class="linenos">19</span><span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-<span class="linenos">20</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Clicked on node: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
+<span class="linenos">20</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">'Clicked on node: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
 <span class="linenos">21</span>
 <span class="linenos">22</span><span class="c1"># create node graph and register node classes.</span>
 <span class="linenos">23</span><span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
@@ -269,16 +211,16 @@ can override context menus on a per node type basis.</p>
 <span class="linenos">28</span><span class="n">setup_context_menu</span><span class="p">(</span><span class="n">node_graph</span><span class="p">)</span>
 <span class="linenos">29</span>
 <span class="linenos">30</span><span class="c1"># get the nodes menu.</span>
-<span class="linenos">31</span><span class="n">nodes_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">)</span>
+<span class="linenos">31</span><span class="n">nodes_menu</span> <span class="o">=</span> <span class="n">node_graph</span><span class="o">.</span><span class="n">get_context_menu</span><span class="p">(</span><span class="s1">'nodes'</span><span class="p">)</span>
 <span class="linenos">32</span>
-<span class="linenos">33</span><span class="c1"># here we add override the context menu for &quot;io.github.jchanvfx.FooNode&quot;.</span>
-<span class="linenos">34</span><span class="n">nodes_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span>
+<span class="linenos">33</span><span class="c1"># here we add override the context menu for "io.github.jchanvfx.FooNode".</span>
+<span class="linenos">34</span><span class="n">nodes_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="s1">'Test'</span><span class="p">,</span>
 <span class="linenos">35</span>                       <span class="n">func</span><span class="o">=</span><span class="n">test_func</span><span class="p">,</span>
-<span class="linenos">36</span>                       <span class="n">node_type</span><span class="o">=</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">)</span>
+<span class="linenos">36</span>                       <span class="n">node_type</span><span class="o">=</span><span class="s1">'io.github.jchanvfx.FooNode'</span><span class="p">)</span>
 <span class="linenos">37</span>
 <span class="linenos">38</span><span class="c1"># create some nodes.</span>
-<span class="linenos">39</span><span class="n">foo_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx.FooNode&#39;</span><span class="p">)</span>
-<span class="linenos">40</span><span class="n">bar_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;io.github.jchanvfx&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="linenos">39</span><span class="n">foo_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">'io.github.jchanvfx.FooNode'</span><span class="p">)</span>
+<span class="linenos">40</span><span class="n">bar_node</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">'io.github.jchanvfx'</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
 <span class="linenos">41</span>
 <span class="linenos">42</span><span class="c1"># show widget.</span>
 <span class="linenos">43</span><span class="n">node_graph</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -286,45 +228,24 @@ can override context menus on a per node type basis.</p>
 </div>
 </section>
 </section>
-
-
-           </div>
-           
-          </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../host_apps/_index_apps.html" class="btn btn-neutral float-right" title="Host Application Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="ex_pipe.html" class="btn btn-neutral float-left" title="Pipe Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2023, Johnny Chan.
-
-    </p>
-  </div> 
-
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#default-context-menu'" class="reference internal" href="#default-context-menu">Default Context Menu</a></li>
+<li><a :data-current="activeSection === '#adding-to-the-graph-menu'" class="reference internal" href="#adding-to-the-graph-menu">Adding to the Graph Menu</a></li>
+<li><a :data-current="activeSection === '#adding-to-the-nodes-menu'" class="reference internal" href="#adding-to-the-nodes-menu">Adding to the Nodes Menu</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2023, Johnny Chan </p>
+</div>
+</div>
 </footer>
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
+</div>
 </body>
 </html>
