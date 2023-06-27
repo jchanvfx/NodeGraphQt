@@ -3,9 +3,11 @@ name: Build API Documentation
 
 on:
   # trigger this workflow when a release is published.
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - main
+#    tags:
+#      - v*.*.*
 
 env:
   # environment variables.
@@ -32,10 +34,10 @@ jobs:
       # Install the python dependencies required for building.
       - name: Install Dependencies
         run: |
-            pip install -U sphinx
-            pip install sphinx-rtd-theme
+            pip install sphinx
             pip install PySide2
             pip install Qt.py
+            pip install autodocsumm
       # Set the local git configs.
       - name: Set Git Config
         run: |
@@ -45,7 +47,7 @@ jobs:
       - name: Update "gh-pages" branch
         run: |
             git checkout $GH_PAGES_BRANCH
-            git merge $SOURCE_BRANCH
+            git merge origin/$SOURCE_BRANCH
             git push origin $GH_PAGES_BRANCH
       # Build the sphinx api documentation.
       - name: Run Sphinx Build

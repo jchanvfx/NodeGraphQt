@@ -1,0 +1,16 @@
+{#-
+A `scroll to top` button. Is shown at the bottom right if `show_scrolltop` is true.
+-#}
+<button data-scroll-to-top-target="scrollToTop"
+        data-action="scroll-to-top#scroll"
+        class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white invisible opacity-0 transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       height="14"
+       viewBox="0 96 960 960"
+       width="14"
+       class="inline fill-current mb-[2px]"
+       aria-hidden="true">
+    <path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z" />
+  </svg>
+  Back to top
+</button>
