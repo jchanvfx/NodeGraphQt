@@ -34,6 +34,7 @@ jobs:
         run: |
             pip install -U sphinx
             pip install sphinx-rtd-theme
+            pip install bs4
             pip install PySide2
             pip install Qt.py
       # Set the local git configs.
