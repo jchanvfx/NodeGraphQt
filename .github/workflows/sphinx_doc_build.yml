@@ -2,12 +2,12 @@
 name: Build API Documentation
 
 on:
-  # trigger this workflow when a release is published.
-  push:
-    branches:
-      - main
-#    tags:
-#      - v*.*.*
+  release:
+    types:
+      - published
+#  push:
+#    branches:
+#      - main
 
 env:
   # environment variables.
