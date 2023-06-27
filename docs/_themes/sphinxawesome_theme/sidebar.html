@@ -1,0 +1,43 @@
+{#- Template for the sidebar. -#}
+
+{%- set only_main_nav = sidebars == ["sidebar_main_nav_links.html"] -%}
+
+{%- if not only_main_nav and sidebars|length > 0 -%}
+<aside id="left-sidebar"
+  class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky"
+  :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }">
+  {%- else %}
+  <aside id="left-sidebar"
+    class="fixed inset-y-0 left-0 md:hidden z-50 bg-background transition-all duration-100 -translate-x-full ml-0 p-6 w-5/6 shrink-0 overflow-y-auto border-r border-border"
+    :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }">
+    {%- endif %}
+
+    <a href="{{ pathto(master_doc) }}" class="!justify-start text-sm md:!hidden bg-background">
+      {%- if logo_url %}
+        <img height="16" width="16" class="mr-2 dark:invert" src="{{ logo_url }}" alt="Logo" />
+      {%- endif -%}
+      {%- if theme_logo_dark and not logo_url %}
+        <img width="16" height="16" class="mr-2 hidden dark:block" src="{{ pathto('_static/' + theme_logo_dark, 1) }}" alt="Logo" />
+      {%- endif -%}
+      {%- if theme_logo_light and not logo_url %}
+        <img width="16" height="16" class="mr-2 dark:hidden" src="{{ pathto('_static/' + theme_logo_light, 1) }}" alt="Logo" />
+      {%- endif -%}
+      <span class="font-bold text-clip whitespace-nowrap">{{ docstitle }}</span>
+    </a>
+
+    <div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+      <div class="overflow-y-auto h-full w-full relative pr-6">
+        {%- for section in sidebars %}
+        {%- include section %}
+        {%- endfor %}
+      </div>
+    </div>
+    <button type="button" @click="showSidebar = false"
+      class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 96 960 960" fill="currentColor"
+        stroke="none" class="h-4 w-4">
+        <path
+          d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z" />
+      </svg>
+    </button>
+  </aside>

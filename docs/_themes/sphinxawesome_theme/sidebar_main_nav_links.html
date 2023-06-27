@@ -1,0 +1,12 @@
+{#- Template for the main navigation links in the sidebar -#}
+{%- if theme_main_nav_links|tobool -%}
+<nav class="flex md:hidden flex-col font-medium mt-4">
+  {%- for text,url in theme_main_nav_links.items() %}
+  {%- if url.startswith("http") %}
+  <a href="{{ url }}" rel="nofollow noopener">{{ text }}</a>
+  {%- else %}
+  <a href="{{ pathto(url) }}">{{ text }}</a>
+  {%- endif %}
+  {%- endfor %}
+</nav>
+{%- endif %}

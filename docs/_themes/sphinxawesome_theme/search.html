@@ -1,0 +1,23 @@
+{#- Template for the search results page. -#}
+{% extends "page.html" %}
+{% set title = _('Search') %}
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ pathto('_static/searchtools.js', 1) }}" defer></script>
+  <script src="{{ pathto('_static/language_data.js', 1) }}" defer></script>
+  <script src="{{ pathto('searchindex.js', 1) }}" defer></script>
+{% endblock scripts %}
+{% block body %}
+  <div class="w-full min-w-0 mx-auto">
+    {%- if pagename != master_doc and theme_show_breadcrumbs|tobool %}
+      {%- include "breadcrumbs.html" %}
+    {%- endif %}
+    <div id="content">
+      <div id="fallback" class="my-8 text-sm text-red-700">
+        <script>document.querySelector("#fallback").style.display = "none"</script>
+        {%- trans %}Please activate Javascript to enable searching the documentation.{% endtrans -%}
+      </div>
+      <div id="search-results"></div>
+    </div>
+  </div>
+{% endblock body %}
