@@ -35,6 +35,7 @@ jobs:
       - name: Install Dependencies
         run: |
             pip install sphinx
+            pip install bs4
             pip install PySide2
             pip install Qt.py
             pip install autodocsumm
