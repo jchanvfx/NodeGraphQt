@@ -49,7 +49,6 @@ jobs:
         run: |
             git checkout $GH_PAGES_BRANCH
             git merge origin/$SOURCE_BRANCH
-            git push origin $GH_PAGES_BRANCH
       # Build the sphinx api documentation.
       - name: Run Sphinx Build
         run: sphinx-build -b html ./docs ./api -a -E
