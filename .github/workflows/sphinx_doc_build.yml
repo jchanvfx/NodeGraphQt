@@ -15,7 +15,7 @@ env:
   GH_PAGES_BRANCH: gh-pages
 
 jobs:
-  build-docs:
+  docs-build:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
