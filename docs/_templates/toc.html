@@ -1,0 +1,14 @@
+{%- if meta is mapping %}
+{%- if "hide-rtoc" not in meta %}
+{#- Template for the on-page TOC -#}
+
+<aside id="right-sidebar" class="hidden text-sm xl:block">
+  <div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2">
+    {%- block toc_before %}{%- endblock -%}
+    <p class="font-medium">Page Contents</p>
+    {{ toc }}
+    {%- block toc_after %}{%- endblock -%}
+  </div>
+</aside>
+{%- endif %}
+{%- endif %}

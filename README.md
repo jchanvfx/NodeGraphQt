@@ -14,7 +14,7 @@ applications.
 
 ## Install
 
-NodeGraphQt is avaliable on The Python Package Index (PyPI) [here](https://pypi.org/project/NodeGraphQt) so it can be installed with:
+NodeGraphQt is available on The Python Package Index (PyPI) [here](https://pypi.org/project/NodeGraphQt) so it can be installed with:
 ```
 pip install NodeGraphQt
 ```

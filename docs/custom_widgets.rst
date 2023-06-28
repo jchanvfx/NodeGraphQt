@@ -1,3 +1,5 @@
+:hide-rtoc:
+
 Built-in Widgets
 ################
 
