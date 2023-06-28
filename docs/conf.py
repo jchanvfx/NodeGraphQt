@@ -16,9 +16,13 @@ import os
 import sys
 from datetime import datetime
 
+# make NodeGraphQt module available.
 base_path = os.path.abspath('.')
 root_path = os.path.split(base_path)[0]
 sys.path.insert(0, root_path)
+
+# required for the theme template.
+sys.path.insert(0, os.path.abspath('_themes'))
 
 import NodeGraphQt
 
@@ -52,6 +56,8 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
+    # theme template related
+    'sphinxawesome_theme'
 ]
 
 intersphinx_mapping = {
@@ -90,7 +96,7 @@ rst_prolog = '''
 '''.format(release)
 
 # Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -129,10 +135,6 @@ html_logo = '_images/favicon.png'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-
-sys.path.insert(0, os.path.abspath('_themes'))
-extensions += ['sphinxawesome_theme']
 
 html_theme = 'sphinxawesome_theme'
 html_theme_path = ['_themes']
@@ -154,11 +156,14 @@ html_title = 'NodeGraphQt'
 html_theme_options = {
     # "logo_light": "_images/logo.png",
     # "logo_dark": "_images/logo.png"
-    # # Add your theme options. For example:
-    # 'show_breadcrumbs': True,
-    # 'main_nav_links': {
-    #     'About': '/about',
-    # }
+    'main_nav_links': {
+        'Source': 'https://github.com/jchanvfx/NodeGraphQt',
+        'Issues': 'https://github.com/jchanvfx/NodeGraphQt/issues',
+        'Releases': 'https://github.com/jchanvfx/NodeGraphQt/releases',
+    },
+    'show_scrolltop': True,
+    'show_prev_next': True,
+    'awesome_external_links': True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -187,19 +192,6 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'NodeGraphQTdoc'
-
-
-# -- Options for LaTeX output ------------------------------------------------
-
-latex_elements = {}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'NodeGraphQT.tex', 'NodeGraphQt Documentation',
-     author, 'manual'),
-]
 
 
 # -- Options for manual page output ------------------------------------------
