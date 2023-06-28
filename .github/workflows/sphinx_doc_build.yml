@@ -5,9 +5,6 @@ on:
   release:
     types:
       - published
-  push:
-    branches:
-      - main
 
 env:
   # environment variables.
@@ -57,5 +54,5 @@ jobs:
         run: |
             git ls-files --others --exclude-standard
             git add ./api
-            git commit -m "auto build docs"
+            git commit -m "github action: auto build api docs"
             git push origin $GH_PAGES_BRANCH
