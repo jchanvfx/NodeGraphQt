@@ -43,7 +43,11 @@
 <div class="hidden mr-4 md:flex">
 <a class="flex items-center mr-6" href="index.html">
 <img alt="Logo" class="mr-2 dark:invert" height="24" src="_static/favicon.png" width="24"/><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">NodeGraphQt</span>
-</a></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+</a><nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/jchanvfx/NodeGraphQt" rel="noopener nofollow">Source</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/jchanvfx/NodeGraphQt/issues" rel="noopener nofollow">Issues</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/jchanvfx/NodeGraphQt/releases" rel="noopener nofollow">Releases</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
 <svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
 </svg>
@@ -77,7 +81,11 @@
 <img alt="Logo" class="mr-2 dark:invert" height="16" src="_static/favicon.png" width="16"/><span class="font-bold text-clip whitespace-nowrap">NodeGraphQt</span>
 </a>
 <div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
-<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="https://github.com/jchanvfx/NodeGraphQt" rel="nofollow noopener">Source</a>
+<a href="https://github.com/jchanvfx/NodeGraphQt/issues" rel="nofollow noopener">Issues</a>
+<a href="https://github.com/jchanvfx/NodeGraphQt/releases" rel="nofollow noopener">Releases</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
@@ -132,7 +140,7 @@
 <section id="graphs">
 <h1>Graphs<a class="headerlink" href="#graphs" title="Permalink to this heading">¶</a></h1>
 <div class="line-block">
-<div class="line"><cite>See</cite> <a class="reference internal" href="examples/ex_overview.html#getting-started"><span class="std std-ref">Getting Started</span></a> <cite>from the overview section.</cite></div>
+<div class="line"><cite>See</cite> <a class="reference internal" href="index.html#getting-started"><span class="std std-ref">Getting Started</span></a> <cite>from the overview section.</cite></div>
 </div>
 <p><strong>Classes:</strong></p>
 <table class="autosummary longtable docutils align-default">
@@ -2000,126 +2008,24 @@ controller for managing the expanded node graph for a
 </dd></dl>
 </section>
 </section>
-</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
-<div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
-<ul>
-<li><a :data-current="activeSection === '#nodegraph'" class="reference internal" href="#nodegraph">NodeGraph</a><ul>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph'" class="reference internal" href="#NodeGraphQt.NodeGraph"><code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code></a><ul>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.nodes_registered'" class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_registered"><code class="docutils literal notranslate"><span class="pre">NodeGraph.nodes_registered</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.node_created'" class="reference internal" href="#NodeGraphQt.NodeGraph.node_created"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_created</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.nodes_deleted'" class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_deleted"><code class="docutils literal notranslate"><span class="pre">NodeGraph.nodes_deleted</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.node_selected'" class="reference internal" href="#NodeGraphQt.NodeGraph.node_selected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_selected</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.node_selection_changed'" class="reference internal" href="#NodeGraphQt.NodeGraph.node_selection_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_selection_changed</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.node_double_clicked'" class="reference internal" href="#NodeGraphQt.NodeGraph.node_double_clicked"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_double_clicked</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.port_connected'" class="reference internal" href="#NodeGraphQt.NodeGraph.port_connected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.port_disconnected'" class="reference internal" href="#NodeGraphQt.NodeGraph.port_disconnected"><code class="docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.property_changed'" class="reference internal" href="#NodeGraphQt.NodeGraph.property_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.property_changed</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.data_dropped'" class="reference internal" href="#NodeGraphQt.NodeGraph.data_dropped"><code class="docutils literal notranslate"><span class="pre">NodeGraph.data_dropped</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.session_changed'" class="reference internal" href="#NodeGraphQt.NodeGraph.session_changed"><code class="docutils literal notranslate"><span class="pre">NodeGraph.session_changed</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.model'" class="reference internal" href="#NodeGraphQt.NodeGraph.model"><code class="docutils literal notranslate"><span class="pre">NodeGraph.model</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.node_factory'" class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory"><code class="docutils literal notranslate"><span class="pre">NodeGraph.node_factory</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.widget'" class="reference internal" href="#NodeGraphQt.NodeGraph.widget"><code class="docutils literal notranslate"><span class="pre">NodeGraph.widget</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.undo_view'" class="reference internal" href="#NodeGraphQt.NodeGraph.undo_view"><code class="docutils literal notranslate"><span class="pre">NodeGraph.undo_view</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.toggle_node_search'" class="reference internal" href="#NodeGraphQt.NodeGraph.toggle_node_search"><code class="docutils literal notranslate"><span class="pre">NodeGraph.toggle_node_search()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.show'" class="reference internal" href="#NodeGraphQt.NodeGraph.show"><code class="docutils literal notranslate"><span class="pre">NodeGraph.show()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.close'" class="reference internal" href="#NodeGraphQt.NodeGraph.close"><code class="docutils literal notranslate"><span class="pre">NodeGraph.close()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.viewer'" class="reference internal" href="#NodeGraphQt.NodeGraph.viewer"><code class="docutils literal notranslate"><span class="pre">NodeGraph.viewer()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.scene'" class="reference internal" href="#NodeGraphQt.NodeGraph.scene"><code class="docutils literal notranslate"><span class="pre">NodeGraph.scene()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.background_color'" class="reference internal" href="#NodeGraphQt.NodeGraph.background_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.background_color()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_background_color'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_background_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_background_color()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.grid_color'" class="reference internal" href="#NodeGraphQt.NodeGraph.grid_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.grid_color()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_grid_color'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_grid_color"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_grid_color()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_grid_mode'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_grid_mode"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_grid_mode()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.add_properties_bin'" class="reference internal" href="#NodeGraphQt.NodeGraph.add_properties_bin"><code class="docutils literal notranslate"><span class="pre">NodeGraph.add_properties_bin()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.undo_stack'" class="reference internal" href="#NodeGraphQt.NodeGraph.undo_stack"><code class="docutils literal notranslate"><span class="pre">NodeGraph.undo_stack()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.clear_undo_stack'" class="reference internal" href="#NodeGraphQt.NodeGraph.clear_undo_stack"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_undo_stack()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.begin_undo'" class="reference internal" href="#NodeGraphQt.NodeGraph.begin_undo"><code class="docutils literal notranslate"><span class="pre">NodeGraph.begin_undo()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.end_undo'" class="reference internal" href="#NodeGraphQt.NodeGraph.end_undo"><code class="docutils literal notranslate"><span class="pre">NodeGraph.end_undo()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.context_menu'" class="reference internal" href="#NodeGraphQt.NodeGraph.context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.context_menu()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.context_nodes_menu'" class="reference internal" href="#NodeGraphQt.NodeGraph.context_nodes_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.context_nodes_menu()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_context_menu'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_context_menu()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_context_menu'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_context_menu_from_file'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_context_menu_from_file"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.disable_context_menu'" class="reference internal" href="#NodeGraphQt.NodeGraph.disable_context_menu"><code class="docutils literal notranslate"><span class="pre">NodeGraph.disable_context_menu()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.acyclic'" class="reference internal" href="#NodeGraphQt.NodeGraph.acyclic"><code class="docutils literal notranslate"><span class="pre">NodeGraph.acyclic()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_acyclic'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_acyclic"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_acyclic()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.pipe_collision'" class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_collision"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_collision()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_pipe_collision'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_collision"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_collision()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.pipe_slicing'" class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_slicing"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_slicing()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_pipe_slicing'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_slicing"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_slicing()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.pipe_style'" class="reference internal" href="#NodeGraphQt.NodeGraph.pipe_style"><code class="docutils literal notranslate"><span class="pre">NodeGraph.pipe_style()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_pipe_style'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_pipe_style"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_pipe_style()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.layout_direction'" class="reference internal" href="#NodeGraphQt.NodeGraph.layout_direction"><code class="docutils literal notranslate"><span class="pre">NodeGraph.layout_direction()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_layout_direction'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_layout_direction"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.fit_to_selection'" class="reference internal" href="#NodeGraphQt.NodeGraph.fit_to_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.fit_to_selection()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.reset_zoom'" class="reference internal" href="#NodeGraphQt.NodeGraph.reset_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.reset_zoom()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.set_zoom'" class="reference internal" href="#NodeGraphQt.NodeGraph.set_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.set_zoom()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_zoom'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_zoom"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_zoom()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.center_on'" class="reference internal" href="#NodeGraphQt.NodeGraph.center_on"><code class="docutils literal notranslate"><span class="pre">NodeGraph.center_on()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.center_selection'" class="reference internal" href="#NodeGraphQt.NodeGraph.center_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.center_selection()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.registered_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.registered_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.registered_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.register_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.register_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.register_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.register_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.register_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.register_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.create_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.create_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.create_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.add_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.add_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.add_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.delete_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.delete_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.delete_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.remove_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.remove_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.remove_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.delete_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.delete_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.delete_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.extract_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.extract_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.extract_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.all_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.all_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.all_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.selected_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.selected_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.selected_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.select_all'" class="reference internal" href="#NodeGraphQt.NodeGraph.select_all"><code class="docutils literal notranslate"><span class="pre">NodeGraph.select_all()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.clear_selection'" class="reference internal" href="#NodeGraphQt.NodeGraph.clear_selection"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_selection()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_node_by_id'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_id"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_node_by_id()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_node_by_name'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_name"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_node_by_name()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_nodes_by_type'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_nodes_by_type()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.get_unique_name'" class="reference internal" href="#NodeGraphQt.NodeGraph.get_unique_name"><code class="docutils literal notranslate"><span class="pre">NodeGraph.get_unique_name()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.current_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.current_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.current_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.clear_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.clear_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.clear_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.serialize_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.serialize_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.deserialize_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.deserialize_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.save_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.save_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.save_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.load_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.load_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.load_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.import_session'" class="reference internal" href="#NodeGraphQt.NodeGraph.import_session"><code class="docutils literal notranslate"><span class="pre">NodeGraph.import_session()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.copy_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.copy_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.cut_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.cut_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.paste_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.paste_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.duplicate_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.duplicate_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.duplicate_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.disable_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.disable_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.disable_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.use_OpenGL'" class="reference internal" href="#NodeGraphQt.NodeGraph.use_OpenGL"><code class="docutils literal notranslate"><span class="pre">NodeGraph.use_OpenGL()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.auto_layout_nodes'" class="reference internal" href="#NodeGraphQt.NodeGraph.auto_layout_nodes"><code class="docutils literal notranslate"><span class="pre">NodeGraph.auto_layout_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.question_dialog'" class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.question_dialog()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.message_dialog'" class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.message_dialog()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.load_dialog'" class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.load_dialog()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.save_dialog'" class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog"><code class="docutils literal notranslate"><span class="pre">NodeGraph.save_dialog()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.is_root'" class="reference internal" href="#NodeGraphQt.NodeGraph.is_root"><code class="docutils literal notranslate"><span class="pre">NodeGraph.is_root</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.sub_graphs'" class="reference internal" href="#NodeGraphQt.NodeGraph.sub_graphs"><code class="docutils literal notranslate"><span class="pre">NodeGraph.sub_graphs</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.expand_group_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.expand_group_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.expand_group_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.NodeGraph.collapse_group_node'" class="reference internal" href="#NodeGraphQt.NodeGraph.collapse_group_node"><code class="docutils literal notranslate"><span class="pre">NodeGraph.collapse_group_node()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a :data-current="activeSection === '#subgraph'" class="reference internal" href="#subgraph">SubGraph</a><ul>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph'" class="reference internal" href="#NodeGraphQt.SubGraph"><code class="docutils literal notranslate"><span class="pre">SubGraph</span></code></a><ul>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.initialized_graphs'" class="reference internal" href="#NodeGraphQt.SubGraph.initialized_graphs"><code class="docutils literal notranslate"><span class="pre">SubGraph.initialized_graphs</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.navigation_widget'" class="reference internal" href="#NodeGraphQt.SubGraph.navigation_widget"><code class="docutils literal notranslate"><span class="pre">SubGraph.navigation_widget</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.subviewer_widget'" class="reference internal" href="#NodeGraphQt.SubGraph.subviewer_widget"><code class="docutils literal notranslate"><span class="pre">SubGraph.subviewer_widget</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.parent_graph'" class="reference internal" href="#NodeGraphQt.SubGraph.parent_graph"><code class="docutils literal notranslate"><span class="pre">SubGraph.parent_graph</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.node'" class="reference internal" href="#NodeGraphQt.SubGraph.node"><code class="docutils literal notranslate"><span class="pre">SubGraph.node</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.collapse_graph'" class="reference internal" href="#NodeGraphQt.SubGraph.collapse_graph"><code class="docutils literal notranslate"><span class="pre">SubGraph.collapse_graph()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.expand_group_node'" class="reference internal" href="#NodeGraphQt.SubGraph.expand_group_node"><code class="docutils literal notranslate"><span class="pre">SubGraph.expand_group_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.collapse_group_node'" class="reference internal" href="#NodeGraphQt.SubGraph.collapse_group_node"><code class="docutils literal notranslate"><span class="pre">SubGraph.collapse_group_node()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.get_input_port_nodes'" class="reference internal" href="#NodeGraphQt.SubGraph.get_input_port_nodes"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_input_port_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.get_output_port_nodes'" class="reference internal" href="#NodeGraphQt.SubGraph.get_output_port_nodes"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_output_port_nodes()</span></code></a></li>
-<li><a :data-current="activeSection === '#NodeGraphQt.SubGraph.get_node_by_port'" class="reference internal" href="#NodeGraphQt.SubGraph.get_node_by_port"><code class="docutils literal notranslate"><span class="pre">SubGraph.get_node_by_port()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+</div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
+<div class="mr-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="constants.html">
+<svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="15 18 9 12 15 6"></polyline>
+</svg>
+        Constants
+      </a>
 </div>
-</aside>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="nodes/_index_nodes.html">
+        Nodes
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
+</div>
+</div></div>
 </main>
 </div>
 </div><footer class="py-6 border-t border-border md:py-0">

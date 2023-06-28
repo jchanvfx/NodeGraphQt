@@ -11,18 +11,20 @@ td.lineos {
     -moz-box-shadow: none;
 }
 .hll {
-    background-color: #233150:
+    background-color: #233150;
     display: block;
 }
-.code { background: #232629; !important }
+.code {
+    background: #232629; !important;
+}
 .highlight pre {
     background: #0b0d0f !important;
-    border-radius: 10px !important;
+    padding-left: 18px;
 }
 .highlight pre {
     color: #2fb37a;
-    border: 0px; 
-    border-radius: 0px;
+    border: 1px solid #1c2a38;
+    border-radius: 10px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }

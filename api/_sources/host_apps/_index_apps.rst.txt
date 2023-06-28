@@ -7,6 +7,7 @@ Host Application Examples
 .. toctree::
     :name: appstoc
     :maxdepth: 2
+    :titlesonly:
 
     ex_app_nuke
     ex_app_silhouette
