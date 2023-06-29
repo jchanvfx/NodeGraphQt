@@ -286,6 +286,50 @@ class BaseNode(NodeObject):
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
 
+    def hide_widget(self, name):
+        """
+        Hide an embedded node widget.
+
+        Warnings:
+            Undo is NOT yet supported for this function.
+
+        Args:
+            name (str): node property name for the widget.
+
+        See Also:
+            :meth:`BaseNode.add_custom_widget`,
+            :meth:`BaseNode.show_widget`,
+            :meth:`BaseNode.get_widget`
+        """
+        # TODO: implement this logic to the undo stack.
+        if not self.view.has_widget(name):
+            return
+        widget = self.view.get_widget(name)
+        widget.hide()
+        self.view.draw_node()
+
+    def show_widget(self, name):
+        """
+        Show an embedded node widget.
+
+        Warnings:
+            Undo is NOT yet supported for this function.
+
+        Args:
+            name (str): node property name for the widget.
+
+        See Also:
+            :meth:`BaseNode.add_custom_widget`,
+            :meth:`BaseNode.show_widget`,
+            :meth:`BaseNode.get_widget`
+        """
+        # TODO: implement this logic to the undo stack.
+        if not self.view.has_widget(name):
+            return
+        widget = self.view.get_widget(name)
+        widget.show()
+        self.view.draw_node()
+
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None, locked=False, painter_func=None):
         """

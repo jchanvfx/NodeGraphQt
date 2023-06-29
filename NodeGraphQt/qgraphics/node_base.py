@@ -372,6 +372,8 @@ class NodeItem(AbstractNodeItem):
         widget_width = 0.0
         widget_height = 0.0
         for widget in self._widgets.values():
+            if not widget.isVisible():
+                continue
             w_width = widget.boundingRect().width()
             w_height = widget.boundingRect().height()
             if w_width > widget_width:
@@ -415,6 +417,8 @@ class NodeItem(AbstractNodeItem):
         widget_width = 0.0
         widget_height = 0.0
         for widget in self._widgets.values():
+            if not widget.isVisible():
+                continue
             if widget.boundingRect().width() > widget_width:
                 widget_width = widget.boundingRect().width()
             widget_height += widget.boundingRect().height()
@@ -511,6 +515,8 @@ class NodeItem(AbstractNodeItem):
         inputs = [p for p in self.inputs if p.isVisible()]
         outputs = [p for p in self.outputs if p.isVisible()]
         for widget in self._widgets.values():
+            if not widget.isVisible():
+                continue
             widget_rect = widget.boundingRect()
             if not inputs:
                 x = rect.left() + 10
@@ -531,11 +537,15 @@ class NodeItem(AbstractNodeItem):
         y = rect.center().y() + v_offset
         widget_height = 0.0
         for widget in self._widgets.values():
+            if not widget.isVisible():
+                continue
             widget_rect = widget.boundingRect()
             widget_height += widget_rect.height()
         y -= widget_height / 2
 
         for widget in self._widgets.values():
+            if not widget.isVisible():
+                continue
             widget_rect = widget.boundingRect()
             x = rect.center().x() - (widget_rect.width() / 2)
             widget.widget().setTitleAlign('center')
@@ -776,8 +786,6 @@ class NodeItem(AbstractNodeItem):
         for port, text in self._output_items.items():
             if port.display_name:
                 text.setVisible(port_text_visible)
-
-
 
         self._text_item.setVisible(visible)
         self._icon_item.setVisible(visible)
