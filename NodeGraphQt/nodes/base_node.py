@@ -320,7 +320,7 @@ class BaseNode(NodeObject):
 
         See Also:
             :meth:`BaseNode.add_custom_widget`,
-            :meth:`BaseNode.show_widget`,
+            :meth:`BaseNode.hide_widget`,
             :meth:`BaseNode.get_widget`
         """
         # TODO: implement this logic to the undo stack.
