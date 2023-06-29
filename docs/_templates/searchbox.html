@@ -1,0 +1,21 @@
+{#- Template for the search box in the header. -#}
+{%- if docsearch %}
+  <div id="{{ docsearch_container[1:]|default('docsearch') }}"></div>
+{%- else %}
+  <form id="searchbox"
+        action="{{ pathto('search') }}"
+        method="get"
+        class="relative flex items-center group"
+        @keydown.k.window.meta="$refs.search.focus()">
+    <input x-ref="search"
+           name="q"
+           id="search-input"
+           type="search"
+           aria-label="Search the docs"
+           placeholder="{{ _('Search ...') }}"
+           class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" />
+    <kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+      <span class="text-xs">&#x1F50D;&#xFE0E;</span>
+    </kbd>
+  </form>
+{%- endif -%}

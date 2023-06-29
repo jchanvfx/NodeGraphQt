@@ -58,8 +58,8 @@ Additional Info:
     :meth:`NodeGraphQt.NodeGraph.set_pipe_slicing`
 
 
-Getting Started
-***************
+Basic Setup
+***********
 
 Here's a basic example snippet for creating two nodes and connecting them together.
 

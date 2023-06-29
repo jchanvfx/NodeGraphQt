@@ -193,6 +193,10 @@ Here's an example to embed a custom widget where we subclass the
             node_widget = NodeWidgetWrapper(self.view)
             self.add_custom_widget(node_widget, tab='Custom')
 
+To hide/show the embedded widget on a :class:`NodeGraphQt.BaseNode` checkout the
+:meth:`NodeGraphQt.BaseNode.hide_widget` and :meth:`NodeGraphQt.BaseNode.show_widget`
+functions.
+
 
 Connecting Nodes
 ****************
