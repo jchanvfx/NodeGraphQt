@@ -58,9 +58,8 @@
 <form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
 <input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
 <kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
-<span class="text-xs">⌘</span>
-      K
-    </kbd>
+<span class="text-xs">🔍︎</span>
+</kbd>
 </form>
 </div>
 <nav class="flex items-center space-x-1">
@@ -197,6 +196,12 @@ port connections from one node to another.</p>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_checkbox</span></code></a>(name[, label, text, state, tab])</p></td>
 <td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget into the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide_widget</span></code></a>(name)</p></td>
+<td><p>Hide an embedded node widget.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_widget</span></code></a>(name)</p></td>
+<td><p>Show an embedded node widget.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, ...])</p></td>
 <td><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
@@ -425,6 +430,46 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </ul>
 </dd>
 </dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BaseNode.hide_widget">
+<span class="sig-name descname"><span class="pre">hide_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.hide_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.hide_widget'">¶</a></dt>
+<dd><p>Hide an embedded node widget.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Undo is NOT yet supported for this function.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_custom_widget" title="NodeGraphQt.BaseNode.add_custom_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.add_custom_widget()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.show_widget()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.get_widget" title="NodeGraphQt.BaseNode.get_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.get_widget()</span></code></a></p>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BaseNode.show_widget">
+<span class="sig-name descname"><span class="pre">show_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.show_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.show_widget'">¶</a></dt>
+<dd><p>Show an embedded node widget.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Undo is NOT yet supported for this function.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_custom_widget" title="NodeGraphQt.BaseNode.add_custom_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.add_custom_widget()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.hide_widget()</span></code></a>,
+<a class="reference internal" href="#NodeGraphQt.BaseNode.get_widget" title="NodeGraphQt.BaseNode.get_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BaseNode.get_widget()</span></code></a></p>
+</div>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_input">
