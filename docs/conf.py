@@ -131,7 +131,7 @@ pygments_style = 'monokai'
 # It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
 # pixels large. Default: None.
 html_favicon = '_images/favicon.png'
-html_logo = '_images/favicon.png'
+html_logo = None
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -154,8 +154,8 @@ html_context = {
 # documentation.
 html_title = 'NodeGraphQt'
 html_theme_options = {
-    # "logo_light": "_images/logo.png",
-    # "logo_dark": "_images/logo.png"
+    'logo_light': '_images/favicon.png',
+    'logo_dark': '_images/favicon.png',
     'main_nav_links': {
         'Source': 'https://github.com/jchanvfx/NodeGraphQt',
         'Issues': 'https://github.com/jchanvfx/NodeGraphQt/issues',

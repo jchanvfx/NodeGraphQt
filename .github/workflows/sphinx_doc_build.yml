@@ -9,7 +9,7 @@ on:
 env:
   # environment variables.
   SOURCE_BRANCH: main
-  GH_PAGES_BRANCH: gh-pages
+  PAGES_BRANCH: gh-pages
 
 jobs:
   docs-build:
@@ -44,7 +44,7 @@ jobs:
       # Merge the "main" branch to the "gh-pages" branch.
       - name: Update "gh-pages" branch
         run: |
-            git checkout $GH_PAGES_BRANCH
+            git checkout $PAGES_BRANCH
             git merge origin/$SOURCE_BRANCH
       # Build the sphinx api documentation.
       - name: Run Sphinx Build
@@ -55,4 +55,4 @@ jobs:
             git ls-files --others --exclude-standard
             git add ./api
             git commit -m "github action: auto build api docs"
-            git push origin $GH_PAGES_BRANCH
+            git push origin $PAGES_BRANCH
