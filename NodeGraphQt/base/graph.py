@@ -794,14 +794,13 @@ class NodeGraph(QtCore.QObject):
             [
                 {
                     'type': 'menu',
-                    'label': 'test sub menu',
+                    'label': 'node sub menu',
                     'items': [
                         {
                             'type': 'command',
                             'label': 'test command',
                             'file': '../path/to/my/test_module.py',
                             'function': 'run_test',
-                            'shortcut': 'Ctrl+b',
                             'node_type': 'nodeGraphQt.nodes.MyNodeClass'
                         },
 
