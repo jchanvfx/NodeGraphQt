@@ -294,3 +294,15 @@ class NodeGraphCommand(object):
         execute the menu command.
         """
         self.qaction.trigger()
+
+    def show(self):
+        """
+        Set the command to be visible in the context menu.
+        """
+        self.qaction.setVisible(True)
+
+    def hide(self):
+        """
+        Set the command to be hidden in the context menu.
+        """
+        self.qaction.setVisible(False)
