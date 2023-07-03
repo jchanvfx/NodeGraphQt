@@ -87,7 +87,7 @@
 <a href="https://github.com/jchanvfx/NodeGraphQt/issues" rel="nofollow noopener">Issues</a>
 <a href="https://github.com/jchanvfx/NodeGraphQt/releases" rel="nofollow noopener">Releases</a>
 </nav><nav class="table w-full min-w-full my-6 lg:my-8">
-<code style="font-size: 0.65rem;">Release - v0.6.5</code>
+<code style="font-size: 0.65rem;">Release - v0.6.6</code>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
@@ -397,10 +397,13 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.run_command" title="NodeGraphQt.NodeGraphCommand.run_command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_command</span></code></a>()</p></td>
 <td><p>execute the menu command.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.show" title="NodeGraphQt.NodeGraphCommand.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.set_enabled" title="NodeGraphQt.NodeGraphCommand.set_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_enabled</span></code></a>(state)</p></td>
+<td><p>Sets the command to either be enabled or disabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.show" title="NodeGraphQt.NodeGraphCommand.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>()</p></td>
 <td><p>Set the command to be visible in the context menu.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.hide" title="NodeGraphQt.NodeGraphCommand.hide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.hide" title="NodeGraphQt.NodeGraphCommand.hide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide</span></code></a>()</p></td>
 <td><p>Set the command to be hidden in the context menu.</p></td>
 </tr>
 </tbody>
@@ -445,6 +448,16 @@
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraphCommand.run_command">
 <span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.run_command" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraphCommand.run_command'">¶</a></dt>
 <dd><p>execute the menu command.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraphCommand.set_enabled">
+<span class="sig-name descname"><span class="pre">set_enabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.set_enabled" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraphCommand.set_enabled'">¶</a></dt>
+<dd><p>Sets the command to either be enabled or disabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>bool</em>) – true to enable.</p>
+</dd>
+</dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraphCommand.show">
