@@ -87,7 +87,7 @@
 <a href="https://github.com/jchanvfx/NodeGraphQt/issues" rel="nofollow noopener">Issues</a>
 <a href="https://github.com/jchanvfx/NodeGraphQt/releases" rel="nofollow noopener">Releases</a>
 </nav><nav class="table w-full min-w-full my-6 lg:my-8">
-<code style="font-size: 0.65rem;">Release - v0.6.4</code>
+<code style="font-size: 0.65rem;">Release - v0.6.5</code>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
@@ -202,22 +202,25 @@ and the node graph.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.session_changed" title="NodeGraphQt.NodeGraph.session_changed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session_changed</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Signal is triggered when session has been changed.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.model" title="NodeGraphQt.NodeGraph.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.context_menu_prompt" title="NodeGraphQt.NodeGraph.context_menu_prompt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">context_menu_prompt</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Signal is triggered just before a context menu is shown.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.model" title="NodeGraphQt.NodeGraph.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
 <td><p>The model used for storing the node graph data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory" title="NodeGraphQt.NodeGraph.node_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_factory</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.node_factory" title="NodeGraphQt.NodeGraph.node_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_factory</span></code></a></p></td>
 <td><p>Return the node factory object used by the node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">widget</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">widget</span></code></a></p></td>
 <td><p>The node graph widget for adding into a layout.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.undo_view" title="NodeGraphQt.NodeGraph.undo_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">undo_view</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.undo_view" title="NodeGraphQt.NodeGraph.undo_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">undo_view</span></code></a></p></td>
 <td><p>Returns node graph undo history list widget.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.is_root" title="NodeGraphQt.NodeGraph.is_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_root</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.is_root" title="NodeGraphQt.NodeGraph.is_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_root</span></code></a></p></td>
 <td><p>Returns if the node graph controller is the root graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.sub_graphs" title="NodeGraphQt.NodeGraph.sub_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_graphs</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.sub_graphs" title="NodeGraphQt.NodeGraph.sub_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_graphs</span></code></a></p></td>
 <td><p>Returns expanded group node sub graphs.</p></td>
 </tr>
 </tbody>
@@ -586,10 +589,24 @@ list[<a class="reference internal" href="nodes/NodeObject.html#NodeGraphQt.NodeO
 <dd><p>Signal is triggered when session has been changed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p>:str</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Emits<span class="colon">:</span></dt>
 <dd class="field-even"><p>new session path</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.context_menu_prompt">
+<span class="sig-name descname"><span class="pre">context_menu_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.context_menu_prompt" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.context_menu_prompt'">¶</a></dt>
+<dd><p>Signal is triggered just before a context menu is shown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="menu.html#NodeGraphQt.NodeGraphMenu" title="NodeGraphQt.NodeGraphMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraphMenu</span></code></a> or <a class="reference internal" href="menu.html#NodeGraphQt.NodesMenu" title="NodeGraphQt.NodesMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodesMenu</span></code></a>,
+<a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a></p>
+</dd>
+<dt class="field-even">Emits<span class="colon">:</span></dt>
+<dd class="field-even"><p>triggered context menu, node object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -899,14 +916,13 @@ with the arg <code class="docutils literal notranslate"><span class="pre">menu="
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
         <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'menu'</span><span class="p">,</span>
-        <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'test sub menu'</span><span class="p">,</span>
+        <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'node sub menu'</span><span class="p">,</span>
         <span class="s1">'items'</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
                 <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'command'</span><span class="p">,</span>
                 <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'test command'</span><span class="p">,</span>
                 <span class="s1">'file'</span><span class="p">:</span> <span class="s1">'../path/to/my/test_module.py'</span><span class="p">,</span>
                 <span class="s1">'function'</span><span class="p">:</span> <span class="s1">'run_test'</span><span class="p">,</span>
-                <span class="s1">'shortcut'</span><span class="p">:</span> <span class="s1">'Ctrl+b'</span><span class="p">,</span>
                 <span class="s1">'node_type'</span><span class="p">:</span> <span class="s1">'nodeGraphQt.nodes.MyNodeClass'</span>
             <span class="p">},</span>
 

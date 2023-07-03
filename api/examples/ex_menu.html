@@ -87,7 +87,7 @@
 <a href="https://github.com/jchanvfx/NodeGraphQt/issues" rel="nofollow noopener">Issues</a>
 <a href="https://github.com/jchanvfx/NodeGraphQt/releases" rel="nofollow noopener">Releases</a>
 </nav><nav class="table w-full min-w-full my-6 lg:my-8">
-<code style="font-size: 0.65rem;">Release - v0.6.4</code>
+<code style="font-size: 0.65rem;">Release - v0.6.5</code>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
@@ -237,6 +237,106 @@ can override context menus on a per node type basis.</p>
 </pre></div>
 </div>
 </section>
+<section id="adding-with-config-files">
+<h2>Adding with Config files<a class="headerlink" href="#adding-with-config-files" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#adding-with-config-files'">¶</a></h2>
+<p>Adding menus and commands can also be done through configs and python module files.</p>
+<p>example python script containing a test function.</p>
+<p><code class="docutils literal notranslate"><span class="pre">../path/to/my/hotkeys/cmd_functions.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">graph_command</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">"""</span>
+<span class="linenos"> 3</span><span class="sd">    function that's triggered on the node graph context menu.</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="sd">    Args:</span>
+<span class="linenos"> 6</span><span class="sd">        graph (NodeGraphQt.NodeGraph): node graph controller.</span>
+<span class="linenos"> 7</span><span class="sd">    """</span>
+<span class="linenos"> 8</span>    <span class="nb">print</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="k">def</span> <span class="nf">node_command</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="linenos">11</span><span class="w">    </span><span class="sd">"""</span>
+<span class="linenos">12</span><span class="sd">    function that's triggered on a node's node context menu.</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="sd">    Args:</span>
+<span class="linenos">15</span><span class="sd">        graph (NodeGraphQt.NodeGraph): node graph controller.</span>
+<span class="linenos">16</span><span class="sd">        node: (NodeGraphQt.NodeObject): node object triggered on.</span>
+<span class="linenos">17</span><span class="sd">    """</span>
+<span class="linenos">18</span>    <span class="nb">print</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<span class="linenos">19</span>    <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>example <code class="docutils literal notranslate"><span class="pre">json</span></code> config for the node graph context menu.</p>
+<p><code class="docutils literal notranslate"><span class="pre">../path/to/my/hotkeys/graph_commands.json</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="p">[</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"menu"</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="nt">"label"</span><span class="p">:</span><span class="s2">"My Sub Menu"</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="nt">"items"</span><span class="p">:[</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="p">{</span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"command"</span><span class="p">,</span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="s2">"Example Graph Command"</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="nt">"file"</span><span class="p">:</span><span class="s2">"../examples/hotkeys/cmd_functions.py"</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">        </span><span class="nt">"function_name"</span><span class="p">:</span><span class="s2">"graph_command"</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">        </span><span class="nt">"shortcut"</span><span class="p">:</span><span class="s2">"Shift+t"</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">13</span><span class="w">    </span><span class="p">]</span>
+<span class="linenos">14</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">15</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>example <code class="docutils literal notranslate"><span class="pre">json</span></code> config for the nodes context menu.</p>
+<p><code class="docutils literal notranslate"><span class="pre">../path/to/my/hotkeys/node_commands.json</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="p">[</span>
+<span class="linenos">2</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos">3</span><span class="w">    </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"command"</span><span class="p">,</span>
+<span class="linenos">4</span><span class="w">    </span><span class="nt">"label"</span><span class="p">:</span><span class="s2">"Example Graph Command"</span><span class="p">,</span>
+<span class="linenos">5</span><span class="w">    </span><span class="nt">"file"</span><span class="p">:</span><span class="s2">"../examples/hotkeys/cmd_functions.py"</span><span class="p">,</span>
+<span class="linenos">6</span><span class="w">    </span><span class="nt">"function_name"</span><span class="p">:</span><span class="s2">"node_command"</span><span class="p">,</span>
+<span class="linenos">7</span><span class="w">    </span><span class="nt">"node_type"</span><span class="p">:</span><span class="s2">"io.github.jchanvfx.FooNode"</span><span class="p">,</span>
+<span class="linenos">8</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">9</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In the main code where your node graph controller is defined we can just call the
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_context_menu_from_file" title="NodeGraphQt.NodeGraph.set_context_menu_from_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu_from_file()</span></code></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="linenos">4</span><span class="n">node_graph</span><span class="o">.</span><span class="n">set_context_menu_from_file</span><span class="p">(</span>
+<span class="linenos">5</span>    <span class="s1">'../path/to/a/hotkeys/graph_commands.json'</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="s1">'graph'</span>
+<span class="linenos">6</span><span class="p">)</span>
+<span class="linenos">7</span><span class="n">node_graph</span><span class="o">.</span><span class="n">set_context_menu_from_file</span><span class="p">(</span>
+<span class="linenos">8</span>    <span class="s1">'../path/to/a/hotkeys/node_commands.json'</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="s1">'nodes'</span>
+<span class="linenos">9</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-with-serialized-data">
+<h2>Adding with Serialized data<a class="headerlink" href="#adding-with-serialized-data" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#adding-with-serialized-data'">¶</a></h2>
+<p>Alternatively if you do not prefer to have <code class="docutils literal notranslate"><span class="pre">json</span></code> config files the node graph also has a
+<a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_context_menu" title="NodeGraphQt.NodeGraph.set_context_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_context_menu()</span></code></a> function.</p>
+<p>here’s an example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+<span class="linenos"> 4</span>    <span class="p">{</span>
+<span class="linenos"> 5</span>        <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'menu'</span><span class="p">,</span>
+<span class="linenos"> 6</span>        <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'My Sub Menu'</span><span class="p">,</span>
+<span class="linenos"> 7</span>        <span class="s1">'items'</span><span class="p">:</span> <span class="p">[</span>
+<span class="linenos"> 8</span>            <span class="p">{</span>
+<span class="linenos"> 9</span>                <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'command'</span><span class="p">,</span>
+<span class="linenos">10</span>                <span class="s1">'label'</span><span class="p">:</span> <span class="s1">'Example Graph Command'</span><span class="p">,</span>
+<span class="linenos">11</span>                <span class="s1">'file'</span><span class="p">:</span> <span class="s1">'../examples/hotkeys/cmd_functions.py'</span><span class="p">,</span>
+<span class="linenos">12</span>                <span class="s1">'function_name'</span><span class="p">:</span> <span class="s1">'graph_command'</span><span class="p">,</span>
+<span class="linenos">13</span>                <span class="s1">'shortcut'</span><span class="p">:</span> <span class="s1">'Shift+t'</span>
+<span class="linenos">14</span>            <span class="p">},</span>
+<span class="linenos">15</span>        <span class="p">]</span>
+<span class="linenos">16</span>    <span class="p">},</span>
+<span class="linenos">17</span><span class="p">]</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="n">node_graph</span> <span class="o">=</span> <span class="n">NodeGraph</span><span class="p">()</span>
+<span class="linenos">20</span><span class="n">node_graph</span><span class="o">.</span><span class="n">set_context_menu</span><span class="p">(</span><span class="n">menu_name</span><span class="o">=</span><span class="s1">'graph'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
@@ -261,6 +361,8 @@ can override context menus on a per node type basis.</p>
 <li><a :data-current="activeSection === '#default-context-menu'" class="reference internal" href="#default-context-menu">Default Context Menu</a></li>
 <li><a :data-current="activeSection === '#adding-to-the-graph-menu'" class="reference internal" href="#adding-to-the-graph-menu">Adding to the Graph Menu</a></li>
 <li><a :data-current="activeSection === '#adding-to-the-nodes-menu'" class="reference internal" href="#adding-to-the-nodes-menu">Adding to the Nodes Menu</a></li>
+<li><a :data-current="activeSection === '#adding-with-config-files'" class="reference internal" href="#adding-with-config-files">Adding with Config files</a></li>
+<li><a :data-current="activeSection === '#adding-with-serialized-data'" class="reference internal" href="#adding-with-serialized-data">Adding with Serialized data</a></li>
 </ul>
 </div>
 </aside>

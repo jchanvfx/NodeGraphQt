@@ -107,3 +107,124 @@ can override context menus on a per node type basis.
 
     # show widget.
     node_graph.widget.show()
+
+
+Adding with Config files
+************************
+
+Adding menus and commands can also be done through configs and python module files.
+
+example python script containing a test function.
+
+``../path/to/my/hotkeys/cmd_functions.py``
+
+.. code-block:: python
+    :linenos:
+
+    def graph_command(graph):
+        """
+        function that's triggered on the node graph context menu.
+
+        Args:
+            graph (NodeGraphQt.NodeGraph): node graph controller.
+        """
+        print(graph)
+
+    def node_command(graph, node):
+        """
+        function that's triggered on a node's node context menu.
+
+        Args:
+            graph (NodeGraphQt.NodeGraph): node graph controller.
+            node: (NodeGraphQt.NodeObject): node object triggered on.
+        """
+        print(graph)
+        print(node.name())
+
+example ``json`` config for the node graph context menu.
+
+``../path/to/my/hotkeys/graph_commands.json``
+
+.. code-block:: json
+    :linenos:
+
+    [
+      {
+        "type":"menu",
+        "label":"My Sub Menu",
+        "items":[
+          {
+            "type":"command",
+            "label":"Example Graph Command",
+            "file":"../examples/hotkeys/cmd_functions.py",
+            "function_name":"graph_command",
+            "shortcut":"Shift+t",
+          }
+        ]
+      }
+    ]
+
+example ``json`` config for the nodes context menu.
+
+``../path/to/my/hotkeys/node_commands.json``
+
+.. code-block:: json
+    :linenos:
+
+    [
+      {
+        "type":"command",
+        "label":"Example Graph Command",
+        "file":"../examples/hotkeys/cmd_functions.py",
+        "function_name":"node_command",
+        "node_type":"io.github.jchanvfx.FooNode",
+      }
+    ]
+
+In the main code where your node graph controller is defined we can just call the
+:meth:`NodeGraph.set_context_menu_from_file`
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import NodeGraph
+
+    node_graph = NodeGraph()
+    node_graph.set_context_menu_from_file(
+        '../path/to/a/hotkeys/graph_commands.json', menu='graph'
+    )
+    node_graph.set_context_menu_from_file(
+        '../path/to/a/hotkeys/node_commands.json', menu='nodes'
+    )
+
+Adding with Serialized data
+***************************
+
+Alternatively if you do not prefer to have ``json`` config files the node graph also has a
+:meth:`NodeGraph.set_context_menu` function.
+
+here's an example.
+
+.. code-block:: python
+    :linenos:
+
+    from NodeGraphQt import NodeGraph
+
+    data = [
+        {
+            'type': 'menu',
+            'label': 'My Sub Menu',
+            'items': [
+                {
+                    'type': 'command',
+                    'label': 'Example Graph Command',
+                    'file': '../examples/hotkeys/cmd_functions.py',
+                    'function_name': 'graph_command',
+                    'shortcut': 'Shift+t'
+                },
+            ]
+        },
+    ]
+
+    node_graph = NodeGraph()
+    node_graph.set_context_menu(menu_name='graph', data)
