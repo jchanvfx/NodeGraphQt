@@ -295,6 +295,15 @@ class NodeGraphCommand(object):
         """
         self.qaction.trigger()
 
+    def set_enabled(self, state):
+        """
+        Sets the command to either be enabled or disabled.
+
+        Args:
+            state (bool): true to enable.
+        """
+        self.qaction.setEnabled(state)
+
     def show(self):
         """
         Set the command to be visible in the context menu.
