@@ -51,6 +51,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    context_menu_prompt = QtCore.Signal(str, object)
 
     def __init__(self, parent=None, undo_stack=None):
         """
@@ -354,6 +355,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ctx_menu = None
         ctx_menus = self.context_menus()
 
+        prompted_data = None, None
+
         if ctx_menus['nodes'].isEnabled():
             pos = self.mapToScene(self._previous_pos)
             items = self._items_near(pos)
@@ -365,10 +368,17 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     for action in ctx_menu.actions():
                         if not action.menu():
                             action.node_id = node.id
+                    prompted_data = 'nodes', node.id
 
-        ctx_menu = ctx_menu or ctx_menus['graph']
+        if not ctx_menu:
+            ctx_menu = ctx_menus['graph']
+            prompted_data = 'graph', None
+
         if len(ctx_menu.actions()) > 0:
             if ctx_menu.isEnabled():
+                self.context_menu_prompt.emit(
+                    prompted_data[0], prompted_data[1]
+                )
                 ctx_menu.exec_(event.globalPos())
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
