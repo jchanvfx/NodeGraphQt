@@ -71,7 +71,7 @@
         {%- if theme_extra_header_link_icons|tobool %}
         {%- for text,url in theme_extra_header_link_icons.items() %}
         {%- if url is mapping %}
-        <a href="{{ url.link }}" title="Visit {{ text }}" rel="noopener nofollow">
+        <a href="{{ url.link }}" title="{{ text }}" rel="noopener nofollow">
           <div
             class="inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md disabled:opacity-50 disabled:pointer-events-none hover:bg-accent hover:text-accent-foreground h-9 w-9">
             {{ url.icon }}
