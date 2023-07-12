@@ -258,8 +258,8 @@ class NodePropWidget(QtWidgets.QWidget):
     property_changed = QtCore.Signal(str, str, object)
     property_closed = QtCore.Signal(str)
 
-    #: emitted when a widget is shown or hidden.
-    visibility_changed = QtCore.Signal(str)
+    # emitted when a widget is shown or hidden. (node_id, visible, widget)
+    widget_visible_changed = QtCore.Signal(str, bool, QtWidgets.QWidget)
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
@@ -300,38 +300,20 @@ class NodePropWidget(QtWidgets.QWidget):
 
         self._ports_container = self._read_node(node)
         self._ports_container.input_group_toggled.connect(
-            self._on_input_group_toggled
+            lambda v: self.widget_visible_changed.emit(
+                self.__node_id, v, self._ports_container.in_tree
+            )
         )
         self._ports_container.output_group_toggled.connect(
-            self._on_output_group_toggled
+            lambda v: self.widget_visible_changed.emit(
+                self.__node_id, v, self._ports_container.out_tree
+            )
         )
 
     def __repr__(self):
         return '<{} object at {}>'.format(
             self.__class__.__name__, hex(id(self))
         )
-
-    def _on_input_group_toggled(self, mode):
-        """
-        Triggered when the input ports groupbox checkbox is clicked.
-
-        Args:
-            mode (bool): group box checked state.
-        """
-        self._ports_container.in_tree.setVisible(mode)
-        self._ports_container.adjustSize()
-        self.adjustSize()
-        self.visibility_changed.emit(self.__node_id)
-
-    def _on_output_group_toggled(self, mode):
-        """
-        Triggered when the output ports groupbox checkbox is clicked.
-
-        Args:
-            mode (bool): group box checked state.
-        """
-        self._ports_container.out_tree.setVisible(mode)
-        self.visibility_changed.emit(self.__node_id)
 
     def _on_close(self):
         """
@@ -562,12 +544,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             self.__class__.__name__, hex(id(self))
         )
 
-    def __on_prop_visibility_changed(self, node_id):
-        return
-        # QtCompat.QHeaderView.setSectionResizeMode(
-        #     self._prop_list.verticalHeader(),
-        #     QtWidgets.QHeaderView.ResizeToContents
-        # )
+    def __on_widget_visible_changed(self, node_id, visible, tree_widget):
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        if items:
+            tree_widget.setVisible(visible)
+            widget = self._prop_list.cellWidget(items[0].row(), 0)
+            widget.adjustSize()
+            QtCompat.QHeaderView.setSectionResizeMode(
+                self._prop_list.verticalHeader(),
+                QtWidgets.QHeaderView.ResizeToContents
+            )
 
     def __on_prop_close(self, node_id):
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
@@ -659,8 +645,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         prop_widget = NodePropWidget(node=node)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         prop_widget.property_closed.connect(self.__on_prop_close)
-        prop_widget.visibility_changed.connect(
-            self.__on_prop_visibility_changed
+        prop_widget.widget_visible_changed.connect(
+            self.__on_widget_visible_changed
         )
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
