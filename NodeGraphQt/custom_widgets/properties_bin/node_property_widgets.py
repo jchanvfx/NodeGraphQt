@@ -139,12 +139,13 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
     under a tab in the ``NodePropWidget`` widget.
     """
 
-    input_group_toggled = QtCore.Signal(bool)
-    output_group_toggled = QtCore.Signal(bool)
+    ingroup_visible_toggled = QtCore.Signal(bool)
+    outgroup_visible_toggled = QtCore.Signal(bool)
 
     def __init__(self, parent=None, node=None):
         super(_PortConnectionsContainer, self).__init__(parent)
         self._node = node
+        self._ports = {}
 
         in_group, self.in_tree = self._build_tree_group('Input Ports')
         for _, port in node.inputs().items():
@@ -164,8 +165,12 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         layout.addStretch()
 
         # wire up signals & slots
-        in_group.clicked.connect(lambda x: self.input_group_toggled.emit(x))
-        out_group.clicked.connect(lambda x: self.output_group_toggled.emit(x))
+        in_group.clicked.connect(
+            lambda x: self.ingroup_visible_toggled.emit(x)
+        )
+        out_group.clicked.connect(
+            lambda x: self.outgroup_visible_toggled.emit(x)
+        )
 
         in_group.setChecked(False)
         self.in_tree.setVisible(False)
@@ -193,9 +198,10 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         group_box.setTitle(title)
         group_box.setLayout(QtWidgets.QVBoxLayout())
 
+        headers = ['Locked', 'Name', 'Connections', '']
         tree_widget = QtWidgets.QTreeWidget()
-        tree_widget.setColumnCount(5)
-        tree_widget.setHeaderLabels(['Locked', 'Name', 'Connections', '', ''])
+        tree_widget.setColumnCount(len(headers))
+        tree_widget.setHeaderLabels(headers)
         tree_widget.setHeaderHidden(False)
         tree_widget.header().setStretchLastSection(False)
         QtCompat.QHeaderView.setSectionResizeMode(
@@ -206,8 +212,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
 
         return group_box, tree_widget
 
-    @staticmethod
-    def _build_row(tree, port):
+    def _build_row(self, tree, port):
         """
         Args:
             tree (QtWidgets.QTreeWidget):
@@ -220,29 +225,40 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         item.setToolTip(1, 'Port Name')
         item.setToolTip(2, 'Select connected port.')
         item.setToolTip(3, 'Center on connected port node.')
-        item.setToolTip(4, 'Disconnect selected port connection.')
 
         lock_chb = QtWidgets.QCheckBox()
+        lock_chb.setChecked(port.locked())
+        lock_chb.clicked.connect(lambda x: port.set_locked(x))
         tree.setItemWidget(item, 0, lock_chb)
 
         combo = QtWidgets.QComboBox()
-        combo.addItems([
-            '{} : "{}"'.format(p.name(), p.node().name())
-            for p in port.connected_ports()
-        ])
+        for cp in port.connected_ports():
+            item_name = '{} : "{}"'.format(cp.name(), cp.node().name())
+            self._ports[item_name] = cp
+            combo.addItem(item_name)
         tree.setItemWidget(item, 2, combo)
 
         focus_btn = QtWidgets.QPushButton()
         focus_btn.setIcon(QtGui.QIcon(tree.style().standardPixmap(
             QtWidgets.QStyle.SP_DialogYesButton
         )))
+        focus_btn.clicked.connect(
+            lambda: self._on_focus_on_node(self._ports.get(combo.currentText()))
+        )
         tree.setItemWidget(item, 3, focus_btn)
 
-        disconnect_btn = QtWidgets.QPushButton()
-        disconnect_btn.setIcon(QtGui.QIcon(tree.style().standardPixmap(
-            QtWidgets.QStyle.SP_DialogNoButton
-        )))
-        tree.setItemWidget(item, 4, disconnect_btn)
+    def _on_focus_on_node(self, port):
+        """
+        Slot function emits the node is of the connected port.
+
+        Args:
+            port (NodeGraphQt.Port): connected port.
+        """
+        if port:
+            node = port.node()
+            node.graph.center_on([node])
+            node.graph.clear_selection()
+            node.set_selected(True)
 
 
 class NodePropWidget(QtWidgets.QWidget):
@@ -299,12 +315,12 @@ class NodePropWidget(QtWidgets.QWidget):
         layout.addWidget(self.type_wgt)
 
         self._ports_container = self._read_node(node)
-        self._ports_container.input_group_toggled.connect(
+        self._ports_container.ingroup_visible_toggled.connect(
             lambda v: self.widget_visible_changed.emit(
                 self.__node_id, v, self._ports_container.in_tree
             )
         )
-        self._ports_container.output_group_toggled.connect(
+        self._ports_container.outgroup_visible_toggled.connect(
             lambda v: self.widget_visible_changed.emit(
                 self.__node_id, v, self._ports_container.out_tree
             )
@@ -545,6 +561,15 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         )
 
     def __on_widget_visible_changed(self, node_id, visible, tree_widget):
+        """
+        Triggered when the visibility of the port tree widget changes we
+        resize the property list table row.
+
+        Args:
+            node_id (str): node id.
+            visible (bool): visibility state.
+            tree_widget (QtWidgets.QTreeWidget): ports tree widget.
+        """
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         if items:
             tree_widget.setVisible(visible)
@@ -556,10 +581,23 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             )
 
     def __on_prop_close(self, node_id):
+        """
+        Triggered when a node property widget is requested to be removed from
+        the property list widget.
+
+        Args:
+            node_id (str): node id.
+        """
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         [self._prop_list.removeRow(i.row()) for i in items]
 
     def __on_limit_changed(self, value):
+        """
+        Sets the property list widget limit.
+
+        Args:
+            value (int): limit value.
+        """
         rows = self._prop_list.rowCount()
         if rows > value:
             self._prop_list.removeRow(rows - 1)
