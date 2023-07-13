@@ -226,6 +226,8 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         item.setToolTip(2, 'Select connected port.')
         item.setToolTip(3, 'Center on connected port node.')
 
+        # TODO: will need to update this checkbox lock logic to work with
+        #       the unde/redo functionality.
         lock_chb = QtWidgets.QCheckBox()
         lock_chb.setChecked(port.locked())
         lock_chb.clicked.connect(lambda x: port.set_locked(x))
