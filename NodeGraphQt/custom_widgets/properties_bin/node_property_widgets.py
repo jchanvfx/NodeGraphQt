@@ -133,6 +133,136 @@ class _PropertiesContainer(QtWidgets.QWidget):
                 return item.widget()
 
 
+class _PortConnectionsContainer(QtWidgets.QWidget):
+    """
+    Port connection container widget that displays node ports and connections
+    under a tab in the ``NodePropWidget`` widget.
+    """
+
+    ingroup_visible_toggled = QtCore.Signal(bool)
+    outgroup_visible_toggled = QtCore.Signal(bool)
+
+    def __init__(self, parent=None, node=None):
+        super(_PortConnectionsContainer, self).__init__(parent)
+        self._node = node
+        self._ports = {}
+
+        in_group, self.in_tree = self._build_tree_group('Input Ports')
+        for _, port in node.inputs().items():
+            self._build_row(self.in_tree, port)
+        for col in range(self.in_tree.columnCount()):
+            self.in_tree.resizeColumnToContents(col)
+
+        out_group, self.out_tree = self._build_tree_group('Output Ports')
+        for _, port in node.outputs().items():
+            self._build_row(self.out_tree, port)
+        for col in range(self.out_tree.columnCount()):
+            self.out_tree.resizeColumnToContents(col)
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(in_group)
+        layout.addWidget(out_group)
+        layout.addStretch()
+
+        # wire up signals & slots
+        in_group.clicked.connect(
+            lambda x: self.ingroup_visible_toggled.emit(x)
+        )
+        out_group.clicked.connect(
+            lambda x: self.outgroup_visible_toggled.emit(x)
+        )
+
+        in_group.setChecked(False)
+        self.in_tree.setVisible(False)
+        out_group.setChecked(False)
+        self.out_tree.setVisible(False)
+
+    def __repr__(self):
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self))
+        )
+
+    @staticmethod
+    def _build_tree_group(title):
+        """
+        Args:
+            title (str): group box title.
+
+        Returns:
+            tuple(QtWidgets.QGroupBox, QtWidgets.QTreeWidget): widgets.
+        """
+        group_box = QtWidgets.QGroupBox()
+        group_box.setMaximumHeight(200)
+        group_box.setCheckable(True)
+        group_box.setChecked(True)
+        group_box.setTitle(title)
+        group_box.setLayout(QtWidgets.QVBoxLayout())
+
+        headers = ['Locked', 'Name', 'Connections', '']
+        tree_widget = QtWidgets.QTreeWidget()
+        tree_widget.setColumnCount(len(headers))
+        tree_widget.setHeaderLabels(headers)
+        tree_widget.setHeaderHidden(False)
+        tree_widget.header().setStretchLastSection(False)
+        QtCompat.QHeaderView.setSectionResizeMode(
+            tree_widget.header(), 2, QtWidgets.QHeaderView.Stretch
+        )
+
+        group_box.layout().addWidget(tree_widget)
+
+        return group_box, tree_widget
+
+    def _build_row(self, tree, port):
+        """
+        Args:
+            tree (QtWidgets.QTreeWidget):
+            port (NodeGraphQt.Port):
+        """
+        item = QtWidgets.QTreeWidgetItem(tree)
+        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+        item.setText(1, port.name())
+        item.setToolTip(0, 'Lock Port')
+        item.setToolTip(1, 'Port Name')
+        item.setToolTip(2, 'Select connected port.')
+        item.setToolTip(3, 'Center on connected port node.')
+
+        # TODO: will need to update this checkbox lock logic to work with
+        #       the unde/redo functionality.
+        lock_chb = QtWidgets.QCheckBox()
+        lock_chb.setChecked(port.locked())
+        lock_chb.clicked.connect(lambda x: port.set_locked(x))
+        tree.setItemWidget(item, 0, lock_chb)
+
+        combo = QtWidgets.QComboBox()
+        for cp in port.connected_ports():
+            item_name = '{} : "{}"'.format(cp.name(), cp.node().name())
+            self._ports[item_name] = cp
+            combo.addItem(item_name)
+        tree.setItemWidget(item, 2, combo)
+
+        focus_btn = QtWidgets.QPushButton()
+        focus_btn.setIcon(QtGui.QIcon(tree.style().standardPixmap(
+            QtWidgets.QStyle.SP_DialogYesButton
+        )))
+        focus_btn.clicked.connect(
+            lambda: self._on_focus_on_node(self._ports.get(combo.currentText()))
+        )
+        tree.setItemWidget(item, 3, focus_btn)
+
+    def _on_focus_on_node(self, port):
+        """
+        Slot function emits the node is of the connected port.
+
+        Args:
+            port (NodeGraphQt.Port): connected port.
+        """
+        if port:
+            node = port.node()
+            node.graph.center_on([node])
+            node.graph.clear_selection()
+            node.set_selected(True)
+
+
 class NodePropWidget(QtWidgets.QWidget):
     """
     Node properties widget for display a Node object.
@@ -145,6 +275,9 @@ class NodePropWidget(QtWidgets.QWidget):
     #: signal (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
     property_closed = QtCore.Signal(str)
+
+    # emitted when a widget is shown or hidden. (node_id, visible, widget)
+    widget_visible_changed = QtCore.Signal(str, bool, QtWidgets.QWidget)
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
@@ -182,7 +315,18 @@ class NodePropWidget(QtWidgets.QWidget):
         layout.addLayout(name_layout)
         layout.addWidget(self.__tab)
         layout.addWidget(self.type_wgt)
-        self._read_node(node)
+
+        self._ports_container = self._read_node(node)
+        self._ports_container.ingroup_visible_toggled.connect(
+            lambda v: self.widget_visible_changed.emit(
+                self.__node_id, v, self._ports_container.in_tree
+            )
+        )
+        self._ports_container.outgroup_visible_toggled.connect(
+            lambda v: self.widget_visible_changed.emit(
+                self.__node_id, v, self._ports_container.out_tree
+            )
+        )
 
     def __repr__(self):
         return '<{} object at {}>'.format(
@@ -211,6 +355,9 @@ class NodePropWidget(QtWidgets.QWidget):
 
         Args:
             node (NodeGraphQt.BaseNode): node class.
+
+        Returns:
+            _PortConnectionsContainer: ports container widget.
         """
         model = node.model
         graph_model = node.graph.model
@@ -224,8 +371,9 @@ class NodePropWidget(QtWidgets.QWidget):
             tab_mapping[tab_name].append((prop_name, prop_val))
 
         # add tabs.
+        reserved_tabs = ['Node', 'Ports']
         for tab in sorted(tab_mapping.keys()):
-            if tab != 'Node':
+            if tab not in reserved_tabs:
                 self.add_tab(tab)
 
         # property widget factory.
@@ -252,7 +400,7 @@ class NodePropWidget(QtWidgets.QWidget):
                                        prop_name.replace('_', ' '))
                 widget.value_changed.connect(self._on_property_changed)
 
-        # add "Node" tab properties.
+        # add "Node" tab properties. (default props)
         self.add_tab('Node')
         default_props = ['color', 'text_color', 'disabled', 'id']
         prop_window = self.__tab_windows['Node']
@@ -267,6 +415,12 @@ class NodePropWidget(QtWidgets.QWidget):
             widget.value_changed.connect(self._on_property_changed)
 
         self.type_wgt.setText(model.get_property('type_'))
+
+        # add "ports" tab connections.
+        if node.inputs() or node.outputs():
+            ports_container = _PortConnectionsContainer(self, node=node)
+            self.__tab.addTab(ports_container, 'Ports')
+            return ports_container
 
     def node_id(self):
         """
@@ -404,13 +558,48 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
     def __repr__(self):
-        return '<{} object at {}>'.format(self.__class__.__name__, hex(id(self)))
+        return '<{} object at {}>'.format(
+            self.__class__.__name__, hex(id(self))
+        )
+
+    def __on_widget_visible_changed(self, node_id, visible, tree_widget):
+        """
+        Triggered when the visibility of the port tree widget changes we
+        resize the property list table row.
+
+        Args:
+            node_id (str): node id.
+            visible (bool): visibility state.
+            tree_widget (QtWidgets.QTreeWidget): ports tree widget.
+        """
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        if items:
+            tree_widget.setVisible(visible)
+            widget = self._prop_list.cellWidget(items[0].row(), 0)
+            widget.adjustSize()
+            QtCompat.QHeaderView.setSectionResizeMode(
+                self._prop_list.verticalHeader(),
+                QtWidgets.QHeaderView.ResizeToContents
+            )
 
     def __on_prop_close(self, node_id):
+        """
+        Triggered when a node property widget is requested to be removed from
+        the property list widget.
+
+        Args:
+            node_id (str): node id.
+        """
         items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         [self._prop_list.removeRow(i.row()) for i in items]
 
     def __on_limit_changed(self, value):
+        """
+        Sets the property list widget limit.
+
+        Args:
+            value (int): limit value.
+        """
         rows = self._prop_list.rowCount()
         if rows > value:
             self._prop_list.removeRow(rows - 1)
@@ -496,6 +685,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         prop_widget = NodePropWidget(node=node)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         prop_widget.property_closed.connect(self.__on_prop_close)
+        prop_widget.widget_visible_changed.connect(
+            self.__on_widget_visible_changed
+        )
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
         item = QtWidgets.QTableWidgetItem(node.id)
@@ -545,85 +737,84 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             return self._prop_list.cellWidget(item.row(), 0)
 
 
-if __name__ == '__main__':
-    import sys
-    from NodeGraphQt import BaseNode, NodeGraph
-    from NodeGraphQt.constants import NodePropWidgetEnum
-
-
-    class _TestNode(BaseNode):
-
-        __identifier__ = 'property.test'
-        NODE_NAME = 'test node'
-
-        def __init__(self):
-            super(_TestNode, self).__init__()
-            self.create_property(
-                'label_test',
-                value='foo bar',
-                widget_type=NodePropWidgetEnum.QLABEL.value
-            )
-            self.create_property(
-                'text_edit',
-                value='text edit test',
-                widget_type=NodePropWidgetEnum.QLABEL.value
-            )
-            self.create_property(
-                "file",
-                value="",
-                widget_type=NodePropWidgetEnum.FILE_OPEN.value
-            )
-            self.create_property(
-                'color_picker',
-                value=(0, 0, 255),
-                widget_type=NodePropWidgetEnum.COLOR_PICKER.value
-            )
-            self.create_property(
-                'integer',
-                value=10,
-                widget_type=NodePropWidgetEnum.QSPIN_BOX.value
-            )
-            self.create_property(
-                'list',
-                value='itm2',
-                items=['itm1', 'itm2', 'itm3'],
-                widget_type=NodePropWidgetEnum.QCOMBO_BOX.value
-            )
-            self.create_property(
-                'range',
-                value=50,
-                range=(45, 55),
-                widget_type=NodePropWidgetEnum.SLIDER.value
-            )
-            self.create_property(
-                'float_range',
-                value=150.5,
-                range=(50.5, 200),
-                widget_type=NodePropWidgetEnum.DOUBLE_SLIDER.value
-            )
-            self.create_property(
-                'color4_picker',
-                value=(255, 0, 0, 122),
-                widget_type=NodePropWidgetEnum.COLOR4_PICKER.value
-            )
-
-    def _prop_changed(node_id, prop_name, prop_value):
-        print('-'*100)
-        print(node_id, prop_name, prop_value)
-
-
-    app = QtWidgets.QApplication(sys.argv)
-
-    graph = NodeGraph()
-    graph.register_node(_TestNode)
-
-    prop_bin = PropertiesBinWidget(node_graph=graph)
-    prop_bin.resize(800, 600)
-    prop_bin.property_changed.connect(_prop_changed)
-
-    node = graph.create_node('property.test._TestNode')
-
-    prop_bin.add_node(node)
-    prop_bin.show()
-
-    app.exec_()
+# if __name__ == '__main__':
+#     from NodeGraphQt import BaseNode, NodeGraph
+#     from NodeGraphQt.constants import NodePropWidgetEnum
+#
+#
+#     class _TestNode(BaseNode):
+#
+#         __identifier__ = 'property.test'
+#         NODE_NAME = 'test node'
+#
+#         def __init__(self):
+#             super(_TestNode, self).__init__()
+#             self.create_property(
+#                 'label_test',
+#                 value='foo bar',
+#                 widget_type=NodePropWidgetEnum.QLABEL.value
+#             )
+#             self.create_property(
+#                 'text_edit',
+#                 value='text edit test',
+#                 widget_type=NodePropWidgetEnum.QLABEL.value
+#             )
+#             self.create_property(
+#                 "file",
+#                 value="",
+#                 widget_type=NodePropWidgetEnum.FILE_OPEN.value
+#             )
+#             self.create_property(
+#                 'color_picker',
+#                 value=(0, 0, 255),
+#                 widget_type=NodePropWidgetEnum.COLOR_PICKER.value
+#             )
+#             self.create_property(
+#                 'integer',
+#                 value=10,
+#                 widget_type=NodePropWidgetEnum.QSPIN_BOX.value
+#             )
+#             self.create_property(
+#                 'list',
+#                 value='itm2',
+#                 items=['itm1', 'itm2', 'itm3'],
+#                 widget_type=NodePropWidgetEnum.QCOMBO_BOX.value
+#             )
+#             self.create_property(
+#                 'range',
+#                 value=50,
+#                 range=(45, 55),
+#                 widget_type=NodePropWidgetEnum.SLIDER.value
+#             )
+#             self.create_property(
+#                 'float_range',
+#                 value=150.5,
+#                 range=(50.5, 200),
+#                 widget_type=NodePropWidgetEnum.DOUBLE_SLIDER.value
+#             )
+#             self.create_property(
+#                 'color4_picker',
+#                 value=(255, 0, 0, 122),
+#                 widget_type=NodePropWidgetEnum.COLOR4_PICKER.value
+#             )
+#
+#     def _prop_changed(node_id, prop_name, prop_value):
+#         print('-'*100)
+#         print(node_id, prop_name, prop_value)
+#
+#
+#     app = QtWidgets.QApplication([])
+#
+#     graph = NodeGraph()
+#     graph.register_node(_TestNode)
+#
+#     prop_bin = PropertiesBinWidget(node_graph=graph)
+#     prop_bin.resize(800, 600)
+#     prop_bin.property_changed.connect(_prop_changed)
+#
+#     node = graph.create_node('property.test._TestNode')
+#
+#     prop_bin.add_node(node)
+#     prop_bin.show()
+#
+#     app.exec_()
