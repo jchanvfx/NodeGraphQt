@@ -89,7 +89,15 @@
 </a>
 <div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
 <div class="overflow-y-auto h-full w-full relative pr-6"><nav class="table w-full min-w-full my-6 lg:my-8">
-<code style="font-size: 0.65rem;">Release - v0.6.7</code>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="host_apps/_index_apps.html">Host Application Examples</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
@@ -111,15 +119,8 @@
 <li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex_overview.html">General Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex_node.html">Node Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex_port.html">Port Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex_pipe.html">Pipe Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex_menu.html">Menu Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="host_apps/_index_apps.html">Host Application Examples</a></li>
-</ul>
+<br/>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.8</code>
 </nav>
 </div>
 </div>
@@ -380,76 +381,79 @@ and the node graph.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_selection" title="NodeGraphQt.NodeGraph.clear_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_selection</span></code></a>()</p></td>
 <td><p>Clears the selection in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_id" title="NodeGraphQt.NodeGraph.get_node_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_node_by_id</span></code></a>([node_id])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.invert_selection" title="NodeGraphQt.NodeGraph.invert_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">invert_selection</span></code></a>()</p></td>
+<td><p>Inverts the current node selection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_id" title="NodeGraphQt.NodeGraph.get_node_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_node_by_id</span></code></a>([node_id])</p></td>
 <td><p>Returns the node from the node id string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_name" title="NodeGraphQt.NodeGraph.get_node_by_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_node_by_name</span></code></a>(name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_node_by_name" title="NodeGraphQt.NodeGraph.get_node_by_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_node_by_name</span></code></a>(name)</p></td>
 <td><p>Returns node that matches the name.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type" title="NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nodes_by_type</span></code></a>(node_type)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_nodes_by_type" title="NodeGraphQt.NodeGraph.get_nodes_by_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nodes_by_type</span></code></a>(node_type)</p></td>
 <td><p>Return all nodes by their node type identifier.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_unique_name" title="NodeGraphQt.NodeGraph.get_unique_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_unique_name</span></code></a>(name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.get_unique_name" title="NodeGraphQt.NodeGraph.get_unique_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_unique_name</span></code></a>(name)</p></td>
 <td><p>Creates a unique node name to avoid having nodes with the same name.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.current_session" title="NodeGraphQt.NodeGraph.current_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_session</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.current_session" title="NodeGraphQt.NodeGraph.current_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_session</span></code></a>()</p></td>
 <td><p>Returns the file path to the currently loaded session.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_session" title="NodeGraphQt.NodeGraph.clear_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_session</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.clear_session" title="NodeGraphQt.NodeGraph.clear_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_session</span></code></a>()</p></td>
 <td><p>Clears the current node graph session.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize_session</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize_session</span></code></a>()</p></td>
 <td><p>Serializes the current node graph layout to a dictionary.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize_session</span></code></a>(layout_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize_session</span></code></a>(layout_data)</p></td>
 <td><p>Load node graph session from a dictionary object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_session</span></code></a>(file_path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_session</span></code></a>(file_path)</p></td>
 <td><p>Saves the current node graph session layout to a <cite>JSON</cite> formatted file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_session</span></code></a>(file_path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_session</span></code></a>(file_path)</p></td>
 <td><p>Load node graph session layout file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.import_session" title="NodeGraphQt.NodeGraph.import_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_session</span></code></a>(file_path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.import_session" title="NodeGraphQt.NodeGraph.import_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_session</span></code></a>(file_path)</p></td>
 <td><p>Import node graph session layout file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes" title="NodeGraphQt.NodeGraph.copy_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_nodes</span></code></a>([nodes])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes" title="NodeGraphQt.NodeGraph.copy_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_nodes</span></code></a>([nodes])</p></td>
 <td><p>Copy nodes to the clipboard.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cut_nodes</span></code></a>([nodes])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cut_nodes</span></code></a>([nodes])</p></td>
 <td><p>Cut nodes to the clipboard.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes" title="NodeGraphQt.NodeGraph.paste_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paste_nodes</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes" title="NodeGraphQt.NodeGraph.paste_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paste_nodes</span></code></a>()</p></td>
 <td><p>Pastes nodes copied from the clipboard.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.duplicate_nodes" title="NodeGraphQt.NodeGraph.duplicate_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">duplicate_nodes</span></code></a>(nodes)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.duplicate_nodes" title="NodeGraphQt.NodeGraph.duplicate_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">duplicate_nodes</span></code></a>(nodes)</p></td>
 <td><p>Create duplicate copy from the list of nodes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.disable_nodes" title="NodeGraphQt.NodeGraph.disable_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disable_nodes</span></code></a>(nodes[, mode])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.disable_nodes" title="NodeGraphQt.NodeGraph.disable_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disable_nodes</span></code></a>(nodes[, mode])</p></td>
 <td><p>Toggle nodes to be either disabled or enabled state.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.use_OpenGL" title="NodeGraphQt.NodeGraph.use_OpenGL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">use_OpenGL</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.use_OpenGL" title="NodeGraphQt.NodeGraph.use_OpenGL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">use_OpenGL</span></code></a>()</p></td>
 <td><p>Set the viewport to use QOpenGLWidget widget to draw the graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.auto_layout_nodes" title="NodeGraphQt.NodeGraph.auto_layout_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_layout_nodes</span></code></a>([nodes, down_stream, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.auto_layout_nodes" title="NodeGraphQt.NodeGraph.auto_layout_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_layout_nodes</span></code></a>([nodes, down_stream, ...])</p></td>
 <td><p>Auto layout the nodes in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog" title="NodeGraphQt.NodeGraph.question_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">question_dialog</span></code></a>(text[, title])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog" title="NodeGraphQt.NodeGraph.question_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">question_dialog</span></code></a>(text[, title])</p></td>
 <td><p>Prompts a question open dialog with <code class="docutils literal notranslate"><span class="pre">"Yes"</span></code> and <code class="docutils literal notranslate"><span class="pre">"No"</span></code> buttons in the node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog" title="NodeGraphQt.NodeGraph.message_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message_dialog</span></code></a>(text[, title])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog" title="NodeGraphQt.NodeGraph.message_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message_dialog</span></code></a>(text[, title])</p></td>
 <td><p>Prompts a file open dialog in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog" title="NodeGraphQt.NodeGraph.load_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dialog</span></code></a>([current_dir, ext])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog" title="NodeGraphQt.NodeGraph.load_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dialog</span></code></a>([current_dir, ext])</p></td>
 <td><p>Prompts a file open dialog in the node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog" title="NodeGraphQt.NodeGraph.save_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dialog</span></code></a>([current_dir, ext])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog" title="NodeGraphQt.NodeGraph.save_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dialog</span></code></a>([current_dir, ext])</p></td>
 <td><p>Prompts a file save dialog in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expand_group_node</span></code></a>(node)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expand_group_node</span></code></a>(node)</p></td>
 <td><p>Expands a group node session in a new tab.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.collapse_group_node" title="NodeGraphQt.NodeGraph.collapse_group_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collapse_group_node</span></code></a>(node)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.collapse_group_node" title="NodeGraphQt.NodeGraph.collapse_group_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collapse_group_node</span></code></a>(node)</p></td>
 <td><p>Collapse a group node session tab and it's expanded child sub graphs.</p></td>
 </tr>
 </tbody>
@@ -1391,6 +1395,11 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.clear_selection">
 <span class="sig-name descname"><span class="pre">clear_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.clear_selection" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.clear_selection'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Clears the selection in the node graph.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.invert_selection">
+<span class="sig-name descname"><span class="pre">invert_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.invert_selection" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.invert_selection'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Inverts the current node selection.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.get_node_by_id">
