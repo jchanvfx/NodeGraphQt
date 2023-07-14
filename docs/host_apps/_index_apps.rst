@@ -5,6 +5,7 @@ Host Application Examples
  host application.
 
 .. toctree::
+    :caption: Host Applications
     :name: appstoc
     :maxdepth: 2
     :titlesonly:
