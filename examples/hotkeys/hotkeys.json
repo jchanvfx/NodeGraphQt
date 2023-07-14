@@ -99,6 +99,12 @@
         "function_name":"clear_node_selection",
         "shortcut":"Ctrl+Shift+A"
       },
+            {
+        "type":"command",
+        "label":"Invert Selection",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"invert_node_selection"
+      },
       {
         "type":"command",
         "label":"Enable/Disable",
