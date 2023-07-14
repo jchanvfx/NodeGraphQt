@@ -164,6 +164,13 @@ def clear_node_selection(graph):
     graph.clear_selection()
 
 
+def invert_node_selection(graph):
+    """
+    Invert node selection.
+    """
+    graph.invert_selection()
+
+
 def disable_nodes(graph):
     """
     Toggle disable on selected nodes.

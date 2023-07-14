@@ -55,9 +55,11 @@ class _PropertiesList(QtWidgets.QTableWidget):
         self.horizontalHeader().hide()
 
         QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents)
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents
+        )
         QtCompat.QHeaderView.setSectionResizeMode(
-            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch)
+            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch
+        )
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     def wheelEvent(self, event):
@@ -148,12 +150,14 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         self._ports = {}
 
         in_group, self.in_tree = self._build_tree_group('Input Ports')
+        in_group.setToolTip('Display input port connections')
         for _, port in node.inputs().items():
             self._build_row(self.in_tree, port)
         for col in range(self.in_tree.columnCount()):
             self.in_tree.resizeColumnToContents(col)
 
         out_group, self.out_tree = self._build_tree_group('Output Ports')
+        out_group.setToolTip('Display output port connections')
         for _, port in node.outputs().items():
             self._build_row(self.out_tree, port)
         for col in range(self.out_tree.columnCount()):
@@ -227,7 +231,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         item.setToolTip(3, 'Center on connected port node.')
 
         # TODO: will need to update this checkbox lock logic to work with
-        #       the unde/redo functionality.
+        #       the undo/redo functionality.
         lock_chb = QtWidgets.QCheckBox()
         lock_chb.setChecked(port.locked())
         lock_chb.clicked.connect(lambda x: port.set_locked(x))
@@ -287,7 +291,9 @@ class NodePropWidget(QtWidgets.QWidget):
 
         close_btn = QtWidgets.QPushButton()
         close_btn.setIcon(QtGui.QIcon(
-            self.style().standardPixmap(QtWidgets.QStyle.SP_DialogCancelButton)
+            self.style().standardPixmap(
+                QtWidgets.QStyle.SP_DialogCancelButton
+            )
         ))
         close_btn.setMaximumWidth(40)
         close_btn.setToolTip('close property')
@@ -373,8 +379,11 @@ class NodePropWidget(QtWidgets.QWidget):
         # add tabs.
         reserved_tabs = ['Node', 'Ports']
         for tab in sorted(tab_mapping.keys()):
-            if tab not in reserved_tabs:
-                self.add_tab(tab)
+            if tab in reserved_tabs:
+                print('tab name "{}" is reserved by the "NodePropWidget" '
+                      'please use a different tab name.')
+                continue
+            self.add_tab(tab)
 
         # property widget factory.
         widget_factory = NodePropertyWidgetFactory()
@@ -414,7 +423,7 @@ class NodePropWidget(QtWidgets.QWidget):
 
             widget.value_changed.connect(self._on_property_changed)
 
-        self.type_wgt.setText(model.get_property('type_'))
+        self.type_wgt.setText(model.get_property('type_') or '')
 
         # add "ports" tab connections.
         if node.inputs() or node.outputs():
@@ -531,10 +540,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._block_signal = False
 
         self._lock = False
-        self.btn_lock = QtWidgets.QPushButton('Lock')
-        self.btn_lock.setToolTip(
+        self._btn_lock = QtWidgets.QPushButton('Lock')
+        self._btn_lock.setToolTip(
             'Lock the properties bin prevent nodes from being loaded.')
-        self.btn_lock.clicked.connect(self.lock_bin)
+        self._btn_lock.clicked.connect(self.lock_bin)
 
         btn_clr = QtWidgets.QPushButton('Clear')
         btn_clr.setToolTip('Clear the properties bin.')
@@ -544,7 +553,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         top_layout.setSpacing(2)
         top_layout.addWidget(self._limit)
         top_layout.addStretch(1)
-        top_layout.addWidget(self.btn_lock)
+        top_layout.addWidget(self._btn_lock)
         top_layout.addWidget(btn_clr)
 
         layout = QtWidgets.QVBoxLayout(self)
@@ -710,9 +719,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         self._lock = not self._lock
         if self._lock:
-            self.btn_lock.setText('UnLock')
+            self._btn_lock.setText('UnLock')
         else:
-            self.btn_lock.setText('Lock')
+            self._btn_lock.setText('Lock')
 
     def clear_bin(self):
         """
@@ -735,86 +744,3 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if itm_find:
             item = itm_find[0]
             return self._prop_list.cellWidget(item.row(), 0)
-
-
-# if __name__ == '__main__':
-#     from NodeGraphQt import BaseNode, NodeGraph
-#     from NodeGraphQt.constants import NodePropWidgetEnum
-#
-#
-#     class _TestNode(BaseNode):
-#
-#         __identifier__ = 'property.test'
-#         NODE_NAME = 'test node'
-#
-#         def __init__(self):
-#             super(_TestNode, self).__init__()
-#             self.create_property(
-#                 'label_test',
-#                 value='foo bar',
-#                 widget_type=NodePropWidgetEnum.QLABEL.value
-#             )
-#             self.create_property(
-#                 'text_edit',
-#                 value='text edit test',
-#                 widget_type=NodePropWidgetEnum.QLABEL.value
-#             )
-#             self.create_property(
-#                 "file",
-#                 value="",
-#                 widget_type=NodePropWidgetEnum.FILE_OPEN.value
-#             )
-#             self.create_property(
-#                 'color_picker',
-#                 value=(0, 0, 255),
-#                 widget_type=NodePropWidgetEnum.COLOR_PICKER.value
-#             )
-#             self.create_property(
-#                 'integer',
-#                 value=10,
-#                 widget_type=NodePropWidgetEnum.QSPIN_BOX.value
-#             )
-#             self.create_property(
-#                 'list',
-#                 value='itm2',
-#                 items=['itm1', 'itm2', 'itm3'],
-#                 widget_type=NodePropWidgetEnum.QCOMBO_BOX.value
-#             )
-#             self.create_property(
-#                 'range',
-#                 value=50,
-#                 range=(45, 55),
-#                 widget_type=NodePropWidgetEnum.SLIDER.value
-#             )
-#             self.create_property(
-#                 'float_range',
-#                 value=150.5,
-#                 range=(50.5, 200),
-#                 widget_type=NodePropWidgetEnum.DOUBLE_SLIDER.value
-#             )
-#             self.create_property(
-#                 'color4_picker',
-#                 value=(255, 0, 0, 122),
-#                 widget_type=NodePropWidgetEnum.COLOR4_PICKER.value
-#             )
-#
-#     def _prop_changed(node_id, prop_name, prop_value):
-#         print('-'*100)
-#         print(node_id, prop_name, prop_value)
-#
-#
-#     app = QtWidgets.QApplication([])
-#
-#     graph = NodeGraph()
-#     graph.register_node(_TestNode)
-#
-#     prop_bin = PropertiesBinWidget(node_graph=graph)
-#     prop_bin.resize(800, 600)
-#     prop_bin.property_changed.connect(_prop_changed)
-#
-#     node = graph.create_node('property.test._TestNode')
-#
-#     prop_bin.add_node(node)
-#     prop_bin.show()
-#
-#     app.exec_()

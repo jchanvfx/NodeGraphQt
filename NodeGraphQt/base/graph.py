@@ -1550,6 +1550,18 @@ class NodeGraph(QtCore.QObject):
         [node.set_selected(False) for node in self.all_nodes()]
         self._undo_stack.endMacro()
 
+    def invert_selection(self):
+        """
+        Inverts the current node selection.
+        """
+        if not self.selected_nodes():
+            self.select_all()
+            return
+        self._undo_stack.beginMacro('invert selection')
+        for node in self.all_nodes():
+            node.set_selected(not node.selected())
+        self._undo_stack.endMacro()
+
     def get_node_by_id(self, node_id=None):
         """
         Returns the node from the node id string.

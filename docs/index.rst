@@ -34,6 +34,19 @@ script or checkout the :ref:`General Overview` section.
 
 .. toctree::
     :hidden:
+    :caption: Examples
+    :name: exmplstoc
+    :maxdepth: 1
+
+    examples/ex_overview
+    examples/ex_node
+    examples/ex_port
+    examples/ex_pipe
+    examples/ex_menu
+    host_apps/_index_apps
+
+.. toctree::
+    :hidden:
     :caption: API Reference
     :name: apitoc
     :maxdepth: 2
@@ -53,16 +66,3 @@ script or checkout the :ref:`General Overview` section.
 
     custom_widgets
     node_widgets
-
-.. toctree::
-    :hidden:
-    :caption: Examples
-    :name: exmplstoc
-    :maxdepth: 1
-
-    examples/ex_overview
-    examples/ex_node
-    examples/ex_port
-    examples/ex_pipe
-    examples/ex_menu
-    host_apps/_index_apps
