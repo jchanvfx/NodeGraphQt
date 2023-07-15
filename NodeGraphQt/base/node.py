@@ -393,7 +393,7 @@ class NodeObject(object):
             push_undo (bool): register the command to the undo stack. (default: True)
         """
 
-        # prevent signals from causing a infinite loop.
+        # prevent signals from causing an infinite loop.
         if self.get_property(name) == value:
             return
 
