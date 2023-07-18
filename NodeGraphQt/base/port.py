@@ -117,6 +117,11 @@ class Port(object):
             visible (bool): true if visible.
             push_undo (bool): register the command to the undo stack. (default: True)
         """
+
+        # prevent signals from causing an infinite loop.
+        if visible == self.visible():
+            return
+
         undo_cmd = PortVisibleCmd(self, visible)
         if push_undo:
             undo_stack = self.node().graph.undo_stack()
@@ -165,8 +170,12 @@ class Port(object):
             state (Bool): port lock state.
             connected_ports (Bool): apply to lock state to connected ports.
             push_undo (bool): register the command to the undo stack. (default: True)
-
         """
+
+        # prevent signals from causing an infinite loop.
+        if state == self.locked():
+            return
+
         graph = self.node().graph
         undo_stack = graph.undo_stack()
         if state:
@@ -440,7 +449,7 @@ class Port(object):
             node_type (str): port node type.
         """
         # storing the connection constrain at the graph level instead of the
-        # port level so we don't serialize the same data for every port
+        # port level, so we don't serialize the same data for every port
         # instance.
         self.node().add_reject_port_type(
             port=self,

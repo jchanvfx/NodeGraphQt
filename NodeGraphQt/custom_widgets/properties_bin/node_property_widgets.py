@@ -141,45 +141,38 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
     under a tab in the ``NodePropWidget`` widget.
     """
 
-    ingroup_visible_toggled = QtCore.Signal(bool)
-    outgroup_visible_toggled = QtCore.Signal(bool)
-
     def __init__(self, parent=None, node=None):
         super(_PortConnectionsContainer, self).__init__(parent)
         self._node = node
         self._ports = {}
 
-        in_group, self.in_tree = self._build_tree_group('Input Ports')
-        in_group.setToolTip('Display input port connections')
+        self.input_group, self.input_tree = self._build_tree_group(
+            'Input Ports'
+        )
+        self.input_group.setToolTip('Display input port connections')
         for _, port in node.inputs().items():
-            self._build_row(self.in_tree, port)
-        for col in range(self.in_tree.columnCount()):
-            self.in_tree.resizeColumnToContents(col)
+            self._build_row(self.input_tree, port)
+        for col in range(self.input_tree.columnCount()):
+            self.input_tree.resizeColumnToContents(col)
 
-        out_group, self.out_tree = self._build_tree_group('Output Ports')
-        out_group.setToolTip('Display output port connections')
+        self.output_group, self.output_tree = self._build_tree_group(
+            'Output Ports'
+        )
+        self.output_group.setToolTip('Display output port connections')
         for _, port in node.outputs().items():
-            self._build_row(self.out_tree, port)
-        for col in range(self.out_tree.columnCount()):
-            self.out_tree.resizeColumnToContents(col)
+            self._build_row(self.output_tree, port)
+        for col in range(self.output_tree.columnCount()):
+            self.output_tree.resizeColumnToContents(col)
 
         layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(in_group)
-        layout.addWidget(out_group)
+        layout.addWidget(self.input_group)
+        layout.addWidget(self.output_group)
         layout.addStretch()
 
-        # wire up signals & slots
-        in_group.clicked.connect(
-            lambda x: self.ingroup_visible_toggled.emit(x)
-        )
-        out_group.clicked.connect(
-            lambda x: self.outgroup_visible_toggled.emit(x)
-        )
-
-        in_group.setChecked(False)
-        self.in_tree.setVisible(False)
-        out_group.setChecked(False)
-        self.out_tree.setVisible(False)
+        self.input_group.setChecked(False)
+        self.input_tree.setVisible(False)
+        self.output_group.setChecked(False)
+        self.output_tree.setVisible(False)
 
     def __repr__(self):
         return '<{} object at {}>'.format(
@@ -189,6 +182,8 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
     @staticmethod
     def _build_tree_group(title):
         """
+        Build the ports group box and ports tree widget.
+
         Args:
             title (str): group box title.
 
@@ -218,9 +213,11 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
 
     def _build_row(self, tree, port):
         """
+        Builds a new row in the parent ports tree widget.
+
         Args:
-            tree (QtWidgets.QTreeWidget):
-            port (NodeGraphQt.Port):
+            tree (QtWidgets.QTreeWidget): parent port tree widget.
+            port (NodeGraphQt.Port): port object.
         """
         item = QtWidgets.QTreeWidgetItem(tree)
         item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
@@ -245,15 +242,15 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         tree.setItemWidget(item, 2, combo)
 
         focus_btn = QtWidgets.QPushButton()
-        focus_btn.setIcon(QtGui.QIcon(tree.style().standardPixmap(
-            QtWidgets.QStyle.SP_DialogYesButton
-        )))
+        focus_btn.setIcon(QtGui.QIcon(
+            tree.style().standardPixmap(QtWidgets.QStyle.SP_DialogYesButton)
+        ))
         focus_btn.clicked.connect(
-            lambda: self._on_focus_on_node(self._ports.get(combo.currentText()))
+            lambda: self._on_focus_to_node(self._ports.get(combo.currentText()))
         )
         tree.setItemWidget(item, 3, focus_btn)
 
-    def _on_focus_on_node(self, port):
+    def _on_focus_to_node(self, port):
         """
         Slot function emits the node is of the connected port.
 
@@ -279,9 +276,6 @@ class NodePropWidget(QtWidgets.QWidget):
     #: signal (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
     property_closed = QtCore.Signal(str)
-
-    # emitted when a widget is shown or hidden. (node_id, visible, widget)
-    widget_visible_changed = QtCore.Signal(str, bool, QtWidgets.QWidget)
 
     def __init__(self, parent=None, node=None):
         super(NodePropWidget, self).__init__(parent)
@@ -322,17 +316,7 @@ class NodePropWidget(QtWidgets.QWidget):
         layout.addWidget(self.__tab)
         layout.addWidget(self.type_wgt)
 
-        self._ports_container = self._read_node(node)
-        self._ports_container.ingroup_visible_toggled.connect(
-            lambda v: self.widget_visible_changed.emit(
-                self.__node_id, v, self._ports_container.in_tree
-            )
-        )
-        self._ports_container.outgroup_visible_toggled.connect(
-            lambda v: self.widget_visible_changed.emit(
-                self.__node_id, v, self._ports_container.out_tree
-            )
-        )
+        self._port_connections = self._read_node(node)
 
     def __repr__(self):
         return '<{} object at {}>'.format(
@@ -479,7 +463,7 @@ class NodePropWidget(QtWidgets.QWidget):
             name (str): property name.
 
         Returns:
-            QtWidgets.QWidget: property widget.
+            NodeGraphQt.custom_widgets.properties_bin.prop_widgets_abstract.BaseProperty: property widget.
         """
         if name == 'name':
             return self.name_wgt
@@ -487,6 +471,15 @@ class NodePropWidget(QtWidgets.QWidget):
             widget = prop_win.get_widget(name)
             if widget:
                 return widget
+
+    def get_port_connection_widget(self):
+        """
+        Returns the ports connections container widget.
+
+        Returns:
+            _PortConnectionsContainer: port container widget.
+        """
+        return self._port_connections
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
@@ -537,6 +530,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(450, 400)
 
+        # this attribute to block signals if for the "on_property_changed" signal
+        # in case devs that don't implemented the ".prop_widgets_abstract.BaseProperty"
+        # widget is not implemented properly to prevent infinite loop.
         self._block_signal = False
 
         self._lock = False
@@ -571,7 +567,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             self.__class__.__name__, hex(id(self))
         )
 
-    def __on_widget_visible_changed(self, node_id, visible, tree_widget):
+    def __on_port_tree_visible_changed(self, node_id, visible, tree_widget):
         """
         Triggered when the visibility of the port tree widget changes we
         resize the property list table row.
@@ -635,11 +631,11 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if not properties_widget:
             return
 
-        property_window = properties_widget.get_widget(prop_name)
+        property_widget = properties_widget.get_widget(prop_name)
 
-        if property_window and prop_value != property_window.get_value():
+        if property_widget and prop_value != property_widget.get_value():
             self._block_signal = True
-            property_window.set_value(prop_value)
+            property_widget.set_value(prop_value)
             self._block_signal = False
 
     def __on_property_widget_changed(self, node_id, prop_name, prop_value):
@@ -691,12 +687,22 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
+
         prop_widget = NodePropWidget(node=node)
-        prop_widget.property_changed.connect(self.__on_property_widget_changed)
         prop_widget.property_closed.connect(self.__on_prop_close)
-        prop_widget.widget_visible_changed.connect(
-            self.__on_widget_visible_changed
+        prop_widget.property_changed.connect(self.__on_property_widget_changed)
+        port_connections = prop_widget.get_port_connection_widget()
+        port_connections.input_group.clicked.connect(
+            lambda v: self.__on_port_tree_visible_changed(
+                prop_widget.node_id(), v, port_connections.input_tree
+            )
         )
+        port_connections.output_group.clicked.connect(
+            lambda v: self.__on_port_tree_visible_changed(
+                prop_widget.node_id(), v, port_connections.output_tree
+            )
+        )
+
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
         item = QtWidgets.QTableWidgetItem(node.id)
