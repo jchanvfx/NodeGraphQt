@@ -311,7 +311,7 @@ class NodeGraphCommand(object):
         Args:
             hidden (bool): true to hide the command item.
         """
-        self.qaction.setVisible(hidden)
+        self.qaction.setVisible(not hidden)
 
     def show(self):
         """
