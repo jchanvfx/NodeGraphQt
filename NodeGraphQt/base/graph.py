@@ -1862,12 +1862,19 @@ class NodeGraph(QtCore.QObject):
         """
         serialized_data = self._serialize(self.all_nodes())
         file_path = file_path.strip()
+
+        def default(obj):
+            if isinstance(obj, set):
+                return list(obj)
+            return obj
+
         with open(file_path, 'w') as file_out:
             json.dump(
                 serialized_data,
                 file_out,
                 indent=2,
-                separators=(',', ':')
+                separators=(',', ':'),
+                default=default
             )
 
     def load_session(self, file_path):
