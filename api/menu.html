@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.9</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.10</code>
 </nav>
 </div>
 </div>
@@ -403,10 +403,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.set_enabled" title="NodeGraphQt.NodeGraphCommand.set_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_enabled</span></code></a>(state)</p></td>
 <td><p>Sets the command to either be enabled or disabled.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.show" title="NodeGraphQt.NodeGraphCommand.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.set_hidden" title="NodeGraphQt.NodeGraphCommand.set_hidden"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_hidden</span></code></a>(hidden)</p></td>
+<td><p>Sets then command item visibility in the context menu.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.show" title="NodeGraphQt.NodeGraphCommand.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>()</p></td>
 <td><p>Set the command to be visible in the context menu.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.hide" title="NodeGraphQt.NodeGraphCommand.hide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraphCommand.hide" title="NodeGraphQt.NodeGraphCommand.hide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide</span></code></a>()</p></td>
 <td><p>Set the command to be hidden in the context menu.</p></td>
 </tr>
 </tbody>
@@ -459,6 +462,16 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>state</strong> (<em>bool</em>) – true to enable.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.NodeGraphCommand.set_hidden">
+<span class="sig-name descname"><span class="pre">set_hidden</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraphCommand.set_hidden" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraphCommand.set_hidden'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Sets then command item visibility in the context menu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hidden</strong> (<em>bool</em>) – true to hide the command item.</p>
 </dd>
 </dl>
 </dd></dl>
