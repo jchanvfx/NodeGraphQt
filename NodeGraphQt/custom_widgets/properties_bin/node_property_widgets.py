@@ -263,6 +263,22 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
             node.graph.clear_selection()
             node.set_selected(True)
 
+    def set_lock_controls_disable(self, disable=False):
+        """
+        Enable/Disable port lock column widgets.
+
+        Args:
+            disable (bool): true to disable checkbox.
+        """
+        for r in range(self.input_tree.topLevelItemCount()):
+            item = self.input_tree.topLevelItem(r)
+            chb_widget = self.input_tree.itemWidget(item, 0)
+            chb_widget.setDisabled(disable)
+        for r in range(self.output_tree.topLevelItemCount()):
+            item = self.output_tree.topLevelItem(r)
+            chb_widget = self.output_tree.itemWidget(item, 0)
+            chb_widget.setDisabled(disable)
+
 
 class NodePropWidget(QtWidgets.QWidget):
     """
@@ -480,6 +496,15 @@ class NodePropWidget(QtWidgets.QWidget):
             _PortConnectionsContainer: port container widget.
         """
         return self._port_connections
+
+    def set_port_lock_widgets_disabled(self, disabled=True):
+        """
+        Enable/Disable port lock column widgets.
+
+        Args:
+            disabled (bool): true to disable checkbox.
+        """
+        self._port_connections.set_lock_controls_disable(disabled)
 
 
 class PropertiesBinWidget(QtWidgets.QWidget):
