@@ -525,6 +525,18 @@ class NodeGraph(QtCore.QObject):
             self._undo_view.setWindowTitle('Undo History')
         return self._undo_view
 
+    def cursor_pos(self):
+        """
+        Returns the cursor last position in the node graph.
+
+        Returns:
+            tuple(float, float): cursor x,y coordinates of the scene.
+        """
+        cursor_pos = self.viewer().scene_cursor_pos()
+        if not cursor_pos:
+            return 0.0, 0.0
+        return cursor_pos.x(), cursor_pos.y()
+
     def toggle_node_search(self):
         """
         toggle the node search widget visibility.
@@ -1862,12 +1874,19 @@ class NodeGraph(QtCore.QObject):
         """
         serialized_data = self._serialize(self.all_nodes())
         file_path = file_path.strip()
+
+        def default(obj):
+            if isinstance(obj, set):
+                return list(obj)
+            return obj
+
         with open(file_path, 'w') as file_out:
             json.dump(
                 serialized_data,
                 file_out,
                 indent=2,
-                separators=(',', ':')
+                separators=(',', ':'),
+                default=default
             )
 
     def load_session(self, file_path):
@@ -1943,7 +1962,7 @@ class NodeGraph(QtCore.QObject):
         Cut nodes to the clipboard.
 
         Note:
-            This function doesn't not trigger the
+            This function doesn't trigger the
             :attr:`NodeGraph.nodes_deleted` signal.
 
         See Also:

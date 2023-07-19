@@ -304,6 +304,15 @@ class NodeGraphCommand(object):
         """
         self.qaction.setEnabled(state)
 
+    def set_hidden(self, hidden):
+        """
+        Sets then command item visibility in the context menu.
+
+        Args:
+            hidden (bool): true to hide the command item.
+        """
+        self.qaction.setVisible(not hidden)
+
     def show(self):
         """
         Set the command to be visible in the context menu.
