@@ -1465,7 +1465,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def get_layout_direction(self):
         """
-        Returns the layout direction set on the the node graph viewer
+        Returns the layout direction set on the node graph viewer
         used by the pipe items for drawing.
 
         Returns:
