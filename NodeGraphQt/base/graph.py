@@ -1950,7 +1950,7 @@ class NodeGraph(QtCore.QObject):
         Cut nodes to the clipboard.
 
         Note:
-            This function doesn't not trigger the
+            This function doesn't trigger the
             :attr:`NodeGraph.nodes_deleted` signal.
 
         See Also:
