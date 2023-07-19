@@ -525,6 +525,18 @@ class NodeGraph(QtCore.QObject):
             self._undo_view.setWindowTitle('Undo History')
         return self._undo_view
 
+    def cursor_pos(self):
+        """
+        Returns the cursor last position in the node graph.
+
+        Returns:
+            tuple(float, float): cursor x,y coordinates of the scene.
+        """
+        cursor_pos = self.viewer().scene_cursor_pos()
+        if not cursor_pos:
+            return 0.0, 0.0
+        return cursor_pos.x(), cursor_pos.y()
+
     def toggle_node_search(self):
         """
         toggle the node search widget visibility.

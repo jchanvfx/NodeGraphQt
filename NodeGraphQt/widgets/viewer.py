@@ -1573,6 +1573,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         cent = self._scene_range.center()
         return [cent.x(), cent.y()]
 
+    def scene_cursor_pos(self):
+        """
+        Returns the cursor last position mapped to the scene.
+
+        Returns:
+            QtCore.QPoint: cursor position.
+        """
+        return self.mapToScene(self._previous_pos)
+
     def nodes_rect_center(self, nodes):
         """
         Get the center x,y pos from the specified nodes.
