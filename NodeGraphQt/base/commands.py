@@ -103,6 +103,33 @@ class NodeVisibleCmd(QtWidgets.QUndoCommand):
         self.set_node_visible(self.visible)
 
 
+class NodeWidgetVisibleCmd(QtWidgets.QUndoCommand):
+    """
+    Node widget visibility command.
+
+    Args:
+        node (NodeGraphQt.NodeObject): node object.
+        name (str): node widget name.
+        visible (bool): initial visibility state.
+    """
+
+    def __init__(self, node, name, visible):
+        QtWidgets.QUndoCommand.__init__(self)
+        label = 'show' if visible else 'hide'
+        self.setText('{} node widget "{}"'.format(label, name))
+        self.view = node.view
+        self.node_widget = self.view.get_widget(name)
+        self.visible = visible
+
+    def undo(self):
+        self.node_widget.setVisible(not self.visible)
+        self.view.draw_node()
+
+    def redo(self):
+        self.node_widget.setVisible(self.visible)
+        self.view.draw_node()
+
+
 class NodeMovedCmd(QtWidgets.QUndoCommand):
     """
     Node moved command.
