@@ -1,6 +1,10 @@
 
 # NodeGraphQt
 
+[![API Documentation](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml)
+[![PyPI Package](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml)
+![GitHub Repo stars](https://img.shields.io/github/stars/jchanvfx/NodeGraphQt?style=social)
+
 <p align="center">
     <a href="https://jchanvfx.github.io/NodeGraphQt" target="_blank">
     <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/logo.png" title="logo">
