@@ -1,18 +1,22 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from NodeGraphQt.base.commands import NodeVisibleCmd
+from NodeGraphQt.base.commands import NodeVisibleCmd, NodeWidgetVisibleCmd
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
-from NodeGraphQt.errors import (PortError,
-                                PortRegistrationError,
-                                NodeWidgetError)
+from NodeGraphQt.errors import (
+    PortError,
+    PortRegistrationError,
+    NodeWidgetError
+)
 from NodeGraphQt.qgraphics.node_base import NodeItem
-from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
-                                              NodeComboBox,
-                                              NodeLineEdit,
-                                              NodeCheckBox)
+from NodeGraphQt.widgets.node_widgets import (
+    NodeBaseWidget,
+    NodeCheckBox,
+    NodeComboBox,
+    NodeLineEdit
+)
 
 
 class BaseNode(NodeObject):
@@ -290,9 +294,6 @@ class BaseNode(NodeObject):
         """
         Hide an embedded node widget.
 
-        Warnings:
-            Undo is NOT yet supported for this function.
-
         Args:
             name (str): node property name for the widget.
 
@@ -301,19 +302,14 @@ class BaseNode(NodeObject):
             :meth:`BaseNode.show_widget`,
             :meth:`BaseNode.get_widget`
         """
-        # TODO: implement this logic to the undo stack.
         if not self.view.has_widget(name):
             return
-        widget = self.view.get_widget(name)
-        widget.hide()
-        self.view.draw_node()
+        undo_cmd = NodeWidgetVisibleCmd(self, name, visible=False)
+        self.graph.undo_stack().push(undo_cmd)
 
     def show_widget(self, name):
         """
         Show an embedded node widget.
-
-        Warnings:
-            Undo is NOT yet supported for this function.
 
         Args:
             name (str): node property name for the widget.
@@ -323,12 +319,10 @@ class BaseNode(NodeObject):
             :meth:`BaseNode.hide_widget`,
             :meth:`BaseNode.get_widget`
         """
-        # TODO: implement this logic to the undo stack.
         if not self.view.has_widget(name):
             return
-        widget = self.view.get_widget(name)
-        widget.show()
-        self.view.draw_node()
+        undo_cmd = NodeWidgetVisibleCmd(self, name, visible=True)
+        self.graph.undo_stack().push(undo_cmd)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None, locked=False, painter_func=None):

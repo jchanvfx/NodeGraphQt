@@ -62,7 +62,7 @@ script or checkout the :ref:`General Overview` section.
     :hidden:
     :caption: Widgets
     :name: wdgtstoc
-    :maxdepth: 1
+    :maxdepth: 2
 
     custom_widgets
     node_widgets
