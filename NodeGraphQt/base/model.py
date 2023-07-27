@@ -537,9 +537,9 @@ class NodeGraphModel(object):
             connection_data = connection_data[key]
 
         if accept_ptype not in connection_data:
-            connection_data[accept_ptype] = set([accept_pname])
+            connection_data[accept_ptype] = [accept_pname]
         else:
-            connection_data[accept_ptype].add(accept_pname)
+            connection_data[accept_ptype].append(accept_pname)
 
     def port_accept_connection_types(self, node_type, port_type, port_name):
         """
@@ -582,9 +582,9 @@ class NodeGraphModel(object):
             connection_data = connection_data[key]
 
         if reject_ptype not in connection_data:
-            connection_data[reject_ptype] = set([reject_pname])
+            connection_data[reject_ptype] = [reject_pname]
         else:
-            connection_data[reject_ptype].add(reject_pname)
+            connection_data[reject_ptype].append(reject_pname)
 
     def port_reject_connection_types(self, node_type, port_type, port_name):
         """
