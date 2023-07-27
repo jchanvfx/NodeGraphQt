@@ -19,6 +19,13 @@
       },
       {
         "type":"command",
+        "label":"Clear Session...",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"clear_session",
+        "shortcut":""
+      },
+      {
+        "type":"command",
         "label":"Save...",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"save_session",

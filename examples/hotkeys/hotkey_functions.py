@@ -86,7 +86,7 @@ def save_session_as(graph):
         graph.save_session(file_path)
 
 
-def new_session(graph):
+def clear_session(graph):
     """
     Prompts a warning dialog to new a node graph session.
     """
