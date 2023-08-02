@@ -72,7 +72,7 @@ class _NumberValueMenu(QtWidgets.QMenu):
 
 class _NumberValueEdit(QtWidgets.QLineEdit):
 
-    valueChanged = QtCore.Signal(object)
+    value_changed = QtCore.Signal(object)
 
     def __init__(self, parent=None, data_type=float):
         super(_NumberValueEdit, self).__init__(parent)
