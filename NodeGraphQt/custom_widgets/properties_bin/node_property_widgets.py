@@ -134,6 +134,22 @@ class _PropertiesContainer(QtWidgets.QWidget):
             if item and name == item.widget().toolTip():
                 return item.widget()
 
+    def get_all_widgets(self):
+        """
+        Returns the node property widgets.
+
+        Returns:
+            dict: {name: widget}
+        """
+        widgets = {}
+        for row in range(self.__layout.rowCount()):
+            item = self.__layout.itemAtPosition(row, 1)
+            if not item:
+                continue
+            name = item.widget().toolTip()
+            widgets[name] = item.widget()
+        return widgets
+
 
 class _PortConnectionsContainer(QtWidgets.QWidget):
     """
@@ -426,10 +442,22 @@ class NodePropWidget(QtWidgets.QWidget):
         self.type_wgt.setText(model.get_property('type_') or '')
 
         # add "ports" tab connections.
+        ports_container = None
         if node.inputs() or node.outputs():
             ports_container = _PortConnectionsContainer(self, node=node)
             self.__tab.addTab(ports_container, 'Ports')
-            return ports_container
+
+        # hide empty tabs with no property widgets.
+        tab_index = {
+            self.__tab.tabText(x): x for x in range(self.__tab.count())
+        }
+        for tab_name, prop_window in self.__tab_windows.items():
+            prop_widgets = prop_window.get_all_widgets()
+            if not prop_widgets:
+                self.__tab.setTabVisible(tab_index[tab_name], False)
+        self.__tab.setCurrentWidget(prop_window)
+
+        return ports_container
 
     def node_id(self):
         """
