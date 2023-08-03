@@ -447,15 +447,25 @@ class NodePropWidget(QtWidgets.QWidget):
             ports_container = _PortConnectionsContainer(self, node=node)
             self.__tab.addTab(ports_container, 'Ports')
 
-        # hide empty tabs with no property widgets.
+        # hide/remove empty tabs with no property widgets.
         tab_index = {
             self.__tab.tabText(x): x for x in range(self.__tab.count())
         }
+        current_idx = None
         for tab_name, prop_window in self.__tab_windows.items():
             prop_widgets = prop_window.get_all_widgets()
             if not prop_widgets:
-                self.__tab.setTabVisible(tab_index[tab_name], False)
-        self.__tab.setCurrentWidget(prop_window)
+                # I prefer to hide the tab but in older version of pyside this
+                # attribute doesn't exist we'll just remove.
+                if hasattr(self.__tab, 'setTabVisible'):
+                    self.__tab.setTabVisible(tab_index[tab_name], False)
+                else:
+                    self.__tab.removeTab(tab_index[tab_name])
+                continue
+            if current_idx is None:
+                current_idx = tab_index[tab_name]
+
+        self.__tab.setCurrentIndex(current_idx)
 
         return ports_container
 
@@ -584,8 +594,8 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self.resize(450, 400)
 
         # this attribute to block signals if for the "on_property_changed" signal
-        # in case devs that don't implemented the ".prop_widgets_abstract.BaseProperty"
-        # widget is not implemented properly to prevent infinite loop.
+        # in case devs that don't implement the ".prop_widgets_abstract.BaseProperty"
+        # widget properly to prevent an infinite loop.
         self._block_signal = False
 
         self._lock = False
