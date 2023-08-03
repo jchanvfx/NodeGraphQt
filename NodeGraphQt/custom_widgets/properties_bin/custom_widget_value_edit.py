@@ -141,7 +141,7 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         self._previous_x = None
 
     def _on_text_changed(self):
-        self.valueChanged.emit(self.get_value())
+        self.value_changed.emit(self.get_value())
 
     def _convert_text(self, text):
         # int("1.0") will return error
