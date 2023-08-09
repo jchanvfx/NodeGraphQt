@@ -21,7 +21,7 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
         painter.setPen(QtCore.Qt.NoPen)
 
         # draw background.
-        bg_clr = option.palette.midlight().color()
+        bg_clr = option.palette.base().color()
         painter.setBrush(QtGui.QBrush(bg_clr))
         painter.drawRect(option.rect)
 
