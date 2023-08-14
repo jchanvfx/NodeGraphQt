@@ -224,8 +224,8 @@ class NodesMenu(NodeGraphMenu):
             for menu in node_menus:
                 menu.addAction(action)
 
-        qaction = node_menu.addAction(action)
-        command = NodeGraphCommand(self._graph, qaction, func)
+        node_menu.addAction(action)
+        command = NodeGraphCommand(self._graph, action, func)
         self._commands[name] = command
         self._items.append(command)
         return command
