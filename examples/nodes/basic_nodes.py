@@ -67,7 +67,13 @@ class CircleNode(BaseNodeCircle):
         self.set_color(10, 24, 38)
 
         # create node inputs
-        self.add_input('in 1')
+        p = self.add_input('in 1')
+        p.add_accept_port_type(
+            port_name='single 1',
+            port_type='out',
+            node_type='nodes.basic.BasicNodeB'
+        )
+
         self.add_input('in 2')
         self.add_input('in 3', multi_input=True)
         self.add_input('in 4', display_name=False)

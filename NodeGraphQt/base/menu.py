@@ -224,8 +224,8 @@ class NodesMenu(NodeGraphMenu):
             for menu in node_menus:
                 menu.addAction(action)
 
-        qaction = node_menu.addAction(action)
-        command = NodeGraphCommand(self._graph, qaction, func)
+        node_menu.addAction(action)
+        command = NodeGraphCommand(self._graph, action, func)
         self._commands[name] = command
         self._items.append(command)
         return command
@@ -294,3 +294,33 @@ class NodeGraphCommand(object):
         execute the menu command.
         """
         self.qaction.trigger()
+
+    def set_enabled(self, state):
+        """
+        Sets the command to either be enabled or disabled.
+
+        Args:
+            state (bool): true to enable.
+        """
+        self.qaction.setEnabled(state)
+
+    def set_hidden(self, hidden):
+        """
+        Sets then command item visibility in the context menu.
+
+        Args:
+            hidden (bool): true to hide the command item.
+        """
+        self.qaction.setVisible(not hidden)
+
+    def show(self):
+        """
+        Set the command to be visible in the context menu.
+        """
+        self.qaction.setVisible(True)
+
+    def hide(self):
+        """
+        Set the command to be hidden in the context menu.
+        """
+        self.qaction.setVisible(False)

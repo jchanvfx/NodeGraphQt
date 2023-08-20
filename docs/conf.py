@@ -16,11 +16,16 @@ import os
 import sys
 from datetime import datetime
 
+# make NodeGraphQt module available.
 base_path = os.path.abspath('.')
 root_path = os.path.split(base_path)[0]
 sys.path.insert(0, root_path)
 
+# required for the theme template.
+sys.path.insert(0, os.path.abspath('_themes'))
+
 import NodeGraphQt
+from sphinxawesome_theme.postprocess import Icons
 
 # -- Project information -----------------------------------------------------
 
@@ -43,14 +48,17 @@ version = '{0}.{1}'.format(*NodeGraphQt.VERSION.split('.'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'autodocsumm',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
+    'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
-    'autodocsumm',
+    # theme template related
+    'sphinxawesome_theme'
 ]
 
 intersphinx_mapping = {
@@ -89,7 +97,7 @@ rst_prolog = '''
 '''.format(release)
 
 # Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -105,12 +113,12 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', "_themes"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'monokai'
@@ -124,12 +132,12 @@ pygments_style = 'monokai'
 # It should be a Windows-style icon file (.ico), which is 16x16 or 32x32
 # pixels large. Default: None.
 html_favicon = '_images/favicon.png'
-html_logo = '_images/logo.png'
+html_logo = None
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = 'sphinx_rtd_theme'
+
+html_theme = 'sphinxawesome_theme'
 html_theme_path = ['_themes']
 html_show_sourcelink = False
 html_show_sphinx = False
@@ -145,28 +153,83 @@ html_context = {
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+html_title = 'NodeGraphQt'
+html_permalinks_icon = (
+    '<svg xmlns="http://www.w3.org/2000/svg" '
+    'height="1em" width="1em" viewBox="0 0 24 24"'
+    '>'
+    '<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 '
+    '5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 '
+    '0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>'
+    '</svg>'
+)
 html_theme_options = {
-    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
-    # 'analytics_anonymize_ip': False,
-    # 'logo_only': False,
-    # 'display_version': True,
-    # 'prev_next_buttons_location': 'both',
-    # 'style_external_links': False,
-    # 'vcs_pageview_mode': '',
-    # 'style_nav_header_background': 'white',
-
-    ### Toc options ###
-    # 'collapse_navigation': True,
-    # 'sticky_navigation': True,
-    # 'navigation_depth': 4,
-    # 'includehidden': True,
-    # 'titles_only': False
+    'logo_light': '_images/favicon.png',
+    'logo_dark': '_images/favicon.png',
+    # 'main_nav_links': {
+    #     'Releases': 'https://github.com/jchanvfx/NodeGraphQt/releases',
+    # },
+    'show_scrolltop': True,
+    'show_prev_next': True,
+    'awesome_external_links': True,
+    'extra_header_link_icons': {
+        "GitHub Repository": {
+            "link": "https://github.com/jchanvfx/NodeGraphQt",
+            "icon": (
+                '<svg height="26px" style="margin-top:-2px;display:inline" '
+                'viewBox="0 0 45 44" '
+                'fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
+                '<path fill-rule="evenodd" clip-rule="evenodd" '
+                'd="M22.477.927C10.485.927.76 10.65.76 22.647c0 9.596 6.223 17.736 '
+                "14.853 20.608 1.087.2 1.483-.47 1.483-1.047 "
+                "0-.516-.019-1.881-.03-3.693-6.04 "
+                "1.312-7.315-2.912-7.315-2.912-.988-2.51-2.412-3.178-2.412-3.178-1.972-1.346.149-1.32.149-1.32 "  # noqa
+                "2.18.154 3.327 2.24 3.327 2.24 1.937 3.318 5.084 2.36 6.321 "
+                "1.803.197-1.403.759-2.36 "
+                "1.379-2.903-4.823-.548-9.894-2.412-9.894-10.734 "
+                "0-2.37.847-4.31 2.236-5.828-.224-.55-.969-2.759.214-5.748 0 0 "
+                "1.822-.584 5.972 2.226 "
+                "1.732-.482 3.59-.722 5.437-.732 1.845.01 3.703.25 5.437.732 "
+                "4.147-2.81 5.967-2.226 "
+                "5.967-2.226 1.185 2.99.44 5.198.217 5.748 1.392 1.517 2.232 3.457 "
+                "2.232 5.828 0 "
+                "8.344-5.078 10.18-9.916 10.717.779.67 1.474 1.996 1.474 4.021 0 "
+                "2.904-.027 5.247-.027 "
+                "5.96 0 .58.392 1.256 1.493 1.044C37.981 40.375 44.2 32.24 44.2 "
+                '22.647c0-11.996-9.726-21.72-21.722-21.72" '
+                'fill="currentColor"/></svg>'
+            ),
+        },
+        "PyPI Package": {
+            "link": "https://pypi.org/project/NodeGraphQt",
+            "icon": (
+                '<svg width="28px" height="28px" viewBox="0 0 20 20" '
+                '<svg fill="currentColor" viewBox="0 0 24 24" '
+                'xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" '
+                'stroke-width="0"></g><g id="SVGRepo_tracerCarrier" '
+                'stroke-linecap="round" stroke-linejoin="round"></g>'
+                '<g id="SVGRepo_iconCarrier">'
+                '<path d="M9.585 11.692h4.328s2.432.039 2.432-2.35V5.391S16.714'
+                ' 3 11.936 3C7.362 3 7.647 4.983 7.647 4.983l.006 2.055h4.363v.'
+                '617H5.92s-2.927-.332-2.927 4.282 2.555 4.45 2.555 4.45h1.524v-'
+                '2.141s-.083-2.554 2.513-2.554zm-.056-5.74a.784.784 0 1 1 0-1.5'
+                '7.784.784 0 1 1 0 1.57z"></path><path d="M18.452 7.532h-1.524v'
+                '2.141s.083 2.554-2.513 2.554h-4.328s-2.432-.04-2.432 2.35v3.95'
+                '1s-.369 2.391 4.409 2.391c4.573 0 4.288-1.983 4.288-1.983l-.00'
+                '6-2.054h-4.363v-.617h6.097s2.927.332 2.927-4.282-2.555-4.451-2'
+                '.555-4.451zm-3.981 10.436a.784.784 0 1 1 0 1.57.784.784 0 1 1 '
+                '0-1.57z" /></path></g></svg>'
+            )
+        }
+    }
 }
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static', '_images']
+html_css_files = ['custom.css']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -177,10 +240,10 @@ html_static_path = ['_static', '_images']
 # 'searchbox.html']``.
 
 html_sidebars = {
-    '**': ['globaltoc.html',
-           'relations.html',
-           'sourcelink.html',
-           'searchbox.html']
+    '**': [
+        'sidebar_main_nav_links.html',
+        'sidebar_toc.html'
+    ]
 }
 
 
@@ -188,35 +251,6 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'NodeGraphQTdoc'
-
-
-# -- Options for LaTeX output ------------------------------------------------
-
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'NodeGraphQT.tex', 'NodeGraphQt Documentation',
-     author, 'manual'),
-]
 
 
 # -- Options for manual page output ------------------------------------------
@@ -242,25 +276,6 @@ texinfo_documents = [
      'Node graph framework that can be re-implemented into apps that supports PySide2.',
      'Miscellaneous'),
 ]
-
-
-# -- Options for Epub output -------------------------------------------------
-
-# Bibliographic Dublin Core info.
-epub_title = project
-
-# The unique identifier of the text. This can be a ISBN number
-# or the project homepage.
-#
-# epub_identifier = ''
-
-# A unique identification for the text.
-#
-# epub_uid = ''
-
-# A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
-
 
 # -- Options for autodoc ----------------------------------------------------
 autodoc_member_order = 'groupwise'

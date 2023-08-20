@@ -1,0 +1,34 @@
+{#- Template for the footer. -#}
+<footer class="py-6 border-t border-border md:py-0">
+  {%- block footer_before %}{%- endblock footer_before %}
+    <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+      <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+        <p class="text-sm leading-loose text-center text-muted-foreground md:text-left">
+          {%- if show_copyright and copyright|length -%}
+            {%- if hasdoc('copyright') -%}
+              {%- trans path=pathto('copyright'), copyright=copyright|e -%}
+              © <a href="{{ path }}">Copyright</a>{{ copyright }}
+            {%- endtrans -%}
+          {%- else -%}
+            {%- trans copyright=copyright|e -%}
+            © {{ copyright }}&nbsp;
+          {%- endtrans -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if last_updated -%}
+        {%- trans last_updated=last_updated|e -%}
+        Last updated: {{ last_updated }}.&nbsp;
+      {%- endtrans -%}
+    {%- endif -%}
+    {%- if show_sphinx -%}
+      {%- trans sphinx_version=sphinx_version|e -%}
+      Built with <a class="font-medium underline underline-offset-4"
+    href="https://www.sphinx-doc.org"
+    rel="noreferrer">Sphinx {{ sphinx_version }}</a>
+    {%- endtrans -%}
+  {%- endif -%}
+</p>
+</div>
+</div>
+{%- block footer_after %}{%- endblock footer_after %}
+</footer>

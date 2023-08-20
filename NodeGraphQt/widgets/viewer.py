@@ -51,6 +51,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    context_menu_prompt = QtCore.Signal(str, object)
 
     def __init__(self, parent=None, undo_stack=None):
         """
@@ -354,6 +355,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
         ctx_menu = None
         ctx_menus = self.context_menus()
 
+        prompted_data = None, None
+
         if ctx_menus['nodes'].isEnabled():
             pos = self.mapToScene(self._previous_pos)
             items = self._items_near(pos)
@@ -365,10 +368,17 @@ class NodeViewer(QtWidgets.QGraphicsView):
                     for action in ctx_menu.actions():
                         if not action.menu():
                             action.node_id = node.id
+                    prompted_data = 'nodes', node.id
 
-        ctx_menu = ctx_menu or ctx_menus['graph']
+        if not ctx_menu:
+            ctx_menu = ctx_menus['graph']
+            prompted_data = 'graph', None
+
         if len(ctx_menu.actions()) > 0:
             if ctx_menu.isEnabled():
+                self.context_menu_prompt.emit(
+                    prompted_data[0], prompted_data[1]
+                )
                 ctx_menu.exec_(event.globalPos())
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
@@ -467,7 +477,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         # update the recorded node positions.
         self._node_positions.update({n: n.xy_pos for n in selection})
 
-        # show selection selection marquee.
+        # show selection marquee.
         if self.LMB_state and not items:
             rect = QtCore.QRect(self._previous_pos, QtCore.QSize())
             rect = rect.normalized()
@@ -893,7 +903,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def _validate_accept_connection(self, from_port, to_port):
         """
-        Check if a pipe connection is allowed if there are a constrains set
+        Check if a pipe connection is allowed if there are a constraints set
         on the ports.
 
         Args:
@@ -903,27 +913,34 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Returns:
             bool: true to allow connection.
         """
+        accept_validation = []
+
         to_ptype = to_port.port_type
         from_ptype = from_port.port_type
 
-        to_data = self.accept_connection_types.get(to_port.node.type_) or {}
-        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
-        accept_data = constraints.get(from_port.node.type_, {})
-
-        accepted_pnames = accept_data.get(from_ptype)
-        if accepted_pnames:
-            if from_port.name in accepted_pnames:
-                return True
-            return False
-
+        # validate the start.
         from_data = self.accept_connection_types.get(from_port.node.type_) or {}
         constraints = from_data.get(from_ptype, {}).get(from_port.name, {})
         accept_data = constraints.get(to_port.node.type_, {})
+        accepted_pnames = accept_data.get(to_ptype, {})
+        if constraints:
+            if to_port.name in accepted_pnames:
+                accept_validation.append(True)
+            else:
+                accept_validation.append(False)
 
-        accepted_pnames = accept_data.get(to_ptype)
-        if accepted_pnames:
+        # validate the end.
+        to_data = self.accept_connection_types.get(to_port.node.type_) or {}
+        constraints = to_data.get(to_ptype, {}).get(to_port.name, {})
+        accept_data = constraints.get(from_port.node.type_, {})
+        accepted_pnames = accept_data.get(from_ptype, {})
+        if constraints:
             if from_port.name in accepted_pnames:
-                return True
+                accept_validation.append(True)
+            else:
+                accept_validation.append(False)
+
+        if False in accept_validation:
             return False
         return True
 
@@ -1448,7 +1465,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     def get_layout_direction(self):
         """
-        Returns the layout direction set on the the node graph viewer
+        Returns the layout direction set on the node graph viewer
         used by the pipe items for drawing.
 
         Returns:
@@ -1555,6 +1572,15 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         cent = self._scene_range.center()
         return [cent.x(), cent.y()]
+
+    def scene_cursor_pos(self):
+        """
+        Returns the cursor last position mapped to the scene.
+
+        Returns:
+            QtCore.QPoint: cursor position.
+        """
+        return self.mapToScene(self._previous_pos)
 
     def nodes_rect_center(self, nodes):
         """

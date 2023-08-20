@@ -19,6 +19,13 @@
       },
       {
         "type":"command",
+        "label":"Clear Session...",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"clear_session",
+        "shortcut":""
+      },
+      {
+        "type":"command",
         "label":"Save...",
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"save_session",
@@ -98,6 +105,12 @@
         "file":"../examples/hotkeys/hotkey_functions.py",
         "function_name":"clear_node_selection",
         "shortcut":"Ctrl+Shift+A"
+      },
+            {
+        "type":"command",
+        "label":"Invert Selection",
+        "file":"../examples/hotkeys/hotkey_functions.py",
+        "function_name":"invert_node_selection"
       },
       {
         "type":"command",

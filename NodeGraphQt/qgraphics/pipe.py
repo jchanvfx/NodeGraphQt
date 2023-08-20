@@ -430,7 +430,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         pen.setJoinStyle(QtCore.Qt.MiterJoin)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         self.setPen(pen)
-        self.setBrush(QtCore.Qt.NoBrush)
+        self.setBrush(QtGui.QBrush(QtCore.Qt.NoBrush))
 
         pen = self._dir_pointer.pen()
         pen.setJoinStyle(QtCore.Qt.MiterJoin)

@@ -86,7 +86,7 @@ def save_session_as(graph):
         graph.save_session(file_path)
 
 
-def new_session(graph):
+def clear_session(graph):
     """
     Prompts a warning dialog to new a node graph session.
     """
@@ -162,6 +162,13 @@ def clear_node_selection(graph):
     Clear node selection.
     """
     graph.clear_selection()
+
+
+def invert_node_selection(graph):
+    """
+    Invert node selection.
+    """
+    graph.invert_selection()
 
 
 def disable_nodes(graph):

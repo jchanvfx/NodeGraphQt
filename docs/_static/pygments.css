@@ -1,8 +1,8 @@
 .linenos,
 td.lineos {
-    background: #2e3133;
     margin: 0px 10px;
     padding: 1px 8px;
+    color: #818181;
 }
 .linenos pre {
     background-color: transparent;
@@ -10,13 +10,21 @@ td.lineos {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }
-.hll { background-color: #233150 }
-.code { background: #232629; !important }
-.highlight pre { background: #1a1c1f; !important }
+.hll {
+    background-color: #233150;
+    display: block;
+}
+.code {
+    background: #232629; !important;
+}
 .highlight pre {
-    color: #f8f8f2; 
-    border: 0px; 
-    border-radius: 0px;
+    background: #0b0d0f !important;
+    padding-left: 18px;
+}
+.highlight pre {
+    color: #2fb37a;
+    border: 1px solid #1c2a38;
+    border-radius: 10px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }

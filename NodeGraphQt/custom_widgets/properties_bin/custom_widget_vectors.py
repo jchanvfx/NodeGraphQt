@@ -25,7 +25,7 @@ class _PropVector(BaseProperty):
     def _add_item(self, index):
         _ledit = _NumberValueEdit()
         _ledit.index = index
-        _ledit.valueChanged.connect(
+        _ledit.value_changed.connect(
             lambda: self._on_value_change(_ledit.get_value(), _ledit.index)
         )
 

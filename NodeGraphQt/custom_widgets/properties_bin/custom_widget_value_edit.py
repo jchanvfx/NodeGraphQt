@@ -72,7 +72,7 @@ class _NumberValueMenu(QtWidgets.QMenu):
 
 class _NumberValueEdit(QtWidgets.QLineEdit):
 
-    valueChanged = QtCore.Signal(object)
+    value_changed = QtCore.Signal(object)
 
     def __init__(self, parent=None, data_type=float):
         super(_NumberValueEdit, self).__init__(parent)
@@ -141,7 +141,7 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         self._previous_x = None
 
     def _on_text_changed(self):
-        self.valueChanged.emit(self.get_value())
+        self.value_changed.emit(self.get_value())
 
     def _convert_text(self, text):
         # int("1.0") will return error

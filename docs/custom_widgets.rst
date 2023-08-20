@@ -1,9 +1,11 @@
+:hide-rtoc:
+
 Built-in Widgets
 ################
 
 | The ``NodeGraphQt`` framework comes included with a few custom widgets.
 
-**Classes:**
+**Widget Types:**
 
 .. autosummary::
     NodeGraphQt.PropertiesBinWidget

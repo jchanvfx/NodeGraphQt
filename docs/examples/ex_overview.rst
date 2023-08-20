@@ -58,8 +58,8 @@ Additional Info:
     :meth:`NodeGraphQt.NodeGraph.set_pipe_slicing`
 
 
-Getting Started
-***************
+Basic Setup
+***********
 
 Here's a basic example snippet for creating two nodes and connecting them together.
 
@@ -107,7 +107,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
         node_b = graph.create_node('io.github.jchanvfx.FooNode', name='node B', pos=(300, 50))
 
         # connect node_a to node_b
-        node_a.set_output(0, node_b.input(2))
+        node_a.set_output(0, node_b.input(0))
 
         app.exec_()
 

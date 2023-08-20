@@ -1,18 +1,22 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from NodeGraphQt.base.commands import NodeVisibleCmd
+from NodeGraphQt.base.commands import NodeVisibleCmd, NodeWidgetVisibleCmd
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
 from NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
-from NodeGraphQt.errors import (PortError,
-                                PortRegistrationError,
-                                NodeWidgetError)
+from NodeGraphQt.errors import (
+    PortError,
+    PortRegistrationError,
+    NodeWidgetError
+)
 from NodeGraphQt.qgraphics.node_base import NodeItem
-from NodeGraphQt.widgets.node_widgets import (NodeBaseWidget,
-                                              NodeComboBox,
-                                              NodeLineEdit,
-                                              NodeCheckBox)
+from NodeGraphQt.widgets.node_widgets import (
+    NodeBaseWidget,
+    NodeCheckBox,
+    NodeComboBox,
+    NodeLineEdit
+)
 
 
 class BaseNode(NodeObject):
@@ -285,6 +289,40 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
+
+    def hide_widget(self, name):
+        """
+        Hide an embedded node widget.
+
+        Args:
+            name (str): node property name for the widget.
+
+        See Also:
+            :meth:`BaseNode.add_custom_widget`,
+            :meth:`BaseNode.show_widget`,
+            :meth:`BaseNode.get_widget`
+        """
+        if not self.view.has_widget(name):
+            return
+        undo_cmd = NodeWidgetVisibleCmd(self, name, visible=False)
+        self.graph.undo_stack().push(undo_cmd)
+
+    def show_widget(self, name):
+        """
+        Show an embedded node widget.
+
+        Args:
+            name (str): node property name for the widget.
+
+        See Also:
+            :meth:`BaseNode.add_custom_widget`,
+            :meth:`BaseNode.hide_widget`,
+            :meth:`BaseNode.get_widget`
+        """
+        if not self.view.has_widget(name):
+            return
+        undo_cmd = NodeWidgetVisibleCmd(self, name, visible=True)
+        self.graph.undo_stack().push(undo_cmd)
 
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None, locked=False, painter_func=None):

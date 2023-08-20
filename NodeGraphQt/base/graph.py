@@ -122,8 +122,17 @@ class NodeGraph(QtCore.QObject):
     """
     Signal is triggered when session has been changed.
 
-    :parameters: :str
+    :parameters: str
     :emits: new session path
+    """
+    context_menu_prompt = QtCore.Signal(object, object)
+    """
+    Signal is triggered just before a context menu is shown.
+
+    :parameters: 
+        :class:`NodeGraphQt.NodeGraphMenu` or :class:`NodeGraphQt.NodesMenu`, 
+        :class:`NodeGraphQt.BaseNode`
+    :emits: triggered context menu, node object.
     """
 
     def __init__(self, parent=None, **kwargs):
@@ -220,6 +229,19 @@ class NodeGraph(QtCore.QObject):
         self._viewer.node_selection_changed.connect(
             self._on_node_selection_changed)
         self._viewer.data_dropped.connect(self._on_node_data_dropped)
+        self._viewer.context_menu_prompt.connect(self._on_context_menu_prompt)
+
+    def _on_context_menu_prompt(self, menu_name, node_id):
+        """
+        Slot function triggered just before a context menu is shown.
+
+        Args:
+            menu_name (str): context menu name.
+            node_id (str): node id if triggered from the nodes context menu.
+        """
+        node = self.get_node_by_id(node_id)
+        menu = self.get_context_menu(menu_name)
+        self.context_menu_prompt.emit(menu, node)
 
     def _on_insert_node(self, pipe, node_id, prev_node_pos):
         """
@@ -502,6 +524,18 @@ class NodeGraph(QtCore.QObject):
             self._undo_view = QtWidgets.QUndoView(self._undo_stack)
             self._undo_view.setWindowTitle('Undo History')
         return self._undo_view
+
+    def cursor_pos(self):
+        """
+        Returns the cursor last position in the node graph.
+
+        Returns:
+            tuple(float, float): cursor x,y coordinates of the scene.
+        """
+        cursor_pos = self.viewer().scene_cursor_pos()
+        if not cursor_pos:
+            return 0.0, 0.0
+        return cursor_pos.x(), cursor_pos.y()
 
     def toggle_node_search(self):
         """
@@ -794,14 +828,13 @@ class NodeGraph(QtCore.QObject):
             [
                 {
                     'type': 'menu',
-                    'label': 'test sub menu',
+                    'label': 'node sub menu',
                     'items': [
                         {
                             'type': 'command',
                             'label': 'test command',
                             'file': '../path/to/my/test_module.py',
                             'function': 'run_test',
-                            'shortcut': 'Ctrl+b',
                             'node_type': 'nodeGraphQt.nodes.MyNodeClass'
                         },
 
@@ -1529,6 +1562,18 @@ class NodeGraph(QtCore.QObject):
         [node.set_selected(False) for node in self.all_nodes()]
         self._undo_stack.endMacro()
 
+    def invert_selection(self):
+        """
+        Inverts the current node selection.
+        """
+        if not self.selected_nodes():
+            self.select_all()
+            return
+        self._undo_stack.beginMacro('invert selection')
+        for node in self.all_nodes():
+            node.set_selected(not node.selected())
+        self._undo_stack.endMacro()
+
     def get_node_by_id(self, node_id=None):
         """
         Returns the node from the node id string.
@@ -1829,12 +1874,19 @@ class NodeGraph(QtCore.QObject):
         """
         serialized_data = self._serialize(self.all_nodes())
         file_path = file_path.strip()
+
+        def default(obj):
+            if isinstance(obj, set):
+                return list(obj)
+            return obj
+
         with open(file_path, 'w') as file_out:
             json.dump(
                 serialized_data,
                 file_out,
                 indent=2,
-                separators=(',', ':')
+                separators=(',', ':'),
+                default=default
             )
 
     def load_session(self, file_path):
@@ -1910,7 +1962,7 @@ class NodeGraph(QtCore.QObject):
         Cut nodes to the clipboard.
 
         Note:
-            This function doesn't not trigger the
+            This function doesn't trigger the
             :attr:`NodeGraph.nodes_deleted` signal.
 
         See Also:
