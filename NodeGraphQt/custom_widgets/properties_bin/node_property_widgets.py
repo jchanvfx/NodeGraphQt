@@ -17,8 +17,8 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # draw background.
         bg_clr = option.palette.base().color()
@@ -27,14 +27,14 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
 
         # draw border.
         border_width = 1
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
             bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.drawRect(QtCore.QRect(
             option.rect.x() + border_width,
             option.rect.y() + border_width,
@@ -84,7 +84,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         self.__layout.setSpacing(6)
 
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setAlignment(QtCore.Qt.AlignTop)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layout.addLayout(self.__layout)
 
     def __repr__(self):
@@ -234,7 +234,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
             port (NodeGraphQt.Port): port object.
         """
         item = QtWidgets.QTreeWidgetItem(tree)
-        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+        item.setFlags(item.flags() & ~QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         item.setText(1, port.name())
         item.setToolTip(0, 'Lock Port')
         item.setToolTip(1, 'Port Name')
@@ -638,7 +638,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             visible (bool): visibility state.
             tree_widget (QtWidgets.QTreeWidget): ports tree widget.
         """
-        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         if items:
             tree_widget.setVisible(visible)
             widget = self._prop_list.cellWidget(items[0].row(), 0)

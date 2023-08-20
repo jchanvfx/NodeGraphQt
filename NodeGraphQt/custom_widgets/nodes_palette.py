@@ -39,7 +39,7 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
         # background.
         bg_color = option.palette.window().color()
         pen_color = option.palette.midlight().color().lighter(120)
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bg_color = bg_color.lighter(120)
             pen_color = pen_color.lighter(160)
 
@@ -82,7 +82,7 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
                 pos_x, pos_y, edge_size[0], edge_size[1]
             ))
 
-        # painter.setPen(QtCore.Qt.NoPen)
+        # painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.setBrush(QtGui.QBrush(bg_color))
         dot_size = 4
         left_x = sub_rect.left() - 1

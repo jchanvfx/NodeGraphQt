@@ -48,7 +48,7 @@ def draw_triangle_port(painter, rect, info):
         border_color = QtGui.QColor(*info['border_color'])
 
     pen = QtGui.QPen(border_color, 1.8)
-    pen.setJoinStyle(QtCore.Qt.MiterJoin)
+    pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
 
     painter.setPen(pen)
     painter.setBrush(color)
@@ -91,7 +91,7 @@ def draw_square_port(painter, rect, info):
         border_color = QtGui.QColor(*info['border_color'])
 
     pen = QtGui.QPen(border_color, 1.8)
-    pen.setJoinStyle(QtCore.Qt.MiterJoin)
+    pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
 
     painter.setPen(pen)
     painter.setBrush(color)

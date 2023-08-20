@@ -91,7 +91,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         super(NodeScene, self).drawBackground(painter, rect)
 
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
         painter.setBrush(self.backgroundBrush())
 
         if self._grid_mode is ViewerEnum.GRID_DISPLAY_DOTS.value:

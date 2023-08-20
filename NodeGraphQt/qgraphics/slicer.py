@@ -33,7 +33,7 @@ class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
         arrow_size = 4.0
 
         painter.save()
-        painter.setRenderHint(painter.Antialiasing, True)
+        painter.setRenderHint(painter.RenderHint.Antialiasing, True)
 
         font = painter.font()
         font.setPointSize(12)
