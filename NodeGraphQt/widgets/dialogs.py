@@ -5,7 +5,7 @@ from Qt import QtWidgets
 _current_user_directory = os.path.expanduser('~')
 
 
-def set_dir(file):
+def _set_dir(file):
     global _current_user_directory
     if os.path.isdir(file):
         _current_user_directory = file
@@ -24,7 +24,7 @@ class FileDialog(object):
             parent, title, file_dir, ext_filter)
         file = file_dlg[0] or None
         if file:
-            set_dir(file)
+            _set_dir(file)
         return file_dlg
 
     @staticmethod
@@ -36,23 +36,23 @@ class FileDialog(object):
             parent, title, file_dir, ext_filter)
         file = file_dlg[0] or None
         if file:
-            set_dir(file)
+            _set_dir(file)
         return file_dlg
 
 
 class BaseDialog(object):
 
     @staticmethod
-    def message_dialog(text='', title='Message'):
-        dlg = QtWidgets.QMessageBox()
+    def message_dialog(parent=None, text='', title='Message'):
+        dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         dlg.exec_()
 
     @staticmethod
-    def question_dialog(text='', title='Are you sure?'):
-        dlg = QtWidgets.QMessageBox()
+    def question_dialog(parent=None, text='', title='Are you sure?'):
+        dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(
