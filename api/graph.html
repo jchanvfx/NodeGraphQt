@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=9d1eea0d"></script>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=13dda9ce"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.18</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.20</code>
 </nav>
 </div>
 </div>
@@ -370,7 +370,7 @@ and the node graph.</p>
 <td><p>Remove a list of specified nodes from the node graph.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.extract_nodes" title="NodeGraphQt.NodeGraph.extract_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_nodes</span></code></a>(nodes[, push_undo, prompt_warning])</p></td>
-<td><p>Extract select nodes from it connections.</p></td>
+<td><p>Extract select nodes from its connections.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.all_nodes" title="NodeGraphQt.NodeGraph.all_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all_nodes</span></code></a>()</p></td>
 <td><p>Return all nodes in the node graph.</p></td>
@@ -408,7 +408,7 @@ and the node graph.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.serialize_session" title="NodeGraphQt.NodeGraph.serialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialize_session</span></code></a>()</p></td>
 <td><p>Serializes the current node graph layout to a dictionary.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize_session</span></code></a>(layout_data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.deserialize_session" title="NodeGraphQt.NodeGraph.deserialize_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deserialize_session</span></code></a>(layout_data[, ...])</p></td>
 <td><p>Load node graph session from a dictionary object.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_session" title="NodeGraphQt.NodeGraph.save_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_session</span></code></a>(file_path)</p></td>
@@ -417,14 +417,14 @@ and the node graph.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_session" title="NodeGraphQt.NodeGraph.load_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_session</span></code></a>(file_path)</p></td>
 <td><p>Load node graph session layout file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.import_session" title="NodeGraphQt.NodeGraph.import_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_session</span></code></a>(file_path)</p></td>
-<td><p>Import node graph session layout file.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.import_session" title="NodeGraphQt.NodeGraph.import_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_session</span></code></a>(file_path[, clear_undo_stack])</p></td>
+<td><p>Import node graph into the current session.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.copy_nodes" title="NodeGraphQt.NodeGraph.copy_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_nodes</span></code></a>([nodes])</p></td>
-<td><p>Copy nodes to the clipboard.</p></td>
+<td><p>Copy nodes to the clipboard as a JSON formatted <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cut_nodes</span></code></a>([nodes])</p></td>
-<td><p>Cut nodes to the clipboard.</p></td>
+<td><p>Cut nodes to the clipboard as a JSON formatted <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes" title="NodeGraphQt.NodeGraph.paste_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paste_nodes</span></code></a>()</p></td>
 <td><p>Pastes nodes copied from the clipboard.</p></td>
@@ -441,16 +441,16 @@ and the node graph.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.auto_layout_nodes" title="NodeGraphQt.NodeGraph.auto_layout_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_layout_nodes</span></code></a>([nodes, down_stream, ...])</p></td>
 <td><p>Auto layout the nodes in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog" title="NodeGraphQt.NodeGraph.question_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">question_dialog</span></code></a>(text[, title])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.question_dialog" title="NodeGraphQt.NodeGraph.question_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">question_dialog</span></code></a>(text[, title, dialog_icon, ...])</p></td>
 <td><p>Prompts a question open dialog with <code class="docutils literal notranslate"><span class="pre">"Yes"</span></code> and <code class="docutils literal notranslate"><span class="pre">"No"</span></code> buttons in the node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog" title="NodeGraphQt.NodeGraph.message_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message_dialog</span></code></a>(text[, title])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.message_dialog" title="NodeGraphQt.NodeGraph.message_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message_dialog</span></code></a>(text[, title, dialog_icon, ...])</p></td>
 <td><p>Prompts a file open dialog in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog" title="NodeGraphQt.NodeGraph.load_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dialog</span></code></a>([current_dir, ext])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.load_dialog" title="NodeGraphQt.NodeGraph.load_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dialog</span></code></a>([current_dir, ext, parent])</p></td>
 <td><p>Prompts a file open dialog in the node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog" title="NodeGraphQt.NodeGraph.save_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dialog</span></code></a>([current_dir, ext])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.save_dialog" title="NodeGraphQt.NodeGraph.save_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dialog</span></code></a>([current_dir, ext, parent])</p></td>
 <td><p>Prompts a file save dialog in the node graph.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expand_group_node</span></code></a>(node)</p></td>
@@ -1365,7 +1365,7 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.extract_nodes">
 <span class="sig-name descname"><span class="pre">extract_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt_warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.extract_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.extract_nodes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Extract select nodes from it connections.</p>
+<dd><p>Extract select nodes from its connections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1521,7 +1521,7 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.deserialize_session">
-<span class="sig-name descname"><span class="pre">deserialize_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.deserialize_session" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.deserialize_session'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">deserialize_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_undo_stack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.deserialize_session" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.deserialize_session'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Load node graph session from a dictionary object.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -1531,7 +1531,11 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>layout_data</strong> (<em>dict</em>) – dictionary object containing a node session.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layout_data</strong> (<em>dict</em>) – dictionary object containing a node session.</p></li>
+<li><p><strong>clear_session</strong> (<em>bool</em>) – clear current session.</p></li>
+<li><p><strong>clear_undo_stack</strong> (<em>bool</em>) – clear the undo stack.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1569,18 +1573,21 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.import_session">
-<span class="sig-name descname"><span class="pre">import_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.import_session" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.import_session'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Import node graph session layout file.</p>
+<span class="sig-name descname"><span class="pre">import_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_undo_stack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.import_session" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.import_session'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Import node graph into the current session.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – path to the serialized layout file.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – path to the serialized layout file.</p></li>
+<li><p><strong>clear_undo_stack</strong> (<em>bool</em>) – clear the undo stack after import.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.copy_nodes">
 <span class="sig-name descname"><span class="pre">copy_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.copy_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.copy_nodes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Copy nodes to the clipboard.</p>
+<dd><p>Copy nodes to the clipboard as a JSON formatted <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.cut_nodes()</span></code></a></p>
@@ -1594,7 +1601,7 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.cut_nodes">
 <span class="sig-name descname"><span class="pre">cut_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.cut_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.cut_nodes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Cut nodes to the clipboard.</p>
+<dd><p>Cut nodes to the clipboard as a JSON formatted <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function doesn’t trigger the
@@ -1683,7 +1690,7 @@ if nodes is None then all nodes is layed out.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.question_dialog">
-<span class="sig-name descname"><span class="pre">question_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.question_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.question_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">question_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialog_icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.question_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.question_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Prompts a question open dialog with <code class="docutils literal notranslate"><span class="pre">"Yes"</span></code> and <code class="docutils literal notranslate"><span class="pre">"No"</span></code> buttons in
 the node graph.</p>
 <div class="admonition note">
@@ -1696,6 +1703,9 @@ the node graph.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<em>str</em>) – question text.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – dialog window title.</p></li>
+<li><p><strong>dialog_icon</strong> (<em>str</em>) – display icon. (“information”, “warning”, “critical”)</p></li>
+<li><p><strong>custom_icon</strong> (<em>str</em>) – custom icon to display.</p></li>
+<li><p><strong>parent</strong> (<em>QtWidgets.QObject</em>) – override dialog parent. (optional)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1708,7 +1718,7 @@ the node graph.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.message_dialog">
-<span class="sig-name descname"><span class="pre">message_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.message_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.message_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">message_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Node</span> <span class="pre">Graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialog_icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.message_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.message_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Prompts a file open dialog in the node graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1720,13 +1730,16 @@ the node graph.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<em>str</em>) – message text.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – dialog window title.</p></li>
+<li><p><strong>dialog_icon</strong> (<em>str</em>) – display icon. (“information”, “warning”, “critical”)</p></li>
+<li><p><strong>custom_icon</strong> (<em>str</em>) – custom icon to display.</p></li>
+<li><p><strong>parent</strong> (<em>QtWidgets.QObject</em>) – override dialog parent. (optional)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.load_dialog">
-<span class="sig-name descname"><span class="pre">load_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.load_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.load_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">load_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.load_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.load_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Prompts a file open dialog in the node graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1738,6 +1751,7 @@ the node graph.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
 <li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">"json"</span></code>)</p></li>
+<li><p><strong>parent</strong> (<em>QtWidgets.QObject</em>) – override dialog parent. (optional)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1750,7 +1764,7 @@ the node graph.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.save_dialog">
-<span class="sig-name descname"><span class="pre">save_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.save_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.save_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">save_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.save_dialog" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.save_dialog'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Prompts a file save dialog in the node graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1762,6 +1776,7 @@ the node graph.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>current_dir</strong> (<em>str</em>) – path to a directory.</p></li>
 <li><p><strong>ext</strong> (<em>str</em>) – custom file type extension (default: <code class="docutils literal notranslate"><span class="pre">"json"</span></code>)</p></li>
+<li><p><strong>parent</strong> (<em>QtWidgets.QObject</em>) – override dialog parent. (optional)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
