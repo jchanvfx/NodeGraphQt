@@ -1144,7 +1144,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     @staticmethod
     def acyclic_check(start_port, end_port):
         """
-        Validate the node connections so it doesn't loop itself.
+        Validate the node connections, so it doesn't loop itself.
 
         Args:
             start_port (PortItem): port item.
@@ -1224,13 +1224,16 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
-    def question_dialog(self, text, title='Node Graph', parent=None):
+    def question_dialog(self, text, title='Node Graph', dialog_icon=None,
+                        custom_icon=None, parent=None):
         """
         Prompt node viewer question dialog widget with "yes", "no" buttons.
 
         Args:
             text (str): dialog text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
             parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
@@ -1239,21 +1242,26 @@ class NodeViewer(QtWidgets.QGraphicsView):
         parent = parent or self
 
         self.clear_key_state()
-        return BaseDialog.question_dialog(parent, text, title)
+        return BaseDialog.question_dialog(
+            parent, text, title, dialog_icon, custom_icon
+        )
 
-    def message_dialog(self, text, title='Node Graph', parent=None):
+    def message_dialog(self, text, title='Node Graph', dialog_icon=None,
+                       custom_icon=None, parent=None):
         """
         Prompt node viewer message dialog widget with "ok" button.
 
         Args:
             text (str): dialog text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
             parent (QtWidgets.QObject): override dialog parent. (optional)
         """
         parent = parent or self
 
         self.clear_key_state()
-        BaseDialog.message_dialog(parent, text, title)
+        BaseDialog.message_dialog(parent, text, title, dialog_icon, custom_icon)
 
     def load_dialog(self, current_dir=None, ext=None, parent=None):
         """

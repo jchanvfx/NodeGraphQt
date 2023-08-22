@@ -1,6 +1,6 @@
 import os
 
-from Qt import QtWidgets
+from Qt import QtWidgets, QtGui, QtCore
 
 _current_user_directory = os.path.expanduser('~')
 
@@ -43,20 +43,50 @@ class FileDialog(object):
 class BaseDialog(object):
 
     @staticmethod
-    def message_dialog(parent=None, text='', title='Message'):
+    def message_dialog(parent=None, text='', title='Message', dialog_icon=None,
+                       custom_icon=None):
         dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+
+        if custom_icon:
+            pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
+                32, QtCore.Qt.SmoothTransformation
+            )
+            dlg.setIconPixmap(pixmap)
+        else:
+            if dialog_icon == 'information':
+                dlg.setIcon(dlg.Information)
+            elif dialog_icon == 'warning':
+                dlg.setIcon(dlg.Warning)
+            elif dialog_icon == 'critical':
+                dlg.setIcon(dlg.Critical)
+
         dlg.exec_()
 
     @staticmethod
-    def question_dialog(parent=None, text='', title='Are you sure?'):
+    def question_dialog(parent=None, text='', title='Are you sure?',
+                        dialog_icon=None, custom_icon=None):
         dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
         )
+
+        if custom_icon:
+            pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
+                32, QtCore.Qt.SmoothTransformation
+            )
+            dlg.setIconPixmap(pixmap)
+        else:
+            if dialog_icon == 'information':
+                dlg.setIcon(dlg.Information)
+            elif dialog_icon == 'warning':
+                dlg.setIcon(dlg.Warning)
+            elif dialog_icon == 'critical':
+                dlg.setIcon(dlg.Critical)
+
         result = dlg.exec_()
         return bool(result == QtWidgets.QMessageBox.Yes)

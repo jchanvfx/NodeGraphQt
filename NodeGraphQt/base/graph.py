@@ -2254,7 +2254,8 @@ class NodeGraph(QtCore.QObject):
     # convenience dialog functions.
     # --------------------------------------------------------------------------
 
-    def question_dialog(self, text, title='Node Graph', parent=None):
+    def question_dialog(self, text, title='Node Graph', dialog_icon=None,
+                        custom_icon=None, parent=None):
         """
         Prompts a question open dialog with ``"Yes"`` and ``"No"`` buttons in
         the node graph.
@@ -2266,14 +2267,19 @@ class NodeGraph(QtCore.QObject):
         Args:
             text (str): question text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
             parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             bool: true if user clicked yes.
         """
-        return self._viewer.question_dialog(text, title, parent)
+        return self._viewer.question_dialog(
+            text, title, dialog_icon, custom_icon, parent
+        )
 
-    def message_dialog(self, text, title='Node Graph', parent=None):
+    def message_dialog(self, text, title='Node Graph', dialog_icon=None,
+                       custom_icon=None, parent=None):
         """
         Prompts a file open dialog in the node graph.
 
@@ -2284,9 +2290,13 @@ class NodeGraph(QtCore.QObject):
         Args:
             text (str): message text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
             parent (QtWidgets.QObject): override dialog parent. (optional)
         """
-        self._viewer.message_dialog(text, title, parent)
+        self._viewer.message_dialog(
+            text, title, dialog_icon, custom_icon, parent
+        )
 
     def load_dialog(self, current_dir=None, ext=None, parent=None):
         """
