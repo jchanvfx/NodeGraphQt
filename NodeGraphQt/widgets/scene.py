@@ -106,7 +106,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
                     painter, rect, pen, ViewerEnum.GRID_SIZE.value
                 )
 
-            color = QtGui.QColor(*self._bg_color).darker(150)
+            color = QtGui.QColor(*self._bg_color).darker(200)
             if zoom < -0.0:
                 color = color.darker(100 - int(zoom * 110))
             pen = QtGui.QPen(color, 0.65)
