@@ -31,7 +31,7 @@ jobs:
       # Install the python dependencies required for building.
       - name: Install Dependencies
         run: |
-            pip install sphinx
+            pip install sphinx==7.1.2
             pip install bs4
             pip install PySide2
             pip install Qt.py

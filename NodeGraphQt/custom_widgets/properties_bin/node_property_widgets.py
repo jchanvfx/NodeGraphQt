@@ -318,7 +318,7 @@ class NodePropWidget(QtWidgets.QWidget):
         close_btn = QtWidgets.QPushButton()
         close_btn.setIcon(QtGui.QIcon(
             self.style().standardPixmap(
-                QtWidgets.QStyle.SP_DialogCancelButton
+                QtWidgets.QStyle.SP_DialogCloseButton
             )
         ))
         close_btn.setMaximumWidth(40)

@@ -1,11 +1,11 @@
 import os
 
-from Qt import QtWidgets
+from Qt import QtWidgets, QtGui, QtCore
 
 _current_user_directory = os.path.expanduser('~')
 
 
-def set_dir(file):
+def _set_dir(file):
     global _current_user_directory
     if os.path.isdir(file):
         _current_user_directory = file
@@ -24,7 +24,7 @@ class FileDialog(object):
             parent, title, file_dir, ext_filter)
         file = file_dlg[0] or None
         if file:
-            set_dir(file)
+            _set_dir(file)
         return file_dlg
 
     @staticmethod
@@ -36,27 +36,57 @@ class FileDialog(object):
             parent, title, file_dir, ext_filter)
         file = file_dlg[0] or None
         if file:
-            set_dir(file)
+            _set_dir(file)
         return file_dlg
 
 
 class BaseDialog(object):
 
     @staticmethod
-    def message_dialog(text='', title='Message'):
-        dlg = QtWidgets.QMessageBox()
+    def message_dialog(parent=None, text='', title='Message', dialog_icon=None,
+                       custom_icon=None):
+        dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+
+        if custom_icon:
+            pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
+                32, QtCore.Qt.SmoothTransformation
+            )
+            dlg.setIconPixmap(pixmap)
+        else:
+            if dialog_icon == 'information':
+                dlg.setIcon(dlg.Information)
+            elif dialog_icon == 'warning':
+                dlg.setIcon(dlg.Warning)
+            elif dialog_icon == 'critical':
+                dlg.setIcon(dlg.Critical)
+
         dlg.exec_()
 
     @staticmethod
-    def question_dialog(text='', title='Are you sure?'):
-        dlg = QtWidgets.QMessageBox()
+    def question_dialog(parent=None, text='', title='Are you sure?',
+                        dialog_icon=None, custom_icon=None):
+        dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
         )
+
+        if custom_icon:
+            pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
+                32, QtCore.Qt.SmoothTransformation
+            )
+            dlg.setIconPixmap(pixmap)
+        else:
+            if dialog_icon == 'information':
+                dlg.setIcon(dlg.Information)
+            elif dialog_icon == 'warning':
+                dlg.setIcon(dlg.Warning)
+            elif dialog_icon == 'critical':
+                dlg.setIcon(dlg.Critical)
+
         result = dlg.exec_()
         return bool(result == QtWidgets.QMessageBox.Yes)

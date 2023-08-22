@@ -1144,7 +1144,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     @staticmethod
     def acyclic_check(start_port, end_port):
         """
-        Validate the node connections so it doesn't loop itself.
+        Validate the node connections, so it doesn't loop itself.
 
         Args:
             start_port (PortItem): port item.
@@ -1224,70 +1224,90 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         return {'graph': self._ctx_graph_menu, 'nodes': self._ctx_node_menu}
 
-    def question_dialog(self, text, title='Node Graph'):
+    def question_dialog(self, text, title='Node Graph', dialog_icon=None,
+                        custom_icon=None, parent=None):
         """
         Prompt node viewer question dialog widget with "yes", "no" buttons.
 
         Args:
             text (str): dialog text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             bool: true if user click yes.
         """
-        self.clear_key_state()
-        return BaseDialog.question_dialog(text, title)
+        parent = parent or self
 
-    def message_dialog(self, text, title='Node Graph'):
+        self.clear_key_state()
+        return BaseDialog.question_dialog(
+            parent, text, title, dialog_icon, custom_icon
+        )
+
+    def message_dialog(self, text, title='Node Graph', dialog_icon=None,
+                       custom_icon=None, parent=None):
         """
         Prompt node viewer message dialog widget with "ok" button.
 
         Args:
             text (str): dialog text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
+            parent (QtWidgets.QObject): override dialog parent. (optional)
         """
-        self.clear_key_state()
-        BaseDialog.message_dialog(text, title)
+        parent = parent or self
 
-    def load_dialog(self, current_dir=None, ext=None):
+        self.clear_key_state()
+        BaseDialog.message_dialog(parent, text, title, dialog_icon, custom_icon)
+
+    def load_dialog(self, current_dir=None, ext=None, parent=None):
         """
         Prompt node viewer file load dialog widget.
 
         Args:
             current_dir (str): directory path starting point. (optional)
             ext (str): custom file extension filter type. (optional)
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             str: selected file path.
         """
+        parent = parent or self
+
         self.clear_key_state()
         ext = '*{} '.format(ext) if ext else ''
         ext_filter = ';;'.join([
             'Node Graph ({}*json)'.format(ext), 'All Files (*)'
         ])
         file_dlg = FileDialog.getOpenFileName(
-            self, 'Open File', current_dir, ext_filter)
+            parent, 'Open File', current_dir, ext_filter)
         file = file_dlg[0] or None
         return file
 
-    def save_dialog(self, current_dir=None, ext=None):
+    def save_dialog(self, current_dir=None, ext=None, parent=None):
         """
         Prompt node viewer file save dialog widget.
 
         Args:
             current_dir (str): directory path starting point. (optional)
             ext (str): custom file extension filter type. (optional)
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             str: selected file path.
         """
+        parent = parent or self
+
         self.clear_key_state()
         ext_label = '*{} '.format(ext) if ext else ''
         ext_type = '.{}'.format(ext) if ext else '.json'
         ext_map = {'Node Graph ({}*json)'.format(ext_label): ext_type,
                    'All Files (*)': ''}
         file_dlg = FileDialog.getSaveFileName(
-            self, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
+            parent, 'Save Session', current_dir, ';;'.join(ext_map.keys()))
         file_path = file_dlg[0]
         if not file_path:
             return

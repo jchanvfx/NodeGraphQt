@@ -1478,7 +1478,7 @@ class NodeGraph(QtCore.QObject):
 
     def extract_nodes(self, nodes, push_undo=True, prompt_warning=True):
         """
-        Extract select nodes from it connections.
+        Extract select nodes from its connections.
 
         Args:
             nodes (list[NodeGraphQt.BaseNode]): list of node instances.
@@ -1843,7 +1843,8 @@ class NodeGraph(QtCore.QObject):
         """
         return self._serialize(self.all_nodes())
 
-    def deserialize_session(self, layout_data):
+    def deserialize_session(self, layout_data, clear_session=True,
+                            clear_undo_stack=True):
         """
         Load node graph session from a dictionary object.
 
@@ -1854,11 +1855,15 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             layout_data (dict): dictionary object containing a node session.
+            clear_session (bool): clear current session.
+            clear_undo_stack (bool): clear the undo stack.
         """
-        self.clear_session()
+        if clear_session:
+            self.clear_session()
         self._deserialize(layout_data)
         self.clear_selection()
-        self._undo_stack.clear()
+        if clear_undo_stack:
+            self._undo_stack.clear()
 
     def save_session(self, file_path):
         """
@@ -1872,7 +1877,7 @@ class NodeGraph(QtCore.QObject):
         Args:
             file_path (str): path to the saved node layout.
         """
-        serialized_data = self._serialize(self.all_nodes())
+        serialized_data = self.serialize_session()
         file_path = file_path.strip()
 
         def default(obj):
@@ -1906,14 +1911,15 @@ class NodeGraph(QtCore.QObject):
             raise IOError('file does not exist: {}'.format(file_path))
 
         self.clear_session()
-        self.import_session(file_path)
+        self.import_session(file_path, clear_undo_stack=True)
 
-    def import_session(self, file_path):
+    def import_session(self, file_path, clear_undo_stack=True):
         """
-        Import node graph session layout file.
+        Import node graph into the current session.
 
         Args:
             file_path (str): path to the serialized layout file.
+            clear_undo_stack (bool): clear the undo stack after import.
         """
         file_path = file_path.strip()
         if not os.path.isfile(file_path):
@@ -1929,15 +1935,18 @@ class NodeGraph(QtCore.QObject):
         if not layout_data:
             return
 
-        self._deserialize(layout_data)
-        self._undo_stack.clear()
+        self.deserialize_session(
+            layout_data,
+            clear_session=False,
+            clear_undo_stack=clear_undo_stack
+        )
         self._model.session = file_path
 
         self.session_changed.emit(file_path)
 
     def copy_nodes(self, nodes=None):
         """
-        Copy nodes to the clipboard.
+        Copy nodes to the clipboard as a JSON formatted ``str``.
 
         See Also:
             :meth:`NodeGraph.cut_nodes`
@@ -1959,7 +1968,7 @@ class NodeGraph(QtCore.QObject):
 
     def cut_nodes(self, nodes=None):
         """
-        Cut nodes to the clipboard.
+        Cut nodes to the clipboard as a JSON formatted ``str``.
 
         Note:
             This function doesn't trigger the
@@ -2245,7 +2254,8 @@ class NodeGraph(QtCore.QObject):
     # convenience dialog functions.
     # --------------------------------------------------------------------------
 
-    def question_dialog(self, text, title='Node Graph'):
+    def question_dialog(self, text, title='Node Graph', dialog_icon=None,
+                        custom_icon=None, parent=None):
         """
         Prompts a question open dialog with ``"Yes"`` and ``"No"`` buttons in
         the node graph.
@@ -2257,13 +2267,19 @@ class NodeGraph(QtCore.QObject):
         Args:
             text (str): question text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             bool: true if user clicked yes.
         """
-        return self._viewer.question_dialog(text, title)
+        return self._viewer.question_dialog(
+            text, title, dialog_icon, custom_icon, parent
+        )
 
-    def message_dialog(self, text, title='Node Graph'):
+    def message_dialog(self, text, title='Node Graph', dialog_icon=None,
+                       custom_icon=None, parent=None):
         """
         Prompts a file open dialog in the node graph.
 
@@ -2274,10 +2290,15 @@ class NodeGraph(QtCore.QObject):
         Args:
             text (str): message text.
             title (str): dialog window title.
+            dialog_icon (str): display icon. ("information", "warning", "critical")
+            custom_icon (str): custom icon to display.
+            parent (QtWidgets.QObject): override dialog parent. (optional)
         """
-        self._viewer.message_dialog(text, title)
+        self._viewer.message_dialog(
+            text, title, dialog_icon, custom_icon, parent
+        )
 
-    def load_dialog(self, current_dir=None, ext=None):
+    def load_dialog(self, current_dir=None, ext=None, parent=None):
         """
         Prompts a file open dialog in the node graph.
 
@@ -2288,13 +2309,14 @@ class NodeGraph(QtCore.QObject):
         Args:
             current_dir (str): path to a directory.
             ext (str): custom file type extension (default: ``"json"``)
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             str: selected file path.
         """
-        return self._viewer.load_dialog(current_dir, ext)
+        return self._viewer.load_dialog(current_dir, ext, parent)
 
-    def save_dialog(self, current_dir=None, ext=None):
+    def save_dialog(self, current_dir=None, ext=None,  parent=None):
         """
         Prompts a file save dialog in the node graph.
 
@@ -2305,11 +2327,12 @@ class NodeGraph(QtCore.QObject):
         Args:
             current_dir (str): path to a directory.
             ext (str): custom file type extension (default: ``"json"``)
+            parent (QtWidgets.QObject): override dialog parent. (optional)
 
         Returns:
             str: selected file path.
         """
-        return self._viewer.save_dialog(current_dir, ext)
+        return self._viewer.save_dialog(current_dir, ext, parent)
 
     # group node / sub graph.
     # --------------------------------------------------------------------------
