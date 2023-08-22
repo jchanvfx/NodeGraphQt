@@ -755,16 +755,17 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         prop_widget.property_closed.connect(self.__on_prop_close)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         port_connections = prop_widget.get_port_connection_widget()
-        port_connections.input_group.clicked.connect(
-            lambda v: self.__on_port_tree_visible_changed(
-                prop_widget.node_id(), v, port_connections.input_tree
+        if port_connections:
+            port_connections.input_group.clicked.connect(
+                lambda v: self.__on_port_tree_visible_changed(
+                    prop_widget.node_id(), v, port_connections.input_tree
+                )
             )
-        )
-        port_connections.output_group.clicked.connect(
-            lambda v: self.__on_port_tree_visible_changed(
-                prop_widget.node_id(), v, port_connections.output_tree
+            port_connections.output_group.clicked.connect(
+                lambda v: self.__on_port_tree_visible_changed(
+                    prop_widget.node_id(), v, port_connections.output_tree
+                )
             )
-        )
 
         self._prop_list.setCellWidget(0, 0, prop_widget)
 
