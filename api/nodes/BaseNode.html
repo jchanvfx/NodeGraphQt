@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b7a52dd7"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=805da7bd"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.21</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
 </nav>
 </div>
 </div>
@@ -267,7 +267,7 @@ port connections from one node to another.</p>
 <td><p>Returns all nodes connected from the output ports.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="NodeGraphQt.BaseNode.add_accept_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_accept_port_type</span></code></a>(port, port_type_data)</p></td>
-<td><p>Add a accept constrain to a specified node port.</p></td>
+<td><p>Add an accept constrain to a specified node port.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types" title="NodeGraphQt.BaseNode.accepted_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accepted_port_types</span></code></a>(port)</p></td>
 <td><p>Returns a dictionary of connection constrains of the port types that allow for a pipe connection to this node.</p></td>
@@ -800,8 +800,8 @@ see <a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_accept_port_type">
 <span class="sig-name descname"><span class="pre">add_accept_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_accept_port_type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Add a accept constrain to a specified node port.</p>
-<p>Once a constrain has been added only ports of that type specified will
+<dd><p>Add an accept constrain to a specified node port.</p>
+<p>Once a constraint has been added only ports of that type specified will
 be allowed a pipe connection.</p>
 <p>port type data example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -845,7 +845,7 @@ that allow for a pipe connection to this node.</p>
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_reject_port_type">
 <span class="sig-name descname"><span class="pre">add_reject_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_reject_port_type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Add a reject constrain to a specified node port.</p>
-<p>Once a constrain has been added only ports of that type specified will
+<p>Once a constraint has been added only ports of that type specified will
 NOT be allowed a pipe connection.</p>
 <p>port type data example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
