@@ -697,9 +697,9 @@ class BaseNode(NodeObject):
 
     def add_accept_port_type(self, port, port_type_data):
         """
-        Add a accept constrain to a specified node port.
+        Add an accept constrain to a specified node port.
 
-        Once a constrain has been added only ports of that type specified will
+        Once a constraint has been added only ports of that type specified will
         be allowed a pipe connection.
 
         port type data example
@@ -759,7 +759,7 @@ class BaseNode(NodeObject):
         """
         Add a reject constrain to a specified node port.
 
-        Once a constrain has been added only ports of that type specified will
+        Once a constraint has been added only ports of that type specified will
         NOT be allowed a pipe connection.
 
         port type data example
