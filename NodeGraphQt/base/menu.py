@@ -129,7 +129,7 @@ class NodeGraphMenu(object):
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
 
-        if isinstance(shortcut, str):
+        if isinstance(shortcut, QtGui.QKeySequence):
             search = re.search(r'(?:\.|)QKeySequence\.(\w+)', shortcut)
             if search:
                 shortcut = getattr(QtGui.QKeySequence, search.group(1))
