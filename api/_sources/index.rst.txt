@@ -53,7 +53,7 @@ script or checkout the :ref:`General Overview` section.
     :titlesonly:
 
     constants
-    graph
+    graphs/_index_graphs
     nodes/_index_nodes
     port
     menu
@@ -64,5 +64,7 @@ script or checkout the :ref:`General Overview` section.
     :name: wdgtstoc
     :maxdepth: 2
 
-    custom_widgets
     node_widgets
+    builtin_widgets/PropertiesBinWidget
+    builtin_widgets/NodesPaletteWidget
+    builtin_widgets/NodesTreeWidget

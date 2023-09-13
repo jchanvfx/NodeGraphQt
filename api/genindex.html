@@ -28,7 +28,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=805da7bd"></script>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=242523a4"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -98,7 +98,11 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphs</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="graphs/_index_graphs.html">Graphs<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="graphs/NodeGraph.html">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/SubGraph.html">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="nodes/_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="nodes/NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/BackdropNode.html">BackdropNode</a></li>
@@ -113,11 +117,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/PropertiesBinWidget.html">PropertiesBinWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesPaletteWidget.html">NodesPaletteWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.23</code>
 </nav>
 </div>
 </div>
@@ -177,7 +183,7 @@
 <li><a href="constants.html#NodeGraphQt.constants.PortEnum.ACTIVE_COLOR">(NodeGraphQt.constants.PortEnum attribute)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.acyclic">acyclic() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.acyclic">acyclic() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_accept_port_type">add_accept_port_type() (NodeGraphQt.BaseNode method)</a>
 <ul>
@@ -210,9 +216,9 @@
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphMenu.add_menu">add_menu() (NodeGraphQt.NodeGraphMenu method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.add_node">add_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.add_node">add_node() (NodeGraphQt.NodeGraph method)</a>
 <ul>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.add_node">(NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.add_node">(NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 </ul></li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_output">add_output() (NodeGraphQt.BaseNode method)</a>
@@ -222,7 +228,7 @@
 <li><a href="nodes/PortNode.html#NodeGraphQt.nodes.port_node.PortOutputNode.add_output">(NodeGraphQt.nodes.port_node.PortOutputNode method)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.add_properties_bin">add_properties_bin() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.add_properties_bin">add_properties_bin() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.add_reject_port_type">add_reject_port_type() (NodeGraphQt.BaseNode method)</a>
 <ul>
@@ -235,11 +241,11 @@
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.widgets.node_widgets.NodeComboBox.all_items">all_items() (NodeGraphQt.widgets.node_widgets.NodeComboBox method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.all_nodes">all_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.all_nodes">all_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeLayoutEnum.ANGLE">ANGLE (NodeGraphQt.constants.PipeLayoutEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.auto_layout_nodes">auto_layout_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.auto_layout_nodes">auto_layout_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BackdropNode.html#NodeGraphQt.BackdropNode.auto_size">auto_size() (NodeGraphQt.BackdropNode method)</a>
 </li>
@@ -255,7 +261,7 @@
 <li><a href="constants.html#NodeGraphQt.constants.ViewerNavEnum.BACKGROUND_COLOR">(NodeGraphQt.constants.ViewerNavEnum attribute)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.background_color">background_color() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.background_color">background_color() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode">BaseNode (class in NodeGraphQt)</a>
 </li>
@@ -263,7 +269,7 @@
 <td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNodeCircle">BaseNodeCircle (class in NodeGraphQt)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.begin_undo">begin_undo() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.begin_undo">begin_undo() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PortEnum.BORDER_COLOR">BORDER_COLOR (NodeGraphQt.constants.PortEnum attribute)</a>
 </li>
@@ -276,33 +282,33 @@
 <h2 id="C">C</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.center_on">center_on() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.center_on">center_on() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.center_selection">center_selection() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.center_selection">center_selection() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.widgets.node_widgets.NodeComboBox.clear">clear() (NodeGraphQt.widgets.node_widgets.NodeComboBox method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.clear_bin">clear_bin() (NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.clear_bin">clear_bin() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.clear_connections">clear_connections() (NodeGraphQt.Port method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.clear_selection">clear_selection() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.clear_selection">clear_selection() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.clear_session">clear_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.clear_session">clear_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.clear_undo_stack">clear_undo_stack() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.clear_undo_stack">clear_undo_stack() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PortEnum.CLICK_FALLOFF">CLICK_FALLOFF (NodeGraphQt.constants.PortEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.close">close() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.close">close() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/GroupNode.html#NodeGraphQt.GroupNode.collapse">collapse() (NodeGraphQt.GroupNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.collapse_graph">collapse_graph() (NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.collapse_graph">collapse_graph() (NodeGraphQt.SubGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.collapse_group_node">collapse_group_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.collapse_group_node">collapse_group_node() (NodeGraphQt.NodeGraph method)</a>
 <ul>
-<li><a href="graph.html#NodeGraphQt.SubGraph.collapse_group_node">(NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.collapse_group_node">(NodeGraphQt.SubGraph method)</a>
 </li>
 </ul></li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.COLOR">COLOR (NodeGraphQt.constants.PipeEnum attribute)</a>
@@ -330,46 +336,46 @@
 </li>
 <li><a href="port.html#NodeGraphQt.Port.connected_ports">connected_ports() (NodeGraphQt.Port method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.context_menu">context_menu() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.context_menu">context_menu() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.context_menu_prompt">context_menu_prompt (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.context_menu_prompt">context_menu_prompt (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.context_nodes_menu">context_nodes_menu() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.context_nodes_menu">context_nodes_menu() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.copy_nodes">copy_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.copy_nodes">copy_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.create_node">create_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.create_node">create_node() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.create_property">create_property() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.current_session">current_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.current_session">current_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.cursor_pos">cursor_pos() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.cursor_pos">cursor_pos() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeLayoutEnum.CURVED">CURVED (NodeGraphQt.constants.PipeLayoutEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.cut_nodes">cut_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.cut_nodes">cut_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 </tr></table>
 <h2 id="D">D</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.data_dropped">data_dropped (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.data_dropped">data_dropped (NodeGraphQt.NodeGraph attribute)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.delete_input">delete_input() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.delete_node">delete_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.delete_node">delete_node() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.delete_nodes">delete_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.delete_nodes">delete_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.delete_output">delete_output() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.deserialize_session">deserialize_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.deserialize_session">deserialize_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.disable_context_menu">disable_context_menu() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.disable_context_menu">disable_context_menu() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.disable_nodes">disable_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.disable_nodes">disable_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
@@ -387,25 +393,25 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DOTTED">DRAW_TYPE_DOTTED (NodeGraphQt.constants.PipeEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.duplicate_nodes">duplicate_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.duplicate_nodes">duplicate_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 </tr></table>
 <h2 id="E">E</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.end_undo">end_undo() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.end_undo">end_undo() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/GroupNode.html#NodeGraphQt.GroupNode.expand">expand() (NodeGraphQt.GroupNode method)</a>
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.expand_group_node">expand_group_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.expand_group_node">expand_group_node() (NodeGraphQt.NodeGraph method)</a>
 <ul>
-<li><a href="graph.html#NodeGraphQt.SubGraph.expand_group_node">(NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.expand_group_node">(NodeGraphQt.SubGraph method)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.extract_nodes">extract_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.extract_nodes">extract_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 </tr></table>
@@ -418,7 +424,7 @@
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.fit_to_selection">fit_to_selection() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.fit_to_selection">fit_to_selection() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.NodePropWidgetEnum.FLOAT">FLOAT (NodeGraphQt.constants.NodePropWidgetEnum attribute)</a>
 </li>
@@ -429,7 +435,7 @@
 <td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="menu.html#NodeGraphQt.NodeGraphMenu.get_command">get_command() (NodeGraphQt.NodeGraphMenu method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_context_menu">get_context_menu() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_context_menu">get_context_menu() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.get_custom_widget">get_custom_widget() (NodeGraphQt.NodeBaseWidget method)</a>
 </li>
@@ -437,7 +443,7 @@
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.get_input">get_input() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.get_input_port_nodes">get_input_port_nodes() (NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.get_input_port_nodes">get_input_port_nodes() (NodeGraphQt.SubGraph method)</a>
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphMenu.get_items">get_items() (NodeGraphQt.NodeGraphMenu method)</a>
 </li>
@@ -447,17 +453,17 @@
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.get_name">get_name() (NodeGraphQt.NodeBaseWidget method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_node_by_id">get_node_by_id() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_node_by_id">get_node_by_id() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_node_by_name">get_node_by_name() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_node_by_name">get_node_by_name() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.get_node_by_port">get_node_by_port() (NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.get_node_by_port">get_node_by_port() (NodeGraphQt.SubGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_nodes_by_type">get_nodes_by_type() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_nodes_by_type">get_nodes_by_type() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.get_output">get_output() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.get_output_port_nodes">get_output_port_nodes() (NodeGraphQt.SubGraph method)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.get_output_port_nodes">get_output_port_nodes() (NodeGraphQt.SubGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.get_property">get_property() (NodeGraphQt.NodeObject method)</a>
 </li>
@@ -467,7 +473,7 @@
 </li>
 <li><a href="nodes/GroupNode.html#NodeGraphQt.GroupNode.get_sub_graph_session">get_sub_graph_session() (NodeGraphQt.GroupNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_unique_name">get_unique_name() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_unique_name">get_unique_name() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.get_value">get_value() (NodeGraphQt.NodeBaseWidget method)</a>
 <ul>
@@ -480,13 +486,13 @@
 </ul></li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.get_widget">get_widget() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.get_zoom">get_zoom() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.get_zoom">get_zoom() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.graph">graph (NodeGraphQt.NodeObject property)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.ViewerEnum.GRID_COLOR">GRID_COLOR (NodeGraphQt.constants.ViewerEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.grid_color">grid_color() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.grid_color">grid_color() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS">GRID_DISPLAY_DOTS (NodeGraphQt.constants.ViewerEnum attribute)</a>
 </li>
@@ -534,11 +540,11 @@
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.id">id (NodeGraphQt.NodeObject property)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.import_session">import_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.import_session">import_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PortTypeEnum.IN">IN (NodeGraphQt.constants.PortTypeEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.initialized_graphs">initialized_graphs (NodeGraphQt.SubGraph property)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.initialized_graphs">initialized_graphs (NodeGraphQt.SubGraph property)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.input">input() (NodeGraphQt.BaseNode method)</a>
 </li>
@@ -550,11 +556,11 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.NodePropWidgetEnum.INT">INT (NodeGraphQt.constants.NodePropWidgetEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.invert_selection">invert_selection() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.invert_selection">invert_selection() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/GroupNode.html#NodeGraphQt.GroupNode.is_expanded">is_expanded (NodeGraphQt.GroupNode property)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.is_root">is_root (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.is_root">is_root (NodeGraphQt.NodeGraph property)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.ViewerNavEnum.ITEM_COLOR">ITEM_COLOR (NodeGraphQt.constants.ViewerNavEnum attribute)</a>
 </li>
@@ -563,24 +569,24 @@
 <h2 id="L">L</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.layout_direction">layout_direction() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.layout_direction">layout_direction() (NodeGraphQt.NodeGraph method)</a>
 <ul>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.layout_direction">(NodeGraphQt.NodeObject method)</a>
 </li>
 </ul></li>
 <li><a href="constants.html#NodeGraphQt.constants.LayoutDirectionEnum">LayoutDirectionEnum (class in NodeGraphQt.constants)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.limit">limit() (NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.limit">limit() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.load_dialog">load_dialog() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.load_dialog">load_dialog() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.load_session">load_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.load_session">load_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.lock">lock() (NodeGraphQt.Port method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.lock_bin">lock_bin() (NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.lock_bin">lock_bin() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.locked">locked() (NodeGraphQt.Port method)</a>
 </li>
@@ -591,11 +597,11 @@
 <td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="constants.html#NodeGraphQt.constants.VersionEnum.MAJOR">MAJOR (NodeGraphQt.constants.VersionEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.message_dialog">message_dialog() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.message_dialog">message_dialog() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.VersionEnum.MINOR">MINOR (NodeGraphQt.constants.VersionEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.model">model (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.model">model (NodeGraphQt.NodeGraph property)</a>
 <ul>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.model">(NodeGraphQt.NodeObject property)</a>
 </li>
@@ -625,23 +631,23 @@
 <li><a href="port.html#NodeGraphQt.Port.name">(NodeGraphQt.Port method)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.navigation_widget">navigation_widget (NodeGraphQt.SubGraph property)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.navigation_widget">navigation_widget (NodeGraphQt.SubGraph property)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.node">node (NodeGraphQt.SubGraph property)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.node">node (NodeGraphQt.SubGraph property)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.node">node() (NodeGraphQt.Port method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.node_created">node_created (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.node_created">node_created (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.node_double_clicked">node_double_clicked (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.node_double_clicked">node_double_clicked (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.node_factory">node_factory (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.node_factory">node_factory (NodeGraphQt.NodeGraph property)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.NODE_NAME">NODE_NAME (NodeGraphQt.NodeObject attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.node_selected">node_selected (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.node_selected">node_selected (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.node_selection_changed">node_selection_changed (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.node_selection_changed">node_selection_changed (NodeGraphQt.NodeGraph attribute)</a>
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget">NodeBaseWidget (class in NodeGraphQt)</a>
 </li>
@@ -653,7 +659,7 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.NodeEnum">NodeEnum (class in NodeGraphQt.constants)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph">NodeGraph (class in NodeGraphQt)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph">NodeGraph (class in NodeGraphQt)</a>
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphCommand">NodeGraphCommand (class in NodeGraphQt)</a>
 </li>
@@ -674,15 +680,15 @@
 </li>
 <li><a href="nodes/BackdropNode.html#NodeGraphQt.BackdropNode.nodes">nodes() (NodeGraphQt.BackdropNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.nodes_deleted">nodes_deleted (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.nodes_deleted">nodes_deleted (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.nodes_registered">nodes_registered (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.nodes_registered">nodes_registered (NodeGraphQt.NodeGraph attribute)</a>
 </li>
 <li><a href="menu.html#NodeGraphQt.NodesMenu">NodesMenu (class in NodeGraphQt)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesPaletteWidget">NodesPaletteWidget (class in NodeGraphQt)</a>
+<li><a href="builtin_widgets/NodesPaletteWidget.html#NodeGraphQt.NodesPaletteWidget">NodesPaletteWidget (class in NodeGraphQt)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesTreeWidget">NodesTreeWidget (class in NodeGraphQt)</a>
+<li><a href="builtin_widgets/NodesTreeWidget.html#NodeGraphQt.NodesTreeWidget">NodesTreeWidget (class in NodeGraphQt)</a>
 </li>
 </ul></td>
 </tr></table>
@@ -712,22 +718,22 @@
 <h2 id="P">P</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.SubGraph.parent_graph">parent_graph (NodeGraphQt.SubGraph property)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.parent_graph">parent_graph (NodeGraphQt.SubGraph property)</a>
 </li>
 <li><a href="nodes/PortNode.html#NodeGraphQt.nodes.port_node.PortInputNode.parent_port">parent_port (NodeGraphQt.nodes.port_node.PortInputNode property)</a>
 <ul>
 <li><a href="nodes/PortNode.html#NodeGraphQt.nodes.port_node.PortOutputNode.parent_port">(NodeGraphQt.nodes.port_node.PortOutputNode property)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.paste_nodes">paste_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.paste_nodes">paste_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.VersionEnum.PATCH">PATCH (NodeGraphQt.constants.VersionEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.pipe_collision">pipe_collision() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.pipe_collision">pipe_collision() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.pipe_slicing">pipe_slicing() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.pipe_slicing">pipe_slicing() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.pipe_style">pipe_style() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.pipe_style">pipe_style() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeEnum">PipeEnum (class in NodeGraphQt.constants)</a>
 </li>
@@ -739,11 +745,11 @@
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.port_connected">port_connected (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_connected">port_connected (NodeGraphQt.NodeGraph attribute)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.port_deletion_allowed">port_deletion_allowed() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.port_disconnected">port_disconnected (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_disconnected">port_disconnected (NodeGraphQt.NodeGraph attribute)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PortEnum">PortEnum (class in NodeGraphQt.constants)</a>
 </li>
@@ -755,15 +761,15 @@
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.pos">pos() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.prop_widget">prop_widget() (NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.prop_widget">prop_widget() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.properties">properties() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget">PropertiesBinWidget (class in NodeGraphQt)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget">PropertiesBinWidget (class in NodeGraphQt)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.property_changed">property_changed (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.property_changed">property_changed (NodeGraphQt.NodeGraph attribute)</a>
 <ul>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.property_changed">(NodeGraphQt.PropertiesBinWidget attribute)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.property_changed">(NodeGraphQt.PropertiesBinWidget attribute)</a>
 </li>
 </ul></li>
 </ul></td>
@@ -787,18 +793,18 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.NodePropWidgetEnum.QTEXT_EDIT">QTEXT_EDIT (NodeGraphQt.constants.NodePropWidgetEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.question_dialog">question_dialog() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.question_dialog">question_dialog() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 </tr></table>
 <h2 id="R">R</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.register_node">register_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.register_node">register_node() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.register_nodes">register_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.register_nodes">register_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.registered_nodes">registered_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.registered_nodes">registered_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.rejected_port_types">rejected_port_types() (NodeGraphQt.BaseNode method)</a>
 <ul>
@@ -807,12 +813,12 @@
 </ul></li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.remove_node">remove_node() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.remove_node">remove_node() (NodeGraphQt.NodeGraph method)</a>
 <ul>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.remove_node">(NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.remove_node">(NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 </ul></li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.reset_zoom">reset_zoom() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.reset_zoom">reset_zoom() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphCommand.run_command">run_command() (NodeGraphQt.NodeGraphCommand method)</a>
 </li>
@@ -821,13 +827,13 @@
 <h2 id="S">S</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.save_dialog">save_dialog() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.save_dialog">save_dialog() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.save_session">save_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.save_session">save_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.scene">scene() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.scene">scene() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.select_all">select_all() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.select_all">select_all() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.selected">selected() (NodeGraphQt.NodeObject method)</a>
 </li>
@@ -835,28 +841,28 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.NodeEnum.SELECTED_COLOR">SELECTED_COLOR (NodeGraphQt.constants.NodeEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.selected_nodes">selected_nodes() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.selected_nodes">selected_nodes() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.serialize">serialize() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.serialize_session">serialize_session() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.serialize_session">serialize_session() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.session_changed">session_changed (NodeGraphQt.NodeGraph attribute)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.session_changed">session_changed (NodeGraphQt.NodeGraph attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_acyclic">set_acyclic() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_acyclic">set_acyclic() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_background_color">set_background_color() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_background_color">set_background_color() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesPaletteWidget.set_category_label">set_category_label() (NodeGraphQt.NodesPaletteWidget method)</a>
+<li><a href="builtin_widgets/NodesPaletteWidget.html#NodeGraphQt.NodesPaletteWidget.set_category_label">set_category_label() (NodeGraphQt.NodesPaletteWidget method)</a>
 <ul>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesTreeWidget.set_category_label">(NodeGraphQt.NodesTreeWidget method)</a>
+<li><a href="builtin_widgets/NodesTreeWidget.html#NodeGraphQt.NodesTreeWidget.set_category_label">(NodeGraphQt.NodesTreeWidget method)</a>
 </li>
 </ul></li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_color">set_color() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_context_menu">set_context_menu() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_context_menu">set_context_menu() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_context_menu_from_file">set_context_menu_from_file() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_context_menu_from_file">set_context_menu_from_file() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.set_custom_widget">set_custom_widget() (NodeGraphQt.NodeBaseWidget method)</a>
 </li>
@@ -864,9 +870,9 @@
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphCommand.set_enabled">set_enabled() (NodeGraphQt.NodeGraphCommand method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_grid_color">set_grid_color() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_grid_color">set_grid_color() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_grid_mode">set_grid_mode() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_grid_mode">set_grid_mode() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="menu.html#NodeGraphQt.NodeGraphCommand.set_hidden">set_hidden() (NodeGraphQt.NodeGraphCommand method)</a>
 </li>
@@ -876,12 +882,12 @@
 </li>
 <li><a href="node_widgets.html#NodeGraphQt.NodeBaseWidget.set_label">set_label() (NodeGraphQt.NodeBaseWidget method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_layout_direction">set_layout_direction() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_layout_direction">set_layout_direction() (NodeGraphQt.NodeGraph method)</a>
 <ul>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_layout_direction">(NodeGraphQt.NodeObject method)</a>
 </li>
 </ul></li>
-<li><a href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget.set_limit">set_limit() (NodeGraphQt.PropertiesBinWidget method)</a>
+<li><a href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget.set_limit">set_limit() (NodeGraphQt.PropertiesBinWidget method)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.set_locked">set_locked() (NodeGraphQt.Port method)</a>
 </li>
@@ -898,11 +904,11 @@
 <td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.set_output">set_output() (NodeGraphQt.BaseNode method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_pipe_collision">set_pipe_collision() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_pipe_collision">set_pipe_collision() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_pipe_slicing">set_pipe_slicing() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_pipe_slicing">set_pipe_slicing() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_pipe_style">set_pipe_style() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_pipe_style">set_pipe_style() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.set_port_deletion_allowed">set_port_deletion_allowed() (NodeGraphQt.BaseNode method)</a>
 </li>
@@ -939,9 +945,9 @@
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.set_y_pos">set_y_pos() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.set_zoom">set_zoom() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_zoom">set_zoom() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.show">show() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.show">show() (NodeGraphQt.NodeGraph method)</a>
 <ul>
 <li><a href="menu.html#NodeGraphQt.NodeGraphCommand.show">(NodeGraphQt.NodeGraphCommand method)</a>
 </li>
@@ -960,24 +966,24 @@
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT">STRAIGHT (NodeGraphQt.constants.PipeLayoutEnum attribute)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.sub_graphs">sub_graphs (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.sub_graphs">sub_graphs (NodeGraphQt.NodeGraph property)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph">SubGraph (class in NodeGraphQt)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph">SubGraph (class in NodeGraphQt)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.SubGraph.subviewer_widget">subviewer_widget (NodeGraphQt.SubGraph property)</a>
+<li><a href="graphs/SubGraph.html#NodeGraphQt.SubGraph.subviewer_widget">subviewer_widget (NodeGraphQt.SubGraph property)</a>
 </li>
 </ul></td>
 </tr></table>
 <h2 id="T">T</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesPaletteWidget.tab_widget">tab_widget() (NodeGraphQt.NodesPaletteWidget method)</a>
+<li><a href="builtin_widgets/NodesPaletteWidget.html#NodeGraphQt.NodesPaletteWidget.tab_widget">tab_widget() (NodeGraphQt.NodesPaletteWidget method)</a>
 </li>
 <li><a href="nodes/BackdropNode.html#NodeGraphQt.BackdropNode.text">text() (NodeGraphQt.BackdropNode method)</a>
 </li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.toggle_node_search">toggle_node_search() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.toggle_node_search">toggle_node_search() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.type_">type_ (NodeGraphQt.NodeObject attribute)</a>
 </li>
@@ -988,24 +994,24 @@
 <h2 id="U">U</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.undo_stack">undo_stack() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.undo_stack">undo_stack() (NodeGraphQt.NodeGraph method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.undo_view">undo_view (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.undo_view">undo_view (NodeGraphQt.NodeGraph property)</a>
 </li>
 <li><a href="port.html#NodeGraphQt.Port.unlock">unlock() (NodeGraphQt.Port method)</a>
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.update">update() (NodeGraphQt.NodeObject method)</a>
 <ul>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesPaletteWidget.update">(NodeGraphQt.NodesPaletteWidget method)</a>
+<li><a href="builtin_widgets/NodesPaletteWidget.html#NodeGraphQt.NodesPaletteWidget.update">(NodeGraphQt.NodesPaletteWidget method)</a>
 </li>
-<li><a href="custom_widgets.html#NodeGraphQt.NodesTreeWidget.update">(NodeGraphQt.NodesTreeWidget method)</a>
+<li><a href="builtin_widgets/NodesTreeWidget.html#NodeGraphQt.NodesTreeWidget.update">(NodeGraphQt.NodesTreeWidget method)</a>
 </li>
 </ul></li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.update_model">update_model() (NodeGraphQt.NodeObject method)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.use_OpenGL">use_OpenGL() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.use_OpenGL">use_OpenGL() (NodeGraphQt.NodeGraph method)</a>
 </li>
 </ul></td>
 </tr></table>
@@ -1030,7 +1036,7 @@
 </li>
 <li><a href="nodes/NodeObject.html#NodeGraphQt.NodeObject.view">view (NodeGraphQt.NodeObject property)</a>
 </li>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.viewer">viewer() (NodeGraphQt.NodeGraph method)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.viewer">viewer() (NodeGraphQt.NodeGraph method)</a>
 </li>
 <li><a href="constants.html#NodeGraphQt.constants.ViewerEnum">ViewerEnum (class in NodeGraphQt.constants)</a>
 </li>
@@ -1043,7 +1049,7 @@
 <h2 id="W">W</h2>
 <table class="indextable genindextable" style="width: 100%"><tr>
 <td style="width: 33%; vertical-align: top;"><ul>
-<li><a href="graph.html#NodeGraphQt.NodeGraph.widget">widget (NodeGraphQt.NodeGraph property)</a>
+<li><a href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.widget">widget (NodeGraphQt.NodeGraph property)</a>
 </li>
 <li><a href="nodes/BaseNode.html#NodeGraphQt.BaseNode.widgets">widgets() (NodeGraphQt.BaseNode method)</a>
 </li>

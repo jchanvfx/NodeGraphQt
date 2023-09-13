@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=805da7bd"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=242523a4"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -101,7 +101,11 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../graphs/_index_graphs.html">Graphs<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../graphs/NodeGraph.html">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graphs/SubGraph.html">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
@@ -116,11 +120,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html">PropertiesBinWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesPaletteWidget.html">NodesPaletteWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.23</code>
 </nav>
 </div>
 </div>
@@ -214,7 +220,7 @@ or returns None.</p>
 <dd class="field-odd"><p>sub graph controller.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
+<dd class="field-even"><p><a class="reference internal" href="../graphs/SubGraph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -247,15 +253,15 @@ or returns None.</p>
 <dd><p>Expand the group node session.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.expand_group_node()</span></code></a>,
-<a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.expand_group_node()</span></code></a>.</p>
+<p><a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph.expand_group_node" title="NodeGraphQt.NodeGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.expand_group_node()</span></code></a>,
+<a class="reference internal" href="../graphs/SubGraph.html#NodeGraphQt.SubGraph.expand_group_node" title="NodeGraphQt.SubGraph.expand_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.expand_group_node()</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>node graph used to manage the nodes expaneded session.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
+<dd class="field-even"><p><a class="reference internal" href="../graphs/SubGraph.html#NodeGraphQt.SubGraph" title="NodeGraphQt.SubGraph">SubGraph</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -265,8 +271,8 @@ or returns None.</p>
 <dd><p>Collapse the group node session it’s expanded child sub graphs.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.collapse_group_node" title="NodeGraphQt.NodeGraph.collapse_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.collapse_group_node()</span></code></a>,
-<a class="reference internal" href="../graph.html#NodeGraphQt.SubGraph.collapse_group_node" title="NodeGraphQt.SubGraph.collapse_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.collapse_group_node()</span></code></a>.</p>
+<p><a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph.collapse_group_node" title="NodeGraphQt.NodeGraph.collapse_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.collapse_group_node()</span></code></a>,
+<a class="reference internal" href="../graphs/SubGraph.html#NodeGraphQt.SubGraph.collapse_group_node" title="NodeGraphQt.SubGraph.collapse_group_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SubGraph.collapse_group_node()</span></code></a>.</p>
 </div>
 </dd></dl>
 <dl class="py method">

@@ -7,9 +7,9 @@
 <meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
 <meta content="black" metia="(prefers-color-scheme: dark)" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Node Widgets | NodeGraphQt</title>
-<meta content="Node Widgets | NodeGraphQt" property="og:title"/>
-<meta content="Node Widgets | NodeGraphQt" name="twitter:title"/>
+<title>Embedded Node Widgets | NodeGraphQt</title>
+<meta content="Embedded Node Widgets | NodeGraphQt" property="og:title"/>
+<meta content="Embedded Node Widgets | NodeGraphQt" name="twitter:title"/>
 <link href="_static/pygments.css" rel="stylesheet"/>
 <link href="_static/theme.3849c567b4e07dd3db70.css" rel="stylesheet"/>
 <link href="_static/graphviz.css" rel="stylesheet"/>
@@ -17,7 +17,8 @@
 <link href="_static/favicon.png" rel="icon"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
-<link href="custom_widgets.html" rel="prev" title="Built-in Widgets"/>
+<link href="builtin_widgets/PropertiesBinWidget.html" rel="next" title="PropertiesBinWidget"/>
+<link href="menu.html" rel="prev" title="Menus"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -30,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=805da7bd"></script>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=242523a4"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -100,7 +101,11 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphs</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="graphs/_index_graphs.html">Graphs<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="graphs/NodeGraph.html">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/SubGraph.html">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="nodes/_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="nodes/NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/BackdropNode.html">BackdropNode</a></li>
@@ -115,11 +120,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Widgets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/PropertiesBinWidget.html">PropertiesBinWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesPaletteWidget.html">NodesPaletteWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.23</code>
 </nav>
 </div>
 </div>
@@ -138,16 +145,17 @@
 <path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
 </svg>
 </a>
-<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Node Widgets</span>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Embedded Node Widgets</span>
 </nav>
 <div id="content" role="main">
-<section id="node-widgets">
-<h1>Node Widgets<a class="headerlink" href="#node-widgets" title="Permalink to this heading"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="embedded-node-widgets">
+<h1>Embedded Node Widgets<a class="headerlink" href="#embedded-node-widgets" title="Permalink to this heading"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
 <div class="line-block">
-<div class="line">Node widgets are the widgets that can be embedded into a
+<div class="line">Embedded node widgets are the widgets that can be embedded into a
 <a class="reference internal" href="nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> and displayed in the node graph.</div>
 </div>
 <div class="line-block">
+<div class="line"><br/></div>
 <div class="line">To create your own widget embedded in a node see the
 <a class="reference internal" href="examples/ex_node.html#embedding-custom-widgets"><span class="std std-ref">Embedding Custom Widgets</span></a> example page.</div>
 </div>
@@ -570,12 +578,20 @@ the node.</p>
 </section>
 </div><div class="flex justify-between items-center pt-6 mt-12 border-t border-border gap-4">
 <div class="mr-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="custom_widgets.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="menu.html">
 <svg class="mr-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="15 18 9 12 15 6"></polyline>
 </svg>
-        Built-in Widgets
+        Menus
       </a>
+</div>
+<div class="ml-auto">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="builtin_widgets/PropertiesBinWidget.html">
+        PropertiesBinWidget
+        <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</a>
 </div>
 </div></div>
 </main>

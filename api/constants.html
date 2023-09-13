@@ -17,7 +17,7 @@
 <link href="_static/favicon.png" rel="icon"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
-<link href="graph.html" rel="next" title="Graphs"/>
+<link href="graphs/_index_graphs.html" rel="next" title="Graphs"/>
 <link href="host_apps/ex_app_silhouette.html" rel="prev" title="Silhouette"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=805da7bd"></script>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=242523a4"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -101,7 +101,11 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphs</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="graphs/_index_graphs.html">Graphs<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="graphs/NodeGraph.html">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/SubGraph.html">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="nodes/_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
 <li class="toctree-l2"><a class="reference internal" href="nodes/NodeObject.html">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/BackdropNode.html">BackdropNode</a></li>
@@ -116,11 +120,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="custom_widgets.html">Built-in Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_widgets.html">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/PropertiesBinWidget.html">PropertiesBinWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesPaletteWidget.html">NodesPaletteWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.23</code>
 </nav>
 </div>
 </div>
@@ -182,7 +188,7 @@ used throughout the NodeGraphQt library.</div>
 <td><p>Pipe connection drawing layout: <a class="reference internal" href="#NodeGraphQt.constants.PipeLayoutEnum" title="NodeGraphQt.constants.PipeLayoutEnum"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NodeGraphQt.constants.PipeLayoutEnum</span></code></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum" title="NodeGraphQt.constants.NodePropWidgetEnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NodePropWidgetEnum</span></code></a>(value)</p></td>
-<td><p>Mapping used for the <a class="reference internal" href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> to display a node property in the specified widget type.</p></td>
+<td><p>Mapping used for the <a class="reference internal" href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> to display a node property in the specified widget type.</p></td>
 </tr>
 </tbody>
 </table>
@@ -210,7 +216,7 @@ used throughout the NodeGraphQt library.</div>
 </table>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="NodeGraphQt.constants.VersionEnum.VERSION">
-<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.6.22'</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.VERSION" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.constants.VersionEnum.VERSION'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.6.23'</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.VERSION" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.constants.VersionEnum.VERSION'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>current version string.</p>
 </dd></dl>
 <dl class="py attribute">
@@ -225,7 +231,7 @@ used throughout the NodeGraphQt library.</div>
 </dd></dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="NodeGraphQt.constants.VersionEnum.PATCH">
-<span class="sig-name descname"><span class="pre">PATCH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.PATCH" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.constants.VersionEnum.PATCH'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">PATCH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#NodeGraphQt.constants.VersionEnum.PATCH" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.constants.VersionEnum.PATCH'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>version patch int.</p>
 </dd></dl>
 </dd></dl>
@@ -635,7 +641,7 @@ used throughout the NodeGraphQt library.</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="NodeGraphQt.constants.NodePropWidgetEnum">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">NodeGraphQt.constants.</span></span><span class="sig-name descname"><span class="pre">NodePropWidgetEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.constants.NodePropWidgetEnum" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.constants.NodePropWidgetEnum'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Mapping used for the <a class="reference internal" href="custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> to display a
+<dd><p>Mapping used for the <a class="reference internal" href="builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a> to display a
 node property in the specified widget type.</p>
 <p><a class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum" title="NodeGraphQt.constants.NodePropWidgetEnum"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum</span></code></a></p>
 <p><strong>Attributes:</strong></p>
@@ -815,14 +821,114 @@ node property in the specified widget type.</p>
       </a>
 </div>
 <div class="ml-auto">
-<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="graph.html">
+<a class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input hover:bg-accent hover:text-accent-foreground py-2 px-4" href="graphs/_index_graphs.html">
         Graphs
         <svg class="ml-2 h-4 w-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 18 15 12 9 6"></polyline>
 </svg>
 </a>
 </div>
-</div></div>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">Page Contents</p>
+<ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.VersionEnum'" class="reference internal" href="#NodeGraphQt.constants.VersionEnum"><code class="docutils literal notranslate"><span class="pre">VersionEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.VersionEnum.VERSION'" class="reference internal" href="#NodeGraphQt.constants.VersionEnum.VERSION"><code class="docutils literal notranslate"><span class="pre">VersionEnum.VERSION</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.VersionEnum.MAJOR'" class="reference internal" href="#NodeGraphQt.constants.VersionEnum.MAJOR"><code class="docutils literal notranslate"><span class="pre">VersionEnum.MAJOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.VersionEnum.MINOR'" class="reference internal" href="#NodeGraphQt.constants.VersionEnum.MINOR"><code class="docutils literal notranslate"><span class="pre">VersionEnum.MINOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.VersionEnum.PATCH'" class="reference internal" href="#NodeGraphQt.constants.VersionEnum.PATCH"><code class="docutils literal notranslate"><span class="pre">VersionEnum.PATCH</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.LayoutDirectionEnum'" class="reference internal" href="#NodeGraphQt.constants.LayoutDirectionEnum"><code class="docutils literal notranslate"><span class="pre">LayoutDirectionEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL'" class="reference internal" href="#NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL"><code class="docutils literal notranslate"><span class="pre">LayoutDirectionEnum.HORIZONTAL</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL'" class="reference internal" href="#NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL"><code class="docutils literal notranslate"><span class="pre">LayoutDirectionEnum.VERTICAL</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum"><code class="docutils literal notranslate"><span class="pre">ViewerEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.BACKGROUND_COLOR'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.BACKGROUND_COLOR"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.BACKGROUND_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_NONE"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.GRID_DISPLAY_NONE</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_DOTS"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.GRID_DISPLAY_DOTS</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.GRID_DISPLAY_LINES"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.GRID_DISPLAY_LINES</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.GRID_SIZE'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.GRID_SIZE"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.GRID_SIZE</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerEnum.GRID_COLOR'" class="reference internal" href="#NodeGraphQt.constants.ViewerEnum.GRID_COLOR"><code class="docutils literal notranslate"><span class="pre">ViewerEnum.GRID_COLOR</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerNavEnum'" class="reference internal" href="#NodeGraphQt.constants.ViewerNavEnum"><code class="docutils literal notranslate"><span class="pre">ViewerNavEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerNavEnum.BACKGROUND_COLOR'" class="reference internal" href="#NodeGraphQt.constants.ViewerNavEnum.BACKGROUND_COLOR"><code class="docutils literal notranslate"><span class="pre">ViewerNavEnum.BACKGROUND_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.ViewerNavEnum.ITEM_COLOR'" class="reference internal" href="#NodeGraphQt.constants.ViewerNavEnum.ITEM_COLOR"><code class="docutils literal notranslate"><span class="pre">ViewerNavEnum.ITEM_COLOR</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum"><code class="docutils literal notranslate"><span class="pre">NodeEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum.WIDTH'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum.WIDTH"><code class="docutils literal notranslate"><span class="pre">NodeEnum.WIDTH</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum.HEIGHT'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum.HEIGHT"><code class="docutils literal notranslate"><span class="pre">NodeEnum.HEIGHT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum.ICON_SIZE'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum.ICON_SIZE"><code class="docutils literal notranslate"><span class="pre">NodeEnum.ICON_SIZE</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum.SELECTED_COLOR'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum.SELECTED_COLOR"><code class="docutils literal notranslate"><span class="pre">NodeEnum.SELECTED_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodeEnum.SELECTED_BORDER_COLOR'" class="reference internal" href="#NodeGraphQt.constants.NodeEnum.SELECTED_BORDER_COLOR"><code class="docutils literal notranslate"><span class="pre">NodeEnum.SELECTED_BORDER_COLOR</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum'" class="reference internal" href="#NodeGraphQt.constants.PortEnum"><code class="docutils literal notranslate"><span class="pre">PortEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.SIZE'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.SIZE"><code class="docutils literal notranslate"><span class="pre">PortEnum.SIZE</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.BORDER_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.BORDER_COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.BORDER_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.ACTIVE_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.ACTIVE_COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.ACTIVE_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.ACTIVE_BORDER_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.ACTIVE_BORDER_COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.ACTIVE_BORDER_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.HOVER_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.HOVER_COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.HOVER_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.HOVER_BORDER_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.HOVER_BORDER_COLOR"><code class="docutils literal notranslate"><span class="pre">PortEnum.HOVER_BORDER_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortEnum.CLICK_FALLOFF'" class="reference internal" href="#NodeGraphQt.constants.PortEnum.CLICK_FALLOFF"><code class="docutils literal notranslate"><span class="pre">PortEnum.CLICK_FALLOFF</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortTypeEnum'" class="reference internal" href="#NodeGraphQt.constants.PortTypeEnum"><code class="docutils literal notranslate"><span class="pre">PortTypeEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortTypeEnum.IN'" class="reference internal" href="#NodeGraphQt.constants.PortTypeEnum.IN"><code class="docutils literal notranslate"><span class="pre">PortTypeEnum.IN</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PortTypeEnum.OUT'" class="reference internal" href="#NodeGraphQt.constants.PortTypeEnum.OUT"><code class="docutils literal notranslate"><span class="pre">PortTypeEnum.OUT</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum"><code class="docutils literal notranslate"><span class="pre">PipeEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.WIDTH'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.WIDTH"><code class="docutils literal notranslate"><span class="pre">PipeEnum.WIDTH</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.COLOR'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.COLOR"><code class="docutils literal notranslate"><span class="pre">PipeEnum.COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.DISABLED_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.DISABLED_COLOR"><code class="docutils literal notranslate"><span class="pre">PipeEnum.DISABLED_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.ACTIVE_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.ACTIVE_COLOR"><code class="docutils literal notranslate"><span class="pre">PipeEnum.ACTIVE_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.HIGHLIGHT_COLOR'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.HIGHLIGHT_COLOR"><code class="docutils literal notranslate"><span class="pre">PipeEnum.HIGHLIGHT_COLOR</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DEFAULT'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DEFAULT"><code class="docutils literal notranslate"><span class="pre">PipeEnum.DRAW_TYPE_DEFAULT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DASHED'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DASHED"><code class="docutils literal notranslate"><span class="pre">PipeEnum.DRAW_TYPE_DASHED</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DOTTED'" class="reference internal" href="#NodeGraphQt.constants.PipeEnum.DRAW_TYPE_DOTTED"><code class="docutils literal notranslate"><span class="pre">PipeEnum.DRAW_TYPE_DOTTED</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeSlicerEnum'" class="reference internal" href="#NodeGraphQt.constants.PipeSlicerEnum"><code class="docutils literal notranslate"><span class="pre">PipeSlicerEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeSlicerEnum.WIDTH'" class="reference internal" href="#NodeGraphQt.constants.PipeSlicerEnum.WIDTH"><code class="docutils literal notranslate"><span class="pre">PipeSlicerEnum.WIDTH</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeSlicerEnum.COLOR'" class="reference internal" href="#NodeGraphQt.constants.PipeSlicerEnum.COLOR"><code class="docutils literal notranslate"><span class="pre">PipeSlicerEnum.COLOR</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeLayoutEnum'" class="reference internal" href="#NodeGraphQt.constants.PipeLayoutEnum"><code class="docutils literal notranslate"><span class="pre">PipeLayoutEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT'" class="reference internal" href="#NodeGraphQt.constants.PipeLayoutEnum.STRAIGHT"><code class="docutils literal notranslate"><span class="pre">PipeLayoutEnum.STRAIGHT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeLayoutEnum.CURVED'" class="reference internal" href="#NodeGraphQt.constants.PipeLayoutEnum.CURVED"><code class="docutils literal notranslate"><span class="pre">PipeLayoutEnum.CURVED</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.PipeLayoutEnum.ANGLE'" class="reference internal" href="#NodeGraphQt.constants.PipeLayoutEnum.ANGLE"><code class="docutils literal notranslate"><span class="pre">PipeLayoutEnum.ANGLE</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum</span></code></a><ul>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.HIDDEN"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.HIDDEN</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QLABEL'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QLABEL"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QLABEL</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QLINE_EDIT'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QLINE_EDIT"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QLINE_EDIT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QTEXT_EDIT'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QTEXT_EDIT"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QTEXT_EDIT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QCOMBO_BOX</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QCHECK_BOX'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QCHECK_BOX"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QCHECK_BOX</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QSPIN_BOX'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QSPIN_BOX"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QSPIN_BOX</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.QDOUBLESPIN_BOX'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.QDOUBLESPIN_BOX"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.QDOUBLESPIN_BOX</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.COLOR_PICKER'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.COLOR_PICKER"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.COLOR_PICKER</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.COLOR4_PICKER'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.COLOR4_PICKER"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.COLOR4_PICKER</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.SLIDER</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.DOUBLE_SLIDER'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.DOUBLE_SLIDER"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.DOUBLE_SLIDER</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.FILE_OPEN'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.FILE_OPEN"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.FILE_OPEN</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.FILE_SAVE'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.FILE_SAVE"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.FILE_SAVE</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR2'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR2"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.VECTOR2</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR3'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR3"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.VECTOR3</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR4'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.VECTOR4"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.VECTOR4</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.FLOAT'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.FLOAT"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.FLOAT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.INT'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.INT"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.INT</span></code></a></li>
+<li><a :data-current="activeSection === '#NodeGraphQt.constants.NodePropWidgetEnum.BUTTON'" class="reference internal" href="#NodeGraphQt.constants.NodePropWidgetEnum.BUTTON"><code class="docutils literal notranslate"><span class="pre">NodePropWidgetEnum.BUTTON</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
 </main>
 </div>
 </div><footer class="py-6 border-t border-border md:py-0">

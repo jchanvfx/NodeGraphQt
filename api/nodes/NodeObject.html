@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=805da7bd"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=242523a4"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -101,7 +101,11 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../graph.html">Graphs</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../graphs/_index_graphs.html">Graphs<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../graphs/NodeGraph.html">NodeGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graphs/SubGraph.html">SubGraph</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="_index_nodes.html">Nodes<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">NodeObject</a></li>
 <li class="toctree-l2"><a class="reference internal" href="BackdropNode.html">BackdropNode</a></li>
@@ -116,11 +120,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../custom_widgets.html">Built-in Widgets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_widgets.html">Embedded Node Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html">PropertiesBinWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesPaletteWidget.html">NodesPaletteWidget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.22</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.23</code>
 </nav>
 </div>
 </div>
@@ -349,7 +355,7 @@ nodes inherit from.</p>
 <dd class="field-odd"><p>node graph instance.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph">NodeGraphQt.NodeGraph</a></p>
+<dd class="field-even"><p><a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph" title="NodeGraphQt.NodeGraph">NodeGraphQt.NodeGraph</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,12 +556,12 @@ nodes inherit from.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeObject.create_property">
-<span class="sig-name descname"><span class="pre">create_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeObject.create_property'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">create_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget_tooltip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeObject.create_property" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeObject.create_property'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Creates a custom property to the node.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Custom node properties bin widget
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p>
+<a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p>
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
@@ -573,9 +579,11 @@ attr:<cite>NodeGraphQt.constants.NodePropWidgetEnum.QCOMBO_BOX</cite></p></li>
 <li><p><strong>range</strong> (<em>tuple</em><em> or </em><em>list</em>) – <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max)</span></code> values used by
 <a class="reference internal" href="../constants.html#NodeGraphQt.constants.NodePropWidgetEnum.SLIDER" title="NodeGraphQt.constants.NodePropWidgetEnum.SLIDER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.constants.NodePropWidgetEnum.SLIDER</span></code></a></p></li>
 <li><p><strong>widget_type</strong> (<em>int</em>) – widget flag to display in the
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p></li>
+<a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p></li>
+<li><p><strong>widget_tooltip</strong> (<em>str</em>) – widget tooltip for the property widget
+displayed in the <a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a></p></li>
 <li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in the
-<a class="reference internal" href="../custom_widgets.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a>.</p></li>
+<a class="reference internal" href="../builtin_widgets/PropertiesBinWidget.html#NodeGraphQt.PropertiesBinWidget" title="NodeGraphQt.PropertiesBinWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.PropertiesBinWidget</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -741,7 +749,7 @@ the current node only.</p>
 <p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.3.0</span></code></p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="../graph.html#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a>
+<p><a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph.set_layout_direction" title="NodeGraphQt.NodeGraph.set_layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.set_layout_direction()</span></code></a>
 <a class="reference internal" href="#NodeGraphQt.NodeObject.layout_direction" title="NodeGraphQt.NodeObject.layout_direction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.layout_direction()</span></code></a></p>
 </div>
 <div class="admonition warning">
