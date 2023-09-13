@@ -8,7 +8,7 @@ TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
 
 
-class BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
+class _BaseNodeTreeItem(QtWidgets.QTreeWidgetItem):
 
     def __eq__(self, other):
         """
@@ -28,7 +28,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
         :parts: 1
         :top-classes: PySide2.QtWidgets.QWidget
 
-    .. image:: _images/nodes_tree.png
+    .. image:: ../_images/nodes_tree.png
         :width: 300px
 
     .. code-block:: python
@@ -92,7 +92,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
                 label = self._custom_labels[category]
             else:
                 label = '{}'.format(category)
-            cat_item = BaseNodeTreeItem(self, [label], type=TYPE_CATEGORY)
+            cat_item = _BaseNodeTreeItem(self, [label], type=TYPE_CATEGORY)
             cat_item.setFirstColumnSpanned(True)
             cat_item.setFlags(QtCore.Qt.ItemIsEnabled)
             cat_item.setBackground(0, QtGui.QBrush(palette.midlight().color()))
@@ -105,7 +105,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
             category = '.'.join(node_id.split('.')[:-1])
             category_item = self._category_items[category]
 
-            item = BaseNodeTreeItem(category_item, [node_name], type=TYPE_NODE)
+            item = _BaseNodeTreeItem(category_item, [node_name], type=TYPE_NODE)
             item.setToolTip(0, node_id)
             item.setSizeHint(0, QtCore.QSize(100, 26))
 
@@ -124,7 +124,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
         """
         Override the label for a node category root item.
 
-        .. image:: _images/nodes_tree_category_label.png
+        .. image:: ../_images/nodes_tree_category_label.png
             :width: 70%
 
         Args:

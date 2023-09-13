@@ -42,7 +42,7 @@ class NodeGraph(QtCore.QObject):
     .. inheritance-diagram:: NodeGraphQt.NodeGraph
         :top-classes: PySide2.QtCore.QObject
 
-    .. image:: _images/graph.png
+    .. image:: ../_images/graph.png
         :width: 60%
     """
 
@@ -980,7 +980,7 @@ class NodeGraph(QtCore.QObject):
         When set to true holding down ``Alt + Shift + LMB Drag`` will allow node
         pipe connections to be sliced.
 
-        .. image:: _images/slicer.png
+        .. image:: ../_images/slicer.png
             :width: 400px
 
         See Also:
@@ -1016,7 +1016,7 @@ class NodeGraph(QtCore.QObject):
 
         See: :attr:`NodeGraphQt.constants.PipeLayoutEnum`
 
-        .. image:: _images/pipe_layout_types.gif
+        .. image:: ../_images/pipe_layout_types.gif
             :width: 80%
 
 
@@ -1057,7 +1057,7 @@ class NodeGraph(QtCore.QObject):
         - :attr:`NodeGraphQt.constants.LayoutDirectionEnum.HORIZONTAL`
         - :attr:`NodeGraphQt.constants.LayoutDirectionEnum.VERTICAL`
 
-        .. image:: _images/layout_direction_switch.gif
+        .. image:: ../_images/layout_direction_switch.gif
             :width: 300px
 
         Warnings:
@@ -2468,7 +2468,7 @@ class SubGraph(NodeGraph):
     .. inheritance-diagram:: NodeGraphQt.SubGraph
         :top-classes: PySide2.QtCore.QObject
 
-    .. image:: _images/sub_graph.png
+    .. image:: ../_images/sub_graph.png
         :width: 70%
 
     -
@@ -2806,7 +2806,7 @@ class SubGraph(NodeGraph):
         """
         Returns the parent node to the sub graph.
 
-        .. image:: _images/group_node.png
+        .. image:: ../_images/group_node.png
             :width: 250px
 
         Returns:
@@ -2969,7 +2969,7 @@ class SubGraph(NodeGraph):
         """
         Return all the port nodes related to the group node input ports.
 
-        .. image:: _images/port_in_node.png
+        .. image:: ../_images/port_in_node.png
             :width: 150px
 
         -
@@ -2987,7 +2987,7 @@ class SubGraph(NodeGraph):
         """
         Return all the port nodes related to the group node output ports.
 
-        .. image:: _images/port_out_node.png
+        .. image:: ../_images/port_out_node.png
             :width: 150px
 
         -

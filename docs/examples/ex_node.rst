@@ -79,7 +79,7 @@ To you update the widget you can call the
  - ``QCheckBox``: :meth:`NodeGraphQt.BaseNode.add_checkbox`
  - ``QLineEdit``: :meth:`NodeGraphQt.BaseNode.add_text_input`
 
-See: :ref:`Node Widgets` for more node widget types.
+See: :ref:`Embedded Node Widgets` for more node widget types.
 
 |
 

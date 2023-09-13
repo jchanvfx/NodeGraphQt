@@ -7,7 +7,7 @@ from Qt import QtWidgets, QtCore, QtGui
 from NodeGraphQt.constants import URN_SCHEME
 
 
-class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
+class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
 
     def paint(self, painter, option, index):
         """
@@ -17,7 +17,7 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         if index.column() != 0:
-            super(NodesGridDelagate, self).paint(painter, option, index)
+            super(_NodesGridDelegate, self).paint(painter, option, index)
             return
 
         model = index.model().sourceModel()
@@ -116,16 +116,16 @@ class NodesGridDelagate(QtWidgets.QStyledItemDelegate):
         painter.restore()
 
 
-class NodesGridProxyModel(QtCore.QSortFilterProxyModel):
+class _NodesGridProxyModel(QtCore.QSortFilterProxyModel):
 
     def __init__(self, parent=None):
-        super(NodesGridProxyModel, self).__init__(parent)
+        super(_NodesGridProxyModel, self).__init__(parent)
         
-    def mimeData(self, indexes):
+    def mimeData(self, indexes, p_int=None):
         node_ids = ['node:{}'.format(i.data(QtCore.Qt.ToolTipRole))
                     for i in indexes]
         node_urn = URN_SCHEME + ';'.join(node_ids)
-        mime_data = super(NodesGridProxyModel, self).mimeData(indexes)
+        mime_data = super(_NodesGridProxyModel, self).mimeData(indexes, p_int)
         mime_data.setUrls([node_urn])
         return mime_data
 
@@ -144,10 +144,10 @@ class NodesGridView(QtWidgets.QListView):
         self.setSpacing(4)
 
         model = QtGui.QStandardItemModel()
-        proxy_model = NodesGridProxyModel()
+        proxy_model = _NodesGridProxyModel()
         proxy_model.setSourceModel(model)
         self.setModel(proxy_model)
-        self.setItemDelegate(NodesGridDelagate(self))
+        self.setItemDelegate(_NodesGridDelegate(self))
 
     def clear(self):
         self.model().sourceModel().clear()
@@ -171,7 +171,7 @@ class NodesPaletteWidget(QtWidgets.QWidget):
     .. inheritance-diagram:: NodeGraphQt.NodesPaletteWidget
         :parts: 1
 
-    .. image:: _images/nodes_palette.png
+    .. image:: ../_images/nodes_palette.png
         :width: 400px
 
     .. code-block:: python
