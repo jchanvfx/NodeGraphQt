@@ -553,7 +553,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     .. inheritance-diagram:: NodeGraphQt.PropertiesBinWidget
         :parts: 1
 
-    .. image:: _images/prop_bin.png
+    .. image:: ../_images/prop_bin.png
         :width: 950px
 
     .. code-block:: python
