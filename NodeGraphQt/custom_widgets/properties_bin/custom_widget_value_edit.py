@@ -195,10 +195,15 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
             regexp = QtCore.QRegExp(r'\d+')
             validator = QtGui.QRegExpValidator(regexp, self)
             steps = [1, 10, 100, 1000]
+            self._min = None if self._min is None else int(self._min)
+            self._max = None if self._max is None else int(self._max)
         elif data_type is float:
             regexp = QtCore.QRegExp(r'\d+[\.,]\d+(?:[eE](?:[\-\+]|)\d+)*')
             validator = QtGui.QRegExpValidator(regexp, self)
             steps = [0.001, 0.01, 0.1, 1]
+            self._min = None if self._min is None else float(self._min)
+            self._max = None if self._max is None else float(self._max)
+
         self.setValidator(validator)
         if not self._menu.steps:
             self._menu.set_steps(steps)
