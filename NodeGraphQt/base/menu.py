@@ -112,6 +112,21 @@ class NodeGraphMenu(object):
         self._items.append(menu)
         return menu
 
+    @staticmethod
+    def _set_shortcut(action, shortcut):
+        if isinstance(shortcut, str):
+            search = re.search(r'(?:\.|)QKeySequence\.(\w+)', shortcut)
+            if search:
+                shortcut = getattr(QtGui.QKeySequence, search.group(1))
+            elif all([i in ['Alt', 'Enter'] for i in shortcut.split('+')]):
+                shortcut = QtGui.QKeySequence(
+                    QtCore.Qt.ALT + QtCore.Qt.Key_Return
+                )
+            elif all([i in ['Return', 'Enter'] for i in shortcut.split('+')]):
+                shortcut = QtCore.Qt.Key_Return
+        if shortcut:
+            action.setShortcut(shortcut)
+
     def add_command(self, name, func=None, shortcut=None):
         """
         Adds a command to the menu.
@@ -129,19 +144,8 @@ class NodeGraphMenu(object):
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
 
-        if isinstance(shortcut, str):
-            search = re.search(r'(?:\.|)QKeySequence\.(\w+)', shortcut)
-            if search:
-                shortcut = getattr(QtGui.QKeySequence, search.group(1))
-            elif all([i in ['Alt', 'Enter'] for i in shortcut.split('+')]):
-                shortcut = QtGui.QKeySequence(
-                    QtCore.Qt.ALT + QtCore.Qt.Key_Return
-                )
-            elif all([i in ['Return', 'Enter'] for i in shortcut.split('+')]):
-                shortcut = QtCore.Qt.Key_Return
-
         if shortcut:
-            action.setShortcut(shortcut)
+            self._set_shortcut(action, shortcut)
         if func:
             action.executed.connect(func)
         self.qmenu.addAction(action)
@@ -178,7 +182,8 @@ class NodesMenu(NodeGraphMenu):
         nodes_menu = node_graph.get_context_menu('nodes')
     """
 
-    def add_command(self, name, func=None, node_type=None, node_class=None):
+    def add_command(self, name, func=None, node_type=None, node_class=None,
+                    shortcut=None):
         """
         Re-implemented to add a command to the specified node type menu.
 
@@ -187,6 +192,7 @@ class NodesMenu(NodeGraphMenu):
             func (function): command function eg. "func(``graph``, ``node``)".
             node_type (str): specified node type for the command.
             node_class (class): specified node class for the command.
+            shortcut (str): shortcut key.
 
         Returns:
             NodeGraphQt.NodeGraphCommand: the appended command.
@@ -214,6 +220,9 @@ class NodesMenu(NodeGraphMenu):
         action.graph = self._graph
         if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
             action.setShortcutVisibleInContextMenu(True)
+
+        if shortcut:
+            self._set_shortcut(action, shortcut)
         if func:
             action.executed.connect(func)
 
