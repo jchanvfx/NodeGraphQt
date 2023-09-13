@@ -276,12 +276,14 @@ class PortConnectedCmd(QtWidgets.QUndoCommand):
     Args:
         src_port (NodeGraphQt.Port): source port.
         trg_port (NodeGraphQt.Port): target port.
+        emit_signal (bool): emit port connection signals.
     """
 
-    def __init__(self, src_port, trg_port):
+    def __init__(self, src_port, trg_port, emit_signal):
         QtWidgets.QUndoCommand.__init__(self)
         self.source = src_port
         self.target = trg_port
+        self.emit_signal = emit_signal
 
     def undo(self):
         src_model = self.source.model
@@ -303,6 +305,13 @@ class PortConnectedCmd(QtWidgets.QUndoCommand):
 
         self.source.view.disconnect_from(self.target.view)
 
+        # emit "port_disconnected" signal from the parent graph.
+        if self.emit_signal:
+            ports = {p.type_(): p for p in [self.source, self.target]}
+            graph = self.source.node().graph
+            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value],
+                                         ports[PortTypeEnum.OUT.value])
+
     def redo(self):
         src_model = self.source.model
         trg_model = self.target.model
@@ -313,6 +322,13 @@ class PortConnectedCmd(QtWidgets.QUndoCommand):
         trg_model.connected_ports[src_id].append(self.source.name())
 
         self.source.view.connect_to(self.target.view)
+
+        # emit "port_connected" signal from the parent graph.
+        if self.emit_signal:
+            ports = {p.type_(): p for p in [self.source, self.target]}
+            graph = self.source.node().graph
+            graph.port_connected.emit(ports[PortTypeEnum.IN.value],
+                                      ports[PortTypeEnum.OUT.value])
 
 
 class PortDisconnectedCmd(QtWidgets.QUndoCommand):
@@ -322,12 +338,14 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
     Args:
         src_port (NodeGraphQt.Port): source port.
         trg_port (NodeGraphQt.Port): target port.
+        emit_signal (bool): emit port connection signals.
     """
 
-    def __init__(self, src_port, trg_port):
+    def __init__(self, src_port, trg_port, emit_signal):
         QtWidgets.QUndoCommand.__init__(self)
         self.source = src_port
         self.target = trg_port
+        self.emit_signal = emit_signal
 
     def undo(self):
         src_model = self.source.model
@@ -339,6 +357,13 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
         trg_model.connected_ports[src_id].append(self.source.name())
 
         self.source.view.connect_to(self.target.view)
+
+        # emit "port_connected" signal from the parent graph.
+        if self.emit_signal:
+            ports = {p.type_(): p for p in [self.source, self.target]}
+            graph = self.source.node().graph
+            graph.port_connected.emit(ports[PortTypeEnum.IN.value],
+                                      ports[PortTypeEnum.OUT.value])
 
     def redo(self):
         src_model = self.source.model
@@ -359,6 +384,13 @@ class PortDisconnectedCmd(QtWidgets.QUndoCommand):
             port_names.remove(self.source.name())
 
         self.source.view.disconnect_from(self.target.view)
+
+        # emit "port_disconnected" signal from the parent graph.
+        if self.emit_signal:
+            ports = {p.type_(): p for p in [self.source, self.target]}
+            graph = self.source.node().graph
+            graph.port_disconnected.emit(ports[PortTypeEnum.IN.value],
+                                         ports[PortTypeEnum.OUT.value])
 
 
 class PortLockedCmd(QtWidgets.QUndoCommand):
