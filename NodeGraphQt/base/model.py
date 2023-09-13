@@ -121,7 +121,7 @@ class NodeModel(object):
             self.__class__.__name__, self.name, self.id)
 
     def add_property(self, name, value, items=None, range=None,
-                     widget_type=None, tab=None):
+                     widget_type=None, widget_tooltip=None, tab=None):
         """
         add custom property or raises an error if the property name is already
         taken.
@@ -132,6 +132,7 @@ class NodeModel(object):
             items (list[str]): items used by widget type NODE_PROP_QCOMBO.
             range (tuple): min, max values used by NODE_PROP_SLIDER.
             widget_type (int): widget type flag.
+            widget_tooltip (str): custom tooltip for the property widget.
             tab (str): widget tab name.
         """
         widget_type = widget_type or NodePropWidgetEnum.HIDDEN.value
@@ -153,6 +154,9 @@ class NodeModel(object):
                 self._TEMP_property_attrs[name]['items'] = items
             if range:
                 self._TEMP_property_attrs[name]['range'] = range
+            if widget_tooltip:
+                self._TEMP_property_attrs[name]['tooltip'] = widget_tooltip
+
         else:
             attrs = {
                 self.type_: {
@@ -166,6 +170,8 @@ class NodeModel(object):
                 attrs[self.type_][name]['items'] = items
             if range:
                 attrs[self.type_][name]['range'] = range
+            if widget_tooltip:
+                attrs[self.type_][name]['tooltip'] = widget_tooltip
             self._graph_model.set_node_common_properties(attrs)
 
     def set_property(self, name, value):

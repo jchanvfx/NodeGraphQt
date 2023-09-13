@@ -22,7 +22,8 @@ class DropdownMenuNode(BaseNode):
 
         # create the QComboBox menu.
         items = ['item 1', 'item 2', 'item 3']
-        self.add_combo_menu('my_menu', 'Menu Test', items=items)
+        self.add_combo_menu('my_menu', 'Menu Test', items=items,
+                            tooltip='example custom tooltip')
 
 
 class TextInputNode(BaseNode):

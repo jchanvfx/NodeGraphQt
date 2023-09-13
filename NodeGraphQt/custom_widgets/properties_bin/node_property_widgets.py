@@ -94,7 +94,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
             self.__class__.__name__, hex(id(self))
         )
 
-    def add_widget(self, name, widget, value, label=None):
+    def add_widget(self, name, widget, value, label=None, tooltip=None):
         """
         Add a property widget to the window.
 
@@ -103,8 +103,12 @@ class _PropertiesContainer(QtWidgets.QWidget):
             widget (BaseProperty): property widget.
             value (object): property value.
             label (str): custom label to display.
+            tooltip (str): custom tooltip.
         """
-        widget.setToolTip(name)
+        if tooltip:
+            widget.setToolTip('{}\n{}'.format(name, tooltip))
+        else:
+            widget.setToolTip(name)
         widget.set_value(value)
         if label is None:
             label = name
@@ -412,6 +416,7 @@ class NodePropWidget(QtWidgets.QWidget):
                 if wid_type == 0:
                     continue
 
+                tooltip = None
                 widget = widget_factory.get_widget(wid_type)
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
@@ -420,9 +425,15 @@ class NodePropWidget(QtWidgets.QWidget):
                         prop_range = common_props[prop_name]['range']
                         widget.set_min(prop_range[0])
                         widget.set_max(prop_range[1])
-
-                prop_window.add_widget(prop_name, widget, value,
-                                       prop_name.replace('_', ' '))
+                    if 'tooltip' in common_props[prop_name].keys():
+                        tooltip = common_props[prop_name]['tooltip']
+                prop_window.add_widget(
+                    name=prop_name,
+                    widget=widget,
+                    value=value,
+                    label=prop_name.replace('_', ' '),
+                    tooltip=tooltip
+                )
                 widget.value_changed.connect(self._on_property_changed)
 
         # add "Node" tab properties. (default props)
