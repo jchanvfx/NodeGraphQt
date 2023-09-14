@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=efacb369"></script>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=4bd43770"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -126,7 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.24</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.25</code>
 </nav>
 </div>
 </div>
@@ -207,23 +207,23 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.Port.connected_ports" title="NodeGraphQt.Port.connected_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_ports</span></code></a>()</p></td>
 <td><p>Returns all connected ports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.connect_to" title="NodeGraphQt.Port.connect_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect_to</span></code></a>([port, push_undo])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.connect_to" title="NodeGraphQt.Port.connect_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect_to</span></code></a>([port, push_undo, emit_signal])</p></td>
 <td><p>Create connection to the specified port and emits the <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_connected" title="NodeGraphQt.NodeGraph.port_connected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a> signal from the parent node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.Port.disconnect_from" title="NodeGraphQt.Port.disconnect_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect_from</span></code></a>([port, push_undo])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.Port.disconnect_from" title="NodeGraphQt.Port.disconnect_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect_from</span></code></a>([port, push_undo, emit_signal])</p></td>
 <td><p>Disconnect from the specified port and emits the <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signal from the parent node graph.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.clear_connections" title="NodeGraphQt.Port.clear_connections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_connections</span></code></a>([push_undo])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.clear_connections" title="NodeGraphQt.Port.clear_connections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_connections</span></code></a>([push_undo, emit_signal])</p></td>
 <td><p>Disconnect from all port connections and emit the <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signals from the node graph.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.Port.add_accept_port_type" title="NodeGraphQt.Port.add_accept_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_accept_port_type</span></code></a>(port_name, port_type, ...)</p></td>
-<td><p>Add a constrain to "accept" a pipe connection.</p></td>
+<td><p>Add a constraint to "accept" a pipe connection.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.accepted_port_types" title="NodeGraphQt.Port.accepted_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accepted_port_types</span></code></a>()</p></td>
 <td><p>Returns a dictionary of connection constrains of the port types that allow for a pipe connection to this node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.Port.add_reject_port_type" title="NodeGraphQt.Port.add_reject_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_reject_port_type</span></code></a>(port_name, port_type, ...)</p></td>
-<td><p>Add a constrain to "reject" a pipe connection.</p></td>
+<td><p>Add a constraint to "reject" a pipe connection.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.Port.rejected_port_types" title="NodeGraphQt.Port.rejected_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rejected_port_types</span></code></a>()</p></td>
 <td><p>Returns a dictionary of connection constrains of the port types that are NOT allowed for a pipe connection to this node.</p></td>
@@ -387,7 +387,7 @@ connected or disconnected from this port.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.connect_to">
-<span class="sig-name descname"><span class="pre">connect_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connect_to" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.connect_to'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">connect_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emit_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.connect_to" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.connect_to'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Create connection to the specified port and emits the
 <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_connected" title="NodeGraphQt.NodeGraph.port_connected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_connected</span></code></a> signal from the parent node graph.</p>
 <dl class="field-list simple">
@@ -395,13 +395,14 @@ connected or disconnected from this port.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
 <li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+<li><p><strong>emit_signal</strong> (<em>bool</em>) – emit the port connection signals. (default: True)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.disconnect_from">
-<span class="sig-name descname"><span class="pre">disconnect_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.disconnect_from" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.disconnect_from'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">disconnect_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emit_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.disconnect_from" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.disconnect_from'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Disconnect from the specified port and emits the
 <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signal from the parent node graph.</p>
 <dl class="field-list simple">
@@ -409,13 +410,14 @@ connected or disconnected from this port.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>port</strong> (<a class="reference internal" href="#NodeGraphQt.Port" title="NodeGraphQt.Port"><em>NodeGraphQt.Port</em></a>) – port object.</p></li>
 <li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+<li><p><strong>emit_signal</strong> (<em>bool</em>) – emit the port connection signals. (default: True)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.clear_connections">
-<span class="sig-name descname"><span class="pre">clear_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.clear_connections" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.clear_connections'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">clear_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emit_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.clear_connections" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.clear_connections'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Disconnect from all port connections and emit the
 <a class="reference internal" href="graphs/NodeGraph.html#NodeGraphQt.NodeGraph.port_disconnected" title="NodeGraphQt.NodeGraph.port_disconnected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.port_disconnected</span></code></a> signals from the node graph.</p>
 <div class="admonition seealso">
@@ -426,15 +428,18 @@ connected or disconnected from this port.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+<li><p><strong>emit_signal</strong> (<em>bool</em>) – emit the port connection signals. (default: True)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.add_accept_port_type">
 <span class="sig-name descname"><span class="pre">add_accept_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.add_accept_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.add_accept_port_type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Add a constrain to “accept” a pipe connection.</p>
-<p>Once a constrain has been added only ports of that type specified will
+<dd><p>Add a constraint to “accept” a pipe connection.</p>
+<p>Once a constraint has been added only ports of that type specified will
 be allowed a pipe connection.</p>
 <p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.6.0</span></code></p>
 <div class="admonition seealso">
@@ -473,8 +478,8 @@ that allow for a pipe connection to this node.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.Port.add_reject_port_type">
 <span class="sig-name descname"><span class="pre">add_reject_port_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.Port.add_reject_port_type" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.Port.add_reject_port_type'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
-<dd><p>Add a constrain to “reject” a pipe connection.</p>
-<p>Once a constrain has been added only ports of that type specified will
+<dd><p>Add a constraint to “reject” a pipe connection.</p>
+<p>Once a constraint has been added only ports of that type specified will
 be rejected a pipe connection.</p>
 <p><cite>Implemented in</cite> <code class="docutils literal notranslate"><span class="pre">v0.6.0</span></code></p>
 <div class="admonition seealso">
