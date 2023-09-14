@@ -198,29 +198,40 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
             self.graph.node_created.emit(self.node)
 
 
-class NodeRemovedCmd(QtWidgets.QUndoCommand):
+class NodesRemovedCmd(QtWidgets.QUndoCommand):
     """
     Node deleted command.
 
     Args:
         graph (NodeGraphQt.NodeGraph): node graph.
-        node (NodeGraphQt.BaseNode or NodeGraphQt.NodeObject): node.
+        nodes (list[NodeGraphQt.BaseNode or NodeGraphQt.NodeObject]): nodes.
+        emit_signal (bool): emit node deletion signals. (default: True)
     """
 
-    def __init__(self, graph, node):
+    def __init__(self, graph, nodes, emit_signal=True):
         QtWidgets.QUndoCommand.__init__(self)
-        self.setText('deleted node')
-        self.scene = graph.scene()
-        self.model = graph.model
-        self.node = node
+        self.setText('deleted node(s)')
+        self.graph = graph
+        self.nodes = nodes
+        self.emit_signal = emit_signal
 
     def undo(self):
-        self.model.nodes[self.node.id] = self.node
-        self.scene.addItem(self.node.view)
+        for node in self.nodes:
+            self.graph.model.nodes[node.id] = node
+            self.graph.scene().addItem(node.view)
+
+            if self.emit_signal:
+                self.graph.node_created.emit(node)
 
     def redo(self):
-        self.model.nodes.pop(self.node.id)
-        self.node.view.delete()
+        node_ids = []
+        for node in self.nodes:
+            node_ids.append(node.id)
+            self.graph.model.nodes.pop(node.id)
+            node.view.delete()
+
+        if self.emit_signal:
+            self.graph.nodes_deleted.emit(node_ids)
 
 
 class NodeInputConnectedCmd(QtWidgets.QUndoCommand):

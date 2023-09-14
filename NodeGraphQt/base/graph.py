@@ -8,7 +8,7 @@ import re
 from Qt import QtCore, QtWidgets
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
-                                       NodeRemovedCmd,
+                                       NodesRemovedCmd,
                                        NodeMovedCmd,
                                        PortConnectedCmd)
 from NodeGraphQt.base.factory import NodeFactory
@@ -1385,13 +1385,12 @@ class NodeGraph(QtCore.QObject):
         if isinstance(node, GroupNode) and node.is_expanded:
             node.collapse()
 
+        undo_cmd = NodesRemovedCmd(self, [node], emit_signal=True)
         if push_undo:
-            self._undo_stack.push(NodeRemovedCmd(self, node))
+            self._undo_stack.push(undo_cmd)
             self._undo_stack.endMacro()
         else:
-            NodeRemovedCmd(self, node).redo()
-
-        self.nodes_deleted.emit([node_id])
+            undo_cmd.redo()
 
     def remove_node(self, node, push_undo=True):
         """
@@ -1428,11 +1427,12 @@ class NodeGraph(QtCore.QObject):
                                  push_undo=push_undo)
                 p.clear_connections(push_undo=push_undo)
 
+        undo_cmd = NodesRemovedCmd(self, [node], emit_signal=False)
         if push_undo:
-            self._undo_stack.push(NodeRemovedCmd(self, node))
+            self._undo_stack.push(undo_cmd)
             self._undo_stack.endMacro()
         else:
-            NodeRemovedCmd(self, node).redo()
+            undo_cmd.redo()
 
     def delete_nodes(self, nodes, push_undo=True):
         """
@@ -1471,12 +1471,14 @@ class NodeGraph(QtCore.QObject):
                                      connected_ports=False,
                                      push_undo=push_undo)
                     p.clear_connections(push_undo=push_undo)
-            if push_undo:
-                self._undo_stack.push(NodeRemovedCmd(self, node))
-            else:
-                NodeRemovedCmd(self, node).redo()
+
+        undo_cmd = NodesRemovedCmd(self, nodes, emit_signal=True)
         if push_undo:
+            self._undo_stack.push(undo_cmd)
             self._undo_stack.endMacro()
+        else:
+            undo_cmd.redo()
+
         self.nodes_deleted.emit(node_ids)
 
     def extract_nodes(self, nodes, push_undo=True, prompt_warning=True):
