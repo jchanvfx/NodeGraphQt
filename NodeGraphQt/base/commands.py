@@ -165,29 +165,37 @@ class NodeAddedCmd(QtWidgets.QUndoCommand):
         graph (NodeGraphQt.NodeGraph): node graph.
         node (NodeGraphQt.NodeObject): node.
         pos (tuple(float, float)): initial node position (optional).
+        emit_signal (bool): emit node creation signals. (default: True)
     """
 
-    def __init__(self, graph, node, pos=None):
+    def __init__(self, graph, node, pos=None, emit_signal=True):
         QtWidgets.QUndoCommand.__init__(self)
         self.setText('added node')
-        self.viewer = graph.viewer()
-        self.model = graph.model
+        self.graph = graph
         self.node = node
         self.pos = pos
+        self.emit_signal = emit_signal
 
     def undo(self):
+        node_id = self.node.id
         self.pos = self.pos or self.node.pos()
-        self.model.nodes.pop(self.node.id)
+        self.graph.model.nodes.pop(self.node.id)
         self.node.view.delete()
 
+        if self.emit_signal:
+            self.graph.nodes_deleted.emit([node_id])
+
     def redo(self):
-        self.model.nodes[self.node.id] = self.node
-        self.viewer.add_node(self.node.view, self.pos)
+        self.graph.model.nodes[self.node.id] = self.node
+        self.graph.viewer().add_node(self.node.view, self.pos)
 
         # node width & height is calculated when it's added to the scene,
         # so we have to update the node model here.
         self.node.model.width = self.node.view.width
         self.node.model.height = self.node.view.height
+
+        if self.emit_signal:
+            self.graph.node_created.emit(self.node)
 
 
 class NodeRemovedCmd(QtWidgets.QUndoCommand):

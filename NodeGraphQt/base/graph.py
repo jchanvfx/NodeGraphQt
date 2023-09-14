@@ -1255,7 +1255,9 @@ class NodeGraph(QtCore.QObject):
 
             node.update()
 
-            undo_cmd = NodeAddedCmd(self, node, node.model.pos)
+            undo_cmd = NodeAddedCmd(
+                self, node, pos=node.model.pos, emit_signal=True
+            )
             if push_undo:
                 undo_label = 'create node: "{}"'.format(node.NODE_NAME)
                 self._undo_stack.beginMacro(undo_label)
@@ -1266,10 +1268,10 @@ class NodeGraph(QtCore.QObject):
             else:
                 for n in self.selected_nodes():
                     n.set_property('selected', False, push_undo=False)
-                NodeAddedCmd(self, node, node.model.pos).redo()
+                undo_cmd.redo()
 
-            self.node_created.emit(node)
             return node
+
         raise NodeCreationError('Can\'t find node: "{}"'.format(node_type))
 
     def add_node(self, node, pos=None, selected=True, push_undo=True):
@@ -1341,14 +1343,15 @@ class NodeGraph(QtCore.QObject):
         # update method must be called before it's been added to the viewer.
         node.update()
 
+        undo_cmd = NodeAddedCmd(self, node, pos=pos, emit_signal=False)
         if push_undo:
             self._undo_stack.beginMacro('add node: "{}"'.format(node.name()))
-            self._undo_stack.push(NodeAddedCmd(self, node, pos))
+            self._undo_stack.push(undo_cmd)
             if selected:
                 node.set_selected(True)
             self._undo_stack.endMacro()
         else:
-            NodeAddedCmd(self, node, pos).redo()
+            undo_cmd.redo()
 
     def delete_node(self, node, push_undo=True):
         """
