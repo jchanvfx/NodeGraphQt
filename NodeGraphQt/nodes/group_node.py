@@ -149,7 +149,7 @@ class GroupNode(BaseNode):
 
     def delete_input(self, port):
         if type(port) in [int, str]:
-            port = self.get_output(port)
+            port = self.get_input(port)
             if port is None:
                 return
 
