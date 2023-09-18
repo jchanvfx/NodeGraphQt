@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=4bd43770"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=7c2cbd1a"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -126,7 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.25</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.26</code>
 </nav>
 </div>
 </div>
@@ -209,10 +209,10 @@ port connections from one node to another.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_checkbox</span></code></a>(name[, label, text, state, ...])</p></td>
 <td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget into the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide_widget</span></code></a>(name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide_widget</span></code></a>(name[, push_undo])</p></td>
 <td><p>Hide an embedded node widget.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_widget</span></code></a>(name)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_widget</span></code></a>(name[, push_undo])</p></td>
 <td><p>Show an embedded node widget.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, ...])</p></td>
@@ -448,11 +448,14 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.hide_widget">
-<span class="sig-name descname"><span class="pre">hide_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.hide_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.hide_widget'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">hide_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.hide_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.hide_widget'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Hide an embedded node widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -464,11 +467,14 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.BaseNode.show_widget">
-<span class="sig-name descname"><span class="pre">show_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.show_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.show_widget'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">show_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.show_widget" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.show_widget'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Show an embedded node widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – node property name for the widget.</p></li>
+<li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+</ul>
 </dd>
 </dl>
 <div class="admonition seealso">
