@@ -301,12 +301,13 @@ class BaseNode(NodeObject):
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
 
-    def hide_widget(self, name):
+    def hide_widget(self, name, push_undo=True):
         """
         Hide an embedded node widget.
 
         Args:
             name (str): node property name for the widget.
+            push_undo (bool): register the command to the undo stack. (default: True)
 
         See Also:
             :meth:`BaseNode.add_custom_widget`,
@@ -316,14 +317,18 @@ class BaseNode(NodeObject):
         if not self.view.has_widget(name):
             return
         undo_cmd = NodeWidgetVisibleCmd(self, name, visible=False)
-        self.graph.undo_stack().push(undo_cmd)
+        if push_undo:
+            self.graph.undo_stack().push(undo_cmd)
+        else:
+            undo_cmd.redo()
 
-    def show_widget(self, name):
+    def show_widget(self, name, push_undo=True):
         """
         Show an embedded node widget.
 
         Args:
             name (str): node property name for the widget.
+            push_undo (bool): register the command to the undo stack. (default: True)
 
         See Also:
             :meth:`BaseNode.add_custom_widget`,
@@ -333,7 +338,10 @@ class BaseNode(NodeObject):
         if not self.view.has_widget(name):
             return
         undo_cmd = NodeWidgetVisibleCmd(self, name, visible=True)
-        self.graph.undo_stack().push(undo_cmd)
+        if push_undo:
+            self.graph.undo_stack().push(undo_cmd)
+        else:
+            undo_cmd.redo()
 
     def add_input(self, name='input', multi_input=False, display_name=True,
                   color=None, locked=False, painter_func=None):

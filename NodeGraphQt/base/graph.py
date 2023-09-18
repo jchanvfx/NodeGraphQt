@@ -1660,7 +1660,8 @@ class NodeGraph(QtCore.QObject):
         """
         Clears the current node graph session.
         """
-        for n in self.all_nodes():
+        nodes = self.all_nodes()
+        for n in nodes:
             if isinstance(n, BaseNode):
                 for p in n.input_ports():
                     if p.locked():
@@ -1670,7 +1671,7 @@ class NodeGraph(QtCore.QObject):
                     if p.locked():
                         p.set_locked(False, connected_ports=False)
                     p.clear_connections()
-            self._undo_stack.push(NodeRemovedCmd(self, n))
+        self._undo_stack.push(NodesRemovedCmd(self, nodes))
         self._undo_stack.clear()
         self._model.session = ''
 
@@ -1819,9 +1820,12 @@ class NodeGraph(QtCore.QObject):
                 allow_connection = any([not in_port.model.connected_ports,
                                         in_port.model.multi_connection])
                 if allow_connection:
-                    self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+                    self._undo_stack.push(
+                        PortConnectedCmd(in_port, out_port, emit_signal=False)
+                    )
 
-                # Run on_input_connected to ensure connections are fully set up after deserialization.
+                # Run on_input_connected to ensure connections are fully set up
+                # after deserialization.
                 in_node.on_input_connected(in_port, out_port)
 
         node_objs = nodes.values()
@@ -2009,8 +2013,7 @@ class NodeGraph(QtCore.QObject):
             if isinstance(node, GroupNode) and node.is_expanded:
                 node.collapse()
 
-            self._undo_stack.push(NodeRemovedCmd(self, node))
-
+        self._undo_stack.push(NodesRemovedCmd(self, nodes))
         self._undo_stack.endMacro()
 
     def paste_nodes(self):
@@ -2681,7 +2684,9 @@ class SubGraph(NodeGraph):
             out_port = out_node.outputs().get(pname) if out_node else None
 
             if in_port and out_port:
-                self._undo_stack.push(PortConnectedCmd(in_port, out_port))
+                self._undo_stack.push(
+                    PortConnectedCmd(in_port, out_port, emit_signal=False)
+                )
 
         node_objs = list(nodes.values())
         if relative_pos:
