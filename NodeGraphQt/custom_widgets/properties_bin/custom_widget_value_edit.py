@@ -191,6 +191,8 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
             data_type(int or float): int or float data type object.
         """
         self._data_type = data_type
+        steps = []
+        validator = None
         if data_type is int:
             regexp = QtCore.QRegExp(r'\d+')
             validator = QtGui.QRegExpValidator(regexp, self)
@@ -216,12 +218,11 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         Args:
             steps (list[int] or list[float]): list of ints or floats.
         """
-        step_types = {
-            int: [1, 10, 100, 1000],
-            float: [0.001, 0.01, 0.1, 1]
-        }
-        steps = steps or step_types.get(self._data_type)
-        self._menu.set_steps(steps)
+        steps = steps or []
+        if self._data_type is int:
+            self._menu.set_steps([int(s) for s in steps])
+        else:
+            self._menu.set_steps([float(s) for s in steps])
 
     def set_min(self, value=None):
         """

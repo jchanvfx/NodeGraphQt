@@ -34,6 +34,36 @@ class BaseProperty(QtWidgets.QWidget):
         """
         self._name = name
 
+    def set_items(self, items):
+        """
+        See Also:
+            :meth:`NodeObject.create_property`
+
+        Args:
+            items (list or tuple): list of items.
+        """
+        return
+
+    def set_min(self, min_value):
+        """
+        See Also:
+            :meth:`NodeObject.create_property`
+
+        Args:
+            min_value (int or float): min value.
+        """
+        return
+
+    def set_max(self, max_value):
+        """
+        See Also:
+            :meth:`NodeObject.create_property`
+
+        Args:
+            max_value (int or float): max value.
+        """
+        return
+
     def get_value(self):
         """
         Returns:

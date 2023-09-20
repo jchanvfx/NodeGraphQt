@@ -232,7 +232,7 @@ class NodePropWidgetEnum(Enum):
     COLOR4_PICKER = 10
     #: Node property represented with an (Int) Slider widget.
     SLIDER = 11
-    #: Node property represented with a (Dobule) Slider widget.
+    #: Node property represented with a (Double) Slider widget.
     DOUBLE_SLIDER = 12
     #: Node property represented with a file selector widget.
     FILE_OPEN = 13
@@ -250,3 +250,5 @@ class NodePropWidgetEnum(Enum):
     INT = 19
     #: Node property represented with button widget.
     BUTTON = 20
+    #: Node property represented with a custom implemented property widget.
+    CUSTOM = 21

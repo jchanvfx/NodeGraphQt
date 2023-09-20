@@ -22,7 +22,7 @@ class NodePropertyWidgetFactory(object):
     """
 
     def __init__(self):
-        self._widget_mapping = {
+        self._widget_map = {
             NodePropWidgetEnum.HIDDEN.value: None,
             # base widgets.
             NodePropWidgetEnum.QLABEL.value: PropLabel,
@@ -45,6 +45,7 @@ class NodePropertyWidgetFactory(object):
             NodePropWidgetEnum.FLOAT.value: FloatValueEdit,
             NodePropWidgetEnum.INT.value: IntValueEdit,
         }
+        self._custom_widget_map = {}
 
     def get_widget(self, widget_type=NodePropWidgetEnum.HIDDEN.value):
         """
@@ -54,7 +55,44 @@ class NodePropertyWidgetFactory(object):
             widget_type (int): widget type index.
 
         Returns:
-            BaseProperty: node property widget.
+            BaseProperty: node property widget instance.
         """
-        if widget_type in self._widget_mapping:
-            return self._widget_mapping[widget_type]()
+        if widget_type in self._widget_map:
+            return self._widget_map[widget_type]()
+        elif widget_type in self._custom_widget_map:
+            return self._custom_widget_map[widget_type]()
+
+    def register_custom_widget(self, widget_class, widget_index):
+        """
+        Register a new custom property widget.
+
+        Args:
+            widget_class (BaseProperty): custom property widget.
+            widget_index (int): new widget flag index.
+
+        Returns:
+            int: new widget type index id.
+        """
+        if widget_index in self._widget_map:
+            raise KeyError(
+                'Widget index flag reserved for "{}"'
+                .format(self._widget_map[widget_index])
+            )
+
+        if widget_index in self._custom_widget_map:
+            raise KeyError(
+                'Widget index flag already reserved for "{}"'
+                .format(self._custom_widget_map[widget_index])
+            )
+
+        if widget_class in self._custom_widget_map.values():
+            key = None
+            for k, v in self._custom_widget_map.items():
+                if v == widget_class:
+                    key = k
+            raise ValueError(
+                'Widget "{}" already registered under the index "{}"'
+                .format(widget_class, key)
+            )
+
+        self._custom_widget_map[widget_index] = widget_class

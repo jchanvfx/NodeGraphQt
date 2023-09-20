@@ -4,6 +4,7 @@ from collections import defaultdict
 from Qt import QtWidgets, QtCore, QtGui, QtCompat
 
 from .node_property_factory import NodePropertyWidgetFactory
+from .prop_widgets_abstract import BaseProperty
 from .prop_widgets_base import PropLineEdit
 
 
@@ -309,15 +310,17 @@ class NodePropWidget(QtWidgets.QWidget):
     Args:
         parent (QtWidgets.QWidget): parent object.
         node (NodeGraphQt.BaseNode): node.
+        widget_factory (NodePropertyWidgetFactory): property widget factory.
     """
 
     #: signal (node_id, prop_name, prop_value)
     property_changed = QtCore.Signal(str, str, object)
     property_closed = QtCore.Signal(str)
 
-    def __init__(self, parent=None, node=None):
+    def __init__(self, parent=None, node=None, widget_factory=None):
         super(NodePropWidget, self).__init__(parent)
         self.__node_id = node.id
+        self.__widget_factory = widget_factory
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
@@ -351,6 +354,7 @@ class NodePropWidget(QtWidgets.QWidget):
         name_layout.addWidget(QtWidgets.QLabel('name'))
         name_layout.addWidget(self.name_wgt)
         name_layout.addWidget(close_btn)
+
         layout = QtWidgets.QVBoxLayout(self)
         layout.setSpacing(4)
         layout.addLayout(name_layout)
@@ -410,9 +414,6 @@ class NodePropWidget(QtWidgets.QWidget):
                 continue
             self.add_tab(tab)
 
-        # property widget factory.
-        widget_factory = NodePropertyWidgetFactory()
-
         # populate tab properties.
         for tab in sorted(tab_mapping.keys()):
             prop_window = self.__tab_windows[tab]
@@ -421,8 +422,20 @@ class NodePropWidget(QtWidgets.QWidget):
                 if wid_type == 0:
                     continue
 
-                widget = widget_factory.get_widget(wid_type)
+                widget = self.__widget_factory.get_widget(wid_type)
                 widget.set_name(prop_name)
+                if not widget:
+                    widget = PropLineEdit()
+                    widget.setDisabled(True)
+                    prop_window.add_widget(
+                        name=prop_name,
+                        widget=widget,
+                        value='Can\'t display property with custom widget.',
+                        label=prop_name.replace('_', ' '),
+                        tooltip='Custom widget not registered with index flag '
+                                '"{}"'.format(wid_type)
+                    )
+                    continue
 
                 tooltip = None
                 if prop_name in common_props.keys():
@@ -455,7 +468,7 @@ class NodePropWidget(QtWidgets.QWidget):
         prop_window = self.__tab_windows['Node']
         for prop_name, tooltip in default_props.items():
             wid_type = model.get_widget_type(prop_name)
-            widget = widget_factory.get_widget(wid_type)
+            widget = self.__widget_factory.get_widget(wid_type)
             widget.set_name(prop_name)
             prop_window.add_widget(
                 name=prop_name,
@@ -612,6 +625,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     def __init__(self, parent=None, node_graph=None):
         super(PropertiesBinWidget, self).__init__(parent)
         self.setWindowTitle('Properties Bin')
+
+        self._widget_factory = NodePropertyWidgetFactory()
+
         self._prop_list = _PropertiesList()
         self._limit = QtWidgets.QSpinBox()
         self._limit.setToolTip('Set display nodes limit.')
@@ -621,9 +637,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._limit.valueChanged.connect(self.__on_limit_changed)
         self.resize(450, 400)
 
-        # this attribute to block signals if for the "on_property_changed" signal
-        # in case devs that don't implement the ".prop_widgets_abstract.BaseProperty"
-        # widget properly to prevent an infinite loop.
+        # this attribute to block signals is for the
+        # "self.__on_graph_property_changed" signal in case devs that don't
+        # implement the ".prop_widgets_abstract.BaseProperty" widget properly
+        # to prevent causing an infinite loop.
         self._block_signal = False
 
         self._lock = False
@@ -764,7 +781,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Add node to the properties bin.
 
         Args:
-            node (NodeGraphQt.NodeObject): node object.
+            node (NodeGraphQt.BaseNode): node object.
         """
         if self.limit() == 0 or self._lock:
             return
@@ -779,7 +796,10 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         self._prop_list.insertRow(0)
 
-        prop_widget = NodePropWidget(node=node)
+        prop_widget = NodePropWidget(
+            node=node,
+            widget_factory=self._widget_factory
+        )
         prop_widget.property_closed.connect(self.__on_prop_close)
         prop_widget.property_changed.connect(self.__on_property_widget_changed)
         port_connections = prop_widget.get_port_connection_widget()
@@ -829,16 +849,32 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
     def prop_widget(self, node):
         """
-        Returns the node property widget.
+        Returns the node property window widget.
 
         Args:
             node (str or NodeGraphQt.NodeObject): node id or node object.
 
         Returns:
-            NodePropWidget: node property widget.
+            NodePropWidget: node property window widget.
         """
         node_id = node if isinstance(node, str) else node.id
         itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
         if itm_find:
             item = itm_find[0]
             return self._prop_list.cellWidget(item.row(), 0)
+
+    def register_custom_property_widget(self, widget_class, widget_index):
+        """
+        Register a custom property widget to display a node property.
+
+        Args:
+            widget_class (NodeGraphQt.custom_widgets.properties_bin.prop_widgets_abstract.BaseProperty):
+                custom property widget object.
+            widget_index (int): new widget flag index.
+        """
+        if not issubclass(widget_class, BaseProperty):
+            raise ValueError(
+                'widget "{}" is not a sub class of "BaseProperty" widget.'
+                .format(widget_class)
+            )
+        self._widget_factory.register_custom_widget(widget_class, widget_index)
