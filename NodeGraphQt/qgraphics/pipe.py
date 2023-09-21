@@ -96,7 +96,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             if not self._active:
                 pen.setColor(QtGui.QColor(*PipeEnum.DISABLED_COLOR.value))
                 pen.setStyle(PIPE_STYLES.get(PipeEnum.DRAW_TYPE_DOTTED.value))
-                pen.setWidth(pen.width() * 1.25)
+                pen.setWidth(3)
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
@@ -416,11 +416,11 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         if viewer:
             return viewer.get_layout_direction()
 
-    def set_pipe_styling(self, color, width=0.5, style=0):
+    def set_pipe_styling(self, color, width=2, style=0):
         """
         Args:
             color (list or tuple): (r, g, b, a) values 0-255
-            width (float): pipe width.
+            width (int): pipe width.
             style (int): pipe style.
         """
         pen = self.pen()
@@ -444,7 +444,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self._active = True
         self.set_pipe_styling(
             color=PipeEnum.ACTIVE_COLOR.value,
-            width=2.5,
+            width=3,
             style=PipeEnum.DRAW_TYPE_DEFAULT.value
         )
 
@@ -455,7 +455,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self._highlight = True
         self.set_pipe_styling(
             color=PipeEnum.HIGHLIGHT_COLOR.value,
-            width=2.5,
+            width=2,
             style=PipeEnum.DRAW_TYPE_DEFAULT.value
         )
 
@@ -468,7 +468,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         """
         self._active = False
         self._highlight = False
-        self.set_pipe_styling(color=self.color, width=1.2, style=self.style)
+        self.set_pipe_styling(color=self.color, width=2, style=self.style)
         self._draw_direction_pointer()
 
     def set_connections(self, port1, port2):
@@ -555,7 +555,7 @@ class LivePipeItem(PipeItem):
 
         self.color = PipeEnum.ACTIVE_COLOR.value
         self.style = PipeEnum.DRAW_TYPE_DASHED.value
-        self.set_pipe_styling(color=self.color, width=2.8, style=self.style)
+        self.set_pipe_styling(color=self.color, width=3, style=self.style)
 
         self.shift_selected = False
 
