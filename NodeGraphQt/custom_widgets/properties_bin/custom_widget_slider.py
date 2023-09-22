@@ -49,19 +49,19 @@ class PropSlider(BaseProperty):
 
     def _on_slider_mouse_release(self, event):
         if not self._realtime_update:
-            self.value_changed.emit(self.toolTip(), self.get_value())
+            self.value_changed.emit(self.get_name(), self.get_value())
         self._block = False
 
     def _on_slider_changed(self, value):
         self._spinbox.setValue(value)
         if self._realtime_update:
-            self.value_changed.emit(self.toolTip(), self.get_value())
+            self.value_changed.emit(self.get_name(), self.get_value())
 
     def _on_spnbox_changed(self, value):
         if value != self._slider.value():
             self._slider.setValue(value)
             if not self._block:
-                self.value_changed.emit(self.toolTip(), self.get_value())
+                self.value_changed.emit(self.get_name(), self.get_value())
 
     def get_value(self):
         return self._spinbox.value()
@@ -70,7 +70,7 @@ class PropSlider(BaseProperty):
         if value != self.get_value():
             self._block = True
             self._spinbox.setValue(value)
-            self.value_changed.emit(self.toolTip(), value)
+            self.value_changed.emit(self.get_name(), value)
             self._block = False
 
     def set_min(self, value=0):

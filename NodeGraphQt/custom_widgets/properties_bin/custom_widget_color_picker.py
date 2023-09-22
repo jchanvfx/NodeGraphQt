@@ -33,7 +33,7 @@ class PropColorPickerRGB(BaseProperty):
     def _on_vector_changed(self, _, value):
         self._color = tuple(value)
         self._update_color()
-        self.value_changed.emit(self.toolTip(), value)
+        self.value_changed.emit(self.get_name(), value)
 
     def _on_select_color(self):
         current_color = QtGui.QColor(*self.get_value())
@@ -74,7 +74,7 @@ class PropColorPickerRGB(BaseProperty):
             self._color = value
             self._update_color()
             self._update_vector()
-            self.value_changed.emit(self.toolTip(), value)
+            self.value_changed.emit(self.get_name(), value)
 
 
 class PropColorPickerRGBA(PropColorPickerRGB):

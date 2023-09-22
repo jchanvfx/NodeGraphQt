@@ -99,7 +99,7 @@ class NodeModel(object):
             'icon': NodePropWidgetEnum.HIDDEN.value,
             'name': NodePropWidgetEnum.QLINE_EDIT.value,
             'color': NodePropWidgetEnum.COLOR_PICKER.value,
-            'border_color': NodePropWidgetEnum.HIDDEN.value,
+            'border_color': NodePropWidgetEnum.COLOR_PICKER.value,
             'text_color': NodePropWidgetEnum.COLOR_PICKER.value,
             'disabled': NodePropWidgetEnum.QCHECK_BOX.value,
             'selected': NodePropWidgetEnum.HIDDEN.value,

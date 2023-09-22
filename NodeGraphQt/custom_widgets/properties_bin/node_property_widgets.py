@@ -105,13 +105,15 @@ class _PropertiesContainer(QtWidgets.QWidget):
             label (str): custom label to display.
             tooltip (str): custom tooltip.
         """
+        label = label or name
+        label_widget = QtWidgets.QLabel(label)
         if tooltip:
             widget.setToolTip('{}\n{}'.format(name, tooltip))
+            label_widget.setToolTip('{}\n{}'.format(name, tooltip))
         else:
             widget.setToolTip(name)
+            label_widget.setToolTip(name)
         widget.set_value(value)
-        if label is None:
-            label = name
         row = self.__layout.rowCount()
         if row > 0:
             row += 1
@@ -120,7 +122,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         if widget.__class__.__name__ == 'PropTextEdit':
             label_flags = label_flags | QtCore.Qt.AlignTop
 
-        self.__layout.addWidget(QtWidgets.QLabel(label), row, 0, label_flags)
+        self.__layout.addWidget(label_widget, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
 
     def get_widget(self, name):
@@ -330,13 +332,16 @@ class NodePropWidget(QtWidgets.QWidget):
         close_btn.clicked.connect(self._on_close)
 
         self.name_wgt = PropLineEdit()
-        self.name_wgt.setToolTip('name')
+        self.name_wgt.set_name('name')
+        self.name_wgt.setToolTip('name\nSet the node name.')
         self.name_wgt.set_value(node.name())
         self.name_wgt.value_changed.connect(self._on_property_changed)
 
         self.type_wgt = QtWidgets.QLabel(node.type_)
         self.type_wgt.setAlignment(QtCore.Qt.AlignRight)
-        self.type_wgt.setToolTip('type_')
+        self.type_wgt.setToolTip(
+            'type_\nNode type identifier followed by the class name.'
+        )
         font = self.type_wgt.font()
         font.setPointSize(10)
         self.type_wgt.setFont(font)
@@ -416,8 +421,10 @@ class NodePropWidget(QtWidgets.QWidget):
                 if wid_type == 0:
                     continue
 
-                tooltip = None
                 widget = widget_factory.get_widget(wid_type)
+                widget.set_name(prop_name)
+
+                tooltip = None
                 if prop_name in common_props.keys():
                     if 'items' in common_props[prop_name].keys():
                         widget.set_items(common_props[prop_name]['items'])
@@ -438,15 +445,25 @@ class NodePropWidget(QtWidgets.QWidget):
 
         # add "Node" tab properties. (default props)
         self.add_tab('Node')
-        default_props = ['color', 'text_color', 'disabled', 'id']
+        default_props = {
+            'color': 'Node base color.',
+            'text_color': 'Node text color.',
+            'border_color': 'Node border color.',
+            'disabled': 'Disable/Enable node state.',
+            'id': 'Unique identifier string to the node.'
+        }
         prop_window = self.__tab_windows['Node']
-        for prop_name in default_props:
+        for prop_name, tooltip in default_props.items():
             wid_type = model.get_widget_type(prop_name)
             widget = widget_factory.get_widget(wid_type)
-            prop_window.add_widget(prop_name,
-                                   widget,
-                                   model.get_property(prop_name),
-                                   prop_name.replace('_', ' '))
+            widget.set_name(prop_name)
+            prop_window.add_widget(
+                name=prop_name,
+                widget=widget,
+                value=model.get_property(prop_name),
+                label=prop_name.replace('_', ' '),
+                tooltip=tooltip
+            )
 
             widget.value_changed.connect(self._on_property_changed)
 
