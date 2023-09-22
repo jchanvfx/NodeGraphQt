@@ -9,9 +9,19 @@ class PropLabel(QtWidgets.QLabel):
 
     value_changed = QtCore.Signal(str, object)
 
+    def __init__(self, parent=None):
+        super(PropLabel, self).__init__(parent)
+        self._name = None
+
     def __repr__(self):
         return '<{}() object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.text()
@@ -19,7 +29,7 @@ class PropLabel(QtWidgets.QLabel):
     def set_value(self, value):
         if value != self.get_value():
             self.setText(str(value))
-            self.value_changed.emit(self.toolTip(), value)
+            self.value_changed.emit(self.get_name(), value)
 
 
 class PropLineEdit(QtWidgets.QLineEdit):
@@ -32,6 +42,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         super(PropLineEdit, self).__init__(parent)
+        self._name = None
         self.editingFinished.connect(self._on_editing_finished)
 
     def __repr__(self):
@@ -39,7 +50,13 @@ class PropLineEdit(QtWidgets.QLineEdit):
             self.__class__.__name__, hex(id(self)))
 
     def _on_editing_finished(self):
-        self.value_changed.emit(self.toolTip(), self.text())
+        self.value_changed.emit(self.get_name(), self.text())
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.text()
@@ -48,7 +65,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
         _value = str(value)
         if _value != self.get_value():
             self.setText(_value)
-            self.value_changed.emit(self.toolTip(), _value)
+            self.value_changed.emit(self.get_name(), _value)
 
 
 class PropTextEdit(QtWidgets.QTextEdit):
@@ -61,6 +78,7 @@ class PropTextEdit(QtWidgets.QTextEdit):
 
     def __init__(self, parent=None):
         super(PropTextEdit, self).__init__(parent)
+        self._name = None
         self._prev_text = ''
 
     def __repr__(self):
@@ -74,8 +92,14 @@ class PropTextEdit(QtWidgets.QTextEdit):
     def focusOutEvent(self, event):
         super(PropTextEdit, self).focusOutEvent(event)
         if self._prev_text != self.toPlainText():
-            self.value_changed.emit(self.toolTip(), self.toPlainText())
+            self.value_changed.emit(self.get_name(), self.toPlainText())
         self._prev_text = ''
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.toPlainText()
@@ -84,7 +108,7 @@ class PropTextEdit(QtWidgets.QTextEdit):
         _value = str(value)
         if _value != self.get_value():
             self.setPlainText(_value)
-            self.value_changed.emit(self.toolTip(), _value)
+            self.value_changed.emit(self.get_name(), _value)
 
 
 class PropComboBox(QtWidgets.QComboBox):
@@ -97,6 +121,7 @@ class PropComboBox(QtWidgets.QComboBox):
 
     def __init__(self, parent=None):
         super(PropComboBox, self).__init__(parent)
+        self._name = None
         self.currentIndexChanged.connect(self._on_index_changed)
 
     def __repr__(self):
@@ -104,7 +129,7 @@ class PropComboBox(QtWidgets.QComboBox):
             self.__class__.__name__, hex(id(self)))
 
     def _on_index_changed(self):
-        self.value_changed.emit(self.toolTip(), self.get_value())
+        self.value_changed.emit(self.get_name(), self.get_value())
 
     def items(self):
         """
@@ -125,6 +150,12 @@ class PropComboBox(QtWidgets.QComboBox):
         self.clear()
         self.addItems(items)
 
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
+
     def get_value(self):
         return self.currentText()
 
@@ -133,7 +164,7 @@ class PropComboBox(QtWidgets.QComboBox):
             idx = self.findText(value, QtCore.Qt.MatchExactly)
             self.setCurrentIndex(idx)
             if idx >= 0:
-                self.value_changed.emit(self.toolTip(), value)
+                self.value_changed.emit(self.get_name(), value)
 
 
 class PropCheckBox(QtWidgets.QCheckBox):
@@ -146,6 +177,7 @@ class PropCheckBox(QtWidgets.QCheckBox):
 
     def __init__(self, parent=None):
         super(PropCheckBox, self).__init__(parent)
+        self._name = None
         self.clicked.connect(self._on_clicked)
 
     def __repr__(self):
@@ -153,7 +185,13 @@ class PropCheckBox(QtWidgets.QCheckBox):
             self.__class__.__name__, hex(id(self)))
 
     def _on_clicked(self):
-        self.value_changed.emit(self.toolTip(), self.get_value())
+        self.value_changed.emit(self.get_name(), self.get_value())
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.isChecked()
@@ -162,7 +200,7 @@ class PropCheckBox(QtWidgets.QCheckBox):
         _value = bool(value)
         if _value != self.get_value():
             self.setChecked(_value)
-            self.value_changed.emit(self.toolTip(), _value)
+            self.value_changed.emit(self.get_name(), _value)
 
 
 class PropSpinBox(QtWidgets.QSpinBox):
@@ -174,6 +212,7 @@ class PropSpinBox(QtWidgets.QSpinBox):
 
     def __init__(self, parent=None):
         super(PropSpinBox, self).__init__(parent)
+        self._name = None
         self.setButtonSymbols(self.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
@@ -182,7 +221,13 @@ class PropSpinBox(QtWidgets.QSpinBox):
             self.__class__.__name__, hex(id(self)))
 
     def _on_value_change(self, value):
-        self.value_changed.emit(self.toolTip(), value)
+        self.value_changed.emit(self.get_name(), value)
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.value()
@@ -202,6 +247,7 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
 
     def __init__(self, parent=None):
         super(PropDoubleSpinBox, self).__init__(parent)
+        self._name = None
         self.setButtonSymbols(self.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
@@ -210,7 +256,13 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
             self.__class__.__name__, hex(id(self)))
 
     def _on_value_change(self, value):
-        self.value_changed.emit(self.toolTip(), value)
+        self.value_changed.emit(self.get_name(), value)
+
+    def get_name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     def get_value(self):
         return self.value()
@@ -231,6 +283,7 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
 #
 #     def __init__(self, parent=None):
 #         super(PropPushButton, self).__init__(parent)
+#         self._name = None
 #         self.clicked.connect(self.button_clicked.emit)
 #
 #     def set_on_click_func(self, func, node):
