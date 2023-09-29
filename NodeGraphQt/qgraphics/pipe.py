@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from Qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
     LayoutDirectionEnum,
@@ -15,9 +15,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
-    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.SolidLine,
-    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.DashLine,
-    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.DotLine
+    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.PenStyle.SolidLine,
+    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.PenStyle.DashLine,
+    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.PenStyle.DotLine
 }
 
 
@@ -30,7 +30,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         super(PipeItem, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         self.setCacheMode(ITEM_CACHE_MODE)
 
         self._color = PipeEnum.COLOR.value
@@ -48,7 +48,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         self._dir_pointer = QtWidgets.QGraphicsPolygonItem(self)
         self._dir_pointer.setPolygon(self._poly)
-        self._dir_pointer.setFlag(self.ItemIsSelectable, False)
+        self._dir_pointer.setFlag(self.GraphicsItemFlag.ItemIsSelectable, False)
 
         self.reset()
 
@@ -72,7 +72,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             self.highlight()
 
     def itemChange(self, change, value):
-        if change == self.ItemSelectedChange and self.scene():
+        if change == self.GraphicsItemChange.ItemSelectedChange and self.scene():
             if value:
                 self.highlight()
             else:
@@ -100,7 +100,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
-        painter.setRenderHint(painter.Antialiasing, True)
+        painter.setRenderHint(painter.RenderHint.Antialiasing, True)
         painter.drawPath(self.path())
 
         # QPaintDevice: Cannot destroy paint device that is being painted.
@@ -427,14 +427,14 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         pen.setStyle(PIPE_STYLES.get(style))
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         self.setPen(pen)
-        self.setBrush(QtGui.QBrush(QtCore.Qt.NoBrush))
+        self.setBrush(QtGui.QBrush(QtCore.Qt.BrushStyle.NoBrush))
 
         pen = self._dir_pointer.pen()
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         self._dir_pointer.setPen(pen)
@@ -565,7 +565,7 @@ class LivePipeItem(PipeItem):
         pen = self._idx_pointer.pen()
         pen.setWidth(self.pen().width())
         pen.setColor(self.pen().color())
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
         self._idx_pointer.setPen(pen)
 
         color = self.pen().color()
@@ -649,7 +649,7 @@ class LivePipePolygonItem(QtWidgets.QGraphicsPolygonItem):
 
     def __init__(self, parent):
         super(LivePipePolygonItem, self).__init__(parent)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
 
     def paint(self, painter, option, widget):
         """
