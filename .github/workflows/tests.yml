@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       # Set up headless display for windows and linux
       - name: Setup headless display
-        uses: pyvista/setup-headless-display-action@v2
+        uses: pyvista/setup-headless-display-action@main
         with:
           qt: true
           pyvista: false
