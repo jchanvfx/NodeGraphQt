@@ -164,8 +164,8 @@ Here's an example to embed a custom widget where we subclass the
                 combo1_val, combo2_val = value
             widget = self.get_custom_widget()
 
-            cb1_index = widget.combo_1.findText(combo1_val, QtCore.Qt.MatchExactly)
-            cb2_index = widget.combo_1.findText(combo2_val, QtCore.Qt.MatchExactly)
+            cb1_index = widget.combo_1.findText(combo1_val, QtCore.Qt.MatchFlag.MatchExactly)
+            cb2_index = widget.combo_1.findText(combo2_val, QtCore.Qt.MatchFlag.MatchExactly)
 
             widget.combo_1.setCurrentIndex(cb1_index)
             widget.combo_2.setCurrentIndex(cb2_index)

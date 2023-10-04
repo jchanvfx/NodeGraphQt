@@ -1,0 +1,39 @@
+name: Run Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu, windows, macos ]
+        qt : [ 'PySide6' , 'PyQt5' ]
+    name: Run tests on ${{ matrix.os }} - ${{ matrix.qt }}
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      # Set up headless display for windows and linux
+      - name: Setup headless display
+        uses: pyvista/setup-headless-display-action@main
+        with:
+          qt: true
+          pyvista: false
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Installation with dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ${{ matrix.qt }}
+          python -m pip install -ve ".[tests]"
+      - name: Run tests
+        run: pytest

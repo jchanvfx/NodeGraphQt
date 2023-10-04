@@ -1,32 +1,15 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import os
-import signal
+from pathlib import Path
 
-from qtpy import QtCore, QtWidgets
+from qtpy import QtCore
 
-from NodeGraphQt import (
-    NodeGraph,
-    PropertiesBinWidget,
-    NodesTreeWidget,
-    NodesPaletteWidget
-)
+from NodeGraphQt import NodeGraph, PropertiesBinWidget, NodesTreeWidget, NodesPaletteWidget
+from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
 
-# import example nodes from the "example_nodes" package
-from nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
 
-if __name__ == '__main__':
-
-    # handle SIGINT to make the app terminate on CTRL+C
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    app = QtWidgets.QApplication([])
-
+def test_basic_example(qtbot):
     # create graph controller.
     graph = NodeGraph()
-
-    # set up context menu for the node graph.
-    graph.set_context_menu_from_file('../examples/hotkeys/hotkeys.json')
 
     # registered example nodes.
     graph.register_nodes([
@@ -42,6 +25,7 @@ if __name__ == '__main__':
 
     # show the node graph widget.
     graph_widget = graph.widget
+    qtbot.addWidget(graph_widget)
     graph_widget.resize(1100, 800)
     graph_widget.show()
 
@@ -128,7 +112,8 @@ if __name__ == '__main__':
     nodes_tree.set_category_label('nodes.widget', 'Widget Nodes')
     nodes_tree.set_category_label('nodes.basic', 'Basic Nodes')
     nodes_tree.set_category_label('nodes.group', 'Group Nodes')
-    # nodes_tree.show()
+    qtbot.addWidget(nodes_tree)
+    nodes_tree.show()
 
     # create a node palette widget.
     nodes_palette = NodesPaletteWidget(node_graph=graph)
@@ -137,6 +122,5 @@ if __name__ == '__main__':
     nodes_palette.set_category_label('nodes.widget', 'Widget Nodes')
     nodes_palette.set_category_label('nodes.basic', 'Basic Nodes')
     nodes_palette.set_category_label('nodes.group', 'Group Nodes')
-    # nodes_palette.show()
-
-    app.exec_()
+    qtbot.addWidget(nodes_palette)
+    nodes_palette.show()

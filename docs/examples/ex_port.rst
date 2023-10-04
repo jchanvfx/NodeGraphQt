@@ -68,7 +68,7 @@ Here's an example function for drawing a triangle port.
             border_color = QtGui.QColor(*info['border_color'])
 
         pen = QtGui.QPen(border_color, 1.8)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
 
         painter.setPen(pen)
         painter.setBrush(color)
@@ -134,7 +134,7 @@ And here's another example function for drawing a Square port.
             border_color = QtGui.QColor(*info['border_color'])
 
         pen = QtGui.QPen(border_color, 1.8)
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
 
         painter.setPen(pen)
         painter.setBrush(color)

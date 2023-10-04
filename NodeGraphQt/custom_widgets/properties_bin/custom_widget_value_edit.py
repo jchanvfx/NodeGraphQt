@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import re
 
-from Qt import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 
 _NUMB_REGEX = re.compile(r'^((?:\-)*\d+)*([\.,])*(\d+(?:[eE](?:[\-\+])*\d+)*)*')
 
@@ -122,7 +122,7 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         super(_NumberValueEdit, self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MiddleButton:
+        if event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self._MMB_STATE = True
             self._reset_previous_x()
             self._menu.exec_(QtGui.QCursor.pos())
@@ -135,9 +135,9 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
 
     def keyPressEvent(self, event):
         super(_NumberValueEdit, self).keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Up:
+        if event.key() == QtCore.Qt.Key.Key_Up:
             return
-        elif event.key() == QtCore.Qt.Key_Down:
+        elif event.key() == QtCore.Qt.Key.Key_Down:
             return
 
     # private
@@ -192,14 +192,14 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         """
         self._data_type = data_type
         if data_type is int:
-            regexp = QtCore.QRegExp(r'\d+')
-            validator = QtGui.QRegExpValidator(regexp, self)
+            regexp = QtCore.QRegularExpression(r'\d+')
+            validator = QtGui.QRegularExpressionValidator(regexp, self)
             steps = [1, 10, 100, 1000]
             self._min = None if self._min is None else int(self._min)
             self._max = None if self._max is None else int(self._max)
         elif data_type is float:
-            regexp = QtCore.QRegExp(r'\d+[\.,]\d+(?:[eE](?:[\-\+]|)\d+)*')
-            validator = QtGui.QRegExpValidator(regexp, self)
+            regexp = QtCore.QRegularExpression(r'\d+[\.,]\d+(?:[eE](?:[\-\+]|)\d+)*')
+            validator = QtGui.QRegularExpressionValidator(regexp, self)
             steps = [0.001, 0.01, 0.1, 1]
             self._min = None if self._min is None else float(self._min)
             self._max = None if self._max is None else float(self._max)
