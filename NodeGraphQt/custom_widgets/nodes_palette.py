@@ -121,11 +121,11 @@ class _NodesGridProxyModel(QtCore.QSortFilterProxyModel):
     def __init__(self, parent=None):
         super(_NodesGridProxyModel, self).__init__(parent)
         
-    def mimeData(self, indexes, p_int=None):
+    def mimeData(self, indexes):
         node_ids = ['node:{}'.format(i.data(QtCore.Qt.ItemDataRole.ToolTipRole))
                     for i in indexes]
-        node_urn = URN_SCHEME + ';'.join(node_ids)
-        mime_data = super(_NodesGridProxyModel, self).mimeData(indexes, p_int)
+        node_urn = QtCore.QUrl(URN_SCHEME + ';'.join(node_ids))
+        mime_data = super(_NodesGridProxyModel, self).mimeData(indexes)
         mime_data.setUrls([node_urn])
         return mime_data
 

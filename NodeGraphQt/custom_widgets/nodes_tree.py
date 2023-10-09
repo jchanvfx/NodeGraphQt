@@ -68,7 +68,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
 
     def mimeData(self, items):
         node_ids = ['node:{}'.format(i.toolTip(0)) for i in items]
-        node_urn = URN_SCHEME + ';'.join(node_ids)
+        node_urn = QtCore.QUrl(URN_SCHEME + ';'.join(node_ids))
         mime_data = super(NodesTreeWidget, self).mimeData(items)
         mime_data.setUrls([node_urn])
         return mime_data
