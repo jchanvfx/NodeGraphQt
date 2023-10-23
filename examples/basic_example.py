@@ -115,7 +115,7 @@ if __name__ == '__main__':
     properties_bin = PropertiesBinWidget(node_graph=graph)
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
 
-    # example show the node properties bin widget when a node is double clicked.
+    # example show the node properties bin widget when a node is double-clicked.
     def display_properties_bin(node):
         if not properties_bin.isVisible():
             properties_bin.show()
