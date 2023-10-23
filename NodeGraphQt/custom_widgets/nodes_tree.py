@@ -95,7 +95,6 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
             cat_item = _BaseNodeTreeItem(self, [label], type=TYPE_CATEGORY)
             cat_item.setFirstColumnSpanned(True)
             cat_item.setFlags(QtCore.Qt.ItemIsEnabled)
-            cat_item.setBackground(0, QtGui.QBrush(palette.midlight().color()))
             cat_item.setSizeHint(0, QtCore.QSize(100, 26))
             self.addTopLevelItem(cat_item)
             cat_item.setExpanded(True)
