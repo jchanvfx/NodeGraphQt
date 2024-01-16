@@ -32,7 +32,7 @@ class CircleNodeItem(NodeItem):
             port_height = inputs[0].boundingRect().height()
 
             count = len(inputs)
-            if count > 2:
+            if count >= 2:
                 is_odd = bool(count % 2)
                 middle_idx = int(count / 2)
 
@@ -60,12 +60,10 @@ class CircleNodeItem(NodeItem):
                     port.setPos(port_x, port_y)
                     port_x += (port_width / 2) - (txt_offset / 2)
                     port_y += port_height + spacing
-
             else:
                 port_x = (port_width / 2) * -1
                 port_y = node_center_y - (port_height / 2)
-                inputs[0].setPos(port_x, port_y - (port_height / 2) + spacing)
-                inputs[1].setPos(port_x, port_y + (port_height / 2) + spacing)
+                inputs[0].setPos(port_x, port_y)
 
         # adjust input text position
         for port, text in self._input_items.items():
@@ -81,7 +79,7 @@ class CircleNodeItem(NodeItem):
             port_height = outputs[0].boundingRect().height()
 
             count = len(outputs)
-            if count > 2:
+            if count >= 2:
                 is_odd = bool(count % 2)
                 middle_idx = int(count / 2)
 
@@ -112,8 +110,7 @@ class CircleNodeItem(NodeItem):
             else:
                 port_x = width - (port_width / 2)
                 port_y = node_center_y - (port_height / 2)
-                outputs[0].setPos(port_x, port_y - (port_height / 2) + spacing)
-                outputs[1].setPos(port_x, port_y + (port_height / 2) + spacing)
+                outputs[0].setPos(port_x, port_y)
 
         # adjust output text position
         for port, text in self._output_items.items():

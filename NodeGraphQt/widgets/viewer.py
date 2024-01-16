@@ -673,16 +673,25 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = self.mapToScene(event.pos())
         event.setDropAction(QtCore.Qt.CopyAction)
         self.data_dropped.emit(
-            event.mimeData(), QtCore.QPoint(pos.x(), pos.y()))
+            event.mimeData(), QtCore.QPoint(pos.x(), pos.y())
+        )
 
     def dragEnterEvent(self, event):
-        if event.mimeData().hasFormat('text/uri-list'):
+        is_acceptable = any([
+            event.mimeData().hasFormat(i) for i in
+            ['nodegraphqt/nodes', 'text/plain', 'text/uri-list']
+        ])
+        if is_acceptable:
             event.accept()
         else:
             event.ignore()
 
     def dragMoveEvent(self, event):
-        if event.mimeData().hasFormat('text/uri-list'):
+        is_acceptable = any([
+            event.mimeData().hasFormat(i) for i in
+            ['nodegraphqt/nodes', 'text/plain', 'text/uri-list']
+        ])
+        if is_acceptable:
             event.accept()
         else:
             event.ignore()

@@ -876,6 +876,16 @@ class NodeItem(AbstractNodeItem):
         return self._text_item
 
     @property
+    def icon_item(self):
+        """
+        Get the node icon qgraphics item.
+
+        Returns:
+            QtWidgets.QGraphicsPixmapItem: node icon object.
+        """
+        return self._icon_item
+
+    @property
     def inputs(self):
         """
         Returns:
