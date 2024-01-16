@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_PIPE, NodeEnum
+from NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.pipe import PipeItem
 from NodeGraphQt.qgraphics.port import PortItem
@@ -113,7 +113,7 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def __init__(self, name='backdrop', text='', parent=None):
         super(BackdropNodeItem, self).__init__(name, parent)
-        self.setZValue(Z_VAL_PIPE - 1)
+        self.setZValue(Z_VAL_BACKDROP)
         self._properties['backdrop_text'] = text
         self._min_size = 80, 80
         self._sizer = BackdropSizer(self, 26.0)
