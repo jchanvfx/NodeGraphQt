@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from Qt import QtWidgets, QtCore, QtGui
 
-from NodeGraphQt.constants import URN_SCHEME
+from NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
 
 
 class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
@@ -122,11 +122,13 @@ class _NodesGridProxyModel(QtCore.QSortFilterProxyModel):
         super(_NodesGridProxyModel, self).__init__(parent)
         
     def mimeData(self, indexes, p_int=None):
-        node_ids = ['node:{}'.format(i.data(QtCore.Qt.ToolTipRole))
-                    for i in indexes]
+        node_ids = [
+            'node:{}'.format(i.data(QtCore.Qt.ToolTipRole))
+            for i in indexes
+        ]
         node_urn = URN_SCHEME + ';'.join(node_ids)
-        mime_data = super(_NodesGridProxyModel, self).mimeData(indexes, p_int)
-        mime_data.setUrls([node_urn])
+        mime_data = QtCore.QMimeData()
+        mime_data.setData(MIME_TYPE, QtCore.QByteArray(node_urn.encode()))
         return mime_data
 
 

@@ -131,3 +131,11 @@ class BackdropNode(NodeObject):
         self.model.width = self.view.width
         self.model.height = self.view.height
         return self.model.width, self.model.height
+
+    def inputs(self):
+        # required function but unused for the backdrop node.
+        return
+
+    def outputs(self):
+        # required function but unused for the backdrop node.
+        return

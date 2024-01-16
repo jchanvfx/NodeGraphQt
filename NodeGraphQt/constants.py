@@ -14,6 +14,7 @@ __doc__ = """
 
 # ================================== PRIVATE ===================================
 
+MIME_TYPE = 'nodegraphqt/nodes'
 URI_SCHEME = 'nodegraphqt://'
 URN_SCHEME = 'nodegraphqt::'
 
@@ -24,6 +25,7 @@ ICON_DOWN_ARROW = os.path.join(ICON_PATH, 'down_arrow.png')
 ICON_NODE_BASE = os.path.join(ICON_PATH, 'node_base.png')
 
 # DRAW STACK ORDER
+Z_VAL_BACKDROP = -2
 Z_VAL_PIPE = -1
 Z_VAL_NODE = 1
 Z_VAL_PORT = 2
