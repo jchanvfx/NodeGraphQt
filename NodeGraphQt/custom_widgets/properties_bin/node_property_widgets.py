@@ -856,15 +856,15 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         self._prop_list.setRowCount(0)
 
-    def prop_widget(self, node):
+    def get_property_editor_widget(self, node):
         """
-        Returns the node property widget.
+        Returns the node property editor widget.
 
         Args:
             node (str or NodeGraphQt.NodeObject): node id or node object.
 
         Returns:
-            NodePropEditorWidget: node property widget.
+            NodePropEditorWidget: node property editor widget.
         """
         node_id = node if isinstance(node, str) else node.id
         itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
