@@ -62,7 +62,10 @@ from .nodes.group_node import GroupNode
 from .widgets.node_widgets import NodeBaseWidget
 from .custom_widgets.nodes_tree import NodesTreeWidget
 from .custom_widgets.nodes_palette import NodesPaletteWidget
-from .custom_widgets.properties_bin.node_property_widgets import PropertiesBinWidget
+from .custom_widgets.properties_bin.node_property_widgets import (
+    NodePropEditorWidget,
+    PropertiesBinWidget
+)
 
 
 __version__ = VERSION
@@ -78,6 +81,7 @@ __all__ = [
     'NodeGraphMenu',
     'NodeObject',
     'NodesPaletteWidget',
+    'NodePropEditorWidget',
     'NodesTreeWidget',
     'NodesMenu',
     'Port',
