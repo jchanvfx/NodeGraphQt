@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-__version__ = '0.6.31'
+__version__ = '0.6.32'
 __status__ = 'Work in Progress'
 __license__ = 'MIT'
 

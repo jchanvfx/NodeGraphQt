@@ -89,6 +89,8 @@ class _PropertiesContainer(QtWidgets.QWidget):
         layout.setAlignment(QtCore.Qt.AlignTop)
         layout.addLayout(self.__layout)
 
+        self.__property_widgets = {}
+
     def __repr__(self):
         return '<{} object at {}>'.format(
             self.__class__.__name__, hex(id(self))
@@ -124,6 +126,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
 
         self.__layout.addWidget(label_widget, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
+        self.__property_widgets[name] = widget
 
     def get_widget(self, name):
         """
@@ -135,10 +138,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         Returns:
             QtWidgets.QWidget: property widget.
         """
-        for row in range(self.__layout.rowCount()):
-            item = self.__layout.itemAtPosition(row, 1)
-            if item and name == item.widget().toolTip():
-                return item.widget()
+        return self.__property_widgets.get(name)
 
     def get_all_widgets(self):
         """
@@ -147,14 +147,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         Returns:
             dict: {name: widget}
         """
-        widgets = {}
-        for row in range(self.__layout.rowCount()):
-            item = self.__layout.itemAtPosition(row, 1)
-            if not item:
-                continue
-            name = item.widget().toolTip()
-            widgets[name] = item.widget()
-        return widgets
+        return self.__property_widgets
 
 
 class _PortConnectionsContainer(QtWidgets.QWidget):
@@ -558,10 +551,23 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         """
         if name == 'name':
             return self.name_wgt
-        for tab_name, prop_win in self.__tab_windows.items():
+        for prop_win in self.__tab_windows.values():
             widget = prop_win.get_widget(name)
             if widget:
                 return widget
+
+    def get_all_property_widgets(self):
+        """
+        get all the node property widgets.
+
+        Returns:
+            list[BaseProperty]: property widgets.
+        """
+        widgets = [self.name_wgt]
+        for prop_win in self.__tab_windows.values():
+            for widget in prop_win.get_all_widgets().values():
+                widgets.append(widget)
+        return widgets
 
     def get_port_connection_widget(self):
         """
