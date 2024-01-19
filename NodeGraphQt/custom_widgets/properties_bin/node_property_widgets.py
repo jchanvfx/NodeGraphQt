@@ -864,7 +864,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             node (str or NodeGraphQt.NodeObject): node id or node object.
 
         Returns:
-            NodePropWidget: node property widget.
+            NodePropEditorWidget: node property widget.
         """
         node_id = node if isinstance(node, str) else node.id
         itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
