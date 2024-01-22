@@ -733,7 +733,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             prop_name (str): node property name.
             prop_value (object): node property value.
         """
-        properties_widget = self.prop_widget(node)
+        properties_widget = self.get_property_editor_widget(node)
         if not properties_widget:
             return
 
