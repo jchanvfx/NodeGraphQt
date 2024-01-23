@@ -326,7 +326,7 @@ class NodeLineEdit(NodeBaseWidget):
         :meth:`NodeGraphQt.BaseNode.add_text_input`
     """
 
-    def __init__(self, parent=None, name='', label='', text=''):
+    def __init__(self, parent=None, name='', label='', text='', placeholder_text=''):
         super(NodeLineEdit, self).__init__(parent, name, label)
         bg_color = ViewerEnum.BACKGROUND_COLOR.value
         text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
@@ -352,6 +352,7 @@ class NodeLineEdit(NodeBaseWidget):
             stylesheet += style
         ledit = QtWidgets.QLineEdit()
         ledit.setText(text)
+        ledit.setPlaceholderText(placeholder_text)
         ledit.setStyleSheet(stylesheet)
         ledit.setAlignment(QtCore.Qt.AlignCenter)
         ledit.editingFinished.connect(self.on_value_changed)
