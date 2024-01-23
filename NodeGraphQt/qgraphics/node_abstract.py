@@ -55,6 +55,15 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         self._properties['selected'] = selected
         super(AbstractNodeItem, self).setSelected(selected)
 
+    def draw_node(self):
+        """
+        Re-draw the node item in the scene with proper
+        calculated size and widgets aligned.
+
+        (this is called from the builtin custom widgets.)
+        """
+        return
+
     def pre_init(self, viewer, pos=None):
         """
         Called before node has been added into the scene.
@@ -63,7 +72,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer.
             pos (tuple): the cursor pos if node is called with tab search.
         """
-        pass
+        return
 
     def post_init(self, viewer, pos=None):
         """
@@ -73,7 +82,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
             viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
             pos (tuple): the cursor pos if node is called with tab search.
         """
-        pass
+        return
 
     @property
     def id(self):

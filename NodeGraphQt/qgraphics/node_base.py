@@ -1049,7 +1049,8 @@ class NodeItem(AbstractNodeItem):
 
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
-        widgets = node_dict.pop('widgets', {})
-        for name, value in widgets.items():
-            if self._widgets.get(name):
-                self._widgets[name].set_value(value)
+        custom_prop = node_dict.get('custom') or {}
+        for prop_name, value in custom_prop.items():
+            prop_widget = self._widgets.get(prop_name)
+            if prop_widget:
+                prop_widget.set_value(value)
