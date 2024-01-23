@@ -36,7 +36,7 @@ class PropertyChangedCmd(QtWidgets.QUndoCommand):
         # view widgets.
         if hasattr(view, 'widgets') and name in view.widgets.keys():
             # check if previous value is identical to current value,
-            # prevent signals from causing a infinite loop.
+            # prevent signals from causing an infinite loop.
             if view.widgets[name].get_value() != value:
                 view.widgets[name].set_value(value)
 
