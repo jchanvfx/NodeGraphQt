@@ -1049,7 +1049,7 @@ class NodeItem(AbstractNodeItem):
 
     def from_dict(self, node_dict):
         super(NodeItem, self).from_dict(node_dict)
-        custom_prop = node_dict.pop('custom') or {}
+        custom_prop = node_dict.get('custom') or {}
         for prop_name, value in custom_prop.items():
             prop_widget = self._widgets.get(prop_name)
             if prop_widget:
