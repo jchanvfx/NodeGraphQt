@@ -204,9 +204,6 @@ class NodeObject(object):
         """
         settings = self.model.to_dict[self.model.id]
         settings['id'] = self.model.id
-        if settings.get('custom'):
-            settings['widgets'] = settings.pop('custom')
-
         self.view.from_dict(settings)
 
     def serialize(self):
