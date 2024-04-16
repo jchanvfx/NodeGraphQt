@@ -122,7 +122,7 @@ class GroupNodeItem(NodeItem):
         poly.append(rect_2.bottomLeft())
         poly.append(rect_1.bottomLeft())
 
-        painter.setBrush(QtGui.QColor(*self.color).dark(180))
+        painter.setBrush(QtGui.QColor(*self.color).darker(180))
         painter.drawRect(rect_1)
         painter.drawPolygon(poly)
         painter.setBrush(QtGui.QColor(*self.color))
