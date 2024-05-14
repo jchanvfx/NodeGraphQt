@@ -50,7 +50,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_selected = QtCore.Signal(str)
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
-    data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    data_dropped = QtCore.Signal(object)
     context_menu_prompt = QtCore.Signal(str, object)
 
     def __init__(self, parent=None, undo_stack=None):
