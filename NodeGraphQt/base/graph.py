@@ -1920,6 +1920,9 @@ class NodeGraph(QtCore.QObject):
                 default=default
             )
 
+        # update the current session.
+        self._model.session = file_path
+
     def load_session(self, file_path):
         """
         Load node graph session layout file.
