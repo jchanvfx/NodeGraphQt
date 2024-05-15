@@ -78,7 +78,6 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
         Populate the node tree.
         """
         self.clear()
-        palette = QtGui.QPalette()
         categories = set()
         node_types = {}
         for name, node_ids in self._factory.names.items():

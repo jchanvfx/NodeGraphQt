@@ -38,11 +38,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # node viewer signals.
     # (some of these signals are called by port & node items and connected
     # to the node graph slot functions)
-    moved_nodes = QtCore.Signal(dict)
+    moved_nodes = QtCore.Signal(object)
     search_triggered = QtCore.Signal(str, tuple)
     connection_sliced = QtCore.Signal(list)
     connection_changed = QtCore.Signal(list, list)
-    insert_node = QtCore.Signal(object, str, dict)
+    insert_node = QtCore.Signal(object, str, object)
     node_name_changed = QtCore.Signal(str, str)
     node_backdrop_updated = QtCore.Signal(str, str, object)
 
@@ -50,7 +50,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_selected = QtCore.Signal(str)
     node_selection_changed = QtCore.Signal(list, list)
     node_double_clicked = QtCore.Signal(str)
-    data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    data_dropped = QtCore.Signal(QtCore.QMimeData, object)
     context_menu_prompt = QtCore.Signal(str, object)
 
     def __init__(self, parent=None, undo_stack=None):
