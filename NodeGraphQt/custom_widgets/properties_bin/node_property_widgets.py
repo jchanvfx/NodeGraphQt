@@ -798,7 +798,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if self.limit() == 0 or self._lock:
             return
 
-        rows = self._prop_list.rowCount()
+        rows = self._prop_list.rowCount() - 1
         if rows >= self.limit():
             self._prop_list.removeRow(rows - 1)
 
