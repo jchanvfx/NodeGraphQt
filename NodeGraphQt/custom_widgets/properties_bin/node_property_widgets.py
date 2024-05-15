@@ -17,7 +17,7 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
         painter.setPen(QtCore.Qt.NoPen)
 
         # draw background.
@@ -218,7 +218,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         tree_widget.setHeaderLabels(headers)
         tree_widget.setHeaderHidden(False)
         tree_widget.header().setStretchLastSection(False)
-        QtCompat.QHeaderView.setSectionResizeMode(
+        QtWidgets.QHeaderView.setSectionResizeMode(
             tree_widget.header(), 2, QtWidgets.QHeaderView.Stretch
         )
 
@@ -688,7 +688,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             tree_widget.setVisible(visible)
             widget = self._prop_list.cellWidget(items[0].row(), 0)
             widget.adjustSize()
-            QtCompat.QHeaderView.setSectionResizeMode(
+            QtWidgets.QHeaderView.setSectionResizeMode(
                 self._prop_list.verticalHeader(),
                 QtWidgets.QHeaderView.ResizeToContents
             )

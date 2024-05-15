@@ -48,7 +48,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         self._dir_pointer = QtWidgets.QGraphicsPolygonItem(self)
         self._dir_pointer.setPolygon(self._poly)
-        self._dir_pointer.setFlag(self.ItemIsSelectable, False)
+        self._dir_pointer.setFlag(self.GraphicsItemFlag.ItemIsSelectable, False)
 
         self.reset()
 
