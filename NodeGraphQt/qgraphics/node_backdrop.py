@@ -18,9 +18,9 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
     def __init__(self, parent=None, size=6.0):
         super(BackdropSizer, self).__init__(parent)
-        self.setFlag(self.ItemIsSelectable, True)
-        self.setFlag(self.ItemIsMovable, True)
-        self.setFlag(self.ItemSendsScenePositionChanges, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsScenePositionChanges, True)
         self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
         self.setToolTip('double-click auto resize')
         self._size = size
@@ -38,7 +38,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(0.5, 0.5, self._size, self._size)
 
     def itemChange(self, change, value):
-        if change == self.ItemPositionChange:
+        if change == QtWidgets.QGraphicsItem.ItemPositionChange:
             item = self.parentItem()
             mx, my = item.minimum_size
             x = mx if value.x() < mx else value.x()
