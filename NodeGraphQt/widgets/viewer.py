@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import math
-from distutils.version import LooseVersion
 
 from qtpy import QtGui, QtCore, QtWidgets
 
@@ -199,11 +198,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # setup the undo and redo actions.
         if self._undo_action and self._redo_action:
-            self._undo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Undo)
-            self._redo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Redo)
-            if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-                self._undo_action.setShortcutVisibleInContextMenu(True)
-                self._redo_action.setShortcutVisibleInContextMenu(True)
+            self._undo_action.setShortcuts(QtGui.QKeySequence.Undo)
+            self._redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+            self._undo_action.setShortcutVisibleInContextMenu(True)
+            self._redo_action.setShortcutVisibleInContextMenu(True)
 
             # undo & redo always at the top of the "node graph context menu".
             self._ctx_graph_menu.addAction(self._undo_action)
