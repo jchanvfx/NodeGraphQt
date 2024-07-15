@@ -136,11 +136,11 @@ class NodesGridView(QtWidgets.QListView):
 
     def __init__(self, parent=None):
         super(NodesGridView, self).__init__(parent)
-        self.setSelectionMode(self.SelectionMode.ExtendedSelection)
+        self.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection)
         self.setUniformItemSizes(True)
-        self.setResizeMode(self.ResizeMode.Adjust)
-        self.setViewMode(self.ViewMode.IconMode)
-        self.setDragDropMode(self.DragDropMode.DragOnly)
+        self.setResizeMode(QtWidgets.QListView.ResizeMode.Adjust)
+        self.setViewMode(QtWidgets.QListView.ViewMode.IconMode)
+        self.setDragDropMode(QtWidgets.QListView.DragDropMode.DragOnly)
         self.setDragEnabled(True)
         self.setMinimumSize(300, 100)
         self.setSpacing(4)

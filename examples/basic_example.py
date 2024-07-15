@@ -20,7 +20,6 @@ if __name__ == '__main__':
     # handle SIGINT to make the app terminate on CTRL+C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-
     app = QtWidgets.QApplication([])
 
     # create graph controller.
@@ -140,4 +139,4 @@ if __name__ == '__main__':
     nodes_palette.set_category_label('nodes.group', 'Group Nodes')
     # nodes_palette.show()
 
-    app.exec_()
+    app.exec()
