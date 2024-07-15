@@ -97,7 +97,7 @@ def quit_qt(graph):
     """
     Quit the Qt application.
     """
-    from qtpy import QtCore
+    from Qt import QtCore
     QtCore.QCoreApplication.quit()
 
 def clear_undo(graph):

@@ -4,6 +4,7 @@ import copy
 import json
 import os
 import re
+from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
