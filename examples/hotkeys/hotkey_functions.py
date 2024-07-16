@@ -93,6 +93,12 @@ def clear_session(graph):
     if graph.question_dialog('Clear Current Session?', 'Clear Session'):
         graph.clear_session()
 
+def quit_qt(graph):
+    """
+    Quit the Qt application.
+    """
+    from Qt import QtCore
+    QtCore.QCoreApplication.quit()
 
 def clear_undo(graph):
     """

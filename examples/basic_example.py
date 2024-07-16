@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
 import signal
+from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
@@ -12,11 +12,12 @@ from NodeGraphQt import (
     NodesPaletteWidget
 )
 
-# import example nodes from the "example_nodes" package
-from nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
+# import example nodes from the "nodes" sub-package
+from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
 
-if __name__ == '__main__':
+BASE_PATH = Path(__file__).parent.resolve()
 
+def main():
     # handle SIGINT to make the app terminate on CTRL+C
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -26,7 +27,8 @@ if __name__ == '__main__':
     graph = NodeGraph()
 
     # set up context menu for the node graph.
-    graph.set_context_menu_from_file('../examples/hotkeys/hotkeys.json')
+    hotkey_path = Path(BASE_PATH, 'hotkeys', 'hotkeys.json')
+    graph.set_context_menu_from_file(hotkey_path, 'graph')
 
     # registered example nodes.
     graph.register_nodes([
@@ -53,9 +55,7 @@ if __name__ == '__main__':
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    n_basic_b.set_icon(
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'star.png')
-    )
+    n_basic_b.set_icon(Path(BASE_PATH, 'star.png'))
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
@@ -140,3 +140,7 @@ if __name__ == '__main__':
     # nodes_palette.show()
 
     app.exec()
+
+
+if __name__ == '__main__':
+    main()
