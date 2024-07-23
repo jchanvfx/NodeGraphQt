@@ -4,6 +4,7 @@ import copy
 import json
 import os
 import re
+from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
@@ -519,7 +520,11 @@ class NodeGraph(QtCore.QObject):
             self._widget.addTab(self._viewer, 'Node Graph')
             # hide the close button on the first tab.
             tab_bar = self._widget.tabBar()
-            for btn_flag in [tab_bar.RightSide, tab_bar.LeftSide]:
+            tab_flags = [
+                QtWidgets.QTabBar.RightSide,
+                QtWidgets.QTabBar.LeftSide
+            ]
+            for btn_flag in tab_flags:
                 tab_btn = tab_bar.tabButton(0, btn_flag)
                 if tab_btn:
                     tab_btn.deleteLater()
@@ -771,7 +776,7 @@ class NodeGraph(QtCore.QObject):
         """
         return self._context_menu.get(menu)
 
-    def _deserialize_context_menu(self, menu, menu_data):
+    def _deserialize_context_menu(self, menu, menu_data, anchor_path=None):
         """
         Populate context menu from a dictionary.
 
@@ -779,6 +784,7 @@ class NodeGraph(QtCore.QObject):
             menu (NodeGraphQt.NodeGraphMenu or NodeGraphQt.NodesMenu):
                 parent context menu.
             menu_data (list[dict] or dict): serialized menu data.
+            anchor_path (str or None): directory to interpret file paths relative to (optional)
         """
         if not menu:
             raise ValueError('No context menu named: "{}"'.format(menu))
@@ -787,6 +793,10 @@ class NodeGraph(QtCore.QObject):
         import importlib.util
 
         nodes_menu = self.get_context_menu('nodes')
+
+        anchor = Path(anchor_path).resolve()
+        if anchor.is_file():
+            anchor = anchor.parent
 
         def build_menu_command(menu, data):
             """
@@ -797,14 +807,16 @@ class NodeGraph(QtCore.QObject):
                     menu object.
                 data (dict): serialized menu command data.
             """
-            full_path = os.path.abspath(data['file'])
-            base_dir, file_name = os.path.split(full_path)
-            base_name = os.path.basename(base_dir)
-            file_name, _ = file_name.split('.')
+            func_path = Path(data['file'])
+            if not func_path.is_absolute():
+                func_path = anchor.joinpath(func_path)
+
+            base_name = func_path.parent.name
+            file_name = func_path.stem
 
             mod_name = '{}.{}'.format(base_name, file_name)
 
-            spec = importlib.util.spec_from_file_location(mod_name, full_path)
+            spec = importlib.util.spec_from_file_location(mod_name, func_path)
             mod = importlib.util.module_from_spec(spec)
             sys.modules[mod_name] = mod
             spec.loader.exec_module(mod)
@@ -828,12 +840,12 @@ class NodeGraph(QtCore.QObject):
             elif item_type == 'menu':
                 sub_menu = menu.add_menu(menu_data['label'])
                 items = menu_data.get('items', [])
-                self._deserialize_context_menu(sub_menu, items)
+                self._deserialize_context_menu(sub_menu, items, anchor_path)
         elif isinstance(menu_data, list):
             for item_data in menu_data:
-                self._deserialize_context_menu(menu, item_data)
+                self._deserialize_context_menu(menu, item_data, anchor_path)
 
-    def set_context_menu(self, menu_name, data):
+    def set_context_menu(self, menu_name, data, anchor_path=None):
         """
         Populate a context menu from serialized data.
 
@@ -871,11 +883,12 @@ class NodeGraph(QtCore.QObject):
         Args:
             menu_name (str): name of the parent context menu to populate under.
             data (dict): serialized menu data.
+            anchor_path (str or None): directory to interpret file paths relative to (optional)
         """
         context_menu = self.get_context_menu(menu_name)
-        self._deserialize_context_menu(context_menu, data)
+        self._deserialize_context_menu(context_menu, data, anchor_path)
 
-    def set_context_menu_from_file(self, file_path, menu=None):
+    def set_context_menu_from_file(self, file_path, menu='graph'):
         """
         Populate a context menu from a serialized json file.
 
@@ -888,16 +901,16 @@ class NodeGraph(QtCore.QObject):
             menu (str): name of the parent context menu to populate under.
             file_path (str): serialized menu commands json file.
         """
-        file_path = os.path.abspath(file_path)
+        file = Path(file_path).resolve()
 
         menu = menu or 'graph'
-        if not os.path.isfile(file_path):
-            raise IOError('file doesn\'t exists: "{}"'.format(file_path))
+        if not file.is_file():
+            raise IOError('file doesn\'t exist: "{}"'.format(file))
 
-        with open(file_path) as f:
+        with file.open() as f:
             data = json.load(f)
         context_menu = self.get_context_menu(menu)
-        self._deserialize_context_menu(context_menu, data)
+        self._deserialize_context_menu(context_menu, data, file)
 
     def disable_context_menu(self, disabled=True, name='all'):
         """

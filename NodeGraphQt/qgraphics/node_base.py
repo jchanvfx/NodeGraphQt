@@ -258,7 +258,7 @@ class NodeItem(AbstractNodeItem):
             change:
             value:
         """
-        if change == self.ItemSelectedChange and self.scene():
+        if change == QtWidgets.QGraphicsItem.ItemSelectedChange and self.scene():
             self.reset_pipes()
             if value:
                 self.highlight_pipes()

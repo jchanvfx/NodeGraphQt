@@ -102,7 +102,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         )))
         text_color.setAlpha(50)
         self._cursor_text = QtWidgets.QGraphicsTextItem()
-        self._cursor_text.setFlag(self._cursor_text.ItemIsSelectable, False)
+        self._cursor_text.setFlag(
+            QtWidgets.QGraphicsTextItem.ItemIsSelectable, False
+        )
         self._cursor_text.setDefaultTextColor(text_color)
         self._cursor_text.setZValue(Z_VAL_PIPE - 1)
         font = self._cursor_text.font()

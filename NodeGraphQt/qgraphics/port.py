@@ -16,8 +16,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         super(PortItem, self).__init__(parent)
         self.setAcceptHoverEvents(True)
         self.setCacheMode(ITEM_CACHE_MODE)
-        self.setFlag(self.ItemIsSelectable, False)
-        self.setFlag(self.ItemSendsScenePositionChanges, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, False)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
         self._pipes = []
         self._width = PortEnum.SIZE.value
@@ -114,7 +114,7 @@ class PortItem(QtWidgets.QGraphicsItem):
         painter.restore()
 
     def itemChange(self, change, value):
-        if change == self.ItemScenePositionHasChanged:
+        if change == QtWidgets.QGraphicsItem.ItemScenePositionHasChanged:
             self.redraw_connected_pipes()
         return super(PortItem, self).itemChange(change, value)
 
