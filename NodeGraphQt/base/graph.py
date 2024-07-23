@@ -6,7 +6,7 @@ import os
 import re
 from pathlib import Path
 
-from Qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodesRemovedCmd,
@@ -151,7 +151,7 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('node_factory') or NodeFactory())
         self._undo_view = None
         self._undo_stack = (
-            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self)
+            kwargs.get('undo_stack') or QtGui.QUndoStack(self)
         )
         self._widget = None
         self._sub_graphs = {}
@@ -521,8 +521,8 @@ class NodeGraph(QtCore.QObject):
             # hide the close button on the first tab.
             tab_bar = self._widget.tabBar()
             tab_flags = [
-                QtWidgets.QTabBar.RightSide,
-                QtWidgets.QTabBar.LeftSide
+                QtWidgets.QTabBar.ButtonPosition.RightSide,
+                QtWidgets.QTabBar.ButtonPosition.LeftSide
             ]
             for btn_flag in tab_flags:
                 tab_btn = tab_bar.tabButton(0, btn_flag)

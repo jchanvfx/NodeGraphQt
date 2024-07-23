@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets
+from qtpy import QtWidgets
 
 from .custom_widget_value_edit import _NumberValueEdit
 from .prop_widgets_abstract import BaseProperty

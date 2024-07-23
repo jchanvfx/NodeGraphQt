@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import re
-from distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore
+from qtpy import QtGui, QtCore
 
 from NodeGraphQt.errors import NodeMenuError
 from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
@@ -120,10 +119,10 @@ class NodeGraphMenu(object):
                 shortcut = getattr(QtGui.QKeySequence, search.group(1))
             elif all([i in ['Alt', 'Enter'] for i in shortcut.split('+')]):
                 shortcut = QtGui.QKeySequence(
-                    QtCore.Qt.ALT | QtCore.Qt.Key_Return
+                    QtCore.Qt.Modifier.ALT | QtCore.Qt.Key.Key_Return
                 )
             elif all([i in ['Return', 'Enter'] for i in shortcut.split('+')]):
-                shortcut = QtCore.Qt.Key_Return
+                shortcut = QtCore.Qt.Key.Key_Return
         if shortcut:
             action.setShortcut(shortcut)
 
@@ -141,8 +140,7 @@ class NodeGraphMenu(object):
         """
         action = GraphAction(name, self._graph.viewer())
         action.graph = self._graph
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            action.setShortcutVisibleInContextMenu(True)
+        action.setShortcutVisibleInContextMenu(True)
 
         if shortcut:
             self._set_shortcut(action, shortcut)
@@ -218,8 +216,6 @@ class NodesMenu(NodeGraphMenu):
 
         action = NodeAction(name, self._graph.viewer())
         action.graph = self._graph
-        if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
-            action.setShortcutVisibleInContextMenu(True)
 
         if shortcut:
             self._set_shortcut(action, shortcut)
