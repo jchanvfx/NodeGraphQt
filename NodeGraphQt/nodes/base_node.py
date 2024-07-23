@@ -204,6 +204,10 @@ class BaseNode(NodeObject):
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
 
+        #: HACK: calling the .parent() function here on the widget as it seems
+        #        to address a seg fault issue when exiting the application.
+        widget.parent()
+
     def add_combo_menu(self, name, label='', items=None, tooltip=None,
                        tab=None):
         """
