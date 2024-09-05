@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     Z_VAL_NODE,
@@ -17,8 +17,8 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
     def __init__(self, name='node', parent=None):
         super(AbstractNodeItem, self).__init__(parent)
         self.setFlags(
-            QtWidgets.QGraphicsItem.ItemIsSelectable |
-            QtWidgets.QGraphicsItem.ItemIsMovable
+            QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable |
+            QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable
         )
         self.setCacheMode(ITEM_CACHE_MODE)
         self.setZValue(Z_VAL_NODE)

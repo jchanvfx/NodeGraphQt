@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from Qt import QtWidgets
+from qtpy import QtWidgets
 from enum import Enum
 
 from .pkg_info import __version__ as _v

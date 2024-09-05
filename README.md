@@ -1,5 +1,5 @@
 
-# NodeGraphQt
+# NodeGraphQt (for Qt6)
 
 [![API Documentation](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml)
 [![PyPI Package](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml)
@@ -11,18 +11,19 @@
     </a>
 </p>
 
-NodeGraphQt is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
-applications.
+[NodeGraphQt](https://github.com/jchanvfx/NodeGraphQt/releases) is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
+applications.  
+**This** fork provides a few changes to support Qt 6 using either PySide6/PyQt6 thanks to the [qtpy compatability layer](https://pypi.org/project/QtPy/).
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
 ## Install
 
-NodeGraphQt is available on The Python Package Index (PyPI) [here](https://pypi.org/project/NodeGraphQt) so it can be installed with:
+NodeGraphQt (for Qt5) is available on The Python Package Index (PyPI) [here](https://pypi.org/project/NodeGraphQt) so it can be installed with:
 ```
 pip install NodeGraphQt
 ```
-or you can download previous versions from the [releases](https://github.com/jchanvfx/NodeGraphQt/releases) page.
+I don't provide releases of this Qt6 fork (for now)
 
 
 ## Documentation

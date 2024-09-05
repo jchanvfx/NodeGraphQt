@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets, QtCore
+from qtpy import QtWidgets, QtCore
 
 
 class BaseProperty(QtWidgets.QWidget):

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets
+from qtpy import QtWidgets
 
 from NodeGraphQt.constants import PortTypeEnum
 

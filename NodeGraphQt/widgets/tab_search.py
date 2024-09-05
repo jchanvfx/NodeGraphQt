@@ -2,7 +2,7 @@
 import re
 from collections import OrderedDict
 
-from Qt import QtCore, QtWidgets, QtGui
+from qtpy import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.constants import ViewerEnum, ViewerNavEnum
 
@@ -15,8 +15,8 @@ class TabSearchCompleter(QtWidgets.QCompleter):
 
     def __init__(self, nodes=None, parent=None):
         super(TabSearchCompleter, self).__init__(nodes, parent)
-        self.setCompletionMode(self.PopupCompletion)
-        self.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setCompletionMode(self.CompletionMode.PopupCompletion)
+        self.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
         self._local_completion_prefix = ''
         self._using_orig_model = False
         self._source_model = None
@@ -35,11 +35,14 @@ class TabSearchCompleter(QtWidgets.QCompleter):
     def updateModel(self):
         if not self._using_orig_model:
             self._filter_model.setSourceModel(self._source_model)
-
-        pattern = QtCore.QRegExp(self._local_completion_prefix,
-                                 QtCore.Qt.CaseInsensitive,
-                                 QtCore.QRegExp.FixedString)
-        self._filter_model.setFilterRegExp(pattern)
+        # # https://doc.qt.io/qtforpython-6/overviews/qtcore-changes-qt6.html#the-qregularexpression-class
+        # pattern = QtCore.QRegExp(self._local_completion_prefix,
+        #                          QtCore.Qt.CaseSensitivity.CaseInsensitive,
+        #                          QtCore.QRegExp.FixedString)
+        # self._filter_model.setFilterRegExp(pattern)
+        # TODO: review these changes
+        self._filter_model.setFilterCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
+        self._filter_model.setFilterFixedString(self._local_completion_prefix)
 
     def setModel(self, model):
         self._source_model = model
@@ -55,7 +58,7 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         super(TabSearchLineEditWidget, self).__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_MacShowFocusRect, 0)
         self.setMinimumSize(200, 22)
         # text_color = self.palette().text().color().getRgb()
         text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
@@ -88,7 +91,7 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
 
     def keyPressEvent(self, event):
         super(TabSearchLineEditWidget, self).keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Tab:
+        if event.key() == QtCore.Qt.Key.Key_Tab:
             self.tab_pressed.emit()
 
 
