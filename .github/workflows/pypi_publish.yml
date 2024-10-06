@@ -20,9 +20,5 @@ jobs:
       - name: Python Build
         run: python3 -m pip install --upgrade build && python3 -m build
       # Publish the python package to pypi.org with the api token.
-      - name: Publish Package
+      - name: Publish Package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://upload.pypi.org/legacy/
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
