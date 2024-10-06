@@ -907,7 +907,7 @@ class NodeGraph(QtCore.QObject):
         if not file.is_file():
             raise IOError('file doesn\'t exist: "{}"'.format(file))
 
-        with file.open() as f:
+        with file.open(encoding='utf8') as f:
             data = json.load(f)
         context_menu = self.get_context_menu(menu)
         self._deserialize_context_menu(context_menu, data, file)
