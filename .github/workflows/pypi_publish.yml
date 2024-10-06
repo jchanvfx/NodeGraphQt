@@ -19,6 +19,6 @@ jobs:
       # Run build to a specified version of python into a specified directory.
       - name: Python Build
         run: python3 -m pip install --upgrade build && python3 -m build
-      # Publish the python package to pypi.org with the api token.
+      # Publish the python package to pypi.org.
       - name: Publish Package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
