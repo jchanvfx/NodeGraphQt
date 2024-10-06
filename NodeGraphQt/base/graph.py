@@ -1727,8 +1727,12 @@ class NodeGraph(QtCore.QObject):
         serial_data['graph']['pipe_style'] = self.pipe_style()
 
         # connection constrains.
-        serial_data['graph']['accept_connection_types'] = self.model.accept_connection_types
-        serial_data['graph']['reject_connection_types'] = self.model.reject_connection_types
+        serial_data['graph']['accept_connection_types'] = {
+            k: list(v) for k, v in self.model.accept_connection_types.items()
+        }
+        serial_data['graph']['reject_connection_types'] = {
+            k: list(v) for k, v in self.model.reject_connection_types.items()
+        }
 
         # serialize nodes.
         for n in nodes:
@@ -1798,9 +1802,13 @@ class NodeGraph(QtCore.QObject):
 
             # connection constrains.
             elif attr_name == 'accept_connection_types':
-                self.model.accept_connection_types = attr_value
+                self.model.accept_connection_types = {
+                    k: set(v) for k, v in attr_value.items()
+                }
             elif attr_name == 'reject_connection_types':
-                self.model.reject_connection_types = attr_value
+                self.model.reject_connection_types = {
+                    k: set(v) for k, v in attr_value.items()
+                }
 
         # build the nodes.
         nodes = {}
