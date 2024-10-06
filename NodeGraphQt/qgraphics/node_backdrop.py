@@ -152,7 +152,7 @@ class BackdropNodeItem(AbstractNodeItem):
 
     def mouseReleaseEvent(self, event):
         super(BackdropNodeItem, self).mouseReleaseEvent(event)
-        self.setFlag(self.ItemIsMovable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
         [n.setSelected(True) for n in self._nodes]
         self._nodes = [self]
 

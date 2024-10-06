@@ -66,10 +66,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setRenderHint(QtGui.QPainter.Antialiasing, True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.BoundingRectViewportUpdate)
         self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
-        self.setOptimizationFlag(
-            QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
@@ -669,7 +668,11 @@ class NodeViewer(QtWidgets.QGraphicsView):
             delta = event.angleDelta().y()
             if delta == 0:
                 delta = event.angleDelta().x()
-        self._set_viewer_zoom(delta, pos=event.pos())
+        try:
+            self._set_viewer_zoom(delta, pos=event.pos())
+        except AttributeError:
+            # For PyQt5 and above
+            self._set_viewer_zoom(delta, pos=event.position().toPoint())
 
     def dropEvent(self, event):
         pos = self.mapToScene(event.pos())
