@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish:
-    name: Upload release to PyPI
+    name: Upload release to PyPI.org
     runs-on: ubuntu-latest
     # IMPORTANT: this permission is mandatory for trusted publishing.
     permissions:
