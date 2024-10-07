@@ -9,7 +9,11 @@ on:
 
 jobs:
   publish:
+    name: Upload release to PyPI.org
     runs-on: ubuntu-latest
+    # IMPORTANT: this permission is mandatory for trusted publishing.
+    permissions:
+      id-token: write
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
       - name: Checkout
