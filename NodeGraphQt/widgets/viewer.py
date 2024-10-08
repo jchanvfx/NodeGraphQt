@@ -617,9 +617,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path = QtGui.QPainterPath()
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
-                self.scene().setSelectionArea(
-                    path, QtCore.Qt.IntersectsItemShape
-                )
+                self.scene().setSelectionArea(path)
                 self.scene().update(map_rect)
 
                 if self.SHIFT_state or self.CTRL_state:
