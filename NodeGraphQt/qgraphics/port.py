@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     PortTypeEnum, PortEnum,
@@ -16,8 +16,8 @@ class PortItem(QtWidgets.QGraphicsItem):
         super(PortItem, self).__init__(parent)
         self.setAcceptHoverEvents(True)
         self.setCacheMode(ITEM_CACHE_MODE)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, False)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsScenePositionChanges, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemSendsScenePositionChanges, True)
         self.setZValue(Z_VAL_PORT)
         self._pipes = []
         self._width = PortEnum.SIZE.value
@@ -114,21 +114,21 @@ class PortItem(QtWidgets.QGraphicsItem):
         painter.restore()
 
     def itemChange(self, change, value):
-        if change == QtWidgets.QGraphicsItem.ItemScenePositionHasChanged:
+        if change == QtWidgets.QGraphicsItem.GraphicsItemChange.ItemScenePositionHasChanged:
             self.redraw_connected_pipes()
         return super(PortItem, self).itemChange(change, value)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
         super(PortItem, self).mousePressEvent(event)
         
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         super(PortItem, self).mouseReleaseEvent(event)
 
-    def hoverEnterEvent(self, event):
+    def hoverEnterEvent(self, event: QtGui.QHoverEvent):
         self._hovered = True
         super(PortItem, self).hoverEnterEvent(event)
         
-    def hoverLeaveEvent(self, event):
+    def hoverLeaveEvent(self, event: QtGui.QHoverEvent):
         self._hovered = False
         super(PortItem, self).hoverLeaveEvent(event)
 

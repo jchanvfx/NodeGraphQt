@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import math
-from distutils.version import LooseVersion
+from setuptools._distutils.version import LooseVersion
 
-from Qt import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.base.menu import BaseMenu
 from NodeGraphQt.constants import (
@@ -38,20 +38,20 @@ class NodeViewer(QtWidgets.QGraphicsView):
     # node viewer signals.
     # (some of these signals are called by port & node items and connected
     # to the node graph slot functions)
-    moved_nodes = QtCore.Signal(object)
-    search_triggered = QtCore.Signal(str, tuple)
-    connection_sliced = QtCore.Signal(list)
-    connection_changed = QtCore.Signal(list, list)
-    insert_node = QtCore.Signal(object, str, object)
-    node_name_changed = QtCore.Signal(str, str)
-    node_backdrop_updated = QtCore.Signal(str, str, object)
+    moved_nodes = QtCore.pyqtSignal(object)
+    search_triggered = QtCore.pyqtSignal(str, tuple)
+    connection_sliced = QtCore.pyqtSignal(list)
+    connection_changed = QtCore.pyqtSignal(list, list)
+    insert_node = QtCore.pyqtSignal(object, str, object)
+    node_name_changed = QtCore.pyqtSignal(str, str)
+    node_backdrop_updated = QtCore.pyqtSignal(str, str, object)
 
     # pass through signals that are translated into "NodeGraph()" signals.
-    node_selected = QtCore.Signal(str)
-    node_selection_changed = QtCore.Signal(list, list)
-    node_double_clicked = QtCore.Signal(str)
-    data_dropped = QtCore.Signal(QtCore.QMimeData, object)
-    context_menu_prompt = QtCore.Signal(str, object)
+    node_selected = QtCore.pyqtSignal(str)
+    node_selection_changed = QtCore.pyqtSignal(list, list)
+    node_double_clicked = QtCore.pyqtSignal(str)
+    data_dropped = QtCore.pyqtSignal(QtCore.QMimeData, object)
+    context_menu_prompt = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None, undo_stack=None):
         """
@@ -63,12 +63,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         super(NodeViewer, self).__init__(parent)
 
         self.setScene(NodeScene(self))
-        self.setRenderHint(QtGui.QPainter.Antialiasing, True)
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setViewportUpdateMode(QtWidgets.QGraphicsView.BoundingRectViewportUpdate)
-        self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
-        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
+        self.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate)
+        self.setCacheMode(QtWidgets.QGraphicsView.CacheModeFlag.CacheBackground)
+        self.setOptimizationFlag(QtWidgets.QGraphicsView.OptimizationFlag.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
@@ -91,7 +91,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._node_positions = {}
 
         self._rubber_band = QtWidgets.QRubberBand(
-            QtWidgets.QRubberBand.Rectangle, self
+            QtWidgets.QRubberBand.Shape.Rectangle, self
         )
         self._rubber_band.isActive = False
 
@@ -102,7 +102,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         text_color.setAlpha(50)
         self._cursor_text = QtWidgets.QGraphicsTextItem()
         self._cursor_text.setFlag(
-            QtWidgets.QGraphicsTextItem.ItemIsSelectable, False
+            QtWidgets.QGraphicsTextItem.GraphicsItemFlag.ItemIsSelectable, False
         )
         self._cursor_text.setDefaultTextColor(text_color)
         self._cursor_text.setZValue(Z_VAL_PIPE - 1)
@@ -163,7 +163,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         return '<{}() object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
 
-    def focusInEvent(self, event):
+    def focusInEvent(self, event: QtGui.QFocusEvent):
         """
         Args:
             event (QtGui.QFocusEvent): focus event.
@@ -174,7 +174,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._ctx_menu_bar.addMenu(self._ctx_node_menu)
         return super(NodeViewer, self).focusInEvent(event)
 
-    def focusOutEvent(self, event):
+    def focusOutEvent(self, event: QtGui.QFocusEvent):
         """
         Args:
             event (QtGui.QFocusEvent): focus event.
@@ -200,8 +200,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         # setup the undo and redo actions.
         if self._undo_action and self._redo_action:
-            self._undo_action.setShortcuts(QtGui.QKeySequence.Undo)
-            self._redo_action.setShortcuts(QtGui.QKeySequence.Redo)
+            self._undo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Undo)
+            self._redo_action.setShortcuts(QtGui.QKeySequence.StandardKey.Redo)
             if LooseVersion(QtCore.qVersion()) >= LooseVersion('5.10'):
                 self._undo_action.setShortcutVisibleInContextMenu(True)
                 self._redo_action.setShortcutVisibleInContextMenu(True)
@@ -268,7 +268,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Redraw the scene.
         """
         self.setSceneRect(self._scene_range)
-        self.fitInView(self._scene_range, QtCore.Qt.KeepAspectRatio)
+        self.fitInView(self._scene_range, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
 
     def _combined_rect(self, nodes):
         """
@@ -341,7 +341,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- reimplemented events ---
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QtGui.QResizeEvent):
         w, h = self.size().width(), self.size().height()
         if 0 in [w, h]:
             self.resize(self._last_size)
@@ -350,7 +350,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._last_size = self.size()
         super(NodeViewer, self).resizeEvent(event)
 
-    def contextMenuEvent(self, event):
+    def contextMenuEvent(self, event: QtGui.QContextMenuEvent):
         self.RMB_state = False
 
         ctx_menu = None
@@ -380,18 +380,18 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self.context_menu_prompt.emit(
                     prompted_data[0], prompted_data[1]
                 )
-                ctx_menu.exec_(event.globalPos())
+                ctx_menu.exec(event.globalPos())
             else:
                 return super(NodeViewer, self).contextMenuEvent(event)
 
         return super(NodeViewer, self).contextMenuEvent(event)
 
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             self.LMB_state = True
-        elif event.button() == QtCore.Qt.RightButton:
+        elif event.button() == QtCore.Qt.MouseButton.RightButton:
             self.RMB_state = True
-        elif event.button() == QtCore.Qt.MiddleButton:
+        elif event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self.MMB_state = True
 
         self._origin_pos = event.pos()
@@ -510,12 +510,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         if not self._LIVE_PIPE.isVisible():
             super(NodeViewer, self).mousePressEvent(event)
 
-    def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             self.LMB_state = False
-        elif event.button() == QtCore.Qt.RightButton:
+        elif event.button() == QtCore.Qt.MouseButton.RightButton:
             self.RMB_state = False
-        elif event.button() == QtCore.Qt.MiddleButton:
+        elif event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self.MMB_state = False
 
         # hide pipe slicer.
@@ -579,7 +579,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         super(NodeViewer, self).mouseReleaseEvent(event)
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QtGui.QMouseEvent):
         if self.ALT_state and self.SHIFT_state:
             if self.pipe_slicing:
                 if self.LMB_state and self._SLICER_PIPE.isVisible():
@@ -617,7 +617,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 path.addRect(map_rect)
                 self._rubber_band.setGeometry(rect)
                 self.scene().setSelectionArea(
-                    path, QtCore.Qt.IntersectsItemShape
+                    path, mode=QtCore.Qt.ItemSelectionMode.IntersectsItemShape
                 )
                 self.scene().update(map_rect)
 
@@ -660,28 +660,21 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self._previous_pos = event.pos()
         super(NodeViewer, self).mouseMoveEvent(event)
 
-    def wheelEvent(self, event):
-        try:
-            delta = event.delta()
-        except AttributeError:
-            # For PyQt5
-            delta = event.angleDelta().y()
-            if delta == 0:
-                delta = event.angleDelta().x()
-        try:
-            self._set_viewer_zoom(delta, pos=event.pos())
-        except AttributeError:
-            # For PyQt5 and above
-            self._set_viewer_zoom(delta, pos=event.position().toPoint())
+    def wheelEvent(self, event: QtGui.QWheelEvent):
+        delta = event.angleDelta().y()
+        if delta == 0:
+            delta = event.angleDelta().x()
 
-    def dropEvent(self, event):
-        pos = self.mapToScene(event.pos())
-        event.setDropAction(QtCore.Qt.CopyAction)
+        self._set_viewer_zoom(delta, pos=event.position().toPoint())
+
+    def dropEvent(self, event: QtGui.QDropEvent):
+        pos = self.mapToScene(event.position().toPoint())
+        event.setDropAction(QtCore.Qt.DropAction.CopyAction)
         self.data_dropped.emit(
-            event.mimeData(), QtCore.QPoint(pos.x(), pos.y())
+            event.mimeData(), QtCore.QPoint(int(pos.x()), int(pos.y()))
         )
 
-    def dragEnterEvent(self, event):
+    def dragEnterEvent(self, event: QtGui.QDragEnterEvent):
         is_acceptable = any([
             event.mimeData().hasFormat(i) for i in
             ['nodegraphqt/nodes', 'text/plain', 'text/uri-list']
@@ -701,10 +694,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         else:
             event.ignore()
 
-    def dragLeaveEvent(self, event):
+    def dragLeaveEvent(self, event: QtGui.QDragLeaveEvent):
         event.ignore()
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
         """
         Key press event re-implemented to update the states for attributes:
         - ALT_state
@@ -714,12 +707,12 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
-        self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
-        self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
+        self.ALT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
+        self.CTRL_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ControlModifier
+        self.SHIFT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier
 
         # Todo: find a better solution to catch modifier keys.
-        if event.modifiers() == (QtCore.Qt.AltModifier | QtCore.Qt.ShiftModifier):
+        if event.modifiers() == (QtCore.Qt.KeyboardModifier.AltModifier | QtCore.Qt.KeyboardModifier.ShiftModifier):
             self.ALT_state = True
             self.SHIFT_state = True
 
@@ -745,7 +738,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
         super(NodeViewer, self).keyPressEvent(event)
 
-    def keyReleaseEvent(self, event):
+    def keyReleaseEvent(self, event: QtGui.QKeyEvent):
         """
         Key release event re-implemented to update the states for attributes:
         - ALT_state
@@ -755,9 +748,9 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Args:
             event (QtGui.QKeyEvent): key event.
         """
-        self.ALT_state = event.modifiers() == QtCore.Qt.AltModifier
-        self.CTRL_state = event.modifiers() == QtCore.Qt.ControlModifier
-        self.SHIFT_state = event.modifiers() == QtCore.Qt.ShiftModifier
+        self.ALT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
+        self.CTRL_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ControlModifier
+        self.SHIFT_state = event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier
         super(NodeViewer, self).keyReleaseEvent(event)
 
         # hide and reset cursor text.
@@ -766,7 +759,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
     # --- scene events ---
 
-    def sceneMouseMoveEvent(self, event):
+    def sceneMouseMoveEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         """
         triggered mouse move event for the scene.
          - redraw the live connection pipe.
@@ -814,7 +807,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self._start_port, cursor_pos=pos, color=pointer_color
         )
 
-    def sceneMousePressEvent(self, event):
+    def sceneMousePressEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         """
         triggered mouse press event for the scene (takes priority over viewer event).
          - detect selected pipe and start connection.
@@ -871,7 +864,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 self._node_positions[n] = n.xy_pos
 
             # emit selected node id with LMB.
-            if event.button() == QtCore.Qt.LeftButton:
+            if event.button() == QtCore.Qt.MouseButton.LeftButton:
                 self.node_selected.emit(node.id)
 
             if not isinstance(node, BackdropNodeItem):
@@ -902,7 +895,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
 
             pipe.delete()
 
-    def sceneMouseReleaseEvent(self, event):
+    def sceneMouseReleaseEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         """
         triggered mouse release event for the scene.
 
@@ -910,7 +903,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
         """
-        if event.button() != QtCore.Qt.MiddleButton:
+        if event.button() != QtCore.Qt.MouseButton.MiddleButton:
             self.apply_live_connection(event)
 
     # --- port connections ---
@@ -994,7 +987,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
             return False
         return False
 
-    def apply_live_connection(self, event):
+    def apply_live_connection(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         """
         triggered mouse press/release event for the scene.
         - verifies the live connection pipe.
@@ -1216,7 +1209,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Get the undo QAction from the parent undo stack.
 
         Returns:
-            QtWidgets.QAction: undo action.
+            QtGui.QAction: undo action.
         """
         return self._undo_action
 
@@ -1225,7 +1218,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         Get the redo QAction from the parent undo stack.
 
         Returns:
-            QtWidgets.QAction: redo action.
+            QtGui.QAction: redo action.
         """
         return self._redo_action
 
@@ -1643,9 +1636,5 @@ class NodeViewer(QtWidgets.QGraphicsView):
         """
         # use QOpenGLWidget instead of the deprecated QGLWidget to avoid
         # problems with Wayland.
-        import Qt
-        if Qt.IsPySide2:
-            from PySide2.QtWidgets import QOpenGLWidget
-        elif Qt.IsPyQt5:
-            from PyQt5.QtWidgets import QOpenGLWidget
+        from PyQt6.QtOpenGLWidgets import QOpenGLWidget
         self.setViewport(QOpenGLWidget())

@@ -6,7 +6,7 @@ import os
 import re
 from pathlib import Path
 
-from Qt import QtCore, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodesRemovedCmd,
@@ -48,7 +48,7 @@ class NodeGraph(QtCore.QObject):
         :width: 60%
     """
 
-    nodes_registered = QtCore.Signal(list)
+    nodes_registered = QtCore.pyqtSignal(list)
     """
     Signal triggered when a node is registered into the node graph.
 
@@ -56,28 +56,28 @@ class NodeGraph(QtCore.QObject):
     :emits: registered nodes
     """
 
-    node_created = QtCore.Signal(NodeObject)
+    node_created = QtCore.pyqtSignal(NodeObject)
     """
     Signal triggered when a node is created in the node graph.
 
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: created node
     """
-    nodes_deleted = QtCore.Signal(list)
+    nodes_deleted = QtCore.pyqtSignal(list)
     """
     Signal triggered when nodes have been deleted from the node graph.
 
     :parameters: list[str]
     :emits: list of deleted node ids.
     """
-    node_selected = QtCore.Signal(NodeObject)
+    node_selected = QtCore.pyqtSignal(NodeObject)
     """
     Signal triggered when a node is clicked with the LMB.
 
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: selected node
     """
-    node_selection_changed = QtCore.Signal(list, list)
+    node_selection_changed = QtCore.pyqtSignal(list, list)
     """
     Signal triggered when the node selection has changed.
 
@@ -85,49 +85,49 @@ class NodeGraph(QtCore.QObject):
                  list[:class:`NodeGraphQt.NodeObject`]
     :emits: selected node, deselected nodes.
     """
-    node_double_clicked = QtCore.Signal(NodeObject)
+    node_double_clicked = QtCore.pyqtSignal(NodeObject)
     """
     Signal triggered when a node is double clicked and emits the node.
 
     :parameters: :class:`NodeGraphQt.NodeObject`
     :emits: selected node
     """
-    port_connected = QtCore.Signal(Port, Port)
+    port_connected = QtCore.pyqtSignal(Port, Port)
     """
     Signal triggered when a node port has been connected.
 
     :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
-    port_disconnected = QtCore.Signal(Port, Port)
+    port_disconnected = QtCore.pyqtSignal(Port, Port)
     """
     Signal triggered when a node port has been disconnected.
 
     :parameters: :class:`NodeGraphQt.Port`, :class:`NodeGraphQt.Port`
     :emits: input port, output port
     """
-    property_changed = QtCore.Signal(NodeObject, str, object)
+    property_changed = QtCore.pyqtSignal(NodeObject, str, object)
     """
     Signal is triggered when a property has changed on a node.
 
     :parameters: :class:`NodeGraphQt.BaseNode`, str, object
     :emits: triggered node, property name, property value
     """
-    data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
+    data_dropped = QtCore.pyqtSignal(QtCore.QMimeData, QtCore.QPoint)
     """
     Signal is triggered when data has been dropped to the graph.
 
     :parameters: :class:`PySide2.QtCore.QMimeData`, :class:`PySide2.QtCore.QPoint`
     :emits: mime data, node graph position
     """
-    session_changed = QtCore.Signal(str)
+    session_changed = QtCore.pyqtSignal(str)
     """
     Signal is triggered when session has been changed.
 
     :parameters: str
     :emits: new session path
     """
-    context_menu_prompt = QtCore.Signal(object, object)
+    context_menu_prompt = QtCore.pyqtSignal(object, object)
     """
     Signal is triggered just before a context menu is shown.
 
@@ -151,7 +151,7 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('node_factory') or NodeFactory())
         self._undo_view = None
         self._undo_stack = (
-            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self)
+            kwargs.get('undo_stack') or QtGui.QUndoStack(self)
         )
         self._widget = None
         self._sub_graphs = {}
@@ -521,8 +521,8 @@ class NodeGraph(QtCore.QObject):
             # hide the close button on the first tab.
             tab_bar = self._widget.tabBar()
             tab_flags = [
-                QtWidgets.QTabBar.RightSide,
-                QtWidgets.QTabBar.LeftSide
+                QtWidgets.QTabBar.ButtonPosition.RightSide,
+                QtWidgets.QTabBar.ButtonPosition.LeftSide,
             ]
             for btn_flag in tab_flags:
                 tab_btn = tab_bar.tabButton(0, btn_flag)

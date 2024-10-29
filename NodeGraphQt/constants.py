@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from Qt import QtWidgets
+from PyQt6 import QtWidgets
 from enum import Enum
 
 from .pkg_info import __version__ as _v
@@ -35,7 +35,7 @@ Z_VAL_NODE_WIDGET = 3
 # QGraphicsItem.NoCache
 # QGraphicsItem.DeviceCoordinateCache
 # QGraphicsItem.ItemCoordinateCache
-ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.DeviceCoordinateCache
+ITEM_CACHE_MODE = QtWidgets.QGraphicsItem.CacheMode.DeviceCoordinateCache
 
 # =================================== GLOBAL ===================================
 

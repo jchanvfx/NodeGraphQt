@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import ViewerEnum
 
@@ -91,7 +91,7 @@ class NodeScene(QtWidgets.QGraphicsScene):
         super(NodeScene, self).drawBackground(painter, rect)
 
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
         painter.setBrush(self.backgroundBrush())
 
         if self._grid_mode is ViewerEnum.GRID_DISPLAY_DOTS.value:
@@ -116,26 +116,26 @@ class NodeScene(QtWidgets.QGraphicsScene):
 
         painter.restore()
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
         selected_nodes = self.viewer().selected_nodes()
         if self.viewer():
             self.viewer().sceneMousePressEvent(event)
         super(NodeScene, self).mousePressEvent(event)
         keep_selection = any([
-            event.button() == QtCore.Qt.MiddleButton,
-            event.button() == QtCore.Qt.RightButton,
-            event.modifiers() == QtCore.Qt.AltModifier
+            event.button() == QtCore.Qt.MouseButton.MiddleButton,
+            event.button() == QtCore.Qt.MouseButton.RightButton,
+            event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier
         ])
         if keep_selection:
             for node in selected_nodes:
                 node.setSelected(True)
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QtGui.QMouseEvent):
         if self.viewer():
             self.viewer().sceneMouseMoveEvent(event)
         super(NodeScene, self).mouseMoveEvent(event)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         if self.viewer():
             self.viewer().sceneMouseReleaseEvent(event)
         super(NodeScene, self).mouseReleaseEvent(event)

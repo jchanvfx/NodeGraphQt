@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui
 
 from NodeGraphQt.constants import NodeEnum, PortEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem
@@ -234,9 +234,9 @@ class CircleNodeItem(NodeItem):
         pen_color = QtGui.QColor(*self.border_color)
         pen_color.setAlpha(120)
         pen = QtGui.QPen(pen_color, 1.5)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         for p in self.inputs:
             if p.isVisible():
                 p_text = self.get_input_text_item(p)
@@ -273,7 +273,7 @@ class CircleNodeItem(NodeItem):
 
         # draw the base color.
         painter.setBrush(QtGui.QColor(*self.color))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawEllipse(rect)
 
         # draw outline.
@@ -291,7 +291,7 @@ class CircleNodeItem(NodeItem):
             border_color = QtGui.QColor(*self.border_color)
 
         # draw the outlines.
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.drawEllipse(rect)
 
@@ -307,7 +307,7 @@ class CircleNodeItem(NodeItem):
             painter.setBrush(QtGui.QColor(*NodeEnum.SELECTED_COLOR.value))
         else:
             painter.setBrush(QtGui.QColor(0, 0, 0, 80))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawRoundedRect(text_rect, 8.0, 8.0)
 
         painter.restore()
@@ -335,9 +335,9 @@ class CircleNodeItem(NodeItem):
         pen_color = QtGui.QColor(*self.border_color)
         pen_color.setAlpha(120)
         pen = QtGui.QPen(pen_color, 1.5)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         for p in self.inputs:
             if p.isVisible():
                 pt1 = QtCore.QPointF(
@@ -364,7 +364,7 @@ class CircleNodeItem(NodeItem):
 
         # draw the base color.
         painter.setBrush(QtGui.QColor(*self.color))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawEllipse(rect)
 
         # draw outline.
@@ -382,7 +382,7 @@ class CircleNodeItem(NodeItem):
             border_color = QtGui.QColor(*self.border_color)
 
         # draw the outlines.
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(QtGui.QPen(border_color, border_width))
         painter.drawEllipse(rect)
 

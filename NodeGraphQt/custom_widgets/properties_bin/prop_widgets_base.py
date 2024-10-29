@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore, QtGui
 
 
 class PropLabel(QtWidgets.QLabel):
@@ -7,7 +7,7 @@ class PropLabel(QtWidgets.QLabel):
     Displays a node property as a "QLabel" widget in the PropertiesBin widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropLabel, self).__init__(parent)
@@ -38,7 +38,7 @@ class PropLineEdit(QtWidgets.QLineEdit):
     widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropLineEdit, self).__init__(parent)
@@ -74,7 +74,7 @@ class PropTextEdit(QtWidgets.QTextEdit):
     widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropTextEdit, self).__init__(parent)
@@ -85,11 +85,11 @@ class PropTextEdit(QtWidgets.QTextEdit):
         return '<{}() object at {}>'.format(
             self.__class__.__name__, hex(id(self)))
 
-    def focusInEvent(self, event):
+    def focusInEvent(self, event: QtGui.QFocusEvent):
         super(PropTextEdit, self).focusInEvent(event)
         self._prev_text = self.toPlainText()
 
-    def focusOutEvent(self, event):
+    def focusOutEvent(self, event: QtGui.QFocusEvent):
         super(PropTextEdit, self).focusOutEvent(event)
         if self._prev_text != self.toPlainText():
             self.value_changed.emit(self.get_name(), self.toPlainText())
@@ -117,7 +117,7 @@ class PropComboBox(QtWidgets.QComboBox):
     widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropComboBox, self).__init__(parent)
@@ -161,7 +161,7 @@ class PropComboBox(QtWidgets.QComboBox):
 
     def set_value(self, value):
         if value != self.get_value():
-            idx = self.findText(value, QtCore.Qt.MatchExactly)
+            idx = self.findText(value, QtCore.Qt.MatchFlag.MatchExactly)
             self.setCurrentIndex(idx)
             if idx >= 0:
                 self.value_changed.emit(self.get_name(), value)
@@ -173,7 +173,7 @@ class PropCheckBox(QtWidgets.QCheckBox):
     widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropCheckBox, self).__init__(parent)
@@ -208,12 +208,12 @@ class PropSpinBox(QtWidgets.QSpinBox):
     Displays a node property as a "QSpinBox" widget in the PropertiesBin widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropSpinBox, self).__init__(parent)
         self._name = None
-        self.setButtonSymbols(self.NoButtons)
+        self.setButtonSymbols(self.ButtonSymbols.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):
@@ -243,12 +243,12 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
     widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
 
     def __init__(self, parent=None):
         super(PropDoubleSpinBox, self).__init__(parent)
         self._name = None
-        self.setButtonSymbols(self.NoButtons)
+        self.setButtonSymbols(self.ButtonSymbols.NoButtons)
         self.valueChanged.connect(self._on_value_change)
 
     def __repr__(self):
@@ -278,8 +278,8 @@ class PropDoubleSpinBox(QtWidgets.QDoubleSpinBox):
 #     widget.
 #     """
 #
-#     value_changed = QtCore.Signal(str, object)
-#     button_clicked = QtCore.Signal(str, object)
+#     value_changed = QtCore.pyqtSignal(str, object)
+#     button_clicked = QtCore.pyqtSignal(str, object)
 #
 #     def __init__(self, parent=None):
 #         super(PropPushButton, self).__init__(parent)

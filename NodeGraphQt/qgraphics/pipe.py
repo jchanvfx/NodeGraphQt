@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import math
 
-from Qt import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import (
     LayoutDirectionEnum,
@@ -15,9 +15,9 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.qgraphics.port import PortItem
 
 PIPE_STYLES = {
-    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.SolidLine,
-    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.DashLine,
-    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.DotLine
+    PipeEnum.DRAW_TYPE_DEFAULT.value: QtCore.Qt.PenStyle.SolidLine,
+    PipeEnum.DRAW_TYPE_DASHED.value: QtCore.Qt.PenStyle.DashLine,
+    PipeEnum.DRAW_TYPE_DOTTED.value: QtCore.Qt.PenStyle.DotLine,
 }
 
 
@@ -30,7 +30,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         super(PipeItem, self).__init__()
         self.setZValue(Z_VAL_PIPE)
         self.setAcceptHoverEvents(True)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         self.setCacheMode(ITEM_CACHE_MODE)
 
         self._color = PipeEnum.COLOR.value
@@ -49,7 +49,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         self._dir_pointer = QtWidgets.QGraphicsPolygonItem(self)
         self._dir_pointer.setPolygon(self._poly)
         self._dir_pointer.setFlag(
-            QtWidgets.QGraphicsPathItem.ItemIsSelectable, False
+            QtWidgets.QGraphicsPathItem.GraphicsItemFlag.ItemIsSelectable, False
         )
 
         self.reset()
@@ -60,10 +60,10 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         return '{}.Pipe(\'{}\', \'{}\')'.format(
             self.__module__, in_name, out_name)
 
-    def hoverEnterEvent(self, event):
+    def hoverEnterEvent(self, event: QtGui.QHoverEvent):
         self.activate()
 
-    def hoverLeaveEvent(self, event):
+    def hoverLeaveEvent(self, event: QtGui.QHoverEvent):
         self.reset()
         if self.input_port and self.output_port:
             if self.input_port.node.selected:
@@ -74,7 +74,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
             self.highlight()
 
     def itemChange(self, change, value):
-        if change == QtWidgets.QGraphicsPathItem.ItemSelectedChange and self.scene():
+        if change == QtWidgets.QGraphicsPathItem.GraphicsItemChange.ItemSelectedChange and self.scene():
             if value:
                 self.highlight()
             else:
@@ -102,7 +102,7 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
 
         painter.setPen(pen)
         painter.setBrush(self.brush())
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
         painter.drawPath(self.path())
 
         # QPaintDevice: Cannot destroy paint device that is being painted.
@@ -429,14 +429,14 @@ class PipeItem(QtWidgets.QGraphicsPathItem):
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         pen.setStyle(PIPE_STYLES.get(style))
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         self.setPen(pen)
-        self.setBrush(QtGui.QBrush(QtCore.Qt.NoBrush))
+        self.setBrush(QtGui.QBrush(QtCore.Qt.BrushStyle.NoBrush))
 
         pen = self._dir_pointer.pen()
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         pen.setWidth(width)
         pen.setColor(QtGui.QColor(*color))
         self._dir_pointer.setPen(pen)
@@ -567,7 +567,7 @@ class LivePipeItem(PipeItem):
         pen = self._idx_pointer.pen()
         pen.setWidth(self.pen().width())
         pen.setColor(self.pen().color())
-        pen.setJoinStyle(QtCore.Qt.MiterJoin)
+        pen.setJoinStyle(QtCore.Qt.PenJoinStyle.MiterJoin)
         self._idx_pointer.setPen(pen)
 
         color = self.pen().color()
@@ -578,7 +578,7 @@ class LivePipeItem(PipeItem):
         font.setPointSize(7)
         self._idx_text.setFont(font)
 
-    def hoverEnterEvent(self, event):
+    def hoverEnterEvent(self, event: QtGui.QHoverEvent):
         """
         re-implemented back to the base default behaviour or the pipe will
         lose it styling when another pipe is selected.
@@ -651,7 +651,7 @@ class LivePipePolygonItem(QtWidgets.QGraphicsPolygonItem):
 
     def __init__(self, parent):
         super(LivePipePolygonItem, self).__init__(parent)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
 
     def paint(self, painter, option, widget):
         """

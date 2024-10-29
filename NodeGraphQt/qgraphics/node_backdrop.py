@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -18,10 +18,10 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
     def __init__(self, parent=None, size=6.0):
         super(BackdropSizer, self).__init__(parent)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsScenePositionChanges, True)
-        self.setCursor(QtGui.QCursor(QtCore.Qt.SizeFDiagCursor))
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemSendsScenePositionChanges, True)
+        self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.SizeFDiagCursor))
         self.setToolTip('double-click auto resize')
         self._size = size
 
@@ -38,7 +38,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(0.5, 0.5, self._size, self._size)
 
     def itemChange(self, change, value):
-        if change == QtWidgets.QGraphicsItem.ItemPositionChange:
+        if change == QtWidgets.QGraphicsItem.GraphicsItemChange.ItemPositionChange:
             item = self.parentItem()
             mx, my = item.minimum_size
             x = mx if value.x() < mx else value.x()
@@ -48,16 +48,16 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
             return value
         return super(BackdropSizer, self).itemChange(change, value)
 
-    def mouseDoubleClickEvent(self, event):
+    def mouseDoubleClickEvent(self, event: QtGui.QMouseEvent):
         item = self.parentItem()
         item.on_sizer_double_clicked()
         super(BackdropSizer, self).mouseDoubleClickEvent(event)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
         self.__prev_xy = (self.pos().x(), self.pos().y())
         super(BackdropSizer, self).mousePressEvent(event)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         current_xy = (self.pos().x(), self.pos().y())
         if current_xy != self.__prev_xy:
             item = self.parentItem()
@@ -95,7 +95,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         path.lineTo(rect.bottomRight())
         path.lineTo(rect.bottomLeft())
         painter.setBrush(color)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.fillPath(path, painter.brush())
 
         painter.restore()
@@ -132,14 +132,14 @@ class BackdropNodeItem(AbstractNodeItem):
             viewer.node_double_clicked.emit(self.id)
         super(BackdropNodeItem, self).mouseDoubleClickEvent(event)
 
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             pos = event.scenePos()
             rect = QtCore.QRectF(pos.x() - 5, pos.y() - 5, 10, 10)
             item = self.scene().items(rect)[0]
 
             if isinstance(item, (PortItem, PipeItem)):
-                self.setFlag(self.ItemIsMovable, False)
+                self.setFlag(self.GraphicsItemFlag.ItemIsMovable, False)
                 return
             if self.selected:
                 return
@@ -150,9 +150,9 @@ class BackdropNodeItem(AbstractNodeItem):
             self._nodes += self.get_nodes(False)
             [n.setSelected(True) for n in self._nodes]
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         super(BackdropNodeItem, self).mouseReleaseEvent(event)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QtWidgets.QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
         [n.setSelected(True) for n in self._nodes]
         self._nodes = [self]
 
@@ -184,8 +184,8 @@ class BackdropNodeItem(AbstractNodeItem):
             widget (QtWidgets.QWidget): not used.
         """
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
 
         margin = 1.0
         rect = self.boundingRect()
@@ -197,12 +197,12 @@ class BackdropNodeItem(AbstractNodeItem):
         radius = 2.6
         color = (self.color[0], self.color[1], self.color[2], 50)
         painter.setBrush(QtGui.QColor(*color))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
 
         top_rect = QtCore.QRectF(rect.x(), rect.y(), rect.width(), 26.0)
         painter.setBrush(QtGui.QBrush(QtGui.QColor(*self.color)))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.drawRoundedRect(top_rect, radius, radius)
         for pos in [top_rect.left(), top_rect.right() - 5.0]:
             painter.drawRect(
@@ -215,35 +215,35 @@ class BackdropNodeItem(AbstractNodeItem):
                 rect.width() - 5.0, rect.height())
             painter.setPen(QtGui.QColor(*self.text_color))
             painter.drawText(txt_rect,
-                             QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap,
+                             QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.TextFlag.TextWordWrap,
                              self.backdrop_text)
 
         if self.selected:
             sel_color = [x for x in NodeEnum.SELECTED_COLOR.value]
             sel_color[-1] = 15
             painter.setBrush(QtGui.QColor(*sel_color))
-            painter.setPen(QtCore.Qt.NoPen)
+            painter.setPen(QtCore.Qt.PenStyle.NoPen)
             painter.drawRoundedRect(rect, radius, radius)
 
         txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y(),
                                  rect.width(), top_rect.height())
         painter.setPen(QtGui.QColor(*self.text_color))
-        painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
+        painter.drawText(txt_rect, QtCore.Qt.AlignmentFlag.AlignCenter, self.name)
 
         border = 0.8
         border_color = self.color
         if self.selected and NodeEnum.SELECTED_BORDER_COLOR.value:
             border = 1.0
             border_color = NodeEnum.SELECTED_BORDER_COLOR.value
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(QtGui.QPen(QtGui.QColor(*border_color), border))
         painter.drawRoundedRect(rect, radius, radius)
 
         painter.restore()
 
     def get_nodes(self, inc_intersects=False):
-        mode = {True: QtCore.Qt.IntersectsItemShape,
-                False: QtCore.Qt.ContainsItemShape}
+        mode = {True: QtCore.Qt.ItemSelectionMode.IntersectsItemShape,
+                False: QtCore.Qt.ItemSelectionMode.ContainsItemShape}
         nodes = []
         if self.scene():
             polygon = self.mapToScene(self.boundingRect())

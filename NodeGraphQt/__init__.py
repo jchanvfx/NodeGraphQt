@@ -41,7 +41,7 @@ example code:
         viewer = graph.viewer()
         viewer.show()
 
-        app.exec_()
+        app.exec()
 """
 from .pkg_info import __version__ as VERSION
 from .pkg_info import __license__ as LICENSE

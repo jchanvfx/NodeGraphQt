@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from Qt import QtGui, QtCore, QtWidgets
+from PyQt6 import QtGui, QtCore, QtWidgets
 
 from NodeGraphQt.constants import (
     ITEM_CACHE_MODE,
@@ -34,11 +34,11 @@ class NodeItem(AbstractNodeItem):
         if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
                 NodeEnum.ICON_SIZE.value,
-                QtCore.Qt.SmoothTransformation
+                QtCore.Qt.TransformationMode.SmoothTransformation
             )
         self._properties['icon'] = ICON_NODE_BASE
         self._icon_item = QtWidgets.QGraphicsPixmapItem(pixmap, self)
-        self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
+        self._icon_item.setTransformationMode(QtCore.Qt.TransformationMode.SmoothTransformation)
         self._text_item = NodeTextItem(self.name, self)
         self._x_item = XDisabledItem(self, 'DISABLED')
         self._input_items = OrderedDict()
@@ -69,8 +69,8 @@ class NodeItem(AbstractNodeItem):
 
     def _paint_horizontal(self, painter, option, widget):
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
 
         # base background.
         margin = 1.0
@@ -119,7 +119,7 @@ class NodeItem(AbstractNodeItem):
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
         path = QtGui.QPainterPath()
         path.addRoundedRect(border_rect, radius, radius)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(pen)
         painter.drawPath(path)
 
@@ -127,8 +127,8 @@ class NodeItem(AbstractNodeItem):
 
     def _paint_vertical(self, painter, option, widget):
         painter.save()
-        painter.setPen(QtCore.Qt.NoPen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
 
         # base background.
         margin = 1.0
@@ -174,7 +174,7 @@ class NodeItem(AbstractNodeItem):
 
         pen = QtGui.QPen(border_color, border_width)
         pen.setCosmetic(self.viewer().get_zoom() < 0.0)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.setPen(pen)
         painter.drawRoundedRect(border_rect, radius, radius)
 
@@ -198,14 +198,14 @@ class NodeItem(AbstractNodeItem):
         else:
             raise RuntimeError('Node graph layout direction not valid!')
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
         """
         Re-implemented to ignore event if LMB is over port collision area.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             for p in self._input_items.keys():
                 if p.hovered:
                     event.ignore()
@@ -216,26 +216,26 @@ class NodeItem(AbstractNodeItem):
                     return
         super(NodeItem, self).mousePressEvent(event)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         """
         Re-implemented to ignore event if Alt modifier is pressed.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
-        if event.modifiers() == QtCore.Qt.AltModifier:
+        if event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
             event.ignore()
             return
         super(NodeItem, self).mouseReleaseEvent(event)
 
-    def mouseDoubleClickEvent(self, event):
+    def mouseDoubleClickEvent(self, event: QtGui.QMouseEvent):
         """
         Re-implemented to emit "node_double_clicked" signal.
 
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
             if not self.disabled:
                 # enable text item edit mode.
                 items = self.scene().items(event.scenePos())
@@ -258,7 +258,7 @@ class NodeItem(AbstractNodeItem):
             change:
             value:
         """
-        if change == QtWidgets.QGraphicsItem.ItemSelectedChange and self.scene():
+        if change == QtWidgets.QGraphicsItem.GraphicsItemChange.ItemSelectedChange and self.scene():
             self.reset_pipes()
             if value:
                 self.highlight_pipes()
@@ -737,7 +737,7 @@ class NodeItem(AbstractNodeItem):
         Decide whether to draw the node with proxy mode.
         (this is called at the start in the "self.paint()" function.)
         """
-        if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.ItemCoordinateCache:
+        if ITEM_CACHE_MODE is QtWidgets.QGraphicsItem.CacheMode.ItemCoordinateCache:
             return
 
         rect = self.sceneBoundingRect()
@@ -798,11 +798,11 @@ class NodeItem(AbstractNodeItem):
     def icon(self, path=None):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
-        pixmap = QtGui.QPixmap(path)
+        pixmap = QtGui.QPixmap(str(path))
         if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
                 NodeEnum.ICON_SIZE.value,
-                QtCore.Qt.SmoothTransformation
+                QtCore.Qt.TransformationMode.SmoothTransformation
             )
         self._icon_item.setPixmap(pixmap)
         if self.scene():

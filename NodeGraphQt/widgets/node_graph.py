@@ -1,4 +1,4 @@
-from Qt import QtWidgets, QtGui
+from PyQt6 import QtWidgets, QtGui
 
 from NodeGraphQt.constants import (
     NodeEnum, ViewerEnum, ViewerNavEnum

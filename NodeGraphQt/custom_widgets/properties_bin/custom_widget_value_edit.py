@@ -1,16 +1,16 @@
 #!/usr/bin/python
 import re
 
-from Qt import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 
 _NUMB_REGEX = re.compile(r'^((?:\-)*\d+)*([\.,])*(\d+(?:[eE](?:[\-\+])*\d+)*)*')
 
 
 class _NumberValueMenu(QtWidgets.QMenu):
 
-    mouseMove = QtCore.Signal(object)
-    mouseRelease = QtCore.Signal(object)
-    stepChange = QtCore.Signal()
+    mouseMove = QtCore.pyqtSignal(object)
+    mouseRelease = QtCore.pyqtSignal(object)
+    stepChange = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super(_NumberValueMenu, self).__init__(parent)
@@ -37,7 +37,7 @@ class _NumberValueMenu(QtWidgets.QMenu):
         self.mouseRelease.emit(event)
         super(_NumberValueMenu, self).mouseReleaseEvent(event)
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QtGui.QMouseEvent):
         """
         Additional functionality to emit step changed signal.
         """
@@ -53,7 +53,7 @@ class _NumberValueMenu(QtWidgets.QMenu):
             self.setActiveAction(self.last_action)
 
     def _add_step_action(self, step):
-        action = QtWidgets.QAction(str(step), self)
+        action = QtGui.QAction(str(step), self)
         action.step = step
         self.addAction(action)
 
@@ -76,7 +76,7 @@ class _NumberValueMenu(QtWidgets.QMenu):
 
 class _NumberValueEdit(QtWidgets.QLineEdit):
 
-    value_changed = QtCore.Signal(object)
+    value_changed = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None, data_type=float):
         super(_NumberValueEdit, self).__init__(parent)
@@ -107,7 +107,7 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
 
     # re-implemented
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QtGui.QMouseEvent):
         if self._MMB_STATE:
             if self._previous_x is None:
                 self._previous_x = event.x()
@@ -121,23 +121,23 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
                 self._on_mmb_mouse_move()
         super(_NumberValueEdit, self).mouseMoveEvent(event)
 
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.MiddleButton:
+    def mousePressEvent(self, event: QtGui.QMouseEvent):
+        if event.button() == QtCore.Qt.MouseButton.MiddleButton:
             self._MMB_STATE = True
             self._reset_previous_x()
-            self._menu.exec_(QtGui.QCursor.pos())
+            self._menu.exec(QtGui.QCursor.pos())
         super(_NumberValueEdit, self).mousePressEvent(event)
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QtGui.QMouseEvent):
         self._menu.close()
         self._MMB_STATE = False
         super(_NumberValueEdit, self).mouseReleaseEvent(event)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
         super(_NumberValueEdit, self).keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Up:
+        if event.key() == QtCore.Qt.Key.Key_Up:
             return
-        elif event.key() == QtCore.Qt.Key_Down:
+        elif event.key() == QtCore.Qt.Key.Key_Down:
             return
 
     # private
@@ -192,14 +192,14 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         """
         self._data_type = data_type
         if data_type is int:
-            regexp = QtCore.QRegExp(r'\d+')
-            validator = QtGui.QRegExpValidator(regexp, self)
+            regexp = QtCore.QRegularExpression(r'\d+')
+            validator = QtGui.QRegularExpressionValidator(regexp, self)
             steps = [1, 10, 100, 1000]
             self._min = None if self._min is None else int(self._min)
             self._max = None if self._max is None else int(self._max)
         elif data_type is float:
-            regexp = QtCore.QRegExp(r'\d+[\.,]\d+(?:[eE](?:[\-\+]|)\d+)*')
-            validator = QtGui.QRegExpValidator(regexp, self)
+            regexp = QtCore.QRegularExpression(r'\d+[\.,]\d+(?:[eE](?:[\-\+]|)\d+)*')
+            validator = QtGui.QRegularExpressionValidator(regexp, self)
             steps = [0.001, 0.01, 0.1, 1]
             self._min = None if self._min is None else float(self._min)
             self._max = None if self._max is None else float(self._max)
@@ -300,4 +300,4 @@ if __name__ == '__main__':
     layout.addWidget(float_edit)
     widget.show()
 
-    app.exec_()
+    app.exec()

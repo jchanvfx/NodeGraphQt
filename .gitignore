@@ -1,6 +1,7 @@
 # virtual enviroment
 env/*
 venv/*
+.venv/*
 
 # sphinx documentation
 docs/_build/
@@ -8,6 +9,7 @@ docs/_build/
 # python stuff
 *.pyc
 *.idea
+__pycache__
 
 # windows/osx stuff
 *.db

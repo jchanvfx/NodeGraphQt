@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import ViewerEnum
 
@@ -81,9 +81,9 @@ class BaseMenu(QtWidgets.QMenu):
         return menus
 
 
-class GraphAction(QtWidgets.QAction):
+class GraphAction(QtGui.QAction):
 
-    executed = QtCore.Signal(object)
+    executed = QtCore.pyqtSignal(object)
 
     def __init__(self, *args, **kwargs):
         super(GraphAction, self).__init__(*args, **kwargs)
@@ -101,7 +101,7 @@ class GraphAction(QtWidgets.QAction):
 
 class NodeAction(GraphAction):
 
-    executed = QtCore.Signal(object, object)
+    executed = QtCore.pyqtSignal(object, object)
 
     def __init__(self, *args, **kwargs):
         super(NodeAction, self).__init__(*args, **kwargs)

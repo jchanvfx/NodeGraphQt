@@ -9,7 +9,7 @@ NodeGraph
 .. code-block:: python
     :linenos:
 
-    from Qt import QtWidgets
+    from PyQt6 import QtWidgets
     from NodeGraphQt import NodeGraph
 
     if __name__ == '__main__':
@@ -20,7 +20,7 @@ NodeGraph
         widget = node_graph.widget
         widget.show()
 
-        app.exec_()
+        app.exec()
 
 ---
 

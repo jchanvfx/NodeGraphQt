@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
 from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET
 from NodeGraphQt.errors import NodeWidgetError
@@ -81,7 +81,7 @@ class NodeBaseWidget(QtWidgets.QGraphicsProxyWidget):
         label (str): label text above the embedded widget.
     """
 
-    value_changed = QtCore.Signal(str, object)
+    value_changed = QtCore.pyqtSignal(str, object)
     """
     Signal triggered when the ``value`` attribute has changed.
     
@@ -287,7 +287,7 @@ class NodeComboBox(NodeBaseWidget):
             combo_widget.addItems(text)
             return
         if text != self.get_value():
-            index = combo_widget.findText(text, QtCore.Qt.MatchExactly)
+            index = combo_widget.findText(text, QtCore.Qt.MatchFlag.MatchExactly)
             combo_widget.setCurrentIndex(index)
 
     def add_item(self, item):
@@ -354,7 +354,7 @@ class NodeLineEdit(NodeBaseWidget):
         ledit.setText(text)
         ledit.setPlaceholderText(placeholder_text)
         ledit.setStyleSheet(stylesheet)
-        ledit.setAlignment(QtCore.Qt.AlignCenter)
+        ledit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         ledit.editingFinished.connect(self.on_value_changed)
         ledit.clearFocus()
         self.set_custom_widget(ledit)

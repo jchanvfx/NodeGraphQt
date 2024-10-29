@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 
 from NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
 
@@ -34,31 +34,31 @@ class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
         )
 
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
 
         # background.
         bg_color = option.palette.window().color()
         pen_color = option.palette.midlight().color().lighter(120)
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bg_color = bg_color.lighter(120)
             pen_color = pen_color.lighter(160)
 
         pen = QtGui.QPen(pen_color, 3.0)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
         painter.setBrush(QtGui.QBrush(bg_color))
         painter.drawRoundedRect(base_rect,
                               int(base_rect.height()/radius),
                               int(base_rect.width()/radius))
 
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             pen_color = option.palette.highlight().color()
         else:
             pen_color = option.palette.midlight().color().darker(130)
         pen = QtGui.QPen(pen_color, 1.0)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
 
         sub_margin = 6
         sub_rect = QtCore.QRectF(
@@ -82,7 +82,7 @@ class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
                 pos_x, pos_y, edge_size[0], edge_size[1]
             ))
 
-        # painter.setPen(QtCore.Qt.NoPen)
+        # painter.setPen(QtCore.Qt.PenStyle.NoPen)
         painter.setBrush(QtGui.QBrush(bg_color))
         dot_size = 4
         left_x = sub_rect.left() - 1
@@ -97,7 +97,7 @@ class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
         # text
         pen_color = option.palette.text().color()
         pen = QtGui.QPen(pen_color, 0.5)
-        pen.setCapStyle(QtCore.Qt.RoundCap)
+        pen.setCapStyle(QtCore.Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
 
         font = painter.font()
@@ -123,7 +123,7 @@ class _NodesGridProxyModel(QtCore.QSortFilterProxyModel):
         
     def mimeData(self, indexes, p_int=None):
         node_ids = [
-            'node:{}'.format(i.data(QtCore.Qt.ToolTipRole))
+            'node:{}'.format(i.data(QtCore.Qt.ItemDataRole.ToolTipRole))
             for i in indexes
         ]
         node_urn = URN_SCHEME + ';'.join(node_ids)
@@ -136,11 +136,11 @@ class NodesGridView(QtWidgets.QListView):
 
     def __init__(self, parent=None):
         super(NodesGridView, self).__init__(parent)
-        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection)
         self.setUniformItemSizes(True)
-        self.setResizeMode(QtWidgets.QListView.Adjust)
-        self.setViewMode(QtWidgets.QListView.IconMode)
-        self.setDragDropMode(QtWidgets.QListView.DragOnly)
+        self.setResizeMode(QtWidgets.QListView.ResizeMode.Adjust)
+        self.setViewMode(QtWidgets.QListView.ViewMode.IconMode)
+        self.setDragDropMode(QtWidgets.QListView.DragDropMode.DragOnly)
         self.setDragEnabled(True)
         self.setMinimumSize(300, 100)
         self.setSpacing(4)

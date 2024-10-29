@@ -1,6 +1,6 @@
 import os
 
-from Qt import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 
 _current_user_directory = os.path.expanduser('~')
 
@@ -48,22 +48,22 @@ class BaseDialog(object):
         dlg = QtWidgets.QMessageBox(parent=parent)
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
-        dlg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        dlg.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
 
         if custom_icon:
             pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
-                32, QtCore.Qt.SmoothTransformation
+                32, QtCore.Qt.TransformationMode.SmoothTransformation
             )
             dlg.setIconPixmap(pixmap)
         else:
             if dialog_icon == 'information':
-                dlg.setIcon(dlg.Information)
+                dlg.setIcon(dlg.Icon.Information)
             elif dialog_icon == 'warning':
-                dlg.setIcon(dlg.Warning)
+                dlg.setIcon(dlg.Icon.Warning)
             elif dialog_icon == 'critical':
-                dlg.setIcon(dlg.Critical)
+                dlg.setIcon(dlg.Icon.Critical)
 
-        dlg.exec_()
+        dlg.exec()
 
     @staticmethod
     def question_dialog(parent=None, text='', title='Are you sure?',
@@ -72,21 +72,21 @@ class BaseDialog(object):
         dlg.setWindowTitle(title)
         dlg.setInformativeText(text)
         dlg.setStandardButtons(
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
         )
 
         if custom_icon:
             pixmap = QtGui.QPixmap(custom_icon).scaledToHeight(
-                32, QtCore.Qt.SmoothTransformation
+                32, QtCore.Qt.TransformationMode.SmoothTransformation
             )
             dlg.setIconPixmap(pixmap)
         else:
             if dialog_icon == 'information':
-                dlg.setIcon(dlg.Information)
+                dlg.setIcon(dlg.Icon.Information)
             elif dialog_icon == 'warning':
-                dlg.setIcon(dlg.Warning)
+                dlg.setIcon(dlg.Icon.Warning)
             elif dialog_icon == 'critical':
-                dlg.setIcon(dlg.Critical)
+                dlg.setIcon(dlg.Icon.Critical)
 
-        result = dlg.exec_()
-        return bool(result == QtWidgets.QMessageBox.Yes)
+        result = dlg.exec()
+        return bool(result == QtWidgets.QMessageBox.StandardButton.Yes)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 
-from Qt import QtWidgets, QtCore, QtGui, QtCompat
+from PyQt6 import QtWidgets, QtCore, QtGui
 
 from .node_property_factory import NodePropertyWidgetFactory
 from .prop_widgets_base import PropLineEdit
@@ -17,8 +17,8 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
             index (QtCore.QModelIndex):
         """
         painter.save()
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, False)
+        painter.setPen(QtCore.Qt.PenStyle.NoPen)
 
         # draw background.
         bg_clr = option.palette.base().color()
@@ -27,14 +27,14 @@ class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
 
         # draw border.
         border_width = 1
-        if option.state & QtWidgets.QStyle.State_Selected:
+        if option.state & QtWidgets.QStyle.StateFlag.State_Selected:
             bdr_clr = option.palette.highlight().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1.5))
         else:
             bdr_clr = option.palette.alternateBase().color()
             painter.setPen(QtGui.QPen(bdr_clr, 1))
 
-        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.setBrush(QtCore.Qt.BrushStyle.NoBrush)
         painter.drawRect(QtCore.QRect(
             option.rect.x() + border_width,
             option.rect.y() + border_width,
@@ -54,20 +54,20 @@ class _PropertiesList(QtWidgets.QTableWidget):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
 
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.verticalHeader(), QtWidgets.QHeaderView.ResizeToContents
+        QtWidgets.QHeaderView.setSectionResizeMode(
+            self.verticalHeader(), QtWidgets.QHeaderView.ResizeMode.ResizeToContents
         )
-        QtCompat.QHeaderView.setSectionResizeMode(
-            self.horizontalHeader(), 0, QtWidgets.QHeaderView.Stretch
+        QtWidgets.QHeaderView.setSectionResizeMode(
+            self.horizontalHeader(), 0, QtWidgets.QHeaderView.ResizeMode.Stretch
         )
-        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollMode.ScrollPerPixel)
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, event: QtGui.QWheelEvent):
         """
         Args:
             event (QtGui.QWheelEvent):
         """
-        delta = event.angleDelta().y() * 0.2
+        delta = int(event.angleDelta().y() * 0.2)
         self.verticalScrollBar().setValue(
             self.verticalScrollBar().value() - delta
         )
@@ -86,7 +86,7 @@ class _PropertiesContainer(QtWidgets.QWidget):
         self.__layout.setSpacing(6)
 
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setAlignment(QtCore.Qt.AlignTop)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layout.addLayout(self.__layout)
 
         self.__property_widgets = {}
@@ -120,9 +120,9 @@ class _PropertiesContainer(QtWidgets.QWidget):
         if row > 0:
             row += 1
 
-        label_flags = QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight
+        label_flags = QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignRight
         if widget.__class__.__name__ == 'PropTextEdit':
-            label_flags = label_flags | QtCore.Qt.AlignTop
+            label_flags = label_flags | QtCore.Qt.AlignmentFlag.AlignTop
 
         self.__layout.addWidget(label_widget, row, 0, label_flags)
         self.__layout.addWidget(widget, row, 1)
@@ -218,8 +218,8 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
         tree_widget.setHeaderLabels(headers)
         tree_widget.setHeaderHidden(False)
         tree_widget.header().setStretchLastSection(False)
-        QtCompat.QHeaderView.setSectionResizeMode(
-            tree_widget.header(), 2, QtWidgets.QHeaderView.Stretch
+        QtWidgets.QHeaderView.setSectionResizeMode(
+            tree_widget.header(), 2, QtWidgets.QHeaderView.ResizeMode.Stretch
         )
 
         group_box.layout().addWidget(tree_widget)
@@ -235,7 +235,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
             port (NodeGraphQt.Port): port object.
         """
         item = QtWidgets.QTreeWidgetItem(tree)
-        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+        item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsSelectable)
         item.setText(1, port.name())
         item.setToolTip(0, 'Lock Port')
         item.setToolTip(1, 'Port Name')
@@ -258,7 +258,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
 
         focus_btn = QtWidgets.QPushButton()
         focus_btn.setIcon(QtGui.QIcon(
-            tree.style().standardPixmap(QtWidgets.QStyle.SP_DialogYesButton)
+            tree.style().standardPixmap(QtWidgets.QStyle.StandardPixmap.SP_DialogYesButton)
         ))
         focus_btn.clicked.connect(
             lambda: self._on_focus_to_node(self._ports.get(combo.currentText()))
@@ -305,8 +305,8 @@ class NodePropEditorWidget(QtWidgets.QWidget):
     """
 
     #: signal (node_id, prop_name, prop_value)
-    property_changed = QtCore.Signal(str, str, object)
-    property_closed = QtCore.Signal(str)
+    property_changed = QtCore.pyqtSignal(str, str, object)
+    property_closed = QtCore.pyqtSignal(str)
 
     def __init__(self, parent=None, node=None):
         super(NodePropEditorWidget, self).__init__(parent)
@@ -317,7 +317,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         close_btn = QtWidgets.QPushButton()
         close_btn.setIcon(QtGui.QIcon(
             self.style().standardPixmap(
-                QtWidgets.QStyle.SP_DialogCloseButton
+                QtWidgets.QStyle.StandardPixmap.SP_DialogCloseButton
             )
         ))
         close_btn.setMaximumWidth(40)
@@ -331,7 +331,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         self.name_wgt.value_changed.connect(self._on_property_changed)
 
         self.type_wgt = QtWidgets.QLabel(node.type_)
-        self.type_wgt.setAlignment(QtCore.Qt.AlignRight)
+        self.type_wgt.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         self.type_wgt.setToolTip(
             'type_\nNode type identifier followed by the class name.'
         )
@@ -622,7 +622,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     """
 
     #: Signal emitted (node_id, prop_name, prop_value)
-    property_changed = QtCore.Signal(str, str, object)
+    property_changed = QtCore.pyqtSignal(str, str, object)
 
     def __init__(self, parent=None, node_graph=None):
         super(PropertiesBinWidget, self).__init__(parent)
@@ -683,14 +683,14 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             visible (bool): visibility state.
             tree_widget (QtWidgets.QTreeWidget): ports tree widget.
         """
-        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         if items:
             tree_widget.setVisible(visible)
             widget = self._prop_list.cellWidget(items[0].row(), 0)
             widget.adjustSize()
-            QtCompat.QHeaderView.setSectionResizeMode(
+            QtWidgets.QHeaderView.setSectionResizeMode(
                 self._prop_list.verticalHeader(),
-                QtWidgets.QHeaderView.ResizeToContents
+                QtWidgets.QHeaderView.ResizeMode.ResizeToContents
             )
 
     def __on_prop_close(self, node_id):
@@ -701,7 +701,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         Args:
             node_id (str): node id.
         """
-        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        items = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         [self._prop_list.removeRow(i.row()) for i in items]
 
     def __on_limit_changed(self, value):
@@ -802,7 +802,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if rows >= self.limit():
             self._prop_list.removeRow(rows - 1)
 
-        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
+        itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchFlag.MatchExactly)
         if itm_find:
             self._prop_list.removeRow(itm_find[0].row())
 
@@ -867,7 +867,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
             NodePropEditorWidget: node property editor widget.
         """
         node_id = node if isinstance(node, str) else node.id
-        itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchExactly)
+        itm_find = self._prop_list.findItems(node_id, QtCore.Qt.MatchFlag.MatchExactly)
         if itm_find:
             item = itm_find[0]
             return self._prop_list.cellWidget(item.row(), 0)

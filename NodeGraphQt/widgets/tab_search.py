@@ -2,7 +2,7 @@
 import re
 from collections import OrderedDict
 
-from Qt import QtCore, QtWidgets, QtGui
+from PyQt6 import QtCore, QtWidgets, QtGui
 
 from NodeGraphQt.constants import ViewerEnum, ViewerNavEnum
 
@@ -15,8 +15,8 @@ class TabSearchCompleter(QtWidgets.QCompleter):
 
     def __init__(self, nodes=None, parent=None):
         super(TabSearchCompleter, self).__init__(nodes, parent)
-        self.setCompletionMode(self.PopupCompletion)
-        self.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setCompletionMode(self.CompletionMode.PopupCompletion)
+        self.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
         self._local_completion_prefix = ''
         self._using_orig_model = False
         self._source_model = None
@@ -36,9 +36,10 @@ class TabSearchCompleter(QtWidgets.QCompleter):
         if not self._using_orig_model:
             self._filter_model.setSourceModel(self._source_model)
 
-        pattern = QtCore.QRegExp(self._local_completion_prefix,
-                                 QtCore.Qt.CaseInsensitive,
-                                 QtCore.QRegExp.FixedString)
+        pattern = QtCore.QRegularExpression(
+            self._local_completion_prefix,
+            QtCore.QRegularExpression.PatternOption.CaseInsensitiveOption,
+        )
         self._filter_model.setFilterRegExp(pattern)
 
     def setModel(self, model):
@@ -51,11 +52,11 @@ class TabSearchCompleter(QtWidgets.QCompleter):
 
 class TabSearchLineEditWidget(QtWidgets.QLineEdit):
 
-    tab_pressed = QtCore.Signal()
+    tab_pressed = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         super(TabSearchLineEditWidget, self).__init__(parent)
-        self.setAttribute(QtCore.Qt.WA_MacShowFocusRect, 0)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_MacShowFocusRect, 0)
         self.setMinimumSize(200, 22)
         # text_color = self.palette().text().color().getRgb()
         text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
@@ -86,15 +87,15 @@ class TabSearchLineEditWidget(QtWidgets.QLineEdit):
             stylesheet += style
         self.setStyleSheet(stylesheet)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
         super(TabSearchLineEditWidget, self).keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Tab:
+        if event.key() == QtCore.Qt.Key.Key_Tab:
             self.tab_pressed.emit()
 
 
 class TabSearchMenuWidget(QtWidgets.QMenu):
 
-    search_submitted = QtCore.Signal(str)
+    search_submitted = QtCore.pyqtSignal(str)
 
     def __init__(self, node_dict=None):
         super(TabSearchMenuWidget, self).__init__()
@@ -160,7 +161,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
     def __repr__(self):
         return '<{} at {}>'.format(self.__class__.__name__, hex(id(self)))
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
         super(TabSearchMenuWidget, self).keyPressEvent(event)
         self.line_edit.keyPressEvent(event)
 
@@ -218,12 +219,12 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
         self.line_edit.setFocus()
         self._set_menu_visible(True)
         self._block_submit = False
-        self.exec_(QtGui.QCursor.pos())
+        self.exec(QtGui.QCursor.pos())
 
     def _on_search_submitted(self):
         if not self._block_submit:
             action = self.sender()
-            if type(action) is not QtWidgets.QAction:
+            if type(action) is not QtGui.QAction:
                 if len(self._searched_actions) > 0:
                     action = self._searched_actions[0]
                 else:
@@ -274,7 +275,7 @@ class TabSearchMenuWidget(QtWidgets.QMenu):
                     parent_menu.addMenu(menu)
 
         for name in node_names:
-            action = QtWidgets.QAction(name, self)
+            action = QtGui.QAction(name, self)
             action.setText(name)
             action.triggered.connect(self._on_search_submitted)
             self._actions[name] = action

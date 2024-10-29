@@ -3,7 +3,7 @@
 import signal
 from pathlib import Path
 
-from Qt import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
 from NodeGraphQt import (
     NodeGraph,
@@ -13,7 +13,9 @@ from NodeGraphQt import (
 )
 
 # import example nodes from the "nodes" sub-package
-from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
+# TODO
+# from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
+from nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
 
 BASE_PATH = Path(__file__).parent.resolve()
 
@@ -111,13 +113,15 @@ def main():
 
     # create a node properties bin widget.
     properties_bin = PropertiesBinWidget(node_graph=graph)
-    properties_bin.setWindowFlags(QtCore.Qt.Tool)
+    properties_bin.setWindowFlags(QtCore.Qt.WindowType.Tool)
 
     # example show the node properties bin widget when a node is double-clicked.
     def display_properties_bin(node):
         if not properties_bin.isVisible():
             properties_bin.show()
-
+        else:
+            properties_bin.raise_()
+    
     # wire function to "node_double_clicked" signal.
     graph.node_double_clicked.connect(display_properties_bin)
 
@@ -128,7 +132,7 @@ def main():
     nodes_tree.set_category_label('nodes.widget', 'Widget Nodes')
     nodes_tree.set_category_label('nodes.basic', 'Basic Nodes')
     nodes_tree.set_category_label('nodes.group', 'Group Nodes')
-    # nodes_tree.show()
+    nodes_tree.show()
 
     # create a node palette widget.
     nodes_palette = NodesPaletteWidget(node_graph=graph)
@@ -137,7 +141,7 @@ def main():
     nodes_palette.set_category_label('nodes.widget', 'Widget Nodes')
     nodes_palette.set_category_label('nodes.basic', 'Basic Nodes')
     nodes_palette.set_category_label('nodes.group', 'Group Nodes')
-    # nodes_palette.show()
+    nodes_palette.show()
 
     app.exec()
 
