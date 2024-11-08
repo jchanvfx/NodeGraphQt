@@ -245,7 +245,7 @@ class NodeModel(object):
     ):
         """
         Convenience function for adding to the "accept_connection_types" dict.
-        If the node graph model is unavailable yet then we store it to a
+        If the node graph model is unavailable, yet then we store it to a
         temp var that gets deleted.
 
         Args:

@@ -11,8 +11,7 @@
     </a>
 </p>
 
-[NodeGraphQt](https://github.com/jchanvfx/NodeGraphQt/releases) is a node graph UI framework for `PySide2` that can be implemented and re-purposed into 
-applications.  
+[NodeGraphQt](https://github.com/jchanvfx/NodeGraphQt/releases) is a node graph UI framework for `PySide2` that can be that can be re-implemented.
 **This** fork provides a few changes to support Qt 6 using either PySide6/PyQt6 thanks to the [qtpy compatability layer](https://pypi.org/project/QtPy/).
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">

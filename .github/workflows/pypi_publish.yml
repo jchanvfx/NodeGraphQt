@@ -9,7 +9,11 @@ on:
 
 jobs:
   publish:
+    name: Upload Release to PyPI
     runs-on: ubuntu-latest
+    # IMPORTANT: this permission is mandatory for trusted publishing.
+    permissions:
+      id-token: write
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
       - name: Checkout
@@ -19,10 +23,6 @@ jobs:
       # Run build to a specified version of python into a specified directory.
       - name: Python Build
         run: python3 -m pip install --upgrade build && python3 -m build
-      # Publish the python package to pypi.org with the api token.
-      - name: Publish Package
+      # Publish the python package to pypi.org.
+      - name: Publish Package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://upload.pypi.org/legacy/
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}

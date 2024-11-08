@@ -13,6 +13,7 @@ env:
 
 jobs:
   docs-build:
+    name: Build Sphinx Documentation
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE , so your workflow can access it.
