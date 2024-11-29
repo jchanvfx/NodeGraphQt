@@ -798,7 +798,7 @@ class NodeItem(AbstractNodeItem):
     def icon(self, path=None):
         self._properties['icon'] = path
         path = path or ICON_NODE_BASE
-        pixmap = QtGui.QPixmap(path)
+        pixmap = QtGui.QPixmap(str(path))
         if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
             pixmap = pixmap.scaledToHeight(
                 NodeEnum.ICON_SIZE.value,
