@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import NodeEnum
 from NodeGraphQt.qgraphics.node_base import NodeItem

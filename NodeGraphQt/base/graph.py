@@ -6,7 +6,7 @@ import os
 import re
 from pathlib import Path
 
-from Qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from NodeGraphQt.base.commands import (NodeAddedCmd,
                                        NodesRemovedCmd,
@@ -35,6 +35,11 @@ from NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
 from NodeGraphQt.widgets.viewer import NodeViewer
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
+import qtpy
+if qtpy.API_NAME in ("PyQt5", "PySide2"):
+    from qtpy.QtWidgets import QUndoStack
+elif qtpy.API_NAME in ("PyQt6", "PySide6"):
+    from qtpy.QtGui import QUndoStack
 
 class NodeGraph(QtCore.QObject):
     """
@@ -151,7 +156,7 @@ class NodeGraph(QtCore.QObject):
             kwargs.get('node_factory') or NodeFactory())
         self._undo_view = None
         self._undo_stack = (
-            kwargs.get('undo_stack') or QtWidgets.QUndoStack(self)
+            kwargs.get('undo_stack') or QUndoStack(self)
         )
         self._widget = None
         self._sub_graphs = {}
@@ -695,7 +700,7 @@ class NodeGraph(QtCore.QObject):
             :meth:`NodeGraph.end_undo()`
 
         Returns:
-            QtWidgets.QUndoStack: undo stack.
+            QUndoStack: undo stack.
         """
         return self._undo_stack
 
