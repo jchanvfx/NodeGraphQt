@@ -1,5 +1,11 @@
 
-# NodeGraphQt
+# NodeGraphQtPy
+
+This is a fork of the [NodeGraphQt](https://github.com/jchanvfx/NodeGraphQt) repo, using 
+[QtPy](https://github.com/spyder-ide/qtpy) instead of [Qt.py](https://github.com/mottosso/Qt.py)
+and with the goal of supporting both PySide2 and PySide6
+
+#### The following README is from the original repo:
 
 [![API Documentation](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/sphinx_doc_build.yml)
 [![PyPI Package](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml/badge.svg)](https://github.com/jchanvfx/NodeGraphQt/actions/workflows/pypi_publish.yml)
