@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-and-deploy:
+    environment: DEV
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,7 +27,7 @@ jobs:
 
 #      - name: Publish to PyPI
 #        run: |
-#          python -m twine upload --repository pypi dist/* --verbose
+#          python -m twine upload --repository testpypi dist/* --verbose
 #        env:
-#          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-#          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+#          TWINE_USERNAME: ${{ secrets.TWINE_PASSWORD }}
+#          TWINE_PASSWORD: ${{ secrets.TWINE_USERNAME }}
