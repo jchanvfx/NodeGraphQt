@@ -1,0 +1,28 @@
+[project]
+name = "NodeGraphQtPy"
+dynamic = ["version"]
+authors = [
+    { name="Jimmy Christensen", email="lithorus@gmail.com" },
+    { name="Johnny Chan (Original Author)" }
+]
+description = "NodeGraphQtPy is a fork of NodeGraphQt using QtPy"
+readme = "README.md"
+requires-python = ">3.7"
+dependencies = [
+    "QtPy"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[build-system]
+requires = [
+    "hatchling",
+    "versioningit",
+]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "versioningit"
