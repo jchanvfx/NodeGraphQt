@@ -5,7 +5,7 @@ from pathlib import Path
 
 from qtpy import QtCore, QtWidgets
 
-from NodeGraphQt import (
+from NodeGraphQtPy import (
     NodeGraph,
     PropertiesBinWidget,
     NodesTreeWidget,
