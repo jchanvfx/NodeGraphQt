@@ -27,6 +27,7 @@ jobs:
 
       - name: Publish to PyPI
         run: |
+          export
           python -m twine upload --repository testpypi dist/* --verbose
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_PASSWORD }}
