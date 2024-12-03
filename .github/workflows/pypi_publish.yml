@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-deploy:
-    environment: DEV
+    environment: PROD
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,7 +27,6 @@ jobs:
 
       - name: Publish to PyPI
         run: |
-          export
           python -m twine upload --repository testpypi dist/* --verbose
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
