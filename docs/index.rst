@@ -4,8 +4,7 @@ NodeGraphQt |version_str|
 .. image:: _images/logo.png
     :align: center
 
-NodeGraphQt a node graph UI framework written in python that can be implemented
-and re-purposed into applications supporting PySide2.
+NodeGraphQt a node graph UI framework written in python that can be implemented.
 
 .. image:: _images/screenshot.png
 
