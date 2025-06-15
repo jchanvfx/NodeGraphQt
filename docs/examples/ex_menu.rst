@@ -64,7 +64,7 @@ can override context menus on a per node type basis.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import BaseNode, NodeGraph, setup_context_menu
+    from NodeGraphQt import BaseNode, NodeGraph
 
     # define a couple example nodes.
     class FooNode(BaseNode):
@@ -89,9 +89,6 @@ can override context menus on a per node type basis.
     node_graph = NodeGraph()
     node_graph.register_node(FooNode)
     node_graph.register_node(BarNode)
-
-    # set up default menu commands.
-    setup_context_menu(node_graph)
 
     # get the nodes menu.
     nodes_menu = node_graph.get_context_menu('nodes')

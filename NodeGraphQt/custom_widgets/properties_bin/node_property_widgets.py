@@ -258,7 +258,7 @@ class _PortConnectionsContainer(QtWidgets.QWidget):
 
         focus_btn = QtWidgets.QPushButton()
         focus_btn.setIcon(QtGui.QIcon(
-            tree.style().standardPixmap(QtWidgets.QStyle.SP_DialogYesButton)
+            tree.style().standardIcon(QtWidgets.QStyle.SP_DialogYesButton)
         ))
         focus_btn.clicked.connect(
             lambda: self._on_focus_to_node(self._ports.get(combo.currentText()))
@@ -316,7 +316,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
 
         close_btn = QtWidgets.QPushButton()
         close_btn.setIcon(QtGui.QIcon(
-            self.style().standardPixmap(
+            self.style().standardIcon(
                 QtWidgets.QStyle.SP_DialogCloseButton
             )
         ))
