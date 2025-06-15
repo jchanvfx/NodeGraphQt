@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=54814a85"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=f0f9ce9c"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -126,7 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.38</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.39</code>
 </nav>
 </div>
 </div>
@@ -157,19 +157,19 @@
 <div class="line">Here is an example where the <a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph.widget" title="NodeGraphQt.NodeGraph.widget"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.widget</span></code></a> can be
 registered as a panel in the compositing application NUKE.</div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">nukescripts</span> <span class="kn">import</span> <span class="n">panels</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">nukescripts</span><span class="w"> </span><span class="kn">import</span> <span class="n">panels</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtCore</span>
-<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">BaseNode</span>
+<span class="linenos"> 3</span><span class="kn">from</span><span class="w"> </span><span class="nn">Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="linenos"> 4</span><span class="kn">from</span><span class="w"> </span><span class="nn">NodeGraphQt</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">BaseNode</span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span><span class="c1"># create a simple test node class.</span>
-<span class="linenos"> 8</span><span class="k">class</span> <span class="nc">TestNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos"> 8</span><span class="k">class</span><span class="w"> </span><span class="nc">TestNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'nodes.nuke'</span>
 <span class="linenos">11</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'test node'</span>
 <span class="linenos">12</span>
-<span class="linenos">13</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">13</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">14</span>        <span class="nb">super</span><span class="p">(</span><span class="n">TestNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
 <span class="linenos">16</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out 1'</span><span class="p">)</span>
@@ -198,16 +198,16 @@ registered as a panel in the compositing application NUKE.</div>
 <span class="linenos">39</span>
 <span class="linenos">40</span>
 <span class="linenos">41</span><span class="c1"># create the wrapper widget.</span>
-<span class="linenos">42</span><span class="k">class</span> <span class="nc">CustomNodeGraph</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="linenos">42</span><span class="k">class</span><span class="w"> </span><span class="nc">CustomNodeGraph</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 <span class="linenos">43</span>
-<span class="linenos">44</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos">44</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">45</span>        <span class="nb">super</span><span class="p">(</span><span class="n">CustomNodeGraph</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">46</span>        <span class="n">layout</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 <span class="linenos">47</span>        <span class="n">layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="linenos">48</span>        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">widget</span><span class="p">)</span>
 <span class="linenos">49</span>
 <span class="linenos">50</span>    <span class="nd">@staticmethod</span>
-<span class="linenos">51</span>    <span class="k">def</span> <span class="nf">_set_nuke_zero_margin</span><span class="p">(</span><span class="n">widget_object</span><span class="p">):</span>
+<span class="linenos">51</span>    <span class="k">def</span><span class="w"> </span><span class="nf">_set_nuke_zero_margin</span><span class="p">(</span><span class="n">widget_object</span><span class="p">):</span>
 <span class="linenos">52</span><span class="w">        </span><span class="sd">"""</span>
 <span class="linenos">53</span><span class="sd">        Foundry Nuke hack for "nukescripts.panels.registerWidgetAsPanel" to</span>
 <span class="linenos">54</span><span class="sd">        remove the widget contents margin.</span>
@@ -225,7 +225,7 @@ registered as a panel in the compositing application NUKE.</div>
 <span class="linenos">66</span>            <span class="k">for</span> <span class="n">widget_layout</span> <span class="ow">in</span> <span class="n">target_widgets</span><span class="p">:</span>
 <span class="linenos">67</span>                <span class="n">widget_layout</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="linenos">68</span>
-<span class="linenos">69</span>    <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="linenos">69</span>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="linenos">70</span>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QEvent</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">Show</span><span class="p">:</span>
 <span class="linenos">71</span>            <span class="k">try</span><span class="p">:</span>
 <span class="linenos">72</span>                <span class="bp">self</span><span class="o">.</span><span class="n">_set_nuke_zero_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -265,7 +265,7 @@ registered as a panel in the compositing application NUKE.</div>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2024, Johnny Chan </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2025, Johnny Chan </p>
 </div>
 </div>
 </footer>

@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=54814a85"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=f0f9ce9c"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -126,7 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.38</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.39</code>
 </nav>
 </div>
 </div>
@@ -156,15 +156,15 @@
 <div class="line">Creating a node is done by calling the <a class="reference internal" href="../graphs/NodeGraph.html#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">NodeGraphQt.NodeGraph.create_node()</span></code></a> function.</div>
 <div class="line">(<cite>see example below</cite> <code class="docutils literal notranslate"><span class="pre">line:</span> <span class="pre">23</span></code>)</div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtWidgets</span>
-<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QtWidgets</span>
+<span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">NodeGraphQt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos"> 4</span><span class="k">class</span><span class="w"> </span><span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
 <span class="linenos"> 7</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos"> 8</span>
-<span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos"> 9</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">10</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">)</span>
 <span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
@@ -193,14 +193,14 @@
 <h2>Creating Node Widgets<a class="headerlink" href="#creating-node-widgets" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-node-widgets'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>The <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode</span></code></a> class allows you to embed some basic widgets inside a node here’s a
 example to simply embed a <code class="docutils literal notranslate"><span class="pre">QComboBox</span></code> widget when reimplementing the <code class="docutils literal notranslate"><span class="pre">BaseNode</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">NodeGraphQt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseNode</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">class</span> <span class="nc">MyListNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos"> 3</span><span class="k">class</span><span class="w"> </span><span class="nc">MyListNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
 <span class="linenos"> 6</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'node'</span>
 <span class="linenos"> 7</span>
-<span class="linenos"> 8</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos"> 8</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos"> 9</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyListNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span>        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'apples'</span><span class="p">,</span> <span class="s1">'bananas'</span><span class="p">,</span> <span class="s1">'pears'</span><span class="p">,</span> <span class="s1">'mangos'</span><span class="p">,</span> <span class="s1">'oranges'</span><span class="p">]</span>
@@ -231,15 +231,15 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <p>Here’s an example to embed a custom widget where we subclass the
 <a class="reference internal" href="../node_widgets.html#NodeGraphQt.NodeBaseWidget" title="NodeGraphQt.NodeBaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeGraphQt.NodeBaseWidget</span></code></a> and then add to the node with the
 <a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode.add_custom_widget" title="NodeGraphQt.BaseNode.add_custom_widget"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraphQt.BaseNode.add_custom_widget()</span></code></a> function.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
-<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeBaseWidget</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
+<span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">NodeGraphQt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeBaseWidget</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="k">class</span> <span class="nc">MyCustomWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="linenos"> 4</span><span class="k">class</span><span class="w"> </span><span class="nc">MyCustomWidget</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">):</span>
 <span class="linenos"> 5</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos"> 6</span><span class="sd">    Custom widget to be embedded inside a node.</span>
 <span class="linenos"> 7</span><span class="sd">    """</span>
 <span class="linenos"> 8</span>
-<span class="linenos"> 9</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos"> 9</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">10</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyCustomWidget</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">11</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_1</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QComboBox</span><span class="p">()</span>
 <span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">])</span>
@@ -254,12 +254,12 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">21</span>        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btn_go</span><span class="p">)</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span>
-<span class="linenos">24</span><span class="k">class</span> <span class="nc">NodeWidgetWrapper</span><span class="p">(</span><span class="n">NodeBaseWidget</span><span class="p">):</span>
+<span class="linenos">24</span><span class="k">class</span><span class="w"> </span><span class="nc">NodeWidgetWrapper</span><span class="p">(</span><span class="n">NodeBaseWidget</span><span class="p">):</span>
 <span class="linenos">25</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos">26</span><span class="sd">    Wrapper that allows the widget to be added in a node object.</span>
 <span class="linenos">27</span><span class="sd">    """</span>
 <span class="linenos">28</span>
-<span class="linenos">29</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos">29</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">30</span>        <span class="nb">super</span><span class="p">(</span><span class="n">NodeWidgetWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">31</span>
 <span class="linenos">32</span>        <span class="c1"># set the name for node property.</span>
@@ -274,7 +274,7 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">41</span>        <span class="c1"># connect up the signals &amp; slots.</span>
 <span class="linenos">42</span>        <span class="bp">self</span><span class="o">.</span><span class="n">wire_signals</span><span class="p">()</span>
 <span class="linenos">43</span>
-<span class="linenos">44</span>    <span class="k">def</span> <span class="nf">wire_signals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">44</span>    <span class="k">def</span><span class="w"> </span><span class="nf">wire_signals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">45</span>        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_custom_widget</span><span class="p">()</span>
 <span class="linenos">46</span>
 <span class="linenos">47</span>        <span class="c1"># wire up the combo boxes.</span>
@@ -284,15 +284,15 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">51</span>        <span class="c1"># wire up the button.</span>
 <span class="linenos">52</span>        <span class="n">widget</span><span class="o">.</span><span class="n">btn_go</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_btn_go_clicked</span><span class="p">)</span>
 <span class="linenos">53</span>
-<span class="linenos">54</span>    <span class="k">def</span> <span class="nf">on_btn_go_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">54</span>    <span class="k">def</span><span class="w"> </span><span class="nf">on_btn_go_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">55</span>        <span class="nb">print</span><span class="p">(</span><span class="s1">'Clicked on node: "</span><span class="si">{}</span><span class="s1">"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
 <span class="linenos">56</span>
-<span class="linenos">57</span>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">57</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">58</span>        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_custom_widget</span><span class="p">()</span>
 <span class="linenos">59</span>        <span class="k">return</span> <span class="s1">'</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">widget</span><span class="o">.</span><span class="n">combo_1</span><span class="o">.</span><span class="n">currentText</span><span class="p">(),</span>
 <span class="linenos">60</span>                              <span class="n">widget</span><span class="o">.</span><span class="n">combo_2</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
 <span class="linenos">61</span>
-<span class="linenos">62</span>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="linenos">62</span>    <span class="k">def</span><span class="w"> </span><span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="linenos">63</span>        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
 <span class="linenos">64</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
 <span class="linenos">65</span>            <span class="n">combo1_val</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -308,7 +308,7 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">75</span>        <span class="n">widget</span><span class="o">.</span><span class="n">combo_2</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">cb2_index</span><span class="p">)</span>
 <span class="linenos">76</span>
 <span class="linenos">77</span>
-<span class="linenos">78</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos">78</span><span class="k">class</span><span class="w"> </span><span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos">79</span><span class="w">    </span><span class="sd">"""</span>
 <span class="linenos">80</span><span class="sd">    Example node.</span>
 <span class="linenos">81</span><span class="sd">    """</span>
@@ -319,7 +319,7 @@ example to simply embed a <code class="docutils literal notranslate"><span class
 <span class="linenos">86</span>    <span class="c1"># set the initial default node name.</span>
 <span class="linenos">87</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos">88</span>
-<span class="linenos">89</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">89</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">90</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">91</span>
 <span class="linenos">92</span>        <span class="c1"># create input and output port.</span>
@@ -376,24 +376,24 @@ functions.</p>
 <h2>Connecting a PropertiesBin<a class="headerlink" href="#connecting-a-propertiesbin" title="Permalink to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#connecting-a-propertiesbin'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
 <p>Here’s an example where we subclass the <code class="docutils literal notranslate"><span class="pre">NodeGraph</span></code> and connect it up to a
 <code class="docutils literal notranslate"><span class="pre">PropertiesBinWidget</span></code> and have it show when a node is double clicked.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">Qt</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
-<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">NodeGraphQt</span> <span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">PropertiesBinWidget</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
+<span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">NodeGraphQt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseNode</span><span class="p">,</span> <span class="n">NodeGraph</span><span class="p">,</span> <span class="n">PropertiesBinWidget</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="k">class</span> <span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
+<span class="linenos"> 5</span><span class="k">class</span><span class="w"> </span><span class="nc">MyNode</span><span class="p">(</span><span class="n">BaseNode</span><span class="p">):</span>
 <span class="linenos"> 6</span>
 <span class="linenos"> 7</span>    <span class="n">__identifier__</span> <span class="o">=</span> <span class="s1">'io.github.jchanvfx'</span>
 <span class="linenos"> 8</span>    <span class="n">NODE_NAME</span> <span class="o">=</span> <span class="s1">'my node'</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">10</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">11</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 <span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">'in'</span><span class="p">)</span>
 <span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">'out'</span><span class="p">)</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span>
-<span class="linenos">16</span><span class="k">class</span> <span class="nc">MyNodeGraph</span><span class="p">(</span><span class="n">NodeGraph</span><span class="p">):</span>
+<span class="linenos">16</span><span class="k">class</span><span class="w"> </span><span class="nc">MyNodeGraph</span><span class="p">(</span><span class="n">NodeGraph</span><span class="p">):</span>
 <span class="linenos">17</span>
-<span class="linenos">18</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="linenos">18</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="linenos">19</span>        <span class="nb">super</span><span class="p">(</span><span class="n">MyNodeGraph</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 <span class="linenos">20</span>
 <span class="linenos">21</span>        <span class="c1"># properties bin widget.</span>
@@ -403,7 +403,7 @@ functions.</p>
 <span class="linenos">25</span>        <span class="c1"># wire signal.</span>
 <span class="linenos">26</span>        <span class="bp">self</span><span class="o">.</span><span class="n">node_double_clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_prop_bin</span><span class="p">)</span>
 <span class="linenos">27</span>
-<span class="linenos">28</span>    <span class="k">def</span> <span class="nf">display_prop_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="linenos">28</span>    <span class="k">def</span><span class="w"> </span><span class="nf">display_prop_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
 <span class="linenos">29</span><span class="w">        </span><span class="sd">"""</span>
 <span class="linenos">30</span><span class="sd">        function for displaying the properties bin when a node</span>
 <span class="linenos">31</span><span class="sd">        is double clicked</span>
@@ -466,7 +466,7 @@ functions.</p>
 </div><footer class="py-6 border-t border-border md:py-0">
 <div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2024, Johnny Chan </p>
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© 2025, Johnny Chan </p>
 </div>
 </div>
 </footer>
