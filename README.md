@@ -11,7 +11,7 @@
     </a>
 </p>
 
-NodeGraphQt is a node graph UI framework written in `PySide2` that can be re-implemented.
+NodeGraphQt is a node graph UI framework written in python using `Qt`.
 
 <img src="https://raw.githubusercontent.com/jchanvfx/NodeGraphQt/main/docs/_images/screenshot.png" width="100%" title="NodeGraphQt">
 
