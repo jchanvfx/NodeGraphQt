@@ -33,10 +33,10 @@ class NodeGraphicsItem(QtWidgets.QGraphicsItem):
             'disabled': False,
             'visible': False,
             'layout_direction': LayoutDirectionEnum.HORIZONTAL.value,
-            'pos': [0.0, 0.0]
+            'pos': [0.0, 0.0],
+            'width': NodeEnum.WIDTH.value,
+            'height': NodeEnum.HEIGHT.value,
         }
-        self._width = NodeEnum.WIDTH.value
-        self._height = NodeEnum.HEIGHT.value
 
     def __repr__(self):
         return '{}.{}(\'{}\')'.format(
@@ -53,39 +53,34 @@ class NodeGraphicsItem(QtWidgets.QGraphicsItem):
         Returns:
             QtCore.QRectF: node bounding rect.
         """
-        return QtCore.QRectF(0.0, 0.0, self._width, self._height)
+        width = self._properties['width']
+        height = self._properties['height']
+        return QtCore.QRectF(0.0, 0.0, width, height)
 
     def mousePressEvent(self, event):
         """
-        Re-implemented to update "self._properties['selected']" attribute.
-
-        Args:
-            event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
+        Re-implemented to update "self._properties" attribute value.
         """
         self._properties['selected'] = True
         super(NodeGraphicsItem, self).mousePressEvent(event)
 
     def setSelected(self, selected):
         """
-        Args:
-            selected (bool):
+        Re-implemented to update "self._properties" attribute value.
         """
         self._properties['selected'] = selected
         super(NodeGraphicsItem, self).setSelected(selected)
 
     def setVisible(self, visible):
         """
-        Args:
-            visible (bool):
+        Re-implemented to update "self._properties" attribute value.
         """
         self._properties['visible'] = visible
         self.setVisible(visible)
 
     def setPos(self, x, y):
         """
-        Args:
-            x (float or int):
-            y (float or int):
+        Re-implemented to update "self._properties" attribute value.
         """
         super().setPos(x, y)
         self._properties['pos'] = [
@@ -127,60 +122,61 @@ class NodeGraphicsItem(QtWidgets.QGraphicsItem):
 
     def add_property(self, name, value):
         """
+        Creates a new node property for storing certain node states.
+
         Args:
-            name:
-            value:
+            name (str): property name.
+            value (object): property value
         """
         if name in self._properties:
             raise KeyError(
                 'Can\'t add property "{}"! already defined in properties.'
             )
-        self._properties[name] = value
+        self._properties[name] = None
+
+        # this ensures we update the QGraphicsItem and set the proper value.
+        self.set_property(name, value)
 
     def get_property(self, name):
         """
+        Get the node property value.
+
         Args:
-            name (str):
+            name (str): property name.
 
         Returns:
             node property value.
         """
-        if name == 'pos':
-            self._properties['pos'] = [self.pos().x(), self.pos().y()]
-        elif name in ['width', 'height']:
-            self._properties[name] = getattr(self.boundingRect(), name)()
-        elif name == 'selected':
-            self._properties[name] = self.isSelected()
-        elif name == 'visible':
-            self._properties[name] = self.isVisible()
         return self._properties.get(name)
 
     def set_property(self, name, value):
         """
+        Updates the node property and also the QGraphicsItem methods.
+
         Args:
-            name (str):
-            value (object):
+            name (str): property name.
+            value (object): property value.
         """
+        if name not in self._properties.keys():
+            raise KeyError('node property "{}" doesn\'t exist')
+
         if name == 'selected':
             self.setSelected(value)
             return
         elif name == 'visible':
             self.setVisible(value)
             return
-
-        if name == 'name':
+        elif name == 'pos':
+            self.setPos(*value)
+            return
+        elif name == 'name':
             self.setToolTip('node: {}'.format(name))
-        elif name in ['width', 'height']:
-            if name == 'width':
-                self._width = value
-            else:
-                self._height = value
 
         self._properties[name] = value
 
     def properties(self):
         """
-        return the node view attributes.
+        return all the node property values.
 
         Returns:
             dict: {property_name: property_value}
@@ -209,7 +205,7 @@ class NodeGraphicsItem(QtWidgets.QGraphicsItem):
 
     def from_dict(self, node_dict):
         """
-        set the node view attributes from the dictionary.
+        Deserialize a dictionary of node properties and update the node.
 
         Args:
             node_dict (dict): serialized node dict.

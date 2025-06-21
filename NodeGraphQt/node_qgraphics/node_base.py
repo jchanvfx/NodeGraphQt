@@ -32,22 +32,26 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
     def __init__(self, name='node', parent=None):
         super().__init__(name, parent)
 
+        self.add_property('icon', ICON_NODE_BASE)
+
+        name = self.get_property('name')
+        text_color = self.get_property('text_color')
+
         self._icon_item = QtWidgets.QGraphicsPixmapItem(self)
         self._icon_item.setTransformationMode(QtCore.Qt.SmoothTransformation)
-        self._text_item = NodeTextItem(self.get_property('name'), self)
-        self._text_item.setDefaultTextColor(
-            QtGui.QColor(*self.get_property('text_color'))
-        )
+        self._text_item = NodeTextItem(name, self)
+        self._text_item.setDefaultTextColor(QtGui.QColor(*text_color))
         self._x_item = XDisabledItem(self, 'DISABLED')
+
         self._in_ports = {}
         self._in_port_txt_items = {}
         self._out_ports = {}
         self._out_port_txt_items = {}
+
         self._widgets = {}
+
         self._proxy_mode = False
         self._proxy_mode_threshold = 70
-
-        self.add_property('icon', ICON_NODE_BASE)
 
     # re-implemented QGraphicsItem functions.
     # --------------------------------------------------------------------------
@@ -60,11 +64,11 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
             event (QtWidgets.QGraphicsSceneMouseEvent): mouse event.
         """
         if event.button() == QtCore.Qt.LeftButton:
-            for p in self._input_items.keys():
+            for _name, p in self._in_ports.items():
                 if p.hovered:
                     event.ignore()
                     return
-            for p in self._output_items.keys():
+            for _name, p in self._out_ports.keys():
                 if p.hovered:
                     event.ignore()
                     return
@@ -102,7 +106,8 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
             viewer = self.viewer()
             if viewer:
-                viewer.node_double_clicked.emit(self.get_property('id'))
+                node_id = self.get_property('id')
+                viewer.node_double_clicked.emit(node_id)
         super().mouseDoubleClickEvent(event)
 
     def itemChange(self, change, value):
@@ -168,30 +173,24 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
         layout_direction = self.get_property('layout_direction')
         if layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
-            self.paint_horizontal(painter)
+            self._paint_horizontal(painter)
         elif layout_direction is LayoutDirectionEnum.VERTICAL.value:
-            self.paint_vertical(painter)
+            self._paint_vertical(painter)
         else:
             raise ValueError('Node graph layout direction not valid!')
 
     # reimplemented NodeGraphicsItem functions.
     # --------------------------------------------------------------------------
-    def add_property(self, name, value):
-        """
-        Args:
-            name:
-            value:
-        """
-        super().add_property(name, value)
-        refresh_properties = ['text_color', 'icon']
-        if name in refresh_properties:
-            self.set_property(name, value)
 
     def set_property(self, name, value):
         """
+        Updates the node property and also the QGraphicsItem methods.
+
+        (adding support for the additional child QGraphicsItems)
+
         Args:
-            name (str):
-            value:
+            name (str): property name.
+            value (object): property value.
         """
         super().set_property(name, value)
         if name == 'text_color':
@@ -201,56 +200,31 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
                 self.icon_item().setVisible(False)
                 return
             pixmap = QtGui.QPixmap(ICON_NODE_BASE)
-            if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
+            pixmap_height = pixmap.size().height()
+            if pixmap_height > NodeEnum.ICON_SIZE.value:
                 pixmap = pixmap.scaledToHeight(
                     NodeEnum.ICON_SIZE.value,
                     QtCore.Qt.SmoothTransformation
                 )
             self.icon_item().setPixmap(pixmap)
 
-    def post_init(self, viewer, pos=None):
+    def draw_node(self):
         """
-        Called after node has been added into the scene.
-
-        Args:
-            viewer (NodeGraphQt.widgets.viewer.NodeViewer): main viewer
-            pos (tuple): the cursor pos if node is called with tab search.
+        Re-draw the node item in the scene with proper
+        calculated size and widgets aligned.
         """
-        layout_direction = self.get_property('layout_direction')
-        if layout_direction == LayoutDirectionEnum.VERTICAL.value:
-            font = QtGui.QFont()
-            font.setPointSize(15)
-            self.text_item().setFont(font)
+        layout = self.get_property('layout_direction')
+        if layout is LayoutDirectionEnum.HORIZONTAL.value:
+            self._draw_node_horizontal()
+        elif layout is LayoutDirectionEnum.VERTICAL.value:
+            self._draw_node_vertical()
+        else:
+            raise RuntimeError('Node graph layout direction not valid!')
 
-            # hide port text items for vertical layout.
-            if layout_direction is LayoutDirectionEnum.VERTICAL.value:
-                for text_item in self._input_items.values():
-                    text_item.setVisible(False)
-                for text_item in self._output_items.values():
-                    text_item.setVisible(False)
-
-    # BaseNodeGraphicItem functions.
+    # draw and paint functions. (horizontal layout)
     # --------------------------------------------------------------------------
 
-    def text_item(self):
-        """
-        Get the node name text qgraphics item.
-
-        Returns:
-            NodeTextItem: node text object.
-        """
-        return self._text_item
-
-    def icon_item(self):
-        """
-        Get the node icon qgraphics item.
-
-        Returns:
-            QtWidgets.QGraphicsPixmapItem: node icon object.
-        """
-        return self._icon_item
-
-    def paint_horizontal(self, painter):
+    def _paint_horizontal(self, painter):
         """
         Paint function responsible for drawing the node shape in the
         horizontal layout.
@@ -292,7 +266,7 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
         # node text item background.
         padding = 3.0, 2.0
-        text_rect = self.text_item.boundingRect()
+        text_rect = self.text_item().boundingRect()
         text_rect = QtCore.QRectF(text_rect.x() + padding[0],
                                   rect.y() + padding[1],
                                   rect.width() - padding[0] - margin,
@@ -326,7 +300,104 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
         painter.restore()
 
-    def paint_vertical(self, painter):
+    def _draw_node_horizontal(self):
+        # change the node name text size.
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.text_item().setFont(font)
+
+        # update port text items in visibility.
+        for name, port in self._in_ports.items():
+            if port.get_property('visible'):
+                text_visible = port.get_property('text_visible')
+                port_text = self._in_port_txt_items[name]
+                port_text.setVisible(text_visible)
+        for name, port in self._out_ports.items():
+            if port.get_property('visible'):
+                text_visible = port.get_property('text_visible')
+                port_text = self._out_port_txt_items[name]
+                port_text.setVisible(text_visible)
+
+        # set node size.
+        width, height = self._draw_node_horizontal_calc_size()
+        self.set_property('width', width)
+        self.set_property('height', height)
+
+        #TODO: implement node layout of ports and texts
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------
+
+    def _draw_node_horizontal_calc_size(self):
+
+        # width, height from node name text.
+        text_w = self.text_item().boundingRect().width()
+        text_h = self.text_item().boundingRect().height()
+
+        # width, height from node ports.
+        def _calc_port_max_size(ports_dict, port_txt_dict):
+            widths = []
+            total_height = 0
+            for port_name, port in ports_dict.items():
+                if not port.get_property('visible'):
+                    continue
+                width = port.boundingRect().width()
+                height = port.boundingRect().height()
+                if port.get_property('text_visible'):
+                    port_text = port_txt_dict[port_name]
+                    width += port_text.boundingRect().width()
+                    height = max(height, port_text.boundingRect().height())
+                widths.append(width)
+                total_height += height
+            return max(widths), total_height
+
+        p_input_width, p_input_height = _calc_port_max_size(
+            self._in_ports, self._in_port_txt_items
+        )
+        p_output_width, p_output_height = _calc_port_max_size(
+            self._out_ports, self._out_port_txt_items
+        )
+        max_port_width = p_input_width + p_output_width
+        max_port_height = max([p_input_height, p_output_height])
+
+        # width, height from node embedded widgets.
+        widget_width = 0.0
+        widget_height = 0.0
+        for widget in self.get_widgets().values():
+            if not widget.get_property('visible'):
+                continue
+            w_width = widget.boundingRect().width()
+            if w_width > widget_width:
+                widget_width = w_width
+            w_height = widget.boundingRect().height()
+            widget_height += w_height
+
+        width = max(text_w, max_port_width) + widget_width
+        height = text_h + max(max_port_height, widget_height)
+
+        return width, height
+
+    def _draw_node_vertical(self):
+        # change the node name text size.
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.text_item().setFont(font)
+
+        # update port text items in visibility.
+        for name, port_text in self._in_port_txt_items.items():
+            port_text.setVisible(False)
+        for name, port_text in self._out_ports.items():
+            port_text.setVisible(False)
+
+    # draw and paint functions. (vertical layout)
+    # --------------------------------------------------------------------------
+
+    def _paint_vertical(self, painter):
         """
         Paint function responsible for drawing the node shape in the
         vertical layout.
@@ -337,7 +408,7 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
             painter (QtGui.QPainter): painter used for drawing the item.
         """
         # node properties
-        n_rect = self.boundingRect()
+        # n_rect = self.boundingRect()
         n_color = self.get_property('color')
         n_border_color = self.get_property('border_color')
         n_selected = self.get_property('selected')
@@ -396,6 +467,61 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
         painter.restore()
 
+    # api functions for accessing attributes.
+    # --------------------------------------------------------------------------
+
+    def text_item(self):
+        """
+        Get the node name text qgraphics item.
+
+        Returns:
+            NodeTextItem: node text object.
+        """
+        return self._text_item
+
+    def icon_item(self):
+        """
+        Get the node icon qgraphics item.
+
+        Returns:
+            QtWidgets.QGraphicsPixmapItem: node icon object.
+        """
+        return self._icon_item
+
+    def add_widget(self, widget):
+        """
+
+        Args:
+            widget:
+        """
+        name = widget.get_property('name')
+        self._widgets[name] = widget
+
+    def get_widget(self, name):
+        """
+
+        Args:
+            name:
+
+        Returns:
+
+        """
+        widget = self._widgets.get(name)
+        if widget:
+            return widget
+        raise KeyError('node has no widget "{}"'.format(name))
+
+    def get_widgets(self):
+        """
+
+        Returns:
+            dict:
+        """
+        return self._widgets
+
+    # add/remove port functions.
+    # --------------------------------------------------------------------------
+
     def add_port(self, port):
         """
         Adds a port qgraphics item into the node.
@@ -417,6 +543,8 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
         elif port.port_type == PortTypeEnum.OUT.value:
             self._out_ports[port.name] = port
             self._out_port_txt_items[port.name] = text
+        else:
+            raise ValueError('"{}" not supported!'.format(port))
 
         if self.scene():
             self.post_init()
@@ -491,16 +619,20 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
         elif port.port_type == PortTypeEnum.OUT:
             self._out_ports.pop(port_name)
             text_item = self._out_port_txt_items.pop(port_name)
+        else:
+            raise ValueError('port object "{}" not valid!'.format(port))
+
+        # unparent items before removing in the scene so it can be properly
+        # deleted.
         text_item.setParentItem(None)
         port.setParentItem(None)
         self.scene().removeItem(port)
         self.scene().removeItem(text_item)
+
+        # not sure if we need to do this just wanna make sure it's
+        # removed from memory.
         del port
         del text_item
-
-
-
-
 
 
 
@@ -555,9 +687,9 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
             color (tuple): color value in (r, g, b, a).
         """
         text_color = QtGui.QColor(*color)
-        for port, text in self._input_items.items():
+        for port, text in self._in_port_txt_items.items():
             text.setDefaultTextColor(text_color)
-        for port, text in self._output_items.items():
+        for port, text in self._out_port_txt_items.items():
             text.setDefaultTextColor(text_color)
         self._text_item.setDefaultTextColor(text_color)
 
@@ -629,12 +761,12 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
         p_output_width = 0.0
         p_input_height = 0.0
         p_output_height = 0.0
-        for port in self._input_items.keys():
+        for port in self._in_port_txt_items.keys():
             if port.isVisible():
                 p_input_width += port.boundingRect().width()
                 if not p_input_height:
                     p_input_height = port.boundingRect().height()
-        for port in self._output_items.keys():
+        for port in self._out_port_txt_items.keys():
             if port.isVisible():
                 p_output_width += port.boundingRect().width()
                 if not p_output_height:
@@ -809,7 +941,7 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
                 port.setPos(port_x, port_y)
                 port_y += port_height + spacing
         # adjust input text position
-        for port, text in self._input_items.items():
+        for port, text in self._in_port_txt_items.items():
             if port.isVisible():
                 txt_x = port.boundingRect().width() / 2 - txt_offset
                 text.setPos(txt_x, port.y() - 1.5)
@@ -825,7 +957,7 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
                 port.setPos(port_x, port_y)
                 port_y += port_height + spacing
         # adjust output text position
-        for port, text in self._output_items.items():
+        for port, text in self._out_port_txt_items.items():
             if port.isVisible():
                 txt_width = text.boundingRect().width() - txt_offset
                 txt_x = port.x() - txt_width
@@ -865,9 +997,10 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
         Args:
             v_offset (float): port vertical offset.
         """
-        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
+        layout = self.get_property('layout_direction')
+        if layout is LayoutDirectionEnum.HORIZONTAL.value:
             self._align_ports_horizontal(v_offset)
-        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
+        elif layout is LayoutDirectionEnum.VERTICAL.value:
             self._align_ports_vertical(v_offset)
         else:
             raise RuntimeError('Node graph layout direction not valid!')
@@ -932,17 +1065,7 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
 
         self.update()
 
-    def draw_node(self):
-        """
-        Re-draw the node item in the scene with proper
-        calculated size and widgets aligned.
-        """
-        if self.layout_direction is LayoutDirectionEnum.HORIZONTAL.value:
-            self._draw_node_horizontal()
-        elif self.layout_direction is LayoutDirectionEnum.VERTICAL.value:
-            self._draw_node_vertical()
-        else:
-            raise RuntimeError('Node graph layout direction not valid!')
+
 
     def post_init(self, viewer=None, pos=None):
         """
@@ -1129,18 +1252,9 @@ class BaseNodeGraphicsItem(NodeGraphicsItem):
         """
         return self._output_items[port_item]
 
-    @property
-    def widgets(self):
-        return self._widgets.copy()
 
-    def add_widget(self, widget):
-        self._widgets[widget.get_name()] = widget
 
-    def get_widget(self, name):
-        widget = self._widgets.get(name)
-        if widget:
-            return widget
-        raise NodeWidgetError('node has no widget "{}"'.format(name))
+
 
     def has_widget(self, name):
         return name in self._widgets.keys()
