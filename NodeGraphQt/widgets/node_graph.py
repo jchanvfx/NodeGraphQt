@@ -1,8 +1,6 @@
 from Qt import QtWidgets, QtGui
 
-from NodeGraphQt.constants import (
-    NodeEnum, ViewerEnum, ViewerNavEnum
-)
+from NodeGraphQt.constants import NodeEnum, ViewerEnum, ViewerNavEnum
 
 from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
@@ -13,50 +11,81 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
         super(NodeGraphWidget, self).__init__(parent)
         self.setTabsClosable(True)
         self.setTabBarAutoHide(True)
-        bg_color = QtGui.QColor(
-            *ViewerEnum.BACKGROUND_COLOR.value).darker(120).getRgb()
+        bg_color = QtGui.QColor(*ViewerEnum.BACKGROUND_COLOR.value).darker(120).getRgb()
         text_color = tuple(map(lambda i, j: i - j, (255, 255, 255), bg_color))
         style_dict = {
-            'QWidget': {
-                'background-color': 'rgb({0},{1},{2})'.format(
+            "QWidget": {
+                "color": "rgb({0},{1},{2})".format(*text_color),
+                "background-color": "rgb({0},{1},{2})".format(
                     *ViewerEnum.BACKGROUND_COLOR.value
                 ),
             },
-            'QTabWidget::pane': {
-                'background': 'rgb({0},{1},{2})'.format(
+            "QTabWidget::pane": {
+                "background": "rgb({0},{1},{2})".format(
                     *ViewerEnum.BACKGROUND_COLOR.value
                 ),
-                'border': '0px',
-                'border-top': '0px solid rgb({0},{1},{2})'.format(*bg_color),
+                "border": "0px",
+                "border-top": "0px solid rgb({0},{1},{2})".format(*bg_color),
             },
-            'QTabBar::tab': {
-                'background': 'rgb({0},{1},{2})'.format(*bg_color),
-                'border': '0px solid black',
-                'color': 'rgba({0},{1},{2},30)'.format(*text_color),
-                'min-width': '10px',
-                'padding': '10px 20px',
+            "QTabBar::tab": {
+                "background": "rgb({0},{1},{2})".format(*bg_color),
+                "border": "0px solid black",
+                "color": "rgba({0},{1},{2},30)".format(*text_color),
+                "min-width": "10px",
+                "padding": "10px 20px",
             },
-            'QTabBar::tab:selected': {
-                'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'background': 'rgb({0},{1},{2})'.format(
+            "QTabBar::tab:selected": {
+                "color": "rgb({0},{1},{2})".format(*text_color),
+                "background": "rgb({0},{1},{2})".format(
                     *ViewerNavEnum.BACKGROUND_COLOR.value
                 ),
-                'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NodeEnum.SELECTED_BORDER_COLOR.value),
+                "border-top": "1px solid rgb({0},{1},{2})".format(
+                    *NodeEnum.SELECTED_BORDER_COLOR.value
+                ),
             },
-            'QTabBar::tab:hover': {
-                'color': 'rgb({0},{1},{2})'.format(*text_color),
-                'border-top': '1px solid rgb({0},{1},{2})'
-                              .format(*NodeEnum.SELECTED_BORDER_COLOR.value),
-            }
+            "QTabBar::tab:hover": {
+                "color": "rgb({0},{1},{2})".format(*text_color),
+                "border-top": "1px solid rgb({0},{1},{2})".format(
+                    *NodeEnum.SELECTED_BORDER_COLOR.value
+                ),
+            },
+            "QSpinBox": {
+                "color": "rgb({0},{1},{2})".format(*text_color),
+                "background-color": "rgb({0},{1},{2})".format(
+                    *ViewerNavEnum.BACKGROUND_COLOR.value
+                ),
+                "min-width": "40px",
+                "padding-right": "34px",
+            },
+            "QSpinBox QLineEdit": {
+                "min-width": "20px",
+            },
+            "QSpinBox::up-button": {
+                "width": "16px",
+                "height": "20px",
+                "subcontrol-origin": "padding",
+                "subcontrol-position": "top right",
+                "margin-top": "0px",
+                "margin-bottom": "0px",
+            },
+            "QSpinBox::down-button": {
+                "width": "16px",
+                "height": "20px",
+                "subcontrol-origin": "padding",
+                "subcontrol-position": "bottom right",
+                "margin-right": "16px",
+                "margin-top": "0px",
+                "margin-bottom": "0px",
+            },
         }
-        stylesheet = ''
+        stylesheet = ""
         for css_class, css in style_dict.items():
-            style = '{} {{\n'.format(css_class)
+            style = "{} {{\n".format(css_class)
             for elm_name, elm_val in css.items():
-                style += '  {}:{};\n'.format(elm_name, elm_val)
-            style += '}\n'
+                style += "  {}:{};\n".format(elm_name, elm_val)
+            style += "}\n"
             stylesheet += style
+
         self.setStyleSheet(stylesheet)
 
     def add_viewer(self, viewer, name, node_id):
