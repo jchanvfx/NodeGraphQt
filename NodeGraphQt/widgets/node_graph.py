@@ -54,28 +54,11 @@ class NodeGraphWidget(QtWidgets.QTabWidget):
                 "background-color": "rgb({0},{1},{2})".format(
                     *ViewerNavEnum.BACKGROUND_COLOR.value
                 ),
-                "min-width": "40px",
-                "padding-right": "34px",
+                "min-width": "30px",
+                "padding-right": "20px",
             },
             "QSpinBox QLineEdit": {
                 "min-width": "20px",
-            },
-            "QSpinBox::up-button": {
-                "width": "16px",
-                "height": "20px",
-                "subcontrol-origin": "padding",
-                "subcontrol-position": "top right",
-                "margin-top": "0px",
-                "margin-bottom": "0px",
-            },
-            "QSpinBox::down-button": {
-                "width": "16px",
-                "height": "20px",
-                "subcontrol-origin": "padding",
-                "subcontrol-position": "bottom right",
-                "margin-right": "16px",
-                "margin-top": "0px",
-                "margin-bottom": "0px",
             },
         }
         stylesheet = ""
