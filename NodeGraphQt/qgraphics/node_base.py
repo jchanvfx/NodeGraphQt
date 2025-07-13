@@ -804,6 +804,11 @@ class NodeItem(AbstractNodeItem):
                 NodeEnum.ICON_SIZE.value,
                 QtCore.Qt.SmoothTransformation
             )
+        if pixmap.size().width() > NodeEnum.ICON_SIZE.value:
+            pixmap = pixmap.scaledToWidth(
+                NodeEnum.ICON_SIZE.value,
+                QtCore.Qt.SmoothTransformation
+            )
         self._icon_item.setPixmap(pixmap)
         if self.scene():
             self.post_init()
