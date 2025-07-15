@@ -5,7 +5,7 @@ from Qt import QtWidgets, QtCore, QtGui, QtCompat
 
 from .node_property_factory import NodePropertyWidgetFactory
 from .prop_widgets_base import PropLineEdit
-
+from ...constants import NodeEnum   
 
 class _PropertiesDelegate(QtWidgets.QStyledItemDelegate):
 
@@ -324,6 +324,23 @@ class NodePropEditorWidget(QtWidgets.QWidget):
         close_btn.setToolTip('close property')
         close_btn.clicked.connect(self._on_close)
 
+        pixmap = QtGui.QPixmap()
+        if node.icon():
+            pixmap = QtGui.QPixmap(node.icon())
+
+            if pixmap.size().height() > NodeEnum.ICON_SIZE.value:
+                pixmap = pixmap.scaledToHeight(
+                    NodeEnum.ICON_SIZE.value, QtCore.Qt.SmoothTransformation
+                )
+            if pixmap.size().width() > NodeEnum.ICON_SIZE.value:
+                pixmap = pixmap.scaledToWidth(
+                    NodeEnum.ICON_SIZE.value, QtCore.Qt.SmoothTransformation
+                )
+
+        self.icon_label = QtWidgets.QLabel(self)
+        self.icon_label.setPixmap(pixmap)
+        self.icon_label.setStyleSheet("background: transparent;")
+
         self.name_wgt = PropLineEdit()
         self.name_wgt.set_name('name')
         self.name_wgt.setToolTip('name\nSet the node name.')
@@ -341,6 +358,7 @@ class NodePropEditorWidget(QtWidgets.QWidget):
 
         name_layout = QtWidgets.QHBoxLayout()
         name_layout.setContentsMargins(0, 0, 0, 0)
+        name_layout.addWidget(self.icon_label)
         name_layout.addWidget(QtWidgets.QLabel('name'))
         name_layout.addWidget(self.name_wgt)
         name_layout.addWidget(close_btn)
