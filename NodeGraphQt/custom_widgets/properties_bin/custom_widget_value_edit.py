@@ -140,6 +140,9 @@ class _NumberValueEdit(QtWidgets.QLineEdit):
         elif event.key() == QtCore.Qt.Key_Down:
             return
 
+    def set_name(self, name):
+        self._name = name
+
     # private
 
     def _reset_previous_x(self):
