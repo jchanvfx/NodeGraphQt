@@ -798,15 +798,17 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         if self.limit() == 0 or self._lock:
             return
 
-        rows = self._prop_list.rowCount() - 1
-        if rows >= self.limit():
-            self._prop_list.removeRow(rows - 1)
-
+        # remove pre-existing instance
         itm_find = self._prop_list.findItems(node.id, QtCore.Qt.MatchExactly)
         if itm_find:
             self._prop_list.removeRow(itm_find[0].row())
 
         self._prop_list.insertRow(0)
+        rows = self._prop_list.rowCount() - 1
+        
+        if rows >= (self.limit()):
+            # remove last row
+            self._prop_list.removeRow(rows)
 
         prop_widget = self.create_property_editor(node=node)
         prop_widget.property_closed.connect(self.__on_prop_close)
