@@ -110,7 +110,7 @@ def main():
     # ---------------------------------------
 
     # create a node properties bin widget.
-    properties_bin = PropertiesBinWidget(node_graph=graph)
+    properties_bin = PropertiesBinWidget(node_graph=graph, parent=graph_widget)
     properties_bin.setWindowFlags(QtCore.Qt.Tool)
 
     # example show the node properties bin widget when a node is double-clicked.
