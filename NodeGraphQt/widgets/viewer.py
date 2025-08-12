@@ -676,7 +676,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         pos = self.mapToScene(event.pos())
         event.setDropAction(QtCore.Qt.CopyAction)
         self.data_dropped.emit(
-            event.mimeData(), QtCore.QPoint(pos.x(), pos.y())
+            event.mimeData(), QtCore.QPoint(int(pos.x()), int(pos.y()))
         )
 
     def dragEnterEvent(self, event):
