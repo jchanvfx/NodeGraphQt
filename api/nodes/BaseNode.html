@@ -206,88 +206,91 @@ port connections from one node to another.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_text_input" title="NodeGraphQt.BaseNode.add_text_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_text_input</span></code></a>(name[, label, text, ...])</p></td>
 <td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QLineEdit</span></code> widget into the node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_checkbox</span></code></a>(name[, label, text, state, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_button" title="NodeGraphQt.BaseNode.add_button"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_button</span></code></a>(name[, label, text, tooltip, tab])</p></td>
+<td><p>Creates and embeds a QPushButton widget into the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_checkbox" title="NodeGraphQt.BaseNode.add_checkbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_checkbox</span></code></a>(name[, label, text, state, ...])</p></td>
 <td><p>Creates a custom property with the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeObject.create_property" title="NodeGraphQt.NodeObject.create_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeObject.create_property()</span></code></a> function and embeds a <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QCheckBox</span></code> widget into the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide_widget</span></code></a>(name[, push_undo])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.hide_widget" title="NodeGraphQt.BaseNode.hide_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hide_widget</span></code></a>(name[, push_undo])</p></td>
 <td><p>Hide an embedded node widget.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_widget</span></code></a>(name[, push_undo])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.show_widget" title="NodeGraphQt.BaseNode.show_widget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_widget</span></code></a>(name[, push_undo])</p></td>
 <td><p>Show an embedded node widget.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_input" title="NodeGraphQt.BaseNode.add_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input</span></code></a>([name, multi_input, display_name, ...])</p></td>
 <td><p>Add input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_output</span></code></a>([name, multi_output, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_output" title="NodeGraphQt.BaseNode.add_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_output</span></code></a>([name, multi_output, ...])</p></td>
 <td><p>Add output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a> to node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_input" title="NodeGraphQt.BaseNode.get_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input</span></code></a>(port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_input" title="NodeGraphQt.BaseNode.get_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input</span></code></a>(port)</p></td>
 <td><p>Get input port by the name or index.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_output" title="NodeGraphQt.BaseNode.get_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_output</span></code></a>(port)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.get_output" title="NodeGraphQt.BaseNode.get_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_output</span></code></a>(port)</p></td>
 <td><p>Get output port by the name or index.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_input" title="NodeGraphQt.BaseNode.delete_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_input</span></code></a>(port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_input" title="NodeGraphQt.BaseNode.delete_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_input</span></code></a>(port)</p></td>
 <td><p>Delete input port.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_output" title="NodeGraphQt.BaseNode.delete_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_output</span></code></a>(port)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.delete_output" title="NodeGraphQt.BaseNode.delete_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_output</span></code></a>(port)</p></td>
 <td><p>Delete output port.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed" title="NodeGraphQt.BaseNode.set_port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_port_deletion_allowed</span></code></a>([mode])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_port_deletion_allowed" title="NodeGraphQt.BaseNode.set_port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_port_deletion_allowed</span></code></a>([mode])</p></td>
 <td><p>Allow ports to be removable on this node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.port_deletion_allowed" title="NodeGraphQt.BaseNode.port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">port_deletion_allowed</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.port_deletion_allowed" title="NodeGraphQt.BaseNode.port_deletion_allowed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">port_deletion_allowed</span></code></a>()</p></td>
 <td><p>Return true if ports can be deleted on this node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_ports" title="NodeGraphQt.BaseNode.set_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ports</span></code></a>(port_data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_ports" title="NodeGraphQt.BaseNode.set_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ports</span></code></a>(port_data)</p></td>
 <td><p>Create node input and output ports from serialized port data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.inputs" title="NodeGraphQt.BaseNode.inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inputs</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.inputs" title="NodeGraphQt.BaseNode.inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inputs</span></code></a>()</p></td>
 <td><p>Returns all the input ports from the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input_ports" title="NodeGraphQt.BaseNode.input_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_ports</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input_ports" title="NodeGraphQt.BaseNode.input_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_ports</span></code></a>()</p></td>
 <td><p>Return all input ports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.outputs" title="NodeGraphQt.BaseNode.outputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outputs</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.outputs" title="NodeGraphQt.BaseNode.outputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outputs</span></code></a>()</p></td>
 <td><p>Returns all the output ports from the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output_ports" title="NodeGraphQt.BaseNode.output_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output_ports</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output_ports" title="NodeGraphQt.BaseNode.output_ports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output_ports</span></code></a>()</p></td>
 <td><p>Return all output ports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input" title="NodeGraphQt.BaseNode.input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input</span></code></a>(index)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.input" title="NodeGraphQt.BaseNode.input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input</span></code></a>(index)</p></td>
 <td><p>Return the input port with the matching index.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_input" title="NodeGraphQt.BaseNode.set_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_input</span></code></a>(index, port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_input" title="NodeGraphQt.BaseNode.set_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_input</span></code></a>(index, port)</p></td>
 <td><p>Creates a connection pipe to the targeted output <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output" title="NodeGraphQt.BaseNode.output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output</span></code></a>(index)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.output" title="NodeGraphQt.BaseNode.output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">output</span></code></a>(index)</p></td>
 <td><p>Return the output port with the matching index.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_output" title="NodeGraphQt.BaseNode.set_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_output</span></code></a>(index, port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.set_output" title="NodeGraphQt.BaseNode.set_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_output</span></code></a>(index, port)</p></td>
 <td><p>Creates a connection pipe to the targeted input <a class="reference internal" href="../port.html#NodeGraphQt.Port" title="NodeGraphQt.Port"><code class="xref py py-class docutils literal notranslate"><span class="pre">Port</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="NodeGraphQt.BaseNode.connected_input_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_input_nodes</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_input_nodes" title="NodeGraphQt.BaseNode.connected_input_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_input_nodes</span></code></a>()</p></td>
 <td><p>Returns all nodes connected from the input ports.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_output_nodes" title="NodeGraphQt.BaseNode.connected_output_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_output_nodes</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.connected_output_nodes" title="NodeGraphQt.BaseNode.connected_output_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_output_nodes</span></code></a>()</p></td>
 <td><p>Returns all nodes connected from the output ports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="NodeGraphQt.BaseNode.add_accept_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_accept_port_type</span></code></a>(port, port_type_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_accept_port_type" title="NodeGraphQt.BaseNode.add_accept_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_accept_port_type</span></code></a>(port, port_type_data)</p></td>
 <td><p>Add an accept constrain to a specified node port.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types" title="NodeGraphQt.BaseNode.accepted_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accepted_port_types</span></code></a>(port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.accepted_port_types" title="NodeGraphQt.BaseNode.accepted_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accepted_port_types</span></code></a>(port)</p></td>
 <td><p>Returns a dictionary of connection constrains of the port types that allow for a pipe connection to this node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="NodeGraphQt.BaseNode.add_reject_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_reject_port_type</span></code></a>(port, port_type_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.add_reject_port_type" title="NodeGraphQt.BaseNode.add_reject_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_reject_port_type</span></code></a>(port, port_type_data)</p></td>
 <td><p>Add a reject constrain to a specified node port.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.rejected_port_types" title="NodeGraphQt.BaseNode.rejected_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rejected_port_types</span></code></a>(port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.rejected_port_types" title="NodeGraphQt.BaseNode.rejected_port_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rejected_port_types</span></code></a>(port)</p></td>
 <td><p>Returns a dictionary of connection constrains of the port types that are NOT allowed for a pipe connection to this node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_connected" title="NodeGraphQt.BaseNode.on_input_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_connected</span></code></a>(in_port, out_port)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_connected" title="NodeGraphQt.BaseNode.on_input_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_connected</span></code></a>(in_port, out_port)</p></td>
 <td><p>Callback triggered when a new pipe connection is made.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_disconnected" title="NodeGraphQt.BaseNode.on_input_disconnected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_disconnected</span></code></a>(in_port, out_port)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.BaseNode.on_input_disconnected" title="NodeGraphQt.BaseNode.on_input_disconnected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_input_disconnected</span></code></a>(in_port, out_port)</p></td>
 <td><p>Callback triggered when a pipe connection has been disconnected from a INPUT port.</p></td>
 </tr>
 </tbody>
@@ -419,6 +422,24 @@ up to the <a class="reference internal" href="NodeObject.html#NodeGraphQt.NodeOb
 <li><p><strong>placeholder_text</strong> (<em>str</em>) – placeholder text.</p></li>
 <li><p><strong>tooltip</strong> (<em>str</em>) – widget tooltip.</p></li>
 <li><p><strong>tab</strong> (<em>str</em>) – name of the widget tab to display in.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NodeGraphQt.BaseNode.add_button">
+<span class="sig-name descname"><span class="pre">add_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tooltip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.BaseNode.add_button" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.BaseNode.add_button'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<dd><p>Creates and embeds a QPushButton widget into the node.</p>
+<p>This function is used to add an interactive button to a node’s properties
+panel. You can then connect your own functions to its <cite>clicked</cite> signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A unique name for the widget property.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The label displayed next to the widget (optional).</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text displayed on the button itself.</p></li>
+<li><p><strong>tooltip</strong> (<em>str</em>) – A tooltip that appears on hover.</p></li>
+<li><p><strong>tab</strong> (<em>str</em>) – The name of the tab to display the widget in.</p></li>
 </ul>
 </dd>
 </dl>
