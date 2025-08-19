@@ -68,7 +68,6 @@ class NodeViewer(QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.BoundingRectViewportUpdate)
         self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
-        self.setOptimizationFlag(QtWidgets.QGraphicsView.DontAdjustForAntialiasing)
 
         self.setAcceptDrops(True)
         self.resize(850, 800)
