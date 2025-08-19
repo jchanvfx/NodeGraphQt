@@ -383,7 +383,87 @@ class NodeLineEdit(NodeBaseWidget):
         if text != self.get_value():
             self.get_custom_widget().setText(text)
             self.on_value_changed()
+class NodeButton(NodeBaseWidget):
+    """
+    Displays as a ``QPushButton`` in a node.
 
+    .. inheritance-diagram:: NodeGraphQt.widgets.node_widgets.NodeButton
+        :parts: 1
+
+    .. note::
+        `To embed a` ``QPushButton`` `in a node, you would typically use a
+        helper function like` :meth:`NodeGraphQt.BaseNode.add_button`
+    """
+
+    def __init__(self, parent=None, name='', label='', text=''):
+        super(NodeButton, self).__init__(parent, name, label)
+
+        # Create the core QPushButton widget.
+        self._button = QtWidgets.QPushButton(text)
+
+        # --- Styling ---
+        # Calculate text color based on the viewer's background for good contrast.
+        text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
+                               ViewerEnum.BACKGROUND_COLOR.value))
+        
+        # Define a clean, modern stylesheet for the button.
+        style_dict = {
+            'QPushButton': {
+                'background-color': 'rgba(40, 40, 40, 200)',
+                'border': '1px solid rgba(100, 100, 100, 255)',
+                'border-radius': '3px',
+                'color': 'rgba({0},{1},{2},150)'.format(*text_color),
+                'font-size': '10pt',
+                'padding': '2px 15px',
+                'max-height': '20px',
+            },
+            'QPushButton:hover': {
+                'background-color': 'rgba(50, 50, 50, 220)',
+                'border': '1px solid rgba(150, 150, 150, 255)',
+            },
+            'QPushButton:pressed': {
+                'background-color': 'rgba(25, 25, 25, 200)',
+                'border': '1px solid rgba(80, 80, 80, 255)',
+            }
+        }
+
+        # Apply the stylesheet.
+        stylesheet = ''
+        for css_class, css in style_dict.items():
+            style = '{} {{\n'.format(css_class)
+            for elm_name, elm_val in css.items():
+                style += '  {}:{};\n'.format(elm_name, elm_val)
+            style += '}\n'
+            stylesheet += style
+        self._button.setStyleSheet(stylesheet)
+        
+        # --- Signal Connection ---
+        # When the button is clicked, it will trigger the base widget's
+        # 'on_value_changed' method, which in turn emits the 'value_changed'
+        # signal that the node can listen to.
+        self._button.clicked.connect(self.on_value_changed)
+
+        # Embed the styled button into the node widget layout.
+        self.set_custom_widget(self._button)
+
+    @property
+    def type_(self):
+        """
+        Returns the unique type identifier for this widget.
+        """
+        return 'ButtonNodeWidget'
+
+    def get_value(self):
+        """
+        Returns the current text of the button.
+        """
+        return self._button.text()
+
+    def set_value(self, text):
+        """
+        Sets the text displayed on the button.
+        """
+        self._button.setText(text)
 
 class NodeCheckBox(NodeBaseWidget):
     """
