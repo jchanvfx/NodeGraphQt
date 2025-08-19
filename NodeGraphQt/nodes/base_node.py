@@ -14,6 +14,7 @@ from NodeGraphQt.qgraphics.node_base import NodeItem
 from NodeGraphQt.widgets.node_widgets import (
     NodeBaseWidget,
     NodeCheckBox,
+    NodeButton,
     NodeComboBox,
     NodeLineEdit
 )
@@ -273,7 +274,31 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
+    def add_button(self, name, label='', text='', tooltip=None, tab=None):
+        """
+        Creates and embeds a QPushButton widget into the node.
 
+        This function is used to add an interactive button to a node's properties
+        panel. You can then connect your own functions to its `clicked` signal.
+
+        Args:
+            name (str): A unique name for the widget property.
+            label (str): The label displayed next to the widget (optional).
+            text (str): The text displayed on the button itself.
+            tooltip (str): A tooltip that appears on hover.
+            tab (str): The name of the tab to display the widget in.
+        """
+        # This would create the button widget internally.
+        # Unlike a checkbox, a button doesn't store a value, so we don't
+        # call self.create_property().
+        widget = NodeButton(self.view, name, label, text)
+        widget.setToolTip(tooltip or '')
+
+        # The widget is added to the node's layout.
+        self.view.add_widget(widget)
+
+        # The node is redrawn to ensure the new widget is visible.
+        self.view.draw_node()
     def add_checkbox(self, name, label='', text='', state=False, tooltip=None,
                      tab=None):
         """
