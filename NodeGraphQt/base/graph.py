@@ -8,24 +8,16 @@ from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.base.commands import (NodeAddedCmd,
-                                       NodesRemovedCmd,
-                                       NodeMovedCmd,
-                                       PortConnectedCmd)
+from NodeGraphQt.base.commands import (NodeAddedCmd, NodeMovedCmd,
+                                       NodesRemovedCmd, PortConnectedCmd)
 from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (
-    MIME_TYPE,
-    URI_SCHEME,
-    URN_SCHEME,
-    LayoutDirectionEnum,
-    PipeLayoutEnum,
-    PortTypeEnum,
-    ViewerEnum
-)
+from NodeGraphQt.constants import (MIME_TYPE, URI_SCHEME, URN_SCHEME,
+                                   LayoutDirectionEnum, PipeLayoutEnum,
+                                   PortTypeEnum, ViewerEnum)
 from NodeGraphQt.errors import NodeCreationError, NodeDeletionError
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
@@ -789,8 +781,8 @@ class NodeGraph(QtCore.QObject):
         if not menu:
             raise ValueError('No context menu named: "{}"'.format(menu))
 
-        import sys
         import importlib.util
+        import sys
 
         nodes_menu = self.get_context_menu('nodes')
 
@@ -1581,6 +1573,30 @@ class NodeGraph(QtCore.QObject):
             nodes.append(node)
         return nodes
 
+    def selected_pipes(self):
+        """
+        Return all selected pipes that are in the node graph.
+
+        Returns:
+            list[tuple[NodeGraphQt.Port,NodeGraphQt.Port]]: list of port tuples
+        """
+        pipes = []
+        ptypes = {PortTypeEnum.IN.value: "inputs", PortTypeEnum.OUT.value: "outputs"}
+
+        for item in self._viewer.selected_pipes():
+            p1_view = item.input_port
+            p2_view = item.output_port
+
+            node1 = self._model.nodes[p1_view.node.id]
+            node2 = self._model.nodes[p2_view.node.id]
+
+            port1 = getattr(node1, ptypes[p1_view.port_type])()[p1_view.name]
+            port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
+
+            pipe = (port1, port2)
+            pipes.append(pipe)
+        return pipes
+    
     def select_all(self):
         """
         Select all nodes in the node graph.
