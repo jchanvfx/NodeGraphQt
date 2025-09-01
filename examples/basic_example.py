@@ -5,17 +5,18 @@ from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt import (
-    NodeGraph,
-    PropertiesBinWidget,
-    NodesTreeWidget,
-    NodesPaletteWidget
-)
-
 # import example nodes from the "nodes" sub-package
 from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
+from NodeGraphQt import (
+    NodeGraph,
+    NodesPaletteWidget,
+    NodesTreeWidget,
+    PropertiesBinWidget,
+)
+from NodeGraphQt.constants import LayoutDirectionEnum
 
 BASE_PATH = Path(__file__).parent.resolve()
+
 
 def main():
     # handle SIGINT to make the app terminate on CTRL+C
@@ -31,26 +32,37 @@ def main():
     graph.set_context_menu_from_file(hotkey_path, 'graph')
 
     # registered example nodes.
-    graph.register_nodes([
-        basic_nodes.BasicNodeA,
-        basic_nodes.BasicNodeB,
-        basic_nodes.CircleNode,
-        custom_ports_node.CustomPortsNode,
-        group_node.MyGroupNode,
-        widget_nodes.DropdownMenuNode,
-        widget_nodes.TextInputNode,
-        widget_nodes.CheckboxNode
-    ])
+    graph.register_nodes(
+        [
+            basic_nodes.BasicNodeA,
+            basic_nodes.BasicNodeB,
+            basic_nodes.CircleNode,
+            custom_ports_node.CustomPortsNode,
+            group_node.MyGroupNode,
+            widget_nodes.DropdownMenuNode,
+            widget_nodes.TextInputNode,
+            widget_nodes.CheckboxNode,
+        ]
+    )
 
     # show the node graph widget.
     graph_widget = graph.widget
     graph_widget.resize(1100, 800)
+    graph_widget.setWindowTitle("NodeGraphQt Example")
     graph_widget.show()
 
     # create node with custom text color and disable it.
     n_basic_a = graph.create_node(
         'nodes.basic.BasicNodeA', text_color='#feab20')
     n_basic_a.set_disabled(True)
+
+    # create node with vertial alignment
+    n_basic_a_vertical = graph.create_node(
+        "nodes.basic.BasicNodeA", name="Vertical Node", text_color="#feab20"
+    )
+
+    # adjust layout of node to be vertical
+    n_basic_a_vertical.set_layout_direction(1)
 
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
@@ -105,6 +117,9 @@ def main():
     # fit nodes to the viewer.
     graph.clear_selection()
     graph.fit_to_selection()
+
+    # adjust layout of node to be vertical (for all nodes).
+    # graph.set_layout_direction(LayoutDirectionEnum.VERTICAL.value)
 
     # Custom builtin widgets from NodeGraphQt
     # ---------------------------------------
