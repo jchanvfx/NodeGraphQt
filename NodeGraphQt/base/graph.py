@@ -8,24 +8,16 @@ from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.base.commands import (NodeAddedCmd,
-                                       NodesRemovedCmd,
-                                       NodeMovedCmd,
-                                       PortConnectedCmd)
+from NodeGraphQt.base.commands import (NodeAddedCmd, NodeMovedCmd,
+                                       NodesRemovedCmd, PortConnectedCmd)
 from NodeGraphQt.base.factory import NodeFactory
 from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
 from NodeGraphQt.base.model import NodeGraphModel
 from NodeGraphQt.base.node import NodeObject
 from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (
-    MIME_TYPE,
-    URI_SCHEME,
-    URN_SCHEME,
-    LayoutDirectionEnum,
-    PipeLayoutEnum,
-    PortTypeEnum,
-    ViewerEnum
-)
+from NodeGraphQt.constants import (MIME_TYPE, URI_SCHEME, URN_SCHEME,
+                                   LayoutDirectionEnum, PipeLayoutEnum,
+                                   PortTypeEnum, ViewerEnum)
 from NodeGraphQt.errors import NodeCreationError, NodeDeletionError
 from NodeGraphQt.nodes.backdrop_node import BackdropNode
 from NodeGraphQt.nodes.base_node import BaseNode
@@ -789,8 +781,8 @@ class NodeGraph(QtCore.QObject):
         if not menu:
             raise ValueError('No context menu named: "{}"'.format(menu))
 
-        import sys
         import importlib.util
+        import sys
 
         nodes_menu = self.get_context_menu('nodes')
 
@@ -1304,7 +1296,7 @@ class NodeGraph(QtCore.QObject):
 
         raise NodeCreationError('Can\'t find node: "{}"'.format(node_type))
 
-    def add_node(self, node, pos=None, selected=True, push_undo=True):
+    def add_node(self, node, pos=None, selected=True, push_undo=True, inherite_graph_style=True):
         """
         Add a node into the node graph.
         unlike the :meth:`NodeGraph.create_node` function this will not
@@ -1315,6 +1307,8 @@ class NodeGraph(QtCore.QObject):
             pos (list[float]): node x,y position. (optional)
             selected (bool): node selected state. (optional)
             push_undo (bool): register the command to the undo stack. (default: True)
+            inherite_graph_style (bool): when True the node will inherite the
+                node graph layout direction. (default: True)
         """
         assert isinstance(node, NodeObject), 'node must be a Node instance.'
 
@@ -1368,7 +1362,8 @@ class NodeGraph(QtCore.QObject):
         node.model.name = node.NODE_NAME
 
         # initial node direction layout.
-        node.model.layout_direction = self.layout_direction()
+        if inherite_graph_style:
+            node.model.layout_direction = self.layout_direction()
 
         # update method must be called before it's been added to the viewer.
         node.update()
@@ -1727,12 +1722,8 @@ class NodeGraph(QtCore.QObject):
         serial_data['graph']['pipe_style'] = self.pipe_style()
 
         # connection constrains.
-        serial_data['graph']['accept_connection_types'] = {
-            k: list(v) for k, v in self.model.accept_connection_types.items()
-        }
-        serial_data['graph']['reject_connection_types'] = {
-            k: list(v) for k, v in self.model.reject_connection_types.items()
-        }
+        serial_data['graph']['accept_connection_types'] = json.dumps(self.model.accept_connection_types, default=list)
+        serial_data['graph']['reject_connection_types'] = json.dumps(self.model.reject_connection_types, default=list)
 
         # serialize nodes.
         for n in nodes:
@@ -1774,7 +1765,7 @@ class NodeGraph(QtCore.QObject):
 
         return serial_data
 
-    def _deserialize(self, data, relative_pos=False, pos=None):
+    def _deserialize(self, data, relative_pos=False, pos=None, adjust_graph_style=True):
         """
         deserialize node data.
         (used internally by the node graph)
@@ -1783,32 +1774,44 @@ class NodeGraph(QtCore.QObject):
             data (dict): node data.
             relative_pos (bool): position node relative to the cursor.
             pos (tuple or list): custom x, y position.
+            adjust_graph_style (bool): if true adjust the node graph properties
 
         Returns:
             list[NodeGraphQt.Nodes]: list of node instances.
         """
         # update node graph properties.
-        for attr_name, attr_value in data.get('graph', {}).items():
-            if attr_name == 'layout_direction':
-                self.set_layout_direction(attr_value)
-            elif attr_name == 'acyclic':
-                self.set_acyclic(attr_value)
-            elif attr_name == 'pipe_collision':
-                self.set_pipe_collision(attr_value)
-            elif attr_name == 'pipe_slicing':
-                self.set_pipe_slicing(attr_value)
-            elif attr_name == 'pipe_style':
-                self.set_pipe_style(attr_value)
+        
+        # Recursive function to convert last lists to sets
+        def convert_last_list_to_set(d):
+            for key, value in d.items():
+                if isinstance(value, dict):
+                    convert_last_list_to_set(value)
+                elif isinstance(value, list):
+                    d[key] = set(value)  # convert list to set
+
+        for attr_name, attr_value in data.get("graph", {}).items():
+            if adjust_graph_style:
+                if attr_name == "layout_direction":
+                    self.set_layout_direction(attr_value)
+                elif attr_name == "acyclic":
+                    self.set_acyclic(attr_value)
+                elif attr_name == "pipe_collision":
+                    self.set_pipe_collision(attr_value)
+                elif attr_name == "pipe_slicing":
+                    self.set_pipe_slicing(attr_value)
+                elif attr_name == "pipe_style":
+                    self.set_pipe_style(attr_value)
 
             # connection constrains.
-            elif attr_name == 'accept_connection_types':
-                self.model.accept_connection_types = {
-                    k: set(v) for k, v in attr_value.items()
-                }
+            if attr_name == 'accept_connection_types':
+                attr_value = json.loads(attr_value)
+                convert_last_list_to_set(attr_value)
+                self.model.accept_connection_types = attr_value
+
             elif attr_name == 'reject_connection_types':
-                self.model.reject_connection_types = {
-                    k: set(v) for k, v in attr_value.items()
-                }
+                attr_value = json.loads(attr_value)
+                convert_last_list_to_set(attr_value)
+                self.model.reject_connection_types =  attr_value
 
         # build the nodes.
         nodes = {}
@@ -1829,7 +1832,7 @@ class NodeGraph(QtCore.QObject):
                             node.view.widgets[prop].set_value(val)
 
                 nodes[n_id] = node
-                self.add_node(node, n_data.get('pos'))
+                self.add_node(node, n_data.get('pos'), inherite_graph_style=adjust_graph_style)
 
                 if n_data.get('port_deletion_allowed', None):
                     node.set_ports({
@@ -2057,10 +2060,13 @@ class NodeGraph(QtCore.QObject):
         self._undo_stack.push(NodesRemovedCmd(self, nodes))
         self._undo_stack.endMacro()
 
-    def paste_nodes(self):
+    def paste_nodes(self, adjust_graph_style=True):
         """
         Pastes nodes copied from the clipboard.
         
+        Args:
+            adjust_graph_style (bool): if true adjust the node graph properties
+                                        other wise only the nodes are pasted.        
         Returns:
             list[NodeGraphQt.BaseNode]: list of pasted node instances.
         """
@@ -2078,7 +2084,7 @@ class NodeGraph(QtCore.QObject):
 
         self._undo_stack.beginMacro('pasted nodes')
         self.clear_selection()
-        nodes = self._deserialize(serial_data, relative_pos=True)
+        nodes = self._deserialize(serial_data, relative_pos=True, adjust_graph_style=adjust_graph_style)
         [n.set_selected(True) for n in nodes]
         self._undo_stack.endMacro()
         return nodes
