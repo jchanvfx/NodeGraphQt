@@ -31,7 +31,7 @@
       }
       if (!userPreference) {localStorage.setItem('darkMode', mode)}
     </script>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=3674ca0e"></script>
+<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=018c4064"></script>
 <script src="../_static/doctools.js?v=888ff710"></script>
 <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
 <script defer="" src="../_static/theme.8ffe40a2eae52cc22aaf.js"></script>
@@ -126,7 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../builtin_widgets/NodesTreeWidget.html">NodesTreeWidget</a></li>
 </ul>
 <br/>
-<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.41</code>
+<code style="font-size: 0.65rem;">NodeGraphQt - v0.6.42</code>
 </nav>
 </div>
 </div>
@@ -370,7 +370,7 @@ and the node graph.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_node</span></code></a>(node_type[, name, selected, ...])</p></td>
 <td><p>Create a new node in the node graph.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.add_node" title="NodeGraphQt.NodeGraph.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(node[, pos, selected, push_undo])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.add_node" title="NodeGraphQt.NodeGraph.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(node[, pos, selected, push_undo, ...])</p></td>
 <td><p>Add a node into the node graph.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.delete_node" title="NodeGraphQt.NodeGraph.delete_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_node</span></code></a>(node[, push_undo])</p></td>
@@ -439,7 +439,7 @@ and the node graph.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.cut_nodes" title="NodeGraphQt.NodeGraph.cut_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cut_nodes</span></code></a>([nodes])</p></td>
 <td><p>Cut nodes to the clipboard as a JSON formatted <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes" title="NodeGraphQt.NodeGraph.paste_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paste_nodes</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.paste_nodes" title="NodeGraphQt.NodeGraph.paste_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paste_nodes</span></code></a>([adjust_graph_style])</p></td>
 <td><p>Pastes nodes copied from the clipboard.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#NodeGraphQt.NodeGraph.duplicate_nodes" title="NodeGraphQt.NodeGraph.duplicate_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">duplicate_nodes</span></code></a>(nodes)</p></td>
@@ -1320,7 +1320,7 @@ If no nodes are selected then all nodes in the graph will be framed.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.add_node">
-<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.add_node" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.add_node'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">push_undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inherite_graph_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.add_node" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.add_node'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Add a node into the node graph.
 unlike the <a class="reference internal" href="#NodeGraphQt.NodeGraph.create_node" title="NodeGraphQt.NodeGraph.create_node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NodeGraph.create_node()</span></code></a> function this will not
 trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.node_created" title="NodeGraphQt.NodeGraph.node_created"><code class="xref py py-attr docutils literal notranslate"><span class="pre">NodeGraph.node_created</span></code></a> signal.</p>
@@ -1331,6 +1331,8 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.node_crea
 <li><p><strong>pos</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – node x,y position. (optional)</p></li>
 <li><p><strong>selected</strong> (<em>bool</em>) – node selected state. (optional)</p></li>
 <li><p><strong>push_undo</strong> (<em>bool</em>) – register the command to the undo stack. (default: True)</p></li>
+<li><p><strong>inherite_graph_style</strong> (<em>bool</em>) – when True the node will inherite the
+node graph layout direction. (default: True)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1633,14 +1635,18 @@ trigger the <a class="reference internal" href="#NodeGraphQt.NodeGraph.nodes_del
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="NodeGraphQt.NodeGraph.paste_nodes">
-<span class="sig-name descname"><span class="pre">paste_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.paste_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.paste_nodes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
+<span class="sig-name descname"><span class="pre">paste_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjust_graph_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#NodeGraphQt.NodeGraph.paste_nodes" title="Permalink to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#NodeGraphQt.NodeGraph.paste_nodes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></dt>
 <dd><p>Pastes nodes copied from the clipboard.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list of pasted node instances.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>adjust_graph_style</strong> (<em>bool</em>) – if true adjust the node graph properties
+other wise only the nodes are pasted.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[<a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of pasted node instances.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="../nodes/BaseNode.html#NodeGraphQt.BaseNode" title="NodeGraphQt.BaseNode">NodeGraphQt.BaseNode</a>]</p>
 </dd>
 </dl>
 </dd></dl>
