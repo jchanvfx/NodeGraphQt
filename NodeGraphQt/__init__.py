@@ -55,6 +55,7 @@ from .base.port import Port
 from .base.node import NodeObject
 from .nodes.base_node import BaseNode
 from .nodes.base_node_circle import BaseNodeCircle
+from .nodes.base_node_svg import BaseNodeSVG
 from .nodes.backdrop_node import BackdropNode
 from .nodes.group_node import GroupNode
 
@@ -73,6 +74,7 @@ __all__ = [
     'BackdropNode',
     'BaseNode',
     'BaseNodeCircle',
+    'BaseNodeSVG',
     'GroupNode',
     'LICENSE',
     'NodeBaseWidget',
