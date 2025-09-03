@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from Qt import QtGui, QtCore, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
 
 from NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
@@ -79,10 +79,12 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
 
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin,
+            rect.top() + margin,
+            rect.width() - (margin * 2),
+            rect.height() - (margin * 2),
+        )
 
         item = self.parentItem()
         if item and item.selected:
@@ -159,6 +161,7 @@ class BackdropNodeItem(AbstractNodeItem):
     def on_sizer_pos_changed(self, pos):
         self._width = pos.x() + self._sizer.size
         self._height = pos.y() + self._sizer.size
+        self.update()
 
     def on_sizer_pos_mouse_release(self):
         size = {
@@ -189,10 +192,12 @@ class BackdropNodeItem(AbstractNodeItem):
 
         margin = 1.0
         rect = self.boundingRect()
-        rect = QtCore.QRectF(rect.left() + margin,
-                             rect.top() + margin,
-                             rect.width() - (margin * 2),
-                             rect.height() - (margin * 2))
+        rect = QtCore.QRectF(
+            rect.left() + margin,
+            rect.top() + margin,
+            rect.width() - (margin * 2),
+            rect.height() - (margin * 2),
+        )
 
         radius = 2.6
         color = (self.color[0], self.color[1], self.color[2], 50)
