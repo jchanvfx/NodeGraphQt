@@ -32,18 +32,17 @@ def main():
     graph.set_context_menu_from_file(hotkey_path, 'graph')
 
     # registered example nodes.
-    graph.register_nodes(
-        [
-            basic_nodes.BasicNodeA,
-            basic_nodes.BasicNodeB,
-            basic_nodes.CircleNode,
-            custom_ports_node.CustomPortsNode,
-            group_node.MyGroupNode,
-            widget_nodes.DropdownMenuNode,
-            widget_nodes.TextInputNode,
-            widget_nodes.CheckboxNode,
-        ]
-    )
+    graph.register_nodes([
+        basic_nodes.BasicNodeA,
+        basic_nodes.BasicNodeB,
+        basic_nodes.CircleNode,
+        basic_nodes.SVGNode,
+        custom_ports_node.CustomPortsNode,
+        group_node.MyGroupNode,
+        widget_nodes.DropdownMenuNode,
+        widget_nodes.TextInputNode,
+        widget_nodes.CheckboxNode
+    ])
 
     # show the node graph widget.
     graph_widget = graph.widget
@@ -67,7 +66,7 @@ def main():
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    n_basic_b.set_icon(Path(BASE_PATH, 'star.png'))
+    n_basic_b.set_icon(Path(BASE_PATH, 'img', 'star.png'))
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
@@ -89,6 +88,21 @@ def main():
     n_circle = graph.create_node(
         'nodes.basic.CircleNode', name='circle node')
 
+    # crete node with the circular design.
+    n_svg = graph.create_node(
+        'nodes.basic.SVGNode', name='svg node')
+    
+    n_svg_file = graph.create_node(
+        'nodes.basic.SVGNode', name='svg file')
+    n_svg_file.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
+    
+    n_svg_file_vertical = graph.create_node(
+        'nodes.basic.SVGNode', name='svg file', color='#0a1e20')
+    
+    n_svg_file_vertical.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
+    # adjust layout of node to be vertical
+    n_svg_file_vertical.set_layout_direction(1)
+    
     # create group node.
     n_group = graph.create_node('nodes.group.MyGroupNode')
 
