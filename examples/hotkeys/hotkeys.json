@@ -93,7 +93,7 @@
         "type":"command",
         "label":"Delete",
         "file":"./hotkey_functions.py",
-        "function_name":"delete_nodes",
+        "function_name":"delete_nodes_and_pipes",
         "shortcut":"QtGui.QKeySequence.Delete"
       },
       {
