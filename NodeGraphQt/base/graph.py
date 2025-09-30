@@ -1576,6 +1576,30 @@ class NodeGraph(QtCore.QObject):
             nodes.append(node)
         return nodes
 
+    def selected_pipes(self):
+        """
+        Return all selected pipes that are in the node graph.
+
+        Returns:
+            list[tuple[NodeGraphQt.Port,NodeGraphQt.Port]]: list of port tuples
+        """
+        pipes = []
+        ptypes = {PortTypeEnum.IN.value: "inputs", PortTypeEnum.OUT.value: "outputs"}
+
+        for item in self._viewer.selected_pipes():
+            p1_view = item.input_port
+            p2_view = item.output_port
+
+            node1 = self._model.nodes[p1_view.node.id]
+            node2 = self._model.nodes[p2_view.node.id]
+
+            port1 = getattr(node1, ptypes[p1_view.port_type])()[p1_view.name]
+            port2 = getattr(node2, ptypes[p2_view.port_type])()[p2_view.name]
+
+            pipe = (port1, port2)
+            pipes.append(pipe)
+        return pipes
+    
     def select_all(self):
         """
         Select all nodes in the node graph.

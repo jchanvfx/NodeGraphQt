@@ -134,11 +134,13 @@ def paste_nodes(graph):
     graph.paste_nodes(adjust_graph_style=False)
 
 
-def delete_nodes(graph):
+def delete_nodes_and_pipes(graph):
     """
-    Delete selected node.
+    Delete selected nodes and connections.
     """
     graph.delete_nodes(graph.selected_nodes())
+    for pipe in graph.selected_pipes():
+        pipe[0].disconnect_from(pipe[1])
 
 
 def extract_nodes(graph):

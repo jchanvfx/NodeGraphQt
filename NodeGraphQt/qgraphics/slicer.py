@@ -33,13 +33,13 @@ class SlicerPipeItem(QtWidgets.QGraphicsPathItem):
         arrow_size = 4.0
 
         painter.save()
-        painter.setRenderHint(painter.Antialiasing, True)
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
 
         font = painter.font()
         font.setPointSize(12)
         painter.setFont(font)
         text = 'slice'
-        text_x = painter.fontMetrics().width(text) / 2
+        text_x = painter.fontMetrics().horizontalAdvance(text) / 2
         text_y = painter.fontMetrics().height() / 1.5
         text_pos = QtCore.QPointF(p1.x() - text_x, p1.y() - text_y)
         text_color = QtGui.QColor(*PipeSlicerEnum.COLOR.value)

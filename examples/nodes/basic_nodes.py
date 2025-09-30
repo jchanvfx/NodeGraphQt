@@ -1,5 +1,8 @@
-from NodeGraphQt import BaseNode, BaseNodeCircle
+from pathlib import Path
 
+from NodeGraphQt import BaseNode, BaseNodeCircle, BaseNodeSVG
+
+BASE_PATH = Path(__file__).parent.parent.resolve()
 
 class BasicNodeA(BaseNode):
     """
@@ -84,3 +87,33 @@ class CircleNode(BaseNodeCircle):
         self.add_output('out 2', multi_output=False)
         self.add_output('out 3', multi_output=True, display_name=False)
         self.add_output('out 4', multi_output=True, display_name=False)
+
+
+class SVGNode(BaseNodeSVG):
+    """
+    A node class with 3 inputs and 3 outputs.
+    This node is a svg design.
+    """
+
+    # unique node identifier.
+    __identifier__ = 'nodes.basic'
+
+    # initial default node name.
+    NODE_NAME = 'SVG Node'
+
+    def __init__(self):
+        super(SVGNode, self).__init__()
+        self.set_color(10, 24, 38)
+
+        # create node inputs
+        self.add_input('in 1')
+        self.add_input('in 2')
+        self.add_input('in 3')
+        self.add_input('in 4')
+        self.add_input('in 5')
+
+        # create node outputs
+        self.add_output('out 1')
+        self.add_output('out 2')
+        self.add_output('out 3')
+        self.add_output('out 4')
