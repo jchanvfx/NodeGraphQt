@@ -5,17 +5,18 @@ from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt import (
-    NodeGraph,
-    PropertiesBinWidget,
-    NodesTreeWidget,
-    NodesPaletteWidget
-)
-
 # import example nodes from the "nodes" sub-package
 from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
+from NodeGraphQt import (
+    NodeGraph,
+    NodesPaletteWidget,
+    NodesTreeWidget,
+    PropertiesBinWidget,
+)
+from NodeGraphQt.constants import LayoutDirectionEnum
 
 BASE_PATH = Path(__file__).parent.resolve()
+
 
 def main():
     # handle SIGINT to make the app terminate on CTRL+C
@@ -35,6 +36,7 @@ def main():
         basic_nodes.BasicNodeA,
         basic_nodes.BasicNodeB,
         basic_nodes.CircleNode,
+        basic_nodes.SVGNode,
         custom_ports_node.CustomPortsNode,
         group_node.MyGroupNode,
         widget_nodes.DropdownMenuNode,
@@ -45,6 +47,7 @@ def main():
     # show the node graph widget.
     graph_widget = graph.widget
     graph_widget.resize(1100, 800)
+    graph_widget.setWindowTitle("NodeGraphQt Example")
     graph_widget.show()
 
     # create node with custom text color and disable it.
@@ -52,10 +55,18 @@ def main():
         'nodes.basic.BasicNodeA', text_color='#feab20')
     n_basic_a.set_disabled(True)
 
+    # create node with vertial alignment
+    n_basic_a_vertical = graph.create_node(
+        "nodes.basic.BasicNodeA", name="Vertical Node", text_color="#feab20"
+    )
+
+    # adjust layout of node to be vertical
+    n_basic_a_vertical.set_layout_direction(1)
+
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    n_basic_b.set_icon(Path(BASE_PATH, 'star.png'))
+    n_basic_b.set_icon(Path(BASE_PATH, 'img', 'star.png'))
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
@@ -77,6 +88,21 @@ def main():
     n_circle = graph.create_node(
         'nodes.basic.CircleNode', name='circle node')
 
+    # crete node with the circular design.
+    n_svg = graph.create_node(
+        'nodes.basic.SVGNode', name='svg node')
+    
+    n_svg_file = graph.create_node(
+        'nodes.basic.SVGNode', name='svg file')
+    n_svg_file.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
+    
+    n_svg_file_vertical = graph.create_node(
+        'nodes.basic.SVGNode', name='svg file', color='#0a1e20')
+    
+    n_svg_file_vertical.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
+    # adjust layout of node to be vertical
+    n_svg_file_vertical.set_layout_direction(1)
+    
     # create group node.
     n_group = graph.create_node('nodes.group.MyGroupNode')
 
@@ -105,6 +131,9 @@ def main():
     # fit nodes to the viewer.
     graph.clear_selection()
     graph.fit_to_selection()
+
+    # adjust layout of node to be vertical (for all nodes).
+    # graph.set_layout_direction(LayoutDirectionEnum.VERTICAL.value)
 
     # Custom builtin widgets from NodeGraphQt
     # ---------------------------------------

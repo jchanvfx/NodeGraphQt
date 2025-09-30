@@ -128,7 +128,10 @@ def paste_nodes(graph):
     """
     Pastes nodes copied from the clipboard.
     """
-    graph.paste_nodes()
+    # by default the graph will inherite the global style
+    # from the graph when pasting nodes.
+    # to disable this behaviour set `adjust_graph_style` to False.
+    graph.paste_nodes(adjust_graph_style=False)
 
 
 def delete_nodes_and_pipes(graph):

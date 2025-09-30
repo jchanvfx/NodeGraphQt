@@ -1,22 +1,16 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from Qt import QtGui, QtCore, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import (
-    ITEM_CACHE_MODE,
-    ICON_NODE_BASE,
-    LayoutDirectionEnum,
-    NodeEnum,
-    PortEnum,
-    PortTypeEnum,
-    Z_VAL_NODE
-)
+from NodeGraphQt.constants import (ICON_NODE_BASE, ITEM_CACHE_MODE, Z_VAL_NODE,
+                                   LayoutDirectionEnum, NodeEnum, PortEnum,
+                                   PortTypeEnum)
 from NodeGraphQt.errors import NodeWidgetError
 from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
 from NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
 from NodeGraphQt.qgraphics.node_text_item import NodeTextItem
-from NodeGraphQt.qgraphics.port import PortItem, CustomPortItem
+from NodeGraphQt.qgraphics.port import CustomPortItem, PortItem
 
 
 class NodeItem(AbstractNodeItem):
@@ -860,6 +854,13 @@ class NodeItem(AbstractNodeItem):
     @AbstractNodeItem.color.setter
     def color(self, color=(100, 100, 100, 255)):
         AbstractNodeItem.color.fset(self, color)
+        if self.scene():
+            self.scene().update()
+        self.update()
+        
+    @AbstractNodeItem.border_color.setter
+    def border_color(self, color=(100, 100, 100, 255)):
+        AbstractNodeItem.border_color.fset(self, color)
         if self.scene():
             self.scene().update()
         self.update()
