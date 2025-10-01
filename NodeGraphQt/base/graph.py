@@ -2657,7 +2657,7 @@ class SubGraph(NodeGraph):
 
         return input_nodes, output_nodes
 
-    def _deserialize(self, data, relative_pos=False, pos=None):
+    def _deserialize(self, data, relative_pos=False, pos=None, adjust_graph_style=True):
         """
         deserialize node data.
         (used internally by the node graph)
@@ -2666,16 +2666,18 @@ class SubGraph(NodeGraph):
             data (dict): node data.
             relative_pos (bool): position node relative to the cursor.
             pos (tuple or list): custom x, y position.
+            adjust_graph_style (bool): if true adjust the node graph properties
 
         Returns:
             list[NodeGraphQt.Nodes]: list of node instances.
         """
         # update node graph properties.
         for attr_name, attr_value in data.get('graph', {}).items():
-            if attr_name == 'acyclic':
-                self.set_acyclic(attr_value)
-            elif attr_name == 'pipe_collision':
-                self.set_pipe_collision(attr_value)
+            if adjust_graph_style:
+                if attr_name == 'acyclic':
+                    self.set_acyclic(attr_value)
+                elif attr_name == 'pipe_collision':
+                    self.set_pipe_collision(attr_value)
 
         # build the port input & output nodes here.
         input_nodes, output_nodes = self._build_port_nodes()
