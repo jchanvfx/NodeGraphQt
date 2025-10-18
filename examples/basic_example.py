@@ -66,7 +66,7 @@ def main():
     # create node and set a custom icon.
     n_basic_b = graph.create_node(
         'nodes.basic.BasicNodeB', name='custom icon')
-    n_basic_b.set_icon(Path(BASE_PATH, 'img', 'star.png'))
+    n_basic_b.set_icon(str(Path(BASE_PATH, 'img', 'star.png')))
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
@@ -168,7 +168,7 @@ def main():
     nodes_palette.set_category_label('nodes.group', 'Group Nodes')
     # nodes_palette.show()
 
-    app.exec()
+    app.exec_()
 
 
 if __name__ == '__main__':
