@@ -100,7 +100,7 @@ can override context menus on a per node type basis.
 
     # create some nodes.
     foo_node = graph.create_node('io.github.jchanvfx.FooNode')
-    bar_node = graph.create_node('io.github.jchanvfx', pos=[300, 100])
+    bar_node = graph.create_node('io.github.jchanvfx', pos=(300, 100))
 
     # show widget.
     node_graph.widget.show()
