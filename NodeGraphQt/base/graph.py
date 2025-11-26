@@ -1754,7 +1754,7 @@ class NodeGraph(QtCore.QObject):
             # update the node model.
             n.update_model()
 
-            node_dict = n.model.to_dict
+            node_dict = n.serialize()
             nodes_data.update(node_dict)
 
         for n_id, n_data in nodes_data.items():
