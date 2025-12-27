@@ -2,6 +2,7 @@
 from Qt import QtCore, QtGui
 
 from NodeGraphQt import BaseNode
+from NodeGraphQt.base.model import PortDatatypeModel
 
 
 def draw_triangle_port(painter, rect, info):
@@ -110,12 +111,14 @@ class CustomPortsNode(BaseNode):
 
     # set the initial default node name.
     NODE_NAME = 'node'
+    int_port = PortDatatypeModel("int", (200, 10, 0), draw_triangle_port)
 
     def __init__(self):
         super(CustomPortsNode, self).__init__()
 
         # create input and output port.
         self.add_input('in', color=(200, 10, 0))
+        self.add_input('triangel_in', data_type=self.int_port)
         self.add_output('default')
         self.add_output('square', painter_func=draw_square_port)
-        self.add_output('triangle', painter_func=draw_triangle_port)
+        self.add_output('triangle_out', data_type=self.int_port)
