@@ -29,11 +29,12 @@ class Port(object):
     Args:
         node (NodeGraphQt.NodeObject): parent node.
         port (PortItem): graphic item used for drawing.
+        data_type (PortDatatypeModel): data type of the port.
     """
 
-    def __init__(self, node, port):
+    def __init__(self, node, port, data_type=None):
         self.__view = port
-        self.__model = PortModel(node)
+        self.__model = PortModel(node,data_type)
 
     def __repr__(self):
         port = str(self.__class__.__name__)

@@ -375,7 +375,7 @@ class BaseNode(NodeObject):
             undo_cmd.redo()
 
     def add_input(self, name='input', multi_input=False, display_name=True,
-                  color=None, locked=False, painter_func=None):
+                  color=None, locked=False, painter_func=None, data_type=None):
         """
         Add input :class:`Port` to node.
 
@@ -390,6 +390,7 @@ class BaseNode(NodeObject):
             locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function or None): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
+            data_type (PortDatatypeModel): data type for the port.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -401,13 +402,17 @@ class BaseNode(NodeObject):
         port_args = [name, multi_input, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
+        elif data_type and data_type.painter_func:
+            port_args.append(data_type.painter_func)
         view = self.view.add_input(*port_args)
 
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
+        elif data_type and data_type.color:
+            view.color = data_type.color
 
-        port = Port(self, view)
+        port = Port(self, view, data_type)
         port.model.type_ = PortTypeEnum.IN.value
         port.model.name = name
         port.model.display_name = display_name
@@ -418,7 +423,7 @@ class BaseNode(NodeObject):
         return port
 
     def add_output(self, name='output', multi_output=True, display_name=True,
-                   color=None, locked=False, painter_func=None):
+                   color=None, locked=False, painter_func=None, data_type=None):
         """
         Add output :class:`Port` to node.
 
@@ -433,6 +438,7 @@ class BaseNode(NodeObject):
             locked (bool): locked state see :meth:`Port.set_locked`
             painter_func (function or None): custom function to override the drawing
                 of the port shape see example: :ref:`Creating Custom Shapes`
+            data_type (PortDatatypeModel): data type for the port.
 
         Returns:
             NodeGraphQt.Port: the created port object.
@@ -444,12 +450,16 @@ class BaseNode(NodeObject):
         port_args = [name, multi_output, display_name, locked]
         if painter_func and callable(painter_func):
             port_args.append(painter_func)
+        elif data_type and data_type.painter_func:
+            port_args.append(data_type.painter_func)
         view = self.view.add_output(*port_args)
 
         if color:
             view.color = color
             view.border_color = [min([255, max([0, i + 80])]) for i in color]
-        port = Port(self, view)
+        elif data_type and data_type.color:
+            view.color = data_type.color
+        port = Port(self, view, data_type)
         port.model.type_ = PortTypeEnum.OUT.value
         port.model.name = name
         port.model.display_name = display_name

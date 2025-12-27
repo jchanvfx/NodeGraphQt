@@ -53,9 +53,10 @@ class PortModel(object):
     Data dump for a port object.
     """
 
-    def __init__(self, node):
+    def __init__(self, node, data_type=None):
         self.node = node
         self.type_ = ''
+        self.data_type = data_type
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False
