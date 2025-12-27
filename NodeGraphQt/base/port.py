@@ -233,6 +233,8 @@ class Port(object):
                 'Can\'t connect port because "{}" is locked.'.format(name))
 
         # validate accept connection.
+        if self.model.data_type != port.model.data_type:
+            return
         node_type = self.node().type_
         accepted_types = port.accepted_port_types().get(node_type)
         if accepted_types:
