@@ -276,7 +276,7 @@ class BaseNode(NodeObject):
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
 
-    def add_spinbox_input(self, name, label='', value=0, min_value=0, max_value=100,
+    def add_spinbox(self, name, label='', value=0, min_value=0, max_value=100,
                        tooltip=None, tab=None):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`

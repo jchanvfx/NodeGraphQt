@@ -89,4 +89,4 @@ class SpinBoxNode(BaseNode):
         self.add_output('out')
 
         # create QSpinBox widget.
-        self.add_spinbox_input("value","value",0,0,255)
+        self.add_spinbox("value","value",0,0,255)
