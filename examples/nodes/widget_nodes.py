@@ -69,3 +69,24 @@ class CheckboxNode(BaseNode):
         # create input and output port.
         self.add_input('in', color=(200, 100, 0))
         self.add_output('out', color=(0, 100, 200))
+
+class SpinBoxNode(BaseNode):
+    """
+    An example of a node with a embedded QSpinBox.
+    """
+
+    # unique node identifier.
+    __identifier__ = 'nodes.widget'
+
+    # initial default node name.
+    NODE_NAME = 'spinbox'
+
+    def __init__(self):
+        super(SpinBoxNode, self).__init__()
+
+        # create input & output ports
+        self.add_input('in')
+        self.add_output('out')
+
+        # create QSpinBox widget.
+        self.add_spinbox_input("value","value",0,0,255)
