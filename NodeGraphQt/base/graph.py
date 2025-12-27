@@ -431,7 +431,7 @@ class NodeGraph(QtCore.QObject):
         called when a pipe connection has been changed in the viewer.
 
         Args:
-            disconnected (list[list[widgets.port.PortItem]]):
+            disconnected (list[list[widgets.port.PortItem]):
                 pair list of port view items.
             connected (list[list[widgets.port.PortItem]]):
                 pair list of port view items.
