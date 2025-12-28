@@ -392,7 +392,7 @@ class NodeSpinBox(NodeBaseWidget):
 
     .. note::
         `To embed a` ``QSpinBox`` `in a node see func:`
-        :meth:`NodeGraphQt.BaseNode.add_text_input`
+        :meth:`NodeGraphQt.BaseNode.add_spinbox`
     """
 
     def __init__(self, parent=None, name='', label='', value=0, min_value=0, max_value=100, double=False):
