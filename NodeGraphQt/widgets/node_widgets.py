@@ -395,7 +395,7 @@ class NodeSpinBox(NodeBaseWidget):
         :meth:`NodeGraphQt.BaseNode.add_text_input`
     """
 
-    def __init__(self, parent=None, name='', label='', value=0, min_value=0, max_value=100):
+    def __init__(self, parent=None, name='', label='', value=0, min_value=0, max_value=100, double=False):
         super(NodeSpinBox, self).__init__(parent, name, label)
         bg_color = ViewerEnum.BACKGROUND_COLOR.value
         text_color = tuple(map(lambda i, j: i - j, (255, 255, 255),
@@ -419,7 +419,10 @@ class NodeSpinBox(NodeBaseWidget):
                 style += '  {}:{};\n'.format(elm_name, elm_val)
             style += '}\n'
             stylesheet += style
-        spin_box = QtWidgets.QSpinBox()
+        if double:
+            spin_box = QtWidgets.QDoubleSpinBox()
+        else:
+            spin_box = QtWidgets.QSpinBox()
         spin_box.setRange(min_value, max_value)
         spin_box.setValue(value)
         spin_box.setStyleSheet(stylesheet)

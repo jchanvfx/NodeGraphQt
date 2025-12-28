@@ -1,3 +1,5 @@
+from sympy import false
+
 from NodeGraphQt import BaseNode
 
 
@@ -89,4 +91,5 @@ class SpinBoxNode(BaseNode):
         self.add_output('out')
 
         # create QSpinBox widget.
-        self.add_spinbox("value","value",0,0,255)
+        self.add_spinbox("value", "value", 0, 0, 255, double=True)
+        self.add_spinbox("value2", "value", 0, 0, 255, double=False)

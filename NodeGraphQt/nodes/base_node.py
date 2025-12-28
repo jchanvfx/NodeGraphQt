@@ -277,7 +277,7 @@ class BaseNode(NodeObject):
         self.view.draw_node()
 
     def add_spinbox(self, name, label='', value=0, min_value=0, max_value=100,
-                       tooltip=None, tab=None):
+                       tooltip=None, tab=None,double=False):
         """
         Creates a custom property with the :meth:`NodeObject.create_property`
         function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
@@ -295,6 +295,7 @@ class BaseNode(NodeObject):
             max_value (int): maximum value.
             tooltip (str): widget tooltip.
             tab (str): name of the widget tab to display in.
+            double (bool): double or integer.
         """
         self.create_property(
             name,
@@ -303,13 +304,13 @@ class BaseNode(NodeObject):
             widget_tooltip=tooltip,
             tab=tab
         )
-        widget = NodeSpinBox(self.view, name, label, 0,min_value, max_value )
+        widget = NodeSpinBox(self.view,  name, label, 0,min_value, max_value ,double)
         widget.setToolTip(tooltip or '')
         widget.value_changed.connect(lambda k, v: self.set_property(k, v))
         self.view.add_widget(widget)
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
-        
+
     def add_button(self, name, label='', text='', tooltip=None, tab=None):
         """
         Creates and embeds a QPushButton widget into the node.
