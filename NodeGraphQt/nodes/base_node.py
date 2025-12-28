@@ -290,13 +290,17 @@ class BaseNode(NodeObject):
         Args:
             name (str): name for the custom property.
             label (str): label to be displayed.
-            value (int): pre-filled value.
-            min_value (int): minimum value.
-            max_value (int): maximum value.
+            value (double): pre-filled value.
+            min_value (double): minimum value.
+            max_value (double): maximum value.
             tooltip (str): widget tooltip.
             tab (str): name of the widget tab to display in.
             double (bool): double or integer.
         """
+        if not double:
+            value = int(value)
+            min_value = int(min_value)
+            max_value = int(max_value)
         self.create_property(
             name,
             value=value,
