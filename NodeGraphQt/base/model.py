@@ -10,14 +10,53 @@ from NodeGraphQt.constants import (
 from NodeGraphQt.errors import NodePropertyError
 
 
+class PortDatatypeModel(object):
+    """
+    Data dump for a port datatype object.
+    """
+
+    def __init__(self, name="", color=None, painter_func=None):
+        self._name = name
+        self._color = color
+        self._painter_func = painter_func
+
+    @property
+    def name(self):
+        """Name of the datatype.
+
+        Returns:
+            str: name of the Datatype.
+        """
+        return self._name
+
+    @property
+    def color(self):
+        """Color of the datatype to override the default color.
+
+        Returns:
+            tuple: RGB color tuple.
+        """
+        return self._color
+
+    @property
+    def painter_func(self):
+        """Painter function for the datatype to override the default painter.
+
+        Returns:
+            callable: custom painter function.
+        """
+        return self._painter_func
+
+
 class PortModel(object):
     """
     Data dump for a port object.
     """
 
-    def __init__(self, node):
+    def __init__(self, node, data_type=None):
         self.node = node
         self.type_ = ''
+        self.data_type = data_type
         self.name = 'port'
         self.display_name = True
         self.multi_connection = False

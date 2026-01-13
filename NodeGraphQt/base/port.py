@@ -29,11 +29,12 @@ class Port(object):
     Args:
         node (NodeGraphQt.NodeObject): parent node.
         port (PortItem): graphic item used for drawing.
+        data_type (PortDatatypeModel): data type of the port.
     """
 
-    def __init__(self, node, port):
+    def __init__(self, node, port, data_type=None):
         self.__view = port
-        self.__model = PortModel(node)
+        self.__model = PortModel(node,data_type)
 
     def __repr__(self):
         port = str(self.__class__.__name__)
@@ -232,6 +233,8 @@ class Port(object):
                 'Can\'t connect port because "{}" is locked.'.format(name))
 
         # validate accept connection.
+        if self.model.data_type != port.model.data_type:
+            return
         node_type = self.node().type_
         accepted_types = port.accepted_port_types().get(node_type)
         if accepted_types:
