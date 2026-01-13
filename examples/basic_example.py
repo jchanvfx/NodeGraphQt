@@ -41,6 +41,7 @@ def main():
         group_node.MyGroupNode,
         widget_nodes.DropdownMenuNode,
         widget_nodes.TextInputNode,
+        widget_nodes.SpinBoxNode,
         widget_nodes.CheckboxNode
     ])
 
@@ -75,6 +76,10 @@ def main():
     # create node with the embedded QLineEdit widget.
     n_text_input = graph.create_node(
         'nodes.widget.TextInputNode', name='text node', color='#0a1e20')
+
+    # create node with the embedded QSpinBox widget.
+    n_spinbox_input = graph.create_node(
+        'nodes.widget.SpinBoxNode', name='spinbox node', color='#0a1e20')
 
     # create node with the embedded QCheckBox widgets.
     n_checkbox = graph.create_node(
