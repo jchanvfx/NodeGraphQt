@@ -357,7 +357,7 @@ class NodeGraph(QtCore.QObject):
                 node_ids = sorted(re.findall(r'node:([\w\.]+)', search_str))
                 x, y = pos.x(), pos.y()
                 for node_id in node_ids:
-                    self.create_node(node_id, pos=[x, y])
+                    self.create_node(node_id, pos=(x, y))
                     x += 80
                     y += 80
         elif mimedata.hasFormat('text/uri-list'):
@@ -422,7 +422,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             node_type (str): node identifier.
-            pos (tuple or list): x, y position for the node.
+            pos (tuple[int, int]): x, y position for the node.
         """
         self.create_node(node_type, pos=pos)
 
@@ -431,7 +431,7 @@ class NodeGraph(QtCore.QObject):
         called when a pipe connection has been changed in the viewer.
 
         Args:
-            disconnected (list[list[widgets.port.PortItem]):
+            disconnected (list[list[widgets.port.PortItem]]):
                 pair list of port view items.
             connected (list[list[widgets.port.PortItem]]):
                 pair list of port view items.
@@ -1200,7 +1200,7 @@ class NodeGraph(QtCore.QObject):
             selected (bool): set created node to be selected.
             color (tuple or str): node color ``(255, 255, 255)`` or ``"#FFFFFF"``.
             text_color (tuple or str): text color ``(255, 255, 255)`` or ``"#FFFFFF"``.
-            pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
+            pos (tuple[int, int]): initial x, y position for the node (default: ``(0, 0)``).
             push_undo (bool): register the command to the undo stack. (default: True)
 
         Returns:

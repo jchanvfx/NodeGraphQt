@@ -35,7 +35,7 @@ Creating Nodes
 
         # here we create a couple nodes in the node graph.
         node_a = node_graph.create_node('io.github.jchanvfx.MyNode', name='node a')
-        node_b = node_graph.create_node('io.github.jchanvfx.MyNode', name='node b', pos=[300, 100])
+        node_b = node_graph.create_node('io.github.jchanvfx.MyNode', name='node b', pos=(300, 100))
 
         app.exec_()
 
