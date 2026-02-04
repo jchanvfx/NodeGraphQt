@@ -16,7 +16,8 @@ from NodeGraphQt.widgets.node_widgets import (
     NodeCheckBox,
     NodeButton,
     NodeComboBox,
-    NodeLineEdit
+    NodeLineEdit,
+    NodeSpinBox
 )
 
 
@@ -274,6 +275,46 @@ class BaseNode(NodeObject):
         self.view.add_widget(widget)
         #: redraw node to address calls outside the "__init__" func.
         self.view.draw_node()
+
+    def add_spinbox(self, name, label='', value=0, min_value=0, max_value=100,
+                       tooltip=None, tab=None,double=False):
+        """
+        Creates a custom property with the :meth:`NodeObject.create_property`
+        function and embeds a :class:`PySide2.QtWidgets.QLineEdit` widget
+        into the node.
+
+        Note:
+            The ``value_changed`` signal from the added node widget is wired
+            up to the :meth:`NodeObject.set_property` function.
+
+        Args:
+            name (str): name for the custom property.
+            label (str): label to be displayed.
+            value (double): pre-filled value.
+            min_value (double): minimum value.
+            max_value (double): maximum value.
+            tooltip (str): widget tooltip.
+            tab (str): name of the widget tab to display in.
+            double (bool): double or integer.
+        """
+        if not double:
+            value = int(value)
+            min_value = int(min_value)
+            max_value = int(max_value)
+        self.create_property(
+            name,
+            value=value,
+            widget_type=NodePropWidgetEnum.QLINE_EDIT.value,
+            widget_tooltip=tooltip,
+            tab=tab
+        )
+        widget = NodeSpinBox(self.view,  name, label, 0,min_value, max_value ,double)
+        widget.setToolTip(tooltip or '')
+        widget.value_changed.connect(lambda k, v: self.set_property(k, v))
+        self.view.add_widget(widget)
+        #: redraw node to address calls outside the "__init__" func.
+        self.view.draw_node()
+
     def add_button(self, name, label='', text='', tooltip=None, tab=None):
         """
         Creates and embeds a QPushButton widget into the node.

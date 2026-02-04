@@ -357,7 +357,7 @@ class NodeGraph(QtCore.QObject):
                 node_ids = sorted(re.findall(r'node:([\w\.]+)', search_str))
                 x, y = pos.x(), pos.y()
                 for node_id in node_ids:
-                    self.create_node(node_id, pos=[x, y])
+                    self.create_node(node_id, pos=(x, y))
                     x += 80
                     y += 80
         elif mimedata.hasFormat('text/uri-list'):
@@ -422,7 +422,7 @@ class NodeGraph(QtCore.QObject):
 
         Args:
             node_type (str): node identifier.
-            pos (tuple or list): x, y position for the node.
+            pos (tuple[int, int]): x, y position for the node.
         """
         self.create_node(node_type, pos=pos)
 
@@ -431,7 +431,7 @@ class NodeGraph(QtCore.QObject):
         called when a pipe connection has been changed in the viewer.
 
         Args:
-            disconnected (list[list[widgets.port.PortItem]):
+            disconnected (list[list[widgets.port.PortItem]]):
                 pair list of port view items.
             connected (list[list[widgets.port.PortItem]]):
                 pair list of port view items.
@@ -1168,7 +1168,7 @@ class NodeGraph(QtCore.QObject):
         Register the node to the :meth:`NodeGraph.node_factory`
 
         Args:
-            node (NodeGraphQt.NodeObject): node object.
+            node (type[NodeGraphQt.NodeObject]): node object.
             alias (str): custom alias name for the node type.
         """
         self._node_factory.register_node(node, alias)
@@ -1200,7 +1200,7 @@ class NodeGraph(QtCore.QObject):
             selected (bool): set created node to be selected.
             color (tuple or str): node color ``(255, 255, 255)`` or ``"#FFFFFF"``.
             text_color (tuple or str): text color ``(255, 255, 255)`` or ``"#FFFFFF"``.
-            pos (list[int, int]): initial x, y position for the node (default: ``(0, 0)``).
+            pos (tuple[int, int]): initial x, y position for the node (default: ``(0, 0)``).
             push_undo (bool): register the command to the undo stack. (default: True)
 
         Returns:
@@ -1754,7 +1754,7 @@ class NodeGraph(QtCore.QObject):
             # update the node model.
             n.update_model()
 
-            node_dict = n.model.to_dict
+            node_dict = n.serialize()
             nodes_data.update(node_dict)
 
         for n_id, n_data in nodes_data.items():
@@ -2681,7 +2681,7 @@ class SubGraph(NodeGraph):
 
         return input_nodes, output_nodes
 
-    def _deserialize(self, data, relative_pos=False, pos=None):
+    def _deserialize(self, data, relative_pos=False, pos=None, adjust_graph_style=True):
         """
         deserialize node data.
         (used internally by the node graph)
@@ -2690,16 +2690,18 @@ class SubGraph(NodeGraph):
             data (dict): node data.
             relative_pos (bool): position node relative to the cursor.
             pos (tuple or list): custom x, y position.
+            adjust_graph_style (bool): if true adjust the node graph properties
 
         Returns:
             list[NodeGraphQt.Nodes]: list of node instances.
         """
         # update node graph properties.
         for attr_name, attr_value in data.get('graph', {}).items():
-            if attr_name == 'acyclic':
-                self.set_acyclic(attr_value)
-            elif attr_name == 'pipe_collision':
-                self.set_pipe_collision(attr_value)
+            if adjust_graph_style:
+                if attr_name == 'acyclic':
+                    self.set_acyclic(attr_value)
+                elif attr_name == 'pipe_collision':
+                    self.set_pipe_collision(attr_value)
 
         # build the port input & output nodes here.
         input_nodes, output_nodes = self._build_port_nodes()

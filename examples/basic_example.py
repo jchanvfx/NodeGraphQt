@@ -6,13 +6,10 @@ from pathlib import Path
 from Qt import QtCore, QtWidgets
 
 # import example nodes from the "nodes" sub-package
-from examples.nodes import basic_nodes, custom_ports_node, group_node, widget_nodes
-from NodeGraphQt import (
-    NodeGraph,
-    NodesPaletteWidget,
-    NodesTreeWidget,
-    PropertiesBinWidget,
-)
+from examples.nodes import (basic_nodes, custom_ports_node, group_node,
+                            widget_nodes)
+from NodeGraphQt import (NodeGraph, NodesPaletteWidget, NodesTreeWidget,
+                         PropertiesBinWidget)
 from NodeGraphQt.constants import LayoutDirectionEnum
 
 BASE_PATH = Path(__file__).parent.resolve()
@@ -28,21 +25,24 @@ def main():
     graph = NodeGraph()
 
     # set up context menu for the node graph.
-    hotkey_path = Path(BASE_PATH, 'hotkeys', 'hotkeys.json')
-    graph.set_context_menu_from_file(hotkey_path, 'graph')
+    hotkey_path = Path(BASE_PATH, "hotkeys", "hotkeys.json")
+    graph.set_context_menu_from_file(hotkey_path, "graph")
 
     # registered example nodes.
-    graph.register_nodes([
-        basic_nodes.BasicNodeA,
-        basic_nodes.BasicNodeB,
-        basic_nodes.CircleNode,
-        basic_nodes.SVGNode,
-        custom_ports_node.CustomPortsNode,
-        group_node.MyGroupNode,
-        widget_nodes.DropdownMenuNode,
-        widget_nodes.TextInputNode,
-        widget_nodes.CheckboxNode
-    ])
+    graph.register_nodes(
+        [
+            basic_nodes.BasicNodeA,
+            basic_nodes.BasicNodeB,
+            basic_nodes.CircleNode,
+            basic_nodes.SVGNode,
+            custom_ports_node.CustomPortsNode,
+            group_node.MyGroupNode,
+            widget_nodes.DropdownMenuNode,
+            widget_nodes.TextInputNode,
+            widget_nodes.SpinBoxNode,
+            widget_nodes.CheckboxNode,
+        ]
+    )
 
     # show the node graph widget.
     graph_widget = graph.widget
@@ -51,8 +51,7 @@ def main():
     graph_widget.show()
 
     # create node with custom text color and disable it.
-    n_basic_a = graph.create_node(
-        'nodes.basic.BasicNodeA', text_color='#feab20')
+    n_basic_a = graph.create_node("nodes.basic.BasicNodeA", text_color="#feab20")
     n_basic_a.set_disabled(True)
 
     # create node with vertial alignment
@@ -64,48 +63,83 @@ def main():
     n_basic_a_vertical.set_layout_direction(1)
 
     # create node and set a custom icon.
-    n_basic_b = graph.create_node(
-        'nodes.basic.BasicNodeB', name='custom icon')
-    n_basic_b.set_icon(Path(BASE_PATH, 'img', 'star.png'))
+    n_basic_b = graph.create_node("nodes.basic.BasicNodeB", name="custom icon")
+    n_basic_b.set_icon(str(Path(BASE_PATH, "img", "star.png")))
 
     # create node with the custom port shapes.
     n_custom_ports = graph.create_node(
-        'nodes.custom.ports.CustomPortsNode', name='custom ports')
+        "nodes.custom.ports.CustomPortsNode", name="custom ports"
+    )
 
     # create node with the embedded QLineEdit widget.
     n_text_input = graph.create_node(
-        'nodes.widget.TextInputNode', name='text node', color='#0a1e20')
+        "nodes.widget.TextInputNode", name="text node", color="#0a1e20"
+    )
+
+    # create node with the embedded QSpinBox widget.
+    n_spinbox_input = graph.create_node(
+        "nodes.widget.SpinBoxNode", name="spinbox node", color="#0a1e20"
+    )
 
     # create node with the embedded QCheckBox widgets.
-    n_checkbox = graph.create_node(
-        'nodes.widget.CheckboxNode', name='checkbox node')
+    n_checkbox = graph.create_node("nodes.widget.CheckboxNode", name="checkbox node")
 
     # create node with the QComboBox widget.
     n_combo_menu = graph.create_node(
-        'nodes.widget.DropdownMenuNode', name='combobox node')
+        "nodes.widget.DropdownMenuNode", name="combobox node"
+    )
 
-    # crete node with the circular design.
-    n_circle = graph.create_node(
-        'nodes.basic.CircleNode', name='circle node')
+    # create node with the circular design.
+    n_circle = graph.create_node("nodes.basic.CircleNode", name="circle node")
 
-    # crete node with the circular design.
-    n_svg = graph.create_node(
-        'nodes.basic.SVGNode', name='svg node')
-    
-    n_svg_file = graph.create_node(
-        'nodes.basic.SVGNode', name='svg file')
-    n_svg_file.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
-    
+    # create node with the circular design.
+    n_svg = graph.create_node("nodes.basic.SVGNode", name="svg node")
+
+    n_svg_file = graph.create_node("nodes.basic.SVGNode", name="svg file")
+    n_svg_file.set_svg(str(Path(BASE_PATH, "img", "cirlce-diamond.svg")))
+
     n_svg_file_vertical = graph.create_node(
-        'nodes.basic.SVGNode', name='svg file', color='#0a1e20')
-    
-    n_svg_file_vertical.set_svg(str(Path(BASE_PATH, 'img', 'cirlce-diamond.svg')))
+        "nodes.basic.SVGNode", name="svg file", color="#0a1e20"
+    )
+
+    n_svg_file_vertical.set_svg(str(Path(BASE_PATH, "img", "cirlce-diamond.svg")))
     # adjust layout of node to be vertical
     n_svg_file_vertical.set_layout_direction(1)
-    
-    # create group node.
-    n_group = graph.create_node('nodes.group.MyGroupNode')
 
+    # create group node.
+    n_group = graph.create_node("nodes.group.MyGroupNode")
+
+    # force-create the subgraph by expanding
+    n_group.expand()
+
+    # get subgraph
+    sub_graph = n_group.get_sub_graph()
+
+    # subgraph input & output ports
+    input_ports = sub_graph.get_input_port_nodes()
+    output_ports = sub_graph.get_output_port_nodes()
+
+    if sub_graph:
+        # create internal nodes
+        internal_node1 = sub_graph.create_node(
+            "nodes.basic.BasicNodeA", name="Inner 1", pos=(0, -30)
+        )
+        internal_node2 = sub_graph.create_node(
+            "nodes.basic.BasicNodeB", name="Inner 2", pos=(200, -30)
+        )
+
+        # connect internal nodes to group input/output ports and each other
+        input_ports[0].output(0).connect_to(internal_node1.input(0))
+        internal_node1.output(0).connect_to(internal_node2.input(0))
+        output_ports[0].input(0).connect_to(internal_node2.output(0))
+
+        # position input/output ports
+        input_ports[0].set_pos(-150, -15)
+        output_ports[0].set_pos(400, -15)
+    
+    # collapse the group node back
+    n_group.collapse()
+    
     # make node connections.
 
     # (connect nodes using the .set_output method)
@@ -125,7 +159,7 @@ def main():
 
     # crate a backdrop node and wrap it around
     # "custom port node" and "group node".
-    n_backdrop = graph.create_node('Backdrop')
+    n_backdrop = graph.create_node("Backdrop")
     n_backdrop.wrap_nodes([n_custom_ports, n_combo_menu])
 
     # fit nodes to the viewer.
@@ -152,24 +186,24 @@ def main():
 
     # create a nodes tree widget.
     nodes_tree = NodesTreeWidget(node_graph=graph)
-    nodes_tree.set_category_label('nodeGraphQt.nodes', 'Builtin Nodes')
-    nodes_tree.set_category_label('nodes.custom.ports', 'Custom Port Nodes')
-    nodes_tree.set_category_label('nodes.widget', 'Widget Nodes')
-    nodes_tree.set_category_label('nodes.basic', 'Basic Nodes')
-    nodes_tree.set_category_label('nodes.group', 'Group Nodes')
+    nodes_tree.set_category_label("nodeGraphQt.nodes", "Builtin Nodes")
+    nodes_tree.set_category_label("nodes.custom.ports", "Custom Port Nodes")
+    nodes_tree.set_category_label("nodes.widget", "Widget Nodes")
+    nodes_tree.set_category_label("nodes.basic", "Basic Nodes")
+    nodes_tree.set_category_label("nodes.group", "Group Nodes")
     # nodes_tree.show()
 
     # create a node palette widget.
     nodes_palette = NodesPaletteWidget(node_graph=graph)
-    nodes_palette.set_category_label('nodeGraphQt.nodes', 'Builtin Nodes')
-    nodes_palette.set_category_label('nodes.custom.ports', 'Custom Port Nodes')
-    nodes_palette.set_category_label('nodes.widget', 'Widget Nodes')
-    nodes_palette.set_category_label('nodes.basic', 'Basic Nodes')
-    nodes_palette.set_category_label('nodes.group', 'Group Nodes')
+    nodes_palette.set_category_label("nodeGraphQt.nodes", "Builtin Nodes")
+    nodes_palette.set_category_label("nodes.custom.ports", "Custom Port Nodes")
+    nodes_palette.set_category_label("nodes.widget", "Widget Nodes")
+    nodes_palette.set_category_label("nodes.basic", "Basic Nodes")
+    nodes_palette.set_category_label("nodes.group", "Group Nodes")
     # nodes_palette.show()
 
-    app.exec()
+    app.exec_()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
