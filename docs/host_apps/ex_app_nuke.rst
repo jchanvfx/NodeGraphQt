@@ -15,7 +15,7 @@ Creating a node graph widget in Nuke.
     from nukescripts import panels
 
     from Qt import QtWidgets, QtCore
-    from NodeGraphQt import NodeGraph, BaseNode
+    from ...NodeGraphQt import NodeGraph, BaseNode
 
 
     # create a simple test node class.

@@ -12,7 +12,7 @@ Creating Nodes
     :emphasize-lines: 23
 
     from Qt import QtWidgets
-    from NodeGraphQt import BaseNode, NodeGraph
+    from ...NodeGraphQt import BaseNode, NodeGraph
 
     class MyNode(BaseNode):
 
@@ -50,7 +50,7 @@ example to simply embed a ``QComboBox`` widget when reimplementing the ``BaseNod
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import BaseNode
+    from ...NodeGraphQt import BaseNode
 
     class MyListNode(BaseNode):
 
@@ -95,7 +95,7 @@ Here's an example to embed a custom widget where we subclass the
     :emphasize-lines: 38, 96, 97
 
     from Qt import QtCore, QtWidgets
-    from NodeGraphQt import BaseNode, NodeBaseWidget
+    from ...NodeGraphQt import BaseNode, NodeBaseWidget
 
     class MyCustomWidget(QtWidgets.QWidget):
         """
@@ -249,7 +249,7 @@ Here's an example where we subclass the ``NodeGraph`` and connect it up to a
     :linenos:
 
     from Qt import QtCore, QtWidgets
-    from NodeGraphQt import BaseNode, NodeGraph, PropertiesBinWidget
+    from ...NodeGraphQt import BaseNode, NodeGraph, PropertiesBinWidget
 
 
     class MyNode(BaseNode):

@@ -3,14 +3,14 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import (ICON_NODE_BASE, ITEM_CACHE_MODE, Z_VAL_NODE,
+from ...NodeGraphQt.constants import (ICON_NODE_BASE, ITEM_CACHE_MODE, Z_VAL_NODE,
                                    LayoutDirectionEnum, NodeEnum, PortEnum,
                                    PortTypeEnum)
-from NodeGraphQt.errors import NodeWidgetError
-from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
-from NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
-from NodeGraphQt.qgraphics.node_text_item import NodeTextItem
-from NodeGraphQt.qgraphics.port import CustomPortItem, PortItem
+from ...NodeGraphQt.errors import NodeWidgetError
+from ...NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from ...NodeGraphQt.qgraphics.node_overlay_disabled import XDisabledItem
+from ...NodeGraphQt.qgraphics.node_text_item import NodeTextItem
+from ...NodeGraphQt.qgraphics.port import CustomPortItem, PortItem
 
 
 class NodeItem(AbstractNodeItem):
@@ -331,11 +331,11 @@ class NodeItem(AbstractNodeItem):
                 pipe.reset()
 
     def _calc_size_horizontal(self):
-        # width, height from node name text.
+        # width, height from ...Node name text.
         text_w = self._text_item.boundingRect().width()
         text_h = self._text_item.boundingRect().height()
 
-        # width, height from node ports.
+        # width, height from ...Node ports.
         port_width = 0.0
         p_input_text_width = 0.0
         p_output_text_width = 0.0
@@ -362,7 +362,7 @@ class NodeItem(AbstractNodeItem):
 
         port_text_width = p_input_text_width + p_output_text_width
 
-        # width, height from node embedded widgets.
+        # width, height from ...Node embedded widgets.
         widget_width = 0.0
         widget_height = 0.0
         for widget in self._widgets.values():
@@ -986,7 +986,7 @@ class NodeItem(AbstractNodeItem):
 
     def _delete_port(self, port, text):
         """
-        Removes port item and port text from node.
+        Removes port item and port text from ...Node.
 
         Args:
             port (PortItem): port object.
@@ -1001,7 +1001,7 @@ class NodeItem(AbstractNodeItem):
 
     def delete_input(self, port):
         """
-        Remove input port from node.
+        Remove input port from ...Node.
 
         Args:
             port (PortItem): port object.
@@ -1010,7 +1010,7 @@ class NodeItem(AbstractNodeItem):
 
     def delete_output(self, port):
         """
-        Remove output port from node.
+        Remove output port from ...Node.
 
         Args:
             port (PortItem): port object.

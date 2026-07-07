@@ -2,12 +2,12 @@
 import json
 from collections import defaultdict
 
-from NodeGraphQt.constants import (
+from ...NodeGraphQt.constants import (
     LayoutDirectionEnum,
     NodePropWidgetEnum,
     PipeLayoutEnum
 )
-from NodeGraphQt.errors import NodePropertyError
+from ...NodeGraphQt.errors import NodePropertyError
 
 
 class PortModel(object):

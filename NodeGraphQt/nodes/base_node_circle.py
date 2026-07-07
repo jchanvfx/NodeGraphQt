@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.qgraphics.node_circle import CircleNodeItem
+from ...NodeGraphQt.nodes.base_node import BaseNode
+from ...NodeGraphQt.qgraphics.node_circle import CircleNodeItem
 
 
 class BaseNodeCircle(BaseNode):
@@ -20,7 +20,7 @@ class BaseNodeCircle(BaseNode):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import BaseNodeCircle
+        from ...NodeGraphQt import BaseNodeCircle
 
         class ExampleNode(BaseNodeCircle):
 

@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from Qt import QtCore, QtWidgets, QtGui
 
-from NodeGraphQt.constants import ViewerEnum, ViewerNavEnum
+from ...NodeGraphQt.constants import ViewerEnum, ViewerNavEnum
 
 
 class TabSearchCompleter(QtWidgets.QCompleter):

@@ -8,24 +8,24 @@ from pathlib import Path
 
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.base.commands import (NodeAddedCmd, NodeMovedCmd,
+from ...NodeGraphQt.base.commands import (NodeAddedCmd, NodeMovedCmd,
                                        NodesRemovedCmd, PortConnectedCmd)
-from NodeGraphQt.base.factory import NodeFactory
-from NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
-from NodeGraphQt.base.model import NodeGraphModel
-from NodeGraphQt.base.node import NodeObject
-from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import (MIME_TYPE, URI_SCHEME, URN_SCHEME,
+from ...NodeGraphQt.base.factory import NodeFactory
+from ...NodeGraphQt.base.menu import NodeGraphMenu, NodesMenu
+from ...NodeGraphQt.base.model import NodeGraphModel
+from ...NodeGraphQt.base.node import NodeObject
+from ...NodeGraphQt.base.port import Port
+from ...NodeGraphQt.constants import (MIME_TYPE, URI_SCHEME, URN_SCHEME,
                                    LayoutDirectionEnum, PipeLayoutEnum,
                                    PortTypeEnum, ViewerEnum)
-from NodeGraphQt.errors import NodeCreationError, NodeDeletionError
-from NodeGraphQt.nodes.backdrop_node import BackdropNode
-from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.nodes.group_node import GroupNode
-from NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
-from NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
-from NodeGraphQt.widgets.viewer import NodeViewer
-from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
+from ...NodeGraphQt.errors import NodeCreationError, NodeDeletionError
+from ...NodeGraphQt.nodes.backdrop_node import BackdropNode
+from ...NodeGraphQt.nodes.base_node import BaseNode
+from ...NodeGraphQt.nodes.group_node import GroupNode
+from ...NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
+from ...NodeGraphQt.widgets.node_graph import NodeGraphWidget, SubGraphWidget
+from ...NodeGraphQt.widgets.viewer import NodeViewer
+from ...NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
 
 class NodeGraph(QtCore.QObject):

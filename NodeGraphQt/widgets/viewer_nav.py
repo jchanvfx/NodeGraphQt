@@ -1,6 +1,6 @@
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import NodeEnum, ViewerNavEnum
+from ...NodeGraphQt.constants import NodeEnum, ViewerNavEnum
 
 
 class NodeNavigationDelagate(QtWidgets.QStyledItemDelegate):

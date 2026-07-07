@@ -20,7 +20,7 @@ Creating a node graph widget in Silhouette FX.
     import fx
 
     from Qt import QtWidgets, QtCore
-    from NodeGraphQt import NodeGraph, BaseNode
+    from ...NodeGraphQt import NodeGraph, BaseNode
 
 
     # create the widget wrapper that can be docked to the main window.

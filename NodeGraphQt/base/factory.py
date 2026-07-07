@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from NodeGraphQt.errors import NodeRegistrationError
+from ...NodeGraphQt.errors import NodeRegistrationError
 
 
 class NodeFactory(object):

@@ -5,8 +5,8 @@ from packaging.version import Version
 
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.base.menu import BaseMenu
-from NodeGraphQt.constants import (
+from ...NodeGraphQt.base.menu import BaseMenu
+from ...NodeGraphQt.constants import (
     LayoutDirectionEnum,
     PortTypeEnum,
     PipeEnum,
@@ -14,14 +14,14 @@ from NodeGraphQt.constants import (
     ViewerEnum,
     Z_VAL_PIPE,
 )
-from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
-from NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
-from NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
-from NodeGraphQt.qgraphics.port import PortItem
-from NodeGraphQt.qgraphics.slicer import SlicerPipeItem
-from NodeGraphQt.widgets.dialogs import BaseDialog, FileDialog
-from NodeGraphQt.widgets.scene import NodeScene
-from NodeGraphQt.widgets.tab_search import TabSearchMenuWidget
+from ...NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from ...NodeGraphQt.qgraphics.node_backdrop import BackdropNodeItem
+from ...NodeGraphQt.qgraphics.pipe import PipeItem, LivePipeItem
+from ...NodeGraphQt.qgraphics.port import PortItem
+from ...NodeGraphQt.qgraphics.slicer import SlicerPipeItem
+from ...NodeGraphQt.widgets.dialogs import BaseDialog, FileDialog
+from ...NodeGraphQt.widgets.scene import NodeScene
+from ...NodeGraphQt.widgets.tab_search import TabSearchMenuWidget
 
 ZOOM_MIN = -0.95
 ZOOM_MAX = 2.0
@@ -45,7 +45,14 @@ class NodeViewer(QtWidgets.QGraphicsView):
     insert_node = QtCore.Signal(object, str, object)
     node_name_changed = QtCore.Signal(str, str)
     node_backdrop_updated = QtCore.Signal(str, str, object)
-
+    pipe_dragged_to_empty = QtCore.Signal(PortItem, QtWidgets.QGraphicsSceneMouseEvent) 
+    '''
+    QtCore.Signal
+    Raised when a pipe is dragged off a port and dropped on empty space
+    Params:
+    PortItem : The port from which the drag was initiated
+    object : Event information for the mouse release event
+    '''
     # pass through signals that are translated into "NodeGraph()" signals.
     node_selected = QtCore.Signal(str)
     node_selection_changed = QtCore.Signal(list, list)
@@ -997,7 +1004,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
         - verifies the live connection pipe.
         - makes a connection pipe if valid.
         - emits the "connection changed" signal.
-
+        - emits the "pipe dragged to empty" signal.
         Args:
             event (QtWidgets.QGraphicsSceneMouseEvent):
                 The event handler from the QtWidgets.QGraphicsScene
@@ -1029,6 +1036,7 @@ class NodeViewer(QtWidgets.QGraphicsView):
                 else:
                     disconnected.append((self._start_port, self._detached_port))
                     self.connection_changed.emit(disconnected, connected)
+            self.pipe_dragged_to_empty.emit(self._start_port, event)
 
             self._detached_port = None
             self.end_live_connection()

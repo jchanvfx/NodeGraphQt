@@ -1,17 +1,17 @@
 #!/usr/bin/python
 from collections import OrderedDict
 
-from NodeGraphQt.base.commands import NodeVisibleCmd, NodeWidgetVisibleCmd
-from NodeGraphQt.base.node import NodeObject
-from NodeGraphQt.base.port import Port
-from NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
-from NodeGraphQt.errors import (
+from ...NodeGraphQt.base.commands import NodeVisibleCmd, NodeWidgetVisibleCmd
+from ...NodeGraphQt.base.node import NodeObject
+from ...NodeGraphQt.base.port import Port
+from ...NodeGraphQt.constants import NodePropWidgetEnum, PortTypeEnum
+from ...NodeGraphQt.errors import (
     PortError,
     PortRegistrationError,
     NodeWidgetError
 )
-from NodeGraphQt.qgraphics.node_base import NodeItem
-from NodeGraphQt.widgets.node_widgets import (
+from ...NodeGraphQt.qgraphics.node_base import NodeItem
+from ...NodeGraphQt.widgets.node_widgets import (
     NodeBaseWidget,
     NodeCheckBox,
     NodeButton,
@@ -36,7 +36,7 @@ class BaseNode(NodeObject):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import BaseNode
+        from ...NodeGraphQt import BaseNode
 
         class ExampleNode(BaseNode):
 

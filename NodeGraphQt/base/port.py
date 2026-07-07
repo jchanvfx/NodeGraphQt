@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import (
+from ...NodeGraphQt.base.commands import (
     PortConnectedCmd,
     PortDisconnectedCmd,
     PortLockedCmd,
@@ -8,9 +8,9 @@ from NodeGraphQt.base.commands import (
     NodeInputConnectedCmd,
     NodeInputDisconnectedCmd
 )
-from NodeGraphQt.base.model import PortModel
-from NodeGraphQt.constants import PortTypeEnum
-from NodeGraphQt.errors import PortError
+from ...NodeGraphQt.base.model import PortModel
+from ...NodeGraphQt.constants import PortTypeEnum
+from ...NodeGraphQt.errors import PortError
 
 
 class Port(object):

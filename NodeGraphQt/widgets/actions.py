@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import ViewerEnum
+from ...NodeGraphQt.constants import ViewerEnum
 
 
 class BaseMenu(QtWidgets.QMenu):

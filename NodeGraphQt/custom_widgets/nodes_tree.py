@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from Qt import QtWidgets, QtCore, QtGui
 
-from NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
+from ...NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
 
 TYPE_NODE = QtWidgets.QTreeWidgetItem.UserType + 1
 TYPE_CATEGORY = QtWidgets.QTreeWidgetItem.UserType + 2
@@ -34,7 +34,7 @@ class NodesTreeWidget(QtWidgets.QTreeWidget):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import NodeGraph, NodesTreeWidget
+        from ...NodeGraphQt import NodeGraph, NodesTreeWidget
 
         # create node graph.
         graph = NodeGraph()

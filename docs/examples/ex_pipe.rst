@@ -17,8 +17,8 @@ function.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
-    from NodeGraphQt.constants import PipeLayoutEnum
+    from ...NodeGraphQt import NodeGraph
+    from ...NodeGraphQt.constants import PipeLayoutEnum
 
     graph = NodeGraph()
     graph.set_pipe_style(PipeLayoutEnum.ANGLE.value)

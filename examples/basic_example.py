@@ -8,9 +8,9 @@ from Qt import QtCore, QtWidgets
 # import example nodes from the "nodes" sub-package
 from examples.nodes import (basic_nodes, custom_ports_node, group_node,
                             widget_nodes)
-from NodeGraphQt import (NodeGraph, NodesPaletteWidget, NodesTreeWidget,
+from ...NodeGraphQt import (NodeGraph, NodesPaletteWidget, NodesTreeWidget,
                          PropertiesBinWidget)
-from NodeGraphQt.constants import LayoutDirectionEnum
+from ...NodeGraphQt.constants import LayoutDirectionEnum
 
 BASE_PATH = Path(__file__).parent.resolve()
 
@@ -169,7 +169,7 @@ def main():
     # adjust layout of node to be vertical (for all nodes).
     # graph.set_layout_direction(LayoutDirectionEnum.VERTICAL.value)
 
-    # Custom builtin widgets from NodeGraphQt
+    # Custom builtin widgets from ...NodeGraphQt
     # ---------------------------------------
 
     # create a node properties bin widget.

@@ -620,7 +620,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import NodeGraph, PropertiesBinWidget
+        from ...NodeGraphQt import NodeGraph, PropertiesBinWidget
 
         # create node graph.
         graph = NodeGraph()

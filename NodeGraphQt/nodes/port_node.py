@@ -1,8 +1,8 @@
 #!/usr/bin/python
-from NodeGraphQt.errors import PortRegistrationError
-from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.qgraphics.node_port_in import PortInputNodeItem
-from NodeGraphQt.qgraphics.node_port_out import PortOutputNodeItem
+from ...NodeGraphQt.errors import PortRegistrationError
+from ...NodeGraphQt.nodes.base_node import BaseNode
+from ...NodeGraphQt.qgraphics.node_port_in import PortInputNodeItem
+from ...NodeGraphQt.qgraphics.node_port_out import PortOutputNodeItem
 
 
 class PortInputNode(BaseNode):

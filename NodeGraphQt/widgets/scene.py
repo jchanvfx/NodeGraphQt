@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import ViewerEnum
+from ...NodeGraphQt.constants import ViewerEnum
 
 
 class NodeScene(QtWidgets.QGraphicsScene):

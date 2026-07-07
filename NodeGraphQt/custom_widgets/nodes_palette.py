@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from Qt import QtWidgets, QtCore, QtGui
 
-from NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
+from ...NodeGraphQt.constants import MIME_TYPE, URN_SCHEME
 
 
 class _NodesGridDelegate(QtWidgets.QStyledItemDelegate):
@@ -179,7 +179,7 @@ class NodesPaletteWidget(QtWidgets.QWidget):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import NodeGraph, NodesPaletteWidget
+        from ...NodeGraphQt import NodeGraph, NodesPaletteWidget
 
         # create node graph.
         graph = NodeGraph()

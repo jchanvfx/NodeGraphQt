@@ -1,8 +1,8 @@
 from Qt import QtWidgets, QtGui
 
-from NodeGraphQt.constants import NodeEnum, ViewerEnum, ViewerNavEnum
+from ...NodeGraphQt.constants import NodeEnum, ViewerEnum, ViewerNavEnum
 
-from NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
+from ...NodeGraphQt.widgets.viewer_nav import NodeNavigationWidget
 
 
 class NodeGraphWidget(QtWidgets.QTabWidget):

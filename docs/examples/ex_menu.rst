@@ -33,7 +33,7 @@ the registered ``my_test()`` function.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
+    from ...NodeGraphQt import NodeGraph
 
     # test function.
     def my_test(graph):
@@ -64,7 +64,7 @@ can override context menus on a per node type basis.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import BaseNode, NodeGraph
+    from ...NodeGraphQt import BaseNode, NodeGraph
 
     # define a couple example nodes.
     class FooNode(BaseNode):
@@ -184,7 +184,7 @@ In the main code where your node graph controller is defined we can just call th
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
+    from ...NodeGraphQt import NodeGraph
 
     node_graph = NodeGraph()
     node_graph.set_context_menu_from_file(
@@ -205,7 +205,7 @@ here's an example.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import NodeGraph
+    from ...NodeGraphQt import NodeGraph
 
     data = [
         {

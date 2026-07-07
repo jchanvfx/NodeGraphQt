@@ -82,7 +82,7 @@ The ``draw_triangle_port`` painter function can then be passed to the ``painter_
     :linenos:
     :emphasize-lines: 8
 
-    from NodeGraphQt import BaseNode
+    from ...NodeGraphQt import BaseNode
 
     class MyListNode(BaseNode):
 
@@ -162,8 +162,8 @@ Here's an example snippet to add pipe connection constraints to a port.
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import BaseNode
-    from NodeGraphQt.constants import PortTypeEnum
+    from ...NodeGraphQt import BaseNode
+    from ...NodeGraphQt.constants import PortTypeEnum
 
 
     class BasicNodeA(BaseNode):

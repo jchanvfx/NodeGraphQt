@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.qgraphics.node_svg import SVGNodeItem
+from ...NodeGraphQt.nodes.base_node import BaseNode
+from ...NodeGraphQt.qgraphics.node_svg import SVGNodeItem
 
 
 class BaseNodeSVG(BaseNode):
@@ -20,7 +20,7 @@ class BaseNodeSVG(BaseNode):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import BaseNodeSVG
+        from ...NodeGraphQt import BaseNodeSVG
 
         class ExampleNode(BaseNodeSVG):
 

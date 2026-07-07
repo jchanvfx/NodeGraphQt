@@ -3,8 +3,8 @@ import xml.etree.ElementTree as ET
 
 from Qt import QtCore, QtGui, QtSvg, QtWidgets
 
-from NodeGraphQt.constants import NodeEnum, PortEnum
-from NodeGraphQt.qgraphics.node_base import NodeItem
+from ...NodeGraphQt.constants import NodeEnum, PortEnum
+from ...NodeGraphQt.qgraphics.node_base import NodeItem
 
 
 def recolor_svg_xml(svg_bytes, node_color, border_color=None):

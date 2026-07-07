@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from NodeGraphQt import BaseNode, BaseNodeCircle, BaseNodeSVG
+from ...NodeGraphQt import BaseNode, BaseNodeCircle, BaseNodeSVG
 
 BASE_PATH = Path(__file__).parent.parent.resolve()
 

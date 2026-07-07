@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtWidgets
 
-from NodeGraphQt.constants import PortTypeEnum
+from ...NodeGraphQt.constants import PortTypeEnum
 
 
 class PropertyChangedCmd(QtWidgets.QUndoCommand):

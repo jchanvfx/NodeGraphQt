@@ -3,7 +3,7 @@ import math
 
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PipeSlicerEnum
+from ...NodeGraphQt.constants import Z_VAL_NODE_WIDGET, PipeSlicerEnum
 
 
 class SlicerPipeItem(QtWidgets.QGraphicsPathItem):

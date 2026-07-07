@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt.base.commands import PropertyChangedCmd
-from NodeGraphQt.base.model import NodeModel
-from NodeGraphQt.constants import NodePropWidgetEnum
+from ...NodeGraphQt.base.commands import PropertyChangedCmd
+from ...NodeGraphQt.base.model import NodeModel
+from ...NodeGraphQt.constants import NodePropWidgetEnum
 
 
 class _ClassProperty(object):
@@ -33,7 +33,7 @@ class NodeObject(object):
         .. code-block:: python
             :linenos:
     
-            from NodeGraphQt import NodeObject
+            from ...NodeGraphQt import NodeObject
     
             class ExampleNode(NodeObject):
     
@@ -58,7 +58,7 @@ class NodeObject(object):
         .. code-block:: python
             :linenos:
     
-            from NodeGraphQt import NodeObject
+            from ...NodeGraphQt import NodeObject
     
             class ExampleNode(NodeObject):
     

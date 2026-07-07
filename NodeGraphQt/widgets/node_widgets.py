@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from Qt import QtCore, QtWidgets
 
-from NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET
-from NodeGraphQt.errors import NodeWidgetError
+from ...NodeGraphQt.constants import ViewerEnum, Z_VAL_NODE_WIDGET
+from ...NodeGraphQt.errors import NodeWidgetError
 
 
 class _NodeGroupBox(QtWidgets.QGroupBox):

@@ -10,7 +10,7 @@ NodeGraph
     :linenos:
 
     from Qt import QtWidgets
-    from NodeGraphQt import NodeGraph
+    from ...NodeGraphQt import NodeGraph
 
     if __name__ == '__main__':
         app = QtWidgets.QApplication([])

@@ -1,7 +1,7 @@
 #!/usr/bin/python
-from NodeGraphQt.nodes.base_node import BaseNode
-from NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
-from NodeGraphQt.qgraphics.node_group import GroupNodeItem
+from ...NodeGraphQt.nodes.base_node import BaseNode
+from ...NodeGraphQt.nodes.port_node import PortInputNode, PortOutputNode
+from ...NodeGraphQt.qgraphics.node_group import GroupNodeItem
 
 
 class GroupNode(BaseNode):

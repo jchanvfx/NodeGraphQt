@@ -4,8 +4,8 @@ from packaging.version import Version
 
 from Qt import QtGui, QtCore
 
-from NodeGraphQt.errors import NodeMenuError
-from NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
+from ...NodeGraphQt.errors import NodeMenuError
+from ...NodeGraphQt.widgets.actions import BaseMenu, GraphAction, NodeAction
 
 
 class NodeGraphMenu(object):
@@ -20,7 +20,7 @@ class NodeGraphMenu(object):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import NodeGraph
+        from ...NodeGraphQt import NodeGraph
 
         node_graph = NodeGraph()
 
@@ -174,7 +174,7 @@ class NodesMenu(NodeGraphMenu):
     .. code-block:: python
         :linenos:
 
-        from NodeGraphQt import NodeGraph
+        from ...NodeGraphQt import NodeGraph
 
         node_graph = NodeGraph()
 

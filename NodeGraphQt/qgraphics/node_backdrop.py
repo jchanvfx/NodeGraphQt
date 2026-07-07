@@ -1,10 +1,10 @@
 #!/usr/bin/python
 from Qt import QtCore, QtGui, QtWidgets
 
-from NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
-from NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
-from NodeGraphQt.qgraphics.pipe import PipeItem
-from NodeGraphQt.qgraphics.port import PortItem
+from ...NodeGraphQt.constants import Z_VAL_BACKDROP, NodeEnum
+from ...NodeGraphQt.qgraphics.node_abstract import AbstractNodeItem
+from ...NodeGraphQt.qgraphics.pipe import PipeItem
+from ...NodeGraphQt.qgraphics.port import PortItem
 
 
 class BackdropSizer(QtWidgets.QGraphicsItem):

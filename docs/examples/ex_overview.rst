@@ -67,7 +67,7 @@ Here's a basic example snippet for creating two nodes and connecting them togeth
     :linenos:
 
     from Qt import QtWidgets
-    from NodeGraphQt import NodeGraph, BaseNode
+    from ...NodeGraphQt import NodeGraph, BaseNode
 
 
     # create a node class object inherited from BaseNode.

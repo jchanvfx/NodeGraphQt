@@ -1,4 +1,4 @@
-from NodeGraphQt.constants import NodePropWidgetEnum
+from ...constants import NodePropWidgetEnum
 from .custom_widget_color_picker import PropColorPickerRGB, PropColorPickerRGBA
 from .custom_widget_file_paths import PropFilePath, PropFileSavePath
 from .custom_widget_slider import PropSlider, PropDoubleSlider

@@ -12,7 +12,7 @@ example code:
 .. code-block:: python
     :linenos:
 
-    from NodeGraphQt import QtWidgets, NodeGraph, BaseNode
+    from ...NodeGraphQt import QtWidgets, NodeGraph, BaseNode
 
 
     class MyNode(BaseNode):

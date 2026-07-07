@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Qt import QtGui, QtCore, QtWidgets
 
-from NodeGraphQt.constants import (
+from ...NodeGraphQt.constants import (
     PortTypeEnum, PortEnum,
     Z_VAL_PORT,
     ITEM_CACHE_MODE)
